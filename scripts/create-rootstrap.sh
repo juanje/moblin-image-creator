@@ -18,7 +18,7 @@ url=$2
 
 # top level packages to install in the rootstrap image. Yum will automatically
 # perform dependency resolution
-PACKAGES="util-linux rpm yum udev"
+PACKAGES="util-linux rpm yum"
 
 if [ -z "$workspace_dir" ] || [ -z "$url" ]; then
     echo "USAGE: $0 NEW_WORKSPACE_DIR YUM_URL"
@@ -98,8 +98,7 @@ yum -y --installroot=$workspace_dir install $PACKAGES
 ## Perform final fixup on the workspace
 ##########################################################
 
-# Create a minimal /dev
-cp --preserve=all --recursive --update $workspace_dir/lib/udev/devices/* $workspace_dir/dev
+rm $workspace_dir/dev/null
 
 ##########################################################
 ## Package the workspace into a rootstrap archive
