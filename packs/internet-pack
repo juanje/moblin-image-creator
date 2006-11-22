@@ -1,0 +1,13 @@
+# The following includes all packages needed to start firefox
+# NOTE: In addition to this the pango modules and gdk pixbuf 
+#       files need to be generated
+xorg-x11-server 
+xorg-x11-fonts-100dpi 
+xorg-x11-fonts-75dpi  
+xorg-x11-fonts-cyrillic
+xorg-x11-fonts-scalable
+xorg-x11-fonts-syriac
+gdk-pixbuf
+glibc-locale
+file
+MozillaFirefox
