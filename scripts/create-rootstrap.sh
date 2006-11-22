@@ -85,6 +85,7 @@ mknod $workspace_dir/dev/null c 1 3
 cp /etc/hosts $workspace_dir/etc/
 cp /etc/passwd $workspace_dir/etc/
 cp /etc/group $workspace_dir/etc/
+cp /etc/resolv.conf $workspace_dir/etc/
 
 mkdir -p $workspace_dir/proc/
 
