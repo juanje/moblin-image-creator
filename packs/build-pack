@@ -1,0 +1,8 @@
+# stuff needed for building pretty much any package
+tar patch gcc make 
+
+# stuff needed for GUI development
+gtk2-devel
+
+# others
+gconf2-devel gettext-devel gtkdoc dbus-1-devel
