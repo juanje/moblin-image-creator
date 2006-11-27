@@ -5,30 +5,24 @@
 
 set -e
 
-rootstrap=$1
-target=$2
+target=$1
 
-if [ -z "$rootstrap" ] || [ -z "$target" ]; then
-    echo "USAGE: $0 ROOTSTRAP.tgz TARGET_DIR"
+if [ -z "$target" ]; then
+    echo "USAGE: $0 TARGET_DIR"
     exit -1
 fi
 
-if [ -e $target ]; then
-    echo "$target already exist!"
+if [ ! -e $target ]; then
+    echo "$target does not exist!"
     exit -1
 fi
 
 if [ `whoami` != "root" ]; then
-    echo "You have to be root to prepare a new workspace!"
+    echo "You have to be root to mount a workspace!"
     exit -1
 fi
 
 
-echo "Extracting new root environment..."
-mkdir $target
-tar -zxf $rootstrap -C $target
-
-echo "bind to /proc, /tmp, /sys, and /dev"
 mount --bind /proc $target/proc
 mount --bind /tmp $target/tmp
 mount --bind /sys $target/sys
