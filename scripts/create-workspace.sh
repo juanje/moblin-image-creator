@@ -1,7 +1,8 @@
 #!/bin/bash
 ###############################################################################
-# create-rootstrap.sh : Creates a basic rootstrap package for consumption
-#                       by scratchbox. 
+# create-workspace.sh : Creates a fundamental workspace capabile of
+#                       chroot'ing inside and using yum to install additional
+#                       packages
 ###############################################################################
 
 set -e
@@ -100,11 +101,4 @@ yum -y --installroot=$workspace_dir install $PACKAGES
 ##########################################################
 
 rm $workspace_dir/dev/null
-
-##########################################################
-## Package the workspace into a rootstrap archive
-##########################################################
-
-rm -f rootstrap.tgz
-tar -zcpvf rootstrap.tgz -C $workspace_dir .
 
