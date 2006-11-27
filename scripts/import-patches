@@ -1,0 +1,63 @@
+#!/bin/sh
+#############################################################################
+# This script need some serious love.  I created this to just enable myself
+# to import the nearly 900 SLED10 kernel patchs into a clone of the kernel
+# source tree.
+#
+# The SLED source rpm using it's own script to compile a file containing
+# an ordered list of all patches to apply, and then inside the spec file
+# applies each of the patch is a for-i-in-list loop.  I'm sure this script
+# could be made more general purpose to assist other poor souls in importing
+# a huge list of distribution patchs into a git tree, but I am leaving that
+# exercise to the next victim.
+#
+# To pull in the SLED patches:
+# * cd path/to/Chef
+# * git clone path/to/linux-2.6
+# * rpm -ivh the/path/to/kernel-source*.src.rpm
+# * cd /usr/src/packages/SOURCES
+# * ./guard < series.conf > series.txt
+# * tar jxf patches.*.bz2
+# * path/to/Chef/scripts/import-patches path/to/Chef/linux-2.6 series.txt . 
+#############################################################################
+
+target=$1
+series_file=$2
+patch_dir=$3
+
+if [ -z "$target" ] || [ -z "$series_file" ] || [ -z "$patch_dir" ]; then
+    echo "USAGE: $0 TARGET_DIR PATCH_SERIES_FILE PATCH_DIR"
+    exit -1
+fi
+
+if [ ! -d "$target" ]; then
+    echo "Target directory, $target, does not exist"
+    exit -1
+fi
+
+if [ ! -d "$patch_dir" ]; then
+    echo "Patch directory, $patch_dir, does not exist"
+    exit -1
+fi
+
+if [ ! -f "$series_file" ]; then
+    echo "Patch series file, $series_file, does not exist"
+    exit -1
+fi
+
+TOP=$PWD
+cd $target
+
+for patch in $(< $TOP/$series_file); do
+    echo "Applying patch: $patch"
+    if ! patch -s -E -p1 --no-backup-if-mismatch -i $TOP/$patch; then
+	echo "*** Patch $patch failed ***"
+	exit 1
+    fi
+
+    git-add $(git-ls-files -o .)
+    git-commit \
+	-m "Importing Patch: $patch" \
+	$(git-diff-index --name-only HEAD .) 
+
+done
