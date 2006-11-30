@@ -1,8 +1,11 @@
 # stuff needed for building pretty much any package
-tar patch gcc make 
+tar patch gcc gcc-c++ make automake autoconf
 
 # stuff needed for GUI development
-gtk2-devel
+gtk2-devel gconf2-devel gettext-devel gtkdoc dbus-1-devel dbus-1-glib
 
-# others
-gconf2-devel gettext-devel gtkdoc dbus-1-devel
+# extras
+outo perl-XML-Parser
+
+# Hildon related build stuff
+libmatchbox libfakekey esound-devel
