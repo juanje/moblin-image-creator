@@ -10,5 +10,8 @@ glibc-locale file which
 # window manger stuff
 libmatchbox matchbox-window-manger matchbox-keyboard
 
+# nice to have items
+vim
+
 # Applications
 MozillaFirefox
