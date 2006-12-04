@@ -26,6 +26,32 @@ if [ -z "$workspace_dir" ] || [ -z "$url" ]; then
     exit -1
 fi
 
+# Check the path name. If the path is not absolute path, we need to convert 
+# them to the absolute one first.
+temp_dir=`dirname $workspace_dir`
+temp_url=`dirname $url`
+
+while true
+do
+    if [ `dirname $temp_dir` = $temp_dir ] && [ `dirname $temp_url` = $temp_url ]; then
+        break
+    fi
+    export temp_dir=`dirname $temp_dir`
+    export temp_url=`dirname $temp_url`
+done
+
+if [ "/" != $temp_dir ]; then
+    echo "$workspace_dir is not an absolute path!"
+    workspace_dir=${PWD}/$workspace_dir
+    echo "fixed to $workspace_dir"
+fi
+
+if [ "/" != $temp_url ]; then
+    echo "$url is not an absolute path!"
+    url=${PWD}/$url
+    echo "fixed to $url"
+fi
+
 if [ -e $workspace_dir ]; then
     echo "$workspace_dir already exist!"
     exit -1
@@ -34,6 +60,12 @@ fi
 if [ `whoami` != "root" ]; then
     echo "You have to be root to create a new rootstrap!"
     exit -1
+fi
+
+# Check the base url comfort. If it is only a local path, insert "file://" in the head.
+if [ -z `echo $url | grep file:///` ] && [ -z `echo $url | grep http://` ]; then
+    url="file://$url"
+    echo "Insert header, fixed to $url"
 fi
 
 # TODO: Either enforce that the workspace_dir is an absolute path
