@@ -7,16 +7,16 @@ rpmi () {
 	rpm --nosignature -q -p $1 --queryformat "%{$2}\n"
 }
 
-pantry=$1
+repository=$1
 shift
 
-if [ -z "$pantry" ]; then
-    echo "USAGE: $0 PANTRY_DIR PKG1 [PKG2] [...]"
+if [ -z "$repository" ]; then
+    echo "USAGE: $0 REPOSITORY_DIR PKG1 [PKG2] [...]"
     exit -1
 fi
 
-if [ ! -d $pantry ]; then
-    echo "$pantry is not a directory!"
+if [ ! -d $repository ]; then
+    echo "$repository is not a directory!"
     exit -1
 fi
 
@@ -37,7 +37,7 @@ while [ "$#" -ne "0" ] ; do
 	pver=$(rpmi $pkg version)
 	prelease=$(rpmi $pkg release)
 	pdistro=$(rpmi $pkg distribution)
-	pdir=$pantry$pgroup/$pname
+	pdir=$repository$pgroup/$pname-$pver
 
  	if [ -z "$RELEASES" ]; then
 	    rdir=releases/$pgroup
@@ -111,7 +111,7 @@ while [ "$#" -ne "0" ] ; do
 	mkdir -p "$pdir"/specs
 	mv build/$pname/*.spec "$pdir"/specs
 
-	cd $pantry
+	cd $repository
 
 	# Add and commit them to the source tree
 	git-add $(git-ls-files -o .)
