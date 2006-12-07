@@ -1,0 +1,44 @@
+#!/bin/sh
+
+rpmi () {
+	rpm --nosignature -q -p $1 --queryformat "%{$2}\n"
+}
+
+repository=$1
+shift
+
+if [ -z "$repository" ]; then
+    echo "USAGE: $0 REPOSITORY_DIR [NEW_PKG1] [NEW_PKG2] [...]"
+    exit -1
+fi
+
+if [ ! -d $repository ]; then
+    echo "$repository is not a directory!"
+    exit -1
+fi
+
+
+while [ "$#" -ne "0" ] ; do
+	pkg="$1"
+	shift
+
+
+	pname=$(rpmi $pkg name)
+	pgroup=$(rpmi $pkg group|sed 's/ /_/g')
+	pdir=$repository$pgroup/$pname
+
+	if test -z "$pname" ; then
+		printf "Skipping %s: Bad name in package\n" $pkg
+		continue
+	fi
+
+	mkdir -p $pdir
+
+	echo -n "Copying $pname into $pdir..."
+	cp $pkg $pdir
+	
+done
+
+echo "Rebuilding yum repository..."
+createrepo $repository
+
