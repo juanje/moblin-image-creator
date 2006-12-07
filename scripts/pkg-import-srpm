@@ -1,0 +1,126 @@
+#!/bin/sh
+
+tagged_files="group license copyright url summary description version release packager arch"
+srcs_regex="\.(tar\.gz|tar\.bz2|tar\.Z|tar|tgz|gz|sig|sign|asc|zip)$"
+
+rpmi () {
+	rpm --nosignature -q -p $1 --queryformat "%{$2}\n"
+}
+
+pantry=$1
+shift
+
+if [ -z "$pantry" ]; then
+    echo "USAGE: $0 PANTRY_DIR PKG1 [PKG2] [...]"
+    exit -1
+fi
+
+if [ ! -d $pantry ]; then
+    echo "$pantry is not a directory!"
+    exit -1
+fi
+
+TOP=`pwd`
+
+while [ "$#" -ne "0" ] ; do
+	pkg="$1"
+	shift
+
+ 	if [ -z "$RELEASES" ]; then
+	    rdir=releases
+	else
+	    rdir=$RELEASES
+	fi
+
+	pname=$(rpmi $pkg name)
+	pgroup=$(rpmi $pkg group|sed 's/ /_/g')
+	pver=$(rpmi $pkg version)
+	prelease=$(rpmi $pkg release)
+	pdistro=$(rpmi $pkg distribution)
+	pdir=$pantry$pgroup/$pname
+
+ 	if [ -z "$RELEASES" ]; then
+	    rdir=releases/$pgroup
+	else
+	    rdir=$RELEASES/$pgroup
+	fi
+
+	if test -z "$pname" ; then
+		printf "Skipping %s: Bad name in package\n" $pkg
+		continue
+	fi
+
+	if [ -d "$pdir" ]; then
+	    
+	    _pver=`cat "$pdir"/info/version`
+	    _prelease=`cat "$pdir"/info/release`
+
+	    if [ $_pver == $pver ] && [ $_prelease == $prelease ]; then
+		printf "Skipping %s: SRPM already imported\n" $pname
+		continue
+	    fi
+	fi
+
+	echo -n "Importing $pname $pver-$prelease from $pdistro... "
+
+	rm -fr build/$pname
+	mkdir -p build/$pname
+	rpm2cpio $pkg | $(cd build/$pname && cpio -i)
+
+	mkdir -p "$pdir"/info
+
+	echo $pname > "$pdir"/info/name
+	for tag in $(echo $tagged_files); do 
+		rpmi $pkg $tag > "$pdir"/info/$tag
+	done
+
+	rpm --nosignature -qp $pkg	\
+	    --queryformat "[%-30{requires} %-30{requirename} %-10{requireversion} %-10{requireflags}\n]" \
+	    > "$pdir"/info/dependencies
+
+	mkdir -p "$pdir"/files
+
+	mkdir -p $rdir/$pname
+	rpm --nosignature  -qp $pkg --queryformat  "[%{source}\n]" | \
+		egrep $srcs_regex > "$pdir"/info/external-sources || true
+
+	for src in $(cat "$pdir"/info/external-sources) ; do 
+		if [ -f build/$pname/$src ]; then 
+			mv -f build/$pname/$src $rdir/$pname
+		fi
+	done
+
+	rpm --nosignature  -qp $pkg --queryformat  "[%{source}\n]" | \
+		egrep -v "^\(none\)$" | \
+		egrep -v $srcs_regex > "$pdir"/info/extras || true
+	for src in $(cat "$pdir"/info/extras) ; do
+		if [ -f build/$pname/$src ]; then 
+			mv -f build/$pname/$src "$pdir"/files/
+		fi
+	done
+
+	rpm --nosignature  -qp $pkg --queryformat  "[%{patch}\n]" | \
+		egrep -v "^\(none\)$" \
+		> "$pdir"/info/patches || true
+	for p in $(cat "$pdir"/info/patches) ; do
+		if [ -f build/$pname/$p ]; then 
+			mv build/$pname/$p "$pdir"/files/
+		fi
+	done
+
+	mkdir -p "$pdir"/specs
+	mv build/$pname/*.spec "$pdir"/specs
+
+	cd $pantry
+
+	# Add and commit them to the source tree
+	git-add $(git-ls-files -o .)
+	git-commit \
+		-m "Import SRPM: $pname $pver-$prelease from $pdistro." \
+		$(git-diff-index --name-only HEAD .) 
+
+	cd $TOP
+	
+done
+
+
