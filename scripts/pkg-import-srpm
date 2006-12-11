@@ -1,5 +1,7 @@
 #!/bin/sh
 
+# testing... will delete on next commit
+
 tagged_files="group license copyright url summary description version release packager arch"
 srcs_regex="\.(tar\.gz|tar\.bz2|tar\.Z|tar|tgz|gz|sig|sign|asc|zip)$"
 
