@@ -12,3 +12,5 @@ perl-XML-Parser
 
 # Hildon related build stuff
 outo libmatchbox libfakekey esound-devel
+
+# Test comment
