@@ -1,0 +1,21 @@
+# stuff needed for building pretty much any package
+tar patch gcc gcc-c++ make automake autoconf libtool file
+
+# not really needed for building, but it sure makes life easier
+vim tree less diff
+
+# stuff needed for kernel development
+module-init-tools ncurses-devel
+
+# stuff below this line isn't needed for kernel development
+#######################################################################
+#
+
+# stuff needed for GUI development
+#gtk2-devel gconf2-devel gettext-devel gtkdoc dbus-1-devel dbus-1-glib
+
+# extras
+#perl-XML-Parser
+
+# Hildon related build stuff
+#outo libmatchbox libfakekey esound-devel
