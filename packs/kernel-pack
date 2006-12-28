@@ -2,7 +2,7 @@
 tar patch gcc gcc-c++ make automake autoconf libtool file
 
 # not really needed for building, but it sure makes life easier
-vim tree less diff
+vim tree less diffutils
 
 # stuff needed for kernel development
 module-init-tools ncurses-devel
