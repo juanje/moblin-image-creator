@@ -73,7 +73,13 @@ if [ ! -e $pristine_src_dir ]; then
     exit -1
 fi
 
+# Find the first matching spec file for the named package
+# WARNING: Can only have ONE spec file that matches this name in the tree.
 spec_file=`find ${pkg_meta_data_dir} -name ${pkg_name}.spec -print -quit`
+if [ -z "$spec_file" ]; then
+    echo -e "Error: Unable to find the spec file for the ${pkg_name} package!\n"
+    exit -1
+fi
 
 spec_pkg_name=`awk '/^Name:/ {print $2}' $spec_file`
 pkg_group=`awk '/^Group:/ {print $2}' $spec_file`
