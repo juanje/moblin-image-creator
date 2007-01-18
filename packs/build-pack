@@ -13,5 +13,8 @@ gtk2-devel gconf2-devel gettext-devel gtkdoc dbus-1-devel dbus-1-glib
 # extras
 perl-XML-Parser
 
+# stuff needed for system login authentication
+resmgr
+
 # Hildon related build stuff
 outo libmatchbox libfakekey esound-devel
