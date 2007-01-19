@@ -16,5 +16,8 @@ perl-XML-Parser
 # stuff needed for system login authentication
 resmgr
 
+# systemtap and its dependencies
+systemtap sudo
+
 # Hildon related build stuff
 outo libmatchbox libfakekey esound-devel
