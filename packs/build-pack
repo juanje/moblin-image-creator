@@ -17,7 +17,7 @@ perl-XML-Parser
 resmgr
 
 # systemtap and its dependencies
-systemtap sudo
+systemtap sudo umd-developer-support kernel-umd kernel-sources kernel-sources-debuginfo
 
 # Hildon related build stuff
 outo libmatchbox libfakekey esound-devel
