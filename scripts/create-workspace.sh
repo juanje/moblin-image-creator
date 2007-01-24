@@ -86,8 +86,11 @@ EOF
 # If we don't create /dev/null then various packages 
 # will waste their time redirecting thier output to a real file
 # located at /dev/null
+
+# /dev/zero is needed to set file permissions.
 mkdir -p $workspace_dir/dev/
 mknod $workspace_dir/dev/null c 1 3
+mknod $workspace_dir/dev/zero c 1 5
 
 # Carry over the creators basic system configuration
 cp /etc/hosts $workspace_dir/etc/
@@ -108,4 +111,4 @@ yum -y --installroot=$workspace_dir install $PACKAGES
 ##########################################################
 
 rm $workspace_dir/dev/null
-
+rm $workspace_dir/dev/zero
