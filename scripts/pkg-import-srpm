@@ -1,4 +1,5 @@
 #!/bin/sh
+set +x
 
 tagged_files="group license copyright url summary description version release packager arch"
 srcs_regex="\.(tar\.gz|tar\.bz2|tar\.Z|tar|tgz|gz|sig|sign|asc|zip)$"
@@ -37,7 +38,7 @@ while [ "$#" -ne "0" ] ; do
 	pver=$(rpmi $pkg version)
 	prelease=$(rpmi $pkg release)
 	pdistro=$(rpmi $pkg distribution)
-	pdir=$repository$pgroup/$pname-$pver
+	pdir=$repository$pgroup/$pname
 
  	if [ -z "$RELEASES" ]; then
 	    rdir=releases/$pgroup

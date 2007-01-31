@@ -8,7 +8,7 @@ vim tree less diffutils
 module-init-tools ncurses-devel
 
 # stuff needed for GUI development
-gtk2-devel gconf2-devel gettext-devel gtkdoc dbus-1-devel dbus-1-glib
+gdk-pixbuf gtk2-devel gconf2-devel gettext-devel gtkdoc dbus-1-devel dbus-1-glib
 
 # extras
 perl-XML-Parser
