@@ -1,5 +1,5 @@
 # stuff needed for building pretty much any package
-tar patch gcc gcc-c++ make automake autoconf libtool file
+tar patch gcc gcc-c++ make automake autoconf libtool file ccache
 
 # not really needed for building, but it sure makes life easier
 vim tree less diffutils
@@ -8,7 +8,7 @@ vim tree less diffutils
 module-init-tools ncurses-devel
 
 # stuff needed for GUI development
-gdk-pixbuf gtk2-devel gconf2-devel gettext-devel gtkdoc dbus-1-devel dbus-1-glib
+gtk2-devel gconf2-devel gettext-devel gtkdoc dbus-1-devel dbus-1-glib
 
 # extras
 perl-XML-Parser

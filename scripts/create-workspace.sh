@@ -56,24 +56,23 @@ mkdir -p $workspace_dir/etc/
 cat > $workspace_dir/etc/yum.conf <<EOF
 [main]
 cachedir=/var/cache/yum
-reposdir=/etc/yum.repos.d
+keepcache=0
 debuglevel=2
-errorlevel=2
 logfile=/var/log/yum.log
-gpgcheck=0
-assumeyes=0
+pkgpolicy=newest
+distroverpkg=redhat-release
 tolerant=1
 exactarch=1
 obsoletes=1
-distroverpkg=suse-release
-retries=20
-pkgpolicy=newest
+gpgcheck=1
+plugins=1
+metadata_expire=1800
 EOF
 
 mkdir $workspace_dir/etc/yum.repos.d/
 cat > $workspace_dir/etc/yum.repos.d/base.repo <<EOF
-[sled10]
-name=SLED 10
+[Fodora Core 6]
+name=Fedora Core 6 - Zod
 baseurl=$url
 enabled=1
 gpgcheck=0
@@ -107,8 +106,17 @@ mkdir -p $workspace_dir/var/lib/rpm
 yum -y --installroot=$workspace_dir install $PACKAGES
 
 ##########################################################
+## Remove the default fedora yum repos
+##########################################################
+
+mkdir -p $workspace_dir/etc/yum.repos.d/backup
+mv $workspace_dir/etc/yum.repos.d/fedora* $workspace_dir/etc/yum.repos.d/backup
+
+##########################################################
 ## Perform final fixup on the workspace
 ##########################################################
 
 rm $workspace_dir/dev/null
 rm $workspace_dir/dev/zero
+
+
