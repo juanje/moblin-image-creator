@@ -41,4 +41,3 @@ done
 
 echo "Rebuilding yum repository..."
 createrepo $repository
-
