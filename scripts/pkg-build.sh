@@ -82,7 +82,7 @@ if [ -z "$spec_file" ]; then
 fi
 
 spec_pkg_name=`awk '/^Name:/ {print $2}' $spec_file`
-pkg_group=`awk '/^Group:/ {print $2}' $spec_file`
+pkg_group=`grep -m 1 ^Group: ${spec_file} | awk '{print $2}'`
 
 # Sanity check the spec file vs. package name
 if [ "$spec_pkg_name" != "$pkg_name" ] ; then
