@@ -36,7 +36,6 @@ while [ "$#" -ne "0" ] ; do
 
 	echo -n "Copying $pname into $pdir..."
 	cp $pkg $pdir
-	
 done
 
 echo "Rebuilding yum repository..."
