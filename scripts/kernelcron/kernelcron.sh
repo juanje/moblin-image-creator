@@ -7,13 +7,13 @@ check_url2="http://linux-ftp.jf.intel.com/pub/mirrors/kernel.org/v2.6/testing/"
 #check_url1="http://www2.kernel.org/pub/linux/kernel/v2.6/"
 #check_url2="http://www2.kernel.org/pub/linux/kernel/v2.6/testing/"
 check_url3="http://people.redhat.com/mingo/realtime-preempt/"
-myhttpproxy="xdu1-desk-linux.sh.intel.com:9110"
+myhttpproxy="proxy.jf.intel.com:911"
 reposuser=xdu1
 reposhost="$reposuser@umd-repo.jf.intel.com"
 myrepository="/home/repos/users/$reposuser"
 
 # execution env
-testmode="1"
+testmode="0"
 
 if [ $testmode -eq 1 ]; then
    echo "test mode"
