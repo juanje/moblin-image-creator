@@ -21,7 +21,6 @@ while [ "$#" -ne "0" ] ; do
 	pkg="$1"
 	shift
 
-
 	pname=$(rpmi $pkg name)
 	pgroup=$(rpmi $pkg group|sed 's/ /_/g')
 	pdir=$repository/$pgroup/$pname
