@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 rpmi () {
 	rpm --nosignature -q -p $1 --queryformat "%{$2}\n"
