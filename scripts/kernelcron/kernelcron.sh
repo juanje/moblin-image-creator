@@ -1,13 +1,15 @@
-#/bin/sh
+#! /bin/sh
 
 # put your url and proxy configuration here
-
 check_url1="http://linux-ftp.jf.intel.com/pub/mirrors/kernel.org/v2.6/"
 check_url2="http://linux-ftp.jf.intel.com/pub/mirrors/kernel.org/v2.6/testing/"
 #check_url1="http://www2.kernel.org/pub/linux/kernel/v2.6/"
 #check_url2="http://www2.kernel.org/pub/linux/kernel/v2.6/testing/"
 check_url3="http://people.redhat.com/mingo/realtime-preempt/"
 myhttpproxy="proxy.jf.intel.com:911"
+
+# set you umd-repo user name here
+# before use the script, you must put you public key to umd-repo homedir/.ssh dir, thus no password input needs for ssh and scp operation
 reposuser=xdu1
 reposhost="$reposuser@umd-repo.jf.intel.com"
 myrepository="/home/repos/users/$reposuser"
@@ -22,8 +24,10 @@ else
    echo "run mode"
    mailto="rob.rhoads@intel.com, feng.tang@intel.com, alek.du@intel.com"
 fi
+
 homedir=~
 progdir=umd/kernelcron
+PATH=$PATH:/usr/sbin:/sbin
 
 # variables needs
 newstamp=""
@@ -51,9 +55,10 @@ fi
 #set http_proxy if out side intel.com
 HttpProxySetting() {
 if [ -n "$(echo $1 | sed -n -e "/intel.com/p")" ]; then
-   http_proxy=""
+   export http_proxy=""
 else
-   http_proxy="$myhttpproxy"
+   echo "set http proxy to $myhttpproxy..."
+   export http_proxy="$myhttpproxy"
 fi
 }
 
@@ -84,7 +89,7 @@ SearchRTPatch() {
   rm -rf index.html
   curl -A "Mozila" $1 > index.html
   patch=$( cat index.html | sed -n -e "/patch-/p" | tail -n 1 | sed "s/.*\(patch-.*\)[\"<].*/\1/")
-  echo "Found RT patch $patch at $1"
+  [ -n "$patch" ] && echo "Found RT patch $patch at $1"
 }
 
 EmailNotification() {
@@ -215,7 +220,7 @@ if [ -n "$newstamp" ]; then
    if [ -n "$patch" ]; then
       patchrt="Patch0: $patch"
       patchrtapply="%patch0 -p1"
-      echo "downloading $patch..."
+      echo "downloading RT patch: $patch..."
       rm -rf $patch
       HttpProxySetting $check_url3
       wget --tries=10 $check_url3$patch 
@@ -270,7 +275,7 @@ if [ -n "$newstamp" ]; then
       scp kernelcron.sh $reposhost:$myrepository/scripts/
       scp kernel-umd-source.spec $reposhost:$myrepository/package-meta-data/Development/Sources/kernel-umd-source/specs/
       ssh $reposhost "cd $myrepository/package-meta-data;git-update-index Development/Sources/kernel-umd-source/specs/kernel-umd-source.spec"
-      if [ -n $patch ]; then
+      if [ -n "$patch" ]; then
          scp $patch $reposhost:$myrepository/package-meta-data/Development/Sources/kernel-umd-source/files/
          ssh $reposhost "cd $myrepository/package-meta-data;git-update-index --add Development/Sources/kernel-umd-source/files/$patch"
       fi
