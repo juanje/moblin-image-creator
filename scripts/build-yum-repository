@@ -17,7 +17,6 @@ if [ ! -d $repository ]; then
     exit -1
 fi
 
-
 while [ "$#" -ne "0" ] ; do
 	pkg="$1"
 	shift
