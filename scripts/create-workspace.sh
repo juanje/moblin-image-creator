@@ -113,13 +113,6 @@ mkdir -p $workspace_dir/etc/yum.repos.d/backup
 mv $workspace_dir/etc/yum.repos.d/fedora* $workspace_dir/etc/yum.repos.d/backup
 
 ##########################################################
-## Import the signing keys for the repository
-##########################################################
-
-rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-fedora
-rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-fedora-extras
-
-##########################################################
 ## Perform final fixup on the workspace
 ##########################################################
 
