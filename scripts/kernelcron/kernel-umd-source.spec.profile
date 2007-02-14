@@ -3,6 +3,9 @@
 # This file and all modifications and additions to the pristine
 # package are under the same license as the package itself.
 
+# build for redhat or suse ?
+%define target @TARGET@
+
 # build environment
 %define level @LEVEL@
 %define sublevel @SUBLEVEL@
@@ -24,7 +27,7 @@ Provides: Linux
 Autoreqprov: off
 Summary: UMD kernel-source
 Group: Development/Sources
-PreReq: /sbin/insserv /usr/bin/grep /bin/sed /bin/uname /bin/mkdir /bin/cat /bin/ln /bin/rm /etc/rc.status
+PreReq: /bin/grep /bin/sed /bin/uname /bin/mkdir /bin/cat /bin/ln /bin/rm
 Version: %{kversion}@EXTRAVER2@
 Release: 1
 
@@ -83,7 +86,11 @@ This is kernel version special for Intel UMD release.
 /lib/modules/%{krelease}-default/extra
 /lib/modules/%{krelease}-default/updates
 /lib/modules/%{krelease}-default/weak-updates
+%if "%{target}" == "redhat"
+%ghost /boot/initrd-%{krelease}-default.img
+%else
 %ghost /boot/initrd-%{krelease}-default
+%endif
 %ghost /boot/vmlinux
 /usr/src/kernels/%{krelease}-default-%{_target_cpu}
 
@@ -110,11 +117,50 @@ This is kernel version special for Intel UMD release.
 /lib/modules/%{krelease}-developer/extra
 /lib/modules/%{krelease}-developer/updates
 /lib/modules/%{krelease}-developer/weak-updates
+%if "%{target}" == "redhat"
+%ghost /boot/initrd-%{krelease}-developer.img
+%else
 %ghost /boot/initrd-%{krelease}-developer
+%endif
 %ghost /boot/vmlinux
 /usr/src/kernels/%{krelease}-developer-%{_target_cpu}
 
 %install
+if [ "%{target}" == "redhat" ]; then
+(   echo "rm -f /usr/src/linux; ln -s linux-%{krelease} /usr/src/linux"
+) > ../source-post.sh
+# redhat source-post.sh must be in %_builddir while suse one must be in %_builddir/%{name}-{%release}
+(echo "$(cat <<!
+  if [ `uname -i` == "x86_64" -o `uname -i` == "i386" ]; then
+   if [ -f /etc/sysconfig/kernel ]; then
+    /bin/sed -i -e 's/^DEFAULTKERNEL=kernel-smp$/DEFAULTKERNEL=kernel/' /etc/sysconfig/kernel || exit $?
+   fi
+  fi
+  /sbin/new-kernel-pkg --package kernel --mkinitrd --depmod --install %{krelease}-default || exit $?
+  if [ -x /sbin/weak-modules ]
+  then
+    /sbin/weak-modules --add-kernel %{krelease}-default || exit $?
+  fi
+  rm -f /boot/vmlinux;
+  ln -s vmlinux-%{krelease}-default /boot/vmlinux
+!)"
+) > ../post-default.sh
+(echo "$(cat <<!
+  if [ `uname -i` == "x86_64" -o `uname -i` == "i386" ]; then
+   if [ -f /etc/sysconfig/kernel ]; then
+    /bin/sed -i -e 's/^DEFAULTKERNEL=kernel-smp$/DEFAULTKERNEL=kernel/' /etc/sysconfig/kernel || exit $?
+   fi
+  fi
+  /sbin/new-kernel-pkg --package kernel --mkinitrd --depmod --install %{krelease}-developer || exit $?
+  if [ -x /sbin/weak-modules ]
+  then
+    /sbin/weak-modules --add-kernel %{krelease}-developer || exit $?
+  fi
+  rm -f /boot/vmlinux;
+  ln -s vmlinux-%{krelease}-developer /boot/vmlinux
+!)"
+) > ../post-developer.sh
+else
 (   cat %_sourcedir/functions.sh
     sed -e "s:@KERNELRELEASE@:%{krelease}:g" %_sourcedir/source-post.sh
 ) > source-post.sh
@@ -146,14 +192,16 @@ This is kernel version special for Intel UMD release.
 	-e "s:@FLAVOR""@:umd:g" \
         %_sourcedir/postun.sh
 ) > postun-developer.sh
+fi
 
 %post -n kernel-umd-default -f post-default.sh
 
-%postun -n kernel-umd-default -f postun-default.sh
-
 %post -n kernel-umd-developer -f post-developer.sh
 
+%if "%{target}" != "redhat"
 %postun -n kernel-umd-developer -f postun-developer.sh
+%postun -n kernel-umd-default -f postun-default.sh
+%endif
 
 # =====================Prepare==========================
 # here start to unpack kernel and apply patch against it
@@ -181,6 +229,7 @@ cd linux-%{krelease}
 # =========================Build============================
 # here start to build kernel and copy results to right place
 %build
+rm -rf $RPM_BUILD_ROOT
 mkdir -p $RPM_BUILD_ROOT/%{image_install_path}
 ln -sf vmlinux $RPM_BUILD_ROOT/%{image_install_path}/vmlinux
 mkdir -p $RPM_BUILD_ROOT/usr/src
@@ -216,7 +265,11 @@ for flavor in %{buildflavors}; do
     cp $kernelimg $RPM_BUILD_ROOT/%{image_install_path}/vmlinuz-$kernelver
     cp vmlinux $RPM_BUILD_ROOT/%{image_install_path}/vmlinux-$kernelver
 # also for %ghost purpose
+    %if "%{target}" == "redhat"
+        touch $RPM_BUILD_ROOT/%{image_install_path}/initrd-$kernelver.img
+    %else
     touch $RPM_BUILD_ROOT/%{image_install_path}/initrd-$kernelver
+    %endif
     mkdir -p $RPM_BUILD_ROOT/lib/modules/$kernelver
     make ARCH=$arch INSTALL_MOD_PATH=$RPM_BUILD_ROOT modules_install KERNELRELEASE=$kernelver
 # Create the kABI metadata for use in packaging
