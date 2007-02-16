@@ -5,33 +5,17 @@
 #                       packages
 ###############################################################################
 
-set -e
-
 # absolute path to new directory for creating workspace
 workspace_dir=$1
-
-# URL to yum repository. Note that using a file:/// URL will work in creating
-# the rootstrap, but then yum will not be usable inside the resulting workspace
-# untill either the yum repository is made available in the same absolute
-# location inside the workspace (like by mounting a portion of the filesystem 
-# using the --bind argument), or by changing the baseurl in the yum config.
-url=$2
+shift
 
 # top level packages to install in the rootstrap image. Yum will automatically
 # perform dependency resolution
 PACKAGES="util-linux rpm yum"
 
-if [ -z "$workspace_dir" ] || [ -z "$url" ]; then
-    echo "USAGE: $0 NEW_WORKSPACE_DIR YUM_URL"
+if [ -z "$workspace_dir" ] || [ -z "$1" ]; then
+    echo "USAGE: $0 NEW_WORKSPACE_DIR YUM_URL1 [YUM_URL2] [...]"
     exit -1
-fi
-
-if [[ ! $url =~ '.*://.*' ]]; then
-    if [[ $url =~ '^/.*' ]]; then
-	url="file://$url"
-    else
-	url="file://$PWD/$url"
-    fi
 fi
 
 if [[ ! $workspace_dir =~ '^/.*' ]]; then
@@ -56,28 +40,43 @@ mkdir -p $workspace_dir/etc/
 cat > $workspace_dir/etc/yum.conf <<EOF
 [main]
 cachedir=/var/cache/yum
-reposdir=/etc/yum.repos.d
+keepcache=0
 debuglevel=2
-errorlevel=2
 logfile=/var/log/yum.log
-gpgcheck=0
-assumeyes=0
+pkgpolicy=newest
+distroverpkg=redhat-release
 tolerant=1
 exactarch=1
 obsoletes=1
-distroverpkg=suse-release
-retries=20
-pkgpolicy=newest
+gpgcheck=1
+plugins=1
+metadata_expire=1800
 EOF
 
+COUNT=0
 mkdir $workspace_dir/etc/yum.repos.d/
-cat > $workspace_dir/etc/yum.repos.d/base.repo <<EOF
-[sled10]
-name=SLED 10
+while [ "$#" -ne "0" ] ; do
+	url="$1"
+	shift
+
+	if [[ ! $url =~ '.*://.*' ]]; then
+	    if [[ $url =~ '^/.*' ]]; then
+		url="file://$url"
+	    else
+		url="file://$PWD/$url"
+	    fi
+	fi
+
+	cat > $workspace_dir/etc/yum.repos.d/$COUNT.repo <<EOF
+[Repository #$COUNT]
+name=Repository-$url
 baseurl=$url
 enabled=1
 gpgcheck=0
 EOF
+
+	((COUNT++))
+done
 
 ##########################################################
 ## Final fixup before calling yum
@@ -107,8 +106,17 @@ mkdir -p $workspace_dir/var/lib/rpm
 yum -y --installroot=$workspace_dir install $PACKAGES
 
 ##########################################################
+## Remove the default fedora yum repos
+##########################################################
+
+mkdir -p $workspace_dir/etc/yum.repos.d/backup
+mv $workspace_dir/etc/yum.repos.d/fedora* $workspace_dir/etc/yum.repos.d/backup
+
+##########################################################
 ## Perform final fixup on the workspace
 ##########################################################
 
 rm $workspace_dir/dev/null
 rm $workspace_dir/dev/zero
+
+
