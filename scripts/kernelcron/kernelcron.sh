@@ -1,14 +1,15 @@
 #! /bin/sh
 # define your target type, "suse" or "redhat"
 #target="suse"
-gitproj="OpenSuSE10.2"
+#gitproj="OpenSuSE10.2"
 target="redhat"
-#gitproj="FC6"
-gitbranch="UMD"
+gitproj="FC6"
+gitbranch="master"
 
 if [ "$target" == "redhat" ]; then
    rpmdir="redhat"
 elif [ "$target" == "suse" ]; then
+# if on a real SuSE platform, update the rpmdir="packages"
    rpmdir="redhat"
 fi
 
