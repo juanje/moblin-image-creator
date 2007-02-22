@@ -90,6 +90,19 @@ if [ "$spec_pkg_name" != "$pkg_name" ] ; then
     exit -1
 fi
 
+# Check for location of the RPM directory within the workspace
+if [ -d ${workspace_dir}/usr/src/redhat ] ; then
+    # Location for a RedHat/Fedora System
+    rpm_dir="${workspace_dir}/usr/src/redhat"
+elif [ -d ${workspace_dir}/usr/src/packages ] ; then
+    # Location for a Novell SuSE System
+    rpm_dir="${workspace_dir}/usr/src/packages"
+else
+    # Houstan, we have a problem...
+    echo -e "Error: Unable to find the RPM directory within the workspace [${workspace_dir}]!\n"
+    exit -1
+fi
+
 echo "UMD_DEV_PATH      : ${UMD_DEV_PATH}"
 echo "UMD_TOOLS_PATH    : ${UMD_TOOLS_PATH}"
 echo "Workspace Dir     : ${workspace_dir}"
@@ -99,16 +112,17 @@ echo
 echo "Spec File         : ${spec_file}"
 echo "Package Name      : ${pkg_name}"
 echo "Package Group     : ${pkg_group}"
+echo "RPM Package Dir   : ${rpm_dir}"
 
 echo -e "\nCopying source files to workspace..."
 cp -fv ${pkg_meta_data_dir}/${pkg_group}/${pkg_name}/files/* \
-       ${workspace_dir}/usr/src/packages/SOURCES
+       ${rpm_dir}/SOURCES
 
 echo -e "\nCopying pristine release files to workspace..."
 cp -fv ${pristine_src_dir}/${pkg_group}/${pkg_name}/* \
-       ${workspace_dir}/usr/src/packages/SOURCES
+       ${rpm_dir}/SOURCES
 
 echo -e "\nCopying spec files to workspace..."
-cp -fv ${spec_file} ${workspace_dir}/usr/src/packages/SPECS
+cp -fv ${spec_file} ${rpm_dir}/SPECS
 
 echo -e "\nFinished!\n"
