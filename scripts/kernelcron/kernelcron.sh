@@ -167,8 +167,8 @@ else SearchNewVersion "$check_url2" "$oldstamp"
 fi
 
 if [ $?  -eq 1 ]; then
-   newstamp=stamp
-   newver=ver
+   newstamp=$stamp
+   newver=$ver
    url=$check_url2
 fi
 
