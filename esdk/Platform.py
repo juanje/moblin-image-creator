@@ -1,7 +1,6 @@
 #!/usr/bin/python
 
-import sys 
-import os
+import os, re, sys 
 
 from SDK import *
 from FSet import *
@@ -10,25 +9,27 @@ class Platform:
 	def __init__(self, SDK, name):
 		self.SDK = SDK
 		self.name = name
+                self.path = os.path.join(self.SDK.path, 'platforms', self.name)
 
 		# instantiate all fsets
 		self.fsets = {}
-		fset_path = self.SDK.path + '/platforms/' + self.name + '/fsets'
-		for file in os.listdir(fset_path):
-			fset = FSet(fset_path + '/' + file)
+		fset_path = os.path.join(self.path, 'fsets')
+		for filename in os.listdir(fset_path):
+			fset = FSet(os.path.join(fset_path, filename))
 			self.fsets[fset.name] = fset
 
 		# instantiate all repos
 		self.repos = []
-		repo_path = self.SDK.path + '/platforms/' + self.name + '/repos'
+		repo_path = os.path.join(self.path, 'repos')
 		for repo in os.listdir(repo_path):
-			self.repos.append(repo_path + '/' + repo)
+			self.repos.append(os.path.join(repo_path, repo))
 
 		# determine what packages need to be installed in the jailroot
 		self.jailroot_packages = []
-		config = open(self.SDK.path + '/platforms/' + self.name + '/jailroot.packages')
+		config = open(os.path.join(self.path, 'jailroot.packages'))
                 for line in config:
-			if line[:1] != '#':
+                        # Ignore lines beginning with '#'
+                        if not re.search(r'^\s*#', line):
 				for p in line.split():
 					self.jailroot_packages.append(p)
 		config.close()
