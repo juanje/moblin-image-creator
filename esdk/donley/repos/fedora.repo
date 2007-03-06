@@ -1,7 +1,5 @@
 [base]
 name=Fedora Core $releasever - $basearch - Base
-#baseurl=http://download.fedora.redhat.com/pub/fedora/linux/core/$releasever/$basearch/os/
-baseurl=http://linux-ftp.jf.intel.com/pub/mirrors/fedora/linux/core/$releasever/$basearch/os/
-#mirrorlist=http://fedora.redhat.com/download/mirrors/fedora-core-$releasever
+baseurl=http://linux-ftp.jf.intel.com/pub/mirrors/fedora/linux/core/6/$basearch/os/
 enabled=1
 gpgcheck=1

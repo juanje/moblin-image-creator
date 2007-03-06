@@ -6,6 +6,8 @@ import yum
 
 from SDK import *
 from Platform import *
+from stat import *
+from shutil import *
 
 class FileSystem:
 	"""
@@ -20,7 +22,7 @@ class FileSystem:
 	anything usefull with the root filesystem will require the caller
 	to use the 'install' method for installing new RPM packages.
 	"""
-	def __init__(self, path):
+	def __init__(self, path, repos):
 		self.path = path
 
 		if os.path.isdir(path) == 0:
@@ -30,27 +32,70 @@ class FileSystem:
 			enough done to allow yum to install packages from
 			outside the root of the filesystem
 			"""
+			
 			os.mkdir(self.path)
-			# make all the minimal directory structures
-			# mknod /dev/null and /dev/zero
-			# create /etc/yum.conf and /etc/yum.repos.d/*.repo
-		
+			
+			os.mkdir(self.path + '/etc')
+			copy('/etc/hosts', self.path + '/etc/')
+			copy('/etc/passwd', self.path + '/etc/')
+			copy('/etc/group', self.path + '/etc/')
+			copy('/etc/resolve.conf', self.path + '/etc/')
+			os.mkdir(self.path + '/etc/yum.repos.d')
+			yumconf = open(self.path + '/etc/yum.conf', 'w')
+			print >> yumconf, """\
+[main]
+cachedir=/var/cache/yum
+keepcache=0
+debuglevel=2
+logfile=/var/log/yum.log
+pkgpolicy=newest
+distroverpkg=redhat-release
+tolerant=1
+exactarch=1
+obsoletes=1
+gpgcheck=1
+plugins=1
+metadata_expire=1800
+"""
+			yumconf.close()
+
+			for r in repos:
+				copy(r, self.path + '/etc/yum.repos.d/')
+			
+			os.mkdir(self.path + '/proc')
+			
+			os.mkdir(self.path + '/var')
+			os.mkdir(self.path + '/var/log')
+			os.mkdir(self.path + '/var/lib')
+			os.mkdir(self.path + '/var/lib/rpm')
+
+			os.mkdir(self.path + '/dev')
+			os.mknod(self.path + '/dev/null', S_IFCHR | 0666, os.makedev(1,3))
+			os.mknod(self.path + '/dev/zero', S_IFCHR | 0666, os.makedev(1,5))
+
+			
 	def install(self, packages, repos):
 		"""
 		Call into yum to install RPM packages using the
 		specified yum repositories
 		"""
-		args = ['-y', '--installroot=' + self.path,  'install']
+		#sys.argv = ['yum', '-y', '--installroot=' + self.path,  'install']
+		#for p in packages:
+		#	sys.argv.append(p)
+		#
+		#sys.path.insert(0, '/usr/share/yum-cli')
+		#try:
+		#	import yummain
+		#	yummain.main(sys.argv[1:])
+		#except KeyboardInterrupt, e:
+		#	print >> sys.stderr, "\n\nExiting on user cancel."
+		#	sys.exit(1)
+
+		command = 'yum -y --installroot=' + self.path + ' install '
 		for p in packages:
-			args.append(p)
-			
-		sys.path.insert(0, '/usr/share/yum-cli')
-		try:
-			import yummain
-			yummain.main(args)
-		except KeyboardInterrupt, e:
-			print >> sys.stderr, "\n\nExiting on user cancel."
-			sys.exit(1)
+			command = command + ' ' + p
+		print "About to call: " + command
+		os.system(command)
 
 class Project(FileSystem):
 	"""
@@ -60,10 +105,10 @@ class Project(FileSystem):
 	"""
 	def __init__(self, path, name, platform):
 		self.targets = []
-		self.path = path
+		self.path = os.path.abspath(path)
 		self.name = name
 		self.platform = platform
-		FileSystem.__init__(self, self.path)
+		FileSystem.__init__(self, self.path, self.platform.repos)
 		
 	def install(self):
 		"""

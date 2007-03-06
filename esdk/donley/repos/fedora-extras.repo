@@ -1,7 +1,0 @@
-[extras]
-name=Fedora Extras $releasever - $basearch - Base
-#baseurl=http://download.fedora.redhat.com/pub/fedora/linux/core/$releasever/$basearch/os/
-baseurl=http://linux-ftp.jf.intel.com/pub/mirrors/fedora/linux/extras/$releasever/$basearch/
-#mirrorlist=http://fedora.redhat.com/download/mirrors/fedora-core-$releasever
-enabled=1
-gpgcheck=1
