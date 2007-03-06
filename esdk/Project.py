@@ -23,9 +23,9 @@ class FileSystem:
 	to use the 'install' method for installing new RPM packages.
 	"""
 	def __init__(self, path, repos):
-		self.path = path
+		self.path = os.path.abspath(os.path.expanduser(path))
 
-		if os.path.isdir(path) == 0:
+		if not os.path.isdir(self.path):
 			"""
 			Initial filesystem stub has never been created, so
 			setup the initial base directory structure with just
@@ -33,15 +33,15 @@ class FileSystem:
 			outside the root of the filesystem
 			"""
 			
-			os.mkdir(self.path)
-			
-			os.mkdir(self.path + '/etc')
-			copy('/etc/hosts', self.path + '/etc/')
-			copy('/etc/passwd', self.path + '/etc/')
-			copy('/etc/group', self.path + '/etc/')
-			copy('/etc/resolv.conf', self.path + '/etc/')
-			os.mkdir(self.path + '/etc/yum.repos.d')
-			yumconf = open(self.path + '/etc/yum.conf', 'w')
+			# Create our directories
+                        for dirname in [ 'proc', 'var/log', 'var/lib/rpm', 'dev', 'etc/yum.repos.d' ]:
+                            full_path = os.path.join(self.path, dirname)
+                            os.makedirs(full_path)
+
+                        target_etc = os.path.join(self.path, "etc")
+                        for filename in [ 'hosts', 'passwd', 'group', 'resolv.conf' ]:
+                            copy(os.path.join('/etc', filename), target_etc)
+			yumconf = open(os.path.join(target_etc, 'yum.conf'), 'w')
 			print >> yumconf, """\
 [main]
 cachedir=/var/cache/yum
@@ -60,16 +60,8 @@ metadata_expire=1800
 			yumconf.close()
 
 			for r in repos:
-				copy(r, self.path + '/etc/yum.repos.d/')
-			
-			os.mkdir(self.path + '/proc')
-			
-			os.mkdir(self.path + '/var')
-			os.mkdir(self.path + '/var/log')
-			os.mkdir(self.path + '/var/lib')
-			os.mkdir(self.path + '/var/lib/rpm')
+				copy(r, os.path.join(target_etc, 'yum.repos.d'))
 
-			os.mkdir(self.path + '/dev')
 			os.mknod(self.path + '/dev/null', S_IFCHR | 0666, os.makedev(1,3))
 			os.mknod(self.path + '/dev/zero', S_IFCHR | 0666, os.makedev(1,5))
 
