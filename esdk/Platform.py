@@ -14,8 +14,9 @@ class Platform:
 		# instantiate all fsets
 		self.fsets = {}
 		fset_path = self.SDK.path + '/platforms/' + self.name + '/fsets'
-		for fset in os.listdir(fset_path):
-			self.fsets[fset] = FSet(fset_path + '/' + fset)
+		for file in os.listdir(fset_path):
+			fset = FSet(fset_path + '/' + file)
+			self.fsets[fset.name] = fset
 
 		# instantiate all repos
 		self.repos = []
