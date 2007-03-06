@@ -2,6 +2,7 @@
 
 import os
 import sys
+import yum
 
 from SDK import *
 from Platform import *
@@ -39,7 +40,17 @@ class FileSystem:
 		Call into yum to install RPM packages using the
 		specified yum repositories
 		"""
-		print "TODO: Implement me using yum python modules"
+		args = ['-y', '--installroot=' + self.path,  'install']
+		for p in packages:
+			args.append(p)
+			
+		sys.path.insert(0, '/usr/share/yum-cli')
+		try:
+			import yummain
+			yummain.main(args)
+		except KeyboardInterrupt, e:
+			print >> sys.stderr, "\n\nExiting on user cancel."
+			sys.exit(1)
 
 class Project(FileSystem):
 	"""
@@ -58,7 +69,7 @@ class Project(FileSystem):
 		"""
 		Install all the packages defined by Platform.jailroot_packages
 		"""
-		FileSystem.install(self, this.platform.jailroot_packages, this.platform.repos)
+		FileSystem.install(self, self.platform.jailroot_packages, self.platform.repos)
 		
 	def __str__(self):
 		return ("<Project: name=%s, path=%s>"
@@ -87,3 +98,4 @@ if __name__ == '__main__':
 		sys.exit(1)
 
 	proj = Project(sys.argv[1], sys.argv[2], Platform(SDK(), sys.argv[3]))
+	proj.install()

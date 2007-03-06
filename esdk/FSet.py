@@ -4,17 +4,22 @@ import os
 import sys
 
 class FSet:
+	"""
+	An FSet object represets a functional set of packages to install
+	in a target filesystem.  An FSet contains an array of package names
+	in FSet.packages, an array of additional debug packages in
+	FSet.debug_packages, and an array of dependant FSet names in
+	FSet.deps.
+	"""
 	def __init__(self, path):
 		self.path = path
-		self._parse()
-
-	def _parse(self):
 		self.name = ''
 		self.packages = []
 		self.debug_packages = []
 		self.deps = []
 		self.desc = ''
 
+		# Parse the fset file
 		fset = open(self.path)
                 for line in fset:
                         tmp = line.split('=')
@@ -28,7 +33,6 @@ class FSet:
 				self.deps = tmp[1].strip().split()
 			elif tmp[0] == 'DESC':
 				self.desc = tmp[1].strip()
-				
 		fset.close()
 
 	def __str__(self):
@@ -36,5 +40,8 @@ class FSet:
                         % (self.name, self.desc, self.packages, self.debug_packages, self.deps))
 
 if __name__ == '__main__':
-	for file in sys.argv[1:]:
-		print FSet(file);
+	if len(sys.argv) == 1:
+		print >> sys.stderr, "USAGE: %s FSET_FILE ..." % (sys.argv[0])
+	else:
+		for file in sys.argv[1:]:
+			print FSet(file);
