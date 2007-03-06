@@ -53,7 +53,7 @@ distroverpkg=redhat-release
 tolerant=1
 exactarch=1
 obsoletes=1
-gpgcheck=1
+gpgcheck=0
 plugins=1
 metadata_expire=1800
 """
@@ -71,18 +71,6 @@ metadata_expire=1800
 		Call into yum to install RPM packages using the
 		specified yum repositories
 		"""
-		#sys.argv = ['yum', '-y', '--installroot=' + self.path,  'install']
-		#for p in packages:
-		#	sys.argv.append(p)
-		#
-		#sys.path.insert(0, '/usr/share/yum-cli')
-		#try:
-		#	import yummain
-		#	yummain.main(sys.argv[1:])
-		#except KeyboardInterrupt, e:
-		#	print >> sys.stderr, "\n\nExiting on user cancel."
-		#	sys.exit(1)
-
 		command = 'yum -y --installroot=' + self.path + ' install '
 		for p in packages:
 			command = command + ' ' + p
