@@ -14,7 +14,6 @@ class SDK:
 		for p in os.listdir(self.path + '/platforms/'):
 			self.platforms[p] = Platform(self, p)
 
-		self.jailroot_packages = []
 
 	def __str__(self):
 		return ("<SDK Object: path=%s, platform=%s>" %
