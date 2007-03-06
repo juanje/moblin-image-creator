@@ -7,13 +7,12 @@ from Platform import *
 
 class SDK:
 	def __init__(self, path='/usr/share/esdk'):
-		self.path = path
+		self.path = os.path.abspath(os.path.expanduser(path))
 		
 		# instantiate all platforms
 		self.platforms = {}
-		for p in os.listdir(self.path + '/platforms/'):
+		for p in os.listdir(os.path.join(self.path, 'platforms')):
 			self.platforms[p] = Platform(self, p)
-
 
 	def __str__(self):
 		return ("<SDK Object: path=%s, platform=%s>" %
