@@ -39,7 +39,7 @@ class FileSystem:
 			copy('/etc/hosts', self.path + '/etc/')
 			copy('/etc/passwd', self.path + '/etc/')
 			copy('/etc/group', self.path + '/etc/')
-			copy('/etc/resolve.conf', self.path + '/etc/')
+			copy('/etc/resolv.conf', self.path + '/etc/')
 			os.mkdir(self.path + '/etc/yum.repos.d')
 			yumconf = open(self.path + '/etc/yum.conf', 'w')
 			print >> yumconf, """\
