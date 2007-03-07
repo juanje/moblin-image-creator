@@ -1,8 +1,6 @@
 #!/usr/bin/python -tt
 
-import os
-import sys
-import yum
+import os, sys, yum
 
 from SDK import *
 from Platform import *
@@ -11,26 +9,25 @@ from shutil import *
 
 class FileSystem:
     """
-    This is the base class for any type of a filesystem.  This is used
-    for both creating 'jailroot' filesystems that isolate a build from
-    the host Linux distribution, and also for creating 'target' filesystems
-    that will eventually be transformed into installation images
-    to be burned/copied/whatever into the target device.
+    This is the base class for any type of a filesystem.  This is used for both
+    creating 'jailroot' filesystems that isolate a build from the host Linux
+    distribution, and also for creating 'target' filesystems that will
+    eventually be transformed into installation images to be
+    burned/copied/whatever into the target device.
 
-    By just instantiating a FileSystem object, the caller will trigger
-    the basic root filesystem components to be intialized, but to do
-    anything usefull with the root filesystem will require the caller
-    to use the 'install' method for installing new RPM packages.
+    By just instantiating a FileSystem object, the caller will trigger the
+    basic root filesystem components to be intialized, but to do anything
+    usefull with the root filesystem will require the caller to use the
+    'install' method for installing new RPM packages.
     """
     def __init__(self, path, repos):
         self.path = os.path.abspath(os.path.expanduser(path))
 
         if not os.path.isdir(self.path):
             """
-            Initial filesystem stub has never been created, so
-            setup the initial base directory structure with just
-            enough done to allow yum to install packages from
-            outside the root of the filesystem
+            Initial filesystem stub has never been created, so setup the
+            initial base directory structure with just enough done to allow yum
+            to install packages from outside the root of the filesystem
             """
 
             # Create our directories
@@ -62,14 +59,14 @@ metadata_expire=1800
             for r in repos:
                 copy(r, os.path.join(target_etc, 'yum.repos.d'))
 
-            os.mknod(self.path + '/dev/null', S_IFCHR | 0666, os.makedev(1,3))
-            os.mknod(self.path + '/dev/zero', S_IFCHR | 0666, os.makedev(1,5))
+            os.mknod(os.path.join(self.path, 'dev/null'), S_IFCHR | 0666, os.makedev(1,3))
+            os.mknod(os.path.join(self.path, 'dev/zero'), S_IFCHR | 0666, os.makedev(1,5))
 
 
     def install(self, packages, repos):
         """
-        Call into yum to install RPM packages using the
-        specified yum repositories
+        Call into yum to install RPM packages using the specified yum
+        repositories
         """
         command = 'yum -y --disablerepo=* --enablerepo=esdk* --installroot=' + self.path + ' install '
         for p in packages:
@@ -78,13 +75,12 @@ metadata_expire=1800
 
 class Project(FileSystem):
     """
-    A Project is a type of  'jailroot' filesystem that is used to
-    isolate the build system from the host Linux distribution.  It
-    also knows how to create new 'target' filesystems.
+    A Project is a type of  'jailroot' filesystem that is used to isolate the
+    build system from the host Linux distribution.  It also knows how to create
+    new 'target' filesystems.
     """
     def __init__(self, path, name, platform):
-
-        self.path = os.path.abspath(path)
+        self.path = os.path.abspath(os.path.expanduser(path))
         self.name = name
         self.platform = platform
         FileSystem.__init__(self, self.path, self.platform.repos)
@@ -112,14 +108,14 @@ class Project(FileSystem):
 
 class Target(FileSystem):
     """
-    Represents a 'target' filesystem that will eventually be installed
-    on the target device.
+    Represents a 'target' filesystem that will eventually be installed on the
+    target device.
     """
     def __init__(self, name, project):
         self.project = project
         self.fsets = []
         self.name = name
-        self.path = project.path + "/targets/" + name
+        self.path = os.path.join(project.path, "targets", name)
         FileSystem.__init__(self, self.path, project.platform.repos)
 
     def install(self, fset, debug=0):
