@@ -37,8 +37,10 @@ class FSet:
                             # See if we want to store the value under a
                             # different identifier
                             if list_vals[key]:
-                                key = list_vals[key]
-                            exec('self.%s = value.split()' % key)
+                                new_key = list_vals[key]
+                            else:
+                                new_key = key
+                            exec('self.%s = value.split()' % new_key)
                             continue
 		fset.close()
                 self.debug_packages.sort()
