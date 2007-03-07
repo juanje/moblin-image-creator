@@ -34,7 +34,7 @@ class FileSystem:
 			"""
 			
 			# Create our directories
-                        for dirname in [ 'proc', 'var/log', 'var/lib/rpm', 'dev', 'etc/yum.repos.d' ]:
+                        for dirname in [ 'proc', 'var/log', 'var/lib/rpm', 'dev', 'etc/yum.repos.d', 'targets' ]:
                             full_path = os.path.join(self.path, dirname)
                             os.makedirs(full_path)
 
@@ -71,7 +71,7 @@ metadata_expire=1800
 		Call into yum to install RPM packages using the
 		specified yum repositories
 		"""
-		command = 'yum -y --installroot=' + self.path + ' install '
+		command = 'yum -y --disablerepo=* --enablerepo=esdk* --installroot=' + self.path + ' install '
 		for p in packages:
 			command = command + ' ' + p
 		os.system(command)
@@ -83,11 +83,18 @@ class Project(FileSystem):
 	also knows how to create new 'target' filesystems.
 	"""
 	def __init__(self, path, name, platform):
-		self.targets = {}
+
 		self.path = os.path.abspath(path)
 		self.name = name
 		self.platform = platform
 		FileSystem.__init__(self, self.path, self.platform.repos)
+
+		# instantiate all targets
+		self.targets = {}
+		targets_path = os.path.join(self.path, 'targets')
+		for dirname in os.listdir(targets_path):
+			target = Target(dirname, self)
+			self.targets[target.name] = target
 		
 	def install(self):
 		"""
@@ -96,7 +103,8 @@ class Project(FileSystem):
 		FileSystem.install(self, self.platform.jailroot_packages, self.platform.repos)
 
 	def create_target(self, name):
-		self.targets[name] = Target(name, self)
+		if not self.targets.has_key(name):
+			self.targets[name] = Target(name, self)
 		
 	def __str__(self):
 		return ("<Project: name=%s, path=%s>"
