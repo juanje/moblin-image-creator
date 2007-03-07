@@ -74,7 +74,6 @@ metadata_expire=1800
 		command = 'yum -y --installroot=' + self.path + ' install '
 		for p in packages:
 			command = command + ' ' + p
-		print "About to call: " + command
 		os.system(command)
 
 class Project(FileSystem):
@@ -84,7 +83,7 @@ class Project(FileSystem):
 	also knows how to create new 'target' filesystems.
 	"""
 	def __init__(self, path, name, platform):
-		self.targets = []
+		self.targets = {}
 		self.path = os.path.abspath(path)
 		self.name = name
 		self.platform = platform
@@ -95,6 +94,9 @@ class Project(FileSystem):
 		Install all the packages defined by Platform.jailroot_packages
 		"""
 		FileSystem.install(self, self.platform.jailroot_packages, self.platform.repos)
+
+	def create_target(self, name):
+		self.targets[name] = Target(name, self)
 		
 	def __str__(self):
 		return ("<Project: name=%s, path=%s>"
@@ -109,9 +111,17 @@ class Target(FileSystem):
 		self.project = project
 		self.fsets = []
 		self.name = name
-		self.path = jailroot.path + "/targets/fs"
-		FileSystem.__init__(self, self.path)
+		self.path = project.path + "/targets/" + name
+		FileSystem.__init__(self, self.path, project.platform.repos)
 
+	def install(self, fset, debug=0):
+		"""
+		Install a fset into the target filesystem
+		"""
+		FileSystem.install(self, fset.packages, self.project.platform.repos)
+		if debug == 1:
+			FileSystem.install(self, fset.debug_packages, self.project.platform.repos)
+			
 	def __str__(self):
 		return ("<Target: name=%s, path=%s>"
                         % (self.name, self.path))
@@ -124,3 +134,5 @@ if __name__ == '__main__':
 
 	proj = Project(sys.argv[1], sys.argv[2], Platform(SDK(), sys.argv[3]))
 	proj.install()
+	proj.create_target('mytest')
+	proj.targets['mytest'].install(proj.platform.fsets['Core'])
