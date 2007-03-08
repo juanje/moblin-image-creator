@@ -144,6 +144,14 @@ class ConfigFile:
         config.close()
 
 class PackageConfig(ConfigFile):
+    """
+    The PackageConfig class abstracts a SDK project configuration file.
+
+    example usage:
+    config = PackageConfig('~/.esdk/myproject.proj')
+    print '~/esdk/myproject.proj: name=%s desc=%s path=%s platform=%s' %
+          (config.name, config.desc, config.path, config.platform)
+    """
     def __init__(self, path):
         self.path = path
         ConfigFile.__init__(self, path, ['name', 'desc', 'path', 'platform'])
@@ -172,7 +180,28 @@ class SDK:
                 pass
             
     def create_project(self, path, name, desc, platform):
+        """
+        Create a new project by specifying an install path, a name, a
+        short description, and a platform object.
 
+        example:
+
+        # By 'creating' a project, the class will:
+        #   - create a new directory (i.e. path)
+        #   - create the initial directory structure
+        #   - setup the project configuration files
+        #     both inside the project directory, and also
+        #     'the project config' in ~/.esdk/
+        proj = SDK().create_project(self, '~/projects/myproject',
+                                    'My Project',
+                                    'This is a test, only a test', 'donley')
+
+        # after creating the project, you still need to install the
+        # platform specific packages to enable the project to be used
+        # as a jailroot
+        proj.install()
+        """
+        
         # create the config file
         config_path = os.path.join(self.config_path, name + '.proj')
         os.path.isfile(config_path)
