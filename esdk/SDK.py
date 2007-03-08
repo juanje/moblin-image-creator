@@ -165,9 +165,12 @@ class SDK:
         # discover all existing projects
         self.projects = {}
         for file in os.listdir(self.config_path):
-            config = PackageConfig(os.path.join(self.config_path, file))
-            self.projects[config.name] = Project(config.path, config.name, self.platforms[config.platform])
-
+            try:
+                config = PackageConfig(os.path.join(self.config_path, file))
+                self.projects[config.name] = Project(config.path, config.name, self.platforms[config.platform])
+            except:
+                pass
+            
     def create_project(self, path, name, desc, platform):
 
         # create the config file
