@@ -17,17 +17,6 @@ for key in sdk.projects.keys():
 	project = sdk.projects[key]
 	print '\t - %s: %s' % (project.name, project.path)
 
-User list available projects:
-------------------------------
-
-# Input  => Nothing
-
-print 'Available projects:'
-sdk = SDK()
-for key in sdk.projects.keys():
-	project = sdk.projects[key]
-	print '\t - %s: %s' % (project.name, project.path)
-
 User opens an existing project:
 -------------------------------
 
