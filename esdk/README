@@ -6,8 +6,28 @@ User list available projects:
 # Input => Nothing
 
 print "Available projects: "
-for project in SDK().projects:
-	print "\t - %s: %s" % (project.name, project.desc)
+sdk = SDK()
+for key in sdk.projects.keys():
+	project = sdk.projects[key]
+	print "\t - %s: %s" % (project.name, project.path)
+
+User list available projects:
+------------------------------
+
+# Input  => Nothing
+
+print "Available projects:"
+sdk = SDK()
+for key in sdk.projects.keys():
+	project = sdk.projects[key]
+	print "\t - %s: %s" % (project.name, project.path)
+
+User opens an existing project:
+-------------------------------
+
+Input => Name of existing project
+
+proj = SDK().projects[project_name]
 
 User list available platforms:
 ------------------------------
@@ -16,7 +36,7 @@ User list available platforms:
 
 print "Available platforms:"
 sdk = SDK()
-for pname in SDK().platforms.keys():
+for pname in sdk.platforms.keys():
 	print "\t - %s" % sdk.platform[pname].name 
 
 User creates a new project:
@@ -27,8 +47,10 @@ Input => Name to give the new project
 Input => Description of project
 Input => Platform object
 
+sdk = SDK()
+
 # construct the new project
-proj = SDK().create_project(path, name, desc, SDK().platforms['donley'])
+proj = sdk.create_project(path, name, desc, sdk.platforms['donley'])
 
 # install the platform defined list of RPM packages into the platform
 # so that the platform directory can be used as a jailroot
@@ -37,10 +59,44 @@ proj.install()
 # keep in mind, that at this point there are no target filesystems
 # installed in the project
 
-User opens an existing project:
+User list available targets installed in a project:
+---------------------------------------------------
+
+Input => Project object
+
+print "Available targets:"
+for key in project.targets.keys():
+	target = project.targets[key]
+	print "\t - %s" % (target.name)
+
+User creates a new target inside a project:
+-------------------------------------------
+
+Input => Project object
+Input => name to use for target
+
+target = project.create_target(name)
+
+User list available fsets for the platform:
+-------------------------------------------
+
+Input => Platform object
+
+print "Available fsets for the %s platform:" % (platform.name)
+for key in platform.fsets.keys():
+	fset = platform.fsets[key]
+	print "\t - %s" % (fset.name)
+
+User installs a fset in target:
 -------------------------------
 
-Input => Name of existing project
+Input => Target object
+Input => fset object
 
-proj = SDK().projects[project_name]
+# you could do a normal install
+target.install(fset)
+
+# or you could install debug packages in addition to the normal packages
+target.install(fset, 1)
+
 
