@@ -1,0 +1,46 @@
+--==: Software Flows :==--
+
+User list available projects:
+-----------------------------
+
+# Input => Nothing
+
+print "Available projects: "
+for project in SDK().projects:
+	print "\t - %s: %s" % (project.name, project.desc)
+
+User list available platforms:
+------------------------------
+
+# Input  => Name of the project (a string)
+
+print "Available platforms:"
+sdk = SDK()
+for pname in SDK().platforms.keys():
+	print "\t - %s" % sdk.platform[pname].name 
+
+User creates a new project:
+---------------------------
+
+Input => Path to the new project workspace
+Input => Name to give the new project
+Input => Description of project
+Input => Platform object
+
+# construct the new project
+proj = SDK().create_project(path, name, desc, SDK().platforms['donley'])
+
+# install the platform defined list of RPM packages into the platform
+# so that the platform directory can be used as a jailroot
+proj.install()
+
+# keep in mind, that at this point there are no target filesystems
+# installed in the project
+
+User opens an existing project:
+-------------------------------
+
+Input => Name of existing project
+
+proj = SDK().projects[project_name]
+
