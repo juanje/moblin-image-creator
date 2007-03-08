@@ -1,5 +1,112 @@
 #!/usr/bin/python -tt
 
+"""
+Embedded Linux SDK (esdk) main module
+
+The SDK allows a developer to use any yum repository as seed material
+for building a target filesystem for an embedded device.
+
+User list available projects:
+-----------------------------
+
+# Input => Nothing
+
+print 'Available projects: '
+sdk = SDK()
+for key in sdk.projects.keys():
+	project = sdk.projects[key]
+	print '\t - %s: %s' % (project.name, project.path)
+
+User list available projects:
+------------------------------
+
+# Input  => Nothing
+
+print 'Available projects:'
+sdk = SDK()
+for key in sdk.projects.keys():
+	project = sdk.projects[key]
+	print '\t - %s: %s' % (project.name, project.path)
+
+User opens an existing project:
+-------------------------------
+
+Input => Name of existing project
+
+proj = SDK().projects[project_name]
+
+User list available platforms:
+------------------------------
+
+# Input  => Name of the project (a string)
+
+print 'Available platforms:'
+sdk = SDK()
+for pname in sdk.platforms.keys():
+	print '\t - %s' % sdk.platform[pname].name 
+
+User creates a new project:
+---------------------------
+
+Input => Path to the new project workspace
+Input => Name to give the new project
+Input => Description of project
+Input => Platform object
+
+sdk = SDK()
+
+# construct the new project
+proj = sdk.create_project(path, name, desc, sdk.platforms['donley'])
+
+# install the platform defined list of RPM packages into the platform
+# so that the platform directory can be used as a jailroot
+proj.install()
+
+# keep in mind, that at this point there are no target filesystems
+# installed in the project
+
+User list available targets installed in a project:
+---------------------------------------------------
+
+Input => Project object
+
+print 'Available targets:'
+for key in project.targets.keys():
+	target = project.targets[key]
+	print '\t - %s' % (target.name)
+
+User creates a new target inside a project:
+-------------------------------------------
+
+Input => Project object
+Input => name to use for target
+
+target = project.create_target(name)
+
+User list available fsets for the platform:
+-------------------------------------------
+
+Input => Platform object
+
+print 'Available fsets for the %s platform:' % (platform.name)
+for key in platform.fsets.keys():
+	fset = platform.fsets[key]
+	print '\t - %s' % (fset.name)
+
+User installs a fset in target:
+-------------------------------
+
+Input => Target object
+Input => fset object
+
+# you could do a normal install
+target.install(fset)
+
+# or you could install debug packages in addition to the normal packages
+target.install(fset, 1)
+
+"""
+
 import sys
 import os
 
