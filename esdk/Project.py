@@ -59,9 +59,8 @@ metadata_expire=1800
             for r in repos:
                 copy(r, os.path.join(target_etc, 'yum.repos.d'))
 
-            os.mknod(os.path.join(self.path, 'dev/null'), S_IFCHR | 0666, os.makedev(1,3))
-            os.mknod(os.path.join(self.path, 'dev/zero'), S_IFCHR | 0666, os.makedev(1,5))
-
+            os.system('sudo mknod ' + os.path.join(self.path, 'dev/null') + ' c 1 3')
+            os.system('sudo mknod ' + os.path.join(self.path, 'dev/zero') + ' c 1 5')
 
     def install(self, packages, repos):
         """
