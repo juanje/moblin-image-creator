@@ -68,7 +68,7 @@ metadata_expire=1800
         Call into yum to install RPM packages using the specified yum
         repositories
         """
-        command = 'yum -y --disablerepo=* --enablerepo=esdk* --installroot=' + self.path + ' install '
+        command = 'sudo yum -y --disablerepo=* --enablerepo=esdk* --installroot=' + self.path + ' install '
         for p in packages:
             command = command + ' ' + p
         os.system(command)
