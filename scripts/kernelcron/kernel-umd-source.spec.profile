@@ -17,7 +17,7 @@
 %define image_install_path boot
 
 # we only let linux on i386 and x86_64 platform to build this package
-ExclusiveArch: i386 i586 x86_64
+ExclusiveArch: i586 x86_64
 ExclusiveOs: linux
 
 # primary package definition
@@ -29,7 +29,8 @@ Summary: UMD kernel-source
 Group: Development/Sources
 PreReq: /bin/grep /bin/sed /bin/uname /bin/mkdir /bin/cat /bin/ln /bin/rm
 Version: %{kversion}@EXTRAVER2@
-Release: 1
+@RELEASE@
+BuildPreReq: nash, module-init-tools
 
 # put sources here
 Source0: @URL@linux-%{krelease}.tar.bz2
@@ -40,6 +41,8 @@ Source4: source-post.sh
 Source5: kabitool
 Source6: kernel-default.config
 Source7: kernel-developer.config
+Source8: init
+Source9: initrd_skeleton
 
 # put patches here for UMD add-on
 # and do NOT forget to apply patches in setup section -- search "apply patches" in this file
@@ -87,9 +90,9 @@ This is kernel version special for Intel UMD release.
 /lib/modules/%{krelease}-default/updates
 /lib/modules/%{krelease}-default/weak-updates
 %if "%{target}" == "redhat"
-%ghost /boot/initrd-%{krelease}-default.img
+/boot/initrd-%{krelease}-default.img
 %else
-%ghost /boot/initrd-%{krelease}-default
+/boot/initrd-%{krelease}-default
 %endif
 %ghost /boot/vmlinux
 /usr/src/kernels/%{krelease}-default-%{_target_cpu}
@@ -118,9 +121,9 @@ This is kernel version special for Intel UMD release.
 /lib/modules/%{krelease}-developer/updates
 /lib/modules/%{krelease}-developer/weak-updates
 %if "%{target}" == "redhat"
-%ghost /boot/initrd-%{krelease}-developer.img
+/boot/initrd-%{krelease}-developer.img
 %else
-%ghost /boot/initrd-%{krelease}-developer
+/boot/initrd-%{krelease}-developer
 %endif
 %ghost /boot/vmlinux
 /usr/src/kernels/%{krelease}-developer-%{_target_cpu}
@@ -136,7 +139,7 @@ if [ "%{target}" == "redhat" ]; then
     /bin/sed -i -e 's/^DEFAULTKERNEL=kernel-smp$/DEFAULTKERNEL=kernel/' /etc/sysconfig/kernel || exit $?
    fi
   fi
-  /sbin/new-kernel-pkg --package kernel --mkinitrd --depmod --install %{krelease}-default || exit $?
+  /sbin/new-kernel-pkg --package kernel --depmod --install %{krelease}-default || exit $?
   if [ -x /sbin/weak-modules ]
   then
     /sbin/weak-modules --add-kernel %{krelease}-default || exit $?
@@ -151,7 +154,7 @@ if [ "%{target}" == "redhat" ]; then
     /bin/sed -i -e 's/^DEFAULTKERNEL=kernel-smp$/DEFAULTKERNEL=kernel/' /etc/sysconfig/kernel || exit $?
    fi
   fi
-  /sbin/new-kernel-pkg --package kernel --mkinitrd --depmod --install %{krelease}-developer || exit $?
+  /sbin/new-kernel-pkg --package kernel --depmod --install %{krelease}-developer || exit $?
   if [ -x /sbin/weak-modules ]
   then
     /sbin/weak-modules --add-kernel %{krelease}-developer || exit $?
@@ -264,12 +267,6 @@ for flavor in %{buildflavors}; do
     install -m 644 System.map $RPM_BUILD_ROOT/%{image_install_path}/System.map-$kernelver
     cp $kernelimg $RPM_BUILD_ROOT/%{image_install_path}/vmlinuz-$kernelver
     cp vmlinux $RPM_BUILD_ROOT/%{image_install_path}/vmlinux-$kernelver
-# also for %ghost purpose
-    %if "%{target}" == "redhat"
-        touch $RPM_BUILD_ROOT/%{image_install_path}/initrd-$kernelver.img
-    %else
-    touch $RPM_BUILD_ROOT/%{image_install_path}/initrd-$kernelver
-    %endif
     mkdir -p $RPM_BUILD_ROOT/lib/modules/$kernelver
     make ARCH=$arch INSTALL_MOD_PATH=$RPM_BUILD_ROOT modules_install KERNELRELEASE=$kernelver
 # Create the kABI metadata for use in packaging
@@ -328,6 +325,32 @@ for flavor in %{buildflavors}; do
     mkdir -p $RPM_BUILD_ROOT/usr/src/kernels
     mv $RPM_BUILD_ROOT/lib/modules/$kernelver/build $RPM_BUILD_ROOT/$develdir
     ln -sf ../../..$develdir $RPM_BUILD_ROOT/lib/modules/$kernelver/build
+# Create our initrd in the rpm build process
+    cd %_builddir/%{name}-%{krelease}
+    rm -rf initrd-$kernelver initrd_skeleton initrd_skeleton.gz
+    mkdir initrd-$kernelver
+    cp $RPM_SOURCE_DIR/initrd_skeleton ./  
+    cd initrd-$kernelver
+    mkdir bin lib
+    cp /sbin/insmod.static ./bin/insmod
+    cp /sbin/nash ./bin
+    cp $RPM_SOURCE_DIR/init ./
+    ln -s /sbin/nash bin/modprobe
+# Copy needed modules to initrd
+    kos=$(cat init | sed -n -e "s/^insmod \/lib\/\(.*.ko\)/\1/p")
+    for ko in $kos ; do
+        kof=`find $RPM_BUILD_ROOT/lib/modules/$kernelver -name "$ko" | tail -n 1`
+        if [ -n "$kof" ] ; then 
+          cp "$kof" ./lib
+        fi
+    done
+    find . | cpio --quiet -c -oAF ../initrd_skeleton
+    gzip ../initrd_skeleton
+    %if "%{target}" == "redhat"
+        cp ../initrd_skeleton.gz $RPM_BUILD_ROOT/%{image_install_path}/initrd-$kernelver.img
+    %else
+        cp ../initrd_skeleton.gz $RPM_BUILD_ROOT/%{image_install_path}/initrd-$kernelver
+    %endif
 done
  
 %clean

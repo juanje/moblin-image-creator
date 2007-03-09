@@ -1,4 +1,5 @@
-#! /bin/sh
+#!/bin/sh
+
 # define your target type, "suse" or "redhat"
 #target="suse"
 #gitproj="OpenSuSE10.2"
@@ -6,12 +7,10 @@ target="redhat"
 gitproj="FC6"
 gitbranch="master"
 
-if [ "$target" == "redhat" ]; then
-   rpmdir="redhat"
-elif [ "$target" == "suse" ]; then
-# if on a real SuSE platform, update the rpmdir="packages"
-   rpmdir="redhat"
-fi
+# define your setup dir
+homedir=~
+progdir=umd/kernelcron
+export PATH=$PATH:/usr/sbin:/sbin
 
 # put your url and proxy configuration here
 check_url1="http://linux-ftp.jf.intel.com/pub/mirrors/kernel.org/v2.6/"
@@ -28,20 +27,12 @@ reposhost="$reposuser@umd-repo.jf.intel.com"
 myremotedir="/home/repos/users/$reposuser"
 myrepository="$myremotedir/$target"
 
-# execution env
-testmode="0"
-
-if [ $testmode -eq 1 ]; then
-   echo "test mode"
-   mailto="alek.du@intel.com"
-else
-   echo "run mode"
-   mailto="rob.rhoads@intel.com, feng.tang@intel.com, alek.du@intel.com"
+if [ "$target" == "redhat" ]; then
+   rpmdir="redhat"
+elif [ "$target" == "suse" ]; then
+# if on a real SuSE platform, update the rpmdir="packages"
+   rpmdir="redhat"
 fi
-
-homedir=~
-progdir=umd/kernelcron
-PATH=$PATH:/usr/sbin:/sbin
 
 # variables needs
 newstamp=""
@@ -57,6 +48,23 @@ if [ $? -eq 1 ] ; then
    echo "Wrong when changing dir to $homedir/$progdir/"
    exit 1
 fi
+
+# execution env
+if [ -e .testmode ]; then
+   testmode='1'
+else
+   testmode='0'   
+fi
+
+if [ $testmode -eq 1 ]; then
+   echo "test mode"
+   mailto="alek.du@intel.com"
+else
+   echo "run mode"
+   mailto="rob.rhoads@intel.com, feng.tang@intel.com, alek.du@intel.com"
+   #mailto="alek.du@intel.com"
+fi
+
 # check last time we got the "new" version 
 if [ -e .oldtimestamp ]; then
     oldstamp=`cat .oldtimestamp`
@@ -80,10 +88,12 @@ fi
 SearchNewVersion() {
   HttpProxySetting $1
   rm -rf index.html
-  curl -A "Mozila" $1 > index.html
-  news=$(cat index.html | sed -n -e "/.tar.bz2/p" | tail -n 1);
-  ver=$(echo $news | sed "s/.*\(linux-.*.tar.bz2\).*/\1/")
-  stamp=$(echo $news | sed "s/.*\(..-...-.... ..:..\).*/\1/")
+  curl -A "Mozilla" $1 > index.html
+  ver=$(cat index.html | sed -n -e "s/.*LATEST-IS-\([0-9a-zA-Z.-]*\).*/\1/p" | tail -n 1);
+  echo "got LATEST-IS-$ver file tag"
+  news=$(cat index.html | sed -n -e "/$ver.tar.bz2/p" | tail -n 1);
+  ver=$(echo $news | sed -n -e "s/.*\(linux-.*.tar.bz2\).*/\1/p")
+  stamp=$(echo $news | sed -n -e "s/.*\(..-...-.... ..:..\).*/\1/p")
   echo "latest version at $1 is:"
   echo $stamp
   echo $ver
@@ -101,8 +111,8 @@ SearchNewVersion() {
 SearchRTPatch() {
   HttpProxySetting $1
   rm -rf index.html
-  curl -A "Mozila" $1 > index.html
-  patch=$( cat index.html | sed -n -e "/patch-/p" | tail -n 1 | sed "s/.*\(patch-.*\)[\"<].*/\1/")
+  curl -A "Mozilla" $1 > index.html
+  patch=$( cat index.html | sed -n -e "s/.*\(patch-[0-9a-zA-Z.-]*\).*/\1/p")
   [ -n "$patch" ] && echo "Found RT patch $patch at $1"
 }
 
@@ -217,7 +227,9 @@ if [ -n "$newstamp" ]; then
    ssh $reposhost "cd $myremotedir; sh commands.sh; rm commands.sh"
 # save old patches info
    scp $reposhost:$myrepository/package-meta-data/Development/Sources/kernel-umd-source/specs/kernel-umd-source.spec kernel-umd-source.spec
-   echo "getting patches info from spec file.."
+   echo "getting release info from spec file..."
+   pkgrelease=$(cat kernel-umd-source.spec | sed -n -e "/^Release:/p")
+   echo "getting patches info from spec file..."
    patches=$(cat kernel-umd-source.spec | sed -n -e "/Patch0/d" -e "/^Patch/p")
    patchesapply=$(cat kernel-umd-source.spec | sed -n -e "/^%patch0/d" -e "/^%patch/p")
    patches=$(echo $patches | sed -e "s/ Patch/\\\x0aPatch/g")
@@ -235,22 +247,31 @@ if [ -n "$newstamp" ]; then
    ver5=`echo $ver4 | sed -e "s/-/./g"`
    echo $ver1, $ver2, $ver3, $ver4
 
-   echo "try to find coresponding RT_PREEMPT patch"
-   SearchRTPatch "$check_url3"
-   if [ -n "$patch" ]; then
-      patchrt="Patch0: $patch"
-      patchrtapply="%patch0 -p1"
-      echo "downloading RT patch: $patch..."
-      rm -rf $patch
-      HttpProxySetting $check_url3
-      wget --tries=10 $check_url3$patch 
+   if [ -e ".rtpatch" ]; then
+      echo "try to find coresponding RT_PREEMPT patch"
+      SearchRTPatch "$check_url3"
+      if [ -n "$patch" ]; then
+         patchrt="Patch0: $patch"
+         patchrtapply="%patch0 -p1"
+         patchrturl=$check_url3$patch
+         echo "downloading RT patch: $patch..."
+         rm -rf $patch
+         HttpProxySetting $check_url3
+         wget --tries=10 $patchrturl
+      else
+        patchrt=""
+        patchrtapply=""
+        patchrturl=""
+      fi
    else
-      patchrt=""
-      patchrtapply=""
+     patchrt=""
+     patchrtapply=""
+     patchrturl=""
    fi
    echo "start to update kernel SRPM spec files and will download new kernel tar ball to build new RPMS"
    echo $patches
    (sed -e "s/@TARGET@/$target/g" \
+        -e "s/@RELEASE@/$pkgrelease/g" \
         -e "s/@LEVEL@/$ver1.$ver2/g" \
         -e "s/@SUBLEVEL@/$ver3/g" \
         -e "s/@EXTRAVER@/$ver4/g" \
@@ -282,7 +303,7 @@ if [ -n "$newstamp" ]; then
       rm /usr/src/$rpmdir/*.log
       logfile=build-linux-$ver1.$ver2.$ver3$ver4-$(date +%Y%m%d%H%M).log
       if [ $testmode -eq 0 ]; then
-         rpmbuild -ba ./SPECS/kernel-umd-source.spec > $logfile 2>&1
+         rpmbuild -ba ./SPECS/kernel-umd-source.spec --target=i586 > $logfile 2>&1
       else
          echo "in test mode, do not call rpmbuild"
       fi
@@ -313,7 +334,7 @@ if [ -n "$newstamp" ]; then
          scp -r /usr/src/$rpmdir/SRPMS $reposhost:$myrepository/
          echo "$newstamp" > .oldtimestamp
          echo "Email to CoreOS members..."
-         EmailNotification "successful" "$url$newver" "$check_url3$patch" $(echo $patches | sed -e "s/Patch.\{1,5\}: //g") \
+         EmailNotification "successful" "$url$newver" "$patchrturl" "$(echo $patches | sed -e "s/Patch.\{1,5\}: //g")" \
                            "http://umd-repo.jf.intel.com/git/users/$reposuser/$target/logs/$logfile" \
                            "http://umd-repo.jf.intel.com/git/users/$reposuser/$target/" \
                            "http://umd-repo.jf.intel.com/git/users/$reposuser/$target/package-meta-data.git/" \
@@ -322,7 +343,7 @@ if [ -n "$newstamp" ]; then
       else
          echo "bad news: RPM build failed!"
          echo "Email to CoreOS members..."
-         EmailNotification "failed" "$url$newver" "$check_url3$patch" $(echo $patches | sed -e "s/Patch.\{1,5\}: //g") \
+         EmailNotification "failed" "$url$newver" "$patchrturl" "$(echo $patches | sed -e "s/Patch.\{1,5\}: //g")" \
                            "http://umd-repo.jf.intel.com/git/users/$reposuser/$target/logs/$logfile" \
                            "http://umd-repo.jf.intel.com/git/users/$reposuser/$target/" \
                            "http://umd-repo.jf.intel.com/git/users/$reposuser/$target/package-meta-data.git/" \
