@@ -31,7 +31,7 @@ class FileSystem:
             """
 
             # Create our directories
-            for dirname in [ 'proc', 'var/log', 'var/lib/rpm', 'dev', 'etc/yum.repos.d', 'targets' ]:
+            for dirname in [ 'proc', 'var/log', 'var/lib/rpm', 'dev', 'etc/yum.repos.d' ]:
                 full_path = os.path.join(self.path, dirname)
                 os.makedirs(full_path)
 
@@ -62,12 +62,12 @@ metadata_expire=1800
             os.system('sudo mknod ' + os.path.join(self.path, 'dev/null') + ' c 1 3')
             os.system('sudo mknod ' + os.path.join(self.path, 'dev/zero') + ' c 1 5')
 
-    def install(self, packages, repos):
+    def install(self, path, packages, repos):
         """
         Call into yum to install RPM packages using the specified yum
         repositories
         """
-        command = 'sudo yum -y --disablerepo=* --enablerepo=esdk* --installroot=' + self.path + ' install '
+        command = 'sudo yum -y --disablerepo=* --enablerepo=esdk* --installroot=' + path + ' install '
         for p in packages:
             command = command + ' ' + p
         os.system(command)
@@ -84,9 +84,13 @@ class Project(FileSystem):
         self.platform = platform
         FileSystem.__init__(self, self.path, self.platform.repos)
 
-        # instantiate all targets
-        self.targets = {}
+        # Create our targets directory
         targets_path = os.path.join(self.path, 'targets')
+        if not os.path.isdir(targets_path):
+            os.makedirs(targets_path)
+
+        # Instantiate all targets
+        self.targets = {}
         for dirname in os.listdir(targets_path):
             target = Target(dirname, self)
             self.targets[target.name] = target
@@ -95,7 +99,7 @@ class Project(FileSystem):
         """
         Install all the packages defined by Platform.jailroot_packages
         """
-        FileSystem.install(self, self.platform.jailroot_packages, self.platform.repos)
+        FileSystem.install(self, self.path, self.platform.jailroot_packages, self.platform.repos)
 
     def create_target(self, name):
         if not self.targets.has_key(name):
@@ -115,19 +119,30 @@ class Target(FileSystem):
         self.fsets = []
         self.name = name
         self.path = os.path.join(project.path, "targets", name)
-        FileSystem.__init__(self, self.path, project.platform.repos)
+
+
+        # Load our target's filesystem directory
+        self.fs_path = os.path.join(self.path, "fs")
+
+        # Load/create our target's image directory
+        self.image_path = os.path.join(self.path, "image")
+        if not os.path.isdir(self.image_path):
+            os.makedirs(self.image_path)
+
+        # Instantiate the target filesystem
+        FileSystem.__init__(self, self.fs_path, project.platform.repos)
 
     def install(self, fset, debug=0):
         """
         Install a fset into the target filesystem
         """
-        FileSystem.install(self, fset.packages, self.project.platform.repos)
+        FileSystem.install(self, self.fs_path, fset.packages, self.project.platform.repos)
         if debug == 1:
-            FileSystem.install(self, fset.debug_packages, self.project.platform.repos)
+            FileSystem.install(self, self.fs_path, fset.debug_packages, self.project.platform.repos)
 
     def __str__(self):
-        return ("<Target: name=%s, path=%s>"
-                % (self.name, self.path))
+        return ("<Target: name=%s, path=%s, fs_path=%s, image_path>"
+                % (self.name, self.path, self.fs_path, self.image_path))
 
 
 if __name__ == '__main__':
