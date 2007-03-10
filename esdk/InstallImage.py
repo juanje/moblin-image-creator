@@ -21,7 +21,7 @@ class InstallImage:
 
     def __str__(self):
         return ("<InstallImage: project=%s, target=%s, dest_path=%s>"
-                % (self.project, self.target, self.path))
+                % (self.project, self.target, self.dest_path))
 
 class LiveDVDImage(InstallImage):
     def __init__(self, project, target, dest_path, img_name):
@@ -33,29 +33,23 @@ class LiveDVDImage(InstallImage):
         
     def __str__(self):
         return ("<LiveDVDImage: project=%s, target=%s, dest_path=%s, img_name=%s>"
-                % (self.project, self.target, self.path, self.img_name))
+                % (self.project, self.target, self.dest_path, self.img_name))
 
 class LiveUSBImage(InstallImage):
-    def __init__(self, project, target, dest_path):
-        InstallImage.__init__(self, project, target, dest_path)
-
     def create_image(self):
         print "LiveUSBImage: Create & Write LiveUSB Image here!"
         
     def __str__(self):
         return ("<LiveUSBImage: project=%s, target=%s, dest_path=%s>"
-                % (self.project, self.target, self.path))
+                % (self.project, self.target, self.dest_path))
 
 class InstallUSBImage(InstallImage):
-    def __init__(self, project, target, dest_path):
-        InstallImage.__init__(self, project, target, dest_path)
-
     def create_image(self):
         print "InstallUSBImage: Create & Write LiveUSB Image here!"
         
     def __str__(self):
         return ("<InstallUSBImage: project=%s, target=%s, dest_path=%s>"
-                % (self.project, self.target, self.path))
+                % (self.project, self.target, self.dest_path))
 
 class HDDImage(InstallImage):
     def __init__(self, project, target, dest_path, img_name):
@@ -67,7 +61,7 @@ class HDDImage(InstallImage):
         
     def __str__(self):
         return ("<HDDImage: project=%s, target=%s, dest_path=%s, img_name=%s>"
-                % (self.project, self.target, self.path, self.img_name))
+                % (self.project, self.target, self.dest_path, self.img_name))
 
 
 
