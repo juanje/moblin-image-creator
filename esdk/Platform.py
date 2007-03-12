@@ -7,11 +7,11 @@ from FSet import *
 
 class Platform:
     """
-    The SDK is composed of a collection of paltforms, where this class
+    The SDK is composed of a collection of platforms, where this class
     represents a specific platform.  A platform provides:
-    - a list of packages to install directly into the platform
-      (i.e. to use as a jailroot to isolate building target binaries
-      from the host distribution)
+    - a list of packages to install directly into the platform (i.e. to use as
+      a jailroot to isolate building target binaries from the host
+      distribution)
     - a set of fsets that can be installed into a target
     - a list of yum repositories that are used to install the fsets
 
