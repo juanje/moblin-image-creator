@@ -1,5 +1,5 @@
 NAME=Core
 DESC=Fundamental fset that provides a root filesystem
-PKGS=kernel-umd grub coreutils
+PKGS=kernel-umd grub coreutils rpm
 DEBUG_PKGS=kernel-umd-devel gdb
 DEPS=

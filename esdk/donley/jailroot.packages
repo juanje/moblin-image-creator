@@ -15,3 +15,6 @@ module-init-tools ncurses-devel
 
 # Hildon related build stuff
 #outo libmatchbox libfakekey esound-devel
+
+# Packages required for making bootable images
+syslinux
