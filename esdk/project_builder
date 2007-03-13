@@ -4,6 +4,8 @@
 import sys, os
 
 from getopt import *
+
+sys.path.insert(0, '/usr/share/esdk/lib')
 from SDK import *
 
 def usage():
@@ -58,8 +60,6 @@ def list_targets():
     
 if __name__ == '__main__':
     
-    sys.path.insert(0, '/usr/share/esdk')
-
     (args, extras) = getopt(sys.argv[1:], '', ['help',
                                                'list-platforms',
                                                'list-projects',
