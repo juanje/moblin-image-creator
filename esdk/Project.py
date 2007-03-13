@@ -82,7 +82,7 @@ class Project(FileSystem):
         self.path = os.path.abspath(os.path.expanduser(path))
         self.name = name
         self.platform = platform
-        FileSystem.__init__(self, self.path, self.platform.repos)
+        FileSystem.__init__(self, self.path, self.platform.buildroot_repos)
 
         # Create our targets directory
         targets_path = os.path.join(self.path, 'targets')
@@ -99,7 +99,7 @@ class Project(FileSystem):
         """
         Install all the packages defined by Platform.jailroot_packages
         """
-        FileSystem.install(self, self.path, self.platform.jailroot_packages, self.platform.repos)
+        FileSystem.install(self, self.path, self.platform.jailroot_packages, self.platform.buildroot_repos)
 
     def create_target(self, name):
         if not self.targets.has_key(name):
@@ -130,15 +130,15 @@ class Target(FileSystem):
             os.makedirs(self.image_path)
 
         # Instantiate the target filesystem
-        FileSystem.__init__(self, self.fs_path, project.platform.repos)
+        FileSystem.__init__(self, self.fs_path, project.platform.target_repos)
 
     def install(self, fset, debug=0):
         """
         Install a fset into the target filesystem
         """
-        FileSystem.install(self, self.fs_path, fset.packages, self.project.platform.repos)
+        FileSystem.install(self, self.fs_path, fset.packages, self.project.platform.buildroot_repos)
         if debug == 1:
-            FileSystem.install(self, self.fs_path, fset.debug_packages, self.project.platform.repos)
+            FileSystem.install(self, self.fs_path, fset.debug_packages, self.project.platform.buildroot_repos)
 
     def __str__(self):
         return ("<Target: name=%s, path=%s, fs_path=%s, image_path>"

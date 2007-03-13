@@ -28,11 +28,17 @@ class Platform:
             fset = FSet(os.path.join(fset_path, filename))
             self.fsets[fset.name] = fset
 
-        # instantiate all repos
-        self.repos = []
-        repo_path = os.path.join(self.path, 'repos')
-        for repo in os.listdir(repo_path):
-            self.repos.append(os.path.join(repo_path, repo))
+        # instantiate all target repos
+        self.target_repos = []
+        target_repo_path = os.path.join(self.path, 'target_repos')
+        for repo in os.listdir(target_repo_path):
+            self.target_repos.append(os.path.join(target_repo_path, repo))
+
+        # instantiate all buildroot repos
+        self.buildroot_repos = []
+        build_repo_path = os.path.join(self.path, 'buildroot_repos')
+        for repo in os.listdir(build_repo_path):
+            self.buildroot_repos.append(os.path.join(build_repo_path, repo))
 
         # determine what packages need to be installed in the jailroot
         self.jailroot_packages = []
@@ -45,8 +51,8 @@ class Platform:
         config.close()
 
     def __str__(self):
-        return ("<Platform Object: \n\tname=%s, \n\tfsets=%s, \n\trepos=%s\n\tjailroot_packages=%s>\n" %
-                (self.name, self.fsets, self.repos, self.jailroot_packages))
+        return ("<Platform Object: \n\tname=%s, \n\tfsets=%s, \n\ttarget_repos=%s\n\tjailroot_packages=%s>\n" %
+                (self.name, self.fsets, self.target_repos, self.jailroot_packages))
 
 if __name__ == '__main__':
     for p in sys.argv[1:]:
