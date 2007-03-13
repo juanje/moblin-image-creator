@@ -142,9 +142,9 @@ class Target(FileSystem):
         """
         Install a fset into the target filesystem
         """
-        FileSystem.install(self, self.fs_path, fset.pkgs, self.project.platform.buildroot_repos)
+        FileSystem.install(self, self.fs_path, fset['pkgs'], self.project.platform.buildroot_repos)
         if debug == 1:
-            FileSystem.install(self, self.fs_path, fset.debug_pkgs, self.project.platform.buildroot_repos)
+            FileSystem.install(self, self.fs_path, fset['debug_pkgs'], self.project.platform.buildroot_repos)
 
     def __str__(self):
         return ("<Target: name=%s, path=%s, fs_path=%s, image_path>"
