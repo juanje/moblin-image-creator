@@ -99,7 +99,7 @@ target.install(fset, 1)
 import os, re, sys, unittest
 import Platform, Project
 
-class ConfigFile:
+class ConfigFile(object):
     """
     This is a class for generically parsing configuration files that
     contain 'NAME=VALUE' pairs, each on it's own line.
@@ -143,7 +143,7 @@ class PackageConfig(ConfigFile):
         ConfigFile.__init__(self, path, ['name', 'desc', 'path', 'platform'])
         
 
-class SDK:
+class SDK(object):
     def __init__(self, path='/usr/share/esdk'):
         self.path = os.path.abspath(os.path.expanduser(path))
         

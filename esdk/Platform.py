@@ -3,7 +3,7 @@
 import os, re, sys, unittest
 import FSet
 
-class Platform:
+class Platform(object):
     """
     The SDK is composed of a collection of platforms, where this class
     represents a specific platform.  A platform provides:
