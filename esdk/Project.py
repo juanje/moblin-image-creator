@@ -72,6 +72,13 @@ metadata_expire=1800
             command = command + ' ' + p
         os.system(command)
 
+    def mount(self):
+        os.system('mount --bind /proc ' + os.path.join(self.path, 'proc'))
+
+    def umount(self):
+        os.system('umount ' + os.path.join(self.path, 'proc'))
+
+
 class Project(FileSystem):
     """
     A Project is a type of  'jailroot' filesystem that is used to isolate the
