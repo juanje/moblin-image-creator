@@ -17,10 +17,10 @@ class FSet:
         """Add a config file to the FSet"""
         filename = os.path.abspath(os.path.expanduser(filename))
         self.filenames.append(filename)
-        self._parseFile(filename)
+        self.__parseFile(filename)
 
 
-    def _parseFile(self, filename):
+    def __parseFile(self, filename):
         valid_values = { 'name' : '', 'desc' : '', 'pkgs' : [],
             'debug_pkgs' : [], 'deps' : [] }
         p = ConfigParser.ConfigParser()
