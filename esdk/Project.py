@@ -152,11 +152,44 @@ class Target(FileSystem):
 
 
 if __name__ == '__main__':
-    if len(sys.argv) != 4:
-        print >> sys.stderr, "USAGE: %s path name platform" % (sys.argv[0])
+    if len(sys.argv) != 6:
+        print >> sys.stderr, "USAGE: %s PROJECT_NAME PROJECT_PATH PROJECT_DESCRIPTION PLATFORM_NAME TARGET_NAME" % (sys.argv[0])
         sys.exit(1)
 
-    proj = Project(sys.argv[1], sys.argv[2], Platform(SDK(), sys.argv[3]))
-    proj.install()
-    proj.create_target('mytest')
-    proj.targets['mytest'].install(proj.platform.fset['Core'])
+    name = sys.argv[1]
+    path = sys.argv[2]
+    desc = sys.argv[3]
+    target_name = sys.argv[4]
+    platform_name = sys.argv[5]
+    
+    sdk = SDK()
+
+    # verify the platform exist
+    if not sdk.platforms.has_key(platform_name):
+        print >> sys.stderr, "ERROR: %s is not a valid platform!" % (platform_name)
+        print >> sys.stderr, "Available platforms include:"
+        for key in sdk.platforms.keys():
+            print "\t%s" % (key)
+        sys.exit(1)
+        
+    platform = sdk.platforms[platform_name]
+        
+    # find an existing project, or create a new one
+    if sdk.projects.has_key(sys.argv[1]):
+        print "Opening existing project..."
+        proj = sdk.projects[name]
+    else:
+        print "Creating new project..."
+        proj = sdk.create_project(path, name, desc, platform)
+        proj.install()
+
+    # see if the target exist
+    if proj.targets.has_key(target_name):
+        print "Target already exists"
+    else:
+        print "Creating new project target filesystem..."
+        proj.create_target(target_name)
+
+        print "Installing all available fsets inside target..."
+        for key in proj.platform.fset.fsets.keys():
+            proj.targets[target_name].install(proj.platform.fset[key])
