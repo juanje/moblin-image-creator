@@ -1,8 +1,6 @@
 #!/usr/bin/python -tt
 
-import os, re, sys
-
-from SDK import *
+import os, re, sys, unittest
 import FSet
 
 class Platform:
@@ -16,10 +14,10 @@ class Platform:
     - a list of yum repositories that are used to install the fsets
 
     """
-    def __init__(self, SDK, name):
-        self.SDK = SDK
+    def __init__(self, sdk_path, name):
+        self.sdk_path = sdk_path
         self.name = name
-        self.path = os.path.join(self.SDK.path, 'platforms', self.name)
+        self.path = os.path.join(self.sdk_path, 'platforms', self.name)
 
         # instantiate all fsets
         self.fset = FSet.FSet()
@@ -54,8 +52,14 @@ class Platform:
                 (self.name, self.fsets, self.target_repos, self.jailroot_packages))
 
     def __repr__(self):
-        return "Platform( %s, '%s')" % (self.SDK, self.name)
+        return "Platform( %s, '%s')" % (self.sdk_path, self.name)
+
+class TestPlatform(unittest.TestCase):
+    def testInstantiate(self):
+        platform = Platform('/usr/share/esdk', 'donley')
 
 if __name__ == '__main__':
+    unittest.main()
+    sdk = SDK()
     for p in sys.argv[1:]:
-        print Platform(SDK(), p)
+        print Platform(sdk.path, p)
