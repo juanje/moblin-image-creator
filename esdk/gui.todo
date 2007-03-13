@@ -1,0 +1,7 @@
+This is a list of GUI todos:
+===========================
+Author: Tariq Shureih
+
+* Generic callback for unimplemented features showing a dialogue to user
+*Object array of Projects for calling back to edit, create and associate targets
+*

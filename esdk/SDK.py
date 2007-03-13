@@ -32,7 +32,7 @@ User list available platforms:
 print 'Available platforms:'
 sdk = SDK()
 for pname in sdk.platforms.keys():
-	print '\t - %s' % sdk.platform[pname].name 
+	print '\t - %s' % sdk.platforms[pname].name 
 
 User creates a new project:
 ---------------------------
