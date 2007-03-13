@@ -5,7 +5,10 @@ install:
 	@cp *.py  /usr/share/esdk/lib
 	@mkdir -p /usr/share/esdk/platforms
 	@cp -a donley /usr/share/esdk/platforms/
-	@cp project_builder /usr/sbin/
+	@cp project-builder /usr/sbin/
+	@ln -f -s /usr/bin/consolehelper /usr/bin/project-builder
+	@cp project-builder.pam.d /etc/pam.d/project-builder
+	@cp project-builder.helperconsole /etc/security/console.apps/project-builder
 
 clean:
 	rm -f *.pyc
