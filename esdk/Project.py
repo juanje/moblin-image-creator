@@ -153,7 +153,7 @@ class Target(FileSystem):
 
 if __name__ == '__main__':
     if len(sys.argv) != 6:
-        print >> sys.stderr, "USAGE: %s PROJECT_NAME PROJECT_PATH PROJECT_DESCRIPTION PLATFORM_NAME TARGET_NAME" % (sys.argv[0])
+        print >> sys.stderr, "USAGE: %s PROJECT_NAME PROJECT_PATH PROJECT_DESCRIPTION TARGET_NAME PLATFORM_NAME" % (sys.argv[0])
         sys.exit(1)
 
     name = sys.argv[1]
