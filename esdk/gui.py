@@ -1,148 +1,151 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 
-from Tkinter import *
-from tkMessageBox import *
+import pygtk
+import gtk, gtk.glade
 from SDK import *
 
-# FIXME callback temporary stub
-def callback():
-		print "FIXME"
 
+class esdkMain:
+	"""
+	This is our main
+	"""
+	def __init__(self):
+		gladefile = "esdk.glade"
+		self.widgets = gtk.glade.XML (gladefile, 'main')
+		#self.widgets.signal_autoconnect(callbacks.__dict__)
+		dic = {"on_main_destroy_event" : gtk.main_quit,
+			"on_quit_activate" : gtk.main_quit,
+			"on_newProject_clicked" : self.on_newProject_clicked}
+		self.widgets.signal_autoconnect(dic)
+		
 
-#========================
-#General Functions	=
-#========================
+		#setup projectList widget
+		self.pName = "Name"
+		self.pDesc = "Description"
+		self.pPath = "Path"
+		self.pPlatform = "Platform"
 
-def exit():
-	main.destroy()
+		self.projectList = self.widgets.get_widget("projectList")
+		print "Setting Project List"
+		self.set_plist(self.pName, 0)
+		self.set_plist(self.pDesc, 1)
+		self.set_plist(self.pPath, 2)
+		self.set_plist(self.pPlatform, 3)
 
-fields = 'Name', 'Path', 'Desc', 'Platform'
+		self.projectView = gtk.ListStore(str, str, str, str)
+		self.projectList.set_model(self.projectView)
+		
+		#dummy project data for demonstration for example purpose
+		#dummy_project = ProjectInfo()
+		#dummy_project.name = "Test1"
+		#dummy_project.desc = "iTest1"
+		#dummy_project.path = "/home/user/something"
+		#dummy_project.platform = "Donley"
+		#self.projectView.append(dummy_project.getList())
+		
+		#read in project list using SDK()
+		#FIXME: I'm only reading them, not saving a handle to each
+		sdk = SDK()
+		for key in sdk.projects.keys():
+			my_project = ProjectInfo()
+			saved_projects = sdk.projects[key]
+			print 'Found: name: %s ' % (saved_projects.name)
+			my_project.name = '%s' % saved_projects.name
+			my_project.path = '%s' % saved_projects.path
+			#my_project.desc = saved_projects.desc
+			my_project.platform = '%s' % saved_projects.platform.name
+			self.projectView.append(my_project.getList())
 
-#Call SDK to create the project
-def create_new_project(new_project, args):
-	sdk = SDK()
-	i = 0
-	for arg in args:
-		print "%s" % args[i].get()
-		i +=1
-		 
-	proj = sdk.create_project(args[1].get(), args[0].get(), args[2].get(), sdk.platforms[args[3].get()])
-	proj.install()
+		#Set targetList widget
+		self.tPath = "Path"
+		self.fsets = "Function Sets"
 
-#Read in user input for New Project
-def get_new_args(new_project, fields):
+		self.targetList = self.widgets.get_widget("targetList")
+		print "Setting Target List"
+		self.set_tlist(self.tPath, 0)
+		self.set_tlist(self.fsets, 1)
 
-	entries = []
-	for field in fields:
-		row=Frame(new_project)
-		lab=Label(row, width=8, text=field)
-		ent=Entry(row)
+		self.targetView = gtk.ListStore(str, str)
+		self.targetList.set_model(self.targetView)
+		
+		
 
-		row.pack(side=TOP, fill=X)
-		lab.pack(side=LEFT)
-		ent.pack(side=RIGHT, expand=YES, fill=BOTH)
-		entries.append(ent)
-	return entries
+	"""Add project list column descriptions"""
+	def set_plist(self, name, id):
+		column = gtk.TreeViewColumn(name, gtk.CellRendererText()
+			, text=id)	
+		column.set_resizable(True)		
+		column.set_sort_column_id(id)
+		self.projectList.append_column(column)
 
-def pCreateButtonHandler(new_project, args):
-	create_new_project(new_project, args)
-	new_project.destroy()
+	"""Add target list column descriptions"""
+	def set_tlist(self, name, id):
+		column = gtk.TreeViewColumn(name, gtk.CellRendererText()
+			, text=id)	
+		column.set_resizable(True)		
+		column.set_sort_column_id(id)
+		self.targetList.append_column(column)
 
-def new():
-	new_project = Tk()
-	new_project.title("Create New Project")
-	#Read user input for project configuration & information
-	args = get_new_args(new_project, fields)
+	def on_newProject_clicked(self, widget):
+		print "New project Dialogue"
+		"""Instantiate a new dialogue"""
+		new_project = AddNewProject();
+		"""Now call its run method"""
+		result,new_project = AddNewProject.run(new_project)
+		if (result == gtk.RESPONSE_OK):
+			"""The user clicked Ok, so let's add this
+			wine to the wine list"""
+			print "user pressed OK"
+			self.projectList.append(new_project.getList())
+		if (result == get.RESPONSE_CANCEL):
+			self.new_project.destroy()
+class TargetInfo:
+	"""Class defining target elements"""
+	def __init__(self, path="", fsets=""):
+		self.path = path
+		self.fsets = fsets
+	def getTargetList(self):
+		return [self.path, self.fsets]
+class ProjectInfo:
+	"""Class to store new project info before we persisit"""
+	def __init__(self, name="", desc="", path="", platform=""):
+		self.name = name
+		self.desc = desc
+		self.path = path
+		self.platform = platform
+	def getList(self):
+		return [self.name, self.desc, self.path, self.platform]
 
-	#Get platforms and list them
-	Label(new_project, text="Supported Platforms").pack()
-	sdk = SDK()
-	_platforms = []
-	pVar=StringVar()
-	for p in sdk.platforms.keys():
-		platform=sdk.platforms[p]
-		print "Platforms found: %s" % (platform.name)
-		_platforms.append(p)
-		#Form an OptinMenu
-	pVar.set(_platforms[0])
-	pmenu=OptionMenu(new_project, pVar, *_platforms)
-	pmenu.pack()
+class AddNewProject:
+	"""Class to bring up AddNewProject dialogue"""
+	def __init__(self, name="", desc="", path="", platform=""):
+		self.gladefile = "esdk.glade"
+		self.newProject = ProjectInfo(name,desc,path,platform)
+	def on_newDlg_destroy(event):
+		print "Destroying dialogue"
+		gtk.newProject.destroy()
+	def on_newDlg_cancel_clicked(event):
+		print "dialogue closing"
+	def run(self):
+		self.widgets = gtk.glade.XML (self.gladefile, 'newProject')
+		self.newDlg = self.widgets.get_widget('newProject')
+		
+		#Get all of the Entry Widgets and set their text
+		self.np_name = self.widgets.get_widget("np_name")
+		self.np_name.set_text(self.newProject.name)
+		self.np_desc = self.widgets.get_widget("np_desc")
+		self.np_desc.set_text(self.newProject.desc)
+		self.np_path = self.widgets.get_widget("np_path")
+		self.np_path.set_text(self.newProject.path)
+		self.np_platform = self.widgets.get_widget("np_platform")
+		self.np_platform.set_text(self.newProject.platform)	
+		
+		self.result = self.newDlg.run()
 
+		return self.result
 
-
-	new_project.bind('<Return>', (lambda event: create_new_project(args)))
-	Button(new_project, text='Create',
-			command= (lambda: pCreateButtonHandler(new_project, args))).pack(side=LEFT)
-		#command= (lambda: create_new_project(new_project, args))).pack(side=LEFT)
-	Button(new_project, text='Cancel', command=new_project.destroy).pack(side=RIGHT)
-
-def open_project(p_list):
-	index = p_list.curselection()
-	label = p_list.get(index)
-	print 'You selected:', label
-	
-	
-
-def open():
-	print "Open"
-	sdk = SDK()
-	p_list = Tk()
-	projects_list = Listbox(p_list, relief=SUNKEN)
-	
-	for key in sdk.projects.keys():
-		project=sdk.projects[key]
-		print '%s ' % (project.name)
-		projects_list.insert(END, project.name)
-		projects_list.pack(side=BOTTOM, expand=YES, fill=BOTH)
-	open = Button(p_list, text='Open', command=open_project).pack()	
-	p_list.bind('<Double-1>',open(p_list))
-
-def about():
-	showinfo(
-		"Aboue Intel eSDK",
-		"eSDK is a developer tool developer by Intel's own OTC\n"
-			"Tiger team: Rusty Lynch, Rob Rhoads, Tariq Shureih"
-		)
-
-#================
-#file menu 	=
-#================
-
-def makeMenu(main):
-	menu = Menu(main)
-	main.config(menu=menu)
-	filemenu = Menu(menu)
-
-	menu.add_cascade(label="File", menu=filemenu)
-	filemenu.add_command(label="New", command=new)
-	filemenu.add_command(label="Open...", command=open)
-	filemenu.add_separator()
-	filemenu.add_command(label="Exit", command=sys.exit)
-
-	menu.add_command(label="About", command=about)
-
-
-
-#========================
-#    Main		=
-#========================
-
-if __name__ == '__main__':
-	main = Tk()
-	main.title("Intel eSDK")
-	
-	makeMenu(main)
-
-	#title
-	logo = PhotoImage(file="./intel-logo.gif")
-	r = Label(text = "\n\nIntel eSDK", fg="red", justify="left")
-	r.pack(expand=YES, fill=BOTH)
-
-	graphic = Label(main,image=logo)
-	graphic.pack(side=TOP, expand=YES, fill=BOTH)
-
-	body = Frame(main, width=500, height=400)
-	body.pack()
-
-	mainloop()
+			
+#if __name__ == "__main__'":
+esdk = esdkMain()
+gtk.main()
 
