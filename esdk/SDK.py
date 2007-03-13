@@ -168,7 +168,7 @@ class SDK:
             except:
                 pass
             
-    def create_project(self, path, name, desc, platform):
+    def create_project(self, install_path, name, desc, platform):
         """
         Create a new project by specifying an install path, a name, a
         short description, and a platform object.
@@ -190,19 +190,19 @@ class SDK:
         # as a jailroot
         proj.install()
         """
-        
+        install_path = os.path.abspath(os.path.expanduser(install_path))
         # create the config file
         config_path = os.path.join(self.config_path, name + '.proj')
         os.path.isfile(config_path)
         config = open(config_path, 'w')
         config.write("NAME=%s\n" % (name))
-        config.write("PATH=%s\n" % (path))
+        config.write("PATH=%s\n" % (install_path))
         config.write("DESC=%s\n" % (desc))
         config.write("PLATFORM=%s\n" % (platform.name))
         config.close()
 
         # instantiate the project
-        self.projects[name] = Project(path, name, platform)
+        self.projects[name] = Project(install_path, name, platform)
         return self.projects[name]
     
     def delete_project(self, project):
