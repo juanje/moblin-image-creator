@@ -53,6 +53,9 @@ class Platform:
         return ("<Platform Object: \n\tname=%s, \n\tfsets=%s, \n\ttarget_repos=%s\n\tjailroot_packages=%s>\n" %
                 (self.name, self.fsets, self.target_repos, self.jailroot_packages))
 
+    def __repr__(self):
+        return "Platform( %s, '%s')" % (self.SDK, self.name)
+
 if __name__ == '__main__':
     for p in sys.argv[1:]:
         print Platform(SDK(), p)
