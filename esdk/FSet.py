@@ -1,6 +1,6 @@
 #!/usr/bin/python -tt
 
-import os, re, sys
+import ConfigParser, os, re, sys
 
 class FSet:
     """
@@ -9,51 +9,59 @@ class FSet:
     FSet.packages, an array of additional debug packages in
     FSet.debug_packages, and an array of dependant FSet names in FSet.deps.
     """
-    def __init__(self, path):
-        self.path = os.path.abspath(os.path.expanduser(path))
-        self.name = ''
-        self.packages = []
-        self.debug_packages = []
-        self.deps = []
-        self.desc = ''
+    def __init__(self):
+        self.filenames = []
+        self.data = {}
 
-        # Parse the fset file
-        string_vals = ['name', 'desc']
-        list_vals = {'pkgs' : 'packages', 'debug_pkgs' : 'debug_packages', 'deps' : 0}
-        fset = open(self.path)
-        for line in fset:
-            if re.search(r'^\s*#', line):
-                continue
-            try:
-                key, value = line.split('=')
-            except:
-                continue
-            key = key.lower().strip()
-            value = value.strip()
-            if key in string_vals:
-                exec('self.%s = value' % key)
-                continue
-            if key in list_vals:
-                # See if we want to store the value under a
-                # different identifier
-                if list_vals[key]:
-                    new_key = list_vals[key]
+    def addFile(self, filename):
+        """Add a config file to the FSet"""
+        filename = os.path.abspath(os.path.expanduser(filename))
+        self.filenames.append(filename)
+        self._parseFile(filename)
+
+
+    def _parseFile(self, filename):
+        valid_values = { 'name' : '', 'desc' : '', 'pkgs' : [],
+            'debug_pkgs' : [], 'deps' : [] }
+        p = ConfigParser.ConfigParser()
+        filenames = p.read(filename)
+        for section in p.sections():
+            section = section.lower()
+            if section in self.data:
+                print "Error: Already have a section called: %s" % section
+                print "Tried to add the section from file: %s" % filename
+                print "But already have that section from file: %s" % self.data[section]['filename']
+                raise ValueError
+            self.data[section] = {}
+            self.data[section]['filename'] = filename
+            for name, value in p.items(section):
+                name = name.lower()
+                if name not in valid_values:
+                    print "Found unsupported value, ignoring: %s %s" % (name, filename)
+                    continue
+                work_type = type(valid_values[name])
+                if work_type == type([]):
+                    value = value.split()
+                elif work_type == type(''):
+                    pass
                 else:
-                    new_key = key
-                exec('self.%s = value.split()' % new_key)
-                continue
-        fset.close()
-        self.debug_packages.sort()
-        self.deps.sort()
-        self.packages.sort()
+                    print "Error: Unsupported type specified in valid_values"
+                    print "Type was: %s" % work_type
+                    raise ValueError
+                self.data[section][name] = value
+
+    def __getitem__(self, key):
+        return self.data[key.lower()]
 
     def __str__(self):
-        return ('<name="%s", desc="%s", packages=%s, debug_packages=%s, deps=%s>'
-                % (self.name, self.desc, self.packages, self.debug_packages, self.deps))
+        return ('<data="%s">'
+                % (self.data))
 
 if __name__ == '__main__':
     if len(sys.argv) == 1:
         print >> sys.stderr, "USAGE: %s FSET_FILE ..." % (sys.argv[0])
     else:
-        for file in sys.argv[1:]:
-            print FSet(file);
+        fset = FSet()
+        for filename in sys.argv[1:]:
+            fset.addFile(filename)
+        print fset

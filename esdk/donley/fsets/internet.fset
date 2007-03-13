@@ -1,5 +1,0 @@
-NAME=Internet
-DESC=Internet fset pulling in basic web 2.0 capabilities
-PKGS=firefox
-DEBUG_PKGS=firefox-devel
-DEPS=core gnome-mobile
