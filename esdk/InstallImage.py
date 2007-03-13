@@ -1,11 +1,9 @@
 #!/usr/bin/python -tt
 
 import os, sys
+import Project
 
-from SDK import *
-from Project import *
-
-class InstallImage:
+class InstallImage(object):
     """
     This is the base class for any type of target image output.
 
@@ -90,7 +88,7 @@ if __name__ == '__main__':
         print >> sys.stderr, "USAGE: %s path name platform" % (sys.argv[0])
         sys.exit(1)
 
-    proj = Project(sys.argv[1], sys.argv[2], Platform('/usr/share/esdk', sys.argv[3]))
+    proj = Project.Project(sys.argv[1], sys.argv[2], Platform('/usr/share/esdk', sys.argv[3]))
     proj.install()
     proj.create_target('mytest')
     proj.targets['mytest'].install(proj.platform.fsets['Core'])
