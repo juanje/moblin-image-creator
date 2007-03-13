@@ -7,4 +7,5 @@ install:
 	@cp -a donley /usr/share/esdk/platforms/
 
 clean:
-	@rm -f *~ *.pyc
+	rm -f *.pyc
+	find -name \*~ -exec rm -f {} \;
