@@ -53,6 +53,9 @@ class FSet:
     def __getitem__(self, key):
         return self.data[key.lower()]
 
+    def __getattr__(self, name):
+        return self.__getitem__(name)
+
     def __str__(self):
         return ('<data="%s">'
                 % (self.data))
