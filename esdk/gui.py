@@ -143,9 +143,8 @@ class AddNewProject:
 		self.result = self.newDlg.run()
 
 		return self.result
-
 			
-#if __name__ == "__main__'":
-esdk = esdkMain()
-gtk.main()
+if __name__ == '__main__':
+	esdk = esdkMain()
+	gtk.main()
 
