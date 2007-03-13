@@ -1,0 +1,11 @@
+[Core]
+DESC=Fundamental fset that provides a root filesystem
+PKGS=kernel-umd grub coreutils rpm
+DEBUG_PKGS=kernel-umd-devel gdb
+DEPS=
+
+[Internet]
+DESC=Internet fset pulling in basic web 2.0 capabilities
+PKGS=firefox
+DEBUG_PKGS=firefox-devel
+DEPS=core gnome-mobile
