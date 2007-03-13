@@ -26,6 +26,7 @@ class FSet:
         p = ConfigParser.ConfigParser()
         filenames = p.read(filename)
         for section in p.sections():
+            orig_section = section
             section = section.lower()
             if section in self.data:
                 print "Error: Already have a section called: %s" % section
@@ -34,7 +35,7 @@ class FSet:
                 raise ValueError
             self.data[section] = {}
             self.data[section]['filename'] = filename
-            for name, value in p.items(section):
+            for name, value in p.items(orig_section):
                 name = name.lower()
                 if name not in valid_values:
                     print "Found unsupported value, ignoring: %s %s" % (name, filename)
