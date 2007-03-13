@@ -1,0 +1,96 @@
+#!/usr/bin/python -tt
+###############################################################################
+
+import sys, os
+
+from getopt import *
+from SDK import *
+
+def usage():
+    print >> sys.stderr, "Usage: %s [ARGS...]" % (sys.argv[0])
+    print >> sys.stderr, """<Informational Options>
+    No arguments        Open GUI
+    --help              Print this message
+    --list-platforms    List available platforms
+    --list-projects     List existing projects
+    --list-targets      List installed targets on all projects
+    
+<Adding a new project>
+    --add-project --name=NAME --platform=PLATFORM --desc=DESC --path=PATH
+
+<Adding a new target to an existing project>
+    --add-target --project=PROJECT_NAME
+
+<Mounting a project>
+    --mount=PROJECT_NAME
+    --umount=PROJECT_NAME
+    
+"""
+
+def list_platforms():
+    sdk = SDK()
+
+    print "Available platforms: "
+    for key in sdk.platforms.keys():
+        print "\t%s" % (sdk.platforms[key].name)
+
+def list_projects():
+    sdk = SDK()
+
+    print "Existing projects: "
+    for key in sdk.projects.keys():
+        p = sdk.projects[key]
+        print """
+        Name:        %s
+        Path:        %s
+        Description: %s
+        Platform:    %s
+""" % (p.name, p.path, p.desc, p.platform.name)
+
+def list_targets():
+    sdk = SDK()
+    
+    for pkey in sdk.projects.keys():
+        print "Installed targets in %s" % (sdk.projects[pkey].name)
+        for tkey in sdk.projects[pkey].targets.keys():
+            print "\t%s" % (sdk.projects[pkey].targets[tkey].name)
+        print ""
+    
+if __name__ == '__main__':
+    
+    sys.path.insert(0, '/usr/share/esdk')
+
+    (args, extras) = getopt(sys.argv[1:], '', ['help',
+                                               'list-platforms',
+                                               'list-projects',
+                                               'list-targets',
+                                               'mount=',
+                                               'umount='])
+    if len(extras) > 0:
+        usage()
+        sys.exit(1)
+        
+    if (len(args) == 0):
+        import gui
+        esdkMain()
+        gtk.main()
+
+    for i in args:
+        if i[0] == '--help':
+            usage()
+            sys.exit(1)
+            
+        elif i[0] == '--list-platforms':
+            list_platforms()
+            
+        elif i[0] == '--list-projects':
+            list_projects()
+
+        elif i[0] == '--list-targets':
+            list_targets()
+
+        elif i[0] == '--mount':
+            SDK().projects[i[1]].mount()        
+
+        elif i[0] == '--umount':
+            SDK().projects[i[1]].umount()        
