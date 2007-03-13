@@ -59,7 +59,8 @@ class TestPlatform(unittest.TestCase):
         platform = Platform('/usr/share/esdk', 'donley')
 
 if __name__ == '__main__':
-    unittest.main()
+    if len(sys.argv) == 1:
+        unittest.main()
     sdk = SDK()
     for p in sys.argv[1:]:
         print Platform(sdk.path, p)

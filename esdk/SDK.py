@@ -219,6 +219,7 @@ class TestSDK(unittest.TestCase):
                 a,b = (project.name, project.path)
 
 if __name__ == '__main__':
-    unittest.main()
+    if len(sys.argv) == 1:
+        unittest.main()
     for path in sys.argv[1:]:
         print SDK(path)
