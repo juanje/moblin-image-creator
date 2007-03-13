@@ -85,10 +85,11 @@ class Project(FileSystem):
     build system from the host Linux distribution.  It also knows how to create
     new 'target' filesystems.
     """
-    def __init__(self, path, name, platform):
+    def __init__(self, path, name, desc, platform):
         self.path = os.path.abspath(os.path.expanduser(path))
         self.name = name
         self.platform = platform
+        self.desc = desc
         FileSystem.__init__(self, self.path, self.platform.buildroot_repos)
 
         # Create our targets directory

@@ -164,7 +164,7 @@ class SDK:
         for file in os.listdir(self.config_path):
             try:
                 config = PackageConfig(os.path.join(self.config_path, file))
-                self.projects[config.name] = Project(config.path, config.name, self.platforms[config.platform])
+                self.projects[config.name] = Project(config.path, config.name, self.desc, self.platforms[config.platform])
             except:
                 pass
             
