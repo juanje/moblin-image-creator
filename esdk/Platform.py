@@ -3,7 +3,7 @@
 import os, re, sys
 
 from SDK import *
-from FSet import *
+import FSet
 
 class Platform:
     """
@@ -22,11 +22,10 @@ class Platform:
         self.path = os.path.join(self.SDK.path, 'platforms', self.name)
 
         # instantiate all fsets
-        self.fsets = {}
+        self.fset = FSet.FSet()
         fset_path = os.path.join(self.path, 'fsets')
         for filename in os.listdir(fset_path):
-            fset = FSet(os.path.join(fset_path, filename))
-            self.fsets[fset.name] = fset
+            self.fset.addFile(os.path.join(fset_path, filename))
 
         # instantiate all target repos
         self.target_repos = []
