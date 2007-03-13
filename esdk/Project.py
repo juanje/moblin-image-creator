@@ -7,7 +7,7 @@ from Platform import *
 from stat import *
 from shutil import *
 
-class FileSystem:
+class FileSystem(object):
     """
     This is the base class for any type of a filesystem.  This is used for both
     creating 'jailroot' filesystems that isolate a build from the host Linux

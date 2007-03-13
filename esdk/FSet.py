@@ -2,7 +2,7 @@
 
 import ConfigParser, os, re, sys
 
-class FSet:
+class FSet(object):
     """
     An FSet object represents a functional set of packages to install in a
     target filesystem.  An FSet contains an array of package names in
@@ -59,7 +59,7 @@ class FSet:
         return ('<data="%s">'
                 % (self.fsets))
 
-class FsetInstance:
+class FsetInstance(object):
     def __init__(self, name, data_dict):
         self.name = name.lower()
         self.data = data_dict

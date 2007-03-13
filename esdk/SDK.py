@@ -96,13 +96,10 @@ target.install(fset, 1)
 
 """
 
-import sys
-import os
+import os, re, sys, unittest
+import Platform, Project
 
-from Platform import *
-from Project import *
-
-class ConfigFile:
+class ConfigFile(object):
     """
     This is a class for generically parsing configuration files that
     contain 'NAME=VALUE' pairs, each on it's own line.
@@ -146,7 +143,7 @@ class PackageConfig(ConfigFile):
         ConfigFile.__init__(self, path, ['name', 'desc', 'path', 'platform'])
         
 
-class SDK:
+class SDK(object):
     def __init__(self, path='/usr/share/esdk'):
         self.path = os.path.abspath(os.path.expanduser(path))
         
@@ -157,14 +154,14 @@ class SDK:
         # instantiate all platforms
         self.platforms = {}
         for p in os.listdir(os.path.join(self.path, 'platforms')):
-            self.platforms[p] = Platform(self, p)
+            self.platforms[p] = Platform.Platform(self.path, p)
 
         # discover all existing projects
         self.projects = {}
         for file in os.listdir(self.config_path):
             try:
                 config = PackageConfig(os.path.join(self.config_path, file))
-                self.projects[config.name] = Project(config.path, config.name, config.desc, self.platforms[config.platform])
+                self.projects[config.name] = Project.Project(config.path, config.name, config.desc, self.platforms[config.platform])
             except:
                 pass
             
@@ -173,26 +170,25 @@ class SDK:
         Create a new project by specifying an install path, a name, a
         short description, and a platform object.
 
-        example:
+        Example:
 
         # By 'creating' a project, the class will:
         #   - create a new directory (i.e. path)
         #   - create the initial directory structure
-        #   - setup the project configuration files
-        #     both inside the project directory, and also
-        #     'the project config' in ~/.esdk/
+        #   - setup the project configuration files both inside the project
+        #     directory, and also 'create the project config' in ~/.esdk/
+
         proj = SDK().create_project(self, '~/projects/myproject',
                                     'My Project',
                                     'This is a test, only a test', 'donley')
 
-        # after creating the project, you still need to install the
-        # platform specific packages to enable the project to be used
-        # as a jailroot
+        # after creating the project, you still need to install the platform
+        # specific packages to enable the project to be used as a jailroot
         proj.install()
         """
         install_path = os.path.abspath(os.path.expanduser(install_path))
         # create the config file
-        config_path = os.path.join(self.config_path, name + '.proj')
+        config_path = os.path.join(self.config_path, "%s.proj" % name)
         os.path.isfile(config_path)
         config = open(config_path, 'w')
         config.write("NAME=%s\n" % (name))
@@ -202,7 +198,7 @@ class SDK:
         config.close()
 
         # instantiate the project
-        self.projects[name] = Project(install_path, name, desc, platform)
+        self.projects[name] = Project.Project(install_path, name, desc, platform)
         return self.projects[name]
     
     def delete_project(self, project):
@@ -212,6 +208,18 @@ class SDK:
         return ("<SDK Object: path=%s, platform=%s>" %
                 (self.path, self.platforms))
 
+    def __repr__(self):
+        return "SDK(path='%s')" % self.path
+
+class TestSDK(unittest.TestCase):
+    def testInstantiate(self):
+        sdk = SDK()
+        for key in sdk.projects.keys():
+                project = sdk.projects[key]
+                a,b = (project.name, project.path)
+
 if __name__ == '__main__':
+    if len(sys.argv) == 1:
+        unittest.main()
     for path in sys.argv[1:]:
         print SDK(path)
