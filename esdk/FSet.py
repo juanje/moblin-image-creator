@@ -11,7 +11,7 @@ class FSet:
     """
     def __init__(self):
         self.filenames = []
-        self.data = {}
+        self.fsets = {}
 
     def addFile(self, filename):
         """Add a config file to the FSet"""
@@ -28,13 +28,13 @@ class FSet:
         for section in p.sections():
             orig_section = section
             section = section.lower()
-            if section in self.data:
+            if section in self.fsets:
                 print "Error: Already have a section called: %s" % section
                 print "Tried to add the section from file: %s" % filename
-                print "But already have that section from file: %s" % self.data[section]['filename']
+                print "But already have that section from file: %s" % self.fsets[section]['filename']
                 raise ValueError
-            self.data[section] = {}
-            self.data[section]['filename'] = filename
+            work_dict = {}
+            work_dict['filename'] = filename
             for name, value in p.items(orig_section):
                 name = name.lower()
                 if name not in valid_values:
@@ -49,14 +49,28 @@ class FSet:
                     print "Error: Unsupported type specified in valid_values"
                     print "Type was: %s" % work_type
                     raise ValueError
-                self.data[section][name] = value
+                work_dict[name] = value
+            self.fsets[section] = FsetInstance(section, work_dict)
 
     def __getitem__(self, key):
-        return self.data[key.lower()]
+        return self.fsets[key.lower()]
 
     def __str__(self):
         return ('<data="%s">'
-                % (self.data))
+                % (self.fsets))
+
+class FsetInstance:
+    def __init__(self, name, data_dict):
+        self.name = name.lower()
+        self.data = data_dict
+    def __getitem__(self, key):
+        return self.data[key.lower()]
+    def __getattr__(self, name):
+        return self.data[name.lower()]
+    def __repr__(self):
+        return ('FsetInstance("%s", %s)' % (self.name, self.data))
+    def __str__(self):
+        return ('<fset name="%s" data="%s">' % (self.name, self.data))
 
 if __name__ == '__main__':
     if len(sys.argv) == 1:
@@ -66,3 +80,7 @@ if __name__ == '__main__':
         for filename in sys.argv[1:]:
             fset.addFile(filename)
         print fset
+        for key in fset.fsets:
+            print
+            print key, fset[key]
+            print fset[key].filename, fset[key]['filename']
