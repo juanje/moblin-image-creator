@@ -54,15 +54,15 @@ metadata_expire=1800
             for repo in repos:
                 shutil.copy(repo, os.path.join(target_etc, 'yum.repos.d'))
 
-            os.system('sudo mknod ' + os.path.join(self.path, 'dev/null') + ' c 1 3')
-            os.system('sudo mknod ' + os.path.join(self.path, 'dev/zero') + ' c 1 5')
+            os.system('mknod ' + os.path.join(self.path, 'dev/null') + ' c 1 3')
+            os.system('mknod ' + os.path.join(self.path, 'dev/zero') + ' c 1 5')
 
     def install(self, path, packages, repos):
         """
         Call into yum to install RPM packages using the specified yum
         repositories
         """
-        command = 'sudo yum -y --disablerepo=* --enablerepo=esdk* --installroot=' + path + ' install '
+        command = 'yum -y --disablerepo=* --enablerepo=esdk* --installroot=' + path + ' install '
         for p in packages:
             command = command + ' ' + p
         os.system(command)
