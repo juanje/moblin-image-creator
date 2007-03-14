@@ -9,26 +9,53 @@ sys.path.insert(0, '/usr/share/esdk/lib')
 from SDK import *
 
 def usage():
-    print >> sys.stderr, "Usage: %s [ARGS...]" % (sys.argv[0])
-    print >> sys.stderr, """<Informational Options>
-    No arguments        Open GUI
+    print >> sys.stderr, """Usage: project-builder [ARGS...]
+
+    No arguments        Open GUI... so easy a caveman could do it
     --help              Print this message
-    --list-platforms    List available platforms
-    --list-projects     List existing projects
-    --list-targets      List installed targets on all projects
+    --command=CMD       Where CMD is one of list-platforms, list-projects,
+                        list-targets, list-fsets, create-project,
+                        create-target, install-fset, delete-target,
+                        or delete-project
+                        
+    --platform_name=PLATFORM
+    --project_name=PROJECT
+    --project_desc=DESC
+    --project_path=PATH
+    --target_name=TARGET
+    --fset=FSET
     
 <Adding a new project>
-    --add-project --name=NAME --platform=PLATFORM --desc=DESC --path=PATH
+    project-builder --command=create-project \\
+                    --platform_name='donley' \\
+                    --project_name='MyProject' \\
+                    --project_desc='Example project' \\
+                    --project_path=/usr/src/projects/myproject
+
+<Delete a project>
+    project-builder --command=delete-project \\
+                    --project_name='MyOtherProject'
 
 <Adding a new target to an existing project>
-    --add-target --name=NAME --project=PROJECT_NAME
+    project-builder --command=create-target \\
+                    --project_name='MyProject' \\
+                    --target_name='MyTarget'
 
-<Mounting a project>
-    --mount=PROJECT_NAME
-    --umount=PROJECT_NAME
+<Delete a target>
+    project-builder --command=delete-target \\
+                    --project_name='MyProject' \\
+                    --target_name='MyOtherTarget'
+
+<installing an fset into a given target>
+    project-builder --command=install-fset \\
+                    --platform_name='donley' \\
+                    --project_name='MyProject' \\
+                    --target_name='MyTarget' \\
+                    --fset='Core'
     
 """
-
+    sys.exit(1)
+    
 def list_platforms():
     sdk = SDK()
 
@@ -49,20 +76,19 @@ def list_projects():
         Platform:    %s
 """ % (p.name, p.path, p.desc, p.platform.name)
 
-def list_targets():
+def list_fsets(platform):
     sdk = SDK()
-    
-    for pkey in sdk.projects.keys():
-        print "Installed targets in %s" % (sdk.projects[pkey].name)
-        for tkey in sdk.projects[pkey].targets.keys():
-            print "\t%s" % (sdk.projects[pkey].targets[tkey].name)
-        print ""
+    print "Available fsets for the %s platform: " % (platform)
+    for key in sdk.platforms[platform].fset.fsets.keys():
+        print "\t%s" % (sdk.platforms[platform].fset.fsets[key].name)
 
-def add_project(path, name, desc, platform):
-    if path == '' or name == '' or platform == '':
-        usage()
-        sys.exit(1)
+def list_targets(project):
+    sdk = SDK()    
+    print "Installed targets in the %s project:" % (project)
+    for key in sdk.projects[project].targets.keys():
+        print "\t%s" % (sdk.projects[project].targets[key].name)
 
+def create_project(platform, name, desc, path):
     sdk = SDK()
 
     if sdk.projects.has_key(name):
@@ -71,93 +97,146 @@ def add_project(path, name, desc, platform):
     
     proj = sdk.create_project(path, name, desc, sdk.platforms[platform])
     proj.install()
+    proj.mount()
 
-def add_target(project, name):
-    if project == '' or name == '':
-        usage()
-        sys.exit(1)
-
+def delete_project(project_name):
+    print "Implement me!"
+    
+def create_target(project, name):
     sdk = SDK()
 
     if not sdk.projects.has_key(project):
         print >> sys.stderr, "project %s does not exists" % (project)
         sys.exit(1)
     
-    proj = sdk.projects[project].create_target(name)
+    target = sdk.projects[project].create_target(name)
 
-if __name__ == '__main__':
+def delete_target(project_name, target_name):
+    print "Implement me!"
     
-    (args, extras) = getopt(sys.argv[1:], '', ['help',
-                                               'list-platforms',
-                                               'list-projects',
-                                               'list-targets',
-                                               'mount=',
-                                               'umount=',
-                                               'add-project',
-                                               'add-target',
-                                               'project=',
-                                               'name=',
-                                               'platform=',
-                                               'desc=',
-                                               'path='])
+def install_fset(platform_name, project_name, target_name, fset_name):
+    sdk = SDK()
+
+    if not sdk.projects.has_key(project_name):
+        print >> sys.stderr, "project %s does not exists" % (project_name)
+        sys.exit(1)
+
+    if not sdk.projects[project_name].targets.has_key(target_name):
+        print >> sys.stderr, "target %s does not exists" % (target_name)
+        sys.exit(1)
+    
+    if not sdk.platforms[platform_name].fset.fsets.has_key(fset_name):
+        print >> sys.stderr, "fset %s does not exists" % (fset_name)
+        sys.exit(1)
+
+    fset = sdk.platforms[platform_name].fset.fsets[fset_name]
+    target = sdk.projects[project_name].targets[target_name]
+
+    target.install(fset)
+    
+if __name__ == '__main__':
+
+    try:
+        (args, extras) = getopt(sys.argv[1:], '', ['help',
+                                                   'command=',
+                                                   'platform_name=',
+                                                   'project_name=',
+                                                   'project_desc=',
+                                                   'project_path=',
+                                                   'target_name=',
+                                                   'fset='])
+    except:
+        print sys.exc_value
+        usage()
+    
     if len(extras) > 0:
         usage()
-        sys.exit(1)
         
     if (len(args) == 0):
         from gui import *
         esdkMain()
         gtk.main()
-
+        sys.exit(0)
+        
     command = ''
-    project = ''
-    platform = ''
-    desc = ''
-    path = ''
-    name = ''
+    platform_name = ''
+    project_name = ''
+    project_desc = ''
+    project_path = ''
+    target_name = ''
+    fset = ''
     for i in args:
         if i[0] == '--help':
             usage()
-            sys.exit(1)
             
-        elif i[0] == '--list-platforms':
-            list_platforms()
+        elif i[0] == '--command':
+            command = i[1]
             
-        elif i[0] == '--list-projects':
-            list_projects()
+        elif i[0] == '--platform_name':
+            platform_name = i[1]
 
-        elif i[0] == '--list-targets':
-            list_targets()
+        elif i[0] == '--project_name':
+            project_name = i[1]
 
-        elif i[0] == '--mount':
-            SDK().projects[i[1]].mount()        
+        elif i[0] == '--project_desc':
+            project_desc = i[1]
 
-        elif i[0] == '--umount':
-            SDK().projects[i[1]].umount()
+        elif i[0] == '--project_path':
+            project_path = i[1]
 
-        elif i[0] == '--add-project':
-            command = 'add-project'
+        elif i[0] == '--target_name':
+            target_name = i[1]
 
-        elif i[0] == '--add-target':
-            command = 'add-target'
+        elif i[0] == '--fset':
+            fset = i[1]
 
-        elif i[0] == '--name':
-            name = i[1]
+    if command == 'list-platforms':
+        list_platforms()
+        
+    elif command == 'list-projects':
+        list_projects()
+        
+    elif command == 'list-targets':
+        if len(project_name) == 0:
+            usage()
 
-        elif i[0] == '--project':
-            project = i[1]
+        list_targets(project_name)
+        
+    elif command == 'list-fsets':
+        if len(platform_name) == 0:
+            usage()
 
-        elif i[0] == '--platform':
-            platform = i[1]
+        list_fsets(platform_name)
+            
+    elif command == 'create-project':
+        if len(platform_name) == 0 or len(project_name) == 0 or len(project_desc) == 0 or len(project_path) == 0:
+            usage()
 
-        elif i[0] == '--desc':
-            desc = i[1]
+        create_project(platform_name, project_name, project_desc, project_path)
+        
+    elif command == 'delete-project':
+        if len(project_name) == 0:
+            usage()
 
-        elif i[0] == '--path':
-            path = i[1]
+        delete_project(project_name)
+        
+    elif command == 'create-target':
+        if len(project_name) == 0 or len(target_name) == 0:
+            usage()
 
-    if len(command) > 0:
-        if command == 'add-project':
-            add_project(path, name, desc, platform)
-        elif command == 'add-target':
-            add_target(project, name)
+        create_target(project_name, target_name)
+
+    elif command == 'delete-target':
+        if len(project_name) == 0 or len(target_name) == 0:
+            usage()
+
+        delete_target(project_name, target_name)
+            
+    elif command == 'install-fset':
+        if len(platform_name) == 0 or len(project_name) == 0 or len(target_name) == 0 or len(fset) == 0:
+            usage()
+
+        install_fset(platform_name, project_name, target_name, fset)
+        
+    else:
+        usage()
