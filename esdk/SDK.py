@@ -78,8 +78,8 @@ User list available fsets for the platform:
 Input => Platform object
 
 print 'Available fsets for the %s platform:' % (platform.name)
-for key in platform.fset.fsets.keys():
-	fset = platform.fsets[key]
+for key in platform.fset:
+	fset = platform.fset[key]
 	print '\t - %s' % (fset.name)
 
 User installs a fset in target:
