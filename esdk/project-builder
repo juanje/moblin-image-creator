@@ -14,7 +14,6 @@ if len(sys.argv) == 1:
 
 def main():
 
-    print len(sys.argv), sys.argv
     if len(sys.argv) == 1:
         esdkMain()
         gtk.main()
