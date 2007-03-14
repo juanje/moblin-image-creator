@@ -192,7 +192,17 @@ def install_fset(options):
     target.install(fset)
 
 def create_image(options):
-    print "Implement me!"
-    
+    sdk = SDK()
+
+    proj = sdk.projects[options.project_name]
+    if options.cmd == 'create-live-iso':
+        proj.create_live_iso(options.target_name, options.image_name)
+    elif options.cmd == 'create-install-iso':
+        proj.create_install_iso(options.target_name, options.image_name)
+    elif options.cmd == 'create-live-usb':
+        proj.create_live_usb(options.target_name, options.image_name)
+    elif options.cmd == 'create-install-usb':
+        proj.create_install_usb(options.target_name, options.image_name)
+
 if __name__ == '__main__':
     sys.exit(main())
