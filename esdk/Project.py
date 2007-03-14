@@ -1,11 +1,8 @@
 #!/usr/bin/python -tt
 
-import os, sys, yum
+import os, shutil, sys, time, yum
 
-from SDK import *
-from Platform import *
-from stat import *
-from shutil import *
+import SDK
 
 class FileSystem(object):
     """
@@ -22,14 +19,12 @@ class FileSystem(object):
     """
     def __init__(self, path, repos):
         self.path = os.path.abspath(os.path.expanduser(path))
-
         if not os.path.isdir(self.path):
             """
             Initial filesystem stub has never been created, so setup the
             initial base directory structure with just enough done to allow yum
             to install packages from outside the root of the filesystem
             """
-
             # Create our directories
             for dirname in [ 'proc', 'var/log', 'var/lib/rpm', 'dev', 'etc/yum.repos.d' ]:
                 full_path = os.path.join(self.path, dirname)
@@ -37,7 +32,7 @@ class FileSystem(object):
 
             target_etc = os.path.join(self.path, "etc")
             for filename in [ 'hosts', 'passwd', 'group', 'resolv.conf' ]:
-                copy(os.path.join('/etc', filename), target_etc)
+                shutil.copy(os.path.join('/etc', filename), target_etc)
             yumconf = open(os.path.join(target_etc, 'yum.conf'), 'w')
             print >> yumconf, """\
 [main]
@@ -56,8 +51,8 @@ metadata_expire=1800
 """
             yumconf.close()
 
-            for r in repos:
-                copy(r, os.path.join(target_etc, 'yum.repos.d'))
+            for repo in repos:
+                shutil.copy(repo, os.path.join(target_etc, 'yum.repos.d'))
 
             os.system('sudo mknod ' + os.path.join(self.path, 'dev/null') + ' c 1 3')
             os.system('sudo mknod ' + os.path.join(self.path, 'dev/zero') + ' c 1 5')
@@ -77,7 +72,6 @@ metadata_expire=1800
 
     def umount(self):
         os.system('umount ' + os.path.join(self.path, 'proc'))
-
 
 class Project(FileSystem):
     """
@@ -116,6 +110,8 @@ class Project(FileSystem):
     def __str__(self):
         return ("<Project: name=%s, path=%s>"
                 % (self.name, self.path))
+    def __repr__(self):
+        return "Project('%s', '%s', '%s', %s)" % (self.path, self.name, self.desc, self.platform)
 
 class Target(FileSystem):
     """
@@ -126,7 +122,6 @@ class Target(FileSystem):
         self.project = project
         self.name = name
         self.path = os.path.join(project.path, "targets", name)
-
 
         # Load our target's filesystem directory
         self.fs_path = os.path.join(self.path, "fs")
@@ -150,6 +145,8 @@ class Target(FileSystem):
     def __str__(self):
         return ("<Target: name=%s, path=%s, fs_path=%s, image_path>"
                 % (self.name, self.path, self.fs_path, self.image_path))
+    def __repr__(self):
+        return "Target('%s', %s)" % (self.path, self.project)
 
 
 if __name__ == '__main__':
@@ -168,30 +165,38 @@ if __name__ == '__main__':
     target_name = sys.argv[4]
     platform_name = sys.argv[5]
     
-    sdk = SDK()
+    sdk = SDK.SDK()
 
-    # verify the platform exist
+    # verify the platform exists
     if not platform_name in sdk.platforms:
         print >> sys.stderr, "ERROR: %s is not a valid platform!" % (platform_name)
         print >> sys.stderr, "Available platforms include:"
-        for key in sdk.platforms.keys():
+        for key in sorted(sdk.platforms.iterkeys()):
             print "\t%s" % (key)
         sys.exit(1)
-        
     platform = sdk.platforms[platform_name]
-        
+
     # find an existing project, or create a new one
+    existing_project = False
     if name in sdk.projects:
-        print "Opening existing project..."
+        print "Opening existing project...Using info from config file..."
         proj = sdk.projects[name]
+        existing_project = True
     else:
         print "Creating new project..."
         proj = sdk.create_project(install_path, name, desc, platform)
         proj.install()
+    print "Install path: %s" % proj.path
+    print "Name: %s" % proj.name
+    print "Description: %s" % proj.desc
+    if existing_project:
+        print "Used info from config file: ~/.esdk/%s.proj" % name
+        time.sleep(2)
 
     # see if the target exist
     if target_name in proj.targets:
-        print "Target already exists"
+        print "Target already exists: %s" % target_name
+        print proj.targets
     else:
         print "Creating new project target filesystem..."
         proj.create_target(target_name)
