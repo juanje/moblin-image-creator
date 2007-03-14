@@ -217,10 +217,10 @@ class TestSDK(unittest.TestCase):
         for key in sdk.projects.keys():
                 project = sdk.projects[key]
                 a,b = (project.name, project.path)
-
-    def testStr(self):
+    def testStrRepr(self):
         sdk = SDK()
-        "%s" % sdk
+        temp = sdk.__str__()
+        temp = sdk.__repr__()
 
 if __name__ == '__main__':
     if len(sys.argv) == 1:
