@@ -1,6 +1,6 @@
 #!/usr/bin/python -tt
 
-import ConfigParser, os, re, sys
+import ConfigParser, os, re, sys, unittest
 
 class FSet(object):
     """
@@ -54,10 +54,14 @@ class FSet(object):
 
     def __getitem__(self, key):
         return self.__fsets[key.lower()]
+    def __iter__(self):
+        return self.__fsets.__iter__()
 
     def __str__(self):
         return ('<data="%s">'
                 % (self.__fsets))
+    def __repr__(self):
+        return "FSet()"
 
 class FsetInstance(object):
     def __init__(self, name, data_dict):
@@ -72,8 +76,27 @@ class FsetInstance(object):
     def __str__(self):
         return ('<fset name="%s" data="%s">' % (self.name, self.data))
 
+
+class TestFset(unittest.TestCase):
+    def testInstantiate(self):
+        fset = FSet()
+        fset.addFile("/usr/share/esdk/platforms/donley/fsets/donley.fset")
+        if "blah" in fset:
+            a = 1
+        for key in fset:
+            print key
+    def testStrRepr(self):
+        fset = FSet()
+        temp = fset.__str__()
+        temp = fset.__repr__()
+        fset.addFile("/usr/share/esdk/platforms/donley/fsets/donley.fset")
+        temp = fset['core'].__str__()
+        temp = fset['core'].__repr__()
+
+
 if __name__ == '__main__':
     if len(sys.argv) == 1:
+        unittest.main()
         print >> sys.stderr, "USAGE: %s FSET_FILE ..." % (sys.argv[0])
     else:
         fset = FSet()
