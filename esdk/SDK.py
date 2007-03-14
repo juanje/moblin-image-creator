@@ -218,6 +218,10 @@ class TestSDK(unittest.TestCase):
                 project = sdk.projects[key]
                 a,b = (project.name, project.path)
 
+    def testStr(self):
+        sdk = SDK()
+        "%s" % sdk
+
 if __name__ == '__main__':
     if len(sys.argv) == 1:
         unittest.main()
