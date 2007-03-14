@@ -106,8 +106,8 @@ def list_projects():
 def list_fsets(platform):
     sdk = SDK()
     print "Available fsets for the %s platform: " % (platform)
-    for key in sdk.platforms[platform].fset.fsets.keys():
-        print "\t%s" % (sdk.platforms[platform].fset.fsets[key].name)
+    for key in sdk.platforms[platform].fset:
+        print "\t%s" % (sdk.platforms[platform].fset[key].name)
 
 def list_targets(project):
     sdk = SDK()    
@@ -152,11 +152,11 @@ def install_fset(platform_name, project_name, target_name, fset_name):
         print >> sys.stderr, "target %s does not exists" % (target_name)
         sys.exit(1)
     
-    if not sdk.platforms[platform_name].fset.fsets.has_key(fset_name):
+    if not fset_name in sdk.platforms[platform_name].fset:
         print >> sys.stderr, "fset %s does not exists" % (fset_name)
         sys.exit(1)
 
-    fset = sdk.platforms[platform_name].fset.fsets[fset_name]
+    fset = sdk.platforms[platform_name].fset[fset_name]
     target = sdk.projects[project_name].targets[target_name]
 
     target.install(fset)
