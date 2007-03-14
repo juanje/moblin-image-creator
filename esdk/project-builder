@@ -4,9 +4,109 @@
 import sys, os
 
 from getopt import *
+from optparse import OptionParser
 
 sys.path.insert(0, '/usr/share/esdk/lib')
 from SDK import *
+
+def main():
+    options, args = parseCommandLine()
+
+    if not options and not args:
+        print "We would execute our gui here"
+        return 0
+
+    if options.cmd == "list-platforms":
+        list_platforms()
+    elif options.cmd == "list-projects":
+        list_projects()
+    elif options.cmd == 'list-targets':
+        list_targets(options.project_name)
+    elif options.cmd == 'list-fsets':
+        list_fsets(options.platform_name)
+    elif options.cmd == 'create-project':
+        create_project(options.platform, options.project_name, options.project_desc, options.project_path)
+    elif options.cmd == 'delete-project':
+        delete_project(options.project)
+    elif options.cmd == 'create-target':
+        create_target(options.project, options.target)
+    elif options.cmd == 'delete-target':
+        delete_target(options.project, options.target)
+    elif options.cmd == 'install-fset':
+        install_fset(options.platform, options.project_name, options.target, options.fset)
+    else:
+        print "unknown command specified"
+        return 0
+        
+
+def parseCommandLine():
+    valid_commands = [ "list-platforms", "list-projects", "list-targets", "list-fsets",
+        "create-project", "create-target", "install-fset", "delete-target",
+        "delete-project", ]
+    valid_command_string = ""
+    for command in valid_commands[:-1]:
+        valid_command_string += "%s, " %  command
+    valid_command_string += "or %s" % valid_commands[-1]
+
+    parser = OptionParser()
+    parser.add_option("-c", "--comand", dest="cmd",
+        help="Where CMD is one of: %s" % valid_command_string, metavar="CMD")
+    parser.add_option("--platform", dest="platform",
+        help="Platform name")
+    parser.add_option("--project-name", dest="project_name",
+        help="Project name")
+    parser.add_option("--project-desc", dest="project_desc",
+        help="Project description")
+    parser.add_option("--project-path", dest="project_path",
+        help="Project path")
+    parser.add_option("-t", "--target", dest="target",
+        help="Target name")
+    parser.add_option("--fset", dest="fset",
+        help="File set identifier")
+    parser.add_option("-q", "--quiet",
+        action="store_false", dest="verbose", default=True,
+        help="don't print status messages to stdout")
+
+    (options, args) = parser.parse_args()
+    # if nothing at all is passed in then return back
+    if not options and not args:
+        return options, args
+    # now lets validate stuff
+    if not options.cmd:
+        parser.error("Must specify a -c/--command argument")
+    if options.cmd not in valid_commands:
+        parser.error("Command specified for option -c/--command invalid.  Valid commands are: %s" % valid_command_string)
+
+    if options.cmd == 'list-targets' and not options.project_name:
+        parser.error("Must specify project-name when using %s command" % options.cmd)
+    if options.cmd == "list-fsets" and not options.platform:
+        parser.error("Must specify platform name when using %s command" % options.cmd)
+    if options.cmd == "create-project":
+        if not options.platform:
+            parser.error("Must specify platform name when using %s command" % options.cmd)
+        if not options.project_name:
+            parser.error("Must specify project name when using %s command" % options.cmd)
+        if not options.project_desc:
+            parser.error("Must specify project description when using %s command" % options.cmd)
+        if not options.project_path:
+            parser.error("Must specify project path when using %s command" % options.cmd)
+    if options.cmd == "delete-project" and not options.project_name:
+        parser.error("Must specify project name when using %s command" % options.cmd)
+    if options.cmd == "create-target" or options.cmd == "delete-target":
+        if not options.project:
+            parser.error("Must specify project name when using %s command" % options.cmd)
+        if not options.target:
+            parser.error("Must specify target when using %s command" % options.cmd)
+    if options.cmd == "install-fset":
+        if not options.platform:
+            parser.error("Must specify platform name when using %s command" % options.cmd)
+        if not options.project_name:
+            parser.error("Must specify project name when using %s command" % options.cmd)
+        if not options.target:
+            parser.error("Must specify target when using %s command" % options.cmd)
+        if not options.fset:
+            parser.error("Must specify fset when using %s command" % options.cmd)
+    return options, args
 
 def usage():
     print >> sys.stderr, """Usage: project-builder [ARGS...]
@@ -174,6 +274,7 @@ def create_install_usb(project_name, target_name, image_name):
     print "Implement me!"
 
 if __name__ == '__main__':
+    sys.exit(main())
 
     try:
         (args, extras) = getopt(sys.argv[1:], '', ['help',
