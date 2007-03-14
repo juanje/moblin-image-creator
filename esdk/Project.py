@@ -1,6 +1,6 @@
 #!/usr/bin/python -tt
 
-import os, shutil, sys, time, yum
+import os, shutil, stat, sys, time
 
 import SDK
 
@@ -53,9 +53,22 @@ metadata_expire=1800
 
             for repo in repos:
                 shutil.copy(repo, os.path.join(target_etc, 'yum.repos.d'))
+            # Create our devices
+            self.__createDevices()
 
-            os.system('mknod ' + os.path.join(self.path, 'dev/null') + ' c 1 3')
-            os.system('mknod ' + os.path.join(self.path, 'dev/zero') + ' c 1 5')
+    def __createDevices(self):
+            devices = [
+                # name, major, minor, mode
+                ('null', 1, 3, (0666 | stat.S_IFCHR)),
+                ('zero', 1, 5, (0666 | stat.S_IFCHR)),
+            ]
+            for device_name, major, minor, mode in devices:
+                device_path = os.path.join(self.path, 'dev', device_name)
+                device = os.makedev(major, minor)
+                os.mknod(device_path, mode, device)
+                # Seems redundant, but mknod doesn't seem to set the mode to
+                # what we want :(
+                os.chmod(device_path, mode)
 
     def install(self, path, packages, repos):
         """
