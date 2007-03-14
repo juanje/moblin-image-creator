@@ -27,7 +27,6 @@ class FSet(object):
         filenames = p.read(filename)
         for section in p.sections():
             orig_section = section
-            section = section.lower()
             if section in self.fsets:
                 print "Error: Already have a section called: %s" % section
                 print "Tried to add the section from file: %s" % filename

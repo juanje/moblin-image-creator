@@ -1,6 +1,7 @@
 #!/usr/bin/python -tt
 
 import os, sys
+import SDK
 import Project
 
 class InstallImage(object):
@@ -85,15 +86,20 @@ class HddImage(InstallImage):
 
 if __name__ == '__main__':
     if len(sys.argv) != 4:
-        print >> sys.stderr, "USAGE: %s path name platform" % (sys.argv[0])
+        print >> sys.stderr, "USAGE: %s path name platform_name" % (sys.argv[0])
         sys.exit(1)
 
-    proj = Project.Project(sys.argv[1], sys.argv[2], Platform('/usr/share/esdk', sys.argv[3]))
-    proj.install()
-    proj.create_target('mytest')
-    proj.targets['mytest'].install(proj.platform.fsets['Core'])
+    path = sys.argv[1]
+    name = sys.argv[2]
+    platform_name = sys.argv[3]
 
-    dest_path = os.path.join(proj.path, "output")
+    sdk = SDK.SDK()
+
+    proj = sdk.create_project(path, name, 'test project', sdk.platforms[platform_name])
+    proj.install()
+
+    target = proj.create_target('mytest')
+    target.install(sdk.platform[platform_name].fset.fsets['Core'], 1)
 
     imgLiveIso = LiveIsoImage(proj, proj.targets['mytest'], "mytest_v1")
     print "\nImage File Name: %s" % imgLiveIso.name
