@@ -48,8 +48,8 @@ class Platform(object):
         config.close()
 
     def __str__(self):
-        return ("<Platform Object: \n\tname=%s, \n\tfsets=%s, \n\ttarget_repos=%s\n\tjailroot_packages=%s>\n" %
-                (self.name, self.fsets, self.target_repos, self.jailroot_packages))
+        return ("<Platform Object: \n\tname=%s, \n\tfset=%s, \n\ttarget_repos=%s\n\tjailroot_packages=%s>\n" %
+                (self.name, self.fset, self.target_repos, self.jailroot_packages))
 
     def __repr__(self):
         return "Platform( %s, '%s')" % (self.sdk_path, self.name)
@@ -58,9 +58,12 @@ class TestPlatform(unittest.TestCase):
     def testInstantiate(self):
         platform = Platform('/usr/share/esdk', 'donley')
 
+    def testStr(self):
+        platform = Platform('/usr/share/esdk', 'donley')
+        "%s" % platform
+
 if __name__ == '__main__':
     if len(sys.argv) == 1:
         unittest.main()
-    sdk = SDK()
     for p in sys.argv[1:]:
-        print Platform(sdk.path, p)
+        print Platform('/usr/share/esdk', p)
