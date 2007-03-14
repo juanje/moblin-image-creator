@@ -21,7 +21,7 @@ def usage():
     --add-project --name=NAME --platform=PLATFORM --desc=DESC --path=PATH
 
 <Adding a new target to an existing project>
-    --add-target --project=PROJECT_NAME
+    --add-target --name=NAME --project=PROJECT_NAME
 
 <Mounting a project>
     --mount=PROJECT_NAME
@@ -57,7 +57,34 @@ def list_targets():
         for tkey in sdk.projects[pkey].targets.keys():
             print "\t%s" % (sdk.projects[pkey].targets[tkey].name)
         print ""
+
+def add_project(path, name, desc, platform):
+    if path == '' or name == '' or platform == '':
+        usage()
+        sys.exit(1)
+
+    sdk = SDK()
+
+    if sdk.projects.has_key(name):
+        print >> sys.stderr, "project %s already exists!" % (name)
+        sys.exit(1)
     
+    proj = sdk.create_project(path, name, desc, sdk.platforms[platform])
+    proj.install()
+
+def add_target(project, name):
+    if project == '' or name == '':
+        usage()
+        sys.exit(1)
+
+    sdk = SDK()
+
+    if not sdk.projects.has_key(project):
+        print >> sys.stderr, "project %s does not exists" % (project)
+        sys.exit(1)
+    
+    proj = sdk.projects[project].create_target(name)
+
 if __name__ == '__main__':
     
     (args, extras) = getopt(sys.argv[1:], '', ['help',
@@ -65,7 +92,14 @@ if __name__ == '__main__':
                                                'list-projects',
                                                'list-targets',
                                                'mount=',
-                                               'umount='])
+                                               'umount=',
+                                               'add-project',
+                                               'add-target',
+                                               'project=',
+                                               'name=',
+                                               'platform=',
+                                               'desc=',
+                                               'path='])
     if len(extras) > 0:
         usage()
         sys.exit(1)
@@ -75,6 +109,12 @@ if __name__ == '__main__':
         esdkMain()
         gtk.main()
 
+    command = ''
+    project = ''
+    platform = ''
+    desc = ''
+    path = ''
+    name = ''
     for i in args:
         if i[0] == '--help':
             usage()
@@ -93,4 +133,31 @@ if __name__ == '__main__':
             SDK().projects[i[1]].mount()        
 
         elif i[0] == '--umount':
-            SDK().projects[i[1]].umount()        
+            SDK().projects[i[1]].umount()
+
+        elif i[0] == '--add-project':
+            command = 'add-project'
+
+        elif i[0] == '--add-target':
+            command = 'add-target'
+
+        elif i[0] == '--name':
+            name = i[1]
+
+        elif i[0] == '--project':
+            project = i[1]
+
+        elif i[0] == '--platform':
+            platform = i[1]
+
+        elif i[0] == '--desc':
+            desc = i[1]
+
+        elif i[0] == '--path':
+            path = i[1]
+
+    if len(command) > 0:
+        if command == 'add-project':
+            add_project(path, name, desc, platform)
+        elif command == 'add-target':
+            add_target(project, name)
