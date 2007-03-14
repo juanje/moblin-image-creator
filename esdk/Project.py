@@ -106,6 +106,7 @@ class Project(FileSystem):
     def create_target(self, name):
         if not name in self.targets:
             self.targets[name] = Target(name, self)
+        return self.targets[name]
 
     def __str__(self):
         return ("<Project: name=%s, path=%s>"
