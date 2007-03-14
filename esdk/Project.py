@@ -16,7 +16,7 @@ class FileSystem(object):
     burned/copied/whatever into the target device.
 
     By just instantiating a FileSystem object, the caller will trigger the
-    basic root filesystem components to be intialized, but to do anything
+    basic root filesystem components to be initialized, but to do anything
     usefull with the root filesystem will require the caller to use the
     'install' method for installing new RPM packages.
     """
@@ -110,7 +110,7 @@ class Project(FileSystem):
         FileSystem.install(self, self.path, self.platform.jailroot_packages, self.platform.buildroot_repos)
 
     def create_target(self, name):
-        if not self.targets.has_key(name):
+        if not name in self.targets:
             self.targets[name] = Target(name, self)
 
     def __str__(self):
@@ -155,10 +155,15 @@ class Target(FileSystem):
 if __name__ == '__main__':
     if len(sys.argv) != 6:
         print >> sys.stderr, "USAGE: %s PROJECT_NAME PROJECT_PATH PROJECT_DESCRIPTION TARGET_NAME PLATFORM_NAME" % (sys.argv[0])
+        print >> sys.stderr, "\tPROJECT_NAME: name to call the project.  The config file ~/.esdk/project_name.proj is used or created"
+        print >> sys.stderr, "\tPROJECT_PATH: directory to install the project"
+        print >> sys.stderr, "\tPROJECT_DESCRIPTION: Textual description of the project"
+        print >> sys.stderr, "\tTARGET_NAME: ???"
+        print >> sys.stderr, "\tPLATFORM_NAME: The platform.  e.g. donley"
         sys.exit(1)
 
     name = sys.argv[1]
-    path = sys.argv[2]
+    install_path = os.path.abspath(os.path.expanduser(sys.argv[2]))
     desc = sys.argv[3]
     target_name = sys.argv[4]
     platform_name = sys.argv[5]
@@ -166,7 +171,7 @@ if __name__ == '__main__':
     sdk = SDK()
 
     # verify the platform exist
-    if not sdk.platforms.has_key(platform_name):
+    if not platform_name in sdk.platforms:
         print >> sys.stderr, "ERROR: %s is not a valid platform!" % (platform_name)
         print >> sys.stderr, "Available platforms include:"
         for key in sdk.platforms.keys():
@@ -176,16 +181,16 @@ if __name__ == '__main__':
     platform = sdk.platforms[platform_name]
         
     # find an existing project, or create a new one
-    if sdk.projects.has_key(sys.argv[1]):
+    if name in sdk.projects:
         print "Opening existing project..."
         proj = sdk.projects[name]
     else:
         print "Creating new project..."
-        proj = sdk.create_project(path, name, desc, platform)
+        proj = sdk.create_project(install_path, name, desc, platform)
         proj.install()
 
     # see if the target exist
-    if proj.targets.has_key(target_name):
+    if target_name in proj.targets:
         print "Target already exists"
     else:
         print "Creating new project target filesystem..."
