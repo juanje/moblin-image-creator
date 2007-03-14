@@ -8,10 +8,13 @@ from optparse import OptionParser
 
 sys.path.insert(0, '/usr/share/esdk/lib')
 from SDK import *
-from gui import *
+
+if len(sys.argv) == 1:
+    from gui import *
 
 def main():
 
+    print len(sys.argv), sys.argv
     if len(sys.argv) == 1:
         esdkMain()
         gtk.main()
