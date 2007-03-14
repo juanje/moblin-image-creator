@@ -78,6 +78,8 @@ class FsetInstance(object):
 
 
 class TestFset(unittest.TestCase):
+    # FIXME: This stuff should probably be moved into a separate file which
+    # creates fset files and then runs some tests using the created files.
     def testInstantiate(self):
         fset = FSet()
         fset.addFile("/usr/share/esdk/platforms/donley/fsets/donley.fset")
