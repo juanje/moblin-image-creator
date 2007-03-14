@@ -203,5 +203,5 @@ if __name__ == '__main__':
         proj.create_target(target_name)
 
         print "Installing all available fsets inside target..."
-        for key in proj.platform.fset.fsets.keys():
+        for key in proj.platform.fset:
             proj.targets[target_name].install(proj.platform.fset[key])
