@@ -16,7 +16,8 @@ def usage():
     --command=CMD       Where CMD is one of list-platforms, list-projects,
                         list-targets, list-fsets, create-project,
                         create-target, install-fset, delete-target,
-                        or delete-project
+                        delete-project, create-live-iso, create-install-iso,
+                        create-live-usb, or create install-usb
                         
     --platform_name=PLATFORM
     --project_name=PROJECT
@@ -24,6 +25,7 @@ def usage():
     --project_path=PATH
     --target_name=TARGET
     --fset=FSET
+    --image=IMAGE
     
 <Adding a new project>
     project-builder --command=create-project \\
@@ -52,7 +54,32 @@ def usage():
                     --project_name='MyProject' \\
                     --target_name='MyTarget' \\
                     --fset='Core'
-    
+
+<Creating a new live ISO image from a given target>
+    project-builder --command=create-live-iso \\
+                    --project_name='MyProject' \\
+                    --target_name='MyTarget' \\
+                    --image_name='myimagefile'
+                    
+<Creating a new install ISO image from a given target>
+    project-builder --command=create-install-iso \\
+                    --project_name='MyProject' \\
+                    --target_name='MyTarget' \\
+                    --image_name='myimagefile'
+
+<Creating a new live USB image from a given target>
+    project-builder --command=create-live-usb \\
+                    --project_name='MyProject' \\
+                    --target_name='MyTarget' \\
+                    --image_name='myimagefile'
+
+<Creating a new install USB image from a given target>
+    project-builder --command=create-install-usb \\
+                    --project_name='MyProject' \\
+                    --target_name='MyTarget' \\
+                    --image_name='myimagefile'
+
+
 """
     sys.exit(1)
     
@@ -133,7 +160,19 @@ def install_fset(platform_name, project_name, target_name, fset_name):
     target = sdk.projects[project_name].targets[target_name]
 
     target.install(fset)
-    
+
+def create_live_iso(project_name, target_name, image_name):
+    print "Implement me!"
+
+def create_install_iso(project_name, target_name, image_name):
+    print "Implement me!"
+
+def create_live_usb(project_name, target_name, image_name):
+    print "Implement me!"
+
+def create_install_usb(project_name, target_name, image_name):
+    print "Implement me!"
+
 if __name__ == '__main__':
 
     try:
@@ -144,7 +183,8 @@ if __name__ == '__main__':
                                                    'project_desc=',
                                                    'project_path=',
                                                    'target_name=',
-                                                   'fset='])
+                                                   'fset=',
+                                                   'image_name='])
     except:
         print sys.exc_value
         usage()
@@ -165,6 +205,7 @@ if __name__ == '__main__':
     project_path = ''
     target_name = ''
     fset = ''
+    image_name = ''
     for i in args:
         if i[0] == '--help':
             usage()
@@ -189,6 +230,9 @@ if __name__ == '__main__':
 
         elif i[0] == '--fset':
             fset = i[1]
+
+        elif i[0] == '--image_name':
+            image_name = i[1]
 
     if command == 'list-platforms':
         list_platforms()
@@ -237,6 +281,31 @@ if __name__ == '__main__':
             usage()
 
         install_fset(platform_name, project_name, target_name, fset)
-        
+
+    elif command == 'create-live-iso':
+        if len(project_name) == 0 or len(target_name) == 0 or len(image_name) == 0:
+            usage()
+
+        create_live_iso(project_name, target_name, image_name)
+
+    elif command == 'create-install-iso':
+        if len(project_name) == 0 or len(target_name) == 0 or len(image_name) == 0:
+            usage()
+
+        create_install_iso(project_name, target_name, image_name)
+
+    elif command == 'create-live-usb':
+        if len(project_name) == 0 or len(target_name) == 0 or len(image_name) == 0:
+            usage()
+
+        create_live_usb(project_name, target_name, image_name)
+
+    elif command == 'create-install-usb':
+        if len(project_name) == 0 or len(target_name) == 0 or len(image_name) == 0:
+            usage()
+
+        create_install_usb(project_name, target_name, image_name)
+
+
     else:
         usage()
