@@ -8,61 +8,71 @@ from optparse import OptionParser
 
 sys.path.insert(0, '/usr/share/esdk/lib')
 from SDK import *
+from gui import *
 
 def main():
-    options, args = parseCommandLine()
 
-    if not options and not args:
-        print "We would execute our gui here"
+    if len(sys.argv) == 1:
+        esdkMain()
+        gtk.main()
         return 0
 
+    options, args = parseCommandLine()
     if options.cmd == "list-platforms":
         list_platforms()
     elif options.cmd == "list-projects":
         list_projects()
     elif options.cmd == 'list-targets':
-        list_targets(options.project_name)
+        list_targets(options)
     elif options.cmd == 'list-fsets':
-        list_fsets(options.platform_name)
+        list_fsets(options)
     elif options.cmd == 'create-project':
-        create_project(options.platform, options.project_name, options.project_desc, options.project_path)
+        create_project(options)
     elif options.cmd == 'delete-project':
-        delete_project(options.project)
+        delete_project(options)
     elif options.cmd == 'create-target':
-        create_target(options.project, options.target)
+        create_target(options)
     elif options.cmd == 'delete-target':
-        delete_target(options.project, options.target)
+        delete_target(options)
     elif options.cmd == 'install-fset':
-        install_fset(options.platform, options.project_name, options.target, options.fset)
+        install_fset(options)
+    elif options.cmd == 'create-live-iso' or options.cmd == 'create-install-iso' or options.cmd == 'create-live-usb' or options.cmd == 'create-install-usb':
+        create_image(options)
+
     else:
         print "unknown command specified"
         return 0
         
 
 def parseCommandLine():
-    valid_commands = [ "list-platforms", "list-projects", "list-targets", "list-fsets",
-        "create-project", "create-target", "install-fset", "delete-target",
-        "delete-project", ]
+    valid_commands = [ "list-platforms", "list-projects", "list-targets",
+                       "list-fsets", "create-project", "create-target",
+                       "install-fset", "delete-target", "delete-project",
+                       "create-live-iso", "create-install-iso",
+                       "create-live-usb", "create-install-usb"]
     valid_command_string = ""
     for command in valid_commands[:-1]:
         valid_command_string += "%s, " %  command
     valid_command_string += "or %s" % valid_commands[-1]
 
     parser = OptionParser()
-    parser.add_option("-c", "--comand", dest="cmd",
+
+    parser.add_option("-c", "--command", dest="cmd",
         help="Where CMD is one of: %s" % valid_command_string, metavar="CMD")
-    parser.add_option("--platform", dest="platform",
+    parser.add_option("--platform-name", dest="platform_name",
         help="Platform name")
     parser.add_option("--project-name", dest="project_name",
         help="Project name")
-    parser.add_option("--project-desc", dest="project_desc",
+    parser.add_option("--project-description", dest="project_desc",
         help="Project description")
     parser.add_option("--project-path", dest="project_path",
         help="Project path")
-    parser.add_option("-t", "--target", dest="target",
+    parser.add_option("-t", "--target-name", dest="target_name",
         help="Target name")
-    parser.add_option("--fset", dest="fset",
-        help="File set identifier")
+    parser.add_option("--fset-name", dest="fset_name",
+        help="Feature set identifier")
+    parser.add_option("--image-name", dest="image_name",
+        help="Name to use for target image file")
     parser.add_option("-q", "--quiet",
         action="store_false", dest="verbose", default=True,
         help="don't print status messages to stdout")
@@ -76,337 +86,113 @@ def parseCommandLine():
         parser.error("Must specify a -c/--command argument")
     if options.cmd not in valid_commands:
         parser.error("Command specified for option -c/--command invalid.  Valid commands are: %s" % valid_command_string)
-
     if options.cmd == 'list-targets' and not options.project_name:
         parser.error("Must specify project-name when using %s command" % options.cmd)
-    if options.cmd == "list-fsets" and not options.platform:
-        parser.error("Must specify platform name when using %s command" % options.cmd)
+    if options.cmd == "list-fsets" and not options.platform_name:
+        parser.error("Must specify platform-name when using %s command" % options.cmd)
     if options.cmd == "create-project":
-        if not options.platform:
-            parser.error("Must specify platform name when using %s command" % options.cmd)
+        if not options.platform_name:
+            parser.error("Must specify platform-name when using %s command" % options.cmd)
         if not options.project_name:
-            parser.error("Must specify project name when using %s command" % options.cmd)
+            parser.error("Must specify project-name when using %s command" % options.cmd)
         if not options.project_desc:
-            parser.error("Must specify project description when using %s command" % options.cmd)
+            parser.error("Must specify project-description when using %s command" % options.cmd)
         if not options.project_path:
-            parser.error("Must specify project path when using %s command" % options.cmd)
+            parser.error("Must specify project-path when using %s command" % options.cmd)
     if options.cmd == "delete-project" and not options.project_name:
-        parser.error("Must specify project name when using %s command" % options.cmd)
+        parser.error("Must specify project-name when using %s command" % options.cmd)
     if options.cmd == "create-target" or options.cmd == "delete-target":
-        if not options.project:
-            parser.error("Must specify project name when using %s command" % options.cmd)
-        if not options.target:
-            parser.error("Must specify target when using %s command" % options.cmd)
-    if options.cmd == "install-fset":
-        if not options.platform:
-            parser.error("Must specify platform name when using %s command" % options.cmd)
         if not options.project_name:
-            parser.error("Must specify project name when using %s command" % options.cmd)
-        if not options.target:
-            parser.error("Must specify target when using %s command" % options.cmd)
-        if not options.fset:
-            parser.error("Must specify fset when using %s command" % options.cmd)
+            parser.error("Must specify project-name when using %s command" % options.cmd)
+        if not options.target_name:
+            parser.error("Must specify target-name when using %s command" % options.cmd)
+    if options.cmd == "install-fset":
+        if not options.platform_name:
+            parser.error("Must specify platform-name when using %s command" % options.cmd)
+        if not options.project_name:
+            parser.error("Must specify project-name when using %s command" % options.cmd)
+        if not options.target_name:
+            parser.error("Must specify target-name when using %s command" % options.cmd)
+        if not options.fset_name:
+            parser.error("Must specify fset-name when using %s command" % options.cmd)
+    if options.cmd == "create-live-iso" or options.cmd == "create-install-iso" or options.cmd == "create-live-usb" or options.cmd == "create-install-usb":
+        if not options.project_name:
+            parser.error("Must specify project-name when using %s command" % options.cmd)
+        if not options.target_name:
+            parser.error("Must specify target-name when using %s command" % options.cmd)
+        if not options.image_name:
+            parser.error("Must specify image-name when using %s command" % options.cmd)
     return options, args
-
-def usage():
-    print >> sys.stderr, """Usage: project-builder [ARGS...]
-
-    No arguments        Open GUI... so easy a caveman could do it
-    --help              Print this message
-    --command=CMD       Where CMD is one of list-platforms, list-projects,
-                        list-targets, list-fsets, create-project,
-                        create-target, install-fset, delete-target,
-                        delete-project, create-live-iso, create-install-iso,
-                        create-live-usb, or create install-usb
-                        
-    --platform_name=PLATFORM
-    --project_name=PROJECT
-    --project_desc=DESC
-    --project_path=PATH
-    --target_name=TARGET
-    --fset=FSET
-    --image=IMAGE
-    
-<Adding a new project>
-    project-builder --command=create-project \\
-                    --platform_name='donley' \\
-                    --project_name='MyProject' \\
-                    --project_desc='Example project' \\
-                    --project_path=/usr/src/projects/myproject
-
-<Delete a project>
-    project-builder --command=delete-project \\
-                    --project_name='MyOtherProject'
-
-<Adding a new target to an existing project>
-    project-builder --command=create-target \\
-                    --project_name='MyProject' \\
-                    --target_name='MyTarget'
-
-<Delete a target>
-    project-builder --command=delete-target \\
-                    --project_name='MyProject' \\
-                    --target_name='MyOtherTarget'
-
-<installing an fset into a given target>
-    project-builder --command=install-fset \\
-                    --platform_name='donley' \\
-                    --project_name='MyProject' \\
-                    --target_name='MyTarget' \\
-                    --fset='Core'
-
-<Creating a new live ISO image from a given target>
-    project-builder --command=create-live-iso \\
-                    --project_name='MyProject' \\
-                    --target_name='MyTarget' \\
-                    --image_name='myimagefile'
-                    
-<Creating a new install ISO image from a given target>
-    project-builder --command=create-install-iso \\
-                    --project_name='MyProject' \\
-                    --target_name='MyTarget' \\
-                    --image_name='myimagefile'
-
-<Creating a new live USB image from a given target>
-    project-builder --command=create-live-usb \\
-                    --project_name='MyProject' \\
-                    --target_name='MyTarget' \\
-                    --image_name='myimagefile'
-
-<Creating a new install USB image from a given target>
-    project-builder --command=create-install-usb \\
-                    --project_name='MyProject' \\
-                    --target_name='MyTarget' \\
-                    --image_name='myimagefile'
-
-
-"""
-    sys.exit(1)
     
 def list_platforms():
     sdk = SDK()
-
-    print "Available platforms: "
     for key in sdk.platforms.keys():
-        print "\t%s" % (sdk.platforms[key].name)
+        print "%s" % (sdk.platforms[key].name)
 
 def list_projects():
     sdk = SDK()
 
-    print "Existing projects: "
     for key in sdk.projects.keys():
-        p = sdk.projects[key]
-        print """
-        Name:        %s
-        Path:        %s
-        Description: %s
-        Platform:    %s
-""" % (p.name, p.path, p.desc, p.platform.name)
+        print "%s ==> %s" % (sdk.projects[key].name, sdk.projects[key].path)
 
-def list_fsets(platform):
+def list_fsets(options):
     sdk = SDK()
-    print "Available fsets for the %s platform: " % (platform)
-    for key in sdk.platforms[platform].fset:
-        print "\t%s" % (sdk.platforms[platform].fset[key].name)
+    for key in sdk.platforms[options.platform_name].fset:
+        print "%s" % (sdk.platforms[options.platform_name].fset[key].name)
 
-def list_targets(project):
+def list_targets(options):
     sdk = SDK()    
-    print "Installed targets in the %s project:" % (project)
-    for key in sdk.projects[project].targets.keys():
-        print "\t%s" % (sdk.projects[project].targets[key].name)
+    for key in sdk.projects[options.project_name].targets.keys():
+        print "%s" % (sdk.projects[options.project_name].targets[key].name)
 
-def create_project(platform, name, desc, path):
+def create_project(options):
     sdk = SDK()
 
-    if sdk.projects.has_key(name):
-        print >> sys.stderr, "project %s already exists!" % (name)
+    if sdk.projects.has_key(options.project_name):
+        print >> sys.stderr, "project %s already exists!" % (options.project_name)
         sys.exit(1)
     
-    proj = sdk.create_project(path, name, desc, sdk.platforms[platform])
+    proj = sdk.create_project(options.project_path, options.project_name, options.project_desc, sdk.platforms[options.platform_name])
     proj.install()
     proj.mount()
 
-def delete_project(project_name):
+def delete_project(options):
     print "Implement me!"
     
-def create_target(project, name):
+def create_target(options):
     sdk = SDK()
 
-    if not sdk.projects.has_key(project):
-        print >> sys.stderr, "project %s does not exists" % (project)
+    if not sdk.projects.has_key(options.project_name):
+        print >> sys.stderr, "project %s does not exists" % (options.project_name)
         sys.exit(1)
     
-    target = sdk.projects[project].create_target(name)
+    target = sdk.projects[options.project_name].create_target(options.target_name)
 
-def delete_target(project_name, target_name):
+def delete_target(options):
     print "Implement me!"
     
-def install_fset(platform_name, project_name, target_name, fset_name):
+def install_fset(options):
     sdk = SDK()
 
-    if not sdk.projects.has_key(project_name):
-        print >> sys.stderr, "project %s does not exists" % (project_name)
+    if not sdk.projects.has_key(options.project_name):
+        print >> sys.stderr, "project %s does not exists" % (options.project_name)
         sys.exit(1)
 
-    if not sdk.projects[project_name].targets.has_key(target_name):
-        print >> sys.stderr, "target %s does not exists" % (target_name)
+    if not sdk.projects[options.project_name].targets.has_key(options.target_name):
+        print >> sys.stderr, "target %s does not exists" % (options.target_name)
         sys.exit(1)
     
-    if not fset_name in sdk.platforms[platform_name].fset:
-        print >> sys.stderr, "fset %s does not exists" % (fset_name)
+    if not options.fset_name in sdk.platforms[options.platform_name].fset:
+        print >> sys.stderr, "fset %s does not exists" % (options.fset_name)
         sys.exit(1)
 
-    fset = sdk.platforms[platform_name].fset[fset_name]
-    target = sdk.projects[project_name].targets[target_name]
+    fset = sdk.platforms[options.platform_name].fset[options.fset_name]
+    target = sdk.projects[options.project_name].targets[options.target_name]
 
     target.install(fset)
 
-def create_live_iso(project_name, target_name, image_name):
+def create_image(options):
     print "Implement me!"
-
-def create_install_iso(project_name, target_name, image_name):
-    print "Implement me!"
-
-def create_live_usb(project_name, target_name, image_name):
-    print "Implement me!"
-
-def create_install_usb(project_name, target_name, image_name):
-    print "Implement me!"
-
+    
 if __name__ == '__main__':
     sys.exit(main())
-
-    try:
-        (args, extras) = getopt(sys.argv[1:], '', ['help',
-                                                   'command=',
-                                                   'platform_name=',
-                                                   'project_name=',
-                                                   'project_desc=',
-                                                   'project_path=',
-                                                   'target_name=',
-                                                   'fset=',
-                                                   'image_name='])
-    except:
-        print sys.exc_value
-        usage()
-    
-    if len(extras) > 0:
-        usage()
-        
-    if (len(args) == 0):
-        from gui import *
-        esdkMain()
-        gtk.main()
-        sys.exit(0)
-        
-    command = ''
-    platform_name = ''
-    project_name = ''
-    project_desc = ''
-    project_path = ''
-    target_name = ''
-    fset = ''
-    image_name = ''
-    for i in args:
-        if i[0] == '--help':
-            usage()
-            
-        elif i[0] == '--command':
-            command = i[1]
-            
-        elif i[0] == '--platform_name':
-            platform_name = i[1]
-
-        elif i[0] == '--project_name':
-            project_name = i[1]
-
-        elif i[0] == '--project_desc':
-            project_desc = i[1]
-
-        elif i[0] == '--project_path':
-            project_path = i[1]
-
-        elif i[0] == '--target_name':
-            target_name = i[1]
-
-        elif i[0] == '--fset':
-            fset = i[1]
-
-        elif i[0] == '--image_name':
-            image_name = i[1]
-
-    if command == 'list-platforms':
-        list_platforms()
-        
-    elif command == 'list-projects':
-        list_projects()
-        
-    elif command == 'list-targets':
-        if len(project_name) == 0:
-            usage()
-
-        list_targets(project_name)
-        
-    elif command == 'list-fsets':
-        if len(platform_name) == 0:
-            usage()
-
-        list_fsets(platform_name)
-            
-    elif command == 'create-project':
-        if len(platform_name) == 0 or len(project_name) == 0 or len(project_desc) == 0 or len(project_path) == 0:
-            usage()
-
-        create_project(platform_name, project_name, project_desc, project_path)
-        
-    elif command == 'delete-project':
-        if len(project_name) == 0:
-            usage()
-
-        delete_project(project_name)
-        
-    elif command == 'create-target':
-        if len(project_name) == 0 or len(target_name) == 0:
-            usage()
-
-        create_target(project_name, target_name)
-
-    elif command == 'delete-target':
-        if len(project_name) == 0 or len(target_name) == 0:
-            usage()
-
-        delete_target(project_name, target_name)
-            
-    elif command == 'install-fset':
-        if len(platform_name) == 0 or len(project_name) == 0 or len(target_name) == 0 or len(fset) == 0:
-            usage()
-
-        install_fset(platform_name, project_name, target_name, fset)
-
-    elif command == 'create-live-iso':
-        if len(project_name) == 0 or len(target_name) == 0 or len(image_name) == 0:
-            usage()
-
-        create_live_iso(project_name, target_name, image_name)
-
-    elif command == 'create-install-iso':
-        if len(project_name) == 0 or len(target_name) == 0 or len(image_name) == 0:
-            usage()
-
-        create_install_iso(project_name, target_name, image_name)
-
-    elif command == 'create-live-usb':
-        if len(project_name) == 0 or len(target_name) == 0 or len(image_name) == 0:
-            usage()
-
-        create_live_usb(project_name, target_name, image_name)
-
-    elif command == 'create-install-usb':
-        if len(project_name) == 0 or len(target_name) == 0 or len(image_name) == 0:
-            usage()
-
-        create_install_usb(project_name, target_name, image_name)
-
-
-    else:
-        usage()
