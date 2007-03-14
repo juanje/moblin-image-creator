@@ -13,3 +13,6 @@ install:
 clean:
 	rm -f *.pyc
 	find -name \*~ -exec rm -f {} \;
+
+cleanall: clean
+	rm -rf /usr/share/esdk
