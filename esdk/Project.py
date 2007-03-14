@@ -3,6 +3,7 @@
 import os, shutil, sys, time, yum
 
 import SDK
+import InstallImage
 
 class FileSystem(object):
     """
@@ -108,6 +109,22 @@ class Project(FileSystem):
             self.targets[name] = Target(name, self)
         return self.targets[name]
 
+    def create_live_iso(self, target_name, image_name):
+        image = InstallImage.LiveIsoImage(self, self.targets[target_name], image_name)
+        image.create_image()
+        
+    def create_install_iso(self, target_name, image_name):
+        image = InstallImage.InstallIsoImage(self, self.targets[target_name], image_name)
+        image.create_image()
+
+    def create_live_usb(self, target_name, image_name):
+        image = InstallImage.LiveUsbImage(self, self.targets[target_name], image_name)
+        image.create_image()
+
+    def create_install_usb(self, target_name, image_name):
+        image = InstallImage.InstallUsbImage(self, self.targets[target_name], image_name)
+        image.create_image()
+    
     def __str__(self):
         return ("<Project: name=%s, path=%s>"
                 % (self.name, self.path))
