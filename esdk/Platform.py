@@ -15,28 +15,24 @@ class Platform(object):
 
     """
     def __init__(self, sdk_path, name):
-        self.sdk_path = sdk_path
+        self.sdk_path = os.path.abspath(os.path.expanduser(sdk_path))
         self.name = name
         self.path = os.path.join(self.sdk_path, 'platforms', self.name)
-
         # instantiate all fsets
         self.fset = FSet.FSet()
         fset_path = os.path.join(self.path, 'fsets')
         for filename in os.listdir(fset_path):
             self.fset.addFile(os.path.join(fset_path, filename))
-
         # instantiate all target repos
         self.target_repos = []
         target_repo_path = os.path.join(self.path, 'target_repos')
         for repo in os.listdir(target_repo_path):
             self.target_repos.append(os.path.join(target_repo_path, repo))
-
         # instantiate all buildroot repos
         self.buildroot_repos = []
         build_repo_path = os.path.join(self.path, 'buildroot_repos')
         for repo in os.listdir(build_repo_path):
             self.buildroot_repos.append(os.path.join(build_repo_path, repo))
-
         # determine what packages need to be installed in the jailroot
         self.jailroot_packages = []
         config = open(os.path.join(self.path, 'jailroot.packages'))
@@ -57,10 +53,10 @@ class Platform(object):
 class TestPlatform(unittest.TestCase):
     def testInstantiate(self):
         platform = Platform('/usr/share/esdk', 'donley')
-
-    def testStr(self):
+    def testStrRepr(self):
         platform = Platform('/usr/share/esdk', 'donley')
-        "%s" % platform
+        temp = platform.__str__()
+        temp = platform.__repr__()
 
 if __name__ == '__main__':
     if len(sys.argv) == 1:
