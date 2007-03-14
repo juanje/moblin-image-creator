@@ -42,7 +42,7 @@ if [ ! -e $UMD_TOOLS_PATH ]; then
 fi
 
 workspace_dir=$1
-yum_url="http://umd-repo.jf.intel.com/git/OpenSuSE10.2/binary-packages"
+yum_url="http://umd-build2.jf.intel.com/yum-repos/fedora-6-core/"
 pack_to_install="${UMD_TOOLS_PATH}/packs/build-pack"
 
 if [ -e $workspace_dir ]; then
