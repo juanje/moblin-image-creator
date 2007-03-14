@@ -11,7 +11,7 @@ class FSet(object):
     """
     def __init__(self):
         self.filenames = []
-        self.fsets = {}
+        self.__fsets = {}
 
     def addFile(self, filename):
         """Add a config file to the FSet"""
@@ -27,10 +27,11 @@ class FSet(object):
         filenames = p.read(filename)
         for section in p.sections():
             orig_section = section
-            if section in self.fsets:
+            section = section.lower()
+            if section in self.__fsets:
                 print "Error: Already have a section called: %s" % section
                 print "Tried to add the section from file: %s" % filename
-                print "But already have that section from file: %s" % self.fsets[section]['filename']
+                print "But already have that section from file: %s" % self.__fsets[section]['filename']
                 raise ValueError
             work_dict = {}
             work_dict['filename'] = filename
@@ -49,14 +50,14 @@ class FSet(object):
                     print "Type was: %s" % work_type
                     raise ValueError
                 work_dict[name] = value
-            self.fsets[section] = FsetInstance(section, work_dict)
+            self.__fsets[section] = FsetInstance(section, work_dict)
 
     def __getitem__(self, key):
-        return self.fsets[key.lower()]
+        return self.__fsets[key.lower()]
 
     def __str__(self):
         return ('<data="%s">'
-                % (self.fsets))
+                % (self.__fsets))
 
 class FsetInstance(object):
     def __init__(self, name, data_dict):
