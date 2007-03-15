@@ -86,6 +86,9 @@ def parseCommandLine():
     parser.add_option("-q", "--quiet",
         action="store_false", dest="verbose", default=True,
         help="don't print status messages to stdout")
+    parser.add_option("-d", "--enable-debug",
+        action="store_true", dest="debug", default=False,
+        help="Enable additional debug package while installing fsets")
 
     (options, args) = parser.parse_args()
     # if nothing at all is passed in then return back
@@ -216,7 +219,7 @@ def install_fset(options):
     fset = sdk.platforms[options.platform_name].fset[options.fset_name]
     target = sdk.projects[options.project_name].targets[options.target_name]
 
-    target.install(fset)
+    target.install(fset, options.debug)
 
 def create_image(options):
     sdk = SDK()
