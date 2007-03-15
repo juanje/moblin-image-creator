@@ -102,7 +102,7 @@ class esdkMain:
 		result,new_project = AddNewProject.run(new_project)
 		if (result == gtk.RESPONSE_OK):
 			"""The user clicked Ok, so let's add this
-			wine to the wine list"""
+			project to the projectList list"""
 			print "user pressed OK"
 			sdk = SDK()
 			platform = sdk.platforms[new_project.platform]
@@ -110,9 +110,6 @@ class esdkMain:
 			proj = sdk.create_project(new_project.path, new_project.name, new_project.desc, platform)
 			#FIXME: error check
 			self.projectView.append(new_project.getList())
-		if (result == gtk.RESPONSE_CANCEL):
-			self.new_project.destroy()
-
 
 	def on_about_activate(self, event):
 		gtk.AboutDialog()
@@ -170,6 +167,10 @@ class AddNewProject:
 		self.newProject.desc = self.np_desc.get_text()
 		self.newProject.path = self.np_path.get_text()
 		self.newProject.platform = self.np_platform.get_text()
+
+		if (self.result == gtk.RESPONSE_CANCEL):
+			print "User cancelled New project Add"
+			self.newDlg.destroy()
 
 		self.newDlg.destroy()
 
