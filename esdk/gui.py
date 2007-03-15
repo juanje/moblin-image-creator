@@ -78,8 +78,6 @@ class esdkMain:
 	def display_selected(model, iter):
 		print "user selected something else "
 
-		print "name: %s" % projectList.name[iter]
-
 	"""Add project list column descriptions"""
 	def set_plist(self, name, id):
 		column = gtk.TreeViewColumn(name, gtk.CellRendererText()
