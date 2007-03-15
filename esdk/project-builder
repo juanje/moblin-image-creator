@@ -65,7 +65,7 @@ def parseCommandLine():
         valid_command_string += "%s, " %  command
     valid_command_string += "or %s" % valid_commands[-1]
 
-    parser = OptionParser()
+    parser = OptionParser(add_help_option=False)
 
     parser.add_option("-c", "--command", dest="cmd",
         help="Where CMD is one of: %s" % valid_command_string, metavar="CMD")
@@ -89,11 +89,47 @@ def parseCommandLine():
     parser.add_option("-d", "--enable-debug",
         action="store_true", dest="debug", default=False,
         help="Enable additional debug package while installing fsets")
+    parser.add_option("-h", "--help", help="show this help message and exit",
+        dest = "help", action="store_true", default=False)
+    examples = """
+Examples:
+<Adding a new project>
+    project-builder --command=create-project \\
+                    --platform-name='donley' \\
+                    --project-name='MyProject' \\
+                    --project-desc='Example project' \\
+                    --project-path=/usr/src/projects/myproject
+
+<Delete a project>
+    project-builder --command=delete-project \\
+                    --project-name='MyOtherProject'
+
+<Adding a new target to an existing project>
+    project-builder --command=create-target \\
+                    --project-name='MyProject' \\
+                    --target-name='MyTarget'
+
+<Delete a target>
+    project-builder --command=delete-target \\
+                    --project-name='MyProject' \\
+                    --target-name='MyOtherTarget'
+
+<installing an fset into a given target>
+    project-builder --command=install-fset \\
+                    --platform-name='donley' \\
+                    --project-name='MyProject' \\
+                    --target-name='MyTarget' \\
+                    --fset='Core'"""
 
     (options, args) = parser.parse_args()
     # if nothing at all is passed in then return back
     if not options and not args:
         return options, args
+    if options.help:
+        parser.print_help()
+        print
+        print examples
+        sys.exit(0)
     # now lets validate stuff
     if not options.cmd:
         parser.error("Must specify a -c/--command argument")
