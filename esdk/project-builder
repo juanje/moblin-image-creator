@@ -167,7 +167,13 @@ def create_project(options):
     proj.mount()
 
 def delete_project(options):
-    print "Implement me!"
+    sdk = SDK()
+
+    if not options.project_name in sdk.projects:
+        print >> sys.stderr, "project %s does not exists" % (options.project_name)
+        sys.exit(1)
+
+    sdk.delete_project(options.project_name)
     
 def create_target(options):
     sdk = SDK()
@@ -179,7 +185,18 @@ def create_target(options):
     target = sdk.projects[options.project_name].create_target(options.target_name)
 
 def delete_target(options):
-    print "Implement me!"
+    sdk = SDK()
+
+    if not options.project_name in sdk.projects:
+        print >> sys.stderr, "project %s does not exists" % (options.project_name)
+        sys.exit(1)
+
+    proj = sdk.projects[options.project_name]
+    if not options.target_name in proj.targets:
+        print >> sys.stderr, "target %s does not exists" % (options.target_name)
+        sys.exit(1)
+
+    proj.delete_target(options.target_name)
     
 def install_fset(options):
     sdk = SDK()

@@ -201,8 +201,16 @@ class SDK(object):
         self.projects[name] = Project.Project(install_path, name, desc, platform)
         return self.projects[name]
     
-    def delete_project(self, project):
-        print "TODO: delete the project"
+    def delete_project(self, project_name):
+        # first delete all contained targets
+        proj = self.projects[project_name]
+        for target in proj.targets.keys():
+            proj.delete_target(target)
+
+        # and then deal with the project
+        proj.umount()
+        os.system('rm -fR ' + os.path.join(proj.path))        
+        os.unlink(os.path.join(self.config_path, proj.name + '.proj'))
         
     def __str__(self):
         return ("<SDK Object: path=%s, platform=%s>" %

@@ -82,10 +82,10 @@ metadata_expire=1800
         os.system(command)
 
     def mount(self):
-        os.system('mount --bind /proc ' + os.path.join(self.path, 'proc'))
+        os.system('mount --bind /proc ' + os.path.join(self.path, 'proc') + ' 2> /dev/null')
 
     def umount(self):
-        os.system('umount ' + os.path.join(self.path, 'proc'))
+        os.system('umount ' + os.path.join(self.path, 'proc')  + ' 2> /dev/null')
 
 class Project(FileSystem):
     """
@@ -121,6 +121,11 @@ class Project(FileSystem):
         if not name in self.targets:
             self.targets[name] = Target(name, self)
         return self.targets[name]
+
+    def delete_target(self, name):
+        target = self.targets[name]
+        target.umount()
+        os.system('rm -fR ' + os.path.join(self.path, 'targets', name))
 
     def create_live_iso(self, target_name, image_name):
         image = InstallImage.LiveIsoImage(self, self.targets[target_name], image_name)
