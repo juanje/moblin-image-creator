@@ -7,7 +7,10 @@ class TestFset(unittest.TestCase):
     def setUp(self):
         self.workdir = tempfile.mkdtemp()
         self.fset_filename =os.path.join(self.workdir, 'unittest.fset')
-        fset_file = open(self.fset_filename, 'w')
+        self.createSampleFsetFile(self.fset_filename)
+    def createSampleFsetFile(self, filename):
+        fset_file = open(filename, 'w')
+        # Let's create a valid FSet file
         print >> fset_file, """\
 [Core]
 DESC=Fundamental fset that provides a root filesystem
