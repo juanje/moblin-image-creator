@@ -96,7 +96,7 @@ target.install(fset, 1)
 
 """
 
-import os, re, sys, unittest
+import os, re, shutil, sys, unittest
 import Platform, Project
 
 class ConfigFile(object):
@@ -206,10 +206,9 @@ class SDK(object):
         proj = self.projects[project_name]
         for target in proj.targets.keys():
             proj.delete_target(target)
-
         # and then deal with the project
         proj.umount()
-        os.system('rm -fR ' + os.path.join(proj.path))        
+        shutil.rmtree(os.path.join(proj.path))
         os.unlink(os.path.join(self.config_path, proj.name + '.proj'))
         
     def __str__(self):
