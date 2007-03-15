@@ -2,6 +2,8 @@
 
 import os, sys, re, tempfile, shutil
 
+import SDK
+
 class Busybox:
     def __init__(self, cmd_path, bin_path):
         self.cmd_path = os.path.abspath(os.path.expanduser(cmd_path))
@@ -49,10 +51,9 @@ class Busybox:
         os.chdir(save_cwd)
 
 class Mkinitrd:
-    def __init__(self, initrd_file):
-        self.initrd_file = os.path.abspath(os.path.expanduser(initrd_file))
+    def create(self, project, initrd_file):
+        initrd_file = os.path.abspath(os.path.expanduser(initrd_file))
 
-    def create(self):
         save_cwd = os.getcwd()
 
         # Create scratch area for creating files
@@ -73,7 +74,8 @@ class Mkinitrd:
         os.makedirs(os.path.join(scratch_path, 'tmp'))
 
         # Setup Busybox in the initrd
-        bb = Busybox("/sbin/busybox", bin_path)
+        cmd_path = os.path.join(project.path, 'sbin/busybox')
+        bb = Busybox(cmd_path, bin_path)
         bb.create()
 
         # Setup init script
@@ -142,19 +144,22 @@ mkblkdevs
 
         # Create the initrd image file
         os.chdir(scratch_path)
-        cmd_string = "find -print | cpio --quiet -c -o | gzip -9 -c > " + self.initrd_file
+        cmd_string = "find -print | cpio --quiet -c -o | gzip -9 -c > " + initrd_file
         os.system(cmd_string)
         os.chdir(save_cwd)
 
         # Clean-up and remove scratch area
-        print scratch_path
         shutil.rmtree(scratch_path)
 
 
 if __name__ == '__main__':
-    if len(sys.argv) != 2:
-        print >> sys.stderr, "USAGE: %s INITRD_FILE" % (sys.argv[0])
+    if len(sys.argv) != 3:
+        print >> sys.stderr, "USAGE: %s PROJECT INITRD_FILE" % (sys.argv[0])
         sys.exit(1)
 
-    initrd = Mkinitrd(sys.argv[1])
-    initrd.create()
+    project_name = sys.argv[1]
+    initrd_file = sys.argv[2]
+
+    proj = SDK.SDK().projects[project_name]
+
+    Mkinitrd().create(proj, initrd_file)
