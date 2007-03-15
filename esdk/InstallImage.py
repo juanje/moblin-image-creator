@@ -53,8 +53,9 @@ class BaseUsbImage(InstallImage):
         os.system(cmd_line)
 
         # NOTE: Running syslinux on the host development system
-        #       means the host and target have compatible arch.
-        #       This runs syslinux inside the jailroot.
+        #       means the host and target have compatible architectures.
+        #       This runs syslinux inside the jailroot so the correct
+        #       version of syslinux is used.
         jail_path = self.path[len(self.project.path):]
         self.project.chroot('/usr/bin/syslinux', jail_path)
 
@@ -64,7 +65,7 @@ class BaseUsbImage(InstallImage):
             cmd_line = "mount -o loop -t vfat %s %s" % (self.path, self.mount_point)
             os.system(cmd_line)
 
-    def unmount_container(self):
+    def umount_container(self):
         if self.mount_point:
             cmd_line = "umount %s" % self.mount_point
             os.system(cmd_line)
@@ -95,7 +96,7 @@ class LiveUsbImage(BaseUsbImage):
         initrd_path = os.path.join(self.mount_point, 'initrd.img')
         Mkinitrd.Mkinitrd().create(self.project, initrd_path)
         
-        self.unmount_container()
+        self.umount_container()
 
         print "LiveUsbImage: Finished!"
         

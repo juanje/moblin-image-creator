@@ -132,10 +132,12 @@ class Project(FileSystem):
         shutil.rmtree(os.path.join(self.path, 'targets', name))
 
     def chroot(self, cmd_path, cmd_args):
-        if os.path.isdir(self.path):
-            self.mount()
-            cmd_line = "/usr/sbin/chroot %s %s %s" % (self.path, cmd_path, cmd_args)
-            os.system(cmd_line)
+        if not os.path.isfile(os.path.join(self.path, 'bin/bash')):
+            raise AssertionError, "Jailroot not installed"
+        
+        self.mount()
+        cmd_line = "/usr/sbin/chroot %s %s %s" % (self.path, cmd_path, cmd_args)
+        return os.system(cmd_line)
 
     def create_live_iso(self, target_name, image_name):
         image = InstallImage.LiveIsoImage(self, self.targets[target_name], image_name)
