@@ -1229,7 +1229,7 @@ Tariq Shureih</property>
 	      <property name="visible">True</property>
 	      <property name="label" translatable="yes">_About</property>
 	      <property name="use_underline">True</property>
-	      <signal name="activate" handler="on_about3_activate" last_modification_time="Mon, 12 Mar 2007 18:22:22 GMT"/>
+	      <signal name="activate" handler="on_about_activate" last_modification_time="Tue, 13 Mar 2007 07:29:06 GMT"/>
 	    </widget>
 	  </child>
 	</widget>
@@ -1261,7 +1261,7 @@ Tariq Shureih</property>
 		  <property name="visible_horizontal">True</property>
 		  <property name="visible_vertical">True</property>
 		  <property name="is_important">False</property>
-		  <signal name="clicked" handler="on_newProject_clicked" after="yes" last_modification_time="Mon, 12 Mar 2007 23:36:45 GMT"/>
+		  <signal name="clicked" handler="on_newProject_clicked" last_modification_time="Mon, 12 Mar 2007 23:36:45 GMT"/>
 		</widget>
 		<packing>
 		  <property name="expand">False</property>
@@ -1270,12 +1270,13 @@ Tariq Shureih</property>
 	      </child>
 
 	      <child>
-		<widget class="GtkToolButton" id="toolbutton2">
+		<widget class="GtkToolButton" id="project_save">
 		  <property name="visible">True</property>
 		  <property name="stock_id">gtk-save</property>
 		  <property name="visible_horizontal">True</property>
 		  <property name="visible_vertical">True</property>
 		  <property name="is_important">False</property>
+		  <signal name="clicked" handler="on_projectSave_clicked" last_modification_time="Tue, 13 Mar 2007 06:31:06 GMT"/>
 		</widget>
 		<packing>
 		  <property name="expand">False</property>
@@ -1284,12 +1285,13 @@ Tariq Shureih</property>
 	      </child>
 
 	      <child>
-		<widget class="GtkToolButton" id="toolbutton3">
+		<widget class="GtkToolButton" id="project_delete">
 		  <property name="visible">True</property>
 		  <property name="stock_id">gtk-delete</property>
 		  <property name="visible_horizontal">True</property>
 		  <property name="visible_vertical">True</property>
 		  <property name="is_important">False</property>
+		  <signal name="clicked" handler="on_projectDelete_clicked" last_modification_time="Tue, 13 Mar 2007 06:30:59 GMT"/>
 		</widget>
 		<packing>
 		  <property name="expand">False</property>
@@ -1363,7 +1365,9 @@ Tariq Shureih</property>
 		      </child>
 
 		      <child>
-			<widget class="GtkScrolledWindow" id="scrolledwindow4">
+			<widget class="GtkScrolledWindow" id="projectList_scroll">
+			  <property name="width_request">517</property>
+			  <property name="height_request">149</property>
 			  <property name="visible">True</property>
 			  <property name="can_focus">True</property>
 			  <property name="hscrollbar_policy">GTK_POLICY_ALWAYS</property>
@@ -1374,6 +1378,7 @@ Tariq Shureih</property>
 			  <child>
 			    <widget class="GtkTreeView" id="projectList">
 			      <property name="visible">True</property>
+			      <property name="tooltip" translatable="yes">List of projects saved</property>
 			      <property name="can_focus">True</property>
 			      <property name="headers_visible">True</property>
 			      <property name="rules_hint">False</property>
@@ -1557,7 +1562,7 @@ Tariq Shureih</property>
 	  <property name="column_spacing">0</property>
 
 	  <child>
-	    <widget class="GtkScrolledWindow" id="scrolledwindow2">
+	    <widget class="GtkScrolledWindow" id="targetList_scroll">
 	      <property name="visible">True</property>
 	      <property name="can_focus">True</property>
 	      <property name="hscrollbar_policy">GTK_POLICY_ALWAYS</property>
@@ -1567,6 +1572,8 @@ Tariq Shureih</property>
 
 	      <child>
 		<widget class="GtkTreeView" id="targetList">
+		  <property name="width_request">475</property>
+		  <property name="height_request">88</property>
 		  <property name="visible">True</property>
 		  <property name="can_focus">True</property>
 		  <property name="headers_visible">True</property>
@@ -1974,7 +1981,7 @@ Project Targets</property>
 	      <property name="editable">True</property>
 	      <property name="visibility">True</property>
 	      <property name="max_length">0</property>
-	      <property name="text" translatable="yes">Platform: donley, menlow, etc</property>
+	      <property name="text" translatable="yes"></property>
 	      <property name="has_frame">True</property>
 	      <property name="invisible_char">•</property>
 	      <property name="activates_default">False</property>
