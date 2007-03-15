@@ -122,6 +122,11 @@ class Project(FileSystem):
             self.targets[name] = Target(name, self)
         return self.targets[name]
 
+    def delete_target(self, name):
+        target = self.targets[name]
+        target.umount()
+        os.system('rm -fR ' + os.path.join(self.path, 'targets', name))
+
     def create_live_iso(self, target_name, image_name):
         image = InstallImage.LiveIsoImage(self, self.targets[target_name], image_name)
         image.create_image()
