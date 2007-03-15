@@ -9,15 +9,23 @@ from optparse import OptionParser
 sys.path.insert(0, '/usr/share/esdk/lib')
 from SDK import *
 
-if len(sys.argv) == 1:
+try:
     from gui import *
+except:
+    # Probably running in a text console
+    pass
 
 def main():
 
     if len(sys.argv) == 1:
-        esdkMain()
-        gtk.main()
-        return 0
+        try:
+            esdkMain()
+            gtk.main()
+            return 0
+        except:
+            print "Error: Unable to run the GUI, maybe you are in a text console"
+            print "Do -h for help"
+            return 1
 
     options, args = parseCommandLine()
     if options.cmd == "list-platforms":
@@ -40,10 +48,10 @@ def main():
         install_fset(options)
     elif options.cmd == 'create-live-iso' or options.cmd == 'create-install-iso' or options.cmd == 'create-live-usb' or options.cmd == 'create-install-usb':
         create_image(options)
-
     else:
-        print "unknown command specified"
-        return 0
+        print "Unknown command specified"
+        return 1
+    return 0
         
 
 def parseCommandLine():
