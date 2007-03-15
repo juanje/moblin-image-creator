@@ -169,13 +169,13 @@ class Target(FileSystem):
     def __init__(self, name, project):
         self.project = project
         self.name = name
-        self.path = os.path.join(project.path, "targets", name)
+        self.top = os.path.join(project.path, "targets", name)
 
         # Load our target's filesystem directory
-        self.fs_path = os.path.join(self.path, "fs")
+        self.fs_path = os.path.join(self.top, "fs")
 
         # Load/create our target's image directory
-        self.image_path = os.path.join(self.path, "image")
+        self.image_path = os.path.join(self.top, "image")
         if not os.path.isdir(self.image_path):
             os.makedirs(self.image_path)
 
@@ -186,9 +186,22 @@ class Target(FileSystem):
         """
         Install a fset into the target filesystem
         """
+        if os.path.isfile(os.path.join(self.top, fset.name)):
+            print >> sys.stderr, "fset %s is already installed!" % (fset.name)
+            return
+
+        for dep in fset['deps']:
+            if not os.path.isfile(os.path.join(self.top, dep)):
+                print >> sys.stderr, "fset %s must be installed first!" % (dep)
+                return
+
         FileSystem.install(self, self.fs_path, fset['pkgs'], self.project.platform.buildroot_repos)
         if debug == 1:
             FileSystem.install(self, self.fs_path, fset['debug_pkgs'], self.project.platform.buildroot_repos)
+
+        # and now create a simple empty file that indicates that the fset
+        # has been installed...
+        os.system('touch ' + os.path.join(self.top, fset.name))
 
     def __str__(self):
         return ("<Target: name=%s, path=%s, fs_path=%s, image_path>"
