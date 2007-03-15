@@ -133,7 +133,7 @@ class Project(FileSystem):
 
     def chroot(self, cmd_path, cmd_args):
         if not os.path.isfile(os.path.join(self.path, 'bin/bash')):
-            raise AssertionError, "Jailroot not installed"
+            raise ValueError, "Jailroot not installed"
         
         self.mount()
         cmd_line = "/usr/sbin/chroot %s %s %s" % (self.path, cmd_path, cmd_args)
