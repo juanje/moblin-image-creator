@@ -82,10 +82,10 @@ metadata_expire=1800
         os.system(command)
 
     def mount(self):
-        os.system('mount --bind /proc ' + os.path.join(self.path, 'proc'))
+        os.system('mount --bind /proc ' + os.path.join(self.path, 'proc') + ' 2> /dev/null')
 
     def umount(self):
-        os.system('umount ' + os.path.join(self.path, 'proc'))
+        os.system('umount ' + os.path.join(self.path, 'proc')  + ' 2> /dev/null')
 
 class Project(FileSystem):
     """
