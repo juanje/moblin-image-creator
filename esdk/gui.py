@@ -72,7 +72,7 @@ class esdkMain:
 				print "\t%s" % my_targets.name
 
 		self.selection = self.projectList.get_selection()
-		model, iter = self.selection.get_selected_row()
+		model, iter = self.selection.get_selected()
 		self.selection.connect("changed", self.display_selected)
 
 	def display_selected(model, iter):
