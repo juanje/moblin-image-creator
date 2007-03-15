@@ -15,10 +15,13 @@ class esdkMain:
 		#self.widgets.signal_autoconnect(callbacks.__dict__)
 		dic = {"on_main_destroy_event" : gtk.main_quit,
 			"on_quit_activate" : gtk.main_quit,
-			"on_newProject_clicked" : self.on_newProject_clicked}
+			"on_newProject_clicked" : self.on_newProject_clicked,
+			"on_projectDelete_clicked": self.on_projectDelete_clicked,
+			"on_projectSave_clicked": self.on_projectSave_clicked,
+			"on_about_activate": self.on_about_activate}
 		self.widgets.signal_autoconnect(dic)
-		
 
+		
 		#setup projectList widget
 		self.pName = "Name"
 		self.pDesc = "Description"
@@ -34,14 +37,20 @@ class esdkMain:
 
 		self.projectView = gtk.ListStore(str, str, str, str)
 		self.projectList.set_model(self.projectView)
+		self.projectList.set_reorderable(1)
+
+		#Set targetList widget
+		self.tParent = "Parent"
+		self.tName = "Name"
+
+		self.targetList = self.widgets.get_widget("targetList")
+		print "Setting Target List"
+		self.set_tlist(self.tParent, 0)
+		self.set_tlist(self.tName, 1)
+
+		self.targetView = gtk.ListStore(str, str)
+		self.targetList.set_model(self.targetView)
 		
-		#dummy project data for demonstration for example purpose
-		#dummy_project = ProjectInfo()
-		#dummy_project.name = "Test1"
-		#dummy_project.desc = "iTest1"
-		#dummy_project.path = "/home/user/something"
-		#dummy_project.platform = "Donley"
-		#self.projectView.append(dummy_project.getList())
 		
 		#read in project list using SDK()
 		#FIXME: I'm only reading them, not saving a handle to each
@@ -56,19 +65,20 @@ class esdkMain:
 			my_project.platform = '%s' % saved_projects.platform.name
 			self.projectView.append(my_project.getList())
 
-		#Set targetList widget
-		self.tPath = "Path"
-		self.fsets = "Function Sets"
+			#get Targets related to each project
+			print "Targets for project: %s" % saved_projects.name
+			for t in saved_projects.targets.keys():
+				my_targets = saved_projects.targets[key]
+				print "\t%s" % my_targets.name
 
-		self.targetList = self.widgets.get_widget("targetList")
-		print "Setting Target List"
-		self.set_tlist(self.tPath, 0)
-		self.set_tlist(self.fsets, 1)
+		self.selection = self.projectList.get_selection()
+		model, iter = self.selection.get_selected_row()
+		self.selection.connect("changed", self.display_selected)
 
-		self.targetView = gtk.ListStore(str, str)
-		self.targetList.set_model(self.targetView)
-		
-		
+	def display_selected(model, iter):
+		print "user selected something else "
+
+		print "name: %s" % projectList.name[iter]
 
 	"""Add project list column descriptions"""
 	def set_plist(self, name, id):
@@ -96,16 +106,31 @@ class esdkMain:
 			"""The user clicked Ok, so let's add this
 			wine to the wine list"""
 			print "user pressed OK"
-			self.projectList.append(new_project.getList())
-		if (result == get.RESPONSE_CANCEL):
+			sdk = SDK()
+			platform = sdk.platforms[new_project.platform]
+			print "platform %s "  % platform.name
+			proj = sdk.create_project(new_project.path, new_project.name, new_project.desc, platform)
+			#FIXME: error check
+			self.projectView.append(new_project.getList())
+		if (result == gtk.RESPONSE_CANCEL):
 			self.new_project.destroy()
+
+
+	def on_about_activate(self, event):
+		gtk.AboutDialog()
+	def on_projectSave_clicked(self, event):
+		print "Not yet implemented"
+	def on_projectDelete_clicked(self, event):
+		print "Not yet implemented"
+		
+
 class TargetInfo:
 	"""Class defining target elements"""
 	def __init__(self, path="", fsets=""):
-		self.path = path
-		self.fsets = fsets
+		self.parent = parent
+		self.name = name
 	def getTargetList(self):
-		return [self.path, self.fsets]
+		return [self.parent, self.name]
 class ProjectInfo:
 	"""Class to store new project info before we persisit"""
 	def __init__(self, name="", desc="", path="", platform=""):
@@ -142,7 +167,15 @@ class AddNewProject:
 		
 		self.result = self.newDlg.run()
 
-		return self.result
+		#get the values
+		self.newProject.name = self.np_name.get_text()
+		self.newProject.desc = self.np_desc.get_text()
+		self.newProject.path = self.np_path.get_text()
+		self.newProject.platform = self.np_platform.get_text()
+
+		self.newDlg.destroy()
+
+		return self.result,self.newProject
 			
 if __name__ == '__main__':
 	esdk = esdkMain()
