@@ -6,6 +6,69 @@ import SDK
 import Project
 import Mkinitrd
 
+class SyslinuxCfg(object):
+    def __init__(self, path, cfg_filename):
+        self.path = path
+        self.cfg_path = os.path.join(self.path, cfg_filename)
+        self.msg_path = os.path.join(self.path, 'boot.msg')
+        self.index = 1
+
+        welcome_mesg = "Welcome to the Linux eSDK:"
+
+        # Create and initialize the syslinux config file
+        cfg_file = open(self.cfg_path, 'w')
+        print >> cfg_file, """\
+prompt 1
+timeout 600
+display boot.msg
+"""
+        cfg_file.close()
+
+        # Create and initialize the syslinux boot message file
+        msg_file = open(self.msg_path, 'w')
+        msg_file.write("\f")
+        print >> msg_file, "\n" + welcome_mesg + "\n"
+        msg_file.close()
+
+    def add_default(self, kernel, append = 'initrd=initrd.img'):
+        label = 'linux'
+        kernel_file = 'vmlinuz'
+
+        # Add the default entry to the syslinux config file
+        cfg_file = open(self.cfg_path, 'a ')
+        print >> cfg_file, "default " + label
+        print >> cfg_file, "label " + label
+        print >> cfg_file, "  kernel " + kernel_file
+        print >> cfg_file, "  append " + append
+        cfg_file.close()
+
+        # Add the default entry in the syslinux boot message file
+        msg_file = open(self.msg_path, 'a ')
+        msg_file.write("- To boot default " + kernel + " kernel, press " + chr(15) + \
+                       "\x01<ENTER>" +  chr(15) + "\x07\n\n")
+        msg_file.close()
+        return kernel_file
+
+    def add_target(self, kernel, append = 'initrd=initrd.img'):
+        label = "linux%s" % self.index
+        kernel_file = "linux%s" % self.index
+        self.index += 1
+
+        # Add the target to the syslinux config file
+        cfg_file = open(self.cfg_path, 'a ')
+        print >> cfg_file, "label " + label
+        print >> cfg_file, "  kernel " + kernel_file
+        print >> cfg_file, "  append " + append
+        cfg_file.close()
+
+        # Add the target to the syslinux boot message file
+        msg_file = open(self.msg_path, 'a ')
+        msg_file.write("- To boot " + kernel + " kernel, type: " + chr(15) + \
+                       "\x01" + label + " <ENTER>" +  chr(15) + "\x07\n\n")
+        msg_file.close()
+        return kernel_file
+
+
 class InstallImage(object):
     """
     This is the base class for any type of target image output.
@@ -20,12 +83,47 @@ class InstallImage(object):
         self.target = target
         self.name = name
         self.path = os.path.join(self.target.image_path, self.name)
-        self.mount_point = ''
+        self.tmp_path = ''
+
+    def install_kernels(self, cfg_filename):
+        if not self.tmp_path:
+            raise ValueError, "tmp_path doesn't exist"
+
+        # Find installed kernels on target filesystem
+        kernels = []
+        n = len('vmlinuz')
+        for file in os.listdir(os.path.join(self.target.fs_path, 'boot')):
+            if (len(file) < n) or (file[:n] != 'vmlinuz'):
+                continue
+            kernels.append(file)
+
+        if not kernels:
+            raise ValueError, "no kernels were found"
+
+        # Sort the kernels, first kernel is the default kernel
+        kernels.sort()
+        
+        s = SyslinuxCfg(self.tmp_path, cfg_filename)
+
+        # Copy the default kernel
+        default_kernel = kernels.pop(0)
+        kernel_name = s.add_default(default_kernel)
+        src_path = os.path.join(self.target.fs_path, 'boot')
+        src_path = os.path.join(src_path, default_kernel)
+        dst_path = os.path.join(self.tmp_path, kernel_name)
+        shutil.copyfile(src_path, dst_path)
+
+        # Copy the remaining kernels
+        for k in kernels:
+            kernel_name = s.add_target(k)
+            src_path = os.path.join(self.target.fs_path, 'boot')
+            src_path = os.path.join(src_path, k)
+            dst_path = os.path.join(self.tmp_path, kernel_name)
+            shutil.copyfile(src_path, dst_path)
 
     def __str__(self):
         return ("<InstallImage: project=%s, target=%s, name=%s>"
                 % (self.project, self.target, self.name))
-
 
 
 class LiveIsoImage(InstallImage):
@@ -36,6 +134,7 @@ class LiveIsoImage(InstallImage):
         return ("<LiveIsoImage: project=%s, target=%s, name=%s>"
                 % (self.project, self.target, self.name))
 
+
 class InstallIsoImage(InstallImage):
     def create_image(self):
         print "InstallIsoImage: Create Install ISO Image here!"
@@ -44,7 +143,11 @@ class InstallIsoImage(InstallImage):
         return ("<InstallIsoImage: project=%s, target=%s, name=%s>"
                 % (self.project, self.target, self.name))
 
+
 class BaseUsbImage(InstallImage):
+    def install_kernels(self):
+        InstallImage.install_kernels(self, 'syslinux.cfg')
+        
     def create_container_file(self, size):
         cmd_line = "dd if=/dev/zero of=%s bs=1M count=%s" % (self.path, size)
         os.system(cmd_line)
@@ -60,31 +163,19 @@ class BaseUsbImage(InstallImage):
         self.project.chroot('/usr/bin/syslinux', jail_path)
 
     def mount_container(self):
-        if not self.mount_point:
-            self.mount_point = tempfile.mkdtemp('','esdk-', '/tmp')
-            cmd_line = "mount -o loop -t vfat %s %s" % (self.path, self.mount_point)
+        if not self.tmp_path:
+            self.tmp_path = tempfile.mkdtemp('','esdk-', '/tmp')
+            cmd_line = "mount -o loop -t vfat %s %s" % (self.path, self.tmp_path)
             os.system(cmd_line)
 
     def umount_container(self):
-        if self.mount_point:
-            cmd_line = "umount %s" % self.mount_point
+        if self.tmp_path:
+            cmd_line = "umount %s" % self.tmp_path
             os.system(cmd_line)
-            os.rmdir(self.mount_point)
-            self.mount_point = ''
+            os.rmdir(self.tmp_path)
+            self.tmp_path = ''
 
-    def create_syslinux_cfg(self):
-        if self.mount.point:
-            cfg_file = open(os.path.join(self.mount_point, 'syslinux.cfg'), 'w')
-            print >> cfg_file, """\
-default linux
-prompt 1
-timeout 600
-label linux
-  kernel vmlinuz-2.6.20-default
-  append initrd=initrd.img
-"""
-            cfg_file.close()
-        
+
 class LiveUsbImage(BaseUsbImage):
     def create_image(self):
         print "LiveUsbImage: Creating LiveUSB Image Now!"
@@ -93,9 +184,11 @@ class LiveUsbImage(BaseUsbImage):
 
         self.mount_container()
 
-        initrd_path = os.path.join(self.mount_point, 'initrd.img')
+        initrd_path = os.path.join(self.tmp_path, 'initrd.img')
         Mkinitrd.Mkinitrd().create(self.project, initrd_path)
         
+        self.install_kernels()
+
         self.umount_container()
 
         print "LiveUsbImage: Finished!"
@@ -104,6 +197,7 @@ class LiveUsbImage(BaseUsbImage):
         return ("<LiveUsbImage: project=%s, target=%s, name=%s>"
                 % (self.project, self.target, self.name))
 
+
 class InstallUsbImage(BaseUsbImage):
     def create_image(self):
         print "InstallUsbImage: Create Install-USB Image here!"
@@ -111,6 +205,7 @@ class InstallUsbImage(BaseUsbImage):
     def __str__(self):
         return ("<InstallUsbImage: project=%s, target=%s, name=%s>"
                 % (self.project, self.target, self.name))
+
 
 class HddImage(InstallImage):
     def create_image(self):
