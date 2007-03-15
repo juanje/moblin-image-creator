@@ -4,7 +4,7 @@ import os, sys, re, tempfile, shutil
 
 import SDK
 
-class Busybox:
+class Busybox(object):
     def __init__(self, cmd_path, bin_path):
         self.cmd_path = os.path.abspath(os.path.expanduser(cmd_path))
         self.bin_path = os.path.abspath(os.path.expanduser(bin_path))
@@ -24,11 +24,12 @@ class Busybox:
                     flag = 1
                 continue
             else:
-                # strip off the new-line & white-space
+                # strip off the new-line & white-space 
                 line = line.strip()
+                # Delete all spaces inside the line
                 line = re.sub(r'\s+', '', line)
 
-                if (line != ''):
+                if line:
                     buf = buf + line
 
         buf = re.sub(r'busybox,', '', buf)
@@ -50,28 +51,24 @@ class Busybox:
 
         os.chdir(save_cwd)
 
-class Mkinitrd:
+class Mkinitrd(object):
     def create(self, project, initrd_file):
         initrd_file = os.path.abspath(os.path.expanduser(initrd_file))
 
         save_cwd = os.getcwd()
-
         # Create scratch area for creating files
         scratch_path = tempfile.mkdtemp('','esdk-', '/tmp')
 
         # Setup initrd directory tree
         bin_path = os.path.join(scratch_path, 'bin')
 
-        os.makedirs(bin_path)
-        os.makedirs(os.path.join(scratch_path, 'etc'))
-        os.makedirs(os.path.join(scratch_path, 'dev'))
-        os.makedirs(os.path.join(scratch_path, 'lib'))
+        # Create directories
+        dirs = [ 'bin', 'etc', 'dev', 'lib', 'proc', 'sys', 'sysroot', 'tmp', ]
+        for dirname in dirs:
+            os.makedirs(os.path.join(scratch_path, dirname))
+
         os.symlink('init', os.path.join(scratch_path, 'linuxrc'))
-        os.makedirs(os.path.join(scratch_path, 'proc'))
         os.symlink('bin', os.path.join(scratch_path, 'sbin'))
-        os.makedirs(os.path.join(scratch_path, 'sys'))
-        os.makedirs(os.path.join(scratch_path, 'sysroot'))
-        os.makedirs(os.path.join(scratch_path, 'tmp'))
 
         # Setup Busybox in the initrd
         cmd_path = os.path.join(project.path, 'sbin/busybox')
