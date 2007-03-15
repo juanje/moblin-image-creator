@@ -26,6 +26,8 @@ class InstallImage(object):
         return ("<InstallImage: project=%s, target=%s, name=%s>"
                 % (self.project, self.target, self.name))
 
+
+
 class LiveIsoImage(InstallImage):
     def create_image(self):
         print "LiveIsoImage: Create ISO Image here!"
@@ -51,9 +53,11 @@ class BaseUsbImage(InstallImage):
         os.system(cmd_line)
 
         # NOTE: Running syslinux on the host development system
-        #       means the host and target have compatible arch
-        cmd_line = "/usr/bin/syslinux %s" %  self.path
-        os.system(cmd_line)
+        #       means the host and target have compatible architectures.
+        #       This runs syslinux inside the jailroot so the correct
+        #       version of syslinux is used.
+        jail_path = self.path[len(self.project.path):]
+        self.project.chroot('/usr/bin/syslinux', jail_path)
 
     def mount_container(self):
         if not self.mount_point:
@@ -61,13 +65,26 @@ class BaseUsbImage(InstallImage):
             cmd_line = "mount -o loop -t vfat %s %s" % (self.path, self.mount_point)
             os.system(cmd_line)
 
-    def unmount_container(self):
+    def umount_container(self):
         if self.mount_point:
             cmd_line = "umount %s" % self.mount_point
             os.system(cmd_line)
             os.rmdir(self.mount_point)
             self.mount_point = ''
 
+    def create_syslinux_cfg(self):
+        if self.mount.point:
+            cfg_file = open(os.path.join(self.mount_point, 'syslinux.cfg'), 'w')
+            print >> cfg_file, """\
+default linux
+prompt 1
+timeout 600
+label linux
+  kernel vmlinuz-2.6.20-default
+  append initrd=initrd.img
+"""
+            cfg_file.close()
+        
 class LiveUsbImage(BaseUsbImage):
     def create_image(self):
         print "LiveUsbImage: Creating LiveUSB Image Now!"
@@ -79,7 +96,7 @@ class LiveUsbImage(BaseUsbImage):
         initrd_path = os.path.join(self.mount_point, 'initrd.img')
         Mkinitrd.Mkinitrd().create(self.project, initrd_path)
         
-        self.unmount_container()
+        self.umount_container()
 
         print "LiveUsbImage: Finished!"
         
@@ -128,6 +145,8 @@ if __name__ == '__main__':
     else:
         proj_name = sys.argv[1]
         proj = sdk.projects[proj_name]
+
+    proj.mount()
 
     imgLiveIso = LiveIsoImage(proj, proj.targets['mytest'], "mytest_v1-Live-DVD.iso")
     print "\nImage File Name: %s" % imgLiveIso.name

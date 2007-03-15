@@ -6,8 +6,11 @@ import FSet
 class TestFset(unittest.TestCase):
     def setUp(self):
         self.workdir = tempfile.mkdtemp()
-        self.fset_filename =os.path.join(self.workdir, 'unittest.fset')
+        self.fset_filename = os.path.join(self.workdir, 'unittest.fset')
         self.createSampleFsetFile(self.fset_filename)
+        # Create another file with same info.
+        self.fset_dupfilename = os.path.join(self.workdir, 'unittest2.fset')
+        self.createSampleFsetFile(self.fset_dupfilename)
     def createSampleFsetFile(self, filename):
         fset_file = open(filename, 'w')
         # Let's create a valid FSet file
@@ -41,6 +44,10 @@ DEPS=core gnome-mobile"""
         fset.addFile(self.fset_filename)
         temp = fset['core'].__str__()
         temp = fset['core'].__repr__()
+    def testCollision(self):
+        fset = FSet.FSet()
+        fset.addFile(self.fset_filename)
+        self.failUnlessRaises(ValueError, fset.addFile, self.fset_dupfilename)
 
 if __name__ == '__main__':
     unittest.main()

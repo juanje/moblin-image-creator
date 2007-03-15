@@ -29,10 +29,10 @@ class FSet(object):
             orig_section = section
             section = section.lower()
             if section in self.__fsets:
-                print "Error: Already have a section called: %s" % section
-                print "Tried to add the section from file: %s" % filename
-                print "But already have that section from file: %s" % self.__fsets[section]['filename']
-                raise ValueError
+                # print "Error: Already have a section called: %s" % section
+                # print "Tried to add the section from file: %s" % filename
+                # print "But already have that section from file: %s" % self.__fsets[section]['filename']
+                raise ValueError, "Error: Already have a section called: %s" % section
             work_dict = {}
             work_dict['filename'] = filename
             for name, value in p.items(orig_section):
