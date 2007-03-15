@@ -82,10 +82,14 @@ metadata_expire=1800
         os.system(command)
 
     def mount(self):
-        os.system('mount --bind /proc ' + os.path.join(self.path, 'proc') + ' 2> /dev/null')
+        path = os.path.join(self.path, 'proc')
+        if not os.path.ismount(path):
+            os.system('mount --bind /proc ' + path + ' 2> /dev/null')
 
     def umount(self):
-        os.system('umount ' + os.path.join(self.path, 'proc')  + ' 2> /dev/null')
+        path = os.path.join(self.path, 'proc')
+        if os.path.ismount(path):
+            os.system('umount ' + path  + ' 2> /dev/null')
 
 class Project(FileSystem):
     """
@@ -126,6 +130,12 @@ class Project(FileSystem):
         target = self.targets[name]
         target.umount()
         shutil.rmtree(os.path.join(self.path, 'targets', name))
+
+    def chroot(self, cmd_path, cmd_args):
+        if os.path.isdir(self.path):
+            self.mount()
+            cmd_line = "/usr/sbin/chroot %s %s %s" % (self.path, cmd_path, cmd_args)
+            os.system(cmd_line)
 
     def create_live_iso(self, target_name, image_name):
         image = InstallImage.LiveIsoImage(self, self.targets[target_name], image_name)

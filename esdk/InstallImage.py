@@ -26,6 +26,8 @@ class InstallImage(object):
         return ("<InstallImage: project=%s, target=%s, name=%s>"
                 % (self.project, self.target, self.name))
 
+
+
 class LiveIsoImage(InstallImage):
     def create_image(self):
         print "LiveIsoImage: Create ISO Image here!"
@@ -51,9 +53,10 @@ class BaseUsbImage(InstallImage):
         os.system(cmd_line)
 
         # NOTE: Running syslinux on the host development system
-        #       means the host and target have compatible arch
-        cmd_line = "/usr/bin/syslinux %s" %  self.path
-        os.system(cmd_line)
+        #       means the host and target have compatible arch.
+        #       This runs syslinux inside the jailroot.
+        jail_path = self.path[len(self.project.path):]
+        self.project.chroot('/usr/bin/syslinux', jail_path)
 
     def mount_container(self):
         if not self.mount_point:
@@ -68,6 +71,19 @@ class BaseUsbImage(InstallImage):
             os.rmdir(self.mount_point)
             self.mount_point = ''
 
+    def create_syslinux_cfg(self):
+        if self.mount.point:
+            cfg_file = open(os.path.join(self.mount_point, 'syslinux.cfg'), 'w')
+            print >> cfg_file, """\
+default linux
+prompt 1
+timeout 600
+label linux
+  kernel vmlinuz-2.6.20-default
+  append initrd=initrd.img
+"""
+            cfg_file.close()
+        
 class LiveUsbImage(BaseUsbImage):
     def create_image(self):
         print "LiveUsbImage: Creating LiveUSB Image Now!"
@@ -128,6 +144,8 @@ if __name__ == '__main__':
     else:
         proj_name = sys.argv[1]
         proj = sdk.projects[proj_name]
+
+    proj.mount()
 
     imgLiveIso = LiveIsoImage(proj, proj.targets['mytest'], "mytest_v1-Live-DVD.iso")
     print "\nImage File Name: %s" % imgLiveIso.name
