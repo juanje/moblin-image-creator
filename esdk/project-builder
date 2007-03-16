@@ -46,7 +46,7 @@ def main():
         delete_target(options)
     elif options.cmd == 'install-fset':
         install_fset(options)
-    elif options.cmd == 'create-live-iso' or options.cmd == 'create-install-iso' or options.cmd == 'create-live-usb' or options.cmd == 'create-install-usb':
+    elif options.cmd in ['create-live-iso', 'create-install-iso', 'create-live-usb', 'create-install-usb']:
         create_image(options)
     else:
         print "Unknown command specified"
