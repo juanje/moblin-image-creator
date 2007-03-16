@@ -27,11 +27,25 @@ gpgcheck=0"""
         if os.path.isdir(self.workdir):
             shutil.rmtree(self.workdir)
     def testInstantiate(self):
+        # Directory should not yet exist
+        self.assert_(not os.path.isdir(self.filesystem_dir), "Wierd, directory exists")
         filesystem = Project.FileSystem(self.filesystem_dir, self.repos)
+        self.assert_(os.path.isdir(self.filesystem_dir), "FileSystem did not create directory!")
     def testStrRepr(self):
         filesystem = Project.FileSystem(self.filesystem_dir, self.repos)
         filesystem = filesystem.__str__()
         filesystem = filesystem.__repr__()
+    def testStructure(self):
+        filesystem = Project.FileSystem(self.filesystem_dir, self.repos)
+        self.assert_(os.path.isdir(self.filesystem_dir), "FileSystem did not create directory!")
+        for filename in [ 'proc', 'var/log', 'var/lib/rpm', 'dev', 'etc/yum.repos.d' ]:
+            full_path = os.path.join(self.filesystem_dir, filename)
+            self.assert_(os.path.exists(full_path), "Missing file/dir: %s" % filename)
+        # Stuff in /etc
+        for filename in [ 'hosts', 'passwd', 'group', 'resolv.conf', 'yum.conf', 'yum.repos.d' ]:
+            etc_path = os.path.join("etc", filename)
+            full_path = os.path.join(self.filesystem_dir, etc_path)
+            self.assert_(os.path.exists(full_path), "Missing file/dir: %s" % etc_path)
 
 if __name__ == '__main__':
     unittest.main()
