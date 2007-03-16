@@ -47,12 +47,11 @@ class Busybox(object):
 
         for cmd in self.cmds:
             if not os.path.exists(cmd):
-                # FIXME: This should really be hardlinks
-                os.symlink("busybox", cmd)
+                os.link("busybox", cmd)
 
         os.chdir(save_cwd)
 
-def create(self, project, initrd_file):
+def create(project, initrd_file):
     """Function to create an initrd file"""
     initrd_file = os.path.abspath(os.path.expanduser(initrd_file))
 
@@ -94,38 +93,12 @@ mount -t devpts -o gid=5,mode=620 /dev/pts /dev/pts
 mkdir /dev/shm
 mkdir /dev/mapper
 echo Creating initial device nodes
-mknod /dev/null c 1 3
-mknod /dev/zero c 1 5
-mknod /dev/systty c 4 0
-mknod /dev/tty c 5 0
-mknod /dev/console c 5 1
-mknod /dev/ptmx c 5 2
-mknod /dev/rtc c 10 135
+mdev -s
 mknod /dev/sda b 8 0
 mknod /dev/sda1 b 8 1
 mknod /dev/sda2 b 8 2
 mknod /dev/sda3 b 8 3
-mknod /dev/tty0 c 4 0
-mknod /dev/tty1 c 4 1
-mknod /dev/tty2 c 4 2
-mknod /dev/tty3 c 4 3
-mknod /dev/tty4 c 4 4
-mknod /dev/tty5 c 4 5
-mknod /dev/tty6 c 4 6
-mknod /dev/tty7 c 4 7
-mknod /dev/tty8 c 4 8
-mknod /dev/tty9 c 4 9
-mknod /dev/tty10 c 4 10
-mknod /dev/tty11 c 4 11
-mknod /dev/tty12 c 4 12
-mknod /dev/ttyS0 c 4 64
-mknod /dev/ttyS1 c 4 65
-mknod /dev/ttyS2 c 4 66
-mknod /dev/ttyS3 c 4 67
-echo Setting up hotplug.
-hotplug
-echo Creating block device nodes.
-mkblkdevs
+mknod /dev/sdb b 8 16
 #resume LABEL=SWAP-hda3
 #echo Creating root device.
 #mkrootdev -t ext3 -o defaults,ro hda1
