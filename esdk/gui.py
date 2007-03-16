@@ -10,8 +10,9 @@ class esdkMain:
 	This is our main
 	"""
 	def __init__(self):
-		gladefile = "esdk.glade"
+		gladefile = "/usr/share/esdk/esdk.glade"
 		self.widgets = gtk.glade.XML (gladefile, 'main')
+		
 		#self.widgets.signal_autoconnect(callbacks.__dict__)
 		dic = {"on_main_destroy_event" : gtk.main_quit,
 			"on_quit_activate" : gtk.main_quit,
