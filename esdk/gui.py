@@ -19,6 +19,7 @@ class esdkMain:
 			"on_newProject_clicked" : self.on_newProject_clicked,
 			"on_projectDelete_clicked": self.on_projectDelete_clicked,
 			"on_projectSave_clicked": self.on_projectSave_clicked,
+			"on_new_target_add_clicked": self.on_new_target_add_clicked,
 			"on_about_activate": self.on_about_activate}
 		self.widgets.signal_autoconnect(dic)
 		
@@ -40,13 +41,13 @@ class esdkMain:
 		self.projectList.set_reorderable(1)
 
 		#Set targetList widget
-		self.tParent = "Parent"
 		self.tName = "Name"
+		self.tFSet = "FSets"
 
 		self.targetList = self.widgets.get_widget("targetList")
 		print "Setting Target List"
-		self.set_tlist(self.tParent, 0)
-		self.set_tlist(self.tName, 1)
+		self.set_tlist(self.tName, 0)
+		self.set_tlist(self.tFSet, 1)
 
 		self.targetView = gtk.ListStore(str, str)
 		self.targetList.set_model(self.targetView)
@@ -77,13 +78,37 @@ class esdkMain:
 		model, iter = self.selection.get_selected()
 		self.selection.connect("changed", self.get_proj_targets)
 
+	#populate the Targets list based on user-selected Project
 	""" Here we populate the targetList based on which
 	projectView row the use selected
 	"""
 	def get_proj_targets(self, selection):
+		
+		#first clear whatever is already displayed
+		self.targetView.clear()
 		model, iter = selection.get_selected()
 		projName = model[iter][0]
 		print "User selected '%s' project, let's list the targets" % projName
+
+
+		sdk = SDK()
+		for key in sdk.projects.keys():
+			projects = sdk.projects[key]
+			if (projects.name == projName):
+				print "Found project %s in main projects list" % projects.name
+				print "Listing targets:"
+				for t in projects.targets.keys():
+					t_target = TargetInfo()
+					my_target = projects.targets[t]
+					print "\t%s" % my_target.name
+
+					#ok let's add them to the widget targetView:targetList
+					t_target.name = my_target.name
+					t_target.fset = ''
+					self.targetView.append(t_target.getList())
+
+
+
 
 	"""Add project list column descriptions"""
 	def set_plist(self, name, id):
@@ -134,17 +159,48 @@ class esdkMain:
 		gtk.AboutDialog()
 	def on_projectSave_clicked(self, event):
 		print "Not yet implemented"
+
+	#Delete a Project
 	def on_projectDelete_clicked(self, event):
-		print "Not yet implemented"
+		selection = self.projectList.get_selection()
+
+		model, iter = selection.get_selected()
+		projectName = model[iter][0]
+		print "Deleting project: %s" % projectName
+		sdk = SDK()
+		sdk.delete_project(projectName)
+		iter = self.projectView.remove(iter)
+				
+	#Adding a new Target
+	def on_new_target_add_clicked(self, event):
+		gladefile = "esdk.glade"
 		
+		widgets = gtk.glade.XML (gladefile, 'nt_dlg')
+		nt_Dlg = widgets.get_widget('nt_dlg')
+		new_target_name = NewTargetInfo()
+		nt_name = widgets.get_widget("nt_name")
+		nt_name.set_text(new_target_name.name)
+
+		selection = self.projectList.get_selection()
+
+		model, iter = selection.get_selected()
+		projectName = model[iter][0]
+		print "Creating new target in project: %s" % projectName
+		sdk = SDK()
+		for key in sdk.projects.keys():
+			project = sdk.projects[key]
+			if (projectName == project.name):
+				project.create_target(new_target_name)
+		
+
 
 class TargetInfo:
 	"""Class defining target elements"""
-	def __init__(self, path="", fsets=""):
-		self.parent = parent
+	def __init__(self, name="", fset=""):
 		self.name = name
-	def getTargetList(self):
-		return [self.parent, self.name]
+		self.fset = name
+	def getList(self):
+		return [self.name, self.fset]
 class ProjectInfo:
 	"""Class to store new project info before we persisit"""
 	def __init__(self, name="", desc="", path="", platform=""):
@@ -155,10 +211,16 @@ class ProjectInfo:
 	def getList(self):
 		return [self.name, self.desc, self.path, self.platform]
 
+class NewTargetInfo:
+	def __init__(self, name=""):
+		self.name = name
+	def getList(self):
+		return [self.name]
+
 class AddNewProject:
 	"""Class to bring up AddNewProject dialogue"""
 	def __init__(self, name="", desc="", path="", platform=""):
-		self.gladefile = "esdk.glade"
+		self.gladefile = '/usr/shar/esdk/esdk.glad'
 		self.newProject = ProjectInfo(name,desc,path,platform)
 	def on_newDlg_destroy(event):
 		print "Destroying dialogue"
@@ -184,7 +246,7 @@ class AddNewProject:
 			
 		self.np_platform.set_model(platform_entry_box)
 		self.np_platform.set_text_column(0)
-		self.np_platform.child.set_text(store[0][0])
+		self.np_platform.child.set_text(platform_entry_box[0][0])
 		
 		self.result = self.newDlg.run()
 
