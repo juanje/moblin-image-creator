@@ -173,7 +173,7 @@ class esdkMain:
 				
 	#Adding a new Target
 	def on_new_target_add_clicked(self, event):
-		gladefile = "/usr/shar/esdk/esdk.glade"
+		gladefile = "/usr/share/esdk/esdk.glade"
 		
 		widgets = gtk.glade.XML (gladefile, 'nt_dlg')
 		nt_Dlg = widgets.get_widget('nt_dlg')
@@ -220,7 +220,7 @@ class NewTargetInfo:
 class AddNewProject:
 	"""Class to bring up AddNewProject dialogue"""
 	def __init__(self, name="", desc="", path="", platform=""):
-		self.gladefile = '/usr/shar/esdk/esdk.glade'
+		self.gladefile = '/usr/share/esdk/esdk.glade'
 		self.newProject = ProjectInfo(name,desc,path,platform)
 	def on_newDlg_destroy(event):
 		print "Destroying dialogue"
