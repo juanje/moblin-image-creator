@@ -68,7 +68,7 @@ class esdkMain:
 			#get Targets related to each project
 			print "Targets for project: %s" % saved_projects.name
 			for t in saved_projects.targets.keys():
-				my_targets = saved_projects.targets[key]
+				my_targets = saved_projects.targets[t]
 				print "\t%s" % my_targets.name
 
 		self.selection = self.projectList.get_selection()
@@ -108,6 +108,18 @@ class esdkMain:
 			platform = sdk.platforms[new_project.platform]
 			print "platform %s "  % platform.name
 			proj = sdk.create_project(new_project.path, new_project.name, new_project.desc, platform)
+			#FIXME: finish packing this dialogue
+			if (proj):
+				print "Project create OK"
+				dialog = gtk.Window(gtk.WINDOW_TOPLEVEL)
+				dialog.set_title("Project Creation Succeeded")
+				dialog.set_size_request(200, 200)
+				dialog.connect("delete_event", self.dialog.destroy)
+				vbox = gtk.VBox()
+				vbox.pack_start("Project Created Successfully")
+				dialog.add(self.vbox)
+
+				dialog.show_all()
 			#FIXME: error check
 			self.projectView.append(new_project.getList())
 
