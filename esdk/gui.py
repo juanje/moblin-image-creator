@@ -75,8 +75,9 @@ class esdkMain:
 		model, iter = self.selection.get_selected()
 		self.selection.connect("changed", self.display_selected)
 
-	def display_selected(model, iter):
-		print "user selected something else "
+	def display_selected(self, selection):
+		model, iter = selection.get_selected()
+		print "Sombody clicked on the %s project" % (model[iter][0])
 
 	"""Add project list column descriptions"""
 	def set_plist(self, name, id):
