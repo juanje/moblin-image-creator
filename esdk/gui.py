@@ -11,6 +11,8 @@ class esdkMain:
 	"""
 	def __init__(self):
 		gladefile = "/usr/share/esdk/esdk.glade"
+                if not os.path.isfile(gladefile):
+                    raise IOError, "Glade file is missing from: %s" % gladefile
 		self.widgets = gtk.glade.XML (gladefile, 'main')
 		
 		#self.widgets.signal_autoconnect(callbacks.__dict__)
