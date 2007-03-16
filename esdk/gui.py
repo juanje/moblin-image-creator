@@ -159,7 +159,6 @@ class AddNewProject:
 		self.np_path = self.widgets.get_widget("np_path")
 		self.np_path.set_text(self.newProject.path)
 		self.np_platform = self.widgets.get_widget("np_platform")
-		self.np_platform.child.set_text(self.newProject.platform)
 
 		store = gtk.ListStore(gobject.TYPE_STRING)
 		for pname in SDK().platforms.keys():
@@ -167,6 +166,7 @@ class AddNewProject:
 			
 		self.np_platform.set_model(store)
 		self.np_platform.set_text_column(0)
+		self.np_platform.child.set_text(store[0][0])
 		
 		self.result = self.newDlg.run()
 
