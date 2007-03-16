@@ -1800,7 +1800,7 @@ Project Targets</property>
 	  <property name="column_spacing">0</property>
 
 	  <child>
-	    <widget class="GtkLabel" id="np_name">
+	    <widget class="GtkLabel" id="np_name_label">
 	      <property name="visible">True</property>
 	      <property name="label" translatable="yes">Name</property>
 	      <property name="use_underline">False</property>
@@ -1828,7 +1828,7 @@ Project Targets</property>
 	  </child>
 
 	  <child>
-	    <widget class="GtkLabel" id="np_desc">
+	    <widget class="GtkLabel" id="np_desc_label">
 	      <property name="visible">True</property>
 	      <property name="label" translatable="yes">Desc</property>
 	      <property name="use_underline">False</property>
@@ -1856,7 +1856,7 @@ Project Targets</property>
 	  </child>
 
 	  <child>
-	    <widget class="GtkLabel" id="np_path">
+	    <widget class="GtkLabel" id="np_path_lable">
 	      <property name="visible">True</property>
 	      <property name="label" translatable="yes">Path</property>
 	      <property name="use_underline">False</property>
@@ -1884,7 +1884,7 @@ Project Targets</property>
 	  </child>
 
 	  <child>
-	    <widget class="GtkLabel" id="np_platform">
+	    <widget class="GtkLabel" id="np_platform_label">
 	      <property name="visible">True</property>
 	      <property name="label" translatable="yes">Platform</property>
 	      <property name="use_underline">False</property>
@@ -1975,23 +1975,19 @@ Project Targets</property>
 	  </child>
 
 	  <child>
-	    <widget class="GtkEntry" id="np_platform">
+	    <widget class="GtkComboBoxEntry" id="np_platform">
 	      <property name="visible">True</property>
-	      <property name="can_focus">True</property>
-	      <property name="editable">True</property>
-	      <property name="visibility">True</property>
-	      <property name="max_length">0</property>
-	      <property name="text" translatable="yes"></property>
+	      <property name="add_tearoffs">False</property>
 	      <property name="has_frame">True</property>
-	      <property name="invisible_char">•</property>
-	      <property name="activates_default">False</property>
+	      <property name="focus_on_click">True</property>
 	    </widget>
 	    <packing>
 	      <property name="left_attach">1</property>
 	      <property name="right_attach">2</property>
 	      <property name="top_attach">3</property>
 	      <property name="bottom_attach">4</property>
-	      <property name="y_options"></property>
+	      <property name="x_options">fill</property>
+	      <property name="y_options">fill</property>
 	    </packing>
 	  </child>
 	</widget>

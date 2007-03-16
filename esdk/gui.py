@@ -20,7 +20,6 @@ class esdkMain:
 			"on_projectSave_clicked": self.on_projectSave_clicked,
 			"on_about_activate": self.on_about_activate}
 		self.widgets.signal_autoconnect(dic)
-
 		
 		#setup projectList widget
 		self.pName = "Name"
@@ -158,7 +157,7 @@ class AddNewProject:
 		self.np_path = self.widgets.get_widget("np_path")
 		self.np_path.set_text(self.newProject.path)
 		self.np_platform = self.widgets.get_widget("np_platform")
-		self.np_platform.set_text(self.newProject.platform)	
+		self.np_platform.child.set_text(self.newProject.platform)
 		
 		self.result = self.newDlg.run()
 
@@ -166,7 +165,7 @@ class AddNewProject:
 		self.newProject.name = self.np_name.get_text()
 		self.newProject.desc = self.np_desc.get_text()
 		self.newProject.path = self.np_path.get_text()
-		self.newProject.platform = self.np_platform.get_text()
+		self.newProject.platform = self.np_platform.child.get_text()
 
 		if (self.result == gtk.RESPONSE_CANCEL):
 			print "User cancelled New project Add"
