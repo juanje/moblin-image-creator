@@ -1,6 +1,7 @@
 #!/usr/bin/python -tt
 
 import os, re, shutil, sys, tempfile, unittest
+sys.path.insert(0, '/usr/share/esdk/lib')
 import Project
 
 # Test our base FileSystem class
