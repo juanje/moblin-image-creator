@@ -33,8 +33,8 @@ gpgcheck=0"""
         self.assert_(os.path.isdir(self.filesystem_dir), "FileSystem did not create directory!")
     def testStrRepr(self):
         filesystem = Project.FileSystem(self.filesystem_dir, self.repos)
-        filesystem = filesystem.__str__()
-        filesystem = filesystem.__repr__()
+        temp = filesystem.__str__()
+        temp = filesystem.__repr__()
     def testStructure(self):
         filesystem = Project.FileSystem(self.filesystem_dir, self.repos)
         self.assert_(os.path.isdir(self.filesystem_dir), "FileSystem did not create directory!")
