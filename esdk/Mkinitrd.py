@@ -63,7 +63,8 @@ def create(project, initrd_file):
     bin_path = os.path.join(scratch_path, 'bin')
 
     # Create directories
-    dirs = [ 'bin', 'etc', 'dev', 'lib', 'proc', 'sys', 'sysroot', 'tmp', ]
+    dirs = [ 'bin', 'boot', 'etc', 'dev', 'lib', 'mnt/install', 'mnt/fs', \
+             'proc', 'sys', 'sysroot', 'tmp', ]
     for dirname in dirs:
         os.makedirs(os.path.join(scratch_path, dirname))
 

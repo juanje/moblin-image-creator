@@ -180,7 +180,7 @@ class LiveUsbImage(BaseUsbImage):
     def create_image(self):
         print "LiveUsbImage: Creating LiveUSB Image Now!"
 
-        self.create_container_file(16)
+        self.create_container_file(128)
 
         self.mount_container()
 
