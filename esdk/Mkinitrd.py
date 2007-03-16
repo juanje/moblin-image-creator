@@ -47,37 +47,38 @@ class Busybox(object):
 
         for cmd in self.cmds:
             if not os.path.exists(cmd):
+                # FIXME: This should really be hardlinks
                 os.symlink("busybox", cmd)
 
         os.chdir(save_cwd)
 
-class Mkinitrd(object):
-    def create(self, project, initrd_file):
-        initrd_file = os.path.abspath(os.path.expanduser(initrd_file))
+def create(self, project, initrd_file):
+    """Function to create an initrd file"""
+    initrd_file = os.path.abspath(os.path.expanduser(initrd_file))
 
-        save_cwd = os.getcwd()
-        # Create scratch area for creating files
-        scratch_path = tempfile.mkdtemp('','esdk-', '/tmp')
+    save_cwd = os.getcwd()
+    # Create scratch area for creating files
+    scratch_path = tempfile.mkdtemp('','esdk-', '/tmp')
 
-        # Setup initrd directory tree
-        bin_path = os.path.join(scratch_path, 'bin')
+    # Setup initrd directory tree
+    bin_path = os.path.join(scratch_path, 'bin')
 
-        # Create directories
-        dirs = [ 'bin', 'etc', 'dev', 'lib', 'proc', 'sys', 'sysroot', 'tmp', ]
-        for dirname in dirs:
-            os.makedirs(os.path.join(scratch_path, dirname))
+    # Create directories
+    dirs = [ 'bin', 'etc', 'dev', 'lib', 'proc', 'sys', 'sysroot', 'tmp', ]
+    for dirname in dirs:
+        os.makedirs(os.path.join(scratch_path, dirname))
 
-        os.symlink('init', os.path.join(scratch_path, 'linuxrc'))
-        os.symlink('bin', os.path.join(scratch_path, 'sbin'))
+    os.symlink('init', os.path.join(scratch_path, 'linuxrc'))
+    os.symlink('bin', os.path.join(scratch_path, 'sbin'))
 
-        # Setup Busybox in the initrd
-        cmd_path = os.path.join(project.path, 'sbin/busybox')
-        bb = Busybox(cmd_path, bin_path)
-        bb.create()
+    # Setup Busybox in the initrd
+    cmd_path = os.path.join(project.path, 'sbin/busybox')
+    bb = Busybox(cmd_path, bin_path)
+    bb.create()
 
-        # Setup init script
-        init_file = open(os.path.join(scratch_path, 'init'), 'w')
-        print >> init_file, """\
+    # Setup init script
+    init_file = open(os.path.join(scratch_path, 'init'), 'w')
+    print >> init_file, """\
 #!/bin/msh
 
 mount -t proc /proc /proc
@@ -136,17 +137,17 @@ mkblkdevs
 #switchroot
 /bin/msh
 """
-        init_file.close()
-        os.chmod(os.path.join(scratch_path, 'init'), 0755)
+    init_file.close()
+    os.chmod(os.path.join(scratch_path, 'init'), 0755)
 
-        # Create the initrd image file
-        os.chdir(scratch_path)
-        cmd_string = "find -print | cpio --quiet -c -o | gzip -9 -c > " + initrd_file
-        os.system(cmd_string)
-        os.chdir(save_cwd)
+    # Create the initrd image file
+    os.chdir(scratch_path)
+    cmd_string = "find -print | cpio --quiet -c -o | gzip -9 -c > " + initrd_file
+    os.system(cmd_string)
+    os.chdir(save_cwd)
 
-        # Clean-up and remove scratch area
-        shutil.rmtree(scratch_path)
+    # Clean-up and remove scratch area
+    shutil.rmtree(scratch_path)
 
 
 if __name__ == '__main__':
@@ -159,4 +160,4 @@ if __name__ == '__main__':
 
     proj = SDK.SDK().projects[project_name]
 
-    Mkinitrd().create(proj, initrd_file)
+    create(proj, initrd_file)

@@ -185,7 +185,7 @@ class LiveUsbImage(BaseUsbImage):
         self.mount_container()
 
         initrd_path = os.path.join(self.tmp_path, 'initrd.img')
-        Mkinitrd.Mkinitrd().create(self.project, initrd_path)
+        Mkinitrd.create(self.project, initrd_path)
         
         self.install_kernels()
 
