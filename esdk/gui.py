@@ -71,13 +71,19 @@ class esdkMain:
 				my_targets = saved_projects.targets[t]
 				print "\t%s" % my_targets.name
 
+		#Connect project selection signal to list targets
+		#in the targetView widget: targetList
 		self.selection = self.projectList.get_selection()
 		model, iter = self.selection.get_selected()
-		self.selection.connect("changed", self.display_selected)
+		self.selection.connect("changed", self.get_proj_targets)
 
-	def display_selected(self, selection):
+	""" Here we populate the targetList based on which
+	projectView row the use selected
+	"""
+	def get_proj_targets(self, selection):
 		model, iter = selection.get_selected()
-		print "Sombody clicked on the %s project" % (model[iter][0])
+		projName = model[iter][0]
+		print "User selected '%s' project, let's list the targets" % projName
 
 	"""Add project list column descriptions"""
 	def set_plist(self, name, id):
@@ -173,11 +179,11 @@ class AddNewProject:
 		self.np_platform = self.widgets.get_widget("np_platform")
 		self.np_platform.child.set_text(self.newProject.platform)
 
-		store = gtk.ListStore(gobject.TYPE_STRING)
+		platform_entry_box = gtk.ListStore(gobject.TYPE_STRING)
 		for pname in SDK().platforms.keys():
-			store.append([pname])
+			platform_entry_box.append([pname])
 			
-		self.np_platform.set_model(store)
+		self.np_platform.set_model(platform_entry_box)
 		self.np_platform.set_text_column(0)
 		
 		self.result = self.newDlg.run()
