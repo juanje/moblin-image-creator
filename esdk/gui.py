@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import pygtk
-import gtk, gtk.glade
+import gtk, gtk.glade, gobject
 from SDK import *
 
 
@@ -159,6 +159,13 @@ class AddNewProject:
 		self.np_path.set_text(self.newProject.path)
 		self.np_platform = self.widgets.get_widget("np_platform")
 		self.np_platform.child.set_text(self.newProject.platform)
+
+		store = gtk.ListStore(gobject.TYPE_STRING)
+		for pname in SDK().platforms.keys():
+			store.append([pname])
+			
+		self.np_platform.set_model(store)
+		self.np_platform.set_text_column(0)
 		
 		self.result = self.newDlg.run()
 
