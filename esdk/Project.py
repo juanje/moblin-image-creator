@@ -123,7 +123,7 @@ class Project(FileSystem):
         FileSystem.install(self, self.path, self.platform.jailroot_packages, self.platform.buildroot_repos)
 
     def create_target(self, name):
-        if not name in self.targets:
+        if name and not name in self.targets:
             self.targets[name] = Target(name, self)
         return self.targets[name]
 

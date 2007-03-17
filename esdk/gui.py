@@ -161,25 +161,21 @@ class esdkMain:
         iter = self.projectView.remove(iter)
 
     def on_new_target_add_clicked(self, widget):
+        # Open the "New Target" dialog
         ntDlg = NewTarget();
-        result, newTarget = ntDlg.run()
+        result, target = ntDlg.run()
 
-        name = newTarget.getList()
-        new_name = name[0]
-        if (result == gtk.RESPONSE_OK):
-            print "new target: %s" % new_name
-        #let's create it for the specific selected project
-        selection = self.projectList.get_selection()
+        # Verify we have valid data
+        targetName = target.getList()[0]
+        if not targetName or result != gtk.RESPONSE_OK:
+            return
 
-        model, iter = selection.get_selected()
-        projectName = model[iter][0]
-        print "Creating new target in project: %s" % projectName
-        sdk = SDK()
-        for key in sdk.projects.keys():
-            project = sdk.projects[key]
-            if (projectName == project.name):
-                project.create_target(new_name)
-        self.targetView.append(newTarget.getList())
+        # Get the user provided target name, and create the target
+        model, iter = self.projectList.get_selection().get_selected()
+        SDK().projects[model[iter][0]].create_target(target.getList()[0])
+
+        # Update the list of targets
+        self.targetView.append(target.getList())
 
 class NewTarget:
     """Class to add a new selected project target"""
