@@ -2,7 +2,10 @@
 # vim: ai ts=4 sts=4 et sw=4
 
 import pygtk
-import gtk, gtk.glade, gobject
+try:
+    import gtk, gtk.glade, gobject
+except:
+    raise ImportError, "Unable to import the gtk libraries.  Maybe you are running in text mode"
 from SDK import *
 
 global gladefile
