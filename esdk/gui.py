@@ -4,15 +4,16 @@ import pygtk
 import gtk, gtk.glade, gobject
 from SDK import *
 
+global gladefile
+gladefile = "/usr/share/esdk/esdk.glade"
+if not os.path.isfile(gladefile):
+	raise IOError, "Glade file is missing from: %s" % gladefile
 
 class esdkMain:
 	"""
 	This is our main
 	"""
 	def __init__(self):
-		gladefile = "/usr/share/esdk/esdk.glade"
-		if not os.path.isfile(gladefile):
-			raise IOError, "Glade file is missing from: %s" % gladefile
 		self.widgets = gtk.glade.XML (gladefile, 'main')
 		
 		#self.widgets.signal_autoconnect(callbacks.__dict__)
@@ -145,17 +146,8 @@ class esdkMain:
 			#FIXME: finish packing this dialogue
 			if (proj):
 				print "Project create OK"
-				dialog = gtk.Window(gtk.WINDOW_TOPLEVEL)
-				dialog.set_title("Project Creation Succeeded")
-				dialog.set_size_request(200, 200)
-				dialog.connect("delete_event", self.dialog.destroy)
-				vbox = gtk.VBox()
-				vbox.pack_start("Project Created Successfully")
-				dialog.add(self.vbox)
-
-				dialog.show_all()
 			#FIXME: error check
-			self.projectView.append(new_project.getList())
+				self.projectView.append(new_project.getList())
 
 	def on_about_activate(self, event):
 		gtk.AboutDialog()
@@ -173,16 +165,15 @@ class esdkMain:
 		sdk.delete_project(projectName)
 		iter = self.projectView.remove(iter)
 				
-	#Adding a new Target
-	def on_new_target_add_clicked(self, event):
-		gladefile = "/usr/share/esdk/esdk.glade"
+	def on_new_target_add_clicked(self, widget):
+		ntDlg = NewTarget();
+		result, newTarget = ntDlg.run()
 		
-		widgets = gtk.glade.XML (gladefile, 'nt_dlg')
-		nt_Dlg = widgets.get_widget('nt_dlg')
-		new_target_name = NewTargetInfo()
-		nt_name = widgets.get_widget("nt_name")
-		nt_name.set_text(new_target_name.name)
-
+		name = newTarget.getList()
+		new_name = name[0]
+		if (result == gtk.RESPONSE_OK):
+			print "new target: %s" % new_name
+		#let's create it for the specific selected project
 		selection = self.projectList.get_selection()
 
 		model, iter = selection.get_selected()
@@ -192,8 +183,46 @@ class esdkMain:
 		for key in sdk.projects.keys():
 			project = sdk.projects[key]
 			if (projectName == project.name):
-				project.create_target(new_target_name)
+				project.create_target(new_name)
+		self.targetView.append(newTarget.getList())
+
+
 		
+
+
+class NewTargetInfo:
+	def __init__(self, name="", fset=""):
+		self.name = name
+		self.fset = fset
+	def getList(self):
+		return [self.name, self.fset]
+
+class NewTarget:
+	"""Class to add a new selected project target"""
+	def __init__(self, name=""):
+		self.Target = NewTargetInfo(name)
+
+	def run(self):
+		"""Function to bring new project-target dialogue"""
+		self.widget = gtk.glade.XML(gladefile, "nt_dlg")
+		self.dlg = self.widget.get_widget("nt_dlg")
+
+		self.t_name = self.widget.get_widget("nt_name")
+		self.t_name.set_text(self.Target.name)
+
+		self.result = self.dlg.run()
+
+		self.Target.name = self.t_name.get_text()
+		print "new target %s" % self.Target.name
+
+		if (self.result == gtk.RESPONSE_CANCEL):
+			print "User cancelled New project Add"
+			self.dlg.destroy()
+
+		self.dlg.destroy()
+
+		return self.result, self.Target
+
 
 
 class TargetInfo:
@@ -213,12 +242,6 @@ class ProjectInfo:
 	def getList(self):
 		return [self.name, self.desc, self.path, self.platform]
 
-class NewTargetInfo:
-	def __init__(self, name=""):
-		self.name = name
-	def getList(self):
-		return [self.name]
-
 class AddNewProject:
 	"""Class to bring up AddNewProject dialogue"""
 	def __init__(self, name="", desc="", path="", platform=""):
@@ -230,7 +253,7 @@ class AddNewProject:
 	def on_newDlg_cancel_clicked(event):
 		print "dialogue closing"
 	def run(self):
-		self.widgets = gtk.glade.XML (self.gladefile, 'newProject')
+		self.widgets = gtk.glade.XML (gladefile, 'newProject')
 		self.newDlg = self.widgets.get_widget('newProject')
 		
 		#Get all of the Entry Widgets and set their text
