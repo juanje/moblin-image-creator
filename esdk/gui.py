@@ -97,14 +97,10 @@ class esdkMain:
                 print "Found project %s in main projects list" % projects.name
                 print "Listing targets:"
                 for t in sorted(projects.targets.iterkeys()):
-                    t_target = TargetInfo()
                     my_target = projects.targets[t]
                     print "\t%s" % my_target.name
-
                     #ok let's add them to the widget targetView:targetList
-                    t_target.name = my_target.name
-                    t_target.fset = ''
-                    self.targetView.append(t_target.getList())
+                    self.targetView.append((my_target.name, ''))
 
 
     def set_plist(self, name, id):
@@ -166,13 +162,12 @@ class esdkMain:
         result, target = ntDlg.run()
 
         # Verify we have valid data
-        targetName = target.getList()[0]
-        if not targetName or result != gtk.RESPONSE_OK:
+        if not target.name or result != gtk.RESPONSE_OK:
             return
 
         # Get the user provided target name, and create the target
         model, iter = self.projectList.get_selection().get_selected()
-        SDK().projects[model[iter][0]].create_target(target.getList()[0])
+        SDK().projects[model[iter][0]].create_target(target.name)
 
         # Update the list of targets
         self.targetView.append(target.getList())
@@ -209,7 +204,7 @@ class TargetInfo:
         self.name = name
         self.fset = fset
     def getList(self):
-        return [self.name, self.fset]
+        return (self.name, self.fset)
 class ProjectInfo:
     """Class to store new project info before we persist"""
     def __init__(self, name="", desc="", path="", platform=""):
@@ -218,7 +213,7 @@ class ProjectInfo:
         self.path = path
         self.platform = platform
     def getList(self):
-        return [self.name, self.desc, self.path, self.platform]
+        return (self.name, self.desc, self.path, self.platform)
 
 class AddNewProject:
     """Class to bring up AddNewProject dialogue"""
