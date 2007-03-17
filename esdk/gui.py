@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/python -tt
 
 import pygtk
 import gtk, gtk.glade, gobject
@@ -229,7 +229,7 @@ class TargetInfo:
 	"""Class defining target elements"""
 	def __init__(self, name="", fset=""):
 		self.name = name
-		self.fset = name
+		self.fset = fset
 	def getList(self):
 		return [self.name, self.fset]
 class ProjectInfo:
