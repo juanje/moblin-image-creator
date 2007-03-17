@@ -147,7 +147,8 @@ class esdkMain:
             #FIXME: finish packing this dialogue
             if (proj):
                 print "Project create OK"
-            #FIXME: error check
+                #FIXME: error check
+                proj.install()
                 self.projectView.append(new_project.getList())
 
     def on_about_activate(self, event):
