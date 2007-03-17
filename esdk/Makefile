@@ -16,4 +16,6 @@ clean:
 	find -name \*~ -exec rm -f {} \;
 
 cleanall: clean
-	rm -rf /usr/share/esdk
+	rm -rf /usr/share/esdk/lib
+	rm -rf /usr/share/esdk/platforms
+	rm -rf /usr/share/esdk/*.glade

@@ -214,7 +214,7 @@ class Target(FileSystem):
 if __name__ == '__main__':
     if len(sys.argv) != 6:
         print >> sys.stderr, "USAGE: %s PROJECT_NAME PROJECT_PATH PROJECT_DESCRIPTION TARGET_NAME PLATFORM_NAME" % (sys.argv[0])
-        print >> sys.stderr, "\tPROJECT_NAME: name to call the project.  The config file ~/.esdk/project_name.proj is used or created"
+        print >> sys.stderr, "\tPROJECT_NAME: name to call the project.  The config file /usr/share/esdk/projects/project_name.proj is used or created"
         print >> sys.stderr, "\tPROJECT_PATH: directory to install the project"
         print >> sys.stderr, "\tPROJECT_DESCRIPTION: Textual description of the project"
         print >> sys.stderr, "\tTARGET_NAME: ???"
@@ -252,7 +252,7 @@ if __name__ == '__main__':
     print "Name: %s" % proj.name
     print "Description: %s" % proj.desc
     if existing_project:
-        print "Used info from config file: ~/.esdk/%s.proj" % name
+        print "Used info from config file: /usr/share/esdk/projects/%s.proj" % name
         time.sleep(2)
 
     # see if the target exist

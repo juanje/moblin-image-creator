@@ -135,7 +135,7 @@ class PackageConfig(ConfigFile):
     The PackageConfig class abstracts a SDK project configuration file.
 
     example usage:
-    config = PackageConfig('~/.esdk/myproject.proj')
+    config = PackageConfig('/usr/share/esdk/projects/myproject.proj')
     print '~/esdk/myproject.proj: name=%s desc=%s path=%s platform=%s' %
           (config.name, config.desc, config.path, config.platform)
     """
@@ -148,7 +148,7 @@ class SDK(object):
     def __init__(self, path='/usr/share/esdk'):
         self.path = os.path.abspath(os.path.expanduser(path))
         
-        self.config_path = os.path.join(os.getenv('HOME'), '.esdk')
+        self.config_path = os.path.join(self.path, 'projects')
         if not os.path.isdir(self.config_path):
             os.mkdir(self.config_path)
 
@@ -177,7 +177,8 @@ class SDK(object):
         #   - create a new directory (i.e. path)
         #   - create the initial directory structure
         #   - setup the project configuration files both inside the project
-        #     directory, and also 'create the project config' in ~/.esdk/
+        #     directory, and also 'create the project config' in
+        #     /usr/share/esdk/projects/
 
         proj = SDK().create_project(self, '~/projects/myproject',
                                     'My Project',
