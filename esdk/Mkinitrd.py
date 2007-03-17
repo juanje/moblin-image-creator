@@ -64,7 +64,7 @@ def create(project, initrd_file):
     bin_path = os.path.join(scratch_path, 'bin')
 
     # Create directories
-    dirs = [ 'bin', 'boot', 'etc', 'dev', 'lib', 'mnt/install', 'mnt/fs', \
+    dirs = [ 'bin', 'boot', 'etc', 'dev', 'lib', 'mnt', \
              'proc', 'sys', 'sysroot', 'tmp', ]
     for dirname in dirs:
         os.makedirs(os.path.join(scratch_path, dirname))
@@ -101,15 +101,13 @@ mknod /dev/sda1 b 8 1
 mknod /dev/sda2 b 8 2
 mknod /dev/sda3 b 8 3
 mknod /dev/sdb b 8 16
-#resume LABEL=SWAP-hda3
-#echo Creating root device.
-#mkrootdev -t ext3 -o defaults,ro hda1
-#echo Mounting root filesystem.
-#mount /sysroot
-#echo Setting up other filesystems.
-#setuproot
-#echo Switching to new root and running init.
-#switchroot
+echo Mounting rootfs
+mkdir /newroot
+sleep 15
+mount -t vfat /dev/sda /newroot
+cd /newroot
+mkdir initrd
+pivot_root . initrd
 /bin/msh
 """
     init_file.close()
