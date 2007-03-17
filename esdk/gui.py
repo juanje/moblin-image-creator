@@ -58,7 +58,7 @@ class esdkMain:
         #read in project list using SDK()
         #FIXME: I'm only reading them, not saving a handle to each
         sdk = SDK()
-        for key in sdk.projects.keys():
+        for key in sorted(sdk.projects.iterkeys()):
             my_project = ProjectInfo()
             saved_projects = sdk.projects[key]
             print 'Found: name: %s ' % (saved_projects.name)
@@ -70,7 +70,7 @@ class esdkMain:
 
             #get Targets related to each project
             print "Targets for project: %s" % saved_projects.name
-            for t in saved_projects.targets.keys():
+            for t in sorted(saved_projects.targets.iterkeys()):
                 my_targets = saved_projects.targets[t]
                 print "\t%s" % my_targets.name
 
@@ -91,12 +91,12 @@ class esdkMain:
         print "User selected '%s' project, let's list the targets" % projName
 
         sdk = SDK()
-        for key in sdk.projects.keys():
+        for key in sorted(sdk.projects.iterkeys()):
             projects = sdk.projects[key]
-            if (projects.name == projName):
+            if projects.name == projName:
                 print "Found project %s in main projects list" % projects.name
                 print "Listing targets:"
-                for t in projects.targets.keys():
+                for t in sorted(projects.targets.iterkeys()):
                     t_target = TargetInfo()
                     my_target = projects.targets[t]
                     print "\t%s" % my_target.name
@@ -129,7 +129,7 @@ class esdkMain:
         new_project = AddNewProject();
         # Now call its run method
         result,new_project = AddNewProject.run(new_project)
-        if (result == gtk.RESPONSE_OK):
+        if result == gtk.RESPONSE_OK:
             # The user clicked Ok, so let's add this project to the projectList
             # list
             print "user pressed OK"
@@ -138,7 +138,7 @@ class esdkMain:
             print "platform %s "  % platform.name
             proj = sdk.create_project(new_project.path, new_project.name, new_project.desc, platform)
             # FIXME: finish packing this dialogue
-            if (proj):
+            if proj:
                 print "Project create OK"
                 #FIXME: error check
                 proj.install()
@@ -195,7 +195,7 @@ class NewTarget:
         self.Target.name = self.t_name.get_text()
         print "new target %s" % self.Target.name
 
-        if (self.result == gtk.RESPONSE_CANCEL):
+        if self.result == gtk.RESPONSE_CANCEL:
             print "User cancelled New project Add"
             self.dlg.destroy()
 
@@ -244,7 +244,7 @@ class AddNewProject:
         self.np_platform = self.widgets.get_widget("np_platform")
 
         platform_entry_box = gtk.ListStore(gobject.TYPE_STRING)
-        for pname in SDK().platforms.keys():
+        for pname in sorted(SDK().platforms.iterkeys()):
             platform_entry_box.append([pname])
 
         self.np_platform.set_model(platform_entry_box)
@@ -259,7 +259,7 @@ class AddNewProject:
         self.newProject.path = self.np_path.get_text()
         self.newProject.platform = self.np_platform.child.get_text()
 
-        if (self.result == gtk.RESPONSE_CANCEL):
+        if self.result == gtk.RESPONSE_CANCEL:
             print "User cancelled New project Add"
             self.newDlg.destroy()
 
