@@ -14,7 +14,7 @@ User list available projects:
 
 print 'Available projects: '
 sdk = SDK()
-for key in sdk.projects.keys():
+for key in sorted(sdk.projects.iterkeys()):
 	project = sdk.projects[key]
 	print '\t - %s: %s' % (project.name, project.path)
 
@@ -32,7 +32,7 @@ User list available platforms:
 
 print 'Available platforms:'
 sdk = SDK()
-for pname in sdk.platforms.keys():
+for pname in sorted(sdk.platforms.iterkeys()):
 	print '\t - %s' % sdk.platforms[pname].name 
 
 User creates a new project:
@@ -61,7 +61,7 @@ User list available targets installed in a project:
 Input => Project object
 
 print 'Available targets:'
-for key in project.targets.keys():
+for key in sorted(project.targets.iterkeys()):
 	target = project.targets[key]
 	print '\t - %s' % (target.name)
 
@@ -206,7 +206,7 @@ class SDK(object):
     def delete_project(self, project_name):
         # first delete all contained targets
         proj = self.projects[project_name]
-        for target in proj.targets.keys():
+        for target in proj.targets:
             proj.delete_target(target)
         # and then deal with the project
         proj.umount()
@@ -223,7 +223,7 @@ class SDK(object):
 class TestSDK(unittest.TestCase):
     def testInstantiate(self):
         sdk = SDK()
-        for key in sdk.projects.keys():
+        for key in sdk.projects:
                 project = sdk.projects[key]
                 a,b = (project.name, project.path)
     def testStrRepr(self):
