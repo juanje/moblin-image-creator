@@ -11,9 +11,7 @@ if not os.path.isfile(gladefile):
     raise IOError, "Glade file is missing from: %s" % gladefile
 
 class esdkMain:
-    """
-    This is our main
-    """
+    """This is our main"""
     def __init__(self):
         self.widgets = gtk.glade.XML (gladefile, 'main')
 
@@ -83,17 +81,14 @@ class esdkMain:
         self.selection.connect("changed", self.get_proj_targets)
 
     #populate the Targets list based on user-selected Project
-    """ Here we populate the targetList based on which
-    projectView row the use selected
-    """
     def get_proj_targets(self, selection):
-
+        """ Here we populate the targetList based on which projectView row the
+        use selected """
         #first clear whatever is already displayed
         self.targetView.clear()
         model, iter = selection.get_selected()
         projName = model[iter][0]
         print "User selected '%s' project, let's list the targets" % projName
-
 
         sdk = SDK()
         for key in sdk.projects.keys():
@@ -112,18 +107,16 @@ class esdkMain:
                     self.targetView.append(t_target.getList())
 
 
-
-
-    """Add project list column descriptions"""
     def set_plist(self, name, id):
+        """Add project list column descriptions"""
         column = gtk.TreeViewColumn(name, gtk.CellRendererText()
                 , text=id)
         column.set_resizable(True)
         column.set_sort_column_id(id)
         self.projectList.append_column(column)
 
-    """Add target list column descriptions"""
     def set_tlist(self, name, id):
+        """Add target list column descriptions"""
         column = gtk.TreeViewColumn(name, gtk.CellRendererText()
                 , text=id)
         column.set_resizable(True)
@@ -134,20 +127,20 @@ class esdkMain:
         print "New project Dialogue"
         """Instantiate a new dialogue"""
         new_project = AddNewProject();
-        """Now call its run method"""
+        # Now call its run method
         result,new_project = AddNewProject.run(new_project)
         if (result == gtk.RESPONSE_OK):
-            """The user clicked Ok, so let's add this
-            project to the projectList list"""
+            # The user clicked Ok, so let's add this project to the projectList
+            # list
             print "user pressed OK"
             sdk = SDK()
             platform = sdk.platforms[new_project.platform]
             print "platform %s "  % platform.name
             proj = sdk.create_project(new_project.path, new_project.name, new_project.desc, platform)
-            #FIXME: finish packing this dialogue
+            # FIXME: finish packing this dialogue
             if (proj):
                 print "Project create OK"
-            #FIXME: error check
+            # FIXME: error check
                 self.projectView.append(new_project.getList())
 
     def on_about_activate(self, event):
@@ -155,7 +148,7 @@ class esdkMain:
     def on_projectSave_clicked(self, event):
         print "Not yet implemented"
 
-    #Delete a Project
+    # Delete a Project
     def on_projectDelete_clicked(self, event):
         selection = self.projectList.get_selection()
 
@@ -187,21 +180,10 @@ class esdkMain:
                 project.create_target(new_name)
         self.targetView.append(newTarget.getList())
 
-
-
-
-
-class NewTargetInfo:
-    def __init__(self, name="", fset=""):
-        self.name = name
-        self.fset = fset
-    def getList(self):
-        return [self.name, self.fset]
-
 class NewTarget:
     """Class to add a new selected project target"""
     def __init__(self, name=""):
-        self.Target = NewTargetInfo(name)
+        self.Target = TargetInfo(name)
 
     def run(self):
         """Function to bring new project-target dialogue"""
@@ -223,8 +205,6 @@ class NewTarget:
         self.dlg.destroy()
 
         return self.result, self.Target
-
-
 
 class TargetInfo:
     """Class defining target elements"""
