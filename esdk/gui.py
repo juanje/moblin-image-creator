@@ -17,7 +17,7 @@ class esdkMain:
     """This is our main"""
     def __init__(self):
         self.widgets = gtk.glade.XML (gladefile, 'main')
-
+        # FIXME: Delete or uncomment below line
         #self.widgets.signal_autoconnect(callbacks.__dict__)
         dic = {"on_main_destroy_event" : gtk.main_quit,
                 "on_quit_activate" : gtk.main_quit,
@@ -27,39 +27,31 @@ class esdkMain:
                 "on_new_target_add_clicked": self.on_new_target_add_clicked,
                 "on_about_activate": self.on_about_activate}
         self.widgets.signal_autoconnect(dic)
-
-        #setup projectList widget
+        # setup projectList widget
         self.pName = "Name"
         self.pDesc = "Description"
         self.pPath = "Path"
         self.pPlatform = "Platform"
-
         self.projectList = self.widgets.get_widget("projectList")
         print "Setting Project List"
         self.set_plist(self.pName, 0)
         self.set_plist(self.pDesc, 1)
         self.set_plist(self.pPath, 2)
         self.set_plist(self.pPlatform, 3)
-
         self.projectView = gtk.ListStore(str, str, str, str)
         self.projectList.set_model(self.projectView)
         self.projectList.set_reorderable(1)
-
-        #Set targetList widget
+        # Set targetList widget
         self.tName = "Name"
         self.tFSet = "FSets"
-
         self.targetList = self.widgets.get_widget("targetList")
         print "Setting Target List"
         self.set_tlist(self.tName, 0)
         self.set_tlist(self.tFSet, 1)
-
         self.targetView = gtk.ListStore(str, str)
         self.targetList.set_model(self.targetView)
-
-
-        #read in project list using SDK()
-        #FIXME: I'm only reading them, not saving a handle to each
+        # read in project list using SDK()
+        # FIXME: I'm only reading them, not saving a handle to each
         sdk = SDK()
         for key in sorted(sdk.projects.iterkeys()):
             my_project = ProjectInfo()
@@ -67,18 +59,18 @@ class esdkMain:
             print 'Found: name: %s ' % (saved_projects.name)
             my_project.name = '%s' % saved_projects.name
             my_project.path = '%s' % saved_projects.path
+            # FIXME: Why isn't this set?  Either delete it or uncomment it
             #my_project.desc = saved_projects.desc
             my_project.platform = '%s' % saved_projects.platform.name
             self.projectView.append(my_project.getList())
 
-            #get Targets related to each project
+            # get Targets related to each project
             print "Targets for project: %s" % saved_projects.name
             for t in sorted(saved_projects.targets.iterkeys()):
                 my_targets = saved_projects.targets[t]
                 print "\t%s" % my_targets.name
-
-        #Connect project selection signal to list targets
-        #in the targetView widget: targetList
+        # Connect project selection signal to list targets in the targetView
+        # widget: targetList
         self.selection = self.projectList.get_selection()
         model, iter = self.selection.get_selected()
         self.selection.connect("changed", self.get_proj_targets)
@@ -92,7 +84,6 @@ class esdkMain:
         model, iter = selection.get_selected()
         projName = model[iter][0]
         print "User selected '%s' project, let's list the targets" % projName
-
         sdk = SDK()
         for key in sorted(sdk.projects.iterkeys()):
             projects = sdk.projects[key]
@@ -105,19 +96,16 @@ class esdkMain:
                     #ok let's add them to the widget targetView:targetList
                     self.targetView.append((my_target.name, ''))
 
-
     def set_plist(self, name, id):
         """Add project list column descriptions"""
-        column = gtk.TreeViewColumn(name, gtk.CellRendererText()
-                , text=id)
+        column = gtk.TreeViewColumn(name, gtk.CellRendererText(), text=id)
         column.set_resizable(True)
         column.set_sort_column_id(id)
         self.projectList.append_column(column)
 
     def set_tlist(self, name, id):
         """Add target list column descriptions"""
-        column = gtk.TreeViewColumn(name, gtk.CellRendererText()
-                , text=id)
+        column = gtk.TreeViewColumn(name, gtk.CellRendererText(), text=id)
         column.set_resizable(True)
         column.set_sort_column_id(id)
         self.targetList.append_column(column)
@@ -145,13 +133,13 @@ class esdkMain:
 
     def on_about_activate(self, event):
         gtk.AboutDialog()
+
     def on_projectSave_clicked(self, event):
         print "Not yet implemented"
 
-    # Delete a Project
     def on_projectDelete_clicked(self, event):
+        """Delete a Project"""
         selection = self.projectList.get_selection()
-
         model, iter = selection.get_selected()
         projectName = model[iter][0]
         print "Deleting project: %s" % projectName
@@ -163,15 +151,12 @@ class esdkMain:
         # Open the "New Target" dialog
         ntDlg = NewTarget();
         result, target = ntDlg.run()
-
         # Verify we have valid data
         if not target.name or result != gtk.RESPONSE_OK:
             return
-
         # Get the user provided target name, and create the target
         model, iter = self.projectList.get_selection().get_selected()
         SDK().projects[model[iter][0]].create_target(target.name)
-
         # Update the list of targets
         self.targetView.append(target.getList())
 
@@ -184,21 +169,15 @@ class NewTarget:
         """Function to bring new project-target dialogue"""
         self.widget = gtk.glade.XML(gladefile, "nt_dlg")
         self.dlg = self.widget.get_widget("nt_dlg")
-
         self.t_name = self.widget.get_widget("nt_name")
         self.t_name.set_text(self.Target.name)
-
         self.result = self.dlg.run()
-
         self.Target.name = self.t_name.get_text()
         print "new target %s" % self.Target.name
-
         if self.result == gtk.RESPONSE_CANCEL:
             print "User cancelled New project Add"
             self.dlg.destroy()
-
         self.dlg.destroy()
-
         return self.result, self.Target
 
 class TargetInfo:
@@ -206,8 +185,10 @@ class TargetInfo:
     def __init__(self, name="", fset=""):
         self.name = name
         self.fset = fset
+
     def getList(self):
         return (self.name, self.fset)
+
 class ProjectInfo:
     """Class to store new project info before we persist"""
     def __init__(self, name="", desc="", path="", platform=""):
@@ -215,6 +196,7 @@ class ProjectInfo:
         self.desc = desc
         self.path = path
         self.platform = platform
+
     def getList(self):
         return (self.name, self.desc, self.path, self.platform)
 
@@ -223,16 +205,18 @@ class AddNewProject:
     def __init__(self, name="", desc="", path="", platform=""):
         self.gladefile = gladefile
         self.newProject = ProjectInfo(name,desc,path,platform)
+
     def on_newDlg_destroy(event):
         print "Destroying dialogue"
         gtk.newProject.destroy()
+
     def on_newDlg_cancel_clicked(event):
         print "dialogue closing"
+
     def run(self):
         self.widgets = gtk.glade.XML (gladefile, 'newProject')
         self.newDlg = self.widgets.get_widget('newProject')
-
-        #Get all of the Entry Widgets and set their text
+        # Get all of the Entry Widgets and set their text
         self.np_name = self.widgets.get_widget("np_name")
         self.np_name.set_text(self.newProject.name)
         self.np_desc = self.widgets.get_widget("np_desc")
@@ -240,29 +224,22 @@ class AddNewProject:
         self.np_path = self.widgets.get_widget("np_path")
         self.np_path.set_text(self.newProject.path)
         self.np_platform = self.widgets.get_widget("np_platform")
-
         platform_entry_box = gtk.ListStore(gobject.TYPE_STRING)
         for pname in sorted(SDK().platforms.iterkeys()):
             platform_entry_box.append([pname])
-
         self.np_platform.set_model(platform_entry_box)
         self.np_platform.set_text_column(0)
         self.np_platform.child.set_text(platform_entry_box[0][0])
-
         self.result = self.newDlg.run()
-
-        #get the values
+        # get the values
         self.newProject.name = self.np_name.get_text()
         self.newProject.desc = self.np_desc.get_text()
         self.newProject.path = self.np_path.get_text()
         self.newProject.platform = self.np_platform.child.get_text()
-
         if self.result == gtk.RESPONSE_CANCEL:
             print "User cancelled New project Add"
             self.newDlg.destroy()
-
         self.newDlg.destroy()
-
         return self.result,self.newProject
 
 if __name__ == '__main__':
