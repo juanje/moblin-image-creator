@@ -124,8 +124,8 @@ class esdkMain:
         self.targetList.append_column(column)
 
     def on_newProject_clicked(self, widget):
-        print "New project Dialogue"
         """Instantiate a new dialogue"""
+        print "New project Dialogue"
         new_project = AddNewProject();
         # Now call its run method
         result,new_project = AddNewProject.run(new_project)
@@ -215,7 +215,7 @@ class TargetInfo:
     def getList(self):
         return [self.name, self.fset]
 class ProjectInfo:
-    """Class to store new project info before we persisit"""
+    """Class to store new project info before we persist"""
     def __init__(self, name="", desc="", path="", platform=""):
         self.name = name
         self.desc = desc
@@ -227,7 +227,7 @@ class ProjectInfo:
 class AddNewProject:
     """Class to bring up AddNewProject dialogue"""
     def __init__(self, name="", desc="", path="", platform=""):
-        self.gladefile = '/usr/share/esdk/esdk.glade'
+        self.gladefile = gladefile
         self.newProject = ProjectInfo(name,desc,path,platform)
     def on_newDlg_destroy(event):
         print "Destroying dialogue"
