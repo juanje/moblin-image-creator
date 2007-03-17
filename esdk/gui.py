@@ -63,7 +63,6 @@ class esdkMain:
             #my_project.desc = saved_projects.desc
             my_project.platform = '%s' % saved_projects.platform.name
             self.projectView.append(my_project.getList())
-
             # get Targets related to each project
             print "Targets for project: %s" % saved_projects.name
             for t in sorted(saved_projects.targets.iterkeys()):
@@ -75,11 +74,10 @@ class esdkMain:
         model, iter = self.selection.get_selected()
         self.selection.connect("changed", self.get_proj_targets)
 
-    #populate the Targets list based on user-selected Project
     def get_proj_targets(self, selection):
         """ Here we populate the targetList based on which projectView row the
         use selected """
-        #first clear whatever is already displayed
+        # first clear whatever is already displayed
         self.targetView.clear()
         model, iter = selection.get_selected()
         projName = model[iter][0]
@@ -93,7 +91,7 @@ class esdkMain:
                 for t in sorted(projects.targets.iterkeys()):
                     my_target = projects.targets[t]
                     print "\t%s" % my_target.name
-                    #ok let's add them to the widget targetView:targetList
+                    # ok let's add them to the widget targetView:targetList
                     self.targetView.append((my_target.name, ''))
 
     def set_plist(self, name, id):
@@ -127,7 +125,7 @@ class esdkMain:
             # FIXME: finish packing this dialogue
             if proj:
                 print "Project create OK"
-                #FIXME: error check
+                # FIXME: error check
                 proj.install()
                 self.projectView.append(new_project.getList())
 
