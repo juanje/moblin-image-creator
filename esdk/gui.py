@@ -261,6 +261,7 @@ class AddNewProject:
 
     def run(self):
         self.widgets = gtk.glade.XML (gladefile, 'newProject')
+        self.widgets.signal_autoconnect({"on_browse": self.on_browse})
         self.newDlg = self.widgets.get_widget('newProject')
         # Get all of the Entry Widgets and set their text
         self.np_name = self.widgets.get_widget("np_name")
@@ -288,6 +289,14 @@ class AddNewProject:
         self.newDlg.destroy()
         return self.result,self.newProject
 
+    def on_browse(self, button):
+        dialog = gtk.FileChooserDialog(action=gtk.FILE_CHOOSER_ACTION_SELECT_FOLDER, title="Choose Project Directory")
+        dialog.add_button(gtk.STOCK_OK, gtk.RESPONSE_OK)
+        dialog.add_button(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL)
+        if dialog.run() == gtk.RESPONSE_OK:
+            self.np_path.set_text(dialog.get_current_folder())
+        dialog.destroy()
+        
 class MainWindowButtons:
     def __init__(self, widgets):
         # Project button bar
