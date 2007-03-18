@@ -183,6 +183,13 @@ class Target(FileSystem):
         # Instantiate the target filesystem
         FileSystem.__init__(self, self.fs_path, project.platform.target_repos)
 
+    def installed_fsets(self):
+        result = []
+        for fset in os.listdir(self.top):
+            if fset not in ['fs', 'image']:
+                result.append(fset)
+        return result
+        
     def install(self, fset, debug=0):
         """
         Install a fset into the target filesystem
