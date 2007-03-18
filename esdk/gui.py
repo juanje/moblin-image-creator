@@ -156,15 +156,13 @@ class esdkMain:
 
     def on_new_target_add_clicked(self, widget):
         # Open the "New Target" dialog
-        ntDlg = NewTarget();
-        result, target = ntDlg.run()
-        # Verify we have valid data
-        if not target.name or result != gtk.RESPONSE_OK:
-            return
-        # Get the user provided target name, and create the target
-        self.current_project().create_target(target.name)
-        # Update the list of targets
-        self.targetList.append(target.getList())
+        widgets = gtk.glade.XML(gladefile, 'nt_dlg')
+        dialog = widgets.get_widget('nt_dlg')
+        if dialog.run() == gtk.RESPONSE_OK:
+            target_name = widgets.get_widget('nt_name').get_text()
+            self.current_project().create_target(target_name)
+            self.targetList.append((target_name, ''))
+        dialog.destroy()
 
     def on_install_fset(self, widget):
         tree = gtk.glade.XML(gladefile, 'installFsetDialog')
@@ -206,35 +204,6 @@ class esdkMain:
     def remove_current_target(self):
         model, iter = self.targetView.get_selection().get_selected()
         self.targetList.remove(iter)
-
-class NewTarget:
-    """Class to add a new selected project target"""
-    def __init__(self, name=""):
-        self.Target = TargetInfo(name)
-
-    def run(self):
-        """Function to bring new project-target dialogue"""
-        self.widget = gtk.glade.XML(gladefile, "nt_dlg")
-        self.dlg = self.widget.get_widget("nt_dlg")
-        self.t_name = self.widget.get_widget("nt_name")
-        self.t_name.set_text(self.Target.name)
-        self.result = self.dlg.run()
-        self.Target.name = self.t_name.get_text()
-        print "new target %s" % self.Target.name
-        if self.result == gtk.RESPONSE_CANCEL:
-            print "User cancelled New project Add"
-            self.dlg.destroy()
-        self.dlg.destroy()
-        return self.result, self.Target
-
-class TargetInfo:
-    """Class defining target elements"""
-    def __init__(self, name="", fset=""):
-        self.name = name
-        self.fset = fset
-
-    def getList(self):
-        return (self.name, self.fset)
 
 class ProjectInfo:
     """Class to store new project info before we persist"""
