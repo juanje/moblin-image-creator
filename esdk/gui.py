@@ -17,8 +17,6 @@ class esdkMain:
     """This is our main"""
     def __init__(self):
         self.widgets = gtk.glade.XML (gladefile, 'main')
-        # FIXME: Delete or uncomment below line
-        #self.widgets.signal_autoconnect(callbacks.__dict__)
         dic = {"on_main_destroy_event" : gtk.main_quit,
                 "on_quit_activate" : gtk.main_quit,
                 "on_newProject_clicked" : self.on_newProject_clicked,
@@ -163,7 +161,8 @@ class esdkMain:
         cebox.set_text_column(0)
         cebox.child.set_text(list[0][0])
         if dialog.run() == gtk.RESPONSE_OK:
-            print "Install the fset %s" % (cebox.child.get_text())
+            fset = self.current_project().platform.fset[cebox.child.get_text()]
+            self.current_target().install(fset)
         dialog.destroy()
         
     def on_delete_target_clicked(self, widget):
