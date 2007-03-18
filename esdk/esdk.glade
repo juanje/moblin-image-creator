@@ -294,7 +294,7 @@ Tariq Shureih</property>
 		      </child>
 
 		      <child>
-			<widget class="GtkScrolledWindow" id="projectList_scroll">
+			<widget class="GtkScrolledWindow" id="projectView_scroll">
 			  <property name="width_request">517</property>
 			  <property name="height_request">149</property>
 			  <property name="visible">True</property>
@@ -305,7 +305,7 @@ Tariq Shureih</property>
 			  <property name="window_placement">GTK_CORNER_TOP_LEFT</property>
 
 			  <child>
-			    <widget class="GtkTreeView" id="projectList">
+			    <widget class="GtkTreeView" id="projectView">
 			      <property name="visible">True</property>
 			      <property name="tooltip" translatable="yes">List of projects saved</property>
 			      <property name="can_focus">True</property>
@@ -494,7 +494,7 @@ Tariq Shureih</property>
 	  <property name="column_spacing">0</property>
 
 	  <child>
-	    <widget class="GtkScrolledWindow" id="targetList_scroll">
+	    <widget class="GtkScrolledWindow" id="targetView_scroll">
 	      <property name="visible">True</property>
 	      <property name="can_focus">True</property>
 	      <property name="hscrollbar_policy">GTK_POLICY_ALWAYS</property>
@@ -503,7 +503,7 @@ Tariq Shureih</property>
 	      <property name="window_placement">GTK_CORNER_TOP_LEFT</property>
 
 	      <child>
-		<widget class="GtkTreeView" id="targetList">
+		<widget class="GtkTreeView" id="targetView">
 		  <property name="width_request">475</property>
 		  <property name="height_request">88</property>
 		  <property name="visible">True</property>

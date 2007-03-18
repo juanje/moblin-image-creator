@@ -35,29 +35,29 @@ class esdkMain:
                 "on_install_fset": self.on_install_fset,
                 "on_about_activate": self.on_about_activate}
         self.widgets.signal_autoconnect(dic)
-        # setup projectList widget
+        # setup projectView widget
         self.pName = "Name"
         self.pDesc = "Description"
         self.pPath = "Path"
         self.pPlatform = "Platform"
-        self.projectList = self.widgets.get_widget("projectList")
+        self.projectView = self.widgets.get_widget("projectView")
         print "Setting Project List"
         self.set_plist(self.pName, 0)
         self.set_plist(self.pDesc, 1)
         self.set_plist(self.pPath, 2)
         self.set_plist(self.pPlatform, 3)
-        self.projectView = gtk.ListStore(str, str, str, str)
-        self.projectList.set_model(self.projectView)
-        self.projectList.set_reorderable(1)
-        # Set targetList widget
+        self.projectList = gtk.ListStore(str, str, str, str)
+        self.projectView.set_model(self.projectList)
+        self.projectView.set_reorderable(1)
+        # Set targetView widget
         self.tName = "Name"
         self.tFSet = "FSets"
-        self.targetList = self.widgets.get_widget("targetList")
+        self.targetView = self.widgets.get_widget("targetView")
         print "Setting Target List"
         self.set_tlist(self.tName, 0)
         self.set_tlist(self.tFSet, 1)
-        self.targetView = gtk.ListStore(str, str)
-        self.targetList.set_model(self.targetView)
+        self.targetList = gtk.ListStore(str, str)
+        self.targetView.set_model(self.targetList)
         # read in project list using SDK()
         # FIXME: I'm only reading them, not saving a handle to each
         sdk = SDK()
@@ -69,38 +69,38 @@ class esdkMain:
             my_project.path = '%s' % saved_projects.path
             my_project.desc = saved_projects.desc
             my_project.platform = '%s' % saved_projects.platform.name
-            self.projectView.append(my_project.getList())
+            self.projectList.append(my_project.getList())
             # get Targets related to each project
             print "Targets for project: %s" % saved_projects.name
             for t in sorted(saved_projects.targets.iterkeys()):
                 my_targets = saved_projects.targets[t]
                 print "\t%s" % my_targets.name
-        # Connect project selection signal to list targets in the targetView
-        # widget: targetList
-        selection = self.projectList.get_selection()
+        # Connect project selection signal to list targets in the targetList
+        # widget: targetView
+        selection = self.projectView.get_selection()
         selection.connect("changed", self.get_proj_targets)
 
     def get_proj_targets(self, selection):
-        self.targetView.clear()
+        self.targetList.clear()
         for key in self.current_project().targets:
             installed_fsets = ''
             for fset in self.current_project().targets[key].installed_fsets():
                 installed_fsets = installed_fsets + fset + ' '
-            self.targetView.append((key, installed_fsets))
+            self.targetList.append((key, installed_fsets))
 
     def set_plist(self, name, id):
         """Add project list column descriptions"""
         column = gtk.TreeViewColumn(name, gtk.CellRendererText(), text=id)
         column.set_resizable(True)
         column.set_sort_column_id(id)
-        self.projectList.append_column(column)
+        self.projectView.append_column(column)
 
     def set_tlist(self, name, id):
         """Add target list column descriptions"""
         column = gtk.TreeViewColumn(name, gtk.CellRendererText(), text=id)
         column.set_resizable(True)
         column.set_sort_column_id(id)
-        self.targetList.append_column(column)
+        self.targetView.append_column(column)
 
     def on_newProject_clicked(self, widget):
         """Instantiate a new dialogue"""
@@ -109,7 +109,7 @@ class esdkMain:
         # Now call its run method
         result,new_project = AddNewProject.run(new_project)
         if result == gtk.RESPONSE_OK:
-            # The user clicked Ok, so let's add this project to the projectList
+            # The user clicked Ok, so let's add this project to the projectView
             # list
             print "user pressed OK"
             sdk = SDK()
@@ -121,7 +121,7 @@ class esdkMain:
                 print "Project create OK"
                 # FIXME: error check
                 proj.install()
-                self.projectView.append(new_project.getList())
+                self.projectList.append(new_project.getList())
 
     def on_about_activate(self, event):
         gtk.AboutDialog()
@@ -150,7 +150,7 @@ class esdkMain:
         # Get the user provided target name, and create the target
         self.current_project().create_target(target.name)
         # Update the list of targets
-        self.targetView.append(target.getList())
+        self.targetList.append(target.getList())
 
     def on_install_fset(self, widget):
         tree = gtk.glade.XML(gladefile, 'installFsetDialog')
@@ -178,20 +178,20 @@ class esdkMain:
         dialog.destroy()
 
     def current_project(self):
-        model, iter = self.projectList.get_selection().get_selected()
+        model, iter = self.projectView.get_selection().get_selected()
         return SDK().projects[model[iter][0]]
 
     def current_target(self):
-        model, iter = self.targetList.get_selection().get_selected()
+        model, iter = self.targetView.get_selection().get_selected()
         return self.current_project().targets[model[iter][0]]
 
     def remove_current_project(self):
-        model, iter = self.projectList.get_selection().get_selected()
-        self.projectView.remove(iter)
+        model, iter = self.projectView.get_selection().get_selected()
+        self.projectList.remove(iter)
 
     def remove_current_target(self):
-        model, iter = self.targetList.get_selection().get_selected()
-        self.targetView.remove(iter)
+        model, iter = self.targetView.get_selection().get_selected()
+        self.targetList.remove(iter)
 
 class NewTarget:
     """Class to add a new selected project target"""
