@@ -136,8 +136,16 @@ class esdkMain:
                 self.projectList.append(new_project.getList())
 
     def on_about_activate(self, event):
-        gtk.AboutDialog()
-
+        dialog = gtk.AboutDialog()
+        dialog.set_name('Embedded Linux SDK: Project Builder')
+        dialog.set_version('0.01 Pre-Alpha')
+        dialog.set_comments('This is the graphical user front-end to the project-builder utility')
+        dialog.set_license('TODO: Add License')
+        dialog.set_website('http://umd.jf.intel.com')
+        dialog.set_website_label('ESDK Developement')
+        dialog.run()
+        dialog.destroy()
+        
     def on_projectSave_clicked(self, event):
         print "Not yet implemented"
 

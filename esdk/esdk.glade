@@ -154,11 +154,24 @@ Tariq Shureih</property>
 	  </child>
 
 	  <child>
-	    <widget class="GtkMenuItem" id="about3">
+	    <widget class="GtkMenuItem" id="help1">
 	      <property name="visible">True</property>
-	      <property name="label" translatable="yes">_About</property>
+	      <property name="label" translatable="yes">Help</property>
 	      <property name="use_underline">True</property>
-	      <signal name="activate" handler="on_about_activate" last_modification_time="Tue, 13 Mar 2007 07:29:06 GMT"/>
+
+	      <child>
+		<widget class="GtkMenu" id="help1_menu">
+
+		  <child>
+		    <widget class="GtkMenuItem" id="about3">
+		      <property name="visible">True</property>
+		      <property name="label" translatable="yes">_About</property>
+		      <property name="use_underline">True</property>
+		      <signal name="activate" handler="on_about_activate" last_modification_time="Tue, 13 Mar 2007 07:29:06 GMT"/>
+		    </widget>
+		  </child>
+		</widget>
+	      </child>
 	    </widget>
 	  </child>
 	</widget>
