@@ -110,24 +110,12 @@ class esdkMain:
 
     def on_newProject_clicked(self, widget):
         """Instantiate a new dialogue"""
-        print "New project Dialogue"
-        new_project = AddNewProject();
-        # Now call its run method
-        result,new_project = AddNewProject.run(new_project)
+        dialog = AddNewProject();
+        result = dialog.run()
         if result == gtk.RESPONSE_OK:
-            # The user clicked Ok, so let's add this project to the projectView
-            # list
-            print "user pressed OK"
             sdk = SDK()
-            platform = sdk.platforms[new_project.platform]
-            print "platform %s "  % platform.name
-            proj = sdk.create_project(new_project.path, new_project.name, new_project.desc, platform)
-            # FIXME: finish packing this dialogue
-            if proj:
-                print "Project create OK"
-                # FIXME: error check
-                proj.install()
-                self.projectList.append(new_project.getList())
+            sdk.create_project(dialog.path, dialog.name, dialog.desc, sdk.platforms[dialog.platform]).install()
+            self.projectList.append((dialog.name, dialog.desc, dialog.path, dialog.platform))
 
     def on_about_activate(self, event):
         dialog = gtk.AboutDialog()
@@ -205,58 +193,37 @@ class esdkMain:
         model, iter = self.targetView.get_selection().get_selected()
         self.targetList.remove(iter)
 
-class ProjectInfo:
-    """Class to store new project info before we persist"""
-    def __init__(self, name="", desc="", path="", platform=""):
-        self.name = name
-        self.desc = desc
-        self.path = path
-        self.platform = platform
-
-    def getList(self):
-        return (self.name, self.desc, self.path, self.platform)
-
 class AddNewProject:
     """Class to bring up AddNewProject dialogue"""
     def __init__(self, name="", desc="", path="", platform=""):
-        self.newProject = ProjectInfo(name,desc,path,platform)
-
-    def on_newDlg_destroy(event):
-        print "Destroying dialogue"
-        gtk.newProject.destroy()
-
-    def on_newDlg_cancel_clicked(event):
-        print "dialogue closing"
-
-    def run(self):
-        self.widgets = gtk.glade.XML (gladefile, 'newProject')
-        self.widgets.signal_autoconnect({"on_browse": self.on_browse})
-        self.newDlg = self.widgets.get_widget('newProject')
-        # Get all of the Entry Widgets and set their text
-        self.np_name = self.widgets.get_widget("np_name")
-        self.np_name.set_text(self.newProject.name)
-        self.np_desc = self.widgets.get_widget("np_desc")
-        self.np_desc.set_text(self.newProject.desc)
-        self.np_path = self.widgets.get_widget("np_path")
-        self.np_path.set_text(self.newProject.path)
-        self.np_platform = self.widgets.get_widget("np_platform")
+        widgets = gtk.glade.XML (gladefile, 'newProject')
+        widgets.signal_autoconnect({"on_browse": self.on_browse})
+        self.dialog = widgets.get_widget('newProject')
+        self.np_name = widgets.get_widget("np_name")
+        self.np_name.set_text(name)
+        self.np_desc = widgets.get_widget("np_desc")
+        self.np_desc.set_text(desc)
+        self.np_path = widgets.get_widget("np_path")
+        self.np_path.set_text(path)
+        self.np_platform = widgets.get_widget("np_platform")
         platform_entry_box = gtk.ListStore(gobject.TYPE_STRING)
         for pname in sorted(SDK().platforms.iterkeys()):
             platform_entry_box.append([pname])
         self.np_platform.set_model(platform_entry_box)
         self.np_platform.set_text_column(0)
-        self.np_platform.child.set_text(platform_entry_box[0][0])
-        self.result = self.newDlg.run()
-        # get the values
-        self.newProject.name = self.np_name.get_text()
-        self.newProject.desc = self.np_desc.get_text()
-        self.newProject.path = self.np_path.get_text()
-        self.newProject.platform = self.np_platform.child.get_text()
-        if self.result == gtk.RESPONSE_CANCEL:
-            print "User cancelled New project Add"
-            self.newDlg.destroy()
-        self.newDlg.destroy()
-        return self.result,self.newProject
+        if platform:
+            self.np_platform.child.set_text(platform)
+        else:
+            self.np_platform.child.set_text(platform_entry_box[0][0])
+
+    def run(self):
+        result = self.dialog.run()
+        self.name = self.np_name.get_text()
+        self.desc = self.np_desc.get_text()
+        self.path = self.np_path.get_text()
+        self.platform = self.np_platform.child.get_text()
+        self.dialog.destroy()
+        return result
 
     def on_browse(self, button):
         dialog = gtk.FileChooserDialog(action=gtk.FILE_CHOOSER_ACTION_SELECT_FOLDER, title="Choose Project Directory")
