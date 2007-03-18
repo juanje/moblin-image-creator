@@ -26,6 +26,7 @@ class esdkMain:
                 "on_projectSave_clicked": self.on_projectSave_clicked,
                 "on_new_target_add_clicked": self.on_new_target_add_clicked,
                 "on_delete_target_clicked": self.on_delete_target_clicked,
+                "on_install_fset": self.on_install_fset,
                 "on_about_activate": self.on_about_activate}
         self.widgets.signal_autoconnect(dic)
         # setup projectList widget
@@ -71,29 +72,16 @@ class esdkMain:
                 print "\t%s" % my_targets.name
         # Connect project selection signal to list targets in the targetView
         # widget: targetList
-        self.selection = self.projectList.get_selection()
-        model, iter = self.selection.get_selected()
-        self.selection.connect("changed", self.get_proj_targets)
+        selection = self.projectList.get_selection()
+        selection.connect("changed", self.get_proj_targets)
 
     def get_proj_targets(self, selection):
-        """ Here we populate the targetList based on which projectView row the
-        use selected """
-        # first clear whatever is already displayed
         self.targetView.clear()
-        model, iter = selection.get_selected()
-        projName = model[iter][0]
-        print "User selected '%s' project, let's list the targets" % projName
-        sdk = SDK()
-        for key in sorted(sdk.projects.iterkeys()):
-            projects = sdk.projects[key]
-            if projects.name == projName:
-                print "Found project %s in main projects list" % projects.name
-                print "Listing targets:"
-                for t in sorted(projects.targets.iterkeys()):
-                    my_target = projects.targets[t]
-                    print "\t%s" % my_target.name
-                    # ok let's add them to the widget targetView:targetList
-                    self.targetView.append((my_target.name, ''))
+        for key in self.current_project().targets:
+            installed_fsets = ''
+            for fset in self.current_project().targets[key].installed_fsets():
+                installed_fsets = installed_fsets + fset + ' '
+            self.targetView.append((key, installed_fsets))
 
     def set_plist(self, name, id):
         """Add project list column descriptions"""
@@ -138,15 +126,13 @@ class esdkMain:
 
     def on_projectDelete_clicked(self, event):
         """Delete a Project"""
-        selection = self.projectList.get_selection()
-        model, iter = selection.get_selected()
-        projectName = model[iter][0]
+        project = self.current_project()
         tree = gtk.glade.XML(gladefile, 'qDialog')
-        tree.get_widget('queryLabel').set_text("Delete the %s project?" % (projectName))
+        tree.get_widget('queryLabel').set_text("Delete the %s project?" % (project.name))
         dialog = tree.get_widget('qDialog')
         if dialog.run() == gtk.RESPONSE_OK:
-            SDK().delete_project(projectName)
-            self.projectView.remove(iter)
+            SDK().delete_project(project.name)
+            self.remove_current_project()
         dialog.destroy()
 
     def on_new_target_add_clicked(self, widget):
@@ -157,24 +143,51 @@ class esdkMain:
         if not target.name or result != gtk.RESPONSE_OK:
             return
         # Get the user provided target name, and create the target
-        model, iter = self.projectList.get_selection().get_selected()
-        SDK().projects[model[iter][0]].create_target(target.name)
+        self.current_project().create_target(target.name)
         # Update the list of targets
         self.targetView.append(target.getList())
 
-    def on_delete_target_clicked(self, widget):
-        model, iter = self.projectList.get_selection().get_selected()
-        projectName = model[iter][0]
-        model, iter = self.targetList.get_selection().get_selected()
-        targetName = model[iter][0]
-        tree = gtk.glade.XML(gladefile, 'qDialog')
-        tree.get_widget('queryLabel').set_text("Delete target %s from project %s?" % (targetName, projectName))
-        dialog = tree.get_widget('qDialog')
+    def on_install_fset(self, widget):
+        tree = gtk.glade.XML(gladefile, 'installFsetDialog')
+        dialog = tree.get_widget('installFsetDialog')
+        list = gtk.ListStore(gobject.TYPE_STRING)            
+        for fset in self.current_project().platform.fset:
+            list.append([fset])
+        cebox = tree.get_widget('installed_fsets')
+        cebox.set_model(list)
+        cebox.set_text_column(0)
+        cebox.child.set_text(list[0][0])
         if dialog.run() == gtk.RESPONSE_OK:
-            SDK().projects[projectName].delete_target(targetName)
-            self.targetView.remove(iter)
+            print "Install the fset %s" % (cebox.child.get_text())
         dialog.destroy()
         
+    def on_delete_target_clicked(self, widget):
+        project = self.current_project()
+        target = self.current_target()
+        tree = gtk.glade.XML(gladefile, 'qDialog')
+        tree.get_widget('queryLabel').set_text("Delete target %s from project %s?" % (target.name, project.name))
+        dialog = tree.get_widget('qDialog')
+        if dialog.run() == gtk.RESPONSE_OK:
+            SDK().projects[project.name].delete_target(target.name)
+            self.remove_current_target()
+        dialog.destroy()
+
+    def current_project(self):
+        model, iter = self.projectList.get_selection().get_selected()
+        return SDK().projects[model[iter][0]]
+
+    def current_target(self):
+        model, iter = self.targetList.get_selection().get_selected()
+        return self.current_project().targets[model[iter][0]]
+
+    def remove_current_project(self):
+        model, iter = self.projectList.get_selection().get_selected()
+        self.projectView.remove(iter)
+
+    def remove_current_target(self):
+        model, iter = self.targetList.get_selection().get_selected()
+        self.targetView.remove(iter)
+
 class NewTarget:
     """Class to add a new selected project target"""
     def __init__(self, name=""):
