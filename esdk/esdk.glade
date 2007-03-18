@@ -212,22 +212,6 @@ Tariq Shureih</property>
 	      </child>
 
 	      <child>
-		<widget class="GtkToolButton" id="project_save">
-		  <property name="visible">True</property>
-		  <property name="sensitive">False</property>
-		  <property name="stock_id">gtk-save</property>
-		  <property name="visible_horizontal">True</property>
-		  <property name="visible_vertical">True</property>
-		  <property name="is_important">False</property>
-		  <signal name="clicked" handler="on_projectSave_clicked" last_modification_time="Tue, 13 Mar 2007 06:31:06 GMT"/>
-		</widget>
-		<packing>
-		  <property name="expand">False</property>
-		  <property name="homogeneous">True</property>
-		</packing>
-	      </child>
-
-	      <child>
 		<widget class="GtkToolButton" id="project_delete">
 		  <property name="visible">True</property>
 		  <property name="sensitive">False</property>

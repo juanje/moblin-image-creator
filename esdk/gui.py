@@ -21,7 +21,6 @@ class esdkMain:
                 "on_quit_activate" : gtk.main_quit,
                 "on_newProject_clicked" : self.on_newProject_clicked,
                 "on_projectDelete_clicked": self.on_projectDelete_clicked,
-                "on_projectSave_clicked": self.on_projectSave_clicked,
                 "on_new_target_add_clicked": self.on_new_target_add_clicked,
                 "on_delete_target_clicked": self.on_delete_target_clicked,
                 "on_install_fset": self.on_install_fset,
@@ -33,7 +32,6 @@ class esdkMain:
         self.pPath = "Path"
         self.pPlatform = "Platform"
         self.projectView = self.widgets.get_widget("projectView")
-        print "Setting Project List"
         self.set_plist(self.pName, 0)
         self.set_plist(self.pDesc, 1)
         self.set_plist(self.pPath, 2)
@@ -45,7 +43,6 @@ class esdkMain:
         self.tName = "Name"
         self.tFSet = "FSets"
         self.targetView = self.widgets.get_widget("targetView")
-        print "Setting Target List"
         self.set_tlist(self.tName, 0)
         self.set_tlist(self.tFSet, 1)
         self.targetList = gtk.ListStore(str, str)
@@ -126,9 +123,6 @@ class esdkMain:
         dialog.run()
         dialog.destroy()
         
-    def on_projectSave_clicked(self, event):
-        print "Not yet implemented"
-
     def on_projectDelete_clicked(self, event):
         """Delete a Project"""
         project = self.current_project()
