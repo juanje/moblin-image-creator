@@ -60,8 +60,7 @@ class esdkMain:
             print 'Found: name: %s ' % (saved_projects.name)
             my_project.name = '%s' % saved_projects.name
             my_project.path = '%s' % saved_projects.path
-            # FIXME: Why isn't this set?  Either delete it or uncomment it
-            #my_project.desc = saved_projects.desc
+            my_project.desc = saved_projects.desc
             my_project.platform = '%s' % saved_projects.platform.name
             self.projectView.append(my_project.getList())
             # get Targets related to each project
