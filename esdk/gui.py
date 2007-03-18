@@ -75,13 +75,38 @@ class esdkMain:
             for t in sorted(saved_projects.targets.iterkeys()):
                 my_targets = saved_projects.targets[t]
                 print "\t%s" % my_targets.name
+        self.buttons = MainWindowButtons(self.widgets)
         # Connect project selection signal to list targets in the targetList
         # widget: targetView
-        selection = self.projectView.get_selection()
-        selection.connect("changed", self.get_proj_targets)
+        self.projectView.get_selection().connect("changed", self.project_view_changed)
+        self.targetView.get_selection().connect("changed", self.target_view_changed)
 
-    def get_proj_targets(self, selection):
+    def target_view_changed(self, selection):
+        model, iter = self.targetView.get_selection().get_selected()
+        if not iter:
+            # No targets are selected
+            self.buttons.delete_target.set_sensitive(False)
+            self.buttons.install_fset.set_sensitive(False)
+            return
+        # A target has been selected
+        self.buttons.delete_target.set_sensitive(True)
+        self.buttons.install_fset.set_sensitive(True)
+        
+    def project_view_changed(self, selection):
         self.targetList.clear()
+        model, iter = self.projectView.get_selection().get_selected()
+        if not iter:
+            # No projects are selected
+            self.buttons.delete_project.set_sensitive(False)
+            self.buttons.save_project.set_sensitive(False)
+            self.buttons.add_target.set_sensitive(False)
+            self.buttons.install_fset.set_sensitive(False)
+            self.buttons.delete_target.set_sensitive(False)
+            return
+        # We have a project selected, so it makes sense for the
+        # delete project and add target buttons to be sensitive
+        self.buttons.delete_project.set_sensitive(True)
+        self.buttons.add_target.set_sensitive(True)
         for key in self.current_project().targets:
             installed_fsets = ''
             for fset in self.current_project().targets[key].installed_fsets():
@@ -274,6 +299,17 @@ class AddNewProject:
         self.newDlg.destroy()
         return self.result,self.newProject
 
+class MainWindowButtons:
+    def __init__(self, widgets):
+        # Project button bar
+        self.add_project = widgets.get_widget('new_project_add')
+        self.delete_project = widgets.get_widget('project_delete')
+        self.save_project = widgets.get_widget('project_save')
+        # Target button bar
+        self.add_target = widgets.get_widget('new_target_add')
+        self.delete_target = widgets.get_widget('target_delete')
+        self.install_fset = widgets.get_widget('target_install_fset')
+        
 if __name__ == '__main__':
     esdk = esdkMain()
     gtk.main()

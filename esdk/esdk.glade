@@ -201,6 +201,7 @@ Tariq Shureih</property>
 	      <child>
 		<widget class="GtkToolButton" id="project_save">
 		  <property name="visible">True</property>
+		  <property name="sensitive">False</property>
 		  <property name="stock_id">gtk-save</property>
 		  <property name="visible_horizontal">True</property>
 		  <property name="visible_vertical">True</property>
@@ -216,6 +217,7 @@ Tariq Shureih</property>
 	      <child>
 		<widget class="GtkToolButton" id="project_delete">
 		  <property name="visible">True</property>
+		  <property name="sensitive">False</property>
 		  <property name="stock_id">gtk-delete</property>
 		  <property name="visible_horizontal">True</property>
 		  <property name="visible_vertical">True</property>
@@ -378,6 +380,7 @@ Tariq Shureih</property>
 	      <child>
 		<widget class="GtkButton" id="new_target_add">
 		  <property name="visible">True</property>
+		  <property name="sensitive">False</property>
 		  <property name="can_focus">True</property>
 		  <property name="label">gtk-add</property>
 		  <property name="use_stock">True</property>
@@ -395,6 +398,7 @@ Tariq Shureih</property>
 	      <child>
 		<widget class="GtkButton" id="target_install_fset">
 		  <property name="visible">True</property>
+		  <property name="sensitive">False</property>
 		  <property name="can_focus">True</property>
 		  <property name="label">Install FSet</property>
 		  <property name="use_underline">True</property>
@@ -424,6 +428,7 @@ Tariq Shureih</property>
 		      <child>
 			<widget class="GtkButton" id="target_delete">
 			  <property name="visible">True</property>
+			  <property name="sensitive">False</property>
 			  <property name="can_focus">True</property>
 			  <property name="label">gtk-delete</property>
 			  <property name="use_stock">True</property>
