@@ -25,6 +25,7 @@ class esdkMain:
                 "on_projectDelete_clicked": self.on_projectDelete_clicked,
                 "on_projectSave_clicked": self.on_projectSave_clicked,
                 "on_new_target_add_clicked": self.on_new_target_add_clicked,
+                "on_delete_target_clicked": self.on_delete_target_clicked,
                 "on_about_activate": self.on_about_activate}
         self.widgets.signal_autoconnect(dic)
         # setup projectList widget
@@ -161,6 +162,19 @@ class esdkMain:
         # Update the list of targets
         self.targetView.append(target.getList())
 
+    def on_delete_target_clicked(self, widget):
+        model, iter = self.projectList.get_selection().get_selected()
+        projectName = model[iter][0]
+        model, iter = self.targetList.get_selection().get_selected()
+        targetName = model[iter][0]
+        tree = gtk.glade.XML(gladefile, 'qDialog')
+        tree.get_widget('queryLabel').set_text("Delete target %s from project %s?" % (targetName, projectName))
+        dialog = tree.get_widget('qDialog')
+        if dialog.run() == gtk.RESPONSE_OK:
+            SDK().projects[projectName].delete_target(targetName)
+            self.targetView.remove(iter)
+        dialog.destroy()
+        
 class NewTarget:
     """Class to add a new selected project target"""
     def __init__(self, name=""):
