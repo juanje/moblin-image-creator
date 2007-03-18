@@ -59,22 +59,9 @@ class esdkMain:
         self.targetList = gtk.ListStore(str, str)
         self.targetView.set_model(self.targetList)
         # read in project list using SDK()
-        # FIXME: I'm only reading them, not saving a handle to each
-        sdk = SDK()
-        for key in sorted(sdk.projects.iterkeys()):
-            my_project = ProjectInfo()
-            saved_projects = sdk.projects[key]
-            print 'Found: name: %s ' % (saved_projects.name)
-            my_project.name = '%s' % saved_projects.name
-            my_project.path = '%s' % saved_projects.path
-            my_project.desc = saved_projects.desc
-            my_project.platform = '%s' % saved_projects.platform.name
-            self.projectList.append(my_project.getList())
-            # get Targets related to each project
-            print "Targets for project: %s" % saved_projects.name
-            for t in sorted(saved_projects.targets.iterkeys()):
-                my_targets = saved_projects.targets[t]
-                print "\t%s" % my_targets.name
+        for key in sorted(SDK().projects.iterkeys()):
+            p = SDK().projects[key]
+            self.projectList.append((p.name, p.desc, p.path, p.platform.name))
         self.buttons = MainWindowButtons(self.widgets)
         # Connect project selection signal to list targets in the targetList
         # widget: targetView
