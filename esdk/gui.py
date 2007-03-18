@@ -156,7 +156,12 @@ class esdkMain:
         cebox.child.set_text(list[0][0])
         if dialog.run() == gtk.RESPONSE_OK:
             fset = self.current_project().platform.fset[cebox.child.get_text()]
-            self.current_target().install(fset)
+            try:
+                self.current_target().install(fset)
+            except ValueError, e:
+                self.show_error_dialog(e.args[1])
+            except:
+                self.show_error_dialog()
         dialog.destroy()
         
     def on_delete_target_clicked(self, widget):
@@ -186,6 +191,13 @@ class esdkMain:
         model, iter = self.targetView.get_selection().get_selected()
         self.targetList.remove(iter)
 
+    def show_error_dialog(self, message="An unknown error has occurred!"):
+        widgets = gtk.glade.XML(gladefile, 'error_dialog')
+        widgets.get_widget('error_label').set_text(message)
+        dialog = widgets.get_widget('error_dialog')
+        dialog.run()
+        dialog.destroy()
+        
 class AddNewProject:
     """Class to bring up AddNewProject dialogue"""
     def __init__(self, name="", desc="", path="", platform=""):

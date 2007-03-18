@@ -195,13 +195,11 @@ class Target(FileSystem):
         Install a fset into the target filesystem
         """
         if os.path.isfile(os.path.join(self.top, fset.name)):
-            print >> sys.stderr, "fset %s is already installed!" % (fset.name)
-            return
-
+            raise ValueError("fset %s is already installed!" % (fset.name))
+        
         for dep in fset['deps']:
             if not os.path.isfile(os.path.join(self.top, dep)):
-                print >> sys.stderr, "fset %s must be installed first!" % (dep)
-                return
+                raise ValueError(sys.stderr, "fset %s must be installed first!" % (dep))
 
         FileSystem.install(self, self.fs_path, fset['pkgs'], self.project.platform.buildroot_repos)
         if debug == 1:
