@@ -1,6 +1,12 @@
 #!/usr/bin/python -tt
 # vim: ai ts=4 sts=4 et sw=4
 
+# KNOWN BUGS:
+#   JLV: Can attempt to add a target without selecting a project.  This causes
+#        an error.
+#   JLV: Can attempt to delete a project without selecting a project.  This
+#        causes an error.
+
 import pygtk
 try:
     import gtk, gtk.glade, gobject
