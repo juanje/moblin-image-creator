@@ -140,10 +140,13 @@ class esdkMain:
         selection = self.projectList.get_selection()
         model, iter = selection.get_selected()
         projectName = model[iter][0]
-        print "Deleting project: %s" % projectName
-        sdk = SDK()
-        sdk.delete_project(projectName)
-        iter = self.projectView.remove(iter)
+        tree = gtk.glade.XML(gladefile, 'qDialog')
+        tree.get_widget('queryLabel').set_text("Delete the %s project?" % (projectName))
+        dialog = tree.get_widget('qDialog')
+        if dialog.run() == gtk.RESPONSE_OK:
+            SDK().delete_project(projectName)
+            self.projectView.remove(iter)
+        dialog.destroy()
 
     def on_new_target_add_clicked(self, widget):
         # Open the "New Target" dialog
@@ -201,7 +204,6 @@ class ProjectInfo:
 class AddNewProject:
     """Class to bring up AddNewProject dialogue"""
     def __init__(self, name="", desc="", path="", platform=""):
-        self.gladefile = gladefile
         self.newProject = ProjectInfo(name,desc,path,platform)
 
     def on_newDlg_destroy(event):
