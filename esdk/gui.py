@@ -24,6 +24,10 @@ class esdkMain:
                 "on_new_target_add_clicked": self.on_new_target_add_clicked,
                 "on_delete_target_clicked": self.on_delete_target_clicked,
                 "on_install_fset": self.on_install_fset,
+                "on_create_liveISO_clicked": self.on_liveISO_clicked,
+                "on_create_installISO_clicked": self.on_installISO_clicked,
+                "on_create_liveUSB_clicked": self.on_liveUSB_clicked,
+                "on_create_installUSB_clicked": self.on_installUSB_clicked,
                 "on_about_activate": self.on_about_activate}
         self.widgets.signal_autoconnect(dic)
         # setup projectView widget
@@ -198,6 +202,19 @@ class esdkMain:
         dialog.run()
         dialog.destroy()
         
+    def on_liveUSB_clicked(self, widget):
+        print "LiveUSB Output not implemented yet"
+
+    def on_installUSB_clicked(self, widget):
+        print "Not implemented"
+
+    def on_installISO_clicked(self, widget):
+        print "Not implemented"
+
+    def on_liveISO_clicked(self, widget):
+        print "Not implemented"
+
+
 class AddNewProject:
     """Class to bring up AddNewProject dialogue"""
     def __init__(self, name="", desc="", path="", platform=""):
@@ -248,6 +265,11 @@ class MainWindowButtons:
         self.add_target = widgets.get_widget('new_target_add')
         self.delete_target = widgets.get_widget('target_delete')
         self.install_fset = widgets.get_widget('target_install_fset')
+        # Action buttons
+        self.create_liveiso = widgets.get_widget('create_liveISO_btn')
+        self.create_installiso = widgets.get_widget('create_installISO_btn')
+        self.create_liveusb = widgets.get_widget('create_liveUSB_btn')
+        self.create_installusb = widgets.get_widget('create_installUSB_btn')
         
 if __name__ == '__main__':
     esdk = esdkMain()
