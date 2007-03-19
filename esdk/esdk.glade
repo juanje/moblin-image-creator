@@ -3,95 +3,6 @@
 
 <glade-interface>
 
-<widget class="GtkDialog" id="About">
-  <property name="visible">True</property>
-  <property name="title" translatable="yes">About eSDK</property>
-  <property name="type">GTK_WINDOW_TOPLEVEL</property>
-  <property name="window_position">GTK_WIN_POS_NONE</property>
-  <property name="modal">False</property>
-  <property name="resizable">True</property>
-  <property name="destroy_with_parent">False</property>
-  <property name="decorated">True</property>
-  <property name="skip_taskbar_hint">False</property>
-  <property name="skip_pager_hint">False</property>
-  <property name="type_hint">GDK_WINDOW_TYPE_HINT_DIALOG</property>
-  <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
-  <property name="focus_on_map">True</property>
-  <property name="urgency_hint">False</property>
-  <property name="has_separator">True</property>
-  <signal name="destroy_event" handler="on_About_destroy_event" last_modification_time="Mon, 12 Mar 2007 07:36:02 GMT"/>
-
-  <child internal-child="vbox">
-    <widget class="GtkVBox" id="dialog-vbox1">
-      <property name="visible">True</property>
-      <property name="homogeneous">False</property>
-      <property name="spacing">0</property>
-
-      <child internal-child="action_area">
-	<widget class="GtkHButtonBox" id="dialog-action_area1">
-	  <property name="visible">True</property>
-	  <property name="layout_style">GTK_BUTTONBOX_END</property>
-
-	  <child>
-	    <widget class="GtkButton" id="closebutton1">
-	      <property name="visible">True</property>
-	      <property name="can_default">True</property>
-	      <property name="can_focus">True</property>
-	      <property name="label">gtk-close</property>
-	      <property name="use_stock">True</property>
-	      <property name="relief">GTK_RELIEF_NORMAL</property>
-	      <property name="focus_on_click">True</property>
-	      <property name="response_id">-7</property>
-	      <signal name="clicked" handler="on_aboutClose_clicked" last_modification_time="Mon, 12 Mar 2007 07:36:40 GMT"/>
-	      <signal name="destroy_event" handler="on_about_destroy" last_modification_time="Mon, 12 Mar 2007 08:03:40 GMT"/>
-	    </widget>
-	  </child>
-	</widget>
-	<packing>
-	  <property name="padding">0</property>
-	  <property name="expand">False</property>
-	  <property name="fill">True</property>
-	  <property name="pack_type">GTK_PACK_END</property>
-	</packing>
-      </child>
-
-      <child>
-	<widget class="GtkLabel" id="aboutText">
-	  <property name="visible">True</property>
-	  <property name="label" translatable="yes">eSDK is Created by
-The Open Source Technology Center
-Intel Coporation
-
-(c)2007
-
-Authors:
-Rusty Lynch
-Rob Rhoads
-Tariq Shureih</property>
-	  <property name="use_underline">False</property>
-	  <property name="use_markup">False</property>
-	  <property name="justify">GTK_JUSTIFY_CENTER</property>
-	  <property name="wrap">False</property>
-	  <property name="selectable">False</property>
-	  <property name="xalign">0.5</property>
-	  <property name="yalign">0.5</property>
-	  <property name="xpad">0</property>
-	  <property name="ypad">0</property>
-	  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
-	  <property name="width_chars">-1</property>
-	  <property name="single_line_mode">False</property>
-	  <property name="angle">0</property>
-	</widget>
-	<packing>
-	  <property name="padding">0</property>
-	  <property name="expand">False</property>
-	  <property name="fill">False</property>
-	</packing>
-      </child>
-    </widget>
-  </child>
-</widget>
-
 <widget class="GtkWindow" id="main">
   <property name="width_request">400</property>
   <property name="height_request">400</property>
@@ -530,9 +441,9 @@ Tariq Shureih</property>
 	  </child>
 
 	  <child>
-	    <widget class="GtkLabel" id="action_txt_lbl">
+	    <widget class="GtkLabel" id="output_txt_lbl">
 	      <property name="visible">True</property>
-	      <property name="label" translatable="yes">Actions:</property>
+	      <property name="label" translatable="yes">Output Actions:</property>
 	      <property name="use_underline">False</property>
 	      <property name="use_markup">False</property>
 	      <property name="justify">GTK_JUSTIFY_LEFT</property>
@@ -564,13 +475,14 @@ Tariq Shureih</property>
 	      <property name="spacing">0</property>
 
 	      <child>
-		<widget class="GtkButton" id="button15">
+		<widget class="GtkButton" id="create_liveISO_btn">
 		  <property name="visible">True</property>
 		  <property name="can_focus">True</property>
-		  <property name="label" translatable="yes">Make ISO</property>
+		  <property name="label" translatable="yes">Live ISO</property>
 		  <property name="use_underline">True</property>
 		  <property name="relief">GTK_RELIEF_NORMAL</property>
 		  <property name="focus_on_click">True</property>
+		  <signal name="clicked" handler="on_create_liveISO_clicked" last_modification_time="Mon, 19 Mar 2007 07:33:13 GMT"/>
 		</widget>
 		<packing>
 		  <property name="padding">0</property>
@@ -580,13 +492,14 @@ Tariq Shureih</property>
 	      </child>
 
 	      <child>
-		<widget class="GtkButton" id="button16">
+		<widget class="GtkButton" id="create_installISO_btn">
 		  <property name="visible">True</property>
 		  <property name="can_focus">True</property>
-		  <property name="label" translatable="yes">Make Live CD/DVD</property>
+		  <property name="label" translatable="yes">Install ISO</property>
 		  <property name="use_underline">True</property>
 		  <property name="relief">GTK_RELIEF_NORMAL</property>
 		  <property name="focus_on_click">True</property>
+		  <signal name="clicked" handler="on_create_installISO_clicked" last_modification_time="Mon, 19 Mar 2007 07:33:42 GMT"/>
 		</widget>
 		<packing>
 		  <property name="padding">0</property>
@@ -596,13 +509,44 @@ Tariq Shureih</property>
 	      </child>
 
 	      <child>
-		<widget class="GtkButton" id="button17">
+		<widget class="GtkHBox" id="hbox19">
 		  <property name="visible">True</property>
-		  <property name="can_focus">True</property>
-		  <property name="label" translatable="yes">Make Live USB</property>
-		  <property name="use_underline">True</property>
-		  <property name="relief">GTK_RELIEF_NORMAL</property>
-		  <property name="focus_on_click">True</property>
+		  <property name="homogeneous">False</property>
+		  <property name="spacing">0</property>
+
+		  <child>
+		    <widget class="GtkButton" id="create_liveUSB_btn">
+		      <property name="visible">True</property>
+		      <property name="can_focus">True</property>
+		      <property name="label" translatable="yes">Live USB</property>
+		      <property name="use_underline">True</property>
+		      <property name="relief">GTK_RELIEF_NORMAL</property>
+		      <property name="focus_on_click">True</property>
+		      <signal name="clicked" handler="on_create_liveUSB_clicked" last_modification_time="Mon, 19 Mar 2007 07:34:13 GMT"/>
+		    </widget>
+		    <packing>
+		      <property name="padding">0</property>
+		      <property name="expand">False</property>
+		      <property name="fill">False</property>
+		    </packing>
+		  </child>
+
+		  <child>
+		    <widget class="GtkButton" id="create_installUSB_btn">
+		      <property name="visible">True</property>
+		      <property name="can_focus">True</property>
+		      <property name="label" translatable="yes">Install USB</property>
+		      <property name="use_underline">True</property>
+		      <property name="relief">GTK_RELIEF_NORMAL</property>
+		      <property name="focus_on_click">True</property>
+		      <signal name="clicked" handler="on_create_installUSB_clicked" last_modification_time="Mon, 19 Mar 2007 07:34:49 GMT"/>
+		    </widget>
+		    <packing>
+		      <property name="padding">0</property>
+		      <property name="expand">False</property>
+		      <property name="fill">False</property>
+		    </packing>
+		  </child>
 		</widget>
 		<packing>
 		  <property name="padding">0</property>
