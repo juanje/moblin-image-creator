@@ -101,13 +101,39 @@ mknod /dev/sda1 b 8 1
 mknod /dev/sda2 b 8 2
 mknod /dev/sda3 b 8 3
 mknod /dev/sdb b 8 16
+
 echo Mounting rootfs
+mkdir /tmp/mnt
 mkdir /newroot
-sleep 15
-mount -t vfat /dev/sda /newroot
+
+echo "Mounting usb key"
+while [ ! -e /proc/scsi/usb-storage ]
+do
+    sleep 1
+done
+mount -t vfat /dev/sda /tmp/mnt
+
+echo "Mounting Squashfs as root"
+for id in `cat /proc/cmdline`
+do
+    echo $id | grep -q root=
+    if [ "$?" -eq "0" ]
+    then
+        ROOT=`echo $id | cut -f 2- -d '='`
+    fi
+done
+
+if [ -f $ROOT ]
+then
+    mount -o loop -t squashfs $ROOT /newroot
+fi
+
+
 cd /newroot
 mkdir initrd
 pivot_root . initrd
+
+cd /
 /bin/msh
 """
     init_file.close()

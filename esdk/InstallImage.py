@@ -108,7 +108,7 @@ class InstallImage(object):
 
         # Copy the default kernel
         default_kernel = kernels.pop(0)
-        kernel_name = s.add_default(default_kernel)
+        kernel_name = s.add_default(default_kernel, 'initrd=initrd.img root=rootfs.img')
         src_path = os.path.join(self.target.fs_path, 'boot')
         src_path = os.path.join(src_path, default_kernel)
         dst_path = os.path.join(self.tmp_path, kernel_name)
@@ -116,11 +116,29 @@ class InstallImage(object):
 
         # Copy the remaining kernels
         for k in kernels:
-            kernel_name = s.add_target(k)
+            kernel_name = s.add_target(k, 'initrd=initrd.img root=rootfs.img')
             src_path = os.path.join(self.target.fs_path, 'boot')
             src_path = os.path.join(src_path, k)
             dst_path = os.path.join(self.tmp_path, kernel_name)
             shutil.copyfile(src_path, dst_path)
+
+    def create_rootfs(self):
+        self.rootfs = 'rootfs.img'
+        self.rootfs_path = os.path.join(self.target.image_path, self.rootfs)
+        if os.path.isfile(self.rootfs_path):
+            os.remove(self.rootfs_path)
+        
+        jail_path = self.path[len(self.project.path):]
+        self.project.chroot('/usr/bin/syslinux', jail_path)
+
+        fs_path    = self.target.fs_path[len(self.project.path):]
+        image_path = self.target.image_path[len(self.project.path):]
+        image_path = os.path.join(image_path,'rootfs.img')
+        cmd_args = "%s %s" % (fs_path, image_path)
+
+        print "Create_rootfs(): " + cmd_args
+
+        self.project.chroot("/sbin/mksquashfs", cmd_args)
 
     def __str__(self):
         return ("<InstallImage: project=%s, target=%s, name=%s>"
@@ -181,7 +199,12 @@ class LiveUsbImage(BaseUsbImage):
     def create_image(self):
         print "LiveUsbImage: Creating LiveUSB Image Now!"
 
-        self.create_container_file(128)
+        self.create_rootfs()
+
+        stat_result = os.stat(self.rootfs_path)
+        size = (stat_result.st_size / (1024 * 1024)) + 16
+
+        self.create_container_file(size)
 
         self.mount_container()
 
@@ -189,6 +212,8 @@ class LiveUsbImage(BaseUsbImage):
         Mkinitrd.create(self.project, initrd_path)
         
         self.install_kernels()
+
+        shutil.copy(self.rootfs_path, self.tmp_path)
 
         self.umount_container()
 
