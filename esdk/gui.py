@@ -83,14 +83,12 @@ class esdkMain:
             self.buttons.install_fset.set_sensitive(False)
             self.buttons.delete_target.set_sensitive(False)
             return
-        # We have a project selected, so it makes sense for the
-        # delete project and add target buttons to be sensitive
+        # We have a project selected, so it makes sense for the delete project
+        # and add target buttons to be sensitive
         self.buttons.delete_project.set_sensitive(True)
         self.buttons.add_target.set_sensitive(True)
         for key in self.current_project().targets:
-            installed_fsets = ''
-            for fset in self.current_project().targets[key].installed_fsets():
-                installed_fsets = installed_fsets + fset + ' '
+            installed_fsets = ' '.join(self.current_project().targets[key].installed_fsets())
             self.targetList.append((key, installed_fsets))
 
     def set_plist(self, name, id):
