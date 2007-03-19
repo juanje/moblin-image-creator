@@ -45,7 +45,7 @@ class esdkMain:
         self.projectView.set_reorderable(1)
         # Set targetView widget
         self.tName = "Name"
-        self.tFSet = "FSets"
+        self.tFSet = "Function Sets"
         self.targetView = self.widgets.get_widget("targetView")
         self.set_tlist(self.tName, 0)
         self.set_tlist(self.tFSet, 1)

@@ -308,7 +308,7 @@
 		  <property name="visible">True</property>
 		  <property name="sensitive">False</property>
 		  <property name="can_focus">True</property>
-		  <property name="label">Install FSet</property>
+		  <property name="label">Install Function Set</property>
 		  <property name="use_underline">True</property>
 		  <property name="relief">GTK_RELIEF_NORMAL</property>
 		  <property name="focus_on_click">True</property>
@@ -1035,7 +1035,7 @@ Project Targets</property>
 
 <widget class="GtkDialog" id="qDialog">
   <property name="visible">True</property>
-  <property name="title" translatable="yes">dialog1</property>
+  <property name="title" translatable="yes">Delete Project</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
   <property name="window_position">GTK_WIN_POS_NONE</property>
   <property name="modal">False</property>
@@ -1169,7 +1169,7 @@ Project Targets</property>
 
 <widget class="GtkDialog" id="installFsetDialog">
   <property name="visible">True</property>
-  <property name="title" translatable="yes">Install Fset</property>
+  <property name="title" translatable="yes">Install Function Set</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
   <property name="window_position">GTK_WIN_POS_NONE</property>
   <property name="modal">False</property>
