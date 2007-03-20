@@ -102,11 +102,8 @@ mknod /dev/sda2 b 8 2
 mknod /dev/sda3 b 8 3
 mknod /dev/sdb b 8 16
 
-echo Mounting rootfs
-mkdir /tmp/mnt
-mkdir /newroot
-
 echo "Mounting USB Key"
+mkdir -p /mnt/tmp
 while true
 do
     grep -q sda /proc/partitions
@@ -117,24 +114,28 @@ do
     sleep 2
 done
 
-mount -t vfat /dev/sda /tmp/mnt
+mount -t vfat /dev/sda /mnt/tmp
 
 echo "Mounting Squashfs as root"
-for id in `cat /proc/cmdline`
-do
-    echo $id | grep -q root=
-    if [ "$?" -eq "0" ]
-    then
-        ROOT=`echo $id | cut -f 2- -d '='`
-    fi
-done
+#for id in `cat /proc/cmdline`
+#do
+#    echo $id | grep -q root=
+#    if [ "$?" -eq "0" ]
+#    then
+#        ROOT=`echo $id | cut -f 2- -d '='`
+#    fi
+#done
+#
+#if [ -f $ROOT ]
+#then
+#    mount -o loop -t squashfs $ROOT /newroot
+#fi
 
-if [ -f $ROOT ]
-then
-    mount -o loop -t squashfs $ROOT /newroot
-fi
+mkdir /newroot
+mount -o loop -t squashfs /mnt/tmp/rootfs.img /newroot
 
 
+echo Mounting rootfs
 cd /newroot
 mkdir initrd
 pivot_root . initrd
