@@ -92,11 +92,9 @@ class InstallImage(object):
 
         # Find installed kernels on target filesystem
         kernels = []
-        n = len('vmlinuz')
         for file in os.listdir(os.path.join(self.target.fs_path, 'boot')):
-            if (len(file) < n) or (file[:n] != 'vmlinuz'):
-                continue
-            kernels.append(file)
+            if file.find('vmlinuz') == 0:
+                kernels.append(file)
 
         if not kernels:
             raise ValueError, "no kernels were found"
