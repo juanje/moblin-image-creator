@@ -147,14 +147,14 @@ mknod /newroot/dev/ram0 c 1 0
 echo Mounting rootfs
 cd /newroot
 
-exec chroot . /bin/sh <<- EOF
+#exec chroot . /bin/sh <<- EOF
 #    umount /tmp/.initrd || echo "*: Failed to unmount the initrd!"
-    /sbin/blockdev --flushbufs /dev/ram0 >/dev/null 2>&1
-    exec /sbin/init ${REAL_INIT}
-EOF
-
-mkdir initrd
-pivot_root . initrd
+#    /sbin/blockdev --flushbufs /dev/ram0 >/dev/null 2>&1
+#    exec /sbin/init ${REAL_INIT}
+#EOF
+#
+#mkdir initrd
+#pivot_root . initrd
 
 cd /
 exec /bin/msh
