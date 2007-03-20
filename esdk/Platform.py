@@ -51,16 +51,6 @@ class Platform(object):
     def __repr__(self):
         return "Platform( %s, '%s')" % (self.sdk_path, self.name)
 
-class TestPlatform(unittest.TestCase):
-    def testInstantiate(self):
-        platform = Platform('/usr/share/esdk', 'donley')
-    def testStrRepr(self):
-        platform = Platform('/usr/share/esdk', 'donley')
-        temp = platform.__str__()
-        temp = platform.__repr__()
-
 if __name__ == '__main__':
-    if len(sys.argv) == 1:
-        unittest.main()
     for p in sys.argv[1:]:
         print Platform('/usr/share/esdk', p)
