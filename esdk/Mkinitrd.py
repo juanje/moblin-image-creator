@@ -65,7 +65,7 @@ def create(project, initrd_file):
 
     # Create directories
     dirs = [ 'bin', 'boot', 'etc', 'dev', 'lib', 'mnt', \
-             'proc', 'sys', 'sysroot', 'tmp', ]
+             'proc', 'sys', 'sysroot', 'tmp', 'usr/bin' ]
     for dirname in dirs:
         os.makedirs(os.path.join(scratch_path, dirname))
 
@@ -131,17 +131,33 @@ echo "Mounting Squashfs as root"
 #    mount -o loop -t squashfs $ROOT /newroot
 #fi
 
-mkdir /newroot
-mount -o loop -t squashfs /mnt/tmp/rootfs.img /newroot
+mkdir /squashfs
+mount -o loop -t squashfs /mnt/tmp/rootfs.img /squashfs
 
+mkdir /ramfs
+mount -t tmpfs none /ramfs
+
+mkdir /newroot
+mount -t unionfs -o dirs=/ramfs=rw:/squashfs=ro none /newroot
+
+mount --bind /proc /newroot/proc
+
+mknod /newroot/dev/ram0 c 1 0
 
 echo Mounting rootfs
 cd /newroot
+
+exec chroot . /bin/sh <<- EOF
+#    umount /tmp/.initrd || echo "*: Failed to unmount the initrd!"
+    /sbin/blockdev --flushbufs /dev/ram0 >/dev/null 2>&1
+    exec /sbin/init ${REAL_INIT}
+EOF
+
 mkdir initrd
 pivot_root . initrd
 
 cd /
-/bin/msh
+exec /bin/msh
 """
     init_file.close()
     os.chmod(os.path.join(scratch_path, 'init'), 0755)
