@@ -106,11 +106,17 @@ echo Mounting rootfs
 mkdir /tmp/mnt
 mkdir /newroot
 
-echo "Mounting usb key"
-while [ ! -e /proc/scsi/usb-storage ]
+echo "Mounting USB Key"
+while true
 do
-    sleep 1
+    grep -q sda /proc/partitions
+    if [ "$?" -eq "0" ]
+    then
+        break
+    fi
+    sleep 2
 done
+
 mount -t vfat /dev/sda /tmp/mnt
 
 echo "Mounting Squashfs as root"
