@@ -65,7 +65,7 @@ def create(project, initrd_file):
 
     # Create directories
     dirs = [ 'bin', 'boot', 'etc', 'dev', 'lib', 'mnt', \
-             'proc', 'sys', 'sysroot', 'tmp', ]
+             'proc', 'sys', 'sysroot', 'tmp', 'usr/bin' ]
     for dirname in dirs:
         os.makedirs(os.path.join(scratch_path, dirname))
 
@@ -101,14 +101,63 @@ mknod /dev/sda1 b 8 1
 mknod /dev/sda2 b 8 2
 mknod /dev/sda3 b 8 3
 mknod /dev/sdb b 8 16
-echo Mounting rootfs
+
+echo "Mounting USB Key"
+mkdir -p /mnt/tmp
+while true
+do
+    grep -q sda /proc/partitions
+    if [ "$?" -eq "0" ]
+    then
+        break
+    fi
+    sleep 2
+done
+
+mount -t vfat /dev/sda /mnt/tmp
+
+echo "Mounting Squashfs as root"
+#for id in `cat /proc/cmdline`
+#do
+#    echo $id | grep -q root=
+#    if [ "$?" -eq "0" ]
+#    then
+#        ROOT=`echo $id | cut -f 2- -d '='`
+#    fi
+#done
+#
+#if [ -f $ROOT ]
+#then
+#    mount -o loop -t squashfs $ROOT /newroot
+#fi
+
+mkdir /squashfs
+mount -o loop -t squashfs /mnt/tmp/rootfs.img /squashfs
+
+mkdir /ramfs
+mount -t tmpfs none /ramfs
+
 mkdir /newroot
-sleep 15
-mount -t vfat /dev/sda /newroot
+mount -t unionfs -o dirs=/ramfs=rw:/squashfs=ro none /newroot
+
+mount --bind /proc /newroot/proc
+
+mknod /newroot/dev/ram0 c 1 0
+
+echo Mounting rootfs
 cd /newroot
-mkdir initrd
-pivot_root . initrd
-/bin/msh
+
+#exec chroot . /bin/sh <<- EOF
+#    umount /tmp/.initrd || echo "*: Failed to unmount the initrd!"
+#    /sbin/blockdev --flushbufs /dev/ram0 >/dev/null 2>&1
+#    exec /sbin/init ${REAL_INIT}
+#EOF
+#
+#mkdir initrd
+#pivot_root . initrd
+
+cd /
+exec /bin/msh
 """
     init_file.close()
     os.chmod(os.path.join(scratch_path, 'init'), 0755)

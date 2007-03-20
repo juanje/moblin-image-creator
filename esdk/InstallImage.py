@@ -92,11 +92,9 @@ class InstallImage(object):
 
         # Find installed kernels on target filesystem
         kernels = []
-        n = len('vmlinuz')
         for file in os.listdir(os.path.join(self.target.fs_path, 'boot')):
-            if (len(file) < n) or (file[:n] != 'vmlinuz'):
-                continue
-            kernels.append(file)
+            if file.find('vmlinuz') == 0:
+                kernels.append(file)
 
         if not kernels:
             raise ValueError, "no kernels were found"
@@ -108,7 +106,7 @@ class InstallImage(object):
 
         # Copy the default kernel
         default_kernel = kernels.pop(0)
-        kernel_name = s.add_default(default_kernel)
+        kernel_name = s.add_default(default_kernel, 'initrd=initrd.img root=rootfs.img')
         src_path = os.path.join(self.target.fs_path, 'boot')
         src_path = os.path.join(src_path, default_kernel)
         dst_path = os.path.join(self.tmp_path, kernel_name)
@@ -116,11 +114,29 @@ class InstallImage(object):
 
         # Copy the remaining kernels
         for k in kernels:
-            kernel_name = s.add_target(k)
+            kernel_name = s.add_target(k, 'initrd=initrd.img root=rootfs.img')
             src_path = os.path.join(self.target.fs_path, 'boot')
             src_path = os.path.join(src_path, k)
             dst_path = os.path.join(self.tmp_path, kernel_name)
             shutil.copyfile(src_path, dst_path)
+
+    def create_rootfs(self):
+        self.rootfs = 'rootfs.img'
+        self.rootfs_path = os.path.join(self.target.image_path, self.rootfs)
+        if os.path.isfile(self.rootfs_path):
+            os.remove(self.rootfs_path)
+        
+        jail_path = self.path[len(self.project.path):]
+        self.project.chroot('/usr/bin/syslinux', jail_path)
+
+        fs_path    = self.target.fs_path[len(self.project.path):]
+        image_path = self.target.image_path[len(self.project.path):]
+        image_path = os.path.join(image_path,'rootfs.img')
+        cmd_args = "%s %s" % (fs_path, image_path)
+
+        print "Create_rootfs(): " + cmd_args
+
+        self.project.chroot("/sbin/mksquashfs", cmd_args)
 
     def __str__(self):
         return ("<InstallImage: project=%s, target=%s, name=%s>"
@@ -176,12 +192,102 @@ class BaseUsbImage(InstallImage):
             os.rmdir(self.tmp_path)
             self.tmp_path = ''
 
+    def create_fake_rootfs(self):
+        # Create directories
+        dirs = [ 'bin', 'boot', 'etc', 'dev', 'lib', 'mnt', \
+                 'proc', 'sys', 'sysroot', 'tmp', 'usr/bin' ]
+        for dirname in dirs:
+            os.makedirs(os.path.join(scratch_path, dirname))
+
+        os.symlink('init', os.path.join(scratch_path, 'linuxrc'))
+        os.symlink('bin', os.path.join(scratch_path, 'sbin'))
+
+        # Setup Busybox in the initrd
+        cmd_path = os.path.join(project.path, 'sbin/busybox')
+        bb = Busybox(cmd_path, bin_path)
+        bb.create()
+
+        # Setup init script
+        linuxrc_file = open(os.path.join(scratch_path, 'linuxrc'), 'w')
+        print >> linuxrc_file, """\
+#!/bin/msh
+
+mount -t proc /proc /proc
+echo Mounting proc filesystem
+echo Mounting sysfs filesystem
+mount -t sysfs /sys /sys
+echo Creating /tmp
+mount -t tmpfs /tmp /tmp
+echo Creating /dev
+mount -o mode=0755 -t tmpfs /dev /dev
+mkdir /dev/pts
+mount -t devpts -o gid=5,mode=620 /dev/pts /dev/pts
+mkdir /dev/shm
+mkdir /dev/mapper
+echo Creating initial device nodes
+mdev -s
+mknod /dev/sda b 8 0
+mknod /dev/sda1 b 8 1
+mknod /dev/sda2 b 8 2
+mknod /dev/sda3 b 8 3
+mknod /dev/sdb b 8 16
+
+echo "Mounting USB Key"
+mkdir -p /mnt/tmp
+while true
+do
+    grep -q sda /proc/partitions
+    if [ "$?" -eq "0" ]
+    then
+        break
+    fi
+    sleep 2
+done
+
+mount -t vfat /dev/sda /mnt/tmp
+
+echo "Mounting Squashfs as root"
+#for id in `cat /proc/cmdline`
+#do
+#    echo $id | grep -q root=
+#    if [ "$?" -eq "0" ]
+#    then
+#        ROOT=`echo $id | cut -f 2- -d '='`
+#    fi
+#done
+#
+#if [ -f $ROOT ]
+#then
+#    mount -o loop -t squashfs $ROOT /newroot
+#fi
+
+mkdir /newroot
+mount -o loop -t squashfs /mnt/tmp/rootfs.img /newroot
+
+
+echo Mounting rootfs
+cd /newroot
+mkdir initrd
+pivot_root . initrd
+
+cd /
+exec /bin/msh
+"""
+        linuxrc_file.close()
+        os.chmod(os.path.join(scratch_path, 'init'), 0755)
+
+    
 
 class LiveUsbImage(BaseUsbImage):
     def create_image(self):
         print "LiveUsbImage: Creating LiveUSB Image Now!"
 
-        self.create_container_file(128)
+        self.create_rootfs()
+
+        stat_result = os.stat(self.rootfs_path)
+        size = (stat_result.st_size / (1024 * 1024)) + 16
+
+        self.create_container_file(size)
 
         self.mount_container()
 
@@ -189,6 +295,8 @@ class LiveUsbImage(BaseUsbImage):
         Mkinitrd.create(self.project, initrd_path)
         
         self.install_kernels()
+
+        shutil.copy(self.rootfs_path, self.tmp_path)
 
         self.umount_container()
 

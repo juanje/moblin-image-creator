@@ -77,29 +77,8 @@ class FsetInstance(object):
     def __str__(self):
         return ('<fset name="%s" data="%s">' % (self.name, self.data))
 
-
-class TestFset(unittest.TestCase):
-    # FIXME: This stuff should probably be moved into a separate file which
-    # creates fset files and then runs some tests using the created files.
-    def testInstantiate(self):
-        fset = FSet()
-        fset.addFile("/usr/share/esdk/platforms/donley/fsets/donley.fset")
-        if "blah" in fset:
-            a = 1
-        for key in fset:
-            print key
-    def testStrRepr(self):
-        fset = FSet()
-        temp = fset.__str__()
-        temp = fset.__repr__()
-        fset.addFile("/usr/share/esdk/platforms/donley/fsets/donley.fset")
-        temp = fset['core'].__str__()
-        temp = fset['core'].__repr__()
-
-
 if __name__ == '__main__':
     if len(sys.argv) == 1:
-        unittest.main()
         print >> sys.stderr, "USAGE: %s FSET_FILE ..." % (sys.argv[0])
     else:
         fset = FSet()
