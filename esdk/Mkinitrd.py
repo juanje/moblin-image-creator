@@ -140,21 +140,25 @@ mount -t tmpfs none /ramfs
 mkdir /newroot
 mount -t unionfs -o dirs=/ramfs=rw:/squashfs=ro none /newroot
 
-mount --bind /proc /newroot/proc
-
 mknod /newroot/dev/ram0 c 1 0
 
-echo Mounting rootfs
-cd /newroot
+umount /dev/pts
+umount /dev
+umount /tmp
+umount /sys
+umount /proc
 
-#exec chroot . /bin/sh <<- EOF
-#    umount /tmp/.initrd || echo "*: Failed to unmount the initrd!"
-#    /sbin/blockdev --flushbufs /dev/ram0 >/dev/null 2>&1
-#    exec /sbin/init ${REAL_INIT}
-#EOF
-#
+echo Starting Rootfs
+
+cd /newroot
 #mkdir initrd
 #pivot_root . initrd
+
+exec chroot . /bin/sh <<EOF
+    mount -t proc /proc /proc
+    mount -t sysfs /sys /sys
+    exec /sbin/init 5
+EOF
 
 cd /
 exec /bin/msh
