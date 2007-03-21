@@ -82,6 +82,9 @@ def create(project, initrd_file):
     print >> init_file, """\
 #!/bin/msh
 
+PATH=/bin
+export PATH
+
 mount -t proc /proc /proc
 echo Mounting proc filesystem
 echo Mounting sysfs filesystem
@@ -157,7 +160,7 @@ cd /newroot
 exec chroot . /bin/sh <<EOF
     mount -t proc /proc /proc
     mount -t sysfs /sys /sys
-    exec /sbin/init 5
+    exec /sbin/init 1
 EOF
 
 cd /

@@ -69,7 +69,6 @@ display boot.msg
         msg_file.close()
         return kernel_file
 
-
 class InstallImage(object):
     """
     This is the base class for any type of target image output.
@@ -120,7 +119,34 @@ class InstallImage(object):
             dst_path = os.path.join(self.tmp_path, kernel_name)
             shutil.copyfile(src_path, dst_path)
 
+    def create_fstab(self):
+        fstab_file = open(os.path.join(self.target.fs_path, 'etc/fstab'), 'w')
+        print >> fstab_file, """\
+/dev/devpts             /dev/pts                devpts  gid=5,mode=620  0 0
+/dev/shm                /dev/shm                tmpfs   defaults        0 0
+/dev/proc               /proc                   proc    defaults        0 0
+/dev/sys                /sys                    sysfs   defaults        0 0
+
+"""
+        fstab_file.close()
+
+    def create_modules_dep(self):
+        base_dir = self.target.fs_path[len(self.project.path):]
+        for file in os.listdir(os.path.join(self.target.fs_path, 'boot')):
+            if file.find('System.map-') == 0:
+                symbol_file = os.path.join(base_dir, 'boot')
+                symbol_file = os.path.join(symbol_file, file)
+                kernel_version = file[len('System.map-'):]
+                cmd_args = "-b %s -v %s -F %s" % (base_dir, kernel_version, symbol_file)
+                
+                self.project.chroot("/sbin/depmod", cmd_args)
+
     def create_rootfs(self):
+        if not os.path.isfile(os.path.join(self.target.fs_path, 'etc/fstab')):
+            self.create_fstab()
+
+        self.create_modules_dep()
+
         self.rootfs = 'rootfs.img'
         self.rootfs_path = os.path.join(self.target.image_path, self.rootfs)
         if os.path.isfile(self.rootfs_path):
@@ -133,8 +159,6 @@ class InstallImage(object):
         image_path = self.target.image_path[len(self.project.path):]
         image_path = os.path.join(image_path,'rootfs.img')
         cmd_args = "%s %s" % (fs_path, image_path)
-
-        print "Create_rootfs(): " + cmd_args
 
         self.project.chroot("/sbin/mksquashfs", cmd_args)
 
