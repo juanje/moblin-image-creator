@@ -67,10 +67,12 @@ class esdkMain:
             # No targets are selected
             self.buttons.delete_target.set_sensitive(False)
             self.buttons.install_fset.set_sensitive(False)
+            self.buttons.create_liveiso.set_sensitive(False)
             return
         # A target has been selected
         self.buttons.delete_target.set_sensitive(True)
         self.buttons.install_fset.set_sensitive(True)
+        self.buttons.create_liveiso.set_sensitive(True)
         
     def project_view_changed(self, selection):
         self.targetList.clear()
@@ -82,6 +84,10 @@ class esdkMain:
             self.buttons.add_target.set_sensitive(False)
             self.buttons.install_fset.set_sensitive(False)
             self.buttons.delete_target.set_sensitive(False)
+            self.buttons.create_liveiso.set_sensitive(False)
+            self.buttons.create_installiso.set_sensitive(False)
+            self.buttons.create_liveusb.set_sensitive(False)
+            self.buttons.create_installusb.set_sensitive(False)
             return
         # We have a project selected, so it makes sense for the delete project
         # and add target buttons to be sensitive
