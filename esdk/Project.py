@@ -82,6 +82,11 @@ metadata_expire=1800
             command = command + ' ' + p
         os.system(command)
 
+        root_path = os.path.abspath(path)
+        BASE_RPM_LIST = "/etc/base-rpms.list"
+        command = 'rpm -r %s -qa > %s%s' % (root_path, root_path, BASE_RPM_LIST)
+        os.system(command)
+
     def mount(self):
         path = os.path.join(self.path, 'proc')
         if not os.path.ismount(path):
