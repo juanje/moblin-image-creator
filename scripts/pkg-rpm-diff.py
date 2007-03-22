@@ -1,15 +1,25 @@
 #!/usr/bin/python
 # vim: ai ts=4 sts=4 et sw=4
 
-import sys, re, os, time, commands, shutil, glob
+import commands, os, re, shutil, sys, tempfile, time
 
-# TEMP_DIR should be absolute path
-TEMP_DIR = "/tmp"
+# Create a temporary directory
+TEMP_DIR = tempfile.mkdtemp()
 
 # RPM_DIFF is the file where the output is saved
-RPM_DIFF = "./rpmdiffs"
+RPM_DIFF = os.path.abspath("rpmdiffs")
 
-def rpm_query(infile) :
+def getAvailableRpms():
+    command_line = "repoquery -qa --queryformat '%{name}'"
+    status, output = commands.getstatusoutput(command_line)
+    if status:
+        print "Error running command: %s" % command_line
+        print output
+        sys.exit(1)
+    rpm_list = output.splitlines()
+    return rpm_list
+
+def rpm_query(infile):
     oinfo = []
     QUERY_CMD = "rpm -qpl --dump %s" % infile
     output = commands.getoutput(QUERY_CMD)
@@ -23,24 +33,12 @@ def rpm_query(infile) :
 #       print oinfo
     return oinfo
 
-def rpm_compare(rpm_name):
-
+def rpm_compare(rpm_name, repo_rpms):
     RPM_QUERY_STR = "rpm -q -p --queryformat '%%{name}' %s" % rpm_name
     pkg_name = commands.getoutput(RPM_QUERY_STR)
-    print "looking up pakage '%s' in yum repository:" % pkg_name
+    print "looking up package '%s' in yum repository:" % pkg_name
 
-    YUM_CMD = "yum list %s" % pkg_name
-    status, output = commands.getstatusoutput(YUM_CMD)
-#print "%s\n" % output
-
-    pkg_notfound = []
-    available = False
-    t = output.splitlines()
-    for line in t :
-        if line == "Installed Packages" or line == "Available Packages" :
-            available = True
-
-    if not available :
+    if pkg_name not in repo_rpms:
         print "\tpackage '%s' not found in yum repository.\n" % pkg_name
         return False
 
@@ -48,7 +46,11 @@ def rpm_compare(rpm_name):
 
     print "downloading package from yum repository to %s:" % TEMP_DIR
     YUMDL_URL_CMD = "yumdownloader --url %s" % pkg_name
-    output = commands.getoutput(YUMDL_URL_CMD)
+    status, output = commands.getstatusoutput(YUMDL_URL_CMD)
+    if status:
+        print "Error running command: %s" % YUMDL_URL_CMD
+        print output
+        sys.exit(1)
 #print output
     orig_rpm_name = output.rsplit('/', 1)
     orig_rpm_name.reverse()
@@ -61,15 +63,14 @@ def rpm_compare(rpm_name):
 #print ORIG_RPM
     if not os.path.exists(ORIG_RPM) :
         print "\tyumdownloader failed to download the rpm.\n"
+        print output
         sys.exit(1)
     print "\trpm downloaded: %s\n" % ORIG_RPM
 
     print "comparing the package with the original: "
 
-    oinfo = []
     oinfo = rpm_query(ORIG_RPM)
 
-    ninfo = []
     ninfo = rpm_query(rpm_name)
 
     lfile = open(RPM_DIFF, 'a')
@@ -97,21 +98,28 @@ def rpm_compare(rpm_name):
     print "\n\n"
     return True
 
-if len(sys.argv) != 2 or not os.path.isdir(sys.argv[1]) :
-    print "%s: RPM_DIR" % sys.argv[0]
-    sys.exit(1)
+def main():
+    if len(sys.argv) != 2:
+        print "Usage: %s: RPM_DIR" % sys.argv[0]
+        return 1
 
-rpm_dir_name = sys.argv[1]
-dir = "%s/*" % rpm_dir_name
-#dir = os.path.abspath(dir)
-rpm_list = glob.glob(dir)
+    rpm_dir_name = os.path.abspath(os.path.expanduser(sys.argv[1]))
+    if not os.path.isdir(rpm_dir_name):
+        print "%s: is not a directory" % rpm_dir_name
+        return 1
 
-found = True
-original_rpm_list = []
-for i in rpm_list :
-    found = rpm_compare(i)
-    if not found :
-        original_rpm_list.append(i)
+    repo_rpms = getAvailableRpms()
+    original_rpm_list = []
+    for filename in os.listdir(rpm_dir_name):
+        full_path = os.path.join(rpm_dir_name, filename)
+        found = rpm_compare(full_path, repo_rpms)
+        if not found:
+            original_rpm_list.append(filename)
 
-print "The list of rpms that are not found in the yum repository:"
-print original_rpm_list
+    print "The list of rpms that are not found in the yum repository:"
+    print original_rpm_list
+    print "Deleting temp_dir: %s" % TEMP_DIR
+    shutil.rmtree(TEMP_DIR)
+
+if '__main__' == __name__:
+    sys.exit(main())
