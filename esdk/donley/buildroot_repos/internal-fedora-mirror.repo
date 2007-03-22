@@ -1,5 +1,5 @@
 [esdk-base]
 name=Fedora Core $releasever - $basearch - Base
-baseurl=http://linux-ftp.jf.intel.com/pub/mirrors/fedora/linux/core/6/$basearch/os/
+baseurl=http://umd-build2.jf.intel.com/yum-repos/fedora-6-core/
 enabled=1
 gpgcheck=0

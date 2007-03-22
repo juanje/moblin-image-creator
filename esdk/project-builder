@@ -180,13 +180,13 @@ def list_platforms():
 
 def list_projects():
     sdk = SDK()
-    print "Name ==> Path"
-    print "-------------"
     for key in sorted(sdk.projects.iterkeys()):
         print "%s ==> %s" % (sdk.projects[key].name, sdk.projects[key].path)
 
 def list_fsets(options):
     sdk = SDK()
+    if options.platform_name not in sdk.platforms:
+        raise ValueError, "%s: is not a valid platform name" % options.platform_name
     for key in sorted(sdk.platforms[options.platform_name].fset.iterkeys()):
         print "%s" % (sdk.platforms[options.platform_name].fset[key].name)
 

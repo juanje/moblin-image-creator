@@ -88,9 +88,10 @@ metadata_expire=1800
             os.system('mount --bind /proc ' + path + ' 2> /dev/null')
 
     def umount(self):
-        path = os.path.join(self.path, 'proc')
-        if os.path.ismount(path):
-            os.system('umount ' + path  + ' 2> /dev/null')
+        for line in os.popen('mount', 'r').readlines():
+            mpoint = line.split()[2]
+            if self.path == mpoint[:len(self.path)]:
+                os.system("umount %s" % (mpoint))
 
 class Project(FileSystem):
     """

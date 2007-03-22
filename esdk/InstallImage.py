@@ -69,7 +69,6 @@ display boot.msg
         msg_file.close()
         return kernel_file
 
-
 class InstallImage(object):
     """
     This is the base class for any type of target image output.
@@ -120,7 +119,49 @@ class InstallImage(object):
             dst_path = os.path.join(self.tmp_path, kernel_name)
             shutil.copyfile(src_path, dst_path)
 
+    def create_fstab(self):
+        fstab_file = open(os.path.join(self.target.fs_path, 'etc/fstab'), 'w')
+        print >> fstab_file, """\
+/dev/devpts             /dev/pts                devpts  gid=5,mode=620  0 0
+/dev/shm                /dev/shm                tmpfs   defaults        0 0
+/dev/proc               /proc                   proc    defaults        0 0
+/dev/sys                /sys                    sysfs   defaults        0 0
+
+"""
+        fstab_file.close()
+
+    def create_modules_dep(self):
+        base_dir = self.target.fs_path[len(self.project.path):]
+        boot_path = os.path.join(self.target.fs_path, 'boot')
+        
+        for file in os.listdir(boot_path):
+            if file.find('System.map-') == 0:
+                kernel_version = file[len('System.map-'):]
+
+                tmp_str = "lib/modules/%s/modules.dep" % kernel_version
+                moddep_file = os.path.join(self.target.fs_path, tmp_str)
+
+                if os.path.isfile(moddep_file):
+                    sr_deps = os.stat(moddep_file)
+                    sr_sym  = os.stat(os.path.join(boot_path, file))
+                    
+                    # Skip generating a new modules.dep if the Symbols are
+                    # older than the current modules.dep file.
+                    if sr_deps.st_mtime > sr_sym.st_mtime: 
+                        continue
+
+                symbol_file = os.path.join(base_dir, 'boot')
+                symbol_file = os.path.join(symbol_file, file)
+
+                cmd_args = "-b %s -v %s -F %s" % (base_dir, kernel_version, symbol_file)
+                self.project.chroot("/sbin/depmod", cmd_args)
+
     def create_rootfs(self):
+        if not os.path.isfile(os.path.join(self.target.fs_path, 'etc/fstab')):
+            self.create_fstab()
+
+        self.create_modules_dep()
+
         self.rootfs = 'rootfs.img'
         self.rootfs_path = os.path.join(self.target.image_path, self.rootfs)
         if os.path.isfile(self.rootfs_path):
@@ -133,8 +174,6 @@ class InstallImage(object):
         image_path = self.target.image_path[len(self.project.path):]
         image_path = os.path.join(image_path,'rootfs.img')
         cmd_args = "%s %s" % (fs_path, image_path)
-
-        print "Create_rootfs(): " + cmd_args
 
         self.project.chroot("/sbin/mksquashfs", cmd_args)
 
@@ -191,92 +230,6 @@ class BaseUsbImage(InstallImage):
             os.system(cmd_line)
             os.rmdir(self.tmp_path)
             self.tmp_path = ''
-
-    def create_fake_rootfs(self):
-        # Create directories
-        dirs = [ 'bin', 'boot', 'etc', 'dev', 'lib', 'mnt', \
-                 'proc', 'sys', 'sysroot', 'tmp', 'usr/bin' ]
-        for dirname in dirs:
-            os.makedirs(os.path.join(scratch_path, dirname))
-
-        os.symlink('init', os.path.join(scratch_path, 'linuxrc'))
-        os.symlink('bin', os.path.join(scratch_path, 'sbin'))
-
-        # Setup Busybox in the initrd
-        cmd_path = os.path.join(project.path, 'sbin/busybox')
-        bb = Busybox(cmd_path, bin_path)
-        bb.create()
-
-        # Setup init script
-        linuxrc_file = open(os.path.join(scratch_path, 'linuxrc'), 'w')
-        print >> linuxrc_file, """\
-#!/bin/msh
-
-mount -t proc /proc /proc
-echo Mounting proc filesystem
-echo Mounting sysfs filesystem
-mount -t sysfs /sys /sys
-echo Creating /tmp
-mount -t tmpfs /tmp /tmp
-echo Creating /dev
-mount -o mode=0755 -t tmpfs /dev /dev
-mkdir /dev/pts
-mount -t devpts -o gid=5,mode=620 /dev/pts /dev/pts
-mkdir /dev/shm
-mkdir /dev/mapper
-echo Creating initial device nodes
-mdev -s
-mknod /dev/sda b 8 0
-mknod /dev/sda1 b 8 1
-mknod /dev/sda2 b 8 2
-mknod /dev/sda3 b 8 3
-mknod /dev/sdb b 8 16
-
-echo "Mounting USB Key"
-mkdir -p /mnt/tmp
-while true
-do
-    grep -q sda /proc/partitions
-    if [ "$?" -eq "0" ]
-    then
-        break
-    fi
-    sleep 2
-done
-
-mount -t vfat /dev/sda /mnt/tmp
-
-echo "Mounting Squashfs as root"
-#for id in `cat /proc/cmdline`
-#do
-#    echo $id | grep -q root=
-#    if [ "$?" -eq "0" ]
-#    then
-#        ROOT=`echo $id | cut -f 2- -d '='`
-#    fi
-#done
-#
-#if [ -f $ROOT ]
-#then
-#    mount -o loop -t squashfs $ROOT /newroot
-#fi
-
-mkdir /newroot
-mount -o loop -t squashfs /mnt/tmp/rootfs.img /newroot
-
-
-echo Mounting rootfs
-cd /newroot
-mkdir initrd
-pivot_root . initrd
-
-cd /
-exec /bin/msh
-"""
-        linuxrc_file.close()
-        os.chmod(os.path.join(scratch_path, 'init'), 0755)
-
-    
 
 class LiveUsbImage(BaseUsbImage):
     def create_image(self):
