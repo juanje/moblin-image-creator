@@ -185,6 +185,8 @@ def list_projects():
 
 def list_fsets(options):
     sdk = SDK()
+    if options.platform_name not in sdk.platforms:
+        raise ValueError, "%s: is not a valid platform name" % options.platform_name
     for key in sorted(sdk.platforms[options.platform_name].fset.iterkeys()):
         print "%s" % (sdk.platforms[options.platform_name].fset[key].name)
 
