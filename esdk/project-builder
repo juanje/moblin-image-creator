@@ -180,8 +180,6 @@ def list_platforms():
 
 def list_projects():
     sdk = SDK()
-    print "Name ==> Path"
-    print "-------------"
     for key in sorted(sdk.projects.iterkeys()):
         print "%s ==> %s" % (sdk.projects[key].name, sdk.projects[key].path)
 
