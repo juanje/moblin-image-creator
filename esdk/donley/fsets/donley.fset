@@ -7,7 +7,7 @@ DEPS=
 [Network]
 DESC=Fundamental Networking capabilities
 PKGS=dhclient
-DEBUG_PKGS=ssh openssh-server
+DEBUG_PKGS=openssh-clients openssh-server
 DEPS=core
 
 [Internet]

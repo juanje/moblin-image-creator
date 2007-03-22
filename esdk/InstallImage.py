@@ -132,13 +132,28 @@ class InstallImage(object):
 
     def create_modules_dep(self):
         base_dir = self.target.fs_path[len(self.project.path):]
-        for file in os.listdir(os.path.join(self.target.fs_path, 'boot')):
+        boot_path = os.path.join(self.target.fs_path, 'boot')
+        
+        for file in os.listdir(boot_path):
             if file.find('System.map-') == 0:
+                kernel_version = file[len('System.map-'):]
+
+                tmp_str = "lib/modules/%s/modules.dep" % kernel_version
+                moddep_file = os.path.join(self.target.fs_path, tmp_str)
+
+                if os.path.isfile(moddep_file):
+                    sr_deps = os.stat(moddep_file)
+                    sr_sym  = os.stat(os.path.join(boot_path, file))
+                    
+                    # Skip generating a new modules.dep if the Symbols are
+                    # older than the current modules.dep file.
+                    if sr_deps.st_mtime > sr_sym.st_mtime: 
+                        continue
+
                 symbol_file = os.path.join(base_dir, 'boot')
                 symbol_file = os.path.join(symbol_file, file)
-                kernel_version = file[len('System.map-'):]
+
                 cmd_args = "-b %s -v %s -F %s" % (base_dir, kernel_version, symbol_file)
-                
                 self.project.chroot("/sbin/depmod", cmd_args)
 
     def create_rootfs(self):
