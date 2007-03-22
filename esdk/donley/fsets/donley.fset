@@ -1,11 +1,17 @@
 [Core]
 DESC=Fundamental fset that provides a root filesystem
-PKGS=kernel-umd-default grub coreutils rpm
+PKGS=kernel-umd-default grub coreutils rpm passwd
 DEBUG_PKGS=kernel-umd-developer gdb yum
 DEPS=
+
+[Network]
+DESC=Fundamental Networking capabilities
+PKGS=dhclient
+DEBUG_PKGS=ssh openssh-server
+DEPS=core
 
 [Internet]
 DESC=Internet fset pulling in basic web 2.0 capabilities
 PKGS=firefox
 DEBUG_PKGS=firefox-devel
-DEPS=core gnome-mobile
+DEPS=core network gnome-mobile
