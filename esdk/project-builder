@@ -1,7 +1,7 @@
 #!/usr/bin/python -tt
 ###############################################################################
 
-import sys, os
+import sys, os, string
 
 from getopt import *
 from optparse import OptionParser
@@ -16,6 +16,11 @@ except:
     pass
 
 def main():
+
+    version = string.split(string.split(sys.version)[0], ".")
+    if map(int, version) < [2, 4, 0]:
+        print >> sys.stderr, "Error: %s depends on a python version of at least 2.4!" % (sys.argv[0])
+        sys.exit(1)
 
     if len(sys.argv) == 1:
         try:
