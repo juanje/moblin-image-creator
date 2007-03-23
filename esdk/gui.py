@@ -204,28 +204,68 @@ class esdkMain:
         dialog.run()
         dialog.destroy()
         
+# Definition of the Image generation buttons labeled "Actions"
     def on_liveUSB_clicked(self, widget):
         project = self.current_project()
         target = self.current_target()
-        print "Create LiveUSB image (project: %s, Target: %s)" % (project.name, target.name)
+        print "Create Live USB image (project: %s, Target: %s)" % (project.name, target.name)
         widgets = gtk.glade.XML(gladefile, 'new_img_dlg')
         dialog = widgets.get_widget('new_img_dlg')
-        if dialog.run() == gtk.RESPONSE_OK:
+        result = dialog.run()
+        if result == gtk.RESPONSE_OK:
             img_name = widgets.get_widget('img_name').get_text()
             self.current_project().create_live_usb(target.name, img_name)
+        if result == gtk.RESPONSE_CANCEL:
+            dialog.destroy()
         dialog.destroy()
 
 
     def on_installUSB_clicked(self, widget):
-        print "Not implemented"
+        project = self.current_project()
+        target = self.current_target()
+        print "Create Install USB image (project: %s, Target: %s)" % (project.name, target.name)
+        widgets = gtk.glade.XML(gladefile, 'new_img_dlg')
+        dialog = widgets.get_widget('new_img_dlg')
+        result = dialog.run()
+        if result == gtk.RESPONSE_OK:
+            img_name = widgets.get_widget('img_name').get_text()
+            self.current_project().create_install_usb(target.name, img_name)
+        if result == gtk.RESPONSE_CANCEL:
+            dialog.destroy()
+        dialog.destroy()
+
 
     def on_installISO_clicked(self, widget):
-        print "Not implemented"
+        project = self.current_project()
+        target = self.current_target()
+        print "Create Install ISO image (project: %s, Target: %s)" % (project.name, target.name)
+        widgets = gtk.glade.XML(gladefile, 'new_img_dlg')
+        dialog = widgets.get_widget('new_img_dlg')
+        result = dialog.run()
+        if result == gtk.RESPONSE_CANCEL:
+            dialog.destroy()
+        if result == gtk.RESPONSE_OK:
+            img_name = widgets.get_widget('img_name').get_text()
+            self.current_project().create_install_iso(target.name, img_name)
+        dialog.destroy()
 
     def on_liveISO_clicked(self, widget):
         print "Not implemented"
+        project = self.current_project()
+        target = self.current_target()
+        print "Create live ISO image (project: %s, Target: %s)" % (project.name, target.name)
+        widgets = gtk.glade.XML(gladefile, 'new_img_dlg')
+        dialog = widgets.get_widget('new_img_dlg')
+        result = dialog.run()
+        if result == gtk.RESPONSE_CANCEL:
+            dialog.destroy()
+        if result == gtk.RESPONSE_OK:
+            img_name = widgets.get_widget('img_name').get_text()
+            self.current_project().create_live_iso(target.name, img_name)
+        dialog.destroy()
 
 
+#Class: Adding a New Project
 class AddNewProject:
     """Class to bring up AddNewProject dialogue"""
     def __init__(self, name="", desc="", path="", platform=""):
