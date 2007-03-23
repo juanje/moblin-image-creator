@@ -33,5 +33,5 @@ tar
 unzip 
 wget 
 which
-
+yum
 
