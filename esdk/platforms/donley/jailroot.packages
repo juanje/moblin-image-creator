@@ -2,7 +2,7 @@
 tar patch gcc gcc-c++ make automake autoconf libtool file rpm-build bzip2 
 
 # not really needed for building, but it sure makes life easier
-vim tree less diffutils yum
+vim-enhanced tree less diffutils yum
 
 # stuff needed for kernel development
 module-init-tools ncurses-devel
