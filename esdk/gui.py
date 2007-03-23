@@ -67,12 +67,14 @@ class esdkMain:
             # No targets are selected
             self.buttons.delete_target.set_sensitive(False)
             self.buttons.install_fset.set_sensitive(False)
-            self.buttons.create_liveiso.set_sensitive(False)
             return
         # A target has been selected
         self.buttons.delete_target.set_sensitive(True)
         self.buttons.install_fset.set_sensitive(True)
         self.buttons.create_liveiso.set_sensitive(True)
+        self.buttons.create_installiso.set_sensitive(True)
+        self.buttons.create_liveusb.set_sensitive(True)
+        self.buttons.create_installusb.set_sensitive(True)
         
     def project_view_changed(self, selection):
         self.targetList.clear()
@@ -84,10 +86,6 @@ class esdkMain:
             self.buttons.add_target.set_sensitive(False)
             self.buttons.install_fset.set_sensitive(False)
             self.buttons.delete_target.set_sensitive(False)
-            self.buttons.create_liveiso.set_sensitive(False)
-            self.buttons.create_installiso.set_sensitive(False)
-            self.buttons.create_liveusb.set_sensitive(False)
-            self.buttons.create_installusb.set_sensitive(False)
             return
         # We have a project selected, so it makes sense for the delete project
         # and add target buttons to be sensitive
@@ -207,7 +205,16 @@ class esdkMain:
         dialog.destroy()
         
     def on_liveUSB_clicked(self, widget):
-        print "LiveUSB Output not implemented yet"
+        project = self.current_project()
+        target = self.current_target()
+        print "Create LiveUSB image (project: %s, Target: %s)" % (project.name, target.name)
+        widgets = gtk.glade.XML(gladefile, 'new_img_dlg')
+        dialog = widgets.get_widget('new_img_dlg')
+        if dialog.run() == gtk.RESPONSE_OK:
+            img_name = widgets.get_widget('img_name').get_text()
+            self.current_project().create_live_usb(target.name, img_name)
+        dialog.destroy()
+
 
     def on_installUSB_clicked(self, widget):
         print "Not implemented"
