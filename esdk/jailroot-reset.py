@@ -1,0 +1,41 @@
+#!/usr/bin/python -tt
+# vim: ai ts=4 sts=4 et sw=4
+
+import os, commands, sys
+
+LIST_FILE = "/etc/base-rpms.list"
+
+list_file = open(LIST_FILE, 'r')
+
+o_list = []
+for i in list_file :
+    rpm_name = i.rstrip()
+    o_list.append(rpm_name)
+o_list.sort()
+
+COMMAND = "rpm -qa"
+output = commands.getoutput(COMMAND)
+n_list = output.splitlines()
+n_list.sort()
+
+for i in o_list :
+    n_index = range(len(n_list))
+    for j in n_index :
+        if i == n_list[j] :
+            del n_list[j]
+            break
+
+if not len(n_list) :
+    print "no rpms to remove"
+    sys.exit(0)
+
+print "removing the following rpms: "
+remove_list = ""
+for i in n_list :
+    print "\t %s " % i 
+    remove_list += "%s " % i
+
+REMOVE_CMD = "yum remove %s" % remove_list
+os.system(REMOVE_CMD)
+
+
