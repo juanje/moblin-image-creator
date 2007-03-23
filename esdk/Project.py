@@ -84,11 +84,13 @@ metadata_expire=1800
 
         root_path = os.path.abspath(path)
         BASE_RPM_LIST = "/etc/base-rpms.list"
-        command = 'rpm -r %s -qa >> %s%s' % (root_path, root_path, BASE_RPM_LIST)
+        command = 'rpm -r %s -qa > %s%s' % (root_path, root_path, BASE_RPM_LIST)
         os.system(command)
 
-        # regenerate the rpmdb.  Needed for x86_64 system.
-        self.chroot('rm -rf /var/lib/rpm/__*; rpm --rebuilddb -v -v', '')
+        # regenerate the rpmdb.  needed for x86_64 system.
+        command = "rm -rf %s%s" % (root_path, "/var/lib/rpm/__*")
+        os.system(command)
+        self.chroot('rpm', '--rebuilddb -v -v')
 
     def mount(self):
         path = os.path.join(self.path, 'proc')
@@ -100,6 +102,16 @@ metadata_expire=1800
             mpoint = line.split()[2]
             if self.path == mpoint[:len(self.path)]:
                 os.system("umount %s" % (mpoint))
+
+    def chroot(self, cmd_path, cmd_args):
+        if not os.path.isfile(os.path.join(self.path, 'bin/bash')):
+            raise ValueError, "Jailroot not installed"
+        
+        self.mount()
+        cmd_line = "chroot %s %s %s" % (self.path, cmd_path, cmd_args)
+        ret = os.system(cmd_line)
+        self.umount()
+        return ret
 
 class Project(FileSystem):
     """
@@ -140,14 +152,6 @@ class Project(FileSystem):
         target = self.targets[name]
         target.umount()
         shutil.rmtree(os.path.join(self.path, 'targets', name))
-
-    def chroot(self, cmd_path, cmd_args):
-        if not os.path.isfile(os.path.join(self.path, 'bin/bash')):
-            raise ValueError, "Jailroot not installed"
-        
-        self.mount()
-        cmd_line = "/usr/sbin/chroot %s %s %s" % (self.path, cmd_path, cmd_args)
-        return os.system(cmd_line)
 
     def create_live_iso(self, target_name, image_name):
         image = InstallImage.LiveIsoImage(self, self.targets[target_name], image_name)
