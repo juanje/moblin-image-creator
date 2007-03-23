@@ -33,7 +33,7 @@ class FileSystem(object):
                 os.makedirs(full_path)
 
             target_etc = os.path.join(self.path, "etc")
-            for filename in [ 'hosts', 'passwd', 'group', 'resolv.conf' ]:
+            for filename in [ 'hosts', 'resolv.conf' ]:
                 shutil.copy(os.path.join('/etc', filename), target_etc)
             yumconf = open(os.path.join(target_etc, 'yum.conf'), 'w')
             print >> yumconf, """\

@@ -155,8 +155,12 @@ class SDK(object):
         # instantiate all platforms
         self.platforms = {}
         for p in os.listdir(os.path.join(self.path, 'platforms')):
-            self.platforms[p] = Platform.Platform(self.path, p)
-
+            try:
+                self.platforms[p] = Platform.Platform(self.path, p)
+            except:
+                print >> sys.stderr, "Platform Config Error for %s: %s" % (p, sys.exc_value)
+                pass
+            
         # discover all existing projects
         self.projects = {}
         for file in os.listdir(self.config_path):
@@ -164,6 +168,7 @@ class SDK(object):
                 config = PackageConfig(os.path.join(self.config_path, file))
                 self.projects[config.name] = Project.Project(config.path, config.name, config.desc, self.platforms[config.platform])
             except:
+                print >> sys.stderr, "Project Config Error: %s" % (sys.exc_value)
                 pass
             
     def create_project(self, install_path, name, desc, platform):
