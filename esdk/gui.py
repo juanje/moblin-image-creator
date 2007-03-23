@@ -82,7 +82,6 @@ class esdkMain:
         if not iter:
             # No projects are selected
             self.buttons.delete_project.set_sensitive(False)
-            self.buttons.save_project.set_sensitive(False)
             self.buttons.add_target.set_sensitive(False)
             self.buttons.install_fset.set_sensitive(False)
             self.buttons.delete_target.set_sensitive(False)
@@ -311,7 +310,6 @@ class MainWindowButtons:
         # Project button bar
         self.add_project = widgets.get_widget('new_project_add')
         self.delete_project = widgets.get_widget('project_delete')
-        self.save_project = widgets.get_widget('project_save')
         # Target button bar
         self.add_target = widgets.get_widget('new_target_add')
         self.delete_target = widgets.get_widget('target_delete')
