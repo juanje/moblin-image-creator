@@ -4,6 +4,7 @@ install:
 	@mkdir -p /usr/share/esdk/{lib,platforms,projects}
 	@cp *.py  /usr/share/esdk/lib
 	@cp -a donley /usr/share/esdk/platforms/
+	@cp -a buildserver /usr/share/esdk/platforms/
 	@cp project-builder /usr/sbin/
 	@ln -f -s /usr/bin/consolehelper /usr/bin/project-builder
 	@cp project-builder.pam.d /etc/pam.d/project-builder
