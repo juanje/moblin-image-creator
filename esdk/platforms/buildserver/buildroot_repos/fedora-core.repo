@@ -1,0 +1,7 @@
+[base]
+name=Fedora Core $releasever - $basearch - Base
+baseurl=http://linux-ftp.jf.intel.com/pub/mirrors/fedora/linux/core/6/i386/os/
+enabled=1
+gpgcheck=0
+
+
