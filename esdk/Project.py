@@ -84,8 +84,11 @@ metadata_expire=1800
 
         root_path = os.path.abspath(path)
         BASE_RPM_LIST = "/etc/base-rpms.list"
-        command = 'rpm -r %s -qa > %s%s' % (root_path, root_path, BASE_RPM_LIST)
+        command = 'rpm -r %s -qa >> %s%s' % (root_path, root_path, BASE_RPM_LIST)
         os.system(command)
+
+        # regenerate the rpmdb.  Needed for x86_64 system.
+        self.chroot('rm -rf /var/lib/rpm/__*; rpm --rebuilddb -v -v', '')
 
     def mount(self):
         path = os.path.join(self.path, 'proc')
