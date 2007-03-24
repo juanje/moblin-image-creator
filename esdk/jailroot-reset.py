@@ -11,12 +11,10 @@ o_list = []
 for i in list_file :
     rpm_name = i.rstrip()
     o_list.append(rpm_name)
-o_list.sort()
 
 COMMAND = "rpm -qa"
 output = commands.getoutput(COMMAND)
 n_list = output.splitlines()
-n_list.sort()
 
 for i in o_list :
     n_index = range(len(n_list))
@@ -35,7 +33,7 @@ for i in n_list :
     print "\t %s " % i 
     remove_list += "%s " % i
 
-REMOVE_CMD = "yum remove %s" % remove_list
+REMOVE_CMD = "rpm -e %s" % remove_list
 os.system(REMOVE_CMD)
 
 
