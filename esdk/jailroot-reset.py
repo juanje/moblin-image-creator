@@ -3,8 +3,15 @@
 
 import os, commands, sys
 
-LIST_FILE = "/etc/base-rpms.list"
+if len(sys.argv) >= 2 and sys.argv[1] != "--test" :
+    print "Usage: %s [--test]" % sys.argv[0]
+    sys.exit(0)
 
+TEST_RUN = ""
+if len(sys.argv) > 1 and sys.argv[1] == "--test" :
+    TEST_RUN = "--test"
+
+LIST_FILE = "/etc/base-rpms.list"
 list_file = open(LIST_FILE, 'r')
 
 o_list = []
@@ -33,7 +40,7 @@ for i in n_list :
     print "\t %s " % i 
     remove_list += "%s " % i
 
-REMOVE_CMD = "rpm -e %s" % remove_list
+REMOVE_CMD = "rpm -e --noscripts %s %s" % (TEST_RUN, remove_list)
 os.system(REMOVE_CMD)
 
 
