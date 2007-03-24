@@ -1,4 +1,5 @@
 #!/usr/bin/python -tt
+# vim: ai ts=4 sts=4 et sw=4
 ###############################################################################
 
 import sys, os, string
@@ -176,6 +177,9 @@ Examples:
             parser.error("Must specify target-name when using %s command" % options.cmd)
         if not options.image_name:
             parser.error("Must specify image-name when using %s command" % options.cmd)
+    if options.project_path:
+        options.project_path = os.path.abspath(os.path.expanduser(options.project_path))
+
     return options, args
     
 def list_platforms():
@@ -205,6 +209,10 @@ def create_project(options):
     if options.project_name in sdk.projects:
         print >> sys.stderr, "Project %s already exist!" % (options.project_name)
         sys.exit(1)
+    cwd = os.getcwd()
+    if cwd.find(options.project_path) == 0:
+	    print >> sys.stderr, "The project path can not be part of the current working directory"
+	    sys.exit(1)
     proj = sdk.create_project(options.project_path, options.project_name, options.project_desc, sdk.platforms[options.platform_name])
     proj.install()
     proj.mount()
