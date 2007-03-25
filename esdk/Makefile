@@ -6,7 +6,7 @@ install:
 	@cp -a platforms/* /usr/share/esdk/platforms/
 	@cp *.glade /usr/share/esdk/
 	@cp project-builder /usr/sbin/
-	@if [ -z "$(shell which gnomesu 2> /dev/null)" ]; then \
+	@if [ -d /etc/security/console.apps ]; then \
 		ln -f -s /usr/bin/consolehelper /usr/bin/project-builder; \
 		cp project-builder.pam.d /etc/pam.d/project-builder; \
 		cp project-builder.helperconsole /etc/security/console.apps/project-builder; \
