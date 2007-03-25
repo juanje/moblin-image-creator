@@ -77,6 +77,9 @@ class esdkMain:
         self.buttons.create_installusb.set_sensitive(True)
         
     def project_view_changed(self, selection):
+        self.redraw_target_view()
+
+    def redraw_target_view(self):
         self.targetList.clear()
         model, iter = self.projectView.get_selection().get_selected()
         if not iter:
@@ -163,6 +166,7 @@ class esdkMain:
             fset = self.current_project().platform.fset[cebox.child.get_text()]
             try:
                 self.current_target().install(fset, tree.get_widget('debug-check-button').get_active())
+                self.redraw_target_view()
             except ValueError, e:
                 self.show_error_dialog(e.args[0])
             except:
