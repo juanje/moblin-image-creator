@@ -110,6 +110,7 @@
 	      <child>
 		<widget class="GtkToolButton" id="new_project_add">
 		  <property name="visible">True</property>
+		  <property name="tooltip" translatable="yes">Create a new project</property>
 		  <property name="stock_id">gtk-add</property>
 		  <property name="visible_horizontal">True</property>
 		  <property name="visible_vertical">True</property>
@@ -126,6 +127,7 @@
 		<widget class="GtkToolButton" id="project_delete">
 		  <property name="visible">True</property>
 		  <property name="sensitive">False</property>
+		  <property name="tooltip" translatable="yes">Delete the currently selected project</property>
 		  <property name="stock_id">gtk-delete</property>
 		  <property name="visible_horizontal">True</property>
 		  <property name="visible_vertical">True</property>
@@ -289,6 +291,7 @@
 		<widget class="GtkButton" id="new_target_add">
 		  <property name="visible">True</property>
 		  <property name="sensitive">False</property>
+		  <property name="tooltip" translatable="yes">Create a new target filesystem</property>
 		  <property name="can_focus">True</property>
 		  <property name="label">gtk-add</property>
 		  <property name="use_stock">True</property>
@@ -307,6 +310,7 @@
 		<widget class="GtkButton" id="target_install_fset">
 		  <property name="visible">True</property>
 		  <property name="sensitive">False</property>
+		  <property name="tooltip" translatable="yes">Install a Functional Set of packages into the currently selected target</property>
 		  <property name="can_focus">True</property>
 		  <property name="label">Install Function Set</property>
 		  <property name="use_underline">True</property>
@@ -337,6 +341,7 @@
 			<widget class="GtkButton" id="target_delete">
 			  <property name="visible">True</property>
 			  <property name="sensitive">False</property>
+			  <property name="tooltip" translatable="yes">Delete the currently selected target</property>
 			  <property name="can_focus">True</property>
 			  <property name="label">gtk-delete</property>
 			  <property name="use_stock">True</property>
@@ -420,6 +425,7 @@
 		  <property name="width_request">475</property>
 		  <property name="height_request">88</property>
 		  <property name="visible">True</property>
+		  <property name="tooltip" translatable="yes">Available target filesystems</property>
 		  <property name="can_focus">True</property>
 		  <property name="headers_visible">True</property>
 		  <property name="rules_hint">False</property>
@@ -478,6 +484,7 @@
 		<widget class="GtkButton" id="create_liveISO_btn">
 		  <property name="visible">True</property>
 		  <property name="sensitive">False</property>
+		  <property name="tooltip" translatable="yes">Create a new Live ISO image.</property>
 		  <property name="can_focus">True</property>
 		  <property name="label" translatable="yes">Live ISO</property>
 		  <property name="use_underline">True</property>
@@ -496,6 +503,7 @@
 		<widget class="GtkButton" id="create_installISO_btn">
 		  <property name="visible">True</property>
 		  <property name="sensitive">False</property>
+		  <property name="tooltip" translatable="yes">Create a new installation ISO image</property>
 		  <property name="can_focus">True</property>
 		  <property name="label" translatable="yes">Install ISO</property>
 		  <property name="use_underline">True</property>
@@ -520,6 +528,7 @@
 		    <widget class="GtkButton" id="create_liveUSB_btn">
 		      <property name="visible">True</property>
 		      <property name="sensitive">False</property>
+		      <property name="tooltip" translatable="yes">Create a new Live USB image</property>
 		      <property name="can_focus">True</property>
 		      <property name="label" translatable="yes">Live USB</property>
 		      <property name="use_underline">True</property>
@@ -538,6 +547,7 @@
 		    <widget class="GtkButton" id="create_installUSB_btn">
 		      <property name="visible">True</property>
 		      <property name="sensitive">False</property>
+		      <property name="tooltip" translatable="yes">Create a new Installation USB image</property>
 		      <property name="can_focus">True</property>
 		      <property name="label" translatable="yes">Install USB</property>
 		      <property name="use_underline">True</property>
