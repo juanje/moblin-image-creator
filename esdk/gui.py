@@ -164,7 +164,7 @@ class esdkMain:
             try:
                 self.current_target().install(fset, tree.get_widget('debug-check-button').get_active())
             except ValueError, e:
-                self.show_error_dialog(e.args[1])
+                self.show_error_dialog(e.args[0])
             except:
                 self.show_error_dialog()
         dialog.destroy()

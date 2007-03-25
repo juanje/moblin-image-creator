@@ -219,7 +219,7 @@ class Target(FileSystem):
         
         for dep in fset['deps']:
             if not os.path.isfile(os.path.join(self.top, dep)):
-                raise ValueError(sys.stderr, "fset %s must be installed first!" % (dep))
+                raise ValueError("fset %s must be installed first!" % (dep))
 
         FileSystem.install(self, self.fs_path, fset['pkgs'], self.project.platform.buildroot_repos)
         if debug == 1:
