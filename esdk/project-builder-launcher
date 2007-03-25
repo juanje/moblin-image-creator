@@ -1,0 +1,7 @@
+#!/bin/bash
+
+if [ -z "$DISPLAY" ]; then 
+    su /usr/sbin/project-builder $@
+else
+    gnomesu /usr/sbin/project-builder $@
+fi
