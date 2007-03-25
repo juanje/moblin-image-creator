@@ -162,7 +162,7 @@ class esdkMain:
         if dialog.run() == gtk.RESPONSE_OK:
             fset = self.current_project().platform.fset[cebox.child.get_text()]
             try:
-                self.current_target().install(fset)
+                self.current_target().install(fset, tree.get_widget('debug-check-button').get_active())
             except ValueError, e:
                 self.show_error_dialog(e.args[1])
             except:
