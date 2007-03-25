@@ -87,10 +87,17 @@ metadata_expire=1800
         command = 'rpm -r %s -qa > %s%s' % (root_path, root_path, BASE_RPM_LIST)
         os.system(command)
 
-        # regenerate the rpmdb.  needed for x86_64 system.
-        command = "rm -rf %s%s" % (root_path, "/var/lib/rpm/__*")
-        os.system(command)
-        self.chroot('rpm', '--rebuilddb -v -v')
+        # Since we are using yum from the host machine, if this is a
+        # 64bit machine then yum produces 64bit database indexes, while
+        # our chroot runtime is 32bit.  To keep the target from chroot's
+        # 32bit rpm from chocking on the 64bit index, we rebuild the
+        # index from inside the chroot.
+        # TODO: there has got to be a better way of doing this
+        if os.uname()[4] == "x86_64":
+            # regenerate the rpmdb.  needed for x86_64 system.
+            command = "rm -rf %s%s" % (root_path, "/var/lib/rpm/__*")
+            os.system(command)
+            self.chroot('rpm', '--rebuilddb -v -v')
 
     def mount(self):
         path = os.path.join(self.path, 'proc')
