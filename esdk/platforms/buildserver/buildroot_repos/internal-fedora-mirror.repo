@@ -22,6 +22,12 @@ name=updates
 #baseurl=http://linux-ftp.jf.intel.com/pub/mirrors/fedora/linux/core/updates/6/i386/
 baseurl=http://umd-build2.jf.intel.com/pub/mid/linux/core/updates/6/i386/
 
+[mid]
+name=mid
+#mirrorlist=http://mirrors.fedoraproject.org/mirrorlist?repo=updates-released-fc6&arch=i386
+#baseurl=http://linux-ftp.jf.intel.com/pub/mirrors/fedora/linux/core/updates/6/i386/
+baseurl=http://umd-build2.jf.intel.com/pub/mid/linux/intel/i386/
+
 [groups]
 name=groups
 #baseurl=http://buildsys.fedoraproject.org/buildgroups/6/i386/
