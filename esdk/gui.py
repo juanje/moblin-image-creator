@@ -7,6 +7,7 @@ try:
 except:
     raise ImportError, "Unable to import the gtk libraries.  Maybe you are running in text mode"
 from SDK import *
+import os
 
 global gladefile
 gladefile = "/usr/share/esdk/esdk.glade"
@@ -28,7 +29,8 @@ class esdkMain:
                 "on_create_installISO_clicked": self.on_installISO_clicked,
                 "on_create_liveUSB_clicked": self.on_liveUSB_clicked,
                 "on_create_installUSB_clicked": self.on_installUSB_clicked,
-                "on_about_activate": self.on_about_activate}
+                "on_about_activate": self.on_about_activate,
+                "on_term_launch_clicked": self.on_term_launch_clicked}
         self.widgets.signal_autoconnect(dic)
         # setup projectView widget
         self.pName = "Name"
@@ -113,6 +115,7 @@ class esdkMain:
 
     def on_newProject_clicked(self, widget):
         """Instantiate a new dialogue"""
+        os.system('/usr/bin/xterm &')
         dialog = AddNewProject();
         result = dialog.run()
         if result == gtk.RESPONSE_OK:
@@ -206,6 +209,11 @@ class esdkMain:
         dialog = widgets.get_widget('error_dialog')
         dialog.run()
         dialog.destroy()
+
+    def on_term_launch_clicked(self, widget):
+        project_path = self.current_project().path
+        print "Project path: %s" % project_path
+        os.system('/usr/bin/gnome-terminal -x sudo /usr/sbin/chroot %s' % project_path)
         
 # Definition of the Image generation buttons labeled "Actions"
     def on_liveUSB_clicked(self, widget):
