@@ -63,6 +63,7 @@ metadata_expire=1800
                 # name, major, minor, mode
                 ('null', 1, 3, (0666 | stat.S_IFCHR)),
                 ('zero', 1, 5, (0666 | stat.S_IFCHR)),
+                ('console', 5, 1, (0600 | stat.S_IFCHR)),
             ]
             for device_name, major, minor, mode in devices:
                 device_path = os.path.join(self.path, 'dev', device_name)
