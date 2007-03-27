@@ -73,7 +73,11 @@ metadata_expire=1800
                 # what we want :(
                 os.chmod(device_path, mode)
 
-    def install(self, path, packages, repos):
+    def update(self, path):
+        os.system("yum -y --installroot=%s update" % (path))
+        self.__rebuild_rpmlist(path)
+
+    def install(self, path, packages):
         """
         Call into yum to install RPM packages using the specified yum
         repositories
@@ -82,7 +86,9 @@ metadata_expire=1800
         for p in packages:
             command = command + ' ' + p
         os.system(command)
-
+        self.__rebuild_rpmlist(path)
+        
+    def __rebuild_rpmlist(self, path):
         root_path = os.path.abspath(path)
         BASE_RPM_LIST = "/etc/base-rpms.list"
         command = 'rpm -r %s -qa > %s%s' % (root_path, root_path, BASE_RPM_LIST)
@@ -149,8 +155,11 @@ class Project(FileSystem):
         """
         Install all the packages defined by Platform.jailroot_packages
         """
-        FileSystem.install(self, self.path, self.platform.jailroot_packages, self.platform.buildroot_repos)
+        FileSystem.install(self, self.path, self.platform.jailroot_packages)
 
+    def update(self):
+        FileSystem.update(self, self.path)
+        
     def create_target(self, name):
         if name and not name in self.targets:
             self.targets[name] = Target(name, self)
@@ -222,13 +231,16 @@ class Target(FileSystem):
             if not os.path.isfile(os.path.join(self.top, dep)):
                 raise ValueError("fset %s must be installed first!" % (dep))
 
-        FileSystem.install(self, self.fs_path, fset['pkgs'], self.project.platform.buildroot_repos)
+        FileSystem.install(self, self.fs_path, fset['pkgs'])
         if debug == 1:
-            FileSystem.install(self, self.fs_path, fset['debug_pkgs'], self.project.platform.buildroot_repos)
+            FileSystem.install(self, self.fs_path, fset['debug_pkgs'])
 
         # and now create a simple empty file that indicates that the fset
         # has been installed...
         os.system('touch ' + os.path.join(self.top, fset.name))
+
+    def update(self):
+        FileSystem.update(self, self.fs_path)
 
     def __str__(self):
         return ("<Target: name=%s, path=%s, fs_path=%s, image_path>"

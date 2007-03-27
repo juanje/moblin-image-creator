@@ -52,6 +52,10 @@ def main():
         delete_target(options)
     elif options.cmd == 'install-fset':
         install_fset(options)
+    elif options.cmd == 'update-project':
+        update_project(options)
+    elif options.cmd == 'update-target':
+        update_target(options)
     elif options.cmd in ['create-live-iso', 'create-install-iso', 'create-live-usb', 'create-install-usb']:
         create_image(options)
     else:
@@ -65,7 +69,8 @@ def parseCommandLine():
                        "list-fsets", "create-project", "create-target",
                        "install-fset", "delete-target", "delete-project",
                        "create-live-iso", "create-install-iso",
-                       "create-live-usb", "create-install-usb"]
+                       "create-live-usb", "create-install-usb",
+                       "update-project", "update-target"]
     valid_command_string = ""
     for command in valid_commands[:-1]:
         valid_command_string += "%s, " %  command
@@ -125,7 +130,16 @@ Examples:
                     --platform-name='donley' \\
                     --project-name='MyProject' \\
                     --target-name='MyTarget' \\
-                    --fset='Core'"""
+                    --fset='Core' \\
+
+<updating a given target inside a project>
+    project-builder --command=update-target \\
+                    --project-name='MyProject' \\
+                    --target-name='MyTarget' \\
+
+<updating a given project>
+    project-builder --command=update-project \\
+                    --project-name='MyProject'"""
 
     (options, args) = parser.parse_args()
     # if nothing at all is passed in then return back
@@ -156,7 +170,9 @@ Examples:
             parser.error("Must specify project-path when using %s command" % options.cmd)
     if options.cmd == "delete-project" and not options.project_name:
         parser.error("Must specify project-name when using %s command" % options.cmd)
-    if options.cmd == "create-target" or options.cmd == "delete-target":
+    if options.cmd == "update-project" and not options.project_name:
+        parser.error("Must specify project-name when using %s command" % options.cmd)
+    if options.cmd == "create-target" or options.cmd == "delete-target" or options.cmd == "update-target":
         if not options.project_name:
             parser.error("Must specify project-name when using %s command" % options.cmd)
         if not options.target_name:
@@ -223,6 +239,13 @@ def delete_project(options):
         print >> sys.stderr, "Project %s does not exist" % (options.project_name)
         sys.exit(1)
     sdk.delete_project(options.project_name)
+
+def update_project(options):
+    sdk = SDK()
+    if not options.project_name in sdk.projects:
+        print >> sys.stderr, "Project %s does not exist" % (options.project_name)
+        sys.exit(1)
+    sdk.projects[options.project_name].update()
     
 def create_target(options):
     sdk = SDK()
@@ -241,6 +264,17 @@ def delete_target(options):
         print >> sys.stderr, "Target %s does not exist" % (options.target_name)
         sys.exit(1)
     proj.delete_target(options.target_name)
+
+def update_target(options):
+    sdk = SDK()
+    if not options.project_name in sdk.projects:
+        print >> sys.stderr, "Project %s does not exist" % (options.project_name)
+        sys.exit(1)
+    proj = sdk.projects[options.project_name]
+    if not options.target_name in proj.targets:
+        print >> sys.stderr, "Target %s does not exist" % (options.target_name)
+        sys.exit(1)
+    proj.targets[options.target_name].update()
     
 def install_fset(options):
     sdk = SDK()
