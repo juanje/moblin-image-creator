@@ -90,11 +90,13 @@ class esdkMain:
             self.buttons.add_target.set_sensitive(False)
             self.buttons.install_fset.set_sensitive(False)
             self.buttons.delete_target.set_sensitive(False)
+            self.buttons.term_launch.set_sensitive(False)
             return
         # We have a project selected, so it makes sense for the delete project
         # and add target buttons to be sensitive
         self.buttons.delete_project.set_sensitive(True)
         self.buttons.add_target.set_sensitive(True)
+        self.buttons.term_launch.set_sensitive(True)
         for key in self.current_project().targets:
             installed_fsets = ' '.join(self.current_project().targets[key].installed_fsets())
             self.targetList.append((key, installed_fsets))
@@ -330,6 +332,8 @@ class MainWindowButtons:
         self.create_installiso = widgets.get_widget('create_installISO_btn')
         self.create_liveusb = widgets.get_widget('create_liveUSB_btn')
         self.create_installusb = widgets.get_widget('create_installUSB_btn')
+        # Terminal button
+        self.term_launch = widgets.get_widget('term_launch')    
         
 if __name__ == '__main__':
     esdk = esdkMain()
