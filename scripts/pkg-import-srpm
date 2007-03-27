@@ -8,13 +8,13 @@ rpmi () {
 	rpm --nosignature -q -p $1 --queryformat "%{$2}\n"
 }
 
-repository="$1/"
-shift
-
-if [ -z "$repository" ]; then
+if [ -z "$1" ]; then
     echo "USAGE: $0 REPOSITORY_DIR PKG1 [PKG2] [...]"
     exit -1
 fi
+
+repository="$1/"
+shift
 
 if [ ! -d $repository ]; then
     echo "$repository is not a directory!"
