@@ -7,6 +7,7 @@ try:
 except:
     raise ImportError, "Unable to import the gtk libraries.  Maybe you are running in text mode"
 from SDK import *
+import os
 
 global gladefile
 gladefile = "/usr/share/esdk/esdk.glade"
@@ -28,7 +29,8 @@ class esdkMain:
                 "on_create_installISO_clicked": self.on_installISO_clicked,
                 "on_create_liveUSB_clicked": self.on_liveUSB_clicked,
                 "on_create_installUSB_clicked": self.on_installUSB_clicked,
-                "on_about_activate": self.on_about_activate}
+                "on_about_activate": self.on_about_activate,
+                "on_term_launch_clicked": self.on_term_launch_clicked}
         self.widgets.signal_autoconnect(dic)
         # setup projectView widget
         self.pName = "Name"
@@ -88,11 +90,13 @@ class esdkMain:
             self.buttons.add_target.set_sensitive(False)
             self.buttons.install_fset.set_sensitive(False)
             self.buttons.delete_target.set_sensitive(False)
+            self.buttons.term_launch.set_sensitive(False)
             return
         # We have a project selected, so it makes sense for the delete project
         # and add target buttons to be sensitive
         self.buttons.delete_project.set_sensitive(True)
         self.buttons.add_target.set_sensitive(True)
+        self.buttons.term_launch.set_sensitive(True)
         for key in self.current_project().targets:
             installed_fsets = ' '.join(self.current_project().targets[key].installed_fsets())
             self.targetList.append((key, installed_fsets))
@@ -206,6 +210,11 @@ class esdkMain:
         dialog = widgets.get_widget('error_dialog')
         dialog.run()
         dialog.destroy()
+
+    def on_term_launch_clicked(self, widget):
+        project_path = self.current_project().path
+        print "Project path: %s" % project_path
+        os.system('/usr/bin/gnome-terminal -x sudo /usr/sbin/chroot %s &' % project_path)
         
 # Definition of the Image generation buttons labeled "Actions"
     def on_liveUSB_clicked(self, widget):
@@ -323,6 +332,8 @@ class MainWindowButtons:
         self.create_installiso = widgets.get_widget('create_installISO_btn')
         self.create_liveusb = widgets.get_widget('create_liveUSB_btn')
         self.create_installusb = widgets.get_widget('create_installUSB_btn')
+        # Terminal button
+        self.term_launch = widgets.get_widget('term_launch')    
         
 if __name__ == '__main__':
     esdk = esdkMain()

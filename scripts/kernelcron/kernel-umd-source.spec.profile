@@ -66,6 +66,24 @@ This is kernel version special for Intel UMD release.
 
 %post -f source-post.sh
 
+# package for kernel headers
+%package -n kernel-umd-headers
+Summary:    umd kernel headers
+Group:	    Development/System
+Obsoletes:  glibc-kernheaders
+Provides:   glibc-kernheaders = 3.0-46
+
+%description -n kernel-umd-headers
+Kernel-headers includes the C header files that specify the interface
+between the Linux kernel and userspace libraries and programs.  The
+header files define structures and constants that are needed for
+building most standard programs and are also needed for rebuilding the
+glibc package.
+
+%files -n kernel-umd-headers
+%defattr(-,root,root)
+/usr/include/*
+
 # package for default 
 %package -n kernel-umd-default
 Summary:    default built kernel binary package
@@ -241,6 +259,7 @@ cd $RPM_BUILD_ROOT/usr/src
 ln -sf linux linux 
 # copy the already patched kernel to $RPM_BUILD_ROOT/usr/src to generate primary package kernel-source
 cp -r %_builddir/%{name}-%{krelease}/linux-%{krelease} ./
+buildheaders="1"
 
 # start to compile kernel in several flavor
 for flavor in %{buildflavors}; do
@@ -269,6 +288,15 @@ for flavor in %{buildflavors}; do
     cp vmlinux $RPM_BUILD_ROOT/%{image_install_path}/vmlinux-$kernelver
     mkdir -p $RPM_BUILD_ROOT/lib/modules/$kernelver
     make ARCH=$arch INSTALL_MOD_PATH=$RPM_BUILD_ROOT modules_install KERNELRELEASE=$kernelver
+    if [ "$buildheaders" == "1" ]; then
+           make ARCH=$arch INSTALL_HDR_PATH=$RPM_BUILD_ROOT/usr headers_install
+           buildheaders="0"
+# glibc provides scsi headers for itself, for now
+           rm -rf $RPM_BUILD_ROOT/usr/include/scsi
+           rm -f $RPM_BUILD_ROOT/usr/include/asm*/atomic.h
+           rm -f $RPM_BUILD_ROOT/usr/include/asm*/io.h
+           rm -f $RPM_BUILD_ROOT/usr/include/asm*/irq.h
+    fi;
 # Create the kABI metadata for use in packaging
     echo "**** GENERATING kernel ABI metadata ****"
     gzip -c9 < Module.symvers > $RPM_BUILD_ROOT/%{image_install_path}/symvers-$kernelver.gz
