@@ -4,15 +4,11 @@ PKGS=kernel-umd-default grub coreutils rpm passwd
 DEBUG_PKGS=kernel-umd-developer gdb yum vim-enhanced
 DEPS=
 
-[Network]
-DESC=Fundamental Networking capabilities
-PKGS=dhclient wireless-tools sdio_wlan_fc6 tem_config_net_donley
-DEBUG_PKGS=openssh-clients openssh-server
-DEPS=core
-
 [Infrastructure]
 DESC=Fundamental non-GUI system infrastructure
-PKGS=dhclient glib2 dbus dbus-glib NetworkManager NetworkManager-glib
+PKGS=dhclient glib2 dbus dbus-glib NetworkManager NetworkManager-glib wireless-tools sdio_wlan_fc6 tem_config_net_donley
+DEBUG_PKGS=openssh-clients openssh-server
+DEPS=core
 
 [Xorg]
 DESC=Minimal packages to get a working X server running on the donley
