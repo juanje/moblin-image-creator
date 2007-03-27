@@ -115,7 +115,6 @@ class esdkMain:
 
     def on_newProject_clicked(self, widget):
         """Instantiate a new dialogue"""
-        os.system('/usr/bin/xterm &')
         dialog = AddNewProject();
         result = dialog.run()
         if result == gtk.RESPONSE_OK:
