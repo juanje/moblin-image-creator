@@ -1,13 +1,3 @@
-[main]
-cachedir=/var/cache/yum
-debuglevel=1
-reposdir=/dev/null
-logfile=/var/log/yum.log
-retries=20
-obsoletes=1
-gpgcheck=0
-assumeyes=1
-
 # repos
 
 [core]
