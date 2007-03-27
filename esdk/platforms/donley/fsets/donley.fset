@@ -6,7 +6,7 @@ DEPS=
 
 [Network]
 DESC=Fundamental Networking capabilities
-PKGS=dhclient
+PKGS=dhclient wireless-tools sdio_wlan_fc6 tem_config_net_donley
 DEBUG_PKGS=openssh-clients openssh-server
 DEPS=core
 
