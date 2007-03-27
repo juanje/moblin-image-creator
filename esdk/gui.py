@@ -214,7 +214,7 @@ class esdkMain:
     def on_term_launch_clicked(self, widget):
         project_path = self.current_project().path
         print "Project path: %s" % project_path
-        os.system('/usr/bin/gnome-terminal -x sudo /usr/sbin/chroot %s' % project_path)
+        os.system('/usr/bin/gnome-terminal -x sudo /usr/sbin/chroot %s &' % project_path)
         
 # Definition of the Image generation buttons labeled "Actions"
     def on_liveUSB_clicked(self, widget):
