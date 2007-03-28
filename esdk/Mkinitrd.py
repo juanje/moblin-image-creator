@@ -145,6 +145,12 @@ mount -t unionfs -o dirs=/ramfs=rw:/squashfs=ro none /newroot
 
 mknod /newroot/dev/ram0 c 1 0
 
+if [ -f /mnt/tmp/install.sh ]
+then
+    echo "Install Process will begin shortly..."
+    cat /mnt/tmp/install.sh >> /newroot/etc/rc.d/rc.local
+fi
+
 umount /dev/pts
 umount /dev
 umount /tmp
