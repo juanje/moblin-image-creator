@@ -159,6 +159,8 @@ class esdkMain:
     def on_install_fset(self, widget):
         tree = gtk.glade.XML(gladefile, 'installFsetDialog')
         dialog = tree.get_widget('installFsetDialog')
+        platform = self.current_project().platform
+        label = tree.get_widget('fset-desc-label')
         list = gtk.ListStore(gobject.TYPE_STRING)            
         for fset in self.current_project().platform.fset:
             list.append([fset])
@@ -166,8 +168,10 @@ class esdkMain:
         cebox.set_model(list)
         cebox.set_text_column(0)
         cebox.child.set_text(list[0][0])
+        cebox.connect("changed", self.fset_install_updated, label, platform)
+        label.set_text(platform.fset[cebox.child.get_text()].desc)
         if dialog.run() == gtk.RESPONSE_OK:
-            fset = self.current_project().platform.fset[cebox.child.get_text()]
+            fset = platform.fset[cebox.child.get_text()]
             try:
                 self.current_target().install(fset, tree.get_widget('debug-check-button').get_active())
                 self.redraw_target_view()
@@ -176,6 +180,9 @@ class esdkMain:
             except:
                 self.show_error_dialog()
         dialog.destroy()
+
+    def fset_install_updated(self, box, label, platform):
+        label.set_text(platform.fset[box.child.get_text()].desc)
         
     def on_delete_target_clicked(self, widget):
         project = self.current_project()
