@@ -82,6 +82,8 @@ def create(project, initrd_file):
     print >> init_file, """\
 #!/bin/msh
 
+RUNLEVEL=1
+
 PATH=/bin
 export PATH
 
@@ -148,7 +150,9 @@ mknod /newroot/dev/ram0 c 1 0
 if [ -f /mnt/tmp/install.sh ]
 then
     echo "Install Process will begin shortly..."
-    cat /mnt/tmp/install.sh >> /newroot/etc/rc.d/rc.local
+    RUNLEVEL=1
+    cp /mnt/tmp/install.sh /newroot/etc/rc.d/rc1.d/S10install
+    chmod 755 /newroot/etc/rc.d/rc1.d/S10install
 fi
 
 umount /dev/pts
@@ -166,7 +170,7 @@ cd /newroot
 exec chroot . /bin/sh <<EOF
     mount -t proc /proc /proc
     mount -t sysfs /sys /sys
-    exec /sbin/init 1
+    exec /sbin/init $RUNLEVEL
 EOF
 
 cd /
