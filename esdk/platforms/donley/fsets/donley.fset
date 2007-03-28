@@ -24,7 +24,7 @@ DEPS=core xorg
 
 [Gnome-mobile-service]
 DESC=gnome mobile service
-PKGS=sapwood matchbox-keyboard matchbox-window-manager
+PKGS=sapwood matchbox-keyboard matchbox-window-manager 915resolution
 DEBUG_PKGS=
 DEPS=core xorg gnome-mobile-core
 
