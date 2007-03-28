@@ -216,17 +216,20 @@ class esdkMain:
         print "Project path: %s" % project_path
         os.system('/usr/bin/gnome-terminal -x sudo /usr/sbin/chroot %s &' % project_path)
         
-# Definition of the Image generation buttons labeled "Actions"
     def on_liveUSB_clicked(self, widget):
         project = self.current_project()
         target = self.current_target()
-        print "Create Live USB image (project: %s, Target: %s)" % (project.name, target.name)
         widgets = gtk.glade.XML(gladefile, 'new_img_dlg')
         dialog = widgets.get_widget('new_img_dlg')
         result = dialog.run()
         if result == gtk.RESPONSE_OK:
-            img_name = widgets.get_widget('img_name').get_text()
-            self.current_project().create_live_usb(target.name, img_name)
+            try:
+                img_name = widgets.get_widget('img_name').get_text()
+                self.current_project().create_live_usb(target.name, img_name)
+            except ValueError, e:
+                self.show_error_dialog(e.args[0])
+            except:
+                self.show_error_dialog()                
         if result == gtk.RESPONSE_CANCEL:
             dialog.destroy()
         dialog.destroy()
@@ -235,13 +238,17 @@ class esdkMain:
     def on_installUSB_clicked(self, widget):
         project = self.current_project()
         target = self.current_target()
-        print "Create Install USB image (project: %s, Target: %s)" % (project.name, target.name)
         widgets = gtk.glade.XML(gladefile, 'new_img_dlg')
         dialog = widgets.get_widget('new_img_dlg')
         result = dialog.run()
         if result == gtk.RESPONSE_OK:
-            img_name = widgets.get_widget('img_name').get_text()
-            self.current_project().create_install_usb(target.name, img_name)
+            try:
+                img_name = widgets.get_widget('img_name').get_text()
+                self.current_project().create_install_usb(target.name, img_name)
+            except ValueError, e:
+                self.show_error_dialog(e.args[0])
+            except:
+                self.show_error_dialog()            
         if result == gtk.RESPONSE_CANCEL:
             dialog.destroy()
         dialog.destroy()
@@ -250,30 +257,37 @@ class esdkMain:
     def on_installISO_clicked(self, widget):
         project = self.current_project()
         target = self.current_target()
-        print "Create Install ISO image (project: %s, Target: %s)" % (project.name, target.name)
         widgets = gtk.glade.XML(gladefile, 'new_img_dlg')
         dialog = widgets.get_widget('new_img_dlg')
         result = dialog.run()
         if result == gtk.RESPONSE_CANCEL:
             dialog.destroy()
         if result == gtk.RESPONSE_OK:
-            img_name = widgets.get_widget('img_name').get_text()
-            self.current_project().create_install_iso(target.name, img_name)
+            try:
+                img_name = widgets.get_widget('img_name').get_text()
+                self.current_project().create_install_iso(target.name, img_name)
+            except ValueError, e:
+                self.show_error_dialog(e.args[0])
+            except:
+                self.show_error_dialog()                
         dialog.destroy()
 
     def on_liveISO_clicked(self, widget):
-        print "Not implemented"
         project = self.current_project()
         target = self.current_target()
-        print "Create live ISO image (project: %s, Target: %s)" % (project.name, target.name)
         widgets = gtk.glade.XML(gladefile, 'new_img_dlg')
         dialog = widgets.get_widget('new_img_dlg')
         result = dialog.run()
         if result == gtk.RESPONSE_CANCEL:
             dialog.destroy()
         if result == gtk.RESPONSE_OK:
-            img_name = widgets.get_widget('img_name').get_text()
-            self.current_project().create_live_iso(target.name, img_name)
+            try:
+                img_name = widgets.get_widget('img_name').get_text()
+                self.current_project().create_live_iso(target.name, img_name)
+            except ValueError, e:
+                self.show_error_dialog(e.args[0])
+            except:
+                self.show_error_dialog()                
         dialog.destroy()
 
 

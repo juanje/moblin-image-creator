@@ -184,7 +184,7 @@ class InstallImage(object):
 
 class LiveIsoImage(InstallImage):
     def create_image(self):
-        print "LiveIsoImage: Create ISO Image here!"
+        raise ValueError("LiveIsoImage: Create ISO Image not implemented!")
         
     def __str__(self):
         return ("<LiveIsoImage: project=%s, target=%s, name=%s>"
@@ -193,7 +193,7 @@ class LiveIsoImage(InstallImage):
 
 class InstallIsoImage(InstallImage):
     def create_image(self):
-        print "InstallIsoImage: Create Install ISO Image here!"
+        raise ValueError("InstallIsoImage: Create Install ISO Image not implemented!")
         
     def __str__(self):
         return ("<InstallIsoImage: project=%s, target=%s, name=%s>"
@@ -262,7 +262,7 @@ class LiveUsbImage(BaseUsbImage):
 
 class InstallUsbImage(BaseUsbImage):
     def create_image(self):
-        print "InstallUsbImage: Create Install-USB Image here!"
+        raise ValueError("InstallUsbImage: Create Install-USB Image not implemented!")
         
     def __str__(self):
         return ("<InstallUsbImage: project=%s, target=%s, name=%s>"
@@ -271,7 +271,7 @@ class InstallUsbImage(BaseUsbImage):
 
 class HddImage(InstallImage):
     def create_image(self):
-        print "HddImage: Create Hard Disk Image here!"
+        raise ValueError("HddImage: Create Hard Disk Image not implemented!")
         
     def __str__(self):
         return ("<HddImage: project=%s, target=%s, name=%s>"
