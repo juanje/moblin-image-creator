@@ -30,6 +30,6 @@ DEPS=core xorg gnome-mobile-core
 
 [Gnome-mobile-desktop]
 DESC=gnome mobile desktop
-PKGS=hildon-control-panel osso-obc maemo-af-desktop-config maemo-launcher hildon-initscripts osso-af-startup hildon-icon-theme
+PKGS=hildon-control-panel osso-obc maemo-af-desktop-config maemo-launcher hildon-initscripts osso-af-startup hildon-icon-theme hildon-theme-plankton
 DEBUG_PKGS=
 DEPS=core xorg gnome-mobile-core gnome-mobile-service
