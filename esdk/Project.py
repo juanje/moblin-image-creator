@@ -1,7 +1,7 @@
 #!/usr/bin/python -tt
 # vim: ai ts=4 sts=4 et sw=4
 
-import os, shutil, stat, sys, time
+import os, shutil, stat, sys, time, socket
 
 import SDK
 import InstallImage
@@ -21,7 +21,7 @@ class FileSystem(object):
     """
     def __init__(self, path, repos):
         self.path = os.path.abspath(os.path.expanduser(path))
-        if not os.path.isdir(self.path):
+        if not os.path.isfile(os.path.join(self.path, 'etc', 'buildstamp')):
             """
             Initial filesystem stub has never been created, so setup the
             initial base directory structure with just enough done to allow yum
@@ -58,6 +58,11 @@ metadata_expire=1800
             # Create our devices
             self.__createDevices()
 
+            # create a build timestamp file
+            buildstamp = open(os.path.join(target_etc, 'buildstamp'), 'w')
+            print >> buildstamp, "%s %s-%s" % (SDK.SDK().version, socket.gethostname(), time.strftime("%d%m%Y%Z%H%M%s"))
+            buildstamp.close()
+            
     def __createDevices(self):
             devices = [
                 # name, major, minor, mode
