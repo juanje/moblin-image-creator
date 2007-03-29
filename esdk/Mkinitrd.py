@@ -82,7 +82,7 @@ def create(project, initrd_file):
     print >> init_file, """\
 #!/bin/msh
 
-RUNLEVEL=1
+RUNLEVEL=3
 
 PATH=/bin
 export PATH

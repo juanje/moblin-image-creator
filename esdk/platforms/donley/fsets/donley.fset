@@ -40,3 +40,9 @@ PKGS=acpid acpi acpitool
 DEBUG_PKGS=
 DEPS=core
 
+[Media]
+DESC=Multimedia infrastructure components
+PKGS=HelixPlayer RealPlugin4HelixPlayer HelixPlayer3rdPlugin mesa-libGLU
+DEBUG_PKGS=
+DEPS=core xorg gnome-mobile-core gnome-mobile-service gnome-mobile-desktop
+
