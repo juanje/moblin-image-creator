@@ -1,5 +1,0 @@
-[esdk-update]
-name=Fedora Update $releasever - $basearch - Base
-baseurl=http://umd-build2.jf.intel.com/yum-repos/fedora-6-updates/
-enabled=1
-gpgcheck=0
