@@ -6,12 +6,43 @@ DEPS=
 
 [Infrastructure]
 DESC=Fundamental non-GUI system infrastructure
-PKGS=dhclient glib2 dbus dbus-glib NetworkManager NetworkManager-glib wireless-tools sdio_wlan_fc6 tem_config_net_donley
+PKGS=dhclient glib2 dbus dbus-glib NetworkManager NetworkManager-glib wireless-tools sdio_wlan_fc6 tem_config_net_donley alsa-utils
 DEBUG_PKGS=openssh-clients openssh-server
 DEPS=core
 
 [Xorg]
 DESC=Minimal packages to get a working X server running on the donley
-PKGS=xorg-x11-server-Xorg xorg-x11-xinit x11-input-evtouch xorg-config-donley
+PKGS=xorg-x11-server-Xorg xorg-x11-xinit x11-input-evtouch xorg-config-donley xorg-x11-fonts-Type1
 DEBUG_PKGS=
 DEPS=core
+
+[Gnome-mobile-core]
+DESC=gnome mobile core
+PKGS=dbus dbus-glib gtk2 GConf2 osso-gnome-vfs2 
+DEBUG_PKGS=dbus-devel dbus-glib-devel gtk2-devel GConf2-devel osso-gnome-vfs2-devel
+DEPS=core xorg
+
+[Gnome-mobile-service]
+DESC=gnome mobile service
+PKGS=sapwood matchbox-keyboard matchbox-window-manager 915resolution
+DEBUG_PKGS=
+DEPS=core xorg gnome-mobile-core
+
+[Gnome-mobile-desktop]
+DESC=gnome mobile desktop
+PKGS=hildon-control-panel osso-obc maemo-af-desktop-config maemo-launcher hildon-initscripts osso-af-startup hildon-icon-theme hildon-theme-plankton
+DEBUG_PKGS=
+DEPS=core xorg gnome-mobile-core gnome-mobile-service
+
+[Power-Management]
+DESC=Power Management components
+PKGS=acpid acpi acpitool
+DEBUG_PKGS=
+DEPS=core
+
+[Media]
+DESC=Multimedia infrastructure components
+PKGS=HelixPlayer RealPlugin4HelixPlayer HelixPlayer3rdPlugin mesa-libGLU
+DEBUG_PKGS=
+DEPS=core xorg gnome-mobile-core gnome-mobile-service gnome-mobile-desktop
+

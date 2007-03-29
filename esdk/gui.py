@@ -20,6 +20,7 @@ class esdkMain:
         self.widgets = gtk.glade.XML (gladefile, 'main')
         dic = {"on_main_destroy_event" : gtk.main_quit,
                 "on_quit_activate" : gtk.main_quit,
+                "on_relnotes_activate" : self.on_relnotes_activate,
                 "on_newProject_clicked" : self.on_newProject_clicked,
                 "on_projectDelete_clicked": self.on_projectDelete_clicked,
                 "on_new_target_add_clicked": self.on_new_target_add_clicked,
@@ -62,6 +63,39 @@ class esdkMain:
         # widget: targetView
         self.projectView.get_selection().connect("changed", self.project_view_changed)
         self.targetView.get_selection().connect("changed", self.target_view_changed)
+    
+    def on_relnotes_activate(self, widget):
+        window = gtk.Window(gtk.WINDOW_TOPLEVEL)
+        window.set_title("Project Builder Release Notes")
+        window.set_resizable(True)
+        window.set_default_size(400, 400)
+        window.set_border_width(0)
+
+        box1 = gtk.VBox(False, 0)
+        window.add(box1)
+        box1.show()
+
+        box2 = gtk.VBox(False, 10)
+        box1.pack_start(box2, True, True, 0)
+        box2.show()
+
+        scroll = gtk.ScrolledWindow()
+        scroll.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
+        textview = gtk.TextView()
+        textbuffer = textview.get_buffer()
+        scroll.add(textview)
+        scroll.show()
+        textview.show()
+
+        box2.pack_start(scroll)
+
+        rel_file = open("/usr/share/esdk/ReleaseNotes.txt", "r")
+
+        if rel_file:
+            txt = rel_file.read()
+            rel_file.close()
+            textbuffer.set_text(txt)
+        window.show()
 
     def target_view_changed(self, selection):
         model, iter = self.targetView.get_selection().get_selected()
@@ -159,6 +193,8 @@ class esdkMain:
     def on_install_fset(self, widget):
         tree = gtk.glade.XML(gladefile, 'installFsetDialog')
         dialog = tree.get_widget('installFsetDialog')
+        platform = self.current_project().platform
+        label = tree.get_widget('fset-desc-label')
         list = gtk.ListStore(gobject.TYPE_STRING)            
         for fset in self.current_project().platform.fset:
             list.append([fset])
@@ -166,8 +202,10 @@ class esdkMain:
         cebox.set_model(list)
         cebox.set_text_column(0)
         cebox.child.set_text(list[0][0])
+        cebox.connect("changed", self.fset_install_updated, label, platform)
+        label.set_text(platform.fset[cebox.child.get_text()].desc)
         if dialog.run() == gtk.RESPONSE_OK:
-            fset = self.current_project().platform.fset[cebox.child.get_text()]
+            fset = platform.fset[cebox.child.get_text()]
             try:
                 self.current_target().install(fset, tree.get_widget('debug-check-button').get_active())
                 self.redraw_target_view()
@@ -176,6 +214,9 @@ class esdkMain:
             except:
                 self.show_error_dialog()
         dialog.destroy()
+
+    def fset_install_updated(self, box, label, platform):
+        label.set_text(platform.fset[box.child.get_text()].desc)
         
     def on_delete_target_clicked(self, widget):
         project = self.current_project()
@@ -216,17 +257,20 @@ class esdkMain:
         print "Project path: %s" % project_path
         os.system('/usr/bin/gnome-terminal -x sudo /usr/sbin/chroot %s &' % project_path)
         
-# Definition of the Image generation buttons labeled "Actions"
     def on_liveUSB_clicked(self, widget):
         project = self.current_project()
         target = self.current_target()
-        print "Create Live USB image (project: %s, Target: %s)" % (project.name, target.name)
         widgets = gtk.glade.XML(gladefile, 'new_img_dlg')
         dialog = widgets.get_widget('new_img_dlg')
         result = dialog.run()
         if result == gtk.RESPONSE_OK:
-            img_name = widgets.get_widget('img_name').get_text()
-            self.current_project().create_live_usb(target.name, img_name)
+            try:
+                img_name = widgets.get_widget('img_name').get_text()
+                self.current_project().create_live_usb(target.name, img_name)
+            except ValueError, e:
+                self.show_error_dialog(e.args[0])
+            except:
+                self.show_error_dialog()                
         if result == gtk.RESPONSE_CANCEL:
             dialog.destroy()
         dialog.destroy()
@@ -235,13 +279,17 @@ class esdkMain:
     def on_installUSB_clicked(self, widget):
         project = self.current_project()
         target = self.current_target()
-        print "Create Install USB image (project: %s, Target: %s)" % (project.name, target.name)
         widgets = gtk.glade.XML(gladefile, 'new_img_dlg')
         dialog = widgets.get_widget('new_img_dlg')
         result = dialog.run()
         if result == gtk.RESPONSE_OK:
-            img_name = widgets.get_widget('img_name').get_text()
-            self.current_project().create_install_usb(target.name, img_name)
+            try:
+                img_name = widgets.get_widget('img_name').get_text()
+                self.current_project().create_install_usb(target.name, img_name)
+            except ValueError, e:
+                self.show_error_dialog(e.args[0])
+            except:
+                self.show_error_dialog()            
         if result == gtk.RESPONSE_CANCEL:
             dialog.destroy()
         dialog.destroy()
@@ -250,30 +298,37 @@ class esdkMain:
     def on_installISO_clicked(self, widget):
         project = self.current_project()
         target = self.current_target()
-        print "Create Install ISO image (project: %s, Target: %s)" % (project.name, target.name)
         widgets = gtk.glade.XML(gladefile, 'new_img_dlg')
         dialog = widgets.get_widget('new_img_dlg')
         result = dialog.run()
         if result == gtk.RESPONSE_CANCEL:
             dialog.destroy()
         if result == gtk.RESPONSE_OK:
-            img_name = widgets.get_widget('img_name').get_text()
-            self.current_project().create_install_iso(target.name, img_name)
+            try:
+                img_name = widgets.get_widget('img_name').get_text()
+                self.current_project().create_install_iso(target.name, img_name)
+            except ValueError, e:
+                self.show_error_dialog(e.args[0])
+            except:
+                self.show_error_dialog()                
         dialog.destroy()
 
     def on_liveISO_clicked(self, widget):
-        print "Not implemented"
         project = self.current_project()
         target = self.current_target()
-        print "Create live ISO image (project: %s, Target: %s)" % (project.name, target.name)
         widgets = gtk.glade.XML(gladefile, 'new_img_dlg')
         dialog = widgets.get_widget('new_img_dlg')
         result = dialog.run()
         if result == gtk.RESPONSE_CANCEL:
             dialog.destroy()
         if result == gtk.RESPONSE_OK:
-            img_name = widgets.get_widget('img_name').get_text()
-            self.current_project().create_live_iso(target.name, img_name)
+            try:
+                img_name = widgets.get_widget('img_name').get_text()
+                self.current_project().create_live_iso(target.name, img_name)
+            except ValueError, e:
+                self.show_error_dialog(e.args[0])
+            except:
+                self.show_error_dialog()                
         dialog.destroy()
 
 

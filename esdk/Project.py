@@ -1,7 +1,7 @@
 #!/usr/bin/python -tt
 # vim: ai ts=4 sts=4 et sw=4
 
-import os, shutil, stat, sys, time
+import os, shutil, stat, sys, time, socket
 
 import SDK
 import InstallImage
@@ -21,7 +21,7 @@ class FileSystem(object):
     """
     def __init__(self, path, repos):
         self.path = os.path.abspath(os.path.expanduser(path))
-        if not os.path.isdir(self.path):
+        if not os.path.isfile(os.path.join(self.path, 'etc', 'buildstamp')):
             """
             Initial filesystem stub has never been created, so setup the
             initial base directory structure with just enough done to allow yum
@@ -58,6 +58,11 @@ metadata_expire=1800
             # Create our devices
             self.__createDevices()
 
+            # create a build timestamp file
+            buildstamp = open(os.path.join(target_etc, 'buildstamp'), 'w')
+            print >> buildstamp, "%s %s-%s" % (SDK.SDK().version, socket.gethostname(), time.strftime("%d%m%Y%Z%H%M%s"))
+            buildstamp.close()
+            
     def __createDevices(self):
             devices = [
                 # name, major, minor, mode
@@ -73,7 +78,14 @@ metadata_expire=1800
                 # what we want :(
                 os.chmod(device_path, mode)
 
-    def install(self, path, packages, repos):
+    def update(self, path):
+        result = os.system("yum -y --installroot=%s update" % (path))
+        if result != 0:
+            raise Exception("Internal error while attempting to update!")
+        
+        self.__rebuild_rpmlist(path)
+
+    def install(self, path, packages):
         """
         Call into yum to install RPM packages using the specified yum
         repositories
@@ -81,12 +93,19 @@ metadata_expire=1800
         command = 'yum -y --installroot=' + path + ' install '
         for p in packages:
             command = command + ' ' + p
-        os.system(command)
-
+        result = os.system(command)
+        if result != 0:
+            raise Exception("Internal error while attempting to install!")
+        
+        self.__rebuild_rpmlist(path)
+        
+    def __rebuild_rpmlist(self, path):
         root_path = os.path.abspath(path)
         BASE_RPM_LIST = "/etc/base-rpms.list"
         command = 'rpm -r %s -qa > %s%s' % (root_path, root_path, BASE_RPM_LIST)
-        os.system(command)
+        result = os.system(command)
+        if result != 0:
+            raise Exception("Internal error while attempting to build package list!")
 
         # Since we are using yum from the host machine, if this is a
         # 64bit machine then yum produces 64bit database indexes, while
@@ -97,19 +116,26 @@ metadata_expire=1800
         if os.uname()[4] == "x86_64":
             # regenerate the rpmdb.  needed for x86_64 system.
             command = "rm -rf %s%s" % (root_path, "/var/lib/rpm/__*")
-            os.system(command)
+            result = os.system(command)
+            if result != 0:
+                raise Exception("Internal error while attempting to rebuild package database!")
+            
             self.chroot('rpm', '--rebuilddb -v -v')
 
     def mount(self):
         path = os.path.join(self.path, 'proc')
         if not os.path.ismount(path):
-            os.system('mount --bind /proc ' + path + ' 2> /dev/null')
+            result = os.system('mount --bind /proc ' + path + ' 2> /dev/null')
+            if result != 0:
+                raise Exception("Internal error while attempting to mount proc filesystem!")
 
     def umount(self):
         for line in os.popen('mount', 'r').readlines():
             mpoint = line.split()[2]
             if self.path == mpoint[:len(self.path)]:
-                os.system("umount %s" % (mpoint))
+                result = os.system("umount %s" % (mpoint))
+                if result != 0:
+                    raise Exception("Internal error while attempting to umount!")
 
     def chroot(self, cmd_path, cmd_args):
         if not os.path.isfile(os.path.join(self.path, 'bin/bash')):
@@ -149,8 +175,11 @@ class Project(FileSystem):
         """
         Install all the packages defined by Platform.jailroot_packages
         """
-        FileSystem.install(self, self.path, self.platform.jailroot_packages, self.platform.buildroot_repos)
+        FileSystem.install(self, self.path, self.platform.jailroot_packages)
 
+    def update(self):
+        FileSystem.update(self, self.path)
+        
     def create_target(self, name):
         if name and not name in self.targets:
             self.targets[name] = Target(name, self)
@@ -222,13 +251,18 @@ class Target(FileSystem):
             if not os.path.isfile(os.path.join(self.top, dep)):
                 raise ValueError("fset %s must be installed first!" % (dep))
 
-        FileSystem.install(self, self.fs_path, fset['pkgs'], self.project.platform.buildroot_repos)
+        FileSystem.install(self, self.fs_path, fset['pkgs'])
         if debug == 1:
-            FileSystem.install(self, self.fs_path, fset['debug_pkgs'], self.project.platform.buildroot_repos)
+            FileSystem.install(self, self.fs_path, fset['debug_pkgs'])
 
         # and now create a simple empty file that indicates that the fset
         # has been installed...
-        os.system('touch ' + os.path.join(self.top, fset.name))
+        result = os.system('touch ' + os.path.join(self.top, fset.name))
+        if result != 0:
+            raise Exception("Unable to create fset file!");
+
+    def update(self):
+        FileSystem.update(self, self.fs_path)
 
     def __str__(self):
         return ("<Target: name=%s, path=%s, fs_path=%s, image_path>"
