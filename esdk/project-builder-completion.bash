@@ -23,12 +23,23 @@ _project_builder()
 
     case $prev in
         -@(-command|c))
-            COMPREPLY=( $( compgen -W 'list-platforms \
-        list-projects list-targets list-fsets \
-        create-project create-target \
-        install-fset delete-target delete-project \
-        create-live-iso create-install-iso \
-        create-live-usb create-install-usb' -- $cur  ) )
+            COMPREPLY=( $( compgen -W '\
+                create-install-iso \
+                create-install-usb \
+                create-live-iso \
+                create-live-usb \
+                create-project \
+                create-target \
+                delete-project \
+                delete-target \
+                install-fset \
+                list-fsets \
+                list-platforms \
+                list-projects \
+                list-targets \
+                update-project \
+                update-target \
+                ' -- $cur  ) )
             return 0
             ;;
         --platform-name)
