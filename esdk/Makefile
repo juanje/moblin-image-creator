@@ -13,6 +13,9 @@ install:
 	else \
 		cp project-builder-launcher /usr/bin/project-builder; \
 	fi
+	@if [ -d /etc/bash_completion.d/ ]; then \
+	    cp -a project-builder-completion.bash /etc/bash_completion.d/; \
+	fi
 
 clean:
 	@rm -f *.pyc
