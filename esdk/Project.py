@@ -79,7 +79,10 @@ metadata_expire=1800
                 os.chmod(device_path, mode)
 
     def update(self, path):
-        os.system("yum -y --installroot=%s update" % (path))
+        result = os.system("yum -y --installroot=%s update" % (path))
+        if result != 0:
+            raise Exception("Internal error while attempting to update!")
+        
         self.__rebuild_rpmlist(path)
 
     def install(self, path, packages):
@@ -90,14 +93,19 @@ metadata_expire=1800
         command = 'yum -y --installroot=' + path + ' install '
         for p in packages:
             command = command + ' ' + p
-        os.system(command)
+        result = os.system(command)
+        if result != 0:
+            raise Exception("Internal error while attempting to install!")
+        
         self.__rebuild_rpmlist(path)
         
     def __rebuild_rpmlist(self, path):
         root_path = os.path.abspath(path)
         BASE_RPM_LIST = "/etc/base-rpms.list"
         command = 'rpm -r %s -qa > %s%s' % (root_path, root_path, BASE_RPM_LIST)
-        os.system(command)
+        result = os.system(command)
+        if result != 0:
+            raise Exception("Internal error while attempting to build package list!")
 
         # Since we are using yum from the host machine, if this is a
         # 64bit machine then yum produces 64bit database indexes, while
@@ -108,19 +116,26 @@ metadata_expire=1800
         if os.uname()[4] == "x86_64":
             # regenerate the rpmdb.  needed for x86_64 system.
             command = "rm -rf %s%s" % (root_path, "/var/lib/rpm/__*")
-            os.system(command)
+            result = os.system(command)
+            if result != 0:
+                raise Exception("Internal error while attempting to rebuild package database!")
+            
             self.chroot('rpm', '--rebuilddb -v -v')
 
     def mount(self):
         path = os.path.join(self.path, 'proc')
         if not os.path.ismount(path):
-            os.system('mount --bind /proc ' + path + ' 2> /dev/null')
+            result = os.system('mount --bind /proc ' + path + ' 2> /dev/null')
+            if result != 0:
+                raise Exception("Internal error while attempting to mount proc filesystem!")
 
     def umount(self):
         for line in os.popen('mount', 'r').readlines():
             mpoint = line.split()[2]
             if self.path == mpoint[:len(self.path)]:
-                os.system("umount %s" % (mpoint))
+                result = os.system("umount %s" % (mpoint))
+                if result != 0:
+                    raise Exception("Internal error while attempting to umount!")
 
     def chroot(self, cmd_path, cmd_args):
         if not os.path.isfile(os.path.join(self.path, 'bin/bash')):
@@ -242,7 +257,9 @@ class Target(FileSystem):
 
         # and now create a simple empty file that indicates that the fset
         # has been installed...
-        os.system('touch ' + os.path.join(self.top, fset.name))
+        result = os.system('touch ' + os.path.join(self.top, fset.name))
+        if result != 0:
+            raise Exception("Unable to create fset file!");
 
     def update(self):
         FileSystem.update(self, self.fs_path)
