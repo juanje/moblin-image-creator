@@ -146,6 +146,7 @@ class PackageConfig(ConfigFile):
 
 class SDK(object):
     def __init__(self, path='/usr/share/esdk'):
+        self.version = "pre-alpha"
         self.path = os.path.abspath(os.path.expanduser(path))
         
         self.config_path = os.path.join(self.path, 'projects')
