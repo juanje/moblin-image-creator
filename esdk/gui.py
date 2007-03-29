@@ -66,7 +66,7 @@ class esdkMain:
     
     def on_relnotes_activate(self, widget):
         window = gtk.Window(gtk.WINDOW_TOPLEVEL)
-        window.set_title("Intel PDK Release Notes")
+        window.set_title("Project Builder Release Notes")
         window.set_resizable(True)
         window.set_default_size(400, 400)
         window.set_border_width(0)
@@ -89,7 +89,7 @@ class esdkMain:
 
         box2.pack_start(scroll)
 
-        rel_file = open("./ReleaseNotes.txt", "r")
+        rel_file = open("/usr/share/esdk/ReleaseNotes.txt", "r")
 
         if rel_file:
             txt = rel_file.read()
