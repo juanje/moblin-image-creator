@@ -20,6 +20,7 @@ class esdkMain:
         self.widgets = gtk.glade.XML (gladefile, 'main')
         dic = {"on_main_destroy_event" : gtk.main_quit,
                 "on_quit_activate" : gtk.main_quit,
+                "on_relnotes_activate" : self.on_relnotes_activate,
                 "on_newProject_clicked" : self.on_newProject_clicked,
                 "on_projectDelete_clicked": self.on_projectDelete_clicked,
                 "on_new_target_add_clicked": self.on_new_target_add_clicked,
@@ -62,6 +63,39 @@ class esdkMain:
         # widget: targetView
         self.projectView.get_selection().connect("changed", self.project_view_changed)
         self.targetView.get_selection().connect("changed", self.target_view_changed)
+    
+    def on_relnotes_activate(self, widget):
+        window = gtk.Window(gtk.WINDOW_TOPLEVEL)
+        window.set_title("Intel PDK Release Notes")
+        window.set_resizable(True)
+        window.set_default_size(400, 400)
+        window.set_border_width(0)
+
+        box1 = gtk.VBox(False, 0)
+        window.add(box1)
+        box1.show()
+
+        box2 = gtk.VBox(False, 10)
+        box1.pack_start(box2, True, True, 0)
+        box2.show()
+
+        scroll = gtk.ScrolledWindow()
+        scroll.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
+        textview = gtk.TextView()
+        textbuffer = textview.get_buffer()
+        scroll.add(textview)
+        scroll.show()
+        textview.show()
+
+        box2.pack_start(scroll)
+
+        rel_file = open("./ReleaseNotes.txt", "r")
+
+        if rel_file:
+            txt = rel_file.read()
+            rel_file.close()
+            textbuffer.set_text(txt)
+        window.show()
 
     def target_view_changed(self, selection):
         model, iter = self.targetView.get_selection().get_selected()
