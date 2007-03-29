@@ -1,4 +1,4 @@
-		Intel Platform Development Kit
+		     Project-Builder
 		------------------------------
 		      Release Notes
 
@@ -7,8 +7,8 @@ Release: pre-alpha
 
 Description:
 ============
-The Intel Platform Development Kit (iPDK) is a development tool written in
-Python and GTK to aid the development of Platform-specific installable images.
+Project-builder is a development tool written in Oython and GTK to aid in the
+development of Platform-specific installable images.
 
 The way it works is simple.  The tools builds on simple yet powerful concepts
 which are:
@@ -26,13 +26,13 @@ target platform.  For example, Core is the base OS and is fundamental to
 booting the system -- it includes the kernel and supporting packages.  Also
 there are Networking, Power-Management, X and more.
 
-Building on these concepts, the iPDK shal provide developers with all the
+Building on these concepts, the Project-builder shal provide developers with all the
 tools to develop, build and produce run-time and installable images for the
 targeted platform.
 
 What's in this release:
 =======================
-*GUI: A graphical front to all the iPDK classes and tools.
+*GUI: A graphical front to all the Project-builder classes and tools.
 *Project-builder: the main application, by default will bring up the GUI but
 accepts command line arguments to create projects and targets and also install
 FSets.
