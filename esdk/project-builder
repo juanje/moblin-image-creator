@@ -71,6 +71,7 @@ def parseCommandLine():
                        "create-live-iso", "create-install-iso",
                        "create-live-usb", "create-install-usb",
                        "update-project", "update-target"]
+    valid_commands.sort()
     valid_command_string = ""
     for command in valid_commands[:-1]:
         valid_command_string += "%s, " %  command
