@@ -34,7 +34,7 @@ PKGS=hildon-control-panel osso-obc maemo-af-desktop-config maemo-launcher hildon
 DEBUG_PKGS=
 DEPS=core xorg gnome-mobile-core gnome-mobile-service
 
-[Power Management]
+[Power-Management]
 DESC=Power Management components
 PKGS=acpid acpi acpitool
 DEBUG_PKGS=
