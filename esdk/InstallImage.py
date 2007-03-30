@@ -178,16 +178,7 @@ class InstallImage(object):
         image_path = os.path.join(image_path,'rootfs.img')
         cmd_args = "%s %s" % (fs_path, image_path)
 
-        # Make sure to un-mount the target file-system before running
-        # the mksquashfs command and then re-mount it afterwards (if needed)
-        ismounted = self.target.ismounted
-        if ismounted:
-            self.target.umount()
-            
         self.project.chroot("/sbin/mksquashfs", cmd_args)
-
-        if ismounted:
-            self.target.mount()
             
     def delete_rootfs(self):
         if self.rootfs and os.path.isfile(self.rootfs_path):

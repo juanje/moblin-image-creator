@@ -20,7 +20,6 @@ class FileSystem(object):
     'install' method for installing new RPM packages.
     """
     def __init__(self, path, repos):
-        self.ismounted = 0
         
         self.path = os.path.abspath(os.path.expanduser(path))
         if not os.path.isfile(os.path.join(self.path, 'etc', 'buildstamp')):
@@ -130,7 +129,6 @@ metadata_expire=1800
             result = os.system('mount --bind /proc ' + path + ' 2> /dev/null')
             if result != 0:
                 raise Exception("Internal error while attempting to mount proc filesystem!")
-        self.ismounted = 1
 
     def umount(self):
         for line in os.popen('mount', 'r').readlines():
@@ -139,7 +137,6 @@ metadata_expire=1800
                 result = os.system("umount %s" % (mpoint))
                 if result != 0:
                     raise Exception("Internal error while attempting to umount!")
-        self.ismounted = 0
 
     def chroot(self, cmd_path, cmd_args):
         if not os.path.isfile(os.path.join(self.path, 'bin/bash')):
