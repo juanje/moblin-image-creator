@@ -31,7 +31,8 @@ class esdkMain:
                 "on_create_liveUSB_clicked": self.on_liveUSB_clicked,
                 "on_create_installUSB_clicked": self.on_installUSB_clicked,
                 "on_about_activate": self.on_about_activate,
-                "on_term_launch_clicked": self.on_term_launch_clicked}
+                "on_term_launch_clicked": self.on_term_launch_clicked,
+                "on_target_term_launch_clicked": self.on_target_term_launch_clicked}
         self.widgets.signal_autoconnect(dic)
         # setup projectView widget
         self.pName = "Name"
@@ -103,6 +104,7 @@ class esdkMain:
             # No targets are selected
             self.buttons.delete_target.set_sensitive(False)
             self.buttons.install_fset.set_sensitive(False)
+            self.buttons.target_term_launch.set_sensitive(False)
             return
         # A target has been selected
         self.buttons.delete_target.set_sensitive(True)
@@ -111,6 +113,7 @@ class esdkMain:
         self.buttons.create_installiso.set_sensitive(True)
         self.buttons.create_liveusb.set_sensitive(True)
         self.buttons.create_installusb.set_sensitive(True)
+        self.buttons.target_term_launch.set_sensitive(True)
         
     def project_view_changed(self, selection):
         self.redraw_target_view()
@@ -256,7 +259,14 @@ class esdkMain:
         project_path = self.current_project().path
         print "Project path: %s" % project_path
         os.system('/usr/bin/gnome-terminal -x sudo /usr/sbin/chroot %s &' % project_path)
-        
+   
+    def on_target_term_launch_clicked(self, widget):
+        project_path = self.current_project().path
+        target = self.current_target()
+        target_path= "%s/targets/%s/fs" % (project_path, target.name)
+        print "Project path: %s" % target_path
+        os.system('/usr/bin/gnome-terminal -x sudo /usr/sbin/chroot %s &' % target_path)
+
     def on_liveUSB_clicked(self, widget):
         project = self.current_project()
         target = self.current_target()
@@ -389,6 +399,7 @@ class MainWindowButtons:
         self.create_installusb = widgets.get_widget('create_installUSB_btn')
         # Terminal button
         self.term_launch = widgets.get_widget('term_launch')    
+        self.target_term_launch = widgets.get_widget('target_term_launch')    
         
 if __name__ == '__main__':
     esdk = esdkMain()
