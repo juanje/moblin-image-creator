@@ -42,7 +42,7 @@ started with real and usable components.
 *Create LiveUSB image to boot off of a USB key with a Live filesystem in
 memory.
 *Create InstallUSB image to install target filesystem and fsets onto target
-system.
+system from USB key.
 
 Known Issues:
 =============
