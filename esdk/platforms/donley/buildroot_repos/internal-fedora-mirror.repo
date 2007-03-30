@@ -3,9 +3,3 @@ name=ESDK Base
 baseurl=http://umd-build2.jf.intel.com/yum-repos/fedora-6-core/
 enabled=1
 gpgcheck=0
-
-[esdk-update]
-name=ESDK Updates
-baseurl=http://umd-build2.jf.intel.com/yum-repos/fedora-6-updates/
-enabled=1
-gpgcheck=0
