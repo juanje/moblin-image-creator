@@ -270,7 +270,8 @@ echo -e 'System shuting down!\n\n'
 echo -e 'Disconnect the USB-Key when shutdown is complete and\n'
 echo -e 'Reboot the system from HDD...\n\n'
 
-exec init -t10 0
+sleep 10
+exec init -t1 0
 """
         install_file.close()
 
