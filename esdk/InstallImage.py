@@ -85,6 +85,8 @@ class InstallImage(object):
         self.name = name
         self.path = os.path.join(self.target.image_path, self.name)
         self.tmp_path = ''
+        self.rootfs = ''
+        self.rootfs_path = ''
 
     def install_kernels(self, cfg_filename):
         if not self.tmp_path:
@@ -177,6 +179,12 @@ class InstallImage(object):
         cmd_args = "%s %s" % (fs_path, image_path)
 
         self.project.chroot("/sbin/mksquashfs", cmd_args)
+
+    def delete_rootfs(self):
+        if self.rootfs and os.path.isfile(self.rootfs_path):
+            os.remove(self.rootfs_path)
+            self.rootfs = ''
+            self.rootfs_path = ''
 
     def create_install_script(self, path):
         install_file = open(os.path.join(path, 'install.sh'), 'w')
@@ -343,6 +351,8 @@ class LiveUsbImage(BaseUsbImage):
 
         self.umount_container()
 
+        self.delete_rootfs()
+        
         print "LiveUsbImage: Finished!"
         
     def __str__(self):
@@ -373,6 +383,8 @@ class InstallUsbImage(BaseUsbImage):
         self.create_install_script(self.tmp_path)
         self.umount_container()
 
+        self.delete_rootfs()
+        
         print "InstallUsbImage: Finished!"
         print "\nYou can now use the image to boot and install the target file-system on the target device's HDD.\n"
         print "\nWARNING: Entire contents of the target devices's HDD will be erased prior to installation!"
