@@ -3,6 +3,7 @@
 		      Release Notes
 
 Release: pre-alpha
+Milestone: 2
 
 
 Description:
@@ -38,13 +39,17 @@ accepts command line arguments to create projects and targets and also install
 FSets.
 *Bundeled FSets: core, Power-Management, Networking and more to get you
 started with real and usable components.
+*Create LiveUSB image to boot off of a USB key with a Live filesystem in
+memory.
+*Create InstallUSB image to install target filesystem and fsets onto target
+system.
 
 Known Issues:
 =============
 *Several issues with the GUI such as "Enter" key in Text entry fields does not
 act as intended action to complete entry.  Will be fixed in next release.
-*
+*Create LiveISO and InstallISO are not implemented yet.
 
 Documentation and Developer's Guide:
 ====================================
-<insert link to meta-data-respository guide>
+http://umd.jf.intel.com
