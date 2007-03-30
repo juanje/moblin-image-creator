@@ -8,7 +8,7 @@ Milestone: 2
 
 Description:
 ============
-Project-builder is a development tool written in Oython and GTK to aid in the
+Project-builder is a development tool written in Python and GTK to aid in the
 development of Platform-specific installable images.
 
 The way it works is simple.  The tools builds on simple yet powerful concepts
@@ -42,7 +42,7 @@ started with real and usable components.
 *Create LiveUSB image to boot off of a USB key with a Live filesystem in
 memory.
 *Create InstallUSB image to install target filesystem and fsets onto target
-system.
+system from USB key.
 
 Known Issues:
 =============
