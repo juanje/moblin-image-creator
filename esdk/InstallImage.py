@@ -179,7 +179,7 @@ class InstallImage(object):
         cmd_args = "%s %s" % (fs_path, image_path)
 
         self.project.chroot("/sbin/mksquashfs", cmd_args)
-
+            
     def delete_rootfs(self):
         if self.rootfs and os.path.isfile(self.rootfs_path):
             os.remove(self.rootfs_path)

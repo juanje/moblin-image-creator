@@ -20,6 +20,7 @@ class FileSystem(object):
     'install' method for installing new RPM packages.
     """
     def __init__(self, path, repos):
+        
         self.path = os.path.abspath(os.path.expanduser(path))
         if not os.path.isfile(os.path.join(self.path, 'etc', 'buildstamp')):
             """
