@@ -46,3 +46,9 @@ PKGS=HelixPlayer RealPlugin4HelixPlayer HelixPlayer3rdPlugin mesa-libGLU
 DEBUG_PKGS=
 DEPS=core xorg gnome-mobile-core gnome-mobile-service gnome-mobile-desktop
 
+[Browser-Seamonkey]
+DESC=Internet Browser based on Mozilla Seamonkey
+PKGS=seamonkey
+DEBUG_PKGS=
+DEPS=core xorg gnome-mobile-core gnome-mobile-service gnome-mobile-desktop
+
