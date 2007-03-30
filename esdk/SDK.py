@@ -207,6 +207,7 @@ class SDK(object):
 
         # instantiate the project
         self.projects[name] = Project.Project(install_path, name, desc, platform)
+        self.projects[name].mount()
         return self.projects[name]
     
     def delete_project(self, project_name):

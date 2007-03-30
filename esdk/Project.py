@@ -133,9 +133,7 @@ metadata_expire=1800
         for line in os.popen('mount', 'r').readlines():
             mpoint = line.split()[2]
             if self.path == mpoint[:len(self.path)]:
-                result = os.system("umount %s" % (mpoint))
-                if result != 0:
-                    raise Exception("Internal error while attempting to umount!")
+                os.system("umount %s" % (mpoint))
 
     def chroot(self, cmd_path, cmd_args):
         if not os.path.isfile(os.path.join(self.path, 'bin/bash')):
@@ -144,7 +142,6 @@ metadata_expire=1800
         self.mount()
         cmd_line = "chroot %s %s %s" % (self.path, cmd_path, cmd_args)
         ret = os.system(cmd_line)
-        self.umount()
         return ret
 
 class Project(FileSystem):
@@ -183,6 +180,7 @@ class Project(FileSystem):
     def create_target(self, name):
         if name and not name in self.targets:
             self.targets[name] = Target(name, self)
+            self.targets[name].mount()
         return self.targets[name]
 
     def delete_target(self, name):
@@ -191,20 +189,32 @@ class Project(FileSystem):
         shutil.rmtree(os.path.join(self.path, 'targets', name))
 
     def create_live_iso(self, target_name, image_name):
+        target = self.targets[target_name]
+        target.umount()
         image = InstallImage.LiveIsoImage(self, self.targets[target_name], image_name)
         image.create_image()
+        target.mount()
         
     def create_install_iso(self, target_name, image_name):
+        target = self.targets[target_name]
+        target.umount()
         image = InstallImage.InstallIsoImage(self, self.targets[target_name], image_name)
         image.create_image()
+        target.mount()
 
     def create_live_usb(self, target_name, image_name):
+        target = self.targets[target_name]
+        target.umount()
         image = InstallImage.LiveUsbImage(self, self.targets[target_name], image_name)
         image.create_image()
-
+        target.mount()
+        
     def create_install_usb(self, target_name, image_name):
+        target = self.targets[target_name]
+        target.umount()        
         image = InstallImage.InstallUsbImage(self, self.targets[target_name], image_name)
         image.create_image()
+        target.mount()
     
     def __str__(self):
         return ("<Project: name=%s, path=%s>"
