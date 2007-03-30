@@ -52,4 +52,4 @@ act as intended action to complete entry.  Will be fixed in next release.
 
 Documentation and Developer's Guide:
 ====================================
-http://umd.jf.intel.com
+https://umd.jf.intel.com/projects/umd/wiki/V1-M2-release-notes
