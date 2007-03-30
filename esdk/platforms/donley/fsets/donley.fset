@@ -1,6 +1,6 @@
 [Core]
 DESC=Fundamental fset that provides a root filesystem
-PKGS=kernel-umd-default grub coreutils rpm passwd
+PKGS=kernel-umd-default grub coreutils rpm passwd core-config-donley
 DEBUG_PKGS=kernel-umd-developer gdb yum vim-enhanced
 DEPS=
 
