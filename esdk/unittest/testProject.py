@@ -44,7 +44,7 @@ gpgcheck=0"""
             full_path = os.path.join(self.filesystem_dir, filename)
             self.assert_(os.path.exists(full_path), "Missing file/dir: %s" % filename)
         # Stuff in /etc
-        for filename in [ 'hosts', 'passwd', 'group', 'resolv.conf', 'yum.conf', 'yum.repos.d' ]:
+        for filename in [ 'hosts', 'resolv.conf', 'yum.conf', 'yum.repos.d' ]:
             etc_path = os.path.join("etc", filename)
             full_path = os.path.join(self.filesystem_dir, etc_path)
             self.assert_(os.path.exists(full_path), "Missing file/dir: %s" % etc_path)
