@@ -164,13 +164,15 @@ class SDK(object):
             
         # discover all existing projects
         self.projects = {}
-        for file in os.listdir(self.config_path):
+        for filename in os.listdir(self.config_path):
+            full_path = os.path.join(self.config_path, filename)
+            if not os.path.isfile(full_path):
+                continue
             try:
-                config = PackageConfig(os.path.join(self.config_path, file))
+                config = PackageConfig(full_path)
                 self.projects[config.name] = Project.Project(config.path, config.name, config.desc, self.platforms[config.platform])
             except:
                 print >> sys.stderr, "Project Config Error: %s" % (sys.exc_value)
-                pass
             
     def create_project(self, install_path, name, desc, platform):
         """
