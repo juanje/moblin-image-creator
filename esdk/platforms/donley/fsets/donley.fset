@@ -30,7 +30,7 @@ DEPS=core xorg gnome-mobile-core
 
 [Gnome-mobile-desktop]
 DESC=gnome mobile desktop
-PKGS=hildon-control-panel osso-obc maemo-af-desktop-config maemo-launcher hildon-initscripts osso-af-startup hildon-icon-theme hildon-theme-plankton
+PKGS=hildon-control-panel osso-obc osso-af-utils maemo-af-desktop-config maemo-launcher hildon-initscripts osso-af-startup hildon-icon-theme hildon-theme-plankton
 DEBUG_PKGS=
 DEPS=core xorg gnome-mobile-core gnome-mobile-service
 
@@ -51,4 +51,11 @@ DESC=Internet Browser based on Mozilla Seamonkey
 PKGS=seamonkey
 DEBUG_PKGS=
 DEPS=core xorg gnome-mobile-core gnome-mobile-service gnome-mobile-desktop
+
+[Internet]
+DESC=Firefox browser (1.5.0.10) with plugins (flash, acrobat).  Future-to-be-included: java plugin and extensions (rss reader, adblock, flashblock, autohide)
+PKGS=firefox flash-plugin AdobeReader
+DEBUG_PKGS=
+DEPS=core xorg gnome-mobile-core gnome-mobile-service gnome-mobile-desktop
+
 
