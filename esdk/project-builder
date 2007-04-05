@@ -4,7 +4,6 @@
 
 import sys, os, string
 
-from getopt import *
 from optparse import OptionParser
 
 sys.path.insert(0, '/usr/share/esdk/lib')
@@ -15,6 +14,13 @@ try:
 except:
     # Probably running in a text console
     pass
+
+# Delete any environment variables that may cause problems.
+# FIXME: Before releasing outside of Intel, we should stop deleting http_proxy
+for bad_env in [ 'http_proxy' ]:
+    if bad_env in os.environ:
+        print "Warning: %s environment variable is set.  Deleting it." % bad_env
+        del os.environ[bad_env]
 
 def main():
     if sys.hexversion < 0x2040000:
