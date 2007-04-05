@@ -30,6 +30,7 @@ Group: Development/Sources
 PreReq: /bin/grep /bin/sed /bin/uname /bin/mkdir /bin/cat /bin/ln /bin/rm
 Version: %{kversion}@EXTRAVER2@
 @RELEASE@
+
 BuildPreReq: nash, module-init-tools
 
 # put sources here
@@ -43,6 +44,8 @@ Source6: kernel-default.config
 Source7: kernel-developer.config
 Source8: init
 Source9: initrd_skeleton
+Source10: init.bash
+Source11: installkernel.sh
 
 # put patches here for UMD add-on
 # and do NOT forget to apply patches in setup section -- search "apply patches" in this file
@@ -151,13 +154,18 @@ if [ "%{target}" == "redhat" ]; then
 (   echo "rm -f /usr/src/linux; ln -s linux-%{krelease} /usr/src/linux"
 ) > ../source-post.sh
 # redhat source-post.sh must be in %_builddir while suse one must be in %_builddir/%{name}-{%release}
-(echo "$(cat <<!
+(cat %_sourcedir/installkernel.sh
+ echo "$(cat <<!
   if [ `uname -i` == "x86_64" -o `uname -i` == "i386" ]; then
    if [ -f /etc/sysconfig/kernel ]; then
     /bin/sed -i -e 's/^DEFAULTKERNEL=kernel-smp$/DEFAULTKERNEL=kernel/' /etc/sysconfig/kernel || exit $?
    fi
   fi
-  /sbin/new-kernel-pkg --package kernel --depmod --install %{krelease}-default || exit $?
+  if [ -x /sbin/new-kernel-pkg ]; then
+     /sbin/new-kernel-pkg --package kernel --depmod --install %{krelease}-default || exit $?
+  else
+    installkernel %{krelease}-default 
+  fi
   if [ -x /sbin/weak-modules ]
   then
     /sbin/weak-modules --add-kernel %{krelease}-default || exit $?
@@ -166,13 +174,20 @@ if [ "%{target}" == "redhat" ]; then
   ln -s vmlinux-%{krelease}-default /boot/vmlinux
 !)"
 ) > ../post-default.sh
-(echo "$(cat <<!
+(cat %_sourcedir/installkernel.sh
+ echo "$(cat <<!
   if [ `uname -i` == "x86_64" -o `uname -i` == "i386" ]; then
    if [ -f /etc/sysconfig/kernel ]; then
     /bin/sed -i -e 's/^DEFAULTKERNEL=kernel-smp$/DEFAULTKERNEL=kernel/' /etc/sysconfig/kernel || exit $?
    fi
   fi
-  /sbin/new-kernel-pkg --package kernel --depmod --install %{krelease}-developer || exit $?
+  if [ -x /sbin/new-kernel-pkg ]; then
+     /sbin/new-kernel-pkg --package kernel --depmod --install %{krelease}-developer || exit $?
+  else
+     installkernel %{krelease}-developer
+     installkernel %{krelease}-developer --withserial
+  fi
+  updatedeveloperetc
   if [ -x /sbin/weak-modules ]
   then
     /sbin/weak-modules --add-kernel %{krelease}-developer || exit $?
@@ -289,13 +304,13 @@ for flavor in %{buildflavors}; do
     mkdir -p $RPM_BUILD_ROOT/lib/modules/$kernelver
     make ARCH=$arch INSTALL_MOD_PATH=$RPM_BUILD_ROOT modules_install KERNELRELEASE=$kernelver
     if [ "$buildheaders" == "1" ]; then
-           make ARCH=$arch INSTALL_HDR_PATH=$RPM_BUILD_ROOT/usr headers_install
-           buildheaders="0"
+       make ARCH=$arch INSTALL_HDR_PATH=$RPM_BUILD_ROOT/usr headers_install
+       buildheaders="0"
 # glibc provides scsi headers for itself, for now
-           rm -rf $RPM_BUILD_ROOT/usr/include/scsi
-           rm -f $RPM_BUILD_ROOT/usr/include/asm*/atomic.h
-           rm -f $RPM_BUILD_ROOT/usr/include/asm*/io.h
-           rm -f $RPM_BUILD_ROOT/usr/include/asm*/irq.h
+       rm -rf $RPM_BUILD_ROOT/usr/include/scsi
+       rm -f $RPM_BUILD_ROOT/usr/include/asm*/atomic.h
+       rm -f $RPM_BUILD_ROOT/usr/include/asm*/io.h
+       rm -f $RPM_BUILD_ROOT/usr/include/asm*/irq.h
     fi;
 # Create the kABI metadata for use in packaging
     echo "**** GENERATING kernel ABI metadata ****"
@@ -360,12 +375,18 @@ for flavor in %{buildflavors}; do
     cp $RPM_SOURCE_DIR/initrd_skeleton ./  
     cd initrd-$kernelver
     mkdir bin lib
-    cp /sbin/insmod.static ./bin/insmod
-    cp /sbin/nash ./bin
+    initrd_bins="/bin/sed /bin/cat /bin/bash /sbin/insmod /sbin/nash"
+    initrd_libs=$(
+          for i in $initrd_bins ; do ldd "$i"; done \
+          | sed -ne 's:\t\(.* => \)\?\(/.*\) (0x[0-9a-f]*):\2:p'
+    )
+    echo -n "$initrd_bins" | xargs -n 1 -d ' ' -I target cp target ./bin
+    echo "$initrd_libs" | xargs -n 1 -I target cp target ./lib
     cp $RPM_SOURCE_DIR/init ./
+    cp $RPM_SOURCE_DIR/init.bash ./
     ln -s /sbin/nash bin/modprobe
 # Copy needed modules to initrd
-    kos=$(cat init | sed -n -e "s/^insmod \/lib\/\(.*.ko\)/\1/p")
+    kos=$(cat init init.bash | sed -n -e "s/^insmod \/lib\/\(.*.ko\)/\1/p")
     for ko in $kos ; do
         kof=`find $RPM_BUILD_ROOT/lib/modules/$kernelver -name "$ko" | tail -n 1`
         if [ -n "$kof" ] ; then 
@@ -380,7 +401,6 @@ for flavor in %{buildflavors}; do
         cp ../initrd_skeleton.gz $RPM_BUILD_ROOT/%{image_install_path}/initrd-$kernelver
     %endif
 done
- 
 %clean
 rm -rf $RPM_BUILD_ROOT 
 
