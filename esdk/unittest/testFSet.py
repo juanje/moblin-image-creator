@@ -9,26 +9,10 @@ class TestFset(unittest.TestCase):
     def setUp(self):
         self.workdir = tempfile.mkdtemp()
         self.fset_filename = os.path.join(self.workdir, 'unittest.fset')
-        self.createSampleFsetFile(self.fset_filename)
+        createSampleFsetFile(self.fset_filename)
         # Create another file with same info.
         self.fset_dupfilename = os.path.join(self.workdir, 'unittest2.fset')
-        self.createSampleFsetFile(self.fset_dupfilename)
-    def createSampleFsetFile(self, filename):
-        fset_file = open(filename, 'w')
-        # Let's create a valid FSet file
-        print >> fset_file, """\
-[Core]
-DESC=Fundamental fset that provides a root filesystem
-PKGS=kernel-umd-default grub coreutils rpm
-DEBUG_PKGS=kernel-umd-developer gdb yum
-DEPS=
-
-[Internet]
-DESC=Internet fset pulling in basic web 2.0 capabilities
-PKGS=firefox
-DEBUG_PKGS=firefox-devel
-DEPS=core gnome-mobile"""
-        fset_file.close()
+        createSampleFsetFile(self.fset_dupfilename)
     def tearDown(self):
         if os.path.isdir(self.workdir):
             shutil.rmtree(self.workdir)
@@ -50,6 +34,23 @@ DEPS=core gnome-mobile"""
         fset = FSet.FSet()
         fset.addFile(self.fset_filename)
         self.failUnlessRaises(ValueError, fset.addFile, self.fset_dupfilename)
+
+def createSampleFsetFile(filename):
+    fset_file = open(filename, 'w')
+    # Let's create a valid FSet file
+    print >> fset_file, """\
+[Core]
+DESC=Fundamental fset that provides a root filesystem
+PKGS=kernel-umd-default grub coreutils rpm
+DEBUG_PKGS=kernel-umd-developer gdb yum
+DEPS=
+
+[Internet]
+DESC=Internet fset pulling in basic web 2.0 capabilities
+PKGS=firefox
+DEBUG_PKGS=firefox-devel
+DEPS=core gnome-mobile"""
+    fset_file.close()
 
 if __name__ == '__main__':
     unittest.main()
