@@ -216,7 +216,8 @@ def list_projects():
 def list_fsets(options):
     sdk = SDK()
     if options.platform_name not in sdk.platforms:
-        raise ValueError, "%s: is not a valid platform name" % options.platform_name
+        print >> sys.stderr, "%s: is not a valid platform name" % options.platform_name
+        sys.exit(1)
     for key in sorted(sdk.platforms[options.platform_name].fset.iterkeys()):
         print "%s" % (sdk.platforms[options.platform_name].fset[key].name)
 
@@ -229,6 +230,9 @@ def create_project(options):
     sdk = SDK()
     if options.project_name in sdk.projects:
         print >> sys.stderr, "Project %s already exist!" % (options.project_name)
+        sys.exit(1)
+    if options.platform_name not in sdk.platforms:
+        print >> sys.stderr, "%s: is not a valid platform name" % options.platform_name
         sys.exit(1)
     cwd = os.getcwd()
     if cwd.find(options.project_path) == 0:
@@ -291,6 +295,9 @@ def install_fset(options):
         sys.exit(1)
     if not options.fset_name in sdk.platforms[options.platform_name].fset:
         print >> sys.stderr, "Feature set %s does not exist" % (options.fset_name)
+        sys.exit(1)
+    if options.platform_name not in sdk.platforms:
+        print >> sys.stderr, "%s: is not a valid platform name" % options.platform_name
         sys.exit(1)
     fset = sdk.platforms[options.platform_name].fset[options.fset_name]
     target = sdk.projects[options.project_name].targets[options.target_name]
