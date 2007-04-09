@@ -304,10 +304,16 @@ class BaseUsbImage(InstallImage):
         
     def create_container_file(self, size):
         cmd_line = "dd if=/dev/zero of=%s bs=1M count=%s" % (self.path, size)
-        os.system(cmd_line)
+        result = os.system(cmd_line)
+        if result:
+            print >> sys.stderr, "Error running command: %s" % cmd_line
+            raise EnvironmentError, "Error running command: %s" % cmd_line
 
         cmd_line = "/sbin/mkfs.vfat %s" % self.path
-        os.system(cmd_line)
+        result = os.system(cmd_line)
+        if result:
+            print >> sys.stderr, "Error running command: %s" % cmd_line
+            raise EnvironmentError, "Error running command: %s" % cmd_line
 
         # NOTE: Running syslinux on the host development system
         #       means the host and target have compatible architectures.
@@ -320,12 +326,18 @@ class BaseUsbImage(InstallImage):
         if not self.tmp_path:
             self.tmp_path = tempfile.mkdtemp('','esdk-', '/tmp')
             cmd_line = "mount -o loop -t vfat %s %s" % (self.path, self.tmp_path)
-            os.system(cmd_line)
+            result = os.system(cmd_line)
+            if result:
+                print >> sys.stderr, "Error running command: %s" % cmd_line
+                raise EnvironmentError, "Error running command: %s" % cmd_line
 
     def umount_container(self):
         if self.tmp_path:
             cmd_line = "umount %s" % self.tmp_path
-            os.system(cmd_line)
+            result = os.system(cmd_line)
+            if result:
+                print >> sys.stderr, "Error running command: %s" % cmd_line
+                raise EnvironmentError, "Error running command: %s" % cmd_line
             os.rmdir(self.tmp_path)
             self.tmp_path = ''
 
