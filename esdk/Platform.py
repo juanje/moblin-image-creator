@@ -1,7 +1,7 @@
 #!/usr/bin/python -tt
 # vim: ai ts=4 sts=4 et sw=4
 
-import os, re, sys, unittest
+import os, re, sys
 import FSet
 
 class Platform(object):
