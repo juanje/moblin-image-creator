@@ -109,16 +109,14 @@ class InstallImage(object):
         # Copy the default kernel
         default_kernel = kernels.pop(0)
         kernel_name = s.add_default(default_kernel, 'initrd=initrd.img root=rootfs.img')
-        src_path = os.path.join(self.target.fs_path, 'boot')
-        src_path = os.path.join(src_path, default_kernel)
+        src_path = os.path.join(self.target.fs_path, 'boot', default_kernel)
         dst_path = os.path.join(self.tmp_path, kernel_name)
         shutil.copyfile(src_path, dst_path)
 
         # Copy the remaining kernels
         for k in kernels:
             kernel_name = s.add_target(k, 'initrd=initrd.img root=rootfs.img')
-            src_path = os.path.join(self.target.fs_path, 'boot')
-            src_path = os.path.join(src_path, k)
+            src_path = os.path.join(self.target.fs_path, 'boot', k)
             dst_path = os.path.join(self.tmp_path, kernel_name)
             shutil.copyfile(src_path, dst_path)
 
@@ -153,8 +151,7 @@ class InstallImage(object):
                     if sr_deps.st_mtime > sr_sym.st_mtime: 
                         continue
 
-                symbol_file = os.path.join(base_dir, 'boot')
-                symbol_file = os.path.join(symbol_file, file)
+                symbol_file = os.path.join(base_dir, 'boot', file)
 
                 cmd_args = "-b %s -v %s -F %s" % (base_dir, kernel_version, symbol_file)
                 self.project.chroot("/sbin/depmod", cmd_args)
@@ -265,7 +262,7 @@ umount /tmp/boot
 umount /tmp/install
 
 echo -e '\n\n\nInstall Finished!\n\n'
-echo -e 'System shuting down!\n\n'
+echo -e 'System shutting down!\n\n'
 echo -e 'Disconnect the USB-Key when shutdown is complete and\n'
 echo -e 'Reboot the system from HDD...\n\n'
 
