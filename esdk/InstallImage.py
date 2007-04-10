@@ -9,27 +9,32 @@ import Mkinitrd
 
 class SyslinuxCfg(object):
     def __init__(self, path, cfg_filename):
-        self.path = path
-        self.cfg_path = os.path.join(self.path, cfg_filename)
-        self.msg_path = os.path.join(self.path, 'boot.msg')
-        self.index = 1
+        try:
+            self.path = path
+            self.cfg_path = os.path.join(self.path, cfg_filename)
+            self.msg_path = os.path.join(self.path, 'boot.msg')
+            self.index = 1
 
-        welcome_mesg = "Welcome to the Linux eSDK:"
+            welcome_mesg = "Welcome to the Linux eSDK:"
 
-        # Create and initialize the syslinux config file
-        cfg_file = open(self.cfg_path, 'w')
-        print >> cfg_file, """\
-prompt 1
-timeout 600
-display boot.msg
-"""
-        cfg_file.close()
+            # Create and initialize the syslinux config file
+            cfg_file = open(self.cfg_path, 'w')
+            print >> cfg_file, """\
+    prompt 1
+    timeout 600
+    display boot.msg
+    """
+            cfg_file.close()
 
-        # Create and initialize the syslinux boot message file
-        msg_file = open(self.msg_path, 'w')
-        msg_file.write("\f")
-        print >> msg_file, "\n" + welcome_mesg + "\n"
-        msg_file.close()
+            # Create and initialize the syslinux boot message file
+            msg_file = open(self.msg_path, 'w')
+            msg_file.write("\f")
+            print >> msg_file, "\n" + welcome_mesg + "\n"
+            msg_file.close()
+        except:
+            print_exc_plus()
+            sys.exit(1)
+            
 
     def add_default(self, kernel, append = 'initrd=initrd.img'):
         label = 'linux'
@@ -418,7 +423,35 @@ class HddImage(InstallImage):
         return ("<HddImage: project=%s, target=%s, name=%s>"
                 % (self.project, self.target, self.name))
 
-
+def print_exc_plus():
+    """ Print the usual traceback information, followed by a listing of
+        all the local variables in each frame.
+    """
+    tb = sys.exc_info()[2]
+    while tb.tb_next:
+        tb = tb.tb_next
+    stack = []
+    f = tb.tb_frame
+    while f:
+        stack.append(f)
+        f = f.f_back
+    stack.reverse()
+    traceback.print_exc()
+    print "Locals by frame, innermost last"
+    for frame in stack:
+        print
+        print "Frame %s in %s at line %s" % (frame.f_code.co_name,
+                                             frame.f_code.co_filename,
+                                             frame.f_lineno)
+        for key, value in frame.f_locals.items():
+            print "\t%20s = " % key,
+            # we must _absolutely_ avoid propagating exceptions, and str(value)
+            # COULD cause any exception, so we MUST catch any...:
+            try:
+                print value
+            except:
+                print "<ERROR WHILE PRINTING VALUE>"
+    traceback.print_exc()
 
 if __name__ == '__main__':
     cnt = len(sys.argv)
