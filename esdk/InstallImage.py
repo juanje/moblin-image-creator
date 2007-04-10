@@ -300,11 +300,13 @@ class BaseUsbImage(InstallImage):
         InstallImage.install_kernels(self, 'syslinux.cfg')
         
     def create_container_file(self, size):
-        cmd_line = "dd if=/dev/zero of=%s bs=1M count=%s" % (self.path, size)
-        result = os.system(cmd_line)
-        if result:
-            print >> sys.stderr, "Error running command: %s" % cmd_line
-            raise EnvironmentError, "Error running command: %s" % cmd_line
+        out_file = open(self.path, 'w')
+        # Make a kibibyte length string of zeroes
+        out_string = chr(0) * 1024
+        # Write the string out to the file to create file of size * mibibyte in length
+        for count in range(0, size * 1024):
+            out_file.write(out_string)
+        out_file.close()
 
         cmd_line = "/sbin/mkfs.vfat %s" % self.path
         result = os.system(cmd_line)
