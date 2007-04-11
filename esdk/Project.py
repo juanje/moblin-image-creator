@@ -263,6 +263,7 @@ class Target(FileSystem):
         for dep in fset['deps']:
             if not os.path.isfile(os.path.join(self.top, dep)):
                 if fsets:
+                    print "Installing Feature Set dependency: %s" % dep
                     self.install(fsets[dep], fsets = fsets, debug = debug)
                 else:
                     raise ValueError("fset %s must be installed first!" % (dep))
