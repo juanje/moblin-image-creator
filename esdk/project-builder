@@ -302,8 +302,9 @@ def install_fset(options):
         print >> sys.stderr, "%s: is not a valid platform name" % options.platform_name
         sys.exit(1)
     fset = sdk.platforms[options.platform_name].fset[options.fset_name]
+    fsets = sdk.platforms[options.platform_name].fset
     target = sdk.projects[options.project_name].targets[options.target_name]
-    target.install(fset, options.debug)
+    target.install(fset, fsets = fsets, debug = options.debug)
 
 def create_image(options):
     sdk = SDK()

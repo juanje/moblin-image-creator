@@ -251,16 +251,21 @@ class Target(FileSystem):
                 result.append(fset)
         return result
         
-    def install(self, fset, debug=0):
+    def install(self, fset, debug=0, fsets = None):
         """
-        Install a fset into the target filesystem
+        Install a fset into the target filesystem.  If the fsets variable is
+        supplied with a list of fsets then we will try to recursively install
+        any missing deps that exist.
         """
         if os.path.isfile(os.path.join(self.top, fset.name)):
             raise ValueError("fset %s is already installed!" % (fset.name))
         
         for dep in fset['deps']:
             if not os.path.isfile(os.path.join(self.top, dep)):
-                raise ValueError("fset %s must be installed first!" % (dep))
+                if fsets:
+                    self.install(fsets[dep], fsets = fsets, debug = debug)
+                else:
+                    raise ValueError("fset %s must be installed first!" % (dep))
 
         FileSystem.install(self, self.fs_path, fset['pkgs'])
         if debug == 1:
