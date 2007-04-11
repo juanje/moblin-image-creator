@@ -199,9 +199,17 @@ class esdkMain:
         platform = self.current_project().platform
         label = tree.get_widget('fset-desc-label')
         checkbox = tree.get_widget('debug-check-button')
-        list = gtk.ListStore(gobject.TYPE_STRING)            
-        for fset in self.current_project().platform.fset:
-            list.append([fset])
+        list = gtk.ListStore(gobject.TYPE_STRING)
+        iter = 0
+        all_fsets = set(platform.fset)
+        installed_fsets = set(self.current_target().installed_fsets())
+        for fset_name in all_fsets.difference(installed_fsets):
+            if set(platform.fset[fset_name]['deps']).issubset(installed_fsets):
+                iter = list.append([fset_name])
+        if not iter:
+            self.show_error_dialog("Nothing available to install!")
+            dialog.destroy()
+            return
         cebox = tree.get_widget('installed_fsets')
         cebox.set_model(list)
         cebox.set_text_column(0)
