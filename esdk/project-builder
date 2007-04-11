@@ -29,8 +29,6 @@ def main():
         print >> sys.stderr, "Error: %s depends on a Python version of at least 2.4!" % (sys.argv[0])
         sys.exit(1)
 
-    x = foo
-
     if len(sys.argv) == 1:
         try:
             esdkMain()
