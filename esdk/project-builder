@@ -2,12 +2,14 @@
 # vim: ai ts=4 sts=4 et sw=4
 ###############################################################################
 
-import sys, os, string
+import sys, os, string, traceback
 
 from optparse import OptionParser
 
 sys.path.insert(0, '/usr/share/esdk/lib')
 from SDK import *
+
+debug = True
 
 try:
     from gui import *
@@ -26,6 +28,8 @@ def main():
     if sys.hexversion < 0x2040000:
         print >> sys.stderr, "Error: %s depends on a Python version of at least 2.4!" % (sys.argv[0])
         sys.exit(1)
+
+    x = foo
 
     if len(sys.argv) == 1:
         try:
@@ -315,5 +319,38 @@ def create_image(options):
     elif options.cmd == 'create-install-usb':
         proj.create_install_usb(options.target_name, options.image_name)
 
+def print_exc_plus(type, value, tb):
+    # From Python Cookbook 2nd Edition.  FIXME: Will need to remove this at
+    # some point, or give attribution.
+    # This is a modified version of recipe 8.6
+    """ Print the usual traceback information, followed by a listing of
+        all the local variables in each frame.
+    """
+    while tb.tb_next:
+        tb = tb.tb_next
+    stack = []
+    f = tb.tb_frame
+    while f:
+        stack.append(f)
+        f = f.f_back
+    stack.reverse()
+    traceback.print_exception(type, value, tb)
+    print "Locals by frame, innermost last"
+    for frame in stack:
+        print
+        print "Frame %s in %s at line %s" % (frame.f_code.co_name,
+                                             frame.f_code.co_filename,
+                                             frame.f_lineno)
+        for key, value in frame.f_locals.items():
+            print "\t%20s = " % key,
+            # we must _absolutely_ avoid propagating exceptions, and str(value)
+            # COULD cause any exception, so we MUST catch any...:
+            try:
+                print value
+            except:
+                print "<ERROR WHILE PRINTING VALUE>"
+    traceback.print_exception(type, value, tb)
+
 if __name__ == '__main__':
+    if debug: sys.excepthook = print_exc_plus
     sys.exit(main())

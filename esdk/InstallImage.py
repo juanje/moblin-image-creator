@@ -424,6 +424,8 @@ class HddImage(InstallImage):
                 % (self.project, self.target, self.name))
 
 def print_exc_plus():
+    # From Python Cookbook 2nd Edition.  FIXME: Will need to remove this at
+    # some point, or give attribution.
     """ Print the usual traceback information, followed by a listing of
         all the local variables in each frame.
     """
