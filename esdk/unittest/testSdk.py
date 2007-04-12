@@ -2,10 +2,19 @@
 # vim: ai ts=4 sts=4 et sw=4
 
 import os, re, shutil, sys, tempfile, unittest
+
+import testPlatform
+
 sys.path.insert(0, '/usr/share/esdk/lib')
 import SDK
 
 class TestSDK(unittest.TestCase):
+    def setUp(self):
+        self.workdir = tempfile.mkdtemp()
+        createEsdkSampleDir(self.workdir)
+    def tearDown(self):
+        if os.path.isdir(self.workdir):
+            shutil.rmtree(self.workdir)
     def testInstantiate(self):
         sdk = SDK.SDK()
         for key in sdk.projects:
@@ -16,5 +25,12 @@ class TestSDK(unittest.TestCase):
         temp = sdk.__str__()
         temp = sdk.__repr__()
 
+def createEsdkSampleDir(root_dir):
+    # Create our directories
+    for dirname in ['projects']:
+        full_path = os.path.join(root_dir, dirname)
+        os.mkdir(full_path)
+    testPlatform.createSamplePlatformDir(os.path.join(root_dir, 'platforms'))
+    
 if __name__ == '__main__':
     unittest.main()
