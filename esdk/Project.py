@@ -251,7 +251,7 @@ class Target(FileSystem):
                 result.append(fset)
         return result
         
-    def install(self, fset, debug=0, fsets = None):
+    def install(self, fset, debug=0, fsets = None, seen_fsets = set()):
         """
         Install a fset into the target filesystem.  If the fsets variable is
         supplied with a list of fsets then we will try to recursively install
@@ -259,12 +259,16 @@ class Target(FileSystem):
         """
         if os.path.isfile(os.path.join(self.top, fset.name)):
             raise ValueError("fset %s is already installed!" % (fset.name))
+
+        if fset.name in seen_fsets:
+            raise RuntimeError, "Circular fset dependency encounterd for: %s" % fset.name
+        seen_fsets.add(fset.name)
         
         for dep in fset['deps']:
             if not os.path.isfile(os.path.join(self.top, dep)):
                 if fsets:
                     print "Installing Feature Set dependency: %s" % dep
-                    self.install(fsets[dep], fsets = fsets, debug = debug)
+                    self.install(fsets[dep], fsets = fsets, debug = debug, seen_fsets = seen_fsets)
                 else:
                     raise ValueError("fset %s must be installed first!" % (dep))
 
