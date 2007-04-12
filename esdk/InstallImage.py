@@ -36,7 +36,7 @@ class SyslinuxCfg(object):
             print_exc_plus()
             sys.exit(1)
             
-    def __repr__:
+    def __repr__(self):
         return 'SyslinuxCfg(path = "%s", cfg_filename = "%s")' % (self.path,
             self.cfg_filename)
 
