@@ -91,6 +91,9 @@ metadata_expire=1800
         Call into yum to install RPM packages using the specified yum
         repositories
         """
+        if not packages:
+            return
+        
         command = 'yum -y --installroot=' + path + ' install '
         for p in packages:
             command = command + ' ' + p
