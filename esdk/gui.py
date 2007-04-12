@@ -215,10 +215,15 @@ class esdkMain:
         cebox.child.set_text(list[0][0])
         cebox.connect("changed", self.fset_install_updated, label, platform, checkbox)
         label.set_text(platform.fset[cebox.child.get_text()].desc)
-        if platform.fset[cebox.child.get_text()]['debug_pkgs']:
-            checkbox.set_sensitive(True)
-        else:
-            checkbox.set_sensitive(False)
+        #FIXME
+        # Probably should remove the code or figure out if fsets we depend on
+        # have debug_pkgs.  For now we will just allow them to specify
+        # debug_pkgs
+        checkbox.set_sensitive(True)
+        # if platform.fset[cebox.child.get_text()]['debug_pkgs']:
+        #     checkbox.set_sensitive(True)
+        # else:
+        #     checkbox.set_sensitive(False)
         if dialog.run() == gtk.RESPONSE_OK:
             fset = platform.fset[cebox.child.get_text()]
             try:

@@ -1588,7 +1588,7 @@ Project Targets</property>
 	  <property name="visible">True</property>
 	  <property name="sensitive">False</property>
 	  <property name="can_focus">True</property>
-	  <property name="label" translatable="yes">Include Debug Packages</property>
+	  <property name="label" translatable="yes">Include Debug Packages (if any)</property>
 	  <property name="use_underline">True</property>
 	  <property name="relief">GTK_RELIEF_NORMAL</property>
 	  <property name="focus_on_click">True</property>
