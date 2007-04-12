@@ -43,8 +43,6 @@ class SyslinuxCfg(object):
     def __str__(self):
         return "<SyslinuxCfg: __dict__=%s>" % self.__dict__
 
-
-
     def add_default(self, kernel, append = 'initrd=initrd.img'):
         label = 'linux'
         kernel_file = 'vmlinuz'
