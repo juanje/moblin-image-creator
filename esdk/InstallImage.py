@@ -11,6 +11,7 @@ class SyslinuxCfg(object):
     def __init__(self, path, cfg_filename):
         try:
             self.path = path
+            self.cfg_filename = cfg_filename
             self.cfg_path = os.path.join(self.path, cfg_filename)
             self.msg_path = os.path.join(self.path, 'boot.msg')
             self.index = 1
@@ -35,6 +36,14 @@ class SyslinuxCfg(object):
             print_exc_plus()
             sys.exit(1)
             
+    def __repr__:
+        return 'SyslinuxCfg(path = "%s", cfg_filename = "%s")' % (self.path,
+            self.cfg_filename)
+
+    def __str__(self):
+        return "<SyslinuxCfg: __dict__=%s>" % self.__dict__
+
+
 
     def add_default(self, kernel, append = 'initrd=initrd.img'):
         label = 'linux'
@@ -73,7 +82,6 @@ class SyslinuxCfg(object):
                        "\x01" + label + " <ENTER>" +  chr(15) + "\x07\n\n")
         msg_file.close()
         return kernel_file
-
 
 class InstallImage(object):
     """
