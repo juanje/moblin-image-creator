@@ -10,22 +10,23 @@ class TestPlatform(unittest.TestCase):
     def setUp(self):
         self.workdir = tempfile.mkdtemp()
         self.platform_dir = os.path.join(self.workdir, 'platforms', 'unittest')
-        self.createSamplePlatformDir(self.platform_dir)
+        createSamplePlatformDir(self.platform_dir)
     def tearDown(self):
         if os.path.isdir(self.workdir):
             shutil.rmtree(self.workdir)
-    def createSamplePlatformDir(self, platform_dir):
-        os.makedirs(platform_dir)
-        for dirname in ('buildroot_repos', 'fsets', 'target_repos'):
-            os.mkdir(os.path.join(platform_dir, dirname))
-        testFSet.createSampleFsetFile(os.path.join(platform_dir, 'fsets', 'unittest.fset'))
-        createSampleJailrootPackages(os.path.join(platform_dir, 'jailroot.packages'))
     def testInstantiate(self):
         platform = Platform.Platform(self.workdir, 'unittest')
     def testStrRepr(self):
         platform = Platform.Platform(self.workdir, 'unittest')
         temp = platform.__str__()
         temp = platform.__repr__()
+
+def createSamplePlatformDir(platform_dir):
+    os.makedirs(platform_dir)
+    for dirname in ('buildroot_repos', 'fsets', 'target_repos'):
+        os.mkdir(os.path.join(platform_dir, dirname))
+    testFSet.createSampleFsetFile(os.path.join(platform_dir, 'fsets', 'unittest.fset'))
+    createSampleJailrootPackages(os.path.join(platform_dir, 'jailroot.packages'))
 
 def createSampleJailrootPackages(filename):
     jailroot_file = open(filename, 'w')
