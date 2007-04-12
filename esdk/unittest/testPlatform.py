@@ -27,11 +27,10 @@ def createSamplePlatformDir(platform_dir):
         os.mkdir(os.path.join(platform_dir, dirname))
     testFSet.createSampleFsetFile(os.path.join(platform_dir, 'fsets', 'unittest.fset'))
     createSampleJailrootPackages(os.path.join(platform_dir, 'jailroot.packages'))
+    createSampleRepos(platform_dir)
 
 def createSampleJailrootPackages(filename):
-    jailroot_file = open(filename, 'w')
-    # Let's create a valid FSet file
-    print >> jailroot_file, """\
+    contents = """\
 # stuff needed for building pretty much any package
 tar patch gcc gcc-c++ make automake autoconf libtool file rpm-build bzip2 
 
@@ -41,19 +40,45 @@ vim-enhanced tree less diffutils yum
 # stuff needed for kernel development
 module-init-tools ncurses-devel nash
 
-# stuff needed for GUI development
-#gtk2-devel gconf2-devel gettext-devel gtkdoc dbus-1-devel dbus-1-glib
-
-# extras
-#perl-XML-Parser
-
-# Hildon related build stuff
-#outo libmatchbox libfakekey esound-devel
-
 # Packages required for making bootable images
 syslinux busybox squashfs-tools
 """
-    jailroot_file.close()
+    text2file(filename, contents)
+
+def createSampleRepos(root_dir):
+    repo_text = """\
+[esdk-base]
+name=ESDK Base
+baseurl=http://umd-build2.jf.intel.com/yum-repos/fedora-6-core/
+enabled=1
+gpgcheck=0
+
+[esdk-updates]
+name=ESDK Updates
+baseurl=http://umd-build2.jf.intel.com/yum-repos/fedora-6-updates/
+enabled=1
+gpgcheck=0
+
+[esdk-extras]
+name=ESDK Extras
+baseurl=http://umd-build2.jf.intel.com/yum-repos/fedora-6-extras/
+enabled=1
+gpgcheck=0
+
+[esdk-rpms]
+name=ESDK RPMS
+baseurl=http://umd-build2.jf.intel.com/yum-repos/mid-core/
+enabled=1
+gpgcheck=0"""
+    for dirname in ('buildroot_repos', 'target_repos'):
+        full_path = os.path.join(root_dir, dirname, "unittest.repo")
+        text2file(full_path, repo_text)
+
+
+def text2file(filename, text):
+    out_file = open(filename, 'w')
+    print >> out_file, text
+    out_file.close()
 
 if __name__ == '__main__':
     unittest.main()
