@@ -229,17 +229,6 @@ class SDK(object):
     def __repr__(self):
         return "SDK(path='%s')" % self.path
 
-class TestSDK(unittest.TestCase):
-    def testInstantiate(self):
-        sdk = SDK()
-        for key in sdk.projects:
-                project = sdk.projects[key]
-                a,b = (project.name, project.path)
-    def testStrRepr(self):
-        sdk = SDK()
-        temp = sdk.__str__()
-        temp = sdk.__repr__()
-
 if __name__ == '__main__':
     if len(sys.argv) == 1:
         unittest.main()

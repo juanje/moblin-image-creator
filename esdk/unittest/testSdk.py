@@ -1,0 +1,20 @@
+#!/usr/bin/python -tt
+# vim: ai ts=4 sts=4 et sw=4
+
+import os, re, shutil, sys, tempfile, unittest
+sys.path.insert(0, '/usr/share/esdk/lib')
+import SDK
+
+class TestSDK(unittest.TestCase):
+    def testInstantiate(self):
+        sdk = SDK.SDK()
+        for key in sdk.projects:
+                project = sdk.projects[key]
+                a,b = (project.name, project.path)
+    def testStrRepr(self):
+        sdk = SDK.SDK()
+        temp = sdk.__str__()
+        temp = sdk.__repr__()
+
+if __name__ == '__main__':
+    unittest.main()
