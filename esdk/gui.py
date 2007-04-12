@@ -227,6 +227,7 @@ class esdkMain:
             except ValueError, e:
                 self.show_error_dialog(e.args[0])
             except:
+                print_exc_plus()
                 self.show_error_dialog("Unexpected error: %s" % (sys.exc_info()[1]))
         dialog.destroy()
 
@@ -418,6 +419,38 @@ class MainWindowButtons:
         self.term_launch = widgets.get_widget('term_launch')    
         self.target_term_launch = widgets.get_widget('target_term_launch')    
         
+def print_exc_plus():
+    # From Python Cookbook 2nd Edition.  FIXME: Will need to remove this at
+    # some point, or give attribution.
+    """ Print the usual traceback information, followed by a listing of
+        all the local variables in each frame.
+    """
+    tb = sys.exc_info()[2]
+    while tb.tb_next:
+        tb = tb.tb_next
+    stack = []
+    f = tb.tb_frame
+    while f:
+        stack.append(f)
+        f = f.f_back
+    stack.reverse()
+    traceback.print_exc()
+    print "Locals by frame, innermost last"
+    for frame in stack:
+        print
+        print "Frame %s in %s at line %s" % (frame.f_code.co_name,
+                                             frame.f_code.co_filename,
+                                             frame.f_lineno)
+        for key, value in frame.f_locals.items():
+            print "\t%20s = " % key,
+            # we must _absolutely_ avoid propagating exceptions, and str(value)
+            # COULD cause any exception, so we MUST catch any...:
+            try:
+                print value
+            except:
+                print "<ERROR WHILE PRINTING VALUE>"
+    traceback.print_exc()
+
 if __name__ == '__main__':
     esdk = esdkMain()
     gtk.main()
