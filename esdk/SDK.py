@@ -97,7 +97,7 @@ target.install(fset, 1)
 
 """
 
-import os, re, shutil, sys, unittest
+import os, re, shutil, sys
 import Platform, Project
 
 class ConfigFile(object):
@@ -230,7 +230,5 @@ class SDK(object):
         return "SDK(path='%s')" % self.path
 
 if __name__ == '__main__':
-    if len(sys.argv) == 1:
-        unittest.main()
     for path in sys.argv[1:]:
         print SDK(path)
