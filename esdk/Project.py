@@ -282,11 +282,10 @@ class Target(FileSystem):
             install_pkgs.extend(fset['debug_pkgs'])
         FileSystem.install(self, self.fs_path, install_pkgs)
 
-        # and now create a simple empty file that indicates that the fset
-        # has been installed...
-        result = os.system('touch ' + os.path.join(self.top, fset.name))
-        if result != 0:
-            raise Exception("Unable to create fset file!");
+        # and now create a simple empty file that indicates that the fset has
+        # been installed...
+        fset_file = open(os.path.join(self.top, fset.name), 'w')
+        fset_file.close()
 
     def update(self):
         FileSystem.update(self, self.fs_path)
