@@ -291,7 +291,7 @@ class Target(FileSystem):
         FileSystem.update(self, self.fs_path)
 
     def __str__(self):
-        return ("<Target: name=%s, path=%s, fs_path=%s, image_path>"
+        return ("<Target: name=%s, path=%s, fs_path=%s, image_path=%s>"
                 % (self.name, self.path, self.fs_path, self.image_path))
     def __repr__(self):
         return "Target('%s', %s)" % (self.path, self.project)
