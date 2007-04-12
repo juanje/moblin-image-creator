@@ -7,7 +7,7 @@ try:
 except:
     raise ImportError, "Unable to import the gtk libraries.  Maybe you are running in text mode"
 from SDK import *
-import os
+import os, traceback
 
 global gladefile
 gladefile = "/usr/share/esdk/esdk.glade"
