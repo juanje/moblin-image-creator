@@ -227,7 +227,7 @@ class esdkMain:
             except ValueError, e:
                 self.show_error_dialog(e.args[0])
             except:
-                self.show_error_dialog()
+                self.show_error_dialog("Unexpected error: %s" % (sys.exc_info()[1]))
         dialog.destroy()
 
     def fset_install_updated(self, box, label, platform, checkbox):
