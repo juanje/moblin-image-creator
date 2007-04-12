@@ -203,7 +203,7 @@ class esdkMain:
         iter = 0
         all_fsets = set(platform.fset)
         installed_fsets = set(self.current_target().installed_fsets())
-        for fset_name in all_fsets.difference(installed_fsets):
+        for fset_name in sorted(all_fsets.difference(installed_fsets)):
             iter = list.append([fset_name])
         if not iter:
             self.show_error_dialog("Nothing available to install!")
