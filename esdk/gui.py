@@ -204,8 +204,7 @@ class esdkMain:
         all_fsets = set(platform.fset)
         installed_fsets = set(self.current_target().installed_fsets())
         for fset_name in all_fsets.difference(installed_fsets):
-            if set(platform.fset[fset_name]['deps']).issubset(installed_fsets):
-                iter = list.append([fset_name])
+            iter = list.append([fset_name])
         if not iter:
             self.show_error_dialog("Nothing available to install!")
             dialog.destroy()
@@ -223,7 +222,7 @@ class esdkMain:
         if dialog.run() == gtk.RESPONSE_OK:
             fset = platform.fset[cebox.child.get_text()]
             try:
-                self.current_target().install(fset, checkbox.get_active())
+                self.current_target().install(fset, fsets = platform.fset, debug = checkbox.get_active())
                 self.redraw_target_view()
             except ValueError, e:
                 self.show_error_dialog(e.args[0])
