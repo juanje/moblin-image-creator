@@ -358,7 +358,7 @@ class LiveUsbImage(BaseUsbImage):
         self.create_rootfs()
 
         stat_result = os.stat(self.rootfs_path)
-        size = (stat_result.st_size / (1024 * 1024)) + 16
+        size = (stat_result.st_size / (1024 * 1024)) + 64
 
         self.create_container_file(size)
 
@@ -391,7 +391,7 @@ class InstallUsbImage(BaseUsbImage):
 
         stat_result1 = os.stat(self.rootfs_path)
         stat_result2 = os.stat(self.bootfs_path)
-        size = ((stat_result1.st_size + stat_result2.st_size) / (1024 * 1024)) + 16
+        size = ((stat_result1.st_size + stat_result2.st_size) / (1024 * 1024)) + 64
 
         self.create_container_file(size)
 
