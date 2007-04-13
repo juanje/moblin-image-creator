@@ -22,8 +22,8 @@ class FSet(object):
 
 
     def __parseFile(self, filename):
-        valid_values = { 'name' : '', 'desc' : '', 'pkgs' : [],
-            'debug_pkgs' : [], 'deps' : [] }
+        valid_values = { 'desc' : '', 'pkgs' : [], 'debug_pkgs' : [],
+            'deps' : [] }
         p = ConfigParser.ConfigParser()
         filenames = p.read(filename)
         for section in p.sections():
@@ -33,22 +33,10 @@ class FSet(object):
                 raise ValueError, "Error: Already have a section called: %s" % section
             work_dict = {}
             work_dict['filename'] = filename
+            fset = FsetInstance(section)
             for name, value in p.items(orig_section):
-                name = name.lower()
-                if name not in valid_values:
-                    print "Found unsupported value, ignoring: %s %s" % (name, filename)
-                    continue
-                work_type = type(valid_values[name])
-                if work_type == type([]):
-                    value = value.split()
-                elif work_type == type(''):
-                    pass
-                else:
-                    print "Error: Unsupported type specified in valid_values"
-                    print "Type was: %s" % work_type
-                    raise ValueError
-                work_dict[name] = value
-            self.__fsets[section] = FsetInstance(section, work_dict)
+                fset.add(name, value)
+            self.__fsets[section] = fset
 
     def __getitem__(self, key):
         return self.__fsets[key.lower()]
@@ -64,9 +52,33 @@ class FSet(object):
         return "FSet()"
 
 class FsetInstance(object):
-    def __init__(self, name, data_dict):
+    valid_values = { 'desc' : '', 'pkgs' : [], 'debug_pkgs' : [], 'deps' : [] }
+    def __init__(self, name):
         self.name = name.lower()
-        self.data = data_dict
+        self.data = {}
+    def add(self, key, value):
+        key = key.lower()
+        if key not in FsetInstance.valid_values:
+            print "Found unsupported value, ignoring: %s = %s" % (key, value)
+            return
+        work_type = type(FsetInstance.valid_values[key])
+        if work_type == type([]):
+            value = value.split()
+        elif work_type == type(''):
+            pass
+        else:
+            print "Error: Unsupported type specified in FsetInstance.valid_values"
+            print "Type was: %s" % work_type
+            raise ValueError
+        self.data[key] = value
+    def get(self, key):
+        key = key.lower()
+        if key not in FsetInstance.valid_values:
+            raise KeyError
+        if key in self.data:
+            return self.data[key]
+        else:
+            return FsetInstance.valid_values[key]
     def __getitem__(self, key):
         return self.data[key.lower()]
     def __getattr__(self, name):
