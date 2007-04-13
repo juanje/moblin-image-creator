@@ -44,7 +44,8 @@ class FSet(object):
         return self.__fsets.__iter__()
     def iterkeys(self):
         return self.__fsets.iterkeys()
-
+    def __len__(self):
+        return len(self.__fsets)
     def __str__(self):
         return ('<data="%s">'
                 % (self.__fsets))
