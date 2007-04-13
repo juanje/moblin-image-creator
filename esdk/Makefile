@@ -17,9 +17,10 @@ install:
 	else \
 		cp project-builder-launcher /usr/bin/project-builder; \
 	fi
-	@if [ -d /etc/bash_completion.d/ ]; then \
-	    cp -a project-builder-completion.bash /etc/bash_completion.d/; \
+	@if [ ! -d /etc/bash_completion.d/ ]; then \
+	    mkdir /etc/bash_completion.d; \
 	fi
+	@cp project-builder-completion.bash /etc/bash_completion.d/
 
 # Cleans out the current directory cruft
 clean:
