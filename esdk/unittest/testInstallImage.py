@@ -2,19 +2,27 @@
 # vim: ai ts=4 sts=4 et sw=4
 
 import os, re, shutil, sys, tempfile, unittest
-import time
+
+import testSdk
+
 sys.path.insert(0, '/usr/share/esdk/lib')
 import InstallImage, SDK
 
 class TestInstallImage(unittest.TestCase):
     def setUp(self):
         self.workdir = tempfile.mkdtemp()
+        self.esdk_dir = os.path.join(self.workdir, 'esdk')
+        os.mkdir(self.esdk_dir)
+        testSdk.createEsdkSampleDir(self.esdk_dir)
 
-        self.sdk = SDK.SDK()
+        self.project_dir = os.path.join(self.workdir, 'project')
+        os.mkdir(self.project_dir)
 
-        self.proj_path = os.path.join(self.workdir, 'project_unittest')
+        self.sdk = SDK.SDK(self.esdk_dir)
+
+        self.proj_path = os.path.join(self.project_dir, 'project_unittest')
         self.proj_name = "unittest-281d8183ckd"
-        self.platform_name = "zi9"
+        self.platform_name = "unittest"
 
         self.proj = self.sdk.create_project(self.proj_path, self.proj_name, 'unittest project', self.sdk.platforms[self.platform_name])
         self.proj.install()
@@ -27,7 +35,6 @@ class TestInstallImage(unittest.TestCase):
 
     def tearDown(self):
         self.proj.umount()
-        return
         # have to delete the temporary project
         self.sdk.delete_project(self.proj_name)
         return
