@@ -31,17 +31,22 @@ basicinstall:
 
 # Cleans out the current directory cruft
 clean:
+	@echo -n "Cleaning up working directory files..."
 	@rm -f *.pyc
 	@rm -f unittest/*.pyc
 	@find -name \*~ -exec rm -f {} \;
+	@echo "Done"
 
 # Cleans out the installation target
 cleanall: clean
+	@echo -n "Removing previously installed files..."
 	@rm -rf /usr/share/esdk/lib
 	@rm -rf /usr/share/esdk/platforms
-	@rm -rf /usr/share/esdk/*.glade
+	@rm -f /usr/share/esdk/*.glade
 	@rm -f /usr/bin/project-builder
 	@rm -f /usr/sbin/project-builder
+	@rm -f /etc/bash_completion.d/project-builder-completion.bash
+	@echo "Done"
 
 # Run the unit tests which run fairly quickly
 runbasictests:
