@@ -252,6 +252,7 @@ class Target(FileSystem):
         for fset in os.listdir(self.top):
             if fset not in ['fs', 'image']:
                 result.append(fset)
+        result.sort()
         return result
         
     def install(self, fset, debug=0, fsets = None, seen_fsets = None):
