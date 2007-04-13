@@ -18,12 +18,21 @@ class TestFset(unittest.TestCase):
             shutil.rmtree(self.workdir)
     def testInstantiate(self):
         fset = FSet.FSet()
-        fset.addFile(self.fset_filename)
-        if "blah" in fset:
-            a = 1
-        for key in fset:
-            print key
 
+    def testLoadingFsets(self):
+        fset = FSet.FSet()
+        fset.addFile(self.fset_filename)
+        # Make sure len operator works and we have greater than zero fsets
+        self.assert_(len(fset))
+        # Make sure we can see if something is in the fset
+        if "blah" in fset:
+            pass
+        # make sure we can iterate over the Fsets
+        for key in fset:
+            temp = key
+
+    def testFsetInstance(self):
+        """Test the FsetInstance class"""
         fset_instance = FSet.FsetInstance('foo')
         for key, value in FSet.FsetInstance.valid_values.iteritems():
             self.assertEqual(fset_instance[key], value)
@@ -31,10 +40,12 @@ class TestFset(unittest.TestCase):
         # Make sure a bad key raises a KeyError exception
         self.assertRaises(KeyError, fset_instance.get, 'bonk')
         # Make sure we store our values correctly
-        fset_instance.add('pkgs', "foo spam")
+        sample_pkg_list = ['foo', 'spam']
+        fset_instance.add('pkgs', " ".join(sample_pkg_list))
         result = fset_instance['pkgs']
         result.sort()
-        self.assertEqual(result, ['foo', 'spam'])
+        self.assertEqual(result, sample_pkg_list)
+
     def testStrRepr(self):
         fset = FSet.FSet()
         temp = fset.__str__()
