@@ -278,7 +278,7 @@ class Target(FileSystem):
                     raise ValueError("fset %s must be installed first!" % (dep))
 
         install_pkgs = fset['pkgs']
-        if debug == 1 and 'debug_pkgs' in fset:
+        if debug == 1:
             install_pkgs.extend(fset['debug_pkgs'])
         FileSystem.install(self, self.fs_path, install_pkgs)
 
