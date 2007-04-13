@@ -45,7 +45,7 @@ def createSamplePlatformDir(platform_dir, repo_filename = "unittest.repo"):
     for dirname in ('buildroot_repos', 'fsets', 'target_repos'):
         os.mkdir(os.path.join(platform_dir, dirname))
     testFSet.createSampleFsetFile(os.path.join(platform_dir, 'fsets', 'unittest.fset'))
-    createSampleJailrootPackages(os.path.join(platform_dir, 'jailroot.packages'))
+    createSampleJailrootPackages(os.path.join(platform_dir, 'buildroot.packages'))
     createSampleRepos(platform_dir, repo_filename)
 
 def createSampleJailrootPackages(filename):

@@ -36,7 +36,7 @@ class Platform(object):
             self.buildroot_repos.append(os.path.join(build_repo_path, repo))
         # determine what packages need to be installed in the jailroot
         self.jailroot_packages = []
-        config = open(os.path.join(self.path, 'jailroot.packages'))
+        config = open(os.path.join(self.path, 'buildroot.packages'))
         for line in config:
             # Ignore lines beginning with '#'
             if not re.search(r'^\s*#', line):
