@@ -1,7 +1,7 @@
 #!/usr/bin/python -tt
 # vim: ai ts=4 sts=4 et sw=4
 
-import os, shutil, stat, sys, time, socket
+import glob, os, shutil, socket, stat, sys, time
 
 import SDK
 import InstallImage
@@ -121,11 +121,9 @@ metadata_expire=1800
         # TODO: there has got to be a better way of doing this
         if os.uname()[4] == "x86_64":
             # regenerate the rpmdb.  needed for x86_64 system.
-            command = "rm -rf %s%s" % (root_path, "/var/lib/rpm/__*")
-            result = os.system(command)
-            if result != 0:
-                raise Exception("Internal error while attempting to rebuild package database!")
-
+            rpmdb_files = glob.glob(os.path.join(root_path, "var/lib/rpm/__*"))
+            for filename in rpmdb_files:
+                os.unlink(filename)
             self.chroot('rpm', '--rebuilddb -v -v')
 
     def mount(self):
