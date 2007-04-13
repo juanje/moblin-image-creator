@@ -23,6 +23,18 @@ class TestFset(unittest.TestCase):
             a = 1
         for key in fset:
             print key
+
+        fset_instance = FSet.FsetInstance('foo')
+        for key, value in FSet.FsetInstance.valid_values.iteritems():
+            self.assertEqual(fset_instance[key], value)
+            self.assertEqual(eval('fset_instance.%s' % key), value)
+        # Make sure a bad key raises a KeyError exception
+        self.assertRaises(KeyError, fset_instance.get, 'bonk')
+        # Make sure we store our values correctly
+        fset_instance.add('pkgs', "foo spam")
+        result = fset_instance['pkgs']
+        result.sort()
+        self.assertEqual(result, ['foo', 'spam'])
     def testStrRepr(self):
         fset = FSet.FSet()
         temp = fset.__str__()
