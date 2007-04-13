@@ -1,5 +1,7 @@
 all:
 
+cleaninstall: cleanall install
+
 install:
 	@mkdir -p /usr/share/esdk/{lib,platforms,projects}
 	@cp *.py  /usr/share/esdk/lib
