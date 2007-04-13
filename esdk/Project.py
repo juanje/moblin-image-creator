@@ -20,7 +20,7 @@ class FileSystem(object):
     'install' method for installing new RPM packages.
     """
     def __init__(self, path, repos):
-        
+
         self.path = os.path.abspath(os.path.expanduser(path))
         if not os.path.isfile(os.path.join(self.path, 'etc', 'buildstamp')):
             """
@@ -63,27 +63,27 @@ metadata_expire=1800
             buildstamp = open(os.path.join(target_etc, 'buildstamp'), 'w')
             print >> buildstamp, "%s %s-%s" % (SDK.SDK().version, socket.gethostname(), time.strftime("%d%m%Y%Z%H%M%s"))
             buildstamp.close()
-            
+
     def __createDevices(self):
-            devices = [
-                # name, major, minor, mode
-                ('null', 1, 3, (0666 | stat.S_IFCHR)),
-                ('zero', 1, 5, (0666 | stat.S_IFCHR)),
-                ('console', 5, 1, (0600 | stat.S_IFCHR)),
-            ]
-            for device_name, major, minor, mode in devices:
-                device_path = os.path.join(self.path, 'dev', device_name)
-                device = os.makedev(major, minor)
-                os.mknod(device_path, mode, device)
-                # Seems redundant, but mknod doesn't seem to set the mode to
-                # what we want :(
-                os.chmod(device_path, mode)
+        devices = [
+            # name, major, minor, mode
+            ('null', 1, 3, (0666 | stat.S_IFCHR)),
+            ('zero', 1, 5, (0666 | stat.S_IFCHR)),
+            ('console', 5, 1, (0600 | stat.S_IFCHR)),
+        ]
+        for device_name, major, minor, mode in devices:
+            device_path = os.path.join(self.path, 'dev', device_name)
+            device = os.makedev(major, minor)
+            os.mknod(device_path, mode, device)
+            # Seems redundant, but mknod doesn't seem to set the mode to
+            # what we want :(
+            os.chmod(device_path, mode)
 
     def update(self, path):
         result = os.system("yum -y --installroot=%s update" % (path))
         if result != 0:
             raise Exception("Internal error while attempting to update!")
-        
+
         self.__rebuild_rpmlist(path)
 
     def install(self, path, packages):
@@ -93,16 +93,16 @@ metadata_expire=1800
         """
         if not packages:
             return
-        
+
         command = 'yum -y --installroot=' + path + ' install '
         for p in packages:
             command = command + ' ' + p
         result = os.system(command)
         if result != 0:
             raise Exception("Internal error while attempting to install!")
-        
+
         self.__rebuild_rpmlist(path)
-        
+
     def __rebuild_rpmlist(self, path):
         root_path = os.path.abspath(path)
         BASE_RPM_LIST = "/etc/base-rpms.list"
@@ -123,7 +123,7 @@ metadata_expire=1800
             result = os.system(command)
             if result != 0:
                 raise Exception("Internal error while attempting to rebuild package database!")
-            
+
             self.chroot('rpm', '--rebuilddb -v -v')
 
     def mount(self):
@@ -142,7 +142,7 @@ metadata_expire=1800
     def chroot(self, cmd_path, cmd_args):
         if not os.path.isfile(os.path.join(self.path, 'bin/bash')):
             raise ValueError, "Jailroot not installed"
-        
+
         self.mount()
         cmd_line = "chroot %s %s %s" % (self.path, cmd_path, cmd_args)
         ret = os.system(cmd_line)
@@ -180,7 +180,7 @@ class Project(FileSystem):
 
     def update(self):
         FileSystem.update(self, self.path)
-        
+
     def create_target(self, name):
         if name and not name in self.targets:
             self.targets[name] = Target(name, self)
@@ -198,7 +198,7 @@ class Project(FileSystem):
         image = InstallImage.LiveIsoImage(self, self.targets[target_name], image_name)
         image.create_image()
         target.mount()
-        
+
     def create_install_iso(self, target_name, image_name):
         target = self.targets[target_name]
         target.umount()
@@ -212,14 +212,14 @@ class Project(FileSystem):
         image = InstallImage.LiveUsbImage(self, self.targets[target_name], image_name)
         image.create_image()
         target.mount()
-        
+
     def create_install_usb(self, target_name, image_name):
         target = self.targets[target_name]
-        target.umount()        
+        target.umount()
         image = InstallImage.InstallUsbImage(self, self.targets[target_name], image_name)
         image.create_image()
         target.mount()
-    
+
     def __str__(self):
         return ("<Project: name=%s, path=%s>"
                 % (self.name, self.path))
@@ -254,7 +254,7 @@ class Target(FileSystem):
                 result.append(fset)
         result.sort()
         return result
-        
+
     def install(self, fset, debug=0, fsets = None, seen_fsets = None):
         """
         Install a fset into the target filesystem.  If the fsets variable is
@@ -269,7 +269,7 @@ class Target(FileSystem):
         if fset.name in seen_fsets:
             raise RuntimeError, "Circular fset dependency encounterd for: %s" % fset.name
         seen_fsets.add(fset.name)
-        
+
         for dep in fset['deps']:
             if not os.path.isfile(os.path.join(self.top, dep)):
                 if fsets:
@@ -313,7 +313,7 @@ if __name__ == '__main__':
     desc = sys.argv[3]
     target_name = sys.argv[4]
     platform_name = sys.argv[5]
-    
+
     sdk = SDK.SDK()
 
     # verify the platform exists
