@@ -2,8 +2,14 @@ all:
 
 # This target will do a cleanall and then reinstall
 cleaninstall: cleanall install
+# Same as cleaninstall
+runtests: cleaninstall
 
-install:
+# Everytime we install the code we want the basic unit tests to run
+install: basicinstall runbasictests
+
+basicinstall:
+	@echo -n "Installing project-builder..."
 	@mkdir -p /usr/share/esdk/{lib,platforms,projects}
 	@cp *.py  /usr/share/esdk/lib
 	@cp -a platforms/* /usr/share/esdk/platforms/
@@ -21,6 +27,7 @@ install:
 	    mkdir /etc/bash_completion.d; \
 	fi
 	@cp project-builder-completion.bash /etc/bash_completion.d/
+	@echo "Done"
 
 # Cleans out the current directory cruft
 clean:
@@ -37,12 +44,15 @@ cleanall: clean
 	@rm -f /usr/sbin/project-builder
 
 # Run the unit tests which run fairly quickly
-runtests: cleaninstall
+runbasictests:
+	@echo "Running basic unit tests..."
 	unittest/testFSet.py
 	unittest/testPlatform.py
 	unittest/testProject.py
 	unittest/testSdk.py
+	@echo "Basic unit tests completed"
 
 # Run all of our tests, even the ones that take a long time to run
 runalltests: runtests
+	@echo "Running unit tests that take a long time..."
 	unittest/testInstallImage.py
