@@ -185,8 +185,6 @@ Examples:
         if not options.target_name:
             parser.error("Must specify target-name when using %s command" % options.cmd)
     if options.cmd == "install-fset":
-        if not options.platform_name:
-            parser.error("Must specify platform-name when using %s command" % options.cmd)
         if not options.project_name:
             parser.error("Must specify project-name when using %s command" % options.cmd)
         if not options.target_name:
@@ -292,17 +290,18 @@ def install_fset(options):
     if not options.project_name in sdk.projects:
         print >> sys.stderr, "Project %s does not exist" % (options.project_name)
         sys.exit(1)
+    platform_name = sdk.projects[options.project_name].platform.name
     if not options.target_name in sdk.projects[options.project_name].targets:
         print >> sys.stderr, "Target %s does not exist" % (options.target_name)
         sys.exit(1)
-    if not options.fset_name in sdk.platforms[options.platform_name].fset:
+    if not options.fset_name in sdk.platforms[platform_name].fset:
         print >> sys.stderr, "Feature set %s does not exist" % (options.fset_name)
         sys.exit(1)
-    if options.platform_name not in sdk.platforms:
-        print >> sys.stderr, "%s: is not a valid platform name" % options.platform_name
+    if platform_name not in sdk.platforms:
+        print >> sys.stderr, "%s: is not a valid platform name" % platform_name
         sys.exit(1)
-    fset = sdk.platforms[options.platform_name].fset[options.fset_name]
-    fsets = sdk.platforms[options.platform_name].fset
+    fset = sdk.platforms[platform_name].fset[options.fset_name]
+    fsets = sdk.platforms[platform_name].fset
     target = sdk.projects[options.project_name].targets[options.target_name]
     target.install(fset, fsets = fsets, debug = options.debug)
 
