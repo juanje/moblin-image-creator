@@ -34,19 +34,19 @@ class Platform(object):
         build_repo_path = os.path.join(self.path, 'buildroot_repos')
         for repo in os.listdir(build_repo_path):
             self.buildroot_repos.append(os.path.join(build_repo_path, repo))
-        # determine what packages need to be installed in the jailroot
-        self.jailroot_packages = []
+        # determine what packages need to be installed in the buildroot
+        self.buildroot_packages = []
         config = open(os.path.join(self.path, 'buildroot.packages'))
         for line in config:
             # Ignore lines beginning with '#'
             if not re.search(r'^\s*#', line):
                 for p in line.split():
-                    self.jailroot_packages.append(p)
+                    self.buildroot_packages.append(p)
         config.close()
 
     def __str__(self):
-        return ("<Platform Object: \n\tname=%s, \n\tfset=%s, \n\ttarget_repos=%s\n\tjailroot_packages=%s>\n" %
-                (self.name, self.fset, self.target_repos, self.jailroot_packages))
+        return ("<Platform Object: \n\tname=%s, \n\tfset=%s, \n\ttarget_repos=%s\n\tbuildroot_packages=%s>\n" %
+                (self.name, self.fset, self.target_repos, self.buildroot_packages))
 
     def __repr__(self):
         return "Platform( %s, '%s')" % (self.sdk_path, self.name)

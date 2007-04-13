@@ -174,9 +174,9 @@ class Project(FileSystem):
 
     def install(self):
         """
-        Install all the packages defined by Platform.jailroot_packages
+        Install all the packages defined by Platform.buildroot_packages
         """
-        FileSystem.install(self, self.path, self.platform.jailroot_packages)
+        FileSystem.install(self, self.path, self.platform.buildroot_packages)
 
     def update(self):
         FileSystem.update(self, self.path)
