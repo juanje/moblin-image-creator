@@ -14,7 +14,7 @@ gladefile = "/usr/share/esdk/esdk.glade"
 if not os.path.isfile(gladefile):
     raise IOError, "Glade file is missing from: %s" % gladefile
 
-class esdkMain:
+class esdkMain(object):
     """This is our main"""
     def __init__(self):
         self.widgets = gtk.glade.XML (gladefile, 'main')
@@ -355,7 +355,7 @@ class esdkMain:
 
 
 #Class: Adding a New Project
-class AddNewProject:
+class AddNewProject(object):
     """Class to bring up AddNewProject dialogue"""
     def __init__(self, name="", desc="", path="", platform=""):
         widgets = gtk.glade.XML (gladefile, 'newProject')
@@ -395,7 +395,7 @@ class AddNewProject:
             self.np_path.set_text(dialog.get_current_folder())
         dialog.destroy()
         
-class MainWindowButtons:
+class MainWindowButtons(object):
     def __init__(self, widgets):
         # Project button bar
         self.add_project = widgets.get_widget('new_project_add')
