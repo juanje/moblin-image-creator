@@ -1,5 +1,6 @@
 all:
 
+# This target will do a cleanall and then reinstall
 cleaninstall: cleanall install
 
 install:
@@ -20,13 +21,27 @@ install:
 	    cp -a project-builder-completion.bash /etc/bash_completion.d/; \
 	fi
 
+# Cleans out the current directory cruft
 clean:
 	@rm -f *.pyc
+	@rm -f unittest/*.pyc
 	@find -name \*~ -exec rm -f {} \;
 
+# Cleans out the installation target
 cleanall: clean
 	@rm -rf /usr/share/esdk/lib
 	@rm -rf /usr/share/esdk/platforms
 	@rm -rf /usr/share/esdk/*.glade
 	@rm -f /usr/bin/project-builder
 	@rm -f /usr/sbin/project-builder
+
+# Run the unit tests which run fairly quickly
+runtests: cleaninstall
+	unittest/testFSet.py
+	unittest/testPlatform.py
+	unittest/testProject.py
+	unittest/testSdk.py
+
+# Run all of our tests, even the ones that take a long time to run
+runalltests: runtests
+	unittest/testInstallImage.py
