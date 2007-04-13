@@ -81,7 +81,7 @@ class FsetInstance(object):
             return FsetInstance.valid_values[key]
     def __getitem__(self, key):
         return self.get(key)
-    def __getattr__(self, name):
+    def __getattr__(self, key):
         return self.get(key)
     def __repr__(self):
         return ('FsetInstance("%s", %s)' % (self.name, self.data))
