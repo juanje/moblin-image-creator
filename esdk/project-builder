@@ -238,9 +238,11 @@ def create_project(options):
     if cwd.find(options.project_path) == 0:
 	    print >> sys.stderr, "The project path can not be part of the current working directory"
 	    sys.exit(1)
-    proj = sdk.create_project(options.project_path, options.project_name, options.project_desc, sdk.platforms[options.platform_name])
-    proj.install()
-    proj.mount()
+    try:
+        sdk.create_project(options.project_path, options.project_name, options.project_desc, sdk.platforms[options.platform_name]).install()
+    except:
+        print >> sys.stderr, "Internal error while attempting to create new project!"
+        sdk.delete_project(options.project_name)
 
 def delete_project(options):
     sdk = SDK.SDK()
