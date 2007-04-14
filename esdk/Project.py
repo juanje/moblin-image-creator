@@ -1,7 +1,7 @@
 #!/usr/bin/python -tt
 # vim: ai ts=4 sts=4 et sw=4
 
-import glob, os, shutil, socket, stat, sys, time
+import glob, os, shutil, socket, stat, sys, time, re
 
 import SDK
 import InstallImage
@@ -133,6 +133,23 @@ metadata_expire=1800
             if result != 0:
                 raise Exception("Internal error while attempting to mount proc filesystem!")
 
+        # search for any file:// URL's in the configured yum repositories, and
+        # when we find them make the equivilant directory in the new filesystem
+        # and then mount --bind the file:// path into the filesystem.
+        rdir = os.path.join(self.path, 'etc', 'yum.repos.d')
+        if os.path.isdir(rdir):
+            for fname in os.listdir(rdir):
+                file = open(os.path.join(rdir, fname))
+                for line in file:
+                    if re.search(r'^\s*baseurl=file:\/\/\/', line):
+                        p = line.split('baseurl=file:///')[1].strip()
+                        os.makedirs(os.path.join(self.path, p))
+                        result = os.system("mount --bind /%s %s 2> /dev/null" % (p, os.path.join(self.path, p)))
+                        if result != 0:
+                            self.umount()
+                            raise Exception("Internal error while attempting to mount /%s!" % (p))
+                file.close()
+                
     def umount(self):
         for line in os.popen('mount', 'r').readlines():
             mpoint = line.split()[2]
