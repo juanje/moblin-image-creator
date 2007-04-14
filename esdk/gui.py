@@ -32,7 +32,8 @@ class esdkMain:
                 "on_create_installUSB_clicked": self.on_installUSB_clicked,
                 "on_about_activate": self.on_about_activate,
                 "on_term_launch_clicked": self.on_term_launch_clicked,
-                "on_target_term_launch_clicked": self.on_target_term_launch_clicked}
+                "on_target_term_launch_clicked": self.on_target_term_launch_clicked,
+                "on_DD_USB_clicked": self.on_DD_USB_clicked}
         self.widgets.signal_autoconnect(dic)
         # setup projectView widget
         self.pName = "Name"
@@ -105,6 +106,7 @@ class esdkMain:
             self.buttons.delete_target.set_sensitive(False)
             self.buttons.install_fset.set_sensitive(False)
             self.buttons.target_term_launch.set_sensitive(False)
+            self.buttons.DD_USB.set_sensitive(False)
             return
         # A target has been selected
         self.buttons.delete_target.set_sensitive(True)
@@ -114,6 +116,7 @@ class esdkMain:
         self.buttons.create_liveusb.set_sensitive(True)
         self.buttons.create_installusb.set_sensitive(True)
         self.buttons.target_term_launch.set_sensitive(True)
+        self.buttons.DD_USB.set_sensitive(True)
         
     def project_view_changed(self, selection):
         self.redraw_target_view()
@@ -276,7 +279,7 @@ class esdkMain:
         project_path = self.current_project().path
         target = self.current_target()
         target_path= "%s/targets/%s/fs" % (project_path, target.name)
-        print "Project path: %s" % target_path
+        print "Target path: %s" % target_path
         os.system('/usr/bin/gnome-terminal -x sudo /usr/sbin/chroot %s &' % target_path)
 
     def on_liveUSB_clicked(self, widget):
@@ -353,6 +356,54 @@ class esdkMain:
                 self.show_error_dialog()                
         dialog.destroy()
 
+    def on_DD_USB_clicked(self, widget):
+        project_path = self.current_project().path
+        target = self.current_target()
+        target_path= "%s/targets/%s/image" % (project_path, target.name)
+        os.chdir(target_path)
+        dialog = gtk.FileChooserDialog('Select Image File',None,gtk.FILE_CHOOSER_ACTION_OPEN,(gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,gtk.STOCK_OK,gtk.RESPONSE_OK),None)
+        result = dialog.run()
+        if result == gtk.RESPONSE_CANCEL:
+           dialog.destroy()
+           print "No target image selected!"
+        if result == gtk.RESPONSE_OK:
+           targetfilename=dialog.get_filename()
+           print "Selected file name: %s " % targetfilename
+           dialog.destroy()
+           widgets = gtk.glade.XML(gladefile, 'select_usb_disk_dialog')
+           dialog2 = widgets.get_widget('select_usb_disk_dialog')
+           list = gtk.ListStore(gobject.TYPE_STRING)
+           iter = 0
+           for line in self.current_project().get_current_udisks():
+               line=line[:len(line)-1]
+               iter=list.append(['/dev/'+line])
+           if not iter:
+              self.show_error_dialog('No USB disk detected! Please plug in your USB disk and try again!')
+              dialog2.destroy()
+              return -1
+           usb_disks = widgets.get_widget('usb_disks')
+           column = gtk.TreeViewColumn('Your current USB disks', gtk.CellRendererText(), text=0)
+           column.set_resizable(True)
+           column.set_sort_column_id(0)
+           usb_disks.append_column(column)
+           usb_disks.set_model(list)
+           usb_disks.get_selection().select_iter(iter)
+           result = dialog2.run()
+           if result == gtk.RESPONSE_CANCEL:
+              print "No USB device selected!"
+           if result == gtk.RESPONSE_OK:
+              model, iter = usb_disks.get_selection().get_selected()
+              if not iter:
+                 self.show_error_dialog('No USB disk selected!')
+              else:
+                 print "Selected USB disk %s" % model[iter][0]
+                 print "Try to umount USB disk if mounted"
+                 if self.current_project().umount_udisks(model[iter][0]) == -1:
+                    self.show_error_dialog("Can not umount "+model[iter][0]+". Please close any shells or opened files still under mount point and try again!")
+                    dialog2.destroy()
+                    return -1
+                 self.current_project().dd_USB_image(targetfilename, model[iter][0])
+                 dialog2.destroy()
 
 #Class: Adding a New Project
 class AddNewProject:
@@ -412,7 +463,7 @@ class MainWindowButtons:
         # Terminal button
         self.term_launch = widgets.get_widget('term_launch')    
         self.target_term_launch = widgets.get_widget('target_term_launch')    
-        
+        self.DD_USB = widgets.get_widget('DD_USB')
 def print_exc_plus():
     # From Python Cookbook 2nd Edition.  FIXME: Will need to remove this at
     # some point, or give attribution.
