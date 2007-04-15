@@ -161,8 +161,12 @@ class esdkMain(object):
         result = dialog.run()
         if result == gtk.RESPONSE_OK:
             sdk = SDK()
-            sdk.create_project(dialog.path, dialog.name, dialog.desc, sdk.platforms[dialog.platform]).install()
-            self.projectList.append((dialog.name, dialog.desc, dialog.path, dialog.platform))
+            try:
+                sdk.create_project(dialog.path, dialog.name, dialog.desc, sdk.platforms[dialog.platform]).install()
+                self.projectList.append((dialog.name, dialog.desc, dialog.path, dialog.platform))
+            except:
+                self.show_error_dialog("Internal error while attempting to create project!")
+                sdk.delete_project(dialog.name)
 
     def on_about_activate(self, event):
         dialog = gtk.AboutDialog()
