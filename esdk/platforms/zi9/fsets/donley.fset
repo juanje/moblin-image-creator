@@ -80,7 +80,7 @@ DEPS=core xorg gnome-mobile-core gnome-mobile-service gnome-mobile-desktop-mid
 DESC=Firefox browser (1.5.0.10) with plugins (flash, acrobat).  Future-to-be-included: java plugin and extensions (rss reader, adblock, flashblock, autohide)
 PKGS=firefox flash-plugin AdobeReader
 DEBUG_PKGS=
-DEPS=core xorg gnome-mobile-core gnome-mobile-service gnome-mobile-d-desktop-mid
+DEPS=core xorg gnome-mobile-core gnome-mobile-service gnome-mobile-desktop-mid
 
 [Full MID Desktop (Everything)]
 DESC=Complete desktop with new MID UI, Firefox, Helix, and tools
