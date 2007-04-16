@@ -13,7 +13,7 @@ debug = True
 
 try:
     import gui
-except:
+except RuntimeError:
     # Probably running in a text console
     pass
 
