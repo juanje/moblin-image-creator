@@ -58,12 +58,6 @@ PKGS=firefox flash-plugin AdobeReader
 DEBUG_PKGS=
 DEPS=core xorg gnome-mobile-core gnome-mobile-service gnome-mobile-desktop
 
-[Example]
-DESC=Example Super-fset that installs a super-set of fsets based on the deps
-PKGS=
-DEBUG_PKGS=
-DEPS=core infrastructure xorg gnome-mobile-core gnome-mobile-service gnome-mobile-desktop internet media power-management
-
 [Gnome-mobile-desktop-mid]
 DESC=gnome mobile desktop
 PKGS=osso-obc osso-af-utils osso-af-startup hildon-control-panel  maemo-af-desktop-config maemo-launcher hildon-initscripts hildon-icon-theme mid-af-desktop mid-theme-basic mid-home-flash mid-monitor xulrunner
