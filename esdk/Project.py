@@ -237,19 +237,6 @@ class Project(FileSystem):
         image.create_image()
         target.mount()
 
-    def umount_udisks(self, dev):
-        # before run dd, we must make sure the udisk isn't mounted
-        shellfile=open('/var/tmp/umountudisk.sh','w')
-        print >> shellfile,"#!/bin/sh\ncat /proc/mounts | grep \""+dev+"\" | sed -ne \"s/^\\([^ ]*\\) .*/\\1/p\" | xargs -n 1 -I target umount target 2>&1"
-        shellfile.close()
-        os.chmod('/var/tmp/umountudisk.sh',0755)
-        filterstr=os.popen('/var/tmp/umountudisk.sh').readlines()
-        print "umount result %s" % filterstr
-        for line in filterstr:
-            if line.find("busy") != -1:
-               return -1
-        return 0
-    
     def __str__(self):
         return ("<Project: name=%s, path=%s>"
                 % (self.name, self.path))

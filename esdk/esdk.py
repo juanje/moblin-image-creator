@@ -11,6 +11,7 @@ import sys
 def main():
     # Add something to exercise this code
     print "USB devices: %s" % get_current_udisks()
+    print umount_udisks('/dev/sda1')
 
 def get_current_udisks():
     usb_devices = []
@@ -40,6 +41,20 @@ def getUsbDirTree(dirname):
         else:
             file_set.add(full_path)
     return file_set
+
+def umount_device(device_file):
+    """umount a device if it is mounted"""
+    search_file = "%s " % os.path.abspath(device_file)
+    mount_file = open('/proc/mounts', 'r')
+    for line in mount_file:
+        line = line.strip()
+        if line.find(search_file) == 0:
+            print "Umounting: %s" % device_file
+            result = os.system("umount %s" % device_file)
+            if result:
+                return False
+            return True
+    return True
 
 if '__main__' == __name__:
     sys.exit(main())
