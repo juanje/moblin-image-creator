@@ -237,18 +237,6 @@ class Project(FileSystem):
         image.create_image()
         target.mount()
 
-    def get_current_udisks(self):
-        shellfile=open('/var/tmp/getudisk.sh','w')
-        print >> shellfile, """\
-#!/bin/sh
-tree /sys/bus/scsi/ | grep "usb" | sed -ne "s/.*\/devices\/\(.*\)$/\\1/p" | sed "s/:/\\\\:/g" | sort | uniq | xargs -n 1 -I target ls -al /sys/devices/target | sed -ne "s/.*block:\\(.*\\) ->.*/\\1/p" | sort
-"""
-        shellfile.close()
-        os.chmod('/var/tmp/getudisk.sh',0755)
-        filterstr=os.popen('/var/tmp/getudisk.sh').readlines()
-        print "get_current_udisks result: %s " % filterstr
-        return filterstr
-
     def umount_udisks(self, dev):
         # before run dd, we must make sure the udisk isn't mounted
         shellfile=open('/var/tmp/umountudisk.sh','w')
@@ -262,10 +250,6 @@ tree /sys/bus/scsi/ | grep "usb" | sed -ne "s/.*\/devices\/\(.*\)$/\\1/p" | sed 
                return -1
         return 0
     
-    def dd_USB_image(self, targetfilename, dev):
-        print "dd if="+targetfilename+" of="+dev+" bs=4096"
-        os.system("dd if="+targetfilename+" of="+dev+" bs=4096")
-
     def __str__(self):
         return ("<Project: name=%s, path=%s>"
                 % (self.name, self.path))
