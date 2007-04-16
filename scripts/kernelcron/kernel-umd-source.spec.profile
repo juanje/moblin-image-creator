@@ -14,7 +14,6 @@
 
 %define all_umd_configs $RPM_SOURCE_DIR/kernel-*.config
 %define buildflavors default developer
-%define image_install_path boot
 
 # we only let linux on i386 and x86_64 platform to build this package
 ExclusiveArch: i586 x86_64
@@ -33,6 +32,7 @@ Version: %{kversion}@EXTRAVER2@
 
 BuildPreReq: nash, module-init-tools
 
+
 # put sources here
 Source0: @URL@linux-%{krelease}.tar.bz2
 Source1: functions.sh
@@ -44,8 +44,7 @@ Source6: kernel-default.config
 Source7: kernel-developer.config
 Source8: init
 Source9: initrd_skeleton
-Source10: init.bash
-Source11: installkernel.sh
+Source10: installkernel.sh
 
 # put patches here for UMD add-on
 # and do NOT forget to apply patches in setup section -- search "apply patches" in this file
@@ -98,11 +97,11 @@ This is kernel version special for Intel UMD release.
 
 %files -n kernel-umd-default
 %defattr(-, root, root)
-/%{image_install_path}/vmlinuz-%{krelease}-default
-/%{image_install_path}/vmlinux-%{krelease}-default
-/%{image_install_path}/System.map-%{krelease}-default
-/%{image_install_path}/symvers-%{krelease}-default.gz
-/%{image_install_path}/config-%{krelease}-default
+/boot/vmlinuz-%{krelease}-default
+/boot/vmlinux-%{krelease}-default
+/boot/System.map-%{krelease}-default
+/boot/symvers-%{krelease}-default.gz
+/boot/config-%{krelease}-default
 %dir /lib/modules/%{krelease}-default
 /lib/modules/%{krelease}-default/kernel
 /lib/modules/%{krelease}-default/build
@@ -129,11 +128,11 @@ This is kernel version special for Intel UMD release.
 
 %files -n kernel-umd-developer
 %defattr(-, root, root)
-/%{image_install_path}/vmlinuz-%{krelease}-developer
-/%{image_install_path}/vmlinux-%{krelease}-developer
-/%{image_install_path}/System.map-%{krelease}-developer
-/%{image_install_path}/symvers-%{krelease}-developer.gz
-/%{image_install_path}/config-%{krelease}-developer
+/boot/vmlinuz-%{krelease}-developer
+/boot/vmlinux-%{krelease}-developer
+/boot/System.map-%{krelease}-developer
+/boot/symvers-%{krelease}-developer.gz
+/boot/config-%{krelease}-developer
 %dir /lib/modules/%{krelease}-developer
 /lib/modules/%{krelease}-developer/kernel
 /lib/modules/%{krelease}-developer/build
@@ -165,6 +164,7 @@ if [ "%{target}" == "redhat" ]; then
      /sbin/new-kernel-pkg --package kernel --depmod --install %{krelease}-default || exit $?
   else
     installkernel %{krelease}-default 
+    depmod %{krelease}-default
   fi
   if [ -x /sbin/weak-modules ]
   then
@@ -185,6 +185,7 @@ if [ "%{target}" == "redhat" ]; then
      /sbin/new-kernel-pkg --package kernel --depmod --install %{krelease}-developer || exit $?
   else
      installkernel %{krelease}-developer
+     depmod %{krelease}-developer
      installkernel %{krelease}-developer --withserial
   fi
   updatedeveloperetc
@@ -218,14 +219,14 @@ else
     echo "rm -f /boot/vmlinux; ln -s vmlinux-%{krelease}-developer /boot/vmlinux"
     sed -e "s:@KERNELRELEASE@:%{krelease}-developer:g" \
 	-e "s:@IMAGE@:vmlinuz:g" \
-	-e "s:@FLAVOR""@:umd:g" \
+	-e "s:@FLAVOR""@:developer:g" \
         %_sourcedir/post.sh
 ) > post-developer.sh
 
 (   cat %_sourcedir/functions.sh
     sed -e "s:@KERNELRELEASE@:%{krelease}-developer:g" \
 	-e "s:@IMAGE@:vmlinuz:g" \
-	-e "s:@FLAVOR""@:umd:g" \
+	-e "s:@FLAVOR""@:developer:g" \
         %_sourcedir/postun.sh
 ) > postun-developer.sh
 fi
@@ -266,8 +267,8 @@ cd linux-%{krelease}
 # here start to build kernel and copy results to right place
 %build
 rm -rf $RPM_BUILD_ROOT
-mkdir -p $RPM_BUILD_ROOT/%{image_install_path}
-ln -sf vmlinux $RPM_BUILD_ROOT/%{image_install_path}/vmlinux
+mkdir -p $RPM_BUILD_ROOT/boot
+ln -sf vmlinux $RPM_BUILD_ROOT/boot/vmlinux
 mkdir -p $RPM_BUILD_ROOT/usr/src
 cd $RPM_BUILD_ROOT/usr/src
 # dummy link for %ghost
@@ -297,10 +298,10 @@ for flavor in %{buildflavors}; do
     make %{?jobs:-j%jobs} ARCH=$arch bzImage
     make %{?jobs:-j%jobs} ARCH=$arch modules
     
-    install -m 644 .config $RPM_BUILD_ROOT/%{image_install_path}/config-$kernelver
-    install -m 644 System.map $RPM_BUILD_ROOT/%{image_install_path}/System.map-$kernelver
-    cp $kernelimg $RPM_BUILD_ROOT/%{image_install_path}/vmlinuz-$kernelver
-    cp vmlinux $RPM_BUILD_ROOT/%{image_install_path}/vmlinux-$kernelver
+    install -m 644 .config $RPM_BUILD_ROOT/boot/config-$kernelver
+    install -m 644 System.map $RPM_BUILD_ROOT/boot/System.map-$kernelver
+    cp $kernelimg $RPM_BUILD_ROOT/boot/vmlinuz-$kernelver
+    cp vmlinux $RPM_BUILD_ROOT/boot/vmlinux-$kernelver
     mkdir -p $RPM_BUILD_ROOT/lib/modules/$kernelver
     make ARCH=$arch INSTALL_MOD_PATH=$RPM_BUILD_ROOT modules_install KERNELRELEASE=$kernelver
     if [ "$buildheaders" == "1" ]; then
@@ -314,7 +315,7 @@ for flavor in %{buildflavors}; do
     fi;
 # Create the kABI metadata for use in packaging
     echo "**** GENERATING kernel ABI metadata ****"
-    gzip -c9 < Module.symvers > $RPM_BUILD_ROOT/%{image_install_path}/symvers-$kernelver.gz
+    gzip -c9 < Module.symvers > $RPM_BUILD_ROOT/boot/symvers-$kernelver.gz
     chmod 0755 %_sourcedir/kabitool
     %_sourcedir/kabitool -b $RPM_BUILD_ROOT/$develdir -k $kernelver -l $RPM_BUILD_ROOT/kabi_whitelist
     rm -f %{_tmppath}/kernel-$KernelVer-kabideps
@@ -375,18 +376,18 @@ for flavor in %{buildflavors}; do
     cp $RPM_SOURCE_DIR/initrd_skeleton ./  
     cd initrd-$kernelver
     mkdir bin lib
-    initrd_bins="/bin/sed /bin/cat /bin/bash /sbin/insmod /sbin/nash"
+    initrd_bins="/sbin/insmod.static /sbin/nash"
     initrd_libs=$(
           for i in $initrd_bins ; do ldd "$i"; done \
           | sed -ne 's:\t\(.* => \)\?\(/.*\) (0x[0-9a-f]*):\2:p'
     )
     echo -n "$initrd_bins" | xargs -n 1 -d ' ' -I target cp target ./bin
-    echo "$initrd_libs" | xargs -n 1 -I target cp target ./lib
+    mv ./bin/insmod.static ./bin/insmod
+    echo -n "$initrd_libs" | xargs -n 1 -I target cp target ./lib
     cp $RPM_SOURCE_DIR/init ./
-    cp $RPM_SOURCE_DIR/init.bash ./
     ln -s /sbin/nash bin/modprobe
 # Copy needed modules to initrd
-    kos=$(cat init init.bash | sed -n -e "s/^insmod \/lib\/\(.*.ko\)/\1/p")
+    kos=$(cat init | sed -n -e "s/^insmod \/lib\/\(.*.ko\)/\1/p")
     for ko in $kos ; do
         kof=`find $RPM_BUILD_ROOT/lib/modules/$kernelver -name "$ko" | tail -n 1`
         if [ -n "$kof" ] ; then 
@@ -396,11 +397,12 @@ for flavor in %{buildflavors}; do
     find . | cpio --quiet -c -oAF ../initrd_skeleton
     gzip ../initrd_skeleton
     %if "%{target}" == "redhat"
-        cp ../initrd_skeleton.gz $RPM_BUILD_ROOT/%{image_install_path}/initrd-$kernelver.img
+        cp ../initrd_skeleton.gz  $RPM_BUILD_ROOT/boot/initrd-$kernelver.img
     %else
-        cp ../initrd_skeleton.gz $RPM_BUILD_ROOT/%{image_install_path}/initrd-$kernelver
+        cp ../initrd_skeleton.gz $RPM_BUILD_ROOT/boot/initrd-$kernelver
     %endif
 done
+
 %clean
 rm -rf $RPM_BUILD_ROOT 
 
