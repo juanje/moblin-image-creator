@@ -27,7 +27,7 @@ basicinstall:
 	@if [ ! -d /etc/bash_completion.d/ ]; then \
 	    mkdir /etc/bash_completion.d; \
 	fi
-	@cp project-builder-completion.bash /etc/bash_completion.d/
+	@cp utils/project-builder-completion.bash /etc/bash_completion.d/
 	@echo "Done"
 
 # Cleans out the current directory cruft
