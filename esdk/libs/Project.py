@@ -283,7 +283,7 @@ class Target(FileSystem):
 
         root_fset = False
         if not seen_fsets:
-            print "Installing fset: %s (and any dependencies)" % fset.name
+            print "Installing Function Set: %s (and any dependencies)" % fset.name
             root_fset = True
             seen_fsets = set()
         if fset.name in seen_fsets:
@@ -307,7 +307,7 @@ class Target(FileSystem):
             return package_set
         req_fsets = seen_fsets - set( [fset.name] )
         if req_fsets:
-            print "Installing required fsets: %s" % ' '.join(req_fsets)
+            print "Installing required Function Set: %s" % ' '.join(req_fsets)
         FileSystem.install(self, self.fs_path, package_set)
         # and now create a simple empty file that indicates that the fsets has
         # been installed.
