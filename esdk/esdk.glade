@@ -788,7 +788,7 @@
 		      <property name="sensitive">False</property>
 		      <property name="tooltip" translatable="yes">DD target image to USB stick now</property>
 		      <property name="can_focus">True</property>
-		      <property name="label" translatable="yes">DD to USB Now</property>
+		      <property name="label" translatable="yes">Write USB Image</property>
 		      <property name="use_underline">True</property>
 		      <property name="relief">GTK_RELIEF_NORMAL</property>
 		      <property name="focus_on_click">True</property>
