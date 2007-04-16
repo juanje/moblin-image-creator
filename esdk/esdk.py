@@ -4,9 +4,13 @@
 # This file contains utility functions which do not need to be inside any of
 # our current classes
 
+import os
+import re
+import sys
+
 def main():
     # Add something to exercise this code
-    pass
+    print "USB devices: %s" % get_current_udisks()
 
 def get_current_udisks():
     usb_devices = []
