@@ -2,7 +2,7 @@
 # vim: ai ts=4 sts=4 et sw=4
 
 import os, re, shutil, sys, tempfile, unittest
-import testFSet
+import test_fsets
 sys.path.insert(0, '/usr/share/esdk/lib')
 import Platform
 
@@ -44,7 +44,7 @@ def createSamplePlatformDir(platform_dir, repo_filename = "unittest.repo"):
     os.makedirs(platform_dir)
     for dirname in ('buildroot_repos', 'fsets', 'target_repos'):
         os.mkdir(os.path.join(platform_dir, dirname))
-    testFSet.createSampleFsetFile(os.path.join(platform_dir, 'fsets', 'unittest.fset'))
+    test_fsets.createSampleFsetFile(os.path.join(platform_dir, 'fsets', 'unittest.fset'))
     createSampleJailrootPackages(os.path.join(platform_dir, 'buildroot.packages'))
     createSampleRepos(platform_dir, repo_filename)
 

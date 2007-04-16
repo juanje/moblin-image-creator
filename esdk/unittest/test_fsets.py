@@ -3,7 +3,7 @@
 
 import os, re, shutil, sys, tempfile, unittest
 sys.path.insert(0, '/usr/share/esdk/lib')
-import FSet
+import fsets
 
 class TestFset(unittest.TestCase):
     def setUp(self):
@@ -17,10 +17,10 @@ class TestFset(unittest.TestCase):
         if os.path.isdir(self.workdir):
             shutil.rmtree(self.workdir)
     def testInstantiate(self):
-        fset = FSet.FSet()
+        fset = fsets.FSet()
 
     def testLoadingFsets(self):
-        fset = FSet.FSet()
+        fset = fsets.FSet()
         fset.addFile(self.fset_filename)
         # Make sure len operator works and we have greater than zero fsets
         self.assert_(len(fset))
@@ -33,8 +33,8 @@ class TestFset(unittest.TestCase):
 
     def testFsetInstance(self):
         """Test the FsetInstance class"""
-        fset_instance = FSet.FsetInstance('foo')
-        for key, value in FSet.FsetInstance.valid_values.iteritems():
+        fset_instance = fsets.FsetInstance('foo')
+        for key, value in fsets.FsetInstance.valid_values.iteritems():
             self.assertEqual(fset_instance[key], value)
             self.assertEqual(eval('fset_instance.%s' % key), value)
         # Make sure a bad key raises a KeyError exception
@@ -47,14 +47,14 @@ class TestFset(unittest.TestCase):
         self.assertEqual(result, sample_pkg_list)
 
     def testStrRepr(self):
-        fset = FSet.FSet()
+        fset = fsets.FSet()
         temp = fset.__str__()
         temp = fset.__repr__()
         fset.addFile(self.fset_filename)
         temp = fset['core'].__str__()
         temp = fset['core'].__repr__()
     def testCollision(self):
-        fset = FSet.FSet()
+        fset = fsets.FSet()
         fset.addFile(self.fset_filename)
         self.failUnlessRaises(ValueError, fset.addFile, self.fset_dupfilename)
 

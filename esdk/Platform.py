@@ -2,7 +2,7 @@
 # vim: ai ts=4 sts=4 et sw=4
 
 import os, re, sys
-import FSet
+import fsets
 
 class Platform(object):
     """
@@ -20,7 +20,7 @@ class Platform(object):
         self.name = name
         self.path = os.path.join(self.sdk_path, 'platforms', self.name)
         # instantiate all fsets
-        self.fset = FSet.FSet()
+        self.fset = fsets.FSet()
         fset_path = os.path.join(self.path, 'fsets')
         for filename in os.listdir(fset_path):
             self.fset.addFile(os.path.join(fset_path, filename))

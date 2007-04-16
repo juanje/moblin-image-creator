@@ -51,7 +51,7 @@ cleanall: clean
 # Run the unit tests which run fairly quickly
 runbasictests:
 	@echo "Running basic unit tests..."
-	unittest/testFSet.py
+	unittest/test_fsets.py
 	unittest/testPlatform.py
 	unittest/testProject.py
 	unittest/testSdk.py
