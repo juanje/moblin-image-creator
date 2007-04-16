@@ -401,9 +401,8 @@ class esdkMain(object):
                     self.show_error_dialog('No USB disk selected!')
                 else:
                     print "Selected USB disk %s" % model[iter][0]
-                    print "Try to umount USB disk if mounted"
-                    if self.current_project().umount_udisks(model[iter][0]) == -1:
-                        self.show_error_dialog("Can not umount "+model[iter][0]+". Please close any shells or opened files still under mount point and try again!")
+                    if not esdk.umount_device(model[iter][0]):
+                        self.show_error_dialog("Can not umount %s. Please close any shells or opened files still under mount point and try again!" % model[iter][0])
                         dialog2.destroy()
                         return -1
                     shutil.copyfile(targetfilename, model[iter][0])
