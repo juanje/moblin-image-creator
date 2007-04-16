@@ -11,9 +11,10 @@ install: basicinstall runbasictests
 basicinstall:
 	@echo -n "Installing project-builder..."
 	@mkdir -p /usr/share/esdk/{lib,platforms,projects}
-	@cp *.py  /usr/share/esdk/lib
+	@cp libs/*.py  /usr/share/esdk/lib
+	@cp gui/*.py  /usr/share/esdk/lib
 	@cp -a platforms/* /usr/share/esdk/platforms/
-	@cp *.glade /usr/share/esdk/
+	@cp gui/*.glade /usr/share/esdk/
 	@cp project-builder /usr/sbin/
 	@cp ReleaseNotes.txt /usr/share/esdk/
 	@if [ -d /etc/security/console.apps ]; then \
