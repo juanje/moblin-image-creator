@@ -1,13 +1,17 @@
 #!/usr/bin/python -tt
 # vim: ai ts=4 sts=4 et sw=4
 
+import os
+import traceback
+
 import pygtk
 try:
     import gtk, gtk.glade, gobject
 except:
     raise ImportError, "Unable to import the gtk libraries.  Maybe you are running in text mode"
+
 from SDK import *
-import os, traceback
+import esdk
 
 global gladefile
 gladefile = "/usr/share/esdk/esdk.glade"
@@ -376,22 +380,20 @@ class esdkMain(object):
             dialog.destroy()
             widgets = gtk.glade.XML(gladefile, 'select_usb_disk_dialog')
             dialog2 = widgets.get_widget('select_usb_disk_dialog')
-            list = gtk.ListStore(gobject.TYPE_STRING)
-            iter = 0
-            for line in self.current_project().get_current_udisks():
-                line=line[:len(line)-1]
-                iter=list.append(['/dev/'+line])
-            if not iter:
+            usb_dev_list = gtk.ListStore(gobject.TYPE_STRING)
+            usb_disk_list = esdk.get_current_udisks()
+            if not usb_disk_list:
                 self.show_error_dialog('No USB disk detected! Please plug in your USB disk and try again!')
                 dialog2.destroy()
                 return -1
+            iter_obj = usb_dev_list.append(usb_disk_list)
             usb_disks = widgets.get_widget('usb_disks')
             column = gtk.TreeViewColumn('Your current USB disks', gtk.CellRendererText(), text=0)
             column.set_resizable(True)
             column.set_sort_column_id(0)
             usb_disks.append_column(column)
-            usb_disks.set_model(list)
-            usb_disks.get_selection().select_iter(iter)
+            usb_disks.set_model(usb_dev_list)
+            usb_disks.get_selection().select_iter(iter_obj)
             result = dialog2.run()
             if result == gtk.RESPONSE_CANCEL:
                 print "No USB device selected!"
