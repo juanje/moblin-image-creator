@@ -228,7 +228,7 @@ class esdkMain(object):
         if dialog.run() == gtk.RESPONSE_OK:
             fset = platform.fset[cebox.child.get_text()]
             try:
-                self.current_target().install(fset, fsets = platform.fset, debug = checkbox.get_active())
+                self.current_target().installFset(fset, fsets = platform.fset, debug = checkbox.get_active())
                 self.redraw_target_view()
             except ValueError, e:
                 self.show_error_dialog(e.args[0])

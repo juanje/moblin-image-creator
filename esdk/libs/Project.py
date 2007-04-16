@@ -272,7 +272,7 @@ class Target(FileSystem):
         result.sort()
         return result
 
-    def install(self, fset, debug=0, fsets = None, seen_fsets = None):
+    def installFset(self, fset, debug=0, fsets = None, seen_fsets = None):
         """
         Install a fset into the target filesystem.  If the fsets variable is
         supplied with a list of fsets then we will try to recursively install
@@ -296,7 +296,7 @@ class Target(FileSystem):
                 continue
             if not os.path.isfile(os.path.join(self.top, dep)):
                 if fsets:
-                    package_set.update(self.install(fsets[dep], fsets = fsets, debug = debug, seen_fsets = seen_fsets))
+                    package_set.update(self.installFset(fsets[dep], fsets = fsets, debug = debug, seen_fsets = seen_fsets))
                 else:
                     raise ValueError("fset %s must be installed first!" % (dep))
 
@@ -306,7 +306,8 @@ class Target(FileSystem):
         if not root_fset:
             return package_set
         req_fsets = seen_fsets - set( [fset.name] )
-        print "Installing required fsets: %s" % ' '.join(req_fsets)
+        if req_fsets:
+            print "Installing required fsets: %s" % ' '.join(req_fsets)
         FileSystem.install(self, self.fs_path, package_set)
         # and now create a simple empty file that indicates that the fsets has
         # been installed.
@@ -378,4 +379,4 @@ if __name__ == '__main__':
 
         print "Installing all available fsets inside target..."
         for key in proj.platform.fset:
-            proj.targets[target_name].install(proj.platform.fset[key])
+            proj.targets[target_name].installFset(proj.platform.fset[key])

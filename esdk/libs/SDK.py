@@ -90,10 +90,10 @@ Input => Target object
 Input => fset object
 
 # you could do a normal install
-target.install(fset)
+target.installFset(fset)
 
 # or you could install debug packages in addition to the normal packages
-target.install(fset, 1)
+target.installFset(fset, 1)
 
 """
 

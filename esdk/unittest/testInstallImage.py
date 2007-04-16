@@ -29,7 +29,7 @@ class TestInstallImage(unittest.TestCase):
 
         self.target_name = 'unittest_target'
         target = self.proj.create_target(self.target_name)
-        target.install(self.sdk.platforms[self.platform_name].fset['Core'])
+        target.installFset(self.sdk.platforms[self.platform_name].fset['Core'])
 
         self.proj.mount()
 

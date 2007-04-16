@@ -479,7 +479,7 @@ if __name__ == '__main__':
         proj.install()
 
         target = proj.create_target('mytest')
-        target.install(sdk.platforms[platform_name].fset['Core'])
+        target.installFset(sdk.platforms[platform_name].fset['Core'])
 
     else:
         proj_name = sys.argv[1]

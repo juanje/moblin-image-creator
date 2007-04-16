@@ -305,7 +305,7 @@ def install_fset(options):
     fset = sdk.platforms[platform_name].fset[options.fset_name]
     fsets = sdk.platforms[platform_name].fset
     target = sdk.projects[options.project_name].targets[options.target_name]
-    target.install(fset, fsets = fsets, debug = options.debug)
+    target.installFset(fset, fsets = fsets, debug = options.debug)
 
 def create_image(options):
     sdk = SDK.SDK()
