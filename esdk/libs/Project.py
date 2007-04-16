@@ -290,30 +290,29 @@ class Target(FileSystem):
             raise RuntimeError, "Circular fset dependency encountered for: %s" % fset.name
         seen_fsets.add(fset.name)
 
-        package_list = []
+        package_set = set()
         for dep in fset['deps']:
             if dep in seen_fsets:
                 continue
             if not os.path.isfile(os.path.join(self.top, dep)):
                 if fsets:
-                    package_list.extend(self.install(fsets[dep], fsets = fsets, debug = debug, seen_fsets = seen_fsets))
+                    package_set.update(self.install(fsets[dep], fsets = fsets, debug = debug, seen_fsets = seen_fsets))
                 else:
                     raise ValueError("fset %s must be installed first!" % (dep))
 
-        package_list.extend(fset['pkgs'])
+        package_set.update(fset['pkgs'])
         if debug == 1:
-            package_list.extend(fset['debug_pkgs'])
-        if root_fset:
-            req_fsets = seen_fsets - set( [fset.name] )
-            print "Installing required fsets: %s" % ' '.join(req_fsets)
-            FileSystem.install(self, self.fs_path, package_list)
-        else:
-            return package_list
-
-        # and now create a simple empty file that indicates that the fset has
-        # been installed...
-        fset_file = open(os.path.join(self.top, fset.name), 'w')
-        fset_file.close()
+            package_set.update(fset['debug_pkgs'])
+        if not root_fset:
+            return package_set
+        req_fsets = seen_fsets - set( [fset.name] )
+        print "Installing required fsets: %s" % ' '.join(req_fsets)
+        FileSystem.install(self, self.fs_path, package_set)
+        # and now create a simple empty file that indicates that the fsets has
+        # been installed.
+        for fset_name in seen_fsets:
+            fset_file = open(os.path.join(self.top, fset_name), 'w')
+            fset_file.close()
 
     def update(self):
         FileSystem.update(self, self.fs_path)
