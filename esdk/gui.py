@@ -1,14 +1,12 @@
 #!/usr/bin/python -tt
 # vim: ai ts=4 sts=4 et sw=4
 
+import gobject
+import gtk
+import gtk.glade
 import os
-import traceback
-
 import pygtk
-try:
-    import gtk, gtk.glade, gobject
-except:
-    raise ImportError, "Unable to import the gtk libraries.  Maybe you are running in text mode"
+import traceback
 
 from SDK import *
 import esdk
@@ -408,7 +406,7 @@ class esdkMain(object):
                         self.show_error_dialog("Can not umount "+model[iter][0]+". Please close any shells or opened files still under mount point and try again!")
                         dialog2.destroy()
                         return -1
-                    self.current_project().dd_USB_image(targetfilename, model[iter][0])
+                    shutil.copyfile(targetfilename, model[iter][0])
                     dialog2.destroy()
 
 #Class: Adding a New Project
