@@ -82,9 +82,10 @@ metadata_expire=1800
             os.chmod(device_path, mode)
 
     def update(self, path):
-        result = os.system("yum -y --installroot=%s update" % (path))
+        cmd_line = "yum -y --installroot=%s update" % (path)
+        result = os.system(cmd_line)
         if result != 0:
-            raise Exception("Internal error while attempting to update!")
+            raise OSError("Internal error while attempting to run: %s" % cmd_line)
 
         self.__rebuild_rpmlist(path)
 
@@ -94,30 +95,29 @@ metadata_expire=1800
         repositories
         """
         if not packages:
+            # No packages, so nothing to do
             return
-
-        command = 'yum -y --installroot=' + path + ' install '
+        command = 'yum -y --installroot=%s install ' % path
         for p in packages:
-            command = command + ' ' + p
+            command += ' %s' % p
         result = os.system(command)
         if result != 0:
-            raise Exception("Internal error while attempting to install!")
-
+            raise OSError("Internal error while attempting to run: %s" command)
         self.__rebuild_rpmlist(path)
 
     def __rebuild_rpmlist(self, path):
         root_path = os.path.abspath(path)
-        BASE_RPM_LIST = "/etc/base-rpms.list"
-        command = 'rpm -r %s -qa > %s%s' % (root_path, root_path, BASE_RPM_LIST)
+        # FIXME: Explain why we need this?  Yixiong put this in, I think.
+        BASE_RPM_LIST = "etc/base-rpms.list"
+        command = 'rpm --root=%s -qa > %s' % (root_path, os.path.join(root_path, BASE_RPM_LIST))
         result = os.system(command)
         if result != 0:
-            raise Exception("Internal error while attempting to build package list!")
-
-        # Since we are using yum from the host machine, if this is a
-        # 64bit machine then yum produces 64bit database indexes, while
-        # our chroot runtime is 32bit.  To keep the target from chroot's
-        # 32bit rpm from chocking on the 64bit index, we rebuild the
-        # index from inside the chroot.
+            raise Exception("Internal error while attempting to build package list.  Command: %s" % command)
+        # Since we are using yum from the host machine, if this is a 64bit
+        # machine then yum produces 64bit database indexes, while our chroot
+        # runtime is 32bit.  To keep the target from chroot's 32bit rpm from
+        # chocking on the 64bit index, we rebuild the index from inside the
+        # chroot.
         # TODO: there has got to be a better way of doing this
         if os.uname()[4] == "x86_64":
             # regenerate the rpmdb.  needed for x86_64 system.
@@ -131,7 +131,7 @@ metadata_expire=1800
         if not os.path.ismount(path):
             result = os.system('mount --bind /proc ' + path + ' 2> /dev/null')
             if result != 0:
-                raise Exception("Internal error while attempting to mount proc filesystem!")
+                raise OSError("Internal error while attempting to mount proc filesystem!")
 
         # search for any file:// URL's in the configured yum repositories, and
         # when we find them make the equivilant directory in the new filesystem
@@ -147,7 +147,7 @@ metadata_expire=1800
                         result = os.system("mount --bind /%s %s 2> /dev/null" % (p, os.path.join(self.path, p)))
                         if result != 0:
                             self.umount()
-                            raise Exception("Internal error while attempting to mount /%s!" % (p))
+                            raise OSError("Internal error while attempting to mount /%s!" % (p))
                 file.close()
                 
     def umount(self):
@@ -323,7 +323,6 @@ class Target(FileSystem):
                 % (self.name, self.path, self.fs_path, self.image_path))
     def __repr__(self):
         return "Target('%s', %s)" % (self.path, self.project)
-
 
 if __name__ == '__main__':
     if len(sys.argv) != 6:
