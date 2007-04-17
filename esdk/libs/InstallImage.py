@@ -352,30 +352,21 @@ class BaseUsbImage(InstallImage):
             self.tmp_path = ''
 
 class LiveUsbImage(BaseUsbImage):
-    def create_image(self, type='RAMFS'):
-        print "LiveUsbImage: Creating LiveUSB Image(%s) Now!" % type
-
+    def create_image(self, fs_type='RAMFS'):
+        print "LiveUsbImage: Creating LiveUSB Image(%s) Now!" % fs_type
         self.create_rootfs()
-
         stat_result = os.stat(self.rootfs_path)
         size = (stat_result.st_size / (1024 * 1024)) + 64
-        if type == 'EXT3FS':
+        if fs_type == 'EXT3FS':
            size = size + 100
         self.create_container_file(size)
-
         self.mount_container()
-
         initrd_path = os.path.join(self.tmp_path, 'initrd.img')
-        Mkinitrd.create(self.project, initrd_path, type)
-        
+        Mkinitrd.create(self.project, initrd_path, fs_type)
         self.install_kernels()
-
         shutil.copy(self.rootfs_path, self.tmp_path)
-
         self.umount_container()
-
         self.delete_rootfs()
-        
         print "LiveUsbImage: Finished!"
         
     def __str__(self):
@@ -386,32 +377,22 @@ class LiveUsbImage(BaseUsbImage):
 class InstallUsbImage(BaseUsbImage):
     def create_image(self):
         print "InstallUsbImage: Creating InstallUSB Image Now!"
-
         self.create_rootfs()
         self.create_bootfs()
-
         stat_result1 = os.stat(self.rootfs_path)
         stat_result2 = os.stat(self.bootfs_path)
         size = ((stat_result1.st_size + stat_result2.st_size) / (1024 * 1024)) + 64
-
         self.create_container_file(size)
-
         self.mount_container()
-
         initrd_path = os.path.join(self.tmp_path, 'initrd.img')
         Mkinitrd.create(self.project, initrd_path)
-        
         self.install_kernels()
-
         shutil.copy(self.rootfs_path, self.tmp_path)
         shutil.copy(self.bootfs_path, self.tmp_path)
-
         self.create_install_script(self.tmp_path)
         self.umount_container()
-
         self.delete_rootfs()
         self.delete_bootfs()
-        
         print "InstallUsbImage: Finished!"
         print "\nYou can now use the image to boot and install the target file-system on the target device's HDD.\n"
         print "\nWARNING: Entire contents of the target devices's HDD will be erased prior to installation!"
