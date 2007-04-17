@@ -1,0 +1,20 @@
+# stuff needed for building pretty much any package
+tar patch gcc gcc-c++ make automake autoconf libtool file rpm-build bzip2 
+
+# not really needed for building, but it sure makes life easier
+vim-enhanced tree less diffutils yum
+
+# stuff needed for kernel development
+module-init-tools ncurses-devel nash
+
+# stuff needed for GUI development
+#gtk2-devel gconf2-devel gettext-devel gtkdoc dbus-1-devel dbus-1-glib
+
+# extras
+#perl-XML-Parser
+
+# Hildon related build stuff
+#outo libmatchbox libfakekey esound-devel
+
+# Packages required for making bootable images
+syslinux busybox squashfs-tools
