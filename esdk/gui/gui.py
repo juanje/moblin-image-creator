@@ -103,28 +103,23 @@ class esdkMain(object):
 
     def target_view_changed(self, selection):
         model, iter = self.targetView.get_selection().get_selected()
-        if not iter:
-            # No targets are selected
-            self.buttons.delete_target.set_sensitive(False)
-            self.buttons.install_fset.set_sensitive(False)
-            self.buttons.target_term_launch.set_sensitive(False)
-            self.buttons.DD_USB.set_sensitive(False)
-            return
-        # A target has been selected
-        self.buttons.delete_target.set_sensitive(True)
-        self.buttons.install_fset.set_sensitive(True)
-        target = self.current_target()
-        fsets = target.installed_fsets()
-        if fsets:
-            state = True
-        else:
-            state = False
-        self.buttons.create_liveiso.set_sensitive(state)
-        self.buttons.create_installiso.set_sensitive(state)
-        self.buttons.create_liveusb.set_sensitive(state)
-        self.buttons.create_installusb.set_sensitive(state)
-        self.buttons.target_term_launch.set_sensitive(state)
-        self.buttons.DD_USB.set_sensitive(state)
+        target_selected_state = False
+        fset_state = False
+        if iter:
+            target_selected_state = True
+            target = self.current_target()
+            fsets = target.installed_fsets()
+            if fsets:
+                fset_state = True
+        self.buttons.delete_target.set_sensitive(target_selected_state)
+        self.buttons.install_fset.set_sensitive(target_selected_state)
+
+        self.buttons.create_liveiso.set_sensitive(fset_state)
+        self.buttons.create_installiso.set_sensitive(fset_state)
+        self.buttons.create_liveusb.set_sensitive(fset_state)
+        self.buttons.create_installusb.set_sensitive(fset_state)
+        self.buttons.target_term_launch.set_sensitive(fset_state)
+        self.buttons.DD_USB.set_sensitive(fset_state)
 
     def project_view_changed(self, selection):
         self.redraw_target_view()
