@@ -106,14 +106,17 @@ class esdkMain(object):
         target_selected_state = False
         fset_state = False
         if iter:
+            # A target is selected
             target_selected_state = True
             target = self.current_target()
             fsets = target.installed_fsets()
             if fsets:
+                # We have fsets installed in the target
                 fset_state = True
+        # Items which should be enabled if we have a target selected
         self.buttons.delete_target.set_sensitive(target_selected_state)
         self.buttons.install_fset.set_sensitive(target_selected_state)
-
+        # Items which should be enabled if our selected target has an fset
         self.buttons.create_liveiso.set_sensitive(fset_state)
         self.buttons.create_installiso.set_sensitive(fset_state)
         self.buttons.create_liveusb.set_sensitive(fset_state)
