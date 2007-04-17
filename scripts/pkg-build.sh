@@ -129,6 +129,6 @@ cp -fv ${spec_file} ${rpm_dir}/SPECS
 
 echo -e "\nLaunching build inside workspace..."
 /usr/sbin/chroot ${workspace_dir} rpmbuild -bs ${rpm_root}/SPECS/${pkg_name}.spec
-/usr/sbin/chroot ${workspace_dir} rpmbuild -bb ${rpm_root}/SPECS/${pkg_name}.spec
+/usr/sbin/chroot ${workspace_dir} rpmbuild -bb ${rpm_root}/SPECS/${pkg_name}.spec --target=i586
 
 echo -e "\nFinished!\n"
