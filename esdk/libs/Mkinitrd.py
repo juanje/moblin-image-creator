@@ -52,7 +52,7 @@ class Busybox(object):
 
         os.chdir(save_cwd)
 
-def create(project, initrd_file, type='RAMFS'):
+def create(project, initrd_file, fs_type='RAMFS'):
     """Function to create an initrd file"""
     initrd_file = os.path.abspath(os.path.expanduser(initrd_file))
 
@@ -79,7 +79,7 @@ def create(project, initrd_file, type='RAMFS'):
 
     # Setup init script
     init_file = open(os.path.join(scratch_path, 'init'), 'w')
-    print >> init_file, "#!/bin/msh\nIMAGETYPE=%s\n" % type
+    print >> init_file, "#!/bin/msh\nIMAGETYPE=%s\n" % fs_type
     print >> init_file, """\
 RUNLEVEL=3
 
