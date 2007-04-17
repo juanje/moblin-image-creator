@@ -352,20 +352,21 @@ class BaseUsbImage(InstallImage):
             self.tmp_path = ''
 
 class LiveUsbImage(BaseUsbImage):
-    def create_image(self):
-        print "LiveUsbImage: Creating LiveUSB Image Now!"
+    def create_image(self, type='RAMFS'):
+        print "LiveUsbImage: Creating LiveUSB Image(%s) Now!" % type
 
         self.create_rootfs()
 
         stat_result = os.stat(self.rootfs_path)
         size = (stat_result.st_size / (1024 * 1024)) + 64
-
+        if type == 'EXT3FS':
+           size = size + 100
         self.create_container_file(size)
 
         self.mount_container()
 
         initrd_path = os.path.join(self.tmp_path, 'initrd.img')
-        Mkinitrd.create(self.project, initrd_path)
+        Mkinitrd.create(self.project, initrd_path, type)
         
         self.install_kernels()
 

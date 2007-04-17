@@ -52,7 +52,7 @@ class Busybox(object):
 
         os.chdir(save_cwd)
 
-def create(project, initrd_file):
+def create(project, initrd_file, type='RAMFS'):
     """Function to create an initrd file"""
     initrd_file = os.path.abspath(os.path.expanduser(initrd_file))
 
@@ -79,9 +79,8 @@ def create(project, initrd_file):
 
     # Setup init script
     init_file = open(os.path.join(scratch_path, 'init'), 'w')
+    print >> init_file, "#!/bin/msh\nIMAGETYPE=%s\n" % type
     print >> init_file, """\
-#!/bin/msh
-
 RUNLEVEL=3
 
 PATH=/bin
@@ -139,13 +138,26 @@ echo "Mounting Squashfs as root"
 mkdir /squashfs
 mount -o loop -t squashfs /mnt/tmp/rootfs.img /squashfs
 
-mkdir /ramfs
-mount -t tmpfs none /ramfs
+if [ "$IMAGETYPE" == "EXT3FS" ]; then
+   if [ ! -e /mnt/tmp/rwfs.img ]; then
+      echo "First time run, will create a RW loopback storage..."
+      ln -s /proc/mounts /etc/mtab
+      dd if=/dev/zero of=/mnt/tmp/rwfs.img bs=1024 count=102400
+      mkfs.ext3 /mnt/tmp/rwfs.img -F
+   fi
+   mkdir /ext3fs
+   mount -o loop /mnt/tmp/rwfs.img /ext3fs
+   mkdir /newroot
+   mount -t unionfs -o dirs=/ext3fs=rw:/squashfs=ro none /newroot
+else   
+   mkdir /ramfs
+   mount -t tmpfs none /ramfs
 
-mkdir /newroot
-mount -t unionfs -o dirs=/ramfs=rw:/squashfs=ro none /newroot
+   mkdir /newroot
+   mount -t unionfs -o dirs=/ramfs=rw:/squashfs=ro none /newroot
 
-mknod /newroot/dev/ram0 c 1 0
+   mknod /newroot/dev/ram0 c 1 0
+fi
 
 if [ -f /mnt/tmp/install.sh ]
 then

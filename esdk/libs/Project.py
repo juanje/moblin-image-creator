@@ -223,11 +223,11 @@ class Project(FileSystem):
         image.create_image()
         target.mount()
 
-    def create_live_usb(self, target_name, image_name):
+    def create_live_usb(self, target_name, image_name, type="RAMFS"):
         target = self.targets[target_name]
         target.umount()
         image = InstallImage.LiveUsbImage(self, self.targets[target_name], image_name)
-        image.create_image()
+        image.create_image(type)
         target.mount()
 
     def create_install_usb(self, target_name, image_name):

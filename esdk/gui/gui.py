@@ -31,6 +31,7 @@ class esdkMain(object):
                 "on_create_liveISO_clicked": self.on_liveISO_clicked,
                 "on_create_installISO_clicked": self.on_installISO_clicked,
                 "on_create_liveUSB_clicked": self.on_liveUSB_clicked,
+                "on_create_liveRWUSB_clicked": self.on_liveRWUSB_clicked,
                 "on_create_installUSB_clicked": self.on_installUSB_clicked,
                 "on_about_activate": self.on_about_activate,
                 "on_term_launch_clicked": self.on_term_launch_clicked,
@@ -120,6 +121,7 @@ class esdkMain(object):
         self.buttons.create_liveiso.set_sensitive(fset_state)
         self.buttons.create_installiso.set_sensitive(fset_state)
         self.buttons.create_liveusb.set_sensitive(fset_state)
+        self.buttons.create_liverwusb.set_sensitive(fset_state)
         self.buttons.create_installusb.set_sensitive(fset_state)
         self.buttons.target_term_launch.set_sensitive(fset_state)
         self.buttons.DD_USB.set_sensitive(fset_state)
@@ -310,6 +312,23 @@ class esdkMain(object):
             dialog.destroy()
         dialog.destroy()
 
+    def on_liveRWUSB_clicked(self, widget):
+        project = self.current_project()
+        target = self.current_target()
+        widgets = gtk.glade.XML(gladefile, 'new_img_dlg')
+        dialog = widgets.get_widget('new_img_dlg')
+        result = dialog.run()
+        if result == gtk.RESPONSE_OK:
+            try:
+                img_name = widgets.get_widget('img_name').get_text()
+                self.current_project().create_live_usb(target.name, img_name, 'EXT3FS')
+            except ValueError, e:
+                self.show_error_dialog(e.args[0])
+            except:
+                self.show_error_dialog()
+        if result == gtk.RESPONSE_CANCEL:
+            dialog.destroy()
+        dialog.destroy()
 
     def on_installUSB_clicked(self, widget):
         project = self.current_project()
@@ -466,6 +485,7 @@ class MainWindowButtons(object):
         self.create_liveiso = widgets.get_widget('create_liveISO_btn')
         self.create_installiso = widgets.get_widget('create_installISO_btn')
         self.create_liveusb = widgets.get_widget('create_liveUSB_btn')
+        self.create_liverwusb = widgets.get_widget('create_liveRWUSB_btn')
         self.create_installusb = widgets.get_widget('create_installUSB_btn')
         # Terminal button
         self.term_launch = widgets.get_widget('term_launch')
