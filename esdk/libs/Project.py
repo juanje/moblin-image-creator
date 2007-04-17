@@ -102,7 +102,7 @@ metadata_expire=1800
             command += ' %s' % p
         result = os.system(command)
         if result != 0:
-            raise OSError("Internal error while attempting to run: %s" command)
+            raise OSError("Internal error while attempting to run: %s" % command)
         self.__rebuild_rpmlist(path)
 
     def __rebuild_rpmlist(self, path):
