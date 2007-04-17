@@ -113,12 +113,18 @@ class esdkMain(object):
         # A target has been selected
         self.buttons.delete_target.set_sensitive(True)
         self.buttons.install_fset.set_sensitive(True)
-        self.buttons.create_liveiso.set_sensitive(True)
-        self.buttons.create_installiso.set_sensitive(True)
-        self.buttons.create_liveusb.set_sensitive(True)
-        self.buttons.create_installusb.set_sensitive(True)
-        self.buttons.target_term_launch.set_sensitive(True)
-        self.buttons.DD_USB.set_sensitive(True)
+        target = self.current_target()
+        fsets = target.installed_fsets()
+        if fsets:
+            state = True
+        else:
+            state = False
+        self.buttons.create_liveiso.set_sensitive(state)
+        self.buttons.create_installiso.set_sensitive(state)
+        self.buttons.create_liveusb.set_sensitive(state)
+        self.buttons.create_installusb.set_sensitive(state)
+        self.buttons.target_term_launch.set_sensitive(state)
+        self.buttons.DD_USB.set_sensitive(state)
 
     def project_view_changed(self, selection):
         self.redraw_target_view()
