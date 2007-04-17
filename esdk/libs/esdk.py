@@ -11,7 +11,6 @@ import sys
 def main():
     # Add something to exercise this code
     print "USB devices: %s" % get_current_udisks()
-    print umount_udisks('/dev/sda1')
 
 def get_current_udisks():
     usb_devices = []
