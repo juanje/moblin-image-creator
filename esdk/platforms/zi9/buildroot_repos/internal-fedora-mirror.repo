@@ -21,3 +21,9 @@ name=ESDK RPMS
 baseurl=http://umd-build2.jf.intel.com/yum-repos/mid-core/
 enabled=1
 gpgcheck=0
+
+[mock-rpms]
+name=Mock Buildroot Requires
+baseurl=http://umd-build2.jf.intel.com/buildgroups/fedora/6/i386/
+enabled=1
+gpgcheck=0

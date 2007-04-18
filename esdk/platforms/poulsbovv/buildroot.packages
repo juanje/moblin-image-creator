@@ -1,3 +1,6 @@
+# Bring in the same stuff as the base mock buildroot
+buildsys-build
+
 # stuff needed for building pretty much any package
 tar patch gcc gcc-c++ make automake autoconf libtool file rpm-build bzip2 
 
