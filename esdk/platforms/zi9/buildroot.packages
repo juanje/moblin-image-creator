@@ -5,7 +5,7 @@ tar patch gcc gcc-c++ make automake autoconf libtool file rpm-build bzip2
 vim-enhanced tree less diffutils yum
 
 # stuff needed for kernel development
-module-init-tools ncurses-devel nash
+module-init-tools ncurses-devel nash gzip
 
 # stuff needed for GUI development
 #gtk2-devel gconf2-devel gettext-devel gtkdoc dbus-1-devel dbus-1-glib
