@@ -199,7 +199,9 @@ class Project(FileSystem):
         FileSystem.update(self, self.path)
 
     def create_target(self, name):
-        if name and not name in self.targets:
+        if not name:
+            raise ValueError("Target name was not specified")
+        if not name in self.targets:
             self.targets[name] = Target(name, self)
             self.targets[name].mount()
         return self.targets[name]
