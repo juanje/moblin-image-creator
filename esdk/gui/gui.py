@@ -165,8 +165,23 @@ class esdkMain(object):
 
     def on_newProject_clicked(self, widget):
         """Instantiate a new dialogue"""
-        dialog = AddNewProject();
-        result = dialog.run()
+        name = ""
+        desc = ""
+        platform = ""
+        path = ""
+        while True:
+            dialog = AddNewProject(name = name, desc = desc, platform = platform, path = path)
+            result = dialog.run()
+            if result != gtk.RESPONSE_OK:
+                break
+            if not dialog.name or not dialog.desc or not dialog.platform or not dialog.path:
+                self.show_error_dialog("All values must be specified")
+            else:
+                break
+            name = dialog.name
+            desc = dialog.desc
+            platform = dialog.platform
+            path = dialog.path
         if result == gtk.RESPONSE_OK:
             sdk = SDK()
             try:
