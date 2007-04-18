@@ -37,7 +37,7 @@ DEPS=core xorg gnome-mobile-core gnome-mobile-service
 [Power-Management]
 DESC=Power Management components
 PKGS=acpid acpi acpitool
-DEBUG_PKGS=
+DEBUG_PKGS=iasl-compiler acpi-abat-tests pmtools
 DEPS=core
 
 [Media]
