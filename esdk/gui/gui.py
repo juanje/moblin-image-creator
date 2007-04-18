@@ -215,13 +215,22 @@ class esdkMain(object):
 
     def on_new_target_add_clicked(self, widget):
         # Open the "New Target" dialog
-        widgets = gtk.glade.XML(gladefile, 'nt_dlg')
-        dialog = widgets.get_widget('nt_dlg')
-        dialog.set_default_response(gtk.RESPONSE_OK)
-        if dialog.run() == gtk.RESPONSE_OK:
+        while True:
+            widgets = gtk.glade.XML(gladefile, 'nt_dlg')
+            dialog = widgets.get_widget('nt_dlg')
+            dialog.set_default_response(gtk.RESPONSE_OK)
             target_name = widgets.get_widget('nt_name').get_text()
-            self.current_project().create_target(target_name)
-            self.targetList.append((target_name, ''))
+            target_name = target_name.strip()
+            if dialog.run() == gtk.RESPONSE_OK:
+                if not target_name:
+                    self.show_error_dialog("Must specify a target name")
+                    dialog.destroy()
+                else:
+                    self.current_project().create_target(target_name)
+                    self.targetList.append((target_name, ''))
+                    break
+            else:
+                break
         dialog.destroy()
 
     def on_install_fset(self, widget):
