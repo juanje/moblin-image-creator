@@ -429,7 +429,7 @@ class esdkMain(object):
                         dialog2.destroy()
                         return -1
                     shutil.copyfile(targetfilename, model[iter][0])
-                    dialog2.destroy()
+            dialog2.destroy()
 
 #Class: Adding a New Project
 class AddNewProject(object):
