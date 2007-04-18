@@ -6,7 +6,7 @@ DEPS=
 
 [Infrastructure]
 DESC=Fundamental non-GUI system infrastructure
-PKGS=dhclient glib2 dbus dbus-glib NetworkManager NetworkManager-glib wireless-tools sdio_wlan_fc6 tem_config_net_donley eth_config_net_donley alsa-utils 
+PKGS=dhclient glib2 dbus dbus-glib NetworkManager NetworkManager-glib wireless-tools sdio_wlan_fc6 tem_config_net_donley eth_config_net_donley alsa-utils nfs-utils
 DEBUG_PKGS=openssh-clients openssh-server man which mlocate tar
 DEPS=core
 
