@@ -219,9 +219,10 @@ class esdkMain(object):
             widgets = gtk.glade.XML(gladefile, 'nt_dlg')
             dialog = widgets.get_widget('nt_dlg')
             dialog.set_default_response(gtk.RESPONSE_OK)
+            result = dialog.run()
             target_name = widgets.get_widget('nt_name').get_text()
             target_name = target_name.strip()
-            if dialog.run() == gtk.RESPONSE_OK:
+            if result == gtk.RESPONSE_OK:
                 if not target_name:
                     self.show_error_dialog("Must specify a target name")
                     dialog.destroy()
