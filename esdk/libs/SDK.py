@@ -196,6 +196,8 @@ class SDK(object):
         # specific packages to enable the project to be used as a jailroot
         proj.install()
         """
+        if not install_path or not name or not desc or not platform:
+            raise ValueError("Empty argument passed in")
         install_path = os.path.abspath(os.path.expanduser(install_path))
         # create the config file
         config_path = os.path.join(self.config_path, "%s.proj" % name)

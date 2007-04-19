@@ -20,7 +20,8 @@ class FileSystem(object):
     'install' method for installing new RPM packages.
     """
     def __init__(self, path, repos):
-
+        if not path or not repos:
+            raise ValueError("Empty argument passed in")
         self.path = os.path.abspath(os.path.expanduser(path))
         if not os.path.isfile(os.path.join(self.path, 'etc', 'buildstamp')):
             """
@@ -172,6 +173,8 @@ class Project(FileSystem):
     new 'target' filesystems.
     """
     def __init__(self, path, name, desc, platform):
+        if not path or not name or not desc or not platform:
+            raise ValueError("Empty argument passed in")
         self.path = os.path.abspath(os.path.expanduser(path))
         self.name = name
         self.platform = platform
@@ -251,6 +254,8 @@ class Target(FileSystem):
     target device.
     """
     def __init__(self, name, project):
+        if not name or not project:
+            raise ValueError("Empty argument passed in")
         self.project = project
         self.name = name
         self.top = os.path.join(project.path, "targets", name)
