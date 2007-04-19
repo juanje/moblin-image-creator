@@ -3,16 +3,23 @@
 
 import os, re, shutil, sys, tempfile, unittest
 sys.path.insert(0, '/usr/share/esdk/lib')
+import Platform
 import Project
+
+import testPlatform
 
 # Test our base FileSystem class
 class TestFileSystem(unittest.TestCase):
     def setUp(self):
         self.workdir = tempfile.mkdtemp()
         self.filesystem_dir = os.path.join(self.workdir, "filesystem")
+        self.project_dir = os.path.join(self.workdir, "project")
         self.repos_dir = os.path.join(self.workdir, "repos")
         os.mkdir(self.repos_dir)
         self.createSampleRepos()
+        self.platform_name = 'unittest-platform'
+        self.platform_dir = os.path.join(self.workdir, "platforms", self.platform_name)
+        testPlatform.createSamplePlatformDir(self.platform_dir)
     def createSampleRepos(self):
         filename = os.path.join(self.repos_dir, "test.repo")
         out_file = open(filename, 'w')
@@ -37,6 +44,13 @@ gpgcheck=0"""
         filesystem = Project.FileSystem(self.filesystem_dir, self.repos)
         temp = filesystem.__str__()
         temp = filesystem.__repr__()
+    def testEmptyValues(self):
+        self.assertRaises(ValueError, Project.FileSystem, '', '')
+        self.assertRaises(ValueError, Project.Project, '', '', '', '')
+        self.assertRaises(ValueError, Project.Target, '', '')
+    def testProjectCreation(self):
+        platform = Platform.Platform(self.workdir, self.platform_name)
+        project = Project.Project(self.project_dir, 'unittest-proj', 'unittest project', platform)
     def testFileSystemStructure(self):
         filesystem = Project.FileSystem(self.filesystem_dir, self.repos)
         self.assert_(os.path.isdir(self.filesystem_dir), "FileSystem did not create directory!")
