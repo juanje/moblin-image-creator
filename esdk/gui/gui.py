@@ -185,7 +185,7 @@ class esdkMain(object):
         if result == gtk.RESPONSE_OK:
             sdk = SDK()
             try:
-                sdk.create_project(dialog.path, dialog.name, dialog.desc, sdk.platforms[dialog.platform]).install()
+                sdk.create_project(dialog.path, dialog.name, dialog.desc, sdk.platforms[dialog.platform]).install(self)
                 self.projectList.append((dialog.name, dialog.desc, dialog.path, dialog.platform))
             except:
                 self.show_error_dialog("Internal error while attempting to create project!")
@@ -259,16 +259,28 @@ class esdkMain(object):
         checkbox.set_sensitive(True)
         if dialog.run() == gtk.RESPONSE_OK:
             fset = platform.fset[cebox.child.get_text()]
+            debug = checkbox.get_active()
+            dialog.destroy()
+            progress_tree = gtk.glade.XML(gladefile, 'ProgressDialog')
+            progress_dialog = progress_tree.get_widget('ProgressDialog')
+            progress_dialog.connect('delete_event', self.ignore)
+            progress_tree.get_widget('progress_label').set_text("Please wait while installing %s" % fset.name)
             try:
-                self.current_target().installFset(fset, fsets = platform.fset, debug = checkbox.get_active())
+                self.current_target().installFset(fset, fsets = platform.fset, debug = debug, cb = self)
                 self.redraw_target_view()
             except ValueError, e:
                 self.show_error_dialog(e.args[0])
             except:
                 print_exc_plus()
                 self.show_error_dialog("Unexpected error: %s" % (sys.exc_info()[1]))
-        dialog.destroy()
+            progress_dialog.destroy()
 
+    def ignore(self, *args):
+        return True
+    
+    def iteration(self, process):
+        gtk.main_iteration()
+            
     def fset_install_updated(self, box, label, platform, checkbox):
         fset = platform.fset[box.child.get_text()]
         checkbox.set_sensitive(True)

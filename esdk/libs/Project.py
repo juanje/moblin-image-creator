@@ -1,7 +1,7 @@
 #!/usr/bin/python -tt
 # vim: ai ts=4 sts=4 et sw=4
 
-import glob, os, shutil, socket, stat, sys, time, re
+import glob, os, shutil, socket, stat, sys, time, re, subprocess
 
 import SDK
 import InstallImage
@@ -90,7 +90,7 @@ metadata_expire=1800
 
         self.__rebuild_rpmlist(path)
 
-    def install(self, path, packages):
+    def install(self, path, packages, cb):
         """
         Call into yum to install RPM packages using the specified yum
         repositories
@@ -101,8 +101,13 @@ metadata_expire=1800
         command = 'yum -y --installroot=%s install ' % path
         for p in packages:
             command += ' %s' % p
-        result = os.system(command)
-        if result != 0:
+        p = subprocess.Popen(command.split())
+        while p.poll() == None:
+            try: 
+                cb.iteration(process=p)
+            except:
+                pass
+        if p.returncode != 0:
             raise OSError("Internal error while attempting to run: %s" % command)
         self.__rebuild_rpmlist(path)
 
@@ -192,11 +197,11 @@ class Project(FileSystem):
             target = Target(dirname, self)
             self.targets[target.name] = target
 
-    def install(self):
+    def install(self, cb = None):
         """
         Install all the packages defined by Platform.buildroot_packages
         """
-        FileSystem.install(self, self.path, self.platform.buildroot_packages)
+        FileSystem.install(self, self.path, self.platform.buildroot_packages, cb)
 
     def update(self):
         FileSystem.update(self, self.path)
@@ -279,7 +284,7 @@ class Target(FileSystem):
         result.sort()
         return result
 
-    def installFset(self, fset, debug=0, fsets = None, seen_fsets = None):
+    def installFset(self, fset, debug=0, fsets = None, seen_fsets = None, cb = None):
         """
         Install a fset into the target filesystem.  If the fsets variable is
         supplied with a list of fsets then we will try to recursively install
@@ -303,7 +308,7 @@ class Target(FileSystem):
                 continue
             if not os.path.isfile(os.path.join(self.top, dep)):
                 if fsets:
-                    package_set.update(self.installFset(fsets[dep], fsets = fsets, debug = debug, seen_fsets = seen_fsets))
+                    package_set.update(self.installFset(fsets[dep], fsets = fsets, debug = debug, seen_fsets = seen_fsets, cb = cb))
                 else:
                     raise ValueError("fset %s must be installed first!" % (dep))
 
@@ -315,7 +320,7 @@ class Target(FileSystem):
         req_fsets = seen_fsets - set( [fset.name] )
         if req_fsets:
             print "Installing required Function Set: %s" % ' '.join(req_fsets)
-        FileSystem.install(self, self.fs_path, package_set)
+        FileSystem.install(self, self.fs_path, package_set, cb)
         # and now create a simple empty file that indicates that the fsets has
         # been installed.
         for fset_name in seen_fsets:
@@ -386,3 +391,4 @@ if __name__ == '__main__':
         print "Installing all available fsets inside target..."
         for key in proj.platform.fset:
             proj.targets[target_name].installFset(proj.platform.fset[key])
+
