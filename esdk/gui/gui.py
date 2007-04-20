@@ -7,6 +7,7 @@ import gtk.glade
 import os
 import pygtk
 import traceback
+import time
 
 from SDK import *
 import esdk
@@ -189,6 +190,7 @@ class esdkMain(object):
                 progress_dialog = progress_tree.get_widget('ProgressDialog')
                 progress_dialog.connect('delete_event', self.ignore)
                 progress_tree.get_widget('progress_label').set_text("Please wait while installing %s" % dialog.name)
+                self.progressbar = progress_tree.get_widget('progressbar')
                 sdk.create_project(dialog.path, dialog.name, dialog.desc, sdk.platforms[dialog.platform]).install(self)
                 self.projectList.append((dialog.name, dialog.desc, dialog.path, dialog.platform))
             except:
@@ -269,6 +271,7 @@ class esdkMain(object):
             progress_tree = gtk.glade.XML(gladefile, 'ProgressDialog')
             progress_dialog = progress_tree.get_widget('ProgressDialog')
             progress_dialog.connect('delete_event', self.ignore)
+            self.progressbar = progress_tree.get_widget('progressbar')
             progress_tree.get_widget('progress_label').set_text("Please wait while installing %s" % fset.name)
             try:
                 self.current_target().installFset(fset, fsets = platform.fset, debug = debug, cb = self)
@@ -284,7 +287,9 @@ class esdkMain(object):
         return True
     
     def iteration(self, process):
+        self.progressbar.pulse()
         gtk.main_iteration()
+        time.sleep(0.01)
             
     def fset_install_updated(self, box, label, platform, checkbox):
         fset = platform.fset[box.child.get_text()]
