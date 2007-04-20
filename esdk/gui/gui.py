@@ -445,7 +445,8 @@ class esdkMain(object):
                 self.show_error_dialog('No USB disk detected! Please plug in your USB disk and try again!')
                 dialog2.destroy()
                 return -1
-            iter_obj = usb_dev_list.append(usb_disk_list)
+            for iter_dev in usb_disk_list:
+                iter_obj = usb_dev_list.append([iter_dev])
             usb_disks = widgets.get_widget('usb_disks')
             column = gtk.TreeViewColumn('Your current USB disks', gtk.CellRendererText(), text=0)
             column.set_resizable(True)
