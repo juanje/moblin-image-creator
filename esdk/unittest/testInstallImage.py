@@ -8,6 +8,10 @@ import testSdk
 sys.path.insert(0, '/usr/share/esdk/lib')
 import InstallImage, SDK
 
+class Callback:
+    def iteration(process):
+        return
+
 class TestInstallImage(unittest.TestCase):
     def setUp(self):
         self.workdir = tempfile.mkdtemp()
@@ -18,7 +22,7 @@ class TestInstallImage(unittest.TestCase):
         self.project_dir = os.path.join(self.workdir, 'project')
         os.mkdir(self.project_dir)
 
-        self.sdk = SDK.SDK(self.esdk_dir)
+        self.sdk = SDK.SDK(path = self.esdk_dir, cb = Callback())
 
         self.proj_path = os.path.join(self.project_dir, 'project_unittest')
         self.proj_name = "unittest-281d8183ckd"

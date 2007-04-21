@@ -443,6 +443,10 @@ def print_exc_plus():
                 print "<ERROR WHILE PRINTING VALUE>"
     traceback.print_exc()
 
+class Callback:
+    def iteration(process):
+        return
+
 if __name__ == '__main__':
     cnt = len(sys.argv)
     if (cnt != 4) and (cnt != 2):
@@ -450,7 +454,7 @@ if __name__ == '__main__':
         print >> sys.stderr, "       %s proj_name" % (sys.argv[0])
         sys.exit(1)
 
-    sdk = SDK.SDK()
+    sdk = SDK.SDK(Callback())
 
     if cnt == 4:
         proj_path = sys.argv[1]

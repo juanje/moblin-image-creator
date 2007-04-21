@@ -8,6 +8,11 @@ import Project
 
 import testPlatform
 
+
+class Callback:
+    def iteration(process):
+        return
+
 # Test our base FileSystem class
 class TestFileSystem(unittest.TestCase):
     def setUp(self):
@@ -38,21 +43,21 @@ gpgcheck=0"""
     def testInstantiate(self):
         # Directory should not yet exist
         self.assert_(not os.path.isdir(self.filesystem_dir), "Wierd, directory exists")
-        filesystem = Project.FileSystem(self.filesystem_dir, self.repos)
+        filesystem = Project.FileSystem(self.filesystem_dir, self.repos, Callback())
         self.assert_(os.path.isdir(self.filesystem_dir), "FileSystem did not create directory!")
     def testStrRepr(self):
-        filesystem = Project.FileSystem(self.filesystem_dir, self.repos)
+        filesystem = Project.FileSystem(self.filesystem_dir, self.repos, Callback())
         temp = filesystem.__str__()
         temp = filesystem.__repr__()
     def testEmptyValues(self):
-        self.assertRaises(ValueError, Project.FileSystem, '', '')
-        self.assertRaises(ValueError, Project.Project, '', '', '', '')
-        self.assertRaises(ValueError, Project.Target, '', '')
+        self.assertRaises(ValueError, Project.FileSystem, '', '', '')
+        self.assertRaises(ValueError, Project.Project, '', '', '', '', '')
+        self.assertRaises(ValueError, Project.Target, '', '', '')
     def testProjectCreation(self):
         platform = Platform.Platform(self.workdir, self.platform_name)
-        project = Project.Project(self.project_dir, 'unittest-proj', 'unittest project', platform)
+        project = Project.Project(self.project_dir, 'unittest-proj', 'unittest project', platform, Callback())
     def testFileSystemStructure(self):
-        filesystem = Project.FileSystem(self.filesystem_dir, self.repos)
+        filesystem = Project.FileSystem(self.filesystem_dir, self.repos, Callback())
         self.assert_(os.path.isdir(self.filesystem_dir), "FileSystem did not create directory!")
         for filename in [ 'proc', 'var/log', 'var/lib/rpm', 'dev', 'etc/yum.repos.d' ]:
             full_path = os.path.join(self.filesystem_dir, filename)

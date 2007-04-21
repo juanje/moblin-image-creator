@@ -8,6 +8,10 @@ import testPlatform
 sys.path.insert(0, '/usr/share/esdk/lib')
 import SDK
 
+class Callback:
+    def iteration(process):
+        return
+
 class TestSDK(unittest.TestCase):
     def setUp(self):
         self.workdir = tempfile.mkdtemp()
@@ -16,12 +20,12 @@ class TestSDK(unittest.TestCase):
         if os.path.isdir(self.workdir):
             shutil.rmtree(self.workdir)
     def testInstantiate(self):
-        sdk = SDK.SDK()
+        sdk = SDK.SDK(Callback())
         for key in sdk.projects:
                 project = sdk.projects[key]
                 a,b = (project.name, project.path)
     def testStrRepr(self):
-        sdk = SDK.SDK()
+        sdk = SDK.SDK(Callback())
         temp = sdk.__str__()
         temp = sdk.__repr__()
 

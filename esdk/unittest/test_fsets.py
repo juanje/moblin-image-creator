@@ -4,7 +4,7 @@
 import os, re, shutil, sys, tempfile, unittest
 sys.path.insert(0, '/usr/share/esdk/lib')
 import fsets
-
+    
 class TestFset(unittest.TestCase):
     def setUp(self):
         self.workdir = tempfile.mkdtemp()

@@ -8,8 +8,9 @@ import os
 import pygtk
 import traceback
 import time
+import shutil
 
-from SDK import *
+import SDK
 import esdk
 
 global gladefile
@@ -20,6 +21,7 @@ if not os.path.isfile(gladefile):
 class esdkMain(object):
     """This is our main"""
     def __init__(self):
+        self.sdk = SDK.SDK(cb = self)
         self.widgets = gtk.glade.XML (gladefile, 'main')
         dic = {"on_main_destroy_event" : gtk.main_quit,
                 "on_quit_activate" : gtk.main_quit,
@@ -61,8 +63,8 @@ class esdkMain(object):
         self.targetList = gtk.ListStore(str, str)
         self.targetView.set_model(self.targetList)
         # read in project list using SDK()
-        for key in sorted(SDK().projects.iterkeys()):
-            p = SDK().projects[key]
+        for key in sorted(self.sdk.projects.iterkeys()):
+            p = self.sdk.projects[key]
             self.projectList.append((p.name, p.desc, p.path, p.platform.name))
         self.buttons = MainWindowButtons(self.widgets)
         # Connect project selection signal to list targets in the targetList
@@ -171,7 +173,7 @@ class esdkMain(object):
         platform = ""
         path = ""
         while True:
-            dialog = AddNewProject(name = name, desc = desc, platform = platform, path = path)
+            dialog = AddNewProject(sdk = self.sdk, name = name, desc = desc, platform = platform, path = path)
             result = dialog.run()
             if result != gtk.RESPONSE_OK:
                 break
@@ -184,18 +186,17 @@ class esdkMain(object):
             platform = dialog.platform
             path = dialog.path
         if result == gtk.RESPONSE_OK:
-            sdk = SDK()
             try:
                 progress_tree = gtk.glade.XML(gladefile, 'ProgressDialog')
                 progress_dialog = progress_tree.get_widget('ProgressDialog')
                 progress_dialog.connect('delete_event', self.ignore)
                 progress_tree.get_widget('progress_label').set_text("Please wait while installing %s" % dialog.name)
                 self.progressbar = progress_tree.get_widget('progressbar')
-                sdk.create_project(dialog.path, dialog.name, dialog.desc, sdk.platforms[dialog.platform]).install(self)
+                proj = self.sdk.create_project(dialog.path, dialog.name, dialog.desc, self.sdk.platforms[dialog.platform]).install()
                 self.projectList.append((dialog.name, dialog.desc, dialog.path, dialog.platform))
             except:
                 self.show_error_dialog("Internal error while attempting to create project!")
-                sdk.delete_project(dialog.name)
+                self.sdk.delete_project(dialog.name)
             progress_dialog.destroy()
             
     def on_about_activate(self, event):
@@ -216,7 +217,7 @@ class esdkMain(object):
         tree.get_widget('queryLabel').set_text("Delete the %s project?" % (project.name))
         dialog = tree.get_widget('qDialog')
         if dialog.run() == gtk.RESPONSE_OK:
-            SDK().delete_project(project.name)
+            self.sdk.delete_project(project.name)
             self.remove_current_project()
         dialog.destroy()
 
@@ -274,7 +275,7 @@ class esdkMain(object):
             self.progressbar = progress_tree.get_widget('progressbar')
             progress_tree.get_widget('progress_label').set_text("Please wait while installing %s" % fset.name)
             try:
-                self.current_target().installFset(fset, fsets = platform.fset, debug = debug, cb = self)
+                self.current_target().installFset(fset, fsets = platform.fset, debug = debug)
                 self.redraw_target_view()
             except ValueError, e:
                 self.show_error_dialog(e.args[0])
@@ -303,13 +304,13 @@ class esdkMain(object):
         tree.get_widget('queryLabel').set_text("Delete target %s from project %s?" % (target.name, project.name))
         dialog = tree.get_widget('qDialog')
         if dialog.run() == gtk.RESPONSE_OK:
-            SDK().projects[project.name].delete_target(target.name)
+            self.sdk.projects[project.name].delete_target(target.name)
             self.remove_current_target()
         dialog.destroy()
 
     def current_project(self):
         model, iter = self.projectView.get_selection().get_selected()
-        return SDK().projects[model[iter][0]]
+        return self.sdk.projects[model[iter][0]]
 
     def current_target(self):
         model, iter = self.targetView.get_selection().get_selected()
@@ -348,17 +349,21 @@ class esdkMain(object):
         widgets = gtk.glade.XML(gladefile, 'new_img_dlg')
         dialog = widgets.get_widget('new_img_dlg')
         result = dialog.run()
+        img_name = widgets.get_widget('img_name').get_text()
+        dialog.destroy()
         if result == gtk.RESPONSE_OK:
+            progress_tree = gtk.glade.XML(gladefile, 'ProgressDialog')
+            progress_dialog = progress_tree.get_widget('ProgressDialog')
+            progress_dialog.connect('delete_event', self.ignore)
+            progress_tree.get_widget('progress_label').set_text("Please wait while while creating %s" % img_name)
+            self.progressbar = progress_tree.get_widget('progressbar')
             try:
-                img_name = widgets.get_widget('img_name').get_text()
                 self.current_project().create_live_usb(target.name, img_name)
             except ValueError, e:
                 self.show_error_dialog(e.args[0])
             except:
                 self.show_error_dialog()
-        if result == gtk.RESPONSE_CANCEL:
-            dialog.destroy()
-        dialog.destroy()
+            progress_dialog.destroy()
 
     def on_liveRWUSB_clicked(self, widget):
         project = self.current_project()
@@ -366,36 +371,43 @@ class esdkMain(object):
         widgets = gtk.glade.XML(gladefile, 'new_img_dlg')
         dialog = widgets.get_widget('new_img_dlg')
         result = dialog.run()
+        img_name = widgets.get_widget('img_name').get_text()
+        dialog.destroy()
         if result == gtk.RESPONSE_OK:
+            progress_tree = gtk.glade.XML(gladefile, 'ProgressDialog')
+            progress_dialog = progress_tree.get_widget('ProgressDialog')
+            progress_dialog.connect('delete_event', self.ignore)
+            progress_tree.get_widget('progress_label').set_text("Please wait while creating %s" % img_name)
+            self.progressbar = progress_tree.get_widget('progressbar')
             try:
-                img_name = widgets.get_widget('img_name').get_text()
                 self.current_project().create_live_usb(target.name, img_name, 'EXT3FS')
             except ValueError, e:
                 self.show_error_dialog(e.args[0])
             except:
                 self.show_error_dialog()
-        if result == gtk.RESPONSE_CANCEL:
-            dialog.destroy()
-        dialog.destroy()
-
+            progress_dialog.destroy()
+            
     def on_installUSB_clicked(self, widget):
         project = self.current_project()
         target = self.current_target()
         widgets = gtk.glade.XML(gladefile, 'new_img_dlg')
         dialog = widgets.get_widget('new_img_dlg')
         result = dialog.run()
+        img_name = widgets.get_widget('img_name').get_text()
+        dialog.destroy()
         if result == gtk.RESPONSE_OK:
+            progress_tree = gtk.glade.XML(gladefile, 'ProgressDialog')
+            progress_dialog = progress_tree.get_widget('ProgressDialog')
+            progress_dialog.connect('delete_event', self.ignore)
+            progress_tree.get_widget('progress_label').set_text("Please wait while creating %s" % img_name)
+            self.progressbar = progress_tree.get_widget('progressbar')
             try:
-                img_name = widgets.get_widget('img_name').get_text()
                 self.current_project().create_install_usb(target.name, img_name)
             except ValueError, e:
                 self.show_error_dialog(e.args[0])
             except:
                 self.show_error_dialog()
-        if result == gtk.RESPONSE_CANCEL:
-            dialog.destroy()
-        dialog.destroy()
-
+            progress_dialog.destroy()
 
     def on_installISO_clicked(self, widget):
         project = self.current_project()
@@ -403,36 +415,44 @@ class esdkMain(object):
         widgets = gtk.glade.XML(gladefile, 'new_img_dlg')
         dialog = widgets.get_widget('new_img_dlg')
         result = dialog.run()
-        if result == gtk.RESPONSE_CANCEL:
-            dialog.destroy()
+        img_name = widgets.get_widget('img_name').get_text()
+        dialog.destroy()
         if result == gtk.RESPONSE_OK:
+            progress_tree = gtk.glade.XML(gladefile, 'ProgressDialog')
+            progress_dialog = progress_tree.get_widget('ProgressDialog')
+            progress_dialog.connect('delete_event', self.ignore)
+            progress_tree.get_widget('progress_label').set_text("Please wait while creating %s" % img_name)
+            self.progressbar = progress_tree.get_widget('progressbar')
             try:
-                img_name = widgets.get_widget('img_name').get_text()
                 self.current_project().create_install_iso(target.name, img_name)
             except ValueError, e:
                 self.show_error_dialog(e.args[0])
             except:
                 self.show_error_dialog()
-        dialog.destroy()
-
+            progress_dialog.destroy()
+            
     def on_liveISO_clicked(self, widget):
         project = self.current_project()
         target = self.current_target()
         widgets = gtk.glade.XML(gladefile, 'new_img_dlg')
         dialog = widgets.get_widget('new_img_dlg')
         result = dialog.run()
-        if result == gtk.RESPONSE_CANCEL:
-            dialog.destroy()
+        img_name = widgets.get_widget('img_name').get_text()
+        dialog.destroy()
         if result == gtk.RESPONSE_OK:
+            progress_tree = gtk.glade.XML(gladefile, 'ProgressDialog')
+            progress_dialog = progress_tree.get_widget('ProgressDialog')
+            progress_dialog.connect('delete_event', self.ignore)
+            progress_tree.get_widget('progress_label').set_text("Please wait while creating %s" % img_name)
+            self.progressbar = progress_tree.get_widget('progressbar')
             try:
-                img_name = widgets.get_widget('img_name').get_text()
                 self.current_project().create_live_iso(target.name, img_name)
             except ValueError, e:
                 self.show_error_dialog(e.args[0])
             except:
                 self.show_error_dialog()
-        dialog.destroy()
-
+            progress_dialog.destroy()
+            
     def on_DD_USB_clicked(self, widget):
         project_path = self.current_project().path
         target = self.current_target()
@@ -483,7 +503,8 @@ class esdkMain(object):
 #Class: Adding a New Project
 class AddNewProject(object):
     """Class to bring up AddNewProject dialogue"""
-    def __init__(self, name="", desc="", path="", platform=""):
+    def __init__(self, sdk, name="", desc="", path="", platform=""):
+        self.sdk = sdk
         widgets = gtk.glade.XML (gladefile, 'newProject')
         widgets.signal_autoconnect({"on_browse": self.on_browse})
         self.dialog = widgets.get_widget('newProject')
@@ -495,7 +516,7 @@ class AddNewProject(object):
         self.np_path.set_text(path)
         self.np_platform = widgets.get_widget("np_platform")
         platform_entry_box = gtk.ListStore(gobject.TYPE_STRING)
-        for pname in sorted(SDK().platforms.iterkeys()):
+        for pname in sorted(self.sdk.platforms.iterkeys()):
             platform_entry_box.append([pname])
         self.np_platform.set_model(platform_entry_box)
         self.np_platform.set_text_column(0)

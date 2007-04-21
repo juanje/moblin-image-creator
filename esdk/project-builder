@@ -24,20 +24,30 @@ for bad_env in [ 'http_proxy' ]:
         print "Warning: %s environment variable is set.  Deleting it." % bad_env
         del os.environ[bad_env]
 
+class Callback:
+    def iteration(self, process):
+        return
+
+sdk = SDK.SDK(cb = Callback())
+
 def main():
     if sys.hexversion < 0x2040000:
         print >> sys.stderr, "Error: %s depends on a Python version of at least 2.4!" % (sys.argv[0])
         sys.exit(1)
 
     if len(sys.argv) == 1:
-        try:
-            gui.esdkMain()
-            gui.gtk.main()
-            return 0
-        except:
-            print "Error: Unable to run the GUI, maybe you are in a text console"
-            print "Do -h for help"
-            return 1
+        gui.esdkMain()
+        gui.gtk.main()
+        return 0
+
+#         try:
+#             gui.esdkMain()
+#             gui.gtk.main()
+#             return 0
+#         except:
+#             print "Error: Unable to run the GUI, maybe you are in a text console"
+#             print "Do -h for help"
+#             return 1
 
     options, args = parseCommandLine()
     if options.cmd == "list-platforms":
@@ -204,17 +214,14 @@ Examples:
     return options, args
     
 def list_platforms():
-    sdk = SDK.SDK()
     for key in sorted(sdk.platforms.iterkeys()):
         print "%s" % (sdk.platforms[key].name)
 
 def list_projects():
-    sdk = SDK.SDK()
     for key in sorted(sdk.projects.iterkeys()):
         print "%s ==> %s" % (sdk.projects[key].name, sdk.projects[key].path)
 
 def list_fsets(options):
-    sdk = SDK.SDK()
     if options.platform_name not in sdk.platforms:
         print >> sys.stderr, "%s: is not a valid platform name" % options.platform_name
         sys.exit(1)
@@ -222,12 +229,10 @@ def list_fsets(options):
         print "%s" % (sdk.platforms[options.platform_name].fset[key].name)
 
 def list_targets(options):
-    sdk = SDK.SDK()    
     for key in (sdk.projects[options.project_name].targets.iterkeys()):
         print "%s" % (sdk.projects[options.project_name].targets[key].name)
 
 def create_project(options):
-    sdk = SDK.SDK()
     if options.project_name in sdk.projects:
         print >> sys.stderr, "Project %s already exist!" % (options.project_name)
         sys.exit(1)
@@ -245,28 +250,24 @@ def create_project(options):
         sdk.delete_project(options.project_name)
 
 def delete_project(options):
-    sdk = SDK.SDK()
     if not options.project_name in sdk.projects:
         print >> sys.stderr, "Project %s does not exist" % (options.project_name)
         sys.exit(1)
     sdk.delete_project(options.project_name)
 
 def update_project(options):
-    sdk = SDK.SDK()
     if not options.project_name in sdk.projects:
         print >> sys.stderr, "Project %s does not exist" % (options.project_name)
         sys.exit(1)
     sdk.projects[options.project_name].update()
     
 def create_target(options):
-    sdk = SDK.SDK()
     if not options.project_name in sdk.projects:
         print >> sys.stderr, "Project %s does not exist" % (options.project_name)
         sys.exit(1)
     target = sdk.projects[options.project_name].create_target(options.target_name)
 
 def delete_target(options):
-    sdk = SDK.SDK()
     if not options.project_name in sdk.projects:
         print >> sys.stderr, "Project %s does not exist" % (options.project_name)
         sys.exit(1)
@@ -277,7 +278,6 @@ def delete_target(options):
     proj.delete_target(options.target_name)
 
 def update_target(options):
-    sdk = SDK.SDK()
     if not options.project_name in sdk.projects:
         print >> sys.stderr, "Project %s does not exist" % (options.project_name)
         sys.exit(1)
@@ -288,7 +288,6 @@ def update_target(options):
     proj.targets[options.target_name].update()
     
 def install_fset(options):
-    sdk = SDK.SDK()
     if not options.project_name in sdk.projects:
         print >> sys.stderr, "Project %s does not exist" % (options.project_name)
         sys.exit(1)
@@ -308,7 +307,6 @@ def install_fset(options):
     target.installFset(fset, fsets = fsets, debug = options.debug)
 
 def create_image(options):
-    sdk = SDK.SDK()
     proj = sdk.projects[options.project_name]
     if options.cmd == 'create-live-iso':
         proj.create_live_iso(options.target_name, options.image_name)

@@ -200,6 +200,9 @@ exec /bin/msh
     # Clean-up and remove scratch area
     shutil.rmtree(scratch_path)
 
+class Callback:
+    def iteration(process):
+        return
 
 if __name__ == '__main__':
     if len(sys.argv) != 3:
@@ -209,6 +212,6 @@ if __name__ == '__main__':
     project_name = sys.argv[1]
     initrd_file = sys.argv[2]
 
-    proj = SDK.SDK().projects[project_name]
+    proj = SDK.SDK(Callback()).projects[project_name]
 
     create(proj, initrd_file)

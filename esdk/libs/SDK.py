@@ -145,9 +145,10 @@ class PackageConfig(ConfigFile):
         
 
 class SDK(object):
-    def __init__(self, path='/usr/share/esdk'):
+    def __init__(self, cb, path='/usr/share/esdk'):
         self.version = "pre-alpha"
         self.path = os.path.abspath(os.path.expanduser(path))
+        self.cb = cb
         
         self.config_path = os.path.join(self.path, 'projects')
         if not os.path.isdir(self.config_path):
@@ -170,7 +171,7 @@ class SDK(object):
                 continue
             try:
                 config = PackageConfig(full_path)
-                self.projects[config.name] = Project.Project(config.path, config.name, config.desc, self.platforms[config.platform])
+                self.projects[config.name] = Project.Project(config.path, config.name, config.desc, self.platforms[config.platform], self.cb)
             except:
                 print >> sys.stderr, "Project Config Error: %s" % (sys.exc_value)
             
@@ -210,7 +211,7 @@ class SDK(object):
         config.close()
 
         # instantiate the project
-        self.projects[name] = Project.Project(install_path, name, desc, platform)
+        self.projects[name] = Project.Project(install_path, name, desc, platform, self.cb)
         self.projects[name].mount()
         return self.projects[name]
     

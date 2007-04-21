@@ -19,9 +19,10 @@ class FileSystem(object):
     usefull with the root filesystem will require the caller to use the
     'install' method for installing new RPM packages.
     """
-    def __init__(self, path, repos):
+    def __init__(self, path, repos, cb):
         if not path or not repos:
             raise ValueError("Empty argument passed in")
+        self.cb = cb
         self.path = os.path.abspath(os.path.expanduser(path))
         if not os.path.isfile(os.path.join(self.path, 'etc', 'buildstamp')):
             """
@@ -62,7 +63,7 @@ metadata_expire=1800
 
             # create a build timestamp file
             buildstamp = open(os.path.join(target_etc, 'buildstamp'), 'w')
-            print >> buildstamp, "%s %s-%s" % (SDK.SDK().version, socket.gethostname(), time.strftime("%d%m%Y%Z%H%M%s"))
+            print >> buildstamp, "%s %s-%s" % (SDK.SDK(self.cb).version, socket.gethostname(), time.strftime("%d%m%Y%Z%H%M%s"))
             buildstamp.close()
 
     def __createDevices(self):
@@ -90,7 +91,7 @@ metadata_expire=1800
 
         self.__rebuild_rpmlist(path)
 
-    def install(self, path, packages, cb):
+    def install(self, path, packages):
         """
         Call into yum to install RPM packages using the specified yum
         repositories
@@ -104,7 +105,7 @@ metadata_expire=1800
         p = subprocess.Popen(command.split())
         while p.poll() == None:
             try: 
-                cb.iteration(process=p)
+                self.cb.iteration(process=p)
             except:
                 pass
         if p.returncode != 0:
@@ -165,11 +166,15 @@ metadata_expire=1800
     def chroot(self, cmd_path, cmd_args):
         if not os.path.isfile(os.path.join(self.path, 'bin/bash')):
             raise ValueError, "Jailroot not installed"
-
         self.mount()
         cmd_line = "chroot %s %s %s" % (self.path, cmd_path, cmd_args)
-        ret = os.system(cmd_line)
-        return ret
+        p = subprocess.Popen(cmd_line.split())
+        while p.poll() == None:
+            try: 
+                self.cb.iteration(process=p)
+            except:
+                pass
+        return p.returncode
 
 class Project(FileSystem):
     """
@@ -177,14 +182,14 @@ class Project(FileSystem):
     build system from the host Linux distribution.  It also knows how to create
     new 'target' filesystems.
     """
-    def __init__(self, path, name, desc, platform):
+    def __init__(self, path, name, desc, platform, cb):
         if not path or not name or not desc or not platform:
             raise ValueError("Empty argument passed in")
         self.path = os.path.abspath(os.path.expanduser(path))
         self.name = name
         self.platform = platform
         self.desc = desc
-        FileSystem.__init__(self, self.path, self.platform.buildroot_repos)
+        FileSystem.__init__(self, self.path, self.platform.buildroot_repos, cb)
 
         # Create our targets directory
         targets_path = os.path.join(self.path, 'targets')
@@ -194,14 +199,14 @@ class Project(FileSystem):
         # Instantiate all targets
         self.targets = {}
         for dirname in os.listdir(targets_path):
-            target = Target(dirname, self)
+            target = Target(dirname, self, self.cb)
             self.targets[target.name] = target
 
-    def install(self, cb = None):
+    def install(self):
         """
         Install all the packages defined by Platform.buildroot_packages
         """
-        FileSystem.install(self, self.path, self.platform.buildroot_packages, cb)
+        FileSystem.install(self, self.path, self.platform.buildroot_packages)
 
     def update(self):
         FileSystem.update(self, self.path)
@@ -210,7 +215,7 @@ class Project(FileSystem):
         if not name:
             raise ValueError("Target name was not specified")
         if not name in self.targets:
-            self.targets[name] = Target(name, self)
+            self.targets[name] = Target(name, self, self.cb)
             self.targets[name].mount()
         return self.targets[name]
 
@@ -258,7 +263,7 @@ class Target(FileSystem):
     Represents a 'target' filesystem that will eventually be installed on the
     target device.
     """
-    def __init__(self, name, project):
+    def __init__(self, name, project, cb):
         if not name or not project:
             raise ValueError("Empty argument passed in")
         self.project = project
@@ -274,7 +279,7 @@ class Target(FileSystem):
             os.makedirs(self.image_path)
 
         # Instantiate the target filesystem
-        FileSystem.__init__(self, self.fs_path, project.platform.target_repos)
+        FileSystem.__init__(self, self.fs_path, project.platform.target_repos, cb)
 
     def installed_fsets(self):
         result = []
@@ -284,7 +289,7 @@ class Target(FileSystem):
         result.sort()
         return result
 
-    def installFset(self, fset, debug=0, fsets = None, seen_fsets = None, cb = None):
+    def installFset(self, fset, debug=0, fsets = None, seen_fsets = None):
         """
         Install a fset into the target filesystem.  If the fsets variable is
         supplied with a list of fsets then we will try to recursively install
@@ -308,7 +313,7 @@ class Target(FileSystem):
                 continue
             if not os.path.isfile(os.path.join(self.top, dep)):
                 if fsets:
-                    package_set.update(self.installFset(fsets[dep], fsets = fsets, debug = debug, seen_fsets = seen_fsets, cb = cb))
+                    package_set.update(self.installFset(fsets[dep], fsets = fsets, debug = debug, seen_fsets = seen_fsets))
                 else:
                     raise ValueError("fset %s must be installed first!" % (dep))
 
@@ -320,7 +325,7 @@ class Target(FileSystem):
         req_fsets = seen_fsets - set( [fset.name] )
         if req_fsets:
             print "Installing required Function Set: %s" % ' '.join(req_fsets)
-        FileSystem.install(self, self.fs_path, package_set, cb)
+        FileSystem.install(self, self.fs_path, package_set)
         # and now create a simple empty file that indicates that the fsets has
         # been installed.
         for fset_name in seen_fsets:
@@ -335,6 +340,10 @@ class Target(FileSystem):
                 % (self.name, self.path, self.fs_path, self.image_path))
     def __repr__(self):
         return "Target('%s', %s)" % (self.path, self.project)
+
+class Callback:
+    def iteration(process):
+        return
 
 if __name__ == '__main__':
     if len(sys.argv) != 6:
@@ -352,7 +361,7 @@ if __name__ == '__main__':
     target_name = sys.argv[4]
     platform_name = sys.argv[5]
 
-    sdk = SDK.SDK()
+    sdk = SDK.SDK(Callback())
 
     # verify the platform exists
     if not platform_name in sdk.platforms:
