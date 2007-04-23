@@ -16,6 +16,7 @@ basicinstall:
 	@cp -a platforms/* /usr/share/esdk/platforms/
 	@cp gui/*.glade /usr/share/esdk/
 	@cp project-builder /usr/sbin/
+	@cp COPYING /usr/share/esdk/
 	@cp ReleaseNotes.txt /usr/share/esdk/
 	@if [ -d /etc/security/console.apps ]; then \
 		ln -f -s /usr/bin/consolehelper /usr/bin/project-builder; \

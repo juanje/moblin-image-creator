@@ -201,12 +201,19 @@ class esdkMain(object):
             
     def on_about_activate(self, event):
         dialog = gtk.AboutDialog()
-        dialog.set_name('Embedded Linux SDK: Project Builder')
-        dialog.set_version('0.01 Pre-Alpha')
-        dialog.set_comments('This is the graphical user front-end to the project-builder utility')
-        dialog.set_license('TODO: Add License')
-        dialog.set_website('http://umd.jf.intel.com')
-        dialog.set_website_label('ESDK Developement')
+        dialog.set_name('Project Builder')
+        dialog.set_version(self.sdk.version)
+        dialog.set_comments("A tool for building Mobile and/or Single Purposed Linux Device Stacks")
+        try:
+            f = open(os.path.join(self.sdk.path, "COPYING"), "r")
+            dialog.set_license(f.read())
+            f.close()
+        except:
+            print >> sys.stderr, sys.exc_value
+            pass
+        dialog.set_copyright("Copyright Intel Corp. 2007")
+        dialog.set_website('http://ADDMYURLHERE')
+        dialog.set_website_label('Project Development Kit Home')
         dialog.run()
         dialog.destroy()
 

@@ -7,7 +7,7 @@
   <property name="width_request">400</property>
   <property name="height_request">400</property>
   <property name="visible">True</property>
-  <property name="title" translatable="yes">Intel eSDK</property>
+  <property name="title" translatable="yes">Project Builder</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
   <property name="window_position">GTK_WIN_POS_NONE</property>
   <property name="modal">False</property>
