@@ -1,7 +1,11 @@
 #!/usr/bin/python -tt
 # vim: ai ts=4 sts=4 et sw=4
 
-import ConfigParser, os, re, sys, unittest
+import ConfigParser
+import os
+import re
+import sys
+import unittest
 
 class FSet(object):
     """

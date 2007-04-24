@@ -1,11 +1,16 @@
 #!/usr/bin/python -tt
 # vim: ai ts=4 sts=4 et sw=4
 
-import os, sys, re, tempfile, shutil, traceback
+import os
+import re
+import shutil
+import sys
+import tempfile
+import traceback
 
-import SDK
-import Project
 import Mkinitrd
+import Project
+import SDK
 
 class SyslinuxCfg(object):
     def __init__(self, path, cfg_filename):

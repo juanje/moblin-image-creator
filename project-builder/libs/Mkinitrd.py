@@ -1,7 +1,11 @@
 #!/usr/bin/python -tt
 # vim: ai ts=4 sts=4 et sw=4
 
-import os, sys, re, tempfile, shutil
+import os
+import re
+import shutil
+import sys
+import tempfile
 
 import SDK
 
