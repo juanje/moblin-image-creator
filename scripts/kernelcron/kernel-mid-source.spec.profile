@@ -1,5 +1,5 @@
-# spec file for UMD kernel-source (Version @LEVEL@.@SUBLEVEL@@EXTRAVER@)
-# Copyright (c) 2007, Intel SSD-OTC-UMD
+# spec file for kernel-mccaslin (Version @LEVEL@.@SUBLEVEL@@EXTRAVER@)
+# Copyright (c) 2007, Intel Corp.
 # This file and all modifications and additions to the pristine
 # package are under the same license as the package itself.
 
