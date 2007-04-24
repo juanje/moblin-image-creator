@@ -2,7 +2,7 @@
 # vim: ai ts=4 sts=4 et sw=4
 
 import os, re, shutil, sys, tempfile, unittest
-sys.path.insert(0, '/usr/share/esdk/lib')
+sys.path.insert(0, '/usr/share/pdk/lib')
 import fsets
     
 class TestFset(unittest.TestCase):

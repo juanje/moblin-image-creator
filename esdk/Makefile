@@ -1,3 +1,5 @@
+SHAREDIR=/usr/share/pdk/
+
 all:
 
 # This target will do a cleanall and then reinstall
@@ -10,25 +12,29 @@ install: basicinstall runbasictests
 
 basicinstall:
 	@echo -n "Installing project-builder..."
-	@mkdir -p /usr/share/esdk/{lib,platforms,projects}
-	@cp libs/*.py  /usr/share/esdk/lib
-	@cp gui/*.py  /usr/share/esdk/lib
-	@cp -a platforms/* /usr/share/esdk/platforms/
-	@cp gui/*.glade /usr/share/esdk/
-	@cp project-builder /usr/sbin/
-	@cp COPYING /usr/share/esdk/
-	@cp ReleaseNotes.txt /usr/share/esdk/
+	@mkdir -p ${DESTDIR}/${SHAREDIR}{lib,platforms,projects}
+	@cp libs/*.py  ${DESTDIR}/${SHAREDIR}/lib
+	@cp gui/*.py  ${DESTDIR}/${SHAREDIR}/lib
+	@cp -a platforms/* ${DESTDIR}/${SHAREDIR}/platforms/
+	@cp gui/*.glade ${DESTDIR}/${SHAREDIR}
+	@cp COPYING ${DESTDIR}/${SHAREDIR}/
+	@cp ReleaseNotes.txt ${DESTDIR}/${SHAREDIR}/
+	@mkdir -p ${DESTDIR}/usr/{bin,sbin}
+	@cp project-builder ${DESTDIR}/usr/sbin/
 	@if [ -d /etc/security/console.apps ]; then \
-		ln -f -s /usr/bin/consolehelper /usr/bin/project-builder; \
-		cp project-builder.pam.d /etc/pam.d/project-builder; \
-		cp project-builder.helperconsole /etc/security/console.apps/project-builder; \
+		ln -f -s /usr/bin/consolehelper ${DESTDIR}/usr/bin/project-builder; \
+		mkdir -p ${DESTDIR}/etc/pam.d; \
+		mkdir -p ${DESTDIR}/etc/security/console.apps; \
+		cp project-builder.pam.d ${DESTDIR}/etc/pam.d/project-builder; \
+		cp project-builder.helperconsole ${DESTDIR}/etc/security/console.apps/project-builder; \
 	else \
-		cp project-builder-launcher /usr/bin/project-builder; \
+		cp project-builder-launcher ${DESTDIR}/usr/bin/project-builder; \
 	fi
-	@if [ ! -d /etc/bash_completion.d/ ]; then \
-	    mkdir /etc/bash_completion.d; \
+	@if [ ! -d ${DESTDIR}/etc/bash_completion.d/ ]; then \
+	    	mkdir ${DESTDIR}/etc/bash_completion.d; \
 	fi
-	@cp utils/project-builder-completion.bash /etc/bash_completion.d/
+	@mkdir -p ${DESTDIR}/etc/bash_completion.d/
+	@cp utils/project-builder-completion.bash ${DESTDIR}/etc/bash_completion.d/
 	@echo "Done"
 
 # Cleans out the current directory cruft
@@ -42,12 +48,12 @@ clean:
 # Cleans out the installation target
 cleanall: clean
 	@echo -n "Removing previously installed files..."
-	@rm -rf /usr/share/esdk/lib
-	@rm -rf /usr/share/esdk/platforms
-	@rm -f /usr/share/esdk/*.glade
-	@rm -f /usr/bin/project-builder
-	@rm -f /usr/sbin/project-builder
-	@rm -f /etc/bash_completion.d/project-builder-completion.bash
+	@rm -rf ${DESTDIR}/${SHAREDIR}/lib
+	@rm -rf ${DESTDIR}/${SHAREDIR}/platforms
+	@rm -f ${DESTDIR}/${SHAREDIR}/*.glade
+	@rm -f ${DESTDIR}/usr/bin/project-builder
+	@rm -f ${DESTDIR}/usr/sbin/project-builder
+	@rm -f ${DESTDIR}/etc/bash_completion.d/project-builder-completion.bash
 	@echo "Done"
 
 # Run the unit tests which run fairly quickly

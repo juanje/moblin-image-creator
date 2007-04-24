@@ -5,7 +5,7 @@ import os, re, shutil, sys, tempfile, unittest
 
 import testSdk
 
-sys.path.insert(0, '/usr/share/esdk/lib')
+sys.path.insert(0, '/usr/share/pdk/lib')
 import InstallImage, SDK
 
 class Callback:
@@ -15,14 +15,14 @@ class Callback:
 class TestInstallImage(unittest.TestCase):
     def setUp(self):
         self.workdir = tempfile.mkdtemp()
-        self.esdk_dir = os.path.join(self.workdir, 'esdk')
-        os.mkdir(self.esdk_dir)
-        testSdk.createEsdkSampleDir(self.esdk_dir)
+        self.pdk_dir = os.path.join(self.workdir, 'pdk')
+        os.mkdir(self.pdk_dir)
+        testSdk.createPdkSampleDir(self.pdk_dir)
 
         self.project_dir = os.path.join(self.workdir, 'project')
         os.mkdir(self.project_dir)
 
-        self.sdk = SDK.SDK(path = self.esdk_dir, cb = Callback())
+        self.sdk = SDK.SDK(path = self.pdk_dir, cb = Callback())
 
         self.proj_path = os.path.join(self.project_dir, 'project_unittest')
         self.proj_name = "unittest-281d8183ckd"

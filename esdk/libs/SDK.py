@@ -2,7 +2,7 @@
 # vim: ai ts=4 sts=4 et sw=4
 
 """
-Embedded Linux SDK (esdk) main module
+Embedded Linux SDK main module
 
 The SDK allows a developer to use any yum repository as seed material
 for building a target filesystem for an embedded device.
@@ -131,21 +131,13 @@ class ConfigFile(object):
         config.close()
 
 class PackageConfig(ConfigFile):
-    """
-    The PackageConfig class abstracts a SDK project configuration file.
-
-    example usage:
-    config = PackageConfig('/usr/share/esdk/projects/myproject.proj')
-    print '~/esdk/myproject.proj: name=%s desc=%s path=%s platform=%s' %
-          (config.name, config.desc, config.path, config.platform)
-    """
     def __init__(self, path):
         self.path = path
         ConfigFile.__init__(self, path, ['name', 'desc', 'path', 'platform'])
         
 
 class SDK(object):
-    def __init__(self, cb, path='/usr/share/esdk'):
+    def __init__(self, cb, path='/usr/share/pdk'):
         self.version = "0.1"
         self.path = os.path.abspath(os.path.expanduser(path))
         self.cb = cb
@@ -187,7 +179,7 @@ class SDK(object):
         #   - create the initial directory structure
         #   - setup the project configuration files both inside the project
         #     directory, and also 'create the project config' in
-        #     /usr/share/esdk/projects/
+        #     /usr/share/pdk/projects/
 
         proj = SDK().create_project(self, '~/projects/myproject',
                                     'My Project',

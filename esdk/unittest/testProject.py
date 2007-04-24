@@ -2,7 +2,7 @@
 # vim: ai ts=4 sts=4 et sw=4
 
 import os, re, shutil, sys, tempfile, unittest
-sys.path.insert(0, '/usr/share/esdk/lib')
+sys.path.insert(0, '/usr/share/pdk/lib')
 import Platform
 import Project
 
@@ -30,7 +30,7 @@ class TestFileSystem(unittest.TestCase):
         out_file = open(filename, 'w')
         # Let's create a repo
         print >> out_file, """\
-[esdk-base]
+[pdk-base]
 name=Fedora Core $releasever - $basearch - Base
 baseurl=http://linux-ftp.jf.intel.com/pub/mirrors/fedora/linux/core/6/$basearch/os/
 enabled=1

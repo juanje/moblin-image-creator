@@ -1,28 +1,17 @@
 #!/usr/bin/python -tt
 # vim: ai ts=4 sts=4 et sw=4
 
-import gobject
-import gtk
-import gtk.glade
-import os
-import pygtk
-import traceback
-import time
-import shutil
+import gobject, gtk, gtk.glade, pygtk, os, traceback, time, shutil
+import SDK, pdk
 
-import SDK
-import esdk
-
-global gladefile
-gladefile = "/usr/share/esdk/esdk.glade"
-if not os.path.isfile(gladefile):
-    raise IOError, "Glade file is missing from: %s" % gladefile
-
-class esdkMain(object):
+class App(object):
     """This is our main"""
     def __init__(self):
         self.sdk = SDK.SDK(cb = self)
-        self.widgets = gtk.glade.XML (gladefile, 'main')
+        self.gladefile = os.path.join(self.sdk.path, "project-builder.glade")
+        if not os.path.isfile(self.gladefile):
+            raise IOError, "Glade file is missing from: %s" % self.gladefile
+        self.widgets = gtk.glade.XML (self.gladefile, 'main')
         dic = {"on_main_destroy_event" : gtk.main_quit,
                 "on_quit_activate" : gtk.main_quit,
                 "on_relnotes_activate" : self.on_relnotes_activate,
@@ -72,6 +61,9 @@ class esdkMain(object):
         self.projectView.get_selection().connect("changed", self.project_view_changed)
         self.targetView.get_selection().connect("changed", self.target_view_changed)
 
+    def run(self):
+        gtk.main()
+        
     def on_relnotes_activate(self, widget):
         window = gtk.Window(gtk.WINDOW_TOPLEVEL)
         window.set_title("Project Builder Release Notes")
@@ -97,7 +89,7 @@ class esdkMain(object):
 
         box2.pack_start(scroll)
 
-        rel_file = open("/usr/share/esdk/ReleaseNotes.txt", "r")
+        rel_file = open("/usr/share/pdk/ReleaseNotes.txt", "r")
 
         if rel_file:
             txt = rel_file.read()
@@ -173,7 +165,7 @@ class esdkMain(object):
         platform = ""
         path = ""
         while True:
-            dialog = AddNewProject(sdk = self.sdk, name = name, desc = desc, platform = platform, path = path)
+            dialog = AddNewProject(sdk = self.sdk, name = name, gladefile = self.gladefile, desc = desc, platform = platform, path = path)
             result = dialog.run()
             if result != gtk.RESPONSE_OK:
                 break
@@ -187,7 +179,7 @@ class esdkMain(object):
             path = dialog.path
         if result == gtk.RESPONSE_OK:
             try:
-                progress_tree = gtk.glade.XML(gladefile, 'ProgressDialog')
+                progress_tree = gtk.glade.XML(self.gladefile, 'ProgressDialog')
                 progress_dialog = progress_tree.get_widget('ProgressDialog')
                 progress_dialog.connect('delete_event', self.ignore)
                 progress_tree.get_widget('progress_label').set_text("Please wait while installing %s" % dialog.name)
@@ -220,7 +212,7 @@ class esdkMain(object):
     def on_projectDelete_clicked(self, event):
         """Delete a Project"""
         project = self.current_project()
-        tree = gtk.glade.XML(gladefile, 'qDialog')
+        tree = gtk.glade.XML(self.gladefile, 'qDialog')
         tree.get_widget('queryLabel').set_text("Delete the %s project?" % (project.name))
         dialog = tree.get_widget('qDialog')
         if dialog.run() == gtk.RESPONSE_OK:
@@ -231,7 +223,7 @@ class esdkMain(object):
     def on_new_target_add_clicked(self, widget):
         # Open the "New Target" dialog
         while True:
-            widgets = gtk.glade.XML(gladefile, 'nt_dlg')
+            widgets = gtk.glade.XML(self.gladefile, 'nt_dlg')
             dialog = widgets.get_widget('nt_dlg')
             dialog.set_default_response(gtk.RESPONSE_OK)
             result = dialog.run()
@@ -250,7 +242,7 @@ class esdkMain(object):
         dialog.destroy()
 
     def on_install_fset(self, widget):
-        tree = gtk.glade.XML(gladefile, 'installFsetDialog')
+        tree = gtk.glade.XML(self.gladefile, 'installFsetDialog')
         dialog = tree.get_widget('installFsetDialog')
         platform = self.current_project().platform
         label = tree.get_widget('fset-desc-label')
@@ -276,7 +268,7 @@ class esdkMain(object):
             fset = platform.fset[cebox.child.get_text()]
             debug = checkbox.get_active()
             dialog.destroy()
-            progress_tree = gtk.glade.XML(gladefile, 'ProgressDialog')
+            progress_tree = gtk.glade.XML(self.gladefile, 'ProgressDialog')
             progress_dialog = progress_tree.get_widget('ProgressDialog')
             progress_dialog.connect('delete_event', self.ignore)
             self.progressbar = progress_tree.get_widget('progressbar')
@@ -307,7 +299,7 @@ class esdkMain(object):
     def on_delete_target_clicked(self, widget):
         project = self.current_project()
         target = self.current_target()
-        tree = gtk.glade.XML(gladefile, 'qDialog')
+        tree = gtk.glade.XML(self.gladefile, 'qDialog')
         tree.get_widget('queryLabel').set_text("Delete target %s from project %s?" % (target.name, project.name))
         dialog = tree.get_widget('qDialog')
         if dialog.run() == gtk.RESPONSE_OK:
@@ -332,7 +324,7 @@ class esdkMain(object):
         self.targetList.remove(iter)
 
     def show_error_dialog(self, message="An unknown error has occurred!"):
-        widgets = gtk.glade.XML(gladefile, 'error_dialog')
+        widgets = gtk.glade.XML(self.gladefile, 'error_dialog')
         widgets.get_widget('error_label').set_text(message)
         dialog = widgets.get_widget('error_dialog')
         dialog.run()
@@ -353,13 +345,13 @@ class esdkMain(object):
     def on_liveUSB_clicked(self, widget):
         project = self.current_project()
         target = self.current_target()
-        widgets = gtk.glade.XML(gladefile, 'new_img_dlg')
+        widgets = gtk.glade.XML(self.gladefile, 'new_img_dlg')
         dialog = widgets.get_widget('new_img_dlg')
         result = dialog.run()
         img_name = widgets.get_widget('img_name').get_text()
         dialog.destroy()
         if result == gtk.RESPONSE_OK:
-            progress_tree = gtk.glade.XML(gladefile, 'ProgressDialog')
+            progress_tree = gtk.glade.XML(self.gladefile, 'ProgressDialog')
             progress_dialog = progress_tree.get_widget('ProgressDialog')
             progress_dialog.connect('delete_event', self.ignore)
             progress_tree.get_widget('progress_label').set_text("Please wait while while creating %s" % img_name)
@@ -375,13 +367,13 @@ class esdkMain(object):
     def on_liveRWUSB_clicked(self, widget):
         project = self.current_project()
         target = self.current_target()
-        widgets = gtk.glade.XML(gladefile, 'new_img_dlg')
+        widgets = gtk.glade.XML(self.gladefile, 'new_img_dlg')
         dialog = widgets.get_widget('new_img_dlg')
         result = dialog.run()
         img_name = widgets.get_widget('img_name').get_text()
         dialog.destroy()
         if result == gtk.RESPONSE_OK:
-            progress_tree = gtk.glade.XML(gladefile, 'ProgressDialog')
+            progress_tree = gtk.glade.XML(self.gladefile, 'ProgressDialog')
             progress_dialog = progress_tree.get_widget('ProgressDialog')
             progress_dialog.connect('delete_event', self.ignore)
             progress_tree.get_widget('progress_label').set_text("Please wait while creating %s" % img_name)
@@ -397,13 +389,13 @@ class esdkMain(object):
     def on_installUSB_clicked(self, widget):
         project = self.current_project()
         target = self.current_target()
-        widgets = gtk.glade.XML(gladefile, 'new_img_dlg')
+        widgets = gtk.glade.XML(self.gladefile, 'new_img_dlg')
         dialog = widgets.get_widget('new_img_dlg')
         result = dialog.run()
         img_name = widgets.get_widget('img_name').get_text()
         dialog.destroy()
         if result == gtk.RESPONSE_OK:
-            progress_tree = gtk.glade.XML(gladefile, 'ProgressDialog')
+            progress_tree = gtk.glade.XML(self.gladefile, 'ProgressDialog')
             progress_dialog = progress_tree.get_widget('ProgressDialog')
             progress_dialog.connect('delete_event', self.ignore)
             progress_tree.get_widget('progress_label').set_text("Please wait while creating %s" % img_name)
@@ -419,13 +411,13 @@ class esdkMain(object):
     def on_installISO_clicked(self, widget):
         project = self.current_project()
         target = self.current_target()
-        widgets = gtk.glade.XML(gladefile, 'new_img_dlg')
+        widgets = gtk.glade.XML(self.gladefile, 'new_img_dlg')
         dialog = widgets.get_widget('new_img_dlg')
         result = dialog.run()
         img_name = widgets.get_widget('img_name').get_text()
         dialog.destroy()
         if result == gtk.RESPONSE_OK:
-            progress_tree = gtk.glade.XML(gladefile, 'ProgressDialog')
+            progress_tree = gtk.glade.XML(self.gladefile, 'ProgressDialog')
             progress_dialog = progress_tree.get_widget('ProgressDialog')
             progress_dialog.connect('delete_event', self.ignore)
             progress_tree.get_widget('progress_label').set_text("Please wait while creating %s" % img_name)
@@ -441,13 +433,13 @@ class esdkMain(object):
     def on_liveISO_clicked(self, widget):
         project = self.current_project()
         target = self.current_target()
-        widgets = gtk.glade.XML(gladefile, 'new_img_dlg')
+        widgets = gtk.glade.XML(self.gladefile, 'new_img_dlg')
         dialog = widgets.get_widget('new_img_dlg')
         result = dialog.run()
         img_name = widgets.get_widget('img_name').get_text()
         dialog.destroy()
         if result == gtk.RESPONSE_OK:
-            progress_tree = gtk.glade.XML(gladefile, 'ProgressDialog')
+            progress_tree = gtk.glade.XML(self.gladefile, 'ProgressDialog')
             progress_dialog = progress_tree.get_widget('ProgressDialog')
             progress_dialog.connect('delete_event', self.ignore)
             progress_tree.get_widget('progress_label').set_text("Please wait while creating %s" % img_name)
@@ -474,10 +466,10 @@ class esdkMain(object):
             targetfilename=dialog.get_filename()
             print "Selected file name: %s " % targetfilename
             dialog.destroy()
-            widgets = gtk.glade.XML(gladefile, 'select_usb_disk_dialog')
+            widgets = gtk.glade.XML(self.gladefile, 'select_usb_disk_dialog')
             dialog2 = widgets.get_widget('select_usb_disk_dialog')
             usb_dev_list = gtk.ListStore(gobject.TYPE_STRING)
-            usb_disk_list = esdk.get_current_udisks()
+            usb_disk_list = pdk.get_current_udisks()
             if not usb_disk_list:
                 self.show_error_dialog('No USB disk detected! Please plug in your USB disk and try again!')
                 dialog2.destroy()
@@ -500,7 +492,7 @@ class esdkMain(object):
                     self.show_error_dialog('No USB disk selected!')
                 else:
                     print "Selected USB disk %s" % model[iter][0]
-                    if not esdk.umount_device(model[iter][0]):
+                    if not pdk.umount_device(model[iter][0]):
                         self.show_error_dialog("Can not umount %s. Please close any shells or opened files still under mount point and try again!" % model[iter][0])
                         dialog2.destroy()
                         return -1
@@ -510,7 +502,7 @@ class esdkMain(object):
 #Class: Adding a New Project
 class AddNewProject(object):
     """Class to bring up AddNewProject dialogue"""
-    def __init__(self, sdk, name="", desc="", path="", platform=""):
+    def __init__(self, sdk, gladefile, name="", desc="", path="", platform=""):
         self.sdk = sdk
         widgets = gtk.glade.XML (gladefile, 'newProject')
         widgets.signal_autoconnect({"on_browse": self.on_browse})
@@ -601,5 +593,5 @@ def print_exc_plus():
     traceback.print_exc()
 
 if __name__ == '__main__':
-    esdk = esdkMain()
-    gtk.main()
+    pdk = App()
+    pdk.run()

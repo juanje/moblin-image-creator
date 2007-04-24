@@ -6,7 +6,7 @@ import sys, os, string, traceback
 
 from optparse import OptionParser
 
-sys.path.insert(0, '/usr/share/esdk/lib')
+sys.path.insert(0, '/usr/share/pdk/lib')
 import SDK
 
 debug = True
@@ -36,18 +36,13 @@ def main():
         sys.exit(1)
 
     if len(sys.argv) == 1:
-        gui.esdkMain()
-        gui.gtk.main()
-        return 0
-
-#         try:
-#             gui.esdkMain()
-#             gui.gtk.main()
-#             return 0
-#         except:
-#             print "Error: Unable to run the GUI, maybe you are in a text console"
-#             print "Do -h for help"
-#             return 1
+        try:
+            gui.App().run()
+            return 0
+        except:
+            print "Error: Unable to run the GUI, maybe you are in a text console"
+            print "Do -h for help"
+            return 1
 
     options, args = parseCommandLine()
     if options.cmd == "list-platforms":

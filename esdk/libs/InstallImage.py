@@ -334,7 +334,7 @@ class BaseUsbImage(InstallImage):
 
     def mount_container(self):
         if not self.tmp_path:
-            self.tmp_path = tempfile.mkdtemp('','esdk-', '/tmp')
+            self.tmp_path = tempfile.mkdtemp('','pdk-', '/tmp')
             cmd_line = "mount -o loop -t vfat %s %s" % (self.path, self.tmp_path)
             result = os.system(cmd_line)
             if result:

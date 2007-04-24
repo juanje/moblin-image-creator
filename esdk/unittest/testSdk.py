@@ -5,7 +5,7 @@ import os, re, shutil, sys, tempfile, unittest
 
 import testPlatform
 
-sys.path.insert(0, '/usr/share/esdk/lib')
+sys.path.insert(0, '/usr/share/pdk/lib')
 import SDK
 
 class Callback:
@@ -15,7 +15,7 @@ class Callback:
 class TestSDK(unittest.TestCase):
     def setUp(self):
         self.workdir = tempfile.mkdtemp()
-        createEsdkSampleDir(self.workdir)
+        createPdkSampleDir(self.workdir)
     def tearDown(self):
         if os.path.isdir(self.workdir):
             shutil.rmtree(self.workdir)
@@ -29,7 +29,7 @@ class TestSDK(unittest.TestCase):
         temp = sdk.__str__()
         temp = sdk.__repr__()
 
-def createEsdkSampleDir(root_dir):
+def createPdkSampleDir(root_dir):
     # Create our directories
     for dirname in ['projects', 'platforms']:
         full_path = os.path.join(root_dir, dirname)

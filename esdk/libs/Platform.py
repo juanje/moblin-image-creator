@@ -53,4 +53,4 @@ class Platform(object):
 
 if __name__ == '__main__':
     for p in sys.argv[1:]:
-        print Platform('/usr/share/esdk', p)
+        print Platform('/usr/share/pdk', p)

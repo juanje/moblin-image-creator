@@ -58,7 +58,7 @@ def create(project, initrd_file, fs_type='RAMFS'):
 
     save_cwd = os.getcwd()
     # Create scratch area for creating files
-    scratch_path = tempfile.mkdtemp('','esdk-', '/tmp')
+    scratch_path = tempfile.mkdtemp('','pdk-', '/tmp')
 
     # Setup initrd directory tree
     bin_path = os.path.join(scratch_path, 'bin')
