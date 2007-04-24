@@ -20,7 +20,7 @@ devices.
 make
 
 %install
-make install
+make DESTDIR=$RPM_BUILD_ROOT basicinstall
 
 %clean
 rm -rf %{buildroot}
@@ -28,6 +28,11 @@ rm -rf %{buildroot}
 %files
 %defattr(-,root,root)
 /usr/share/pdk/*
+/etc/bash_completion.d/project-builder-completion.bash
+/etc/security/console.apps/project-builder
+/etc/pam.d/project-builder
+/usr/bin/project-builder
+/usr/sbin/project-builder
 
 %changelog
 * Sat Apr 21 2007 Rusty Lynch <rusty.lynch@intel.com>
