@@ -20,7 +20,7 @@ ExclusiveArch: i586 x86_64
 ExclusiveOs: linux
 
 # primary package definition
-Name: kernel-umd-source
+Name: kernel-mid-source
 License: GPL
 Provides: Linux
 Autoreqprov: off
@@ -30,8 +30,7 @@ PreReq: /bin/grep /bin/sed /bin/uname /bin/mkdir /bin/cat /bin/ln /bin/rm
 Version: %{kversion}@EXTRAVER2@
 @RELEASE@
 
-BuildPreReq: nash, module-init-tools
-
+BuildPreReq: nash, module-init-tools, gzip
 
 # put sources here
 Source0: @URL@linux-%{krelease}.tar.bz2
@@ -69,33 +68,33 @@ This is kernel version special for Intel UMD release.
 %post -f source-post.sh
 
 # package for kernel headers
-%package -n kernel-umd-headers
-Summary:    umd kernel headers
+%package -n kernel-mid-headers
+Summary:    mid kernel headers
 Group:	    Development/System
 Obsoletes:  glibc-kernheaders
 Provides:   glibc-kernheaders = 3.0-46
 
-%description -n kernel-umd-headers
+%description -n kernel-mid-headers
 Kernel-headers includes the C header files that specify the interface
 between the Linux kernel and userspace libraries and programs.  The
 header files define structures and constants that are needed for
 building most standard programs and are also needed for rebuilding the
 glibc package.
 
-%files -n kernel-umd-headers
+%files -n kernel-mid-headers
 %defattr(-,root,root)
 /usr/include/*
 
 # package for default 
-%package -n kernel-umd-default
+%package -n kernel-mid-default
 Summary:    default built kernel binary package
 Group:       System/Kernel
 Provides:    kernel = %{krelease}
 
-%description -n kernel-umd-default
+%description -n kernel-mid-default
 This is kernel version special for Intel UMD release.
 
-%files -n kernel-umd-default
+%files -n kernel-mid-default
 %defattr(-, root, root)
 /boot/vmlinuz-%{krelease}-default
 /boot/vmlinux-%{krelease}-default
@@ -118,15 +117,15 @@ This is kernel version special for Intel UMD release.
 /usr/src/kernels/%{krelease}-default-%{_target_cpu}
 
 # package for developer 
-%package -n kernel-umd-developer
-Summary:    umd developer built kernel binary package
+%package -n kernel-mid-developer
+Summary:    mid developer built kernel binary package
 Group:       System/Kernel
 Provides:    kernel = %{krelease}
 
-%description -n kernel-umd-developer
+%description -n kernel-mid-developer
 This is kernel version special for Intel UMD release.
 
-%files -n kernel-umd-developer
+%files -n kernel-mid-developer
 %defattr(-, root, root)
 /boot/vmlinuz-%{krelease}-developer
 /boot/vmlinux-%{krelease}-developer
@@ -164,7 +163,7 @@ if [ "%{target}" == "redhat" ]; then
      /sbin/new-kernel-pkg --package kernel --depmod --install %{krelease}-default || exit $?
   else
     installkernel %{krelease}-default 
-    depmod %{krelease}-default
+    /sbin/depmod %{krelease}-default
   fi
   if [ -x /sbin/weak-modules ]
   then
@@ -185,7 +184,7 @@ if [ "%{target}" == "redhat" ]; then
      /sbin/new-kernel-pkg --package kernel --depmod --install %{krelease}-developer || exit $?
   else
      installkernel %{krelease}-developer
-     depmod %{krelease}-developer
+     /sbin/depmod %{krelease}-developer
      installkernel %{krelease}-developer --withserial
   fi
   updatedeveloperetc
@@ -231,13 +230,13 @@ else
 ) > postun-developer.sh
 fi
 
-%post -n kernel-umd-default -f post-default.sh
+%post -n kernel-mid-default -f post-default.sh
 
-%post -n kernel-umd-developer -f post-developer.sh
+%post -n kernel-mid-developer -f post-developer.sh
 
 %if "%{target}" != "redhat"
-%postun -n kernel-umd-developer -f postun-developer.sh
-%postun -n kernel-umd-default -f postun-default.sh
+%postun -n kernel-mid-developer -f postun-developer.sh
+%postun -n kernel-mid-default -f postun-default.sh
 %endif
 
 # =====================Prepare==========================
@@ -245,7 +244,7 @@ fi
 %prep
 echo        "Start to build kernel RPMS for UMD Release"
 echo        "possible configs are:"
-for i in %{all_umd_configs}
+for i in %{all_mid_configs}
 do
     echo $i
 done
