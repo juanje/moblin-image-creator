@@ -4,6 +4,7 @@ all:
 
 # This target will do a cleanall and then reinstall
 cleaninstall: cleanall install
+
 # Same as cleaninstall
 runtests: cleaninstall
 
@@ -20,18 +21,11 @@ basicinstall:
 	@cp COPYING ${DESTDIR}/${SHAREDIR}/
 	@mkdir -p ${DESTDIR}/usr/{bin,sbin}
 	@cp project-builder ${DESTDIR}/usr/sbin/
-	@if [ -d /etc/security/console.apps ]; then \
-		ln -f -s /usr/bin/consolehelper ${DESTDIR}/usr/bin/project-builder; \
-		mkdir -p ${DESTDIR}/etc/pam.d; \
-		mkdir -p ${DESTDIR}/etc/security/console.apps; \
-		cp project-builder.pam.d ${DESTDIR}/etc/pam.d/project-builder; \
-		cp project-builder.helperconsole ${DESTDIR}/etc/security/console.apps/project-builder; \
-	else \
-		cp project-builder-launcher ${DESTDIR}/usr/bin/project-builder; \
-	fi
-	@if [ ! -d ${DESTDIR}/etc/bash_completion.d/ ]; then \
-	    	mkdir ${DESTDIR}/etc/bash_completion.d; \
-	fi
+	@ln -f -s /usr/bin/consolehelper ${DESTDIR}/usr/bin/project-builder
+	@mkdir -p ${DESTDIR}/etc/pam.d
+	@mkdir -p ${DESTDIR}/etc/security/console.apps
+	@cp project-builder.pam.d ${DESTDIR}/etc/pam.d/project-builder
+	@cp project-builder.helperconsole ${DESTDIR}/etc/security/console.apps/project-builder
 	@mkdir -p ${DESTDIR}/etc/bash_completion.d/
 	@cp utils/project-builder-completion.bash ${DESTDIR}/etc/bash_completion.d/
 	@mkdir -p ${DESTDIR}/${SHAREDIR}/gnome/help/project-builder/

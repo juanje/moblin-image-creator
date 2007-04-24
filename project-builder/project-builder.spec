@@ -8,6 +8,9 @@ Source: %{name}-%{version}.tgz
 Buildroot: %{_tmppath}/%{name}-root
 BuildRequires: bash tcsh gzip
 Requires: python >= 2.4
+Requires: pam
+Requires: usermode
+Requires: bash-completion
 
 %description
 Development Kit for creating Linux stacks for mobile or single purposed
