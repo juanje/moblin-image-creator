@@ -1,10 +1,18 @@
 #!/usr/bin/python -tt
 # vim: ai ts=4 sts=4 et sw=4
 
-import glob, os, shutil, socket, stat, sys, time, re, subprocess
+import glob
+import os
+import re
+import shutil
+import socket
+import stat
+import subprocess
+import sys
+import time
 
-import SDK
 import InstallImage
+import SDK
 
 class FileSystem(object):
     """

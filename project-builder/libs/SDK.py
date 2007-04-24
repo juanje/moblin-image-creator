@@ -97,8 +97,13 @@ target.installFset(fset, 1)
 
 """
 
-import os, re, shutil, sys
-import Platform, Project
+import os
+import re
+import shutil
+import sys
+
+import Platform
+import Project
 
 class ConfigFile(object):
     """

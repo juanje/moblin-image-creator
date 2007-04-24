@@ -1,7 +1,10 @@
 #!/usr/bin/python -tt
 # vim: ai ts=4 sts=4 et sw=4
 
-import os, re, sys
+import os
+import re
+import sys
+
 import fsets
 
 class Platform(object):
