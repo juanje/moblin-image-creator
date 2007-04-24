@@ -18,7 +18,6 @@ basicinstall:
 	@cp -a platforms/* ${DESTDIR}/${SHAREDIR}/platforms/
 	@cp gui/*.glade ${DESTDIR}/${SHAREDIR}
 	@cp COPYING ${DESTDIR}/${SHAREDIR}/
-	@cp ReleaseNotes.txt ${DESTDIR}/${SHAREDIR}/
 	@mkdir -p ${DESTDIR}/usr/{bin,sbin}
 	@cp project-builder ${DESTDIR}/usr/sbin/
 	@if [ -d /etc/security/console.apps ]; then \
