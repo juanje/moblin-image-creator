@@ -2,7 +2,7 @@
 # vim: ai ts=4 sts=4 et sw=4
 
 import gobject, gtk, gtk.glade, pygtk, os, traceback, time, shutil
-import SDK, pdk
+import SDK, Utils
 
 class App(object):
     """This is our main"""
@@ -469,7 +469,7 @@ class App(object):
             widgets = gtk.glade.XML(self.gladefile, 'select_usb_disk_dialog')
             dialog2 = widgets.get_widget('select_usb_disk_dialog')
             usb_dev_list = gtk.ListStore(gobject.TYPE_STRING)
-            usb_disk_list = pdk.get_current_udisks()
+            usb_disk_list = Utils.get_current_udisks()
             if not usb_disk_list:
                 self.show_error_dialog('No USB disk detected! Please plug in your USB disk and try again!')
                 dialog2.destroy()
@@ -492,7 +492,7 @@ class App(object):
                     self.show_error_dialog('No USB disk selected!')
                 else:
                     print "Selected USB disk %s" % model[iter][0]
-                    if not pdk.umount_device(model[iter][0]):
+                    if not Utils.umount_device(model[iter][0]):
                         self.show_error_dialog("Can not umount %s. Please close any shells or opened files still under mount point and try again!" % model[iter][0])
                         dialog2.destroy()
                         return -1
@@ -593,5 +593,5 @@ def print_exc_plus():
     traceback.print_exc()
 
 if __name__ == '__main__':
-    pdk = App()
-    pdk.run()
+    app = App()
+    app.run()
