@@ -1,20 +1,22 @@
 #!/usr/bin/python -tt
 # vim: ai ts=4 sts=4 et sw=4
 
-import gobject, gtk, gtk.glade, pygtk, os, traceback, time, shutil
+import gnome, gobject, gtk, gtk.glade, pygtk, os, traceback, time, shutil
 import SDK, Utils
 
 class App(object):
     """This is our main"""
     def __init__(self):
+
         self.sdk = SDK.SDK(cb = self)
         self.gladefile = os.path.join(self.sdk.path, "project-builder.glade")
         if not os.path.isfile(self.gladefile):
             raise IOError, "Glade file is missing from: %s" % self.gladefile
+        gnome.init('project-builder', self.sdk.version, properties = {'app-datadir':self.sdk.path})
         self.widgets = gtk.glade.XML (self.gladefile, 'main')
         dic = {"on_main_destroy_event" : gtk.main_quit,
                 "on_quit_activate" : gtk.main_quit,
-                "on_relnotes_activate" : self.on_relnotes_activate,
+                "on_help_activate" : self.on_help_activate,
                 "on_newProject_clicked" : self.on_newProject_clicked,
                 "on_projectDelete_clicked": self.on_projectDelete_clicked,
                 "on_new_target_add_clicked": self.on_new_target_add_clicked,
@@ -64,38 +66,8 @@ class App(object):
     def run(self):
         gtk.main()
         
-    def on_relnotes_activate(self, widget):
-        window = gtk.Window(gtk.WINDOW_TOPLEVEL)
-        window.set_title("Project Builder Release Notes")
-        window.set_resizable(True)
-        window.set_default_size(400, 400)
-        window.set_border_width(0)
-
-        box1 = gtk.VBox(False, 0)
-        window.add(box1)
-        box1.show()
-
-        box2 = gtk.VBox(False, 10)
-        box1.pack_start(box2, True, True, 0)
-        box2.show()
-
-        scroll = gtk.ScrolledWindow()
-        scroll.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_AUTOMATIC)
-        textview = gtk.TextView()
-        textbuffer = textview.get_buffer()
-        scroll.add(textview)
-        scroll.show()
-        textview.show()
-
-        box2.pack_start(scroll)
-
-        rel_file = open("/usr/share/pdk/ReleaseNotes.txt", "r")
-
-        if rel_file:
-            txt = rel_file.read()
-            rel_file.close()
-            textbuffer.set_text(txt)
-        window.show()
+    def on_help_activate(self, widget):
+        gnome.help_display('project-builder')
 
     def target_view_changed(self, selection):
         model, iter = self.targetView.get_selection().get_selected()

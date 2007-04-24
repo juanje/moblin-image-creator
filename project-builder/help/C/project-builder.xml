@@ -1,0 +1,83 @@
+<?xml version="1.0"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN" 
+"http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
+  <!ENTITY legal SYSTEM "legal.xml">
+  <!ENTITY app "Project Builder">  
+  <!ENTITY appversion "0.1">
+  <!ENTITY manrevision "0">
+  <!ENTITY date "April 2007">
+]>
+<article id="index" lang="en"> 
+  <articleinfo> 
+     <title>&app; Manual</title> 
+     <abstract role="description">
+       <para>
+	 User manual for the Project Builder Tool.
+       </para>
+     </abstract>
+     <copyright> 
+        <year>2007</year> 
+        <holder>Intel Corp.</holder> 
+     </copyright> 
+     <publisher> 
+        <publishername>Project Builder Documentation Team</publishername> 
+     </publisher> &legal; 
+     <authorgroup> 
+        <author> 
+          <firstname>Intel</firstname> 
+          <surname>GNOME Documentation Team</surname> 
+          <affiliation> 
+             <orgname>Intel Corp.</orgname> 
+          </affiliation> 
+        </author> 
+     </authorgroup> 
+     <revhistory> 
+        <revision> 
+          <revnumber>&app; Manual V&manrevision;</revnumber> 
+          <date>&date;</date> 
+          <revdescription> 
+             <para role="author">
+                Project Builder Documentation Team
+             </para>
+             <para role="publisher">
+                Project Builder Documentation Team 
+             </para>
+          </revdescription> 
+        </revision> 
+	<revision> 
+          <revnumber>Project Builder V0.1</revnumber> 
+          <date>April 2007</date> 
+          <revdescription> 
+             <para role="author">Project Builder Documentation Team</para>
+             <para role="publisher">Project Builder Documentation Project</para>
+          </revdescription> 
+        </revision>
+     </revhistory> 
+     <releaseinfo> This manual describes version &appversion; of &app;.
+        </releaseinfo> 
+     <legalnotice> 
+        <title>Feedback</title> 
+        <para> To report a bug or make a suggestion regarding the &app; application or this manual, follow the directions in the <ulink url="ghelp:user-guide?feedback" type="help">Project Builder Feedback Page</ulink>. </para>
+     </legalnotice> 
+  </articleinfo> 
+  <indexterm> 
+     <primary>&app;</primary> 
+  </indexterm> 
+  <indexterm> 
+     <primary>project builder application</primary> 
+  </indexterm> 
+  <sect1 id="project-builder-introduction"> 
+     <title>Introduction</title> 
+     <para>TODO: Add content</para>
+  </sect1> 
+  <sect1 id="project-builder-get-started"> 
+     <title>Getting Started</title> 
+     <para>
+        The following sections describe how to start <application>&app;</application>. 
+     </para>
+  </sect1> 
+  <sect1 id="project-builder-usage"> 
+     <title>Usage</title> 
+     <para>TODO: Add content</para>
+  </sect1>
+</article> 

@@ -35,6 +35,8 @@ basicinstall:
 	fi
 	@mkdir -p ${DESTDIR}/etc/bash_completion.d/
 	@cp utils/project-builder-completion.bash ${DESTDIR}/etc/bash_completion.d/
+	@mkdir -p ${DESTDIR}/${SHAREDIR}/gnome/help/project-builder/
+	@cp -a help/* ${DESTDIR}/${SHAREDIR}/gnome/help/project-builder/
 	@echo "Done"
 
 # Cleans out the current directory cruft
@@ -50,6 +52,7 @@ cleanall: clean
 	@echo -n "Removing previously installed files..."
 	@rm -rf ${DESTDIR}/${SHAREDIR}/lib
 	@rm -rf ${DESTDIR}/${SHAREDIR}/platforms
+	@rm -rf ${DESTDIR}/${SHAREDIR}/gnome
 	@rm -f ${DESTDIR}/${SHAREDIR}/*.glade
 	@rm -f ${DESTDIR}/usr/bin/project-builder
 	@rm -f ${DESTDIR}/usr/sbin/project-builder
