@@ -1,5 +1,9 @@
 SHAREDIR=/usr/share/pdk/
 
+ROOTSTRAP_FILES = platforms/zi9/rootstrap.tar.bz2 \
+                  platforms/donley/rootstrap.tar.bz2 \
+                  platforms/menlow/rootstrap.tar.bz2
+
 all:
 
 # This target will do a cleanall and then reinstall
@@ -11,7 +15,7 @@ runtests: cleaninstall
 # Everytime we install the code we want the basic unit tests to run
 install: basicinstall runbasictests
 
-basicinstall:
+basicinstall: ${ROOTSTRAP_FILES}
 	@echo -n "Installing project-builder..."
 	@mkdir -p ${DESTDIR}/${SHAREDIR}{lib,platforms,projects}
 	@cp libs/*.py  ${DESTDIR}/${SHAREDIR}/lib
@@ -31,6 +35,18 @@ basicinstall:
 	@mkdir -p ${DESTDIR}/${SHAREDIR}/gnome/help/project-builder/
 	@cp -a help/* ${DESTDIR}/${SHAREDIR}/gnome/help/project-builder/
 	@echo "Done"
+
+platforms/donley/rootstrap.tar.bz2:
+	@./utils/create-rootstrap.py  donley
+	mv donley.tar.bz2 platforms/donley/rootstrap.tar.bz2
+
+platforms/zi9/rootstrap.tar.bz2:
+	@./utils/create-rootstrap.py  zi9
+	mv zi9.tar.bz2 platforms/zi9/rootstrap.tar.bz2
+
+platforms/menlow/rootstrap.tar.bz2:
+	@./utils/create-rootstrap.py  menlow
+	mv menlow.tar.bz2 platforms/menlow/rootstrap.tar.bz2
 
 # Cleans out the current directory cruft
 clean:

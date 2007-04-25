@@ -3,7 +3,7 @@
 
 import sys, tempfile, subprocess, shutil
 
-sys.path.insert(0, '/usr/share/pdk/lib')
+sys.path.insert(0, 'libs/')
 import SDK, Project
 
 class Callback:

@@ -92,12 +92,11 @@ metadata_expire=1800
             os.chmod(device_path, mode)
 
     def update(self, path):
-        cmd_line = "yum -y --installroot=%s update" % (path)
-        result = os.system(cmd_line)
-        if result != 0:
-            raise OSError("Internal error while attempting to run: %s" % cmd_line)
+        command = '-y --installroot=%s update' % (path)
+        ret = self.chroot("/usr/bin/yum", command) 
+        if ret != 0:
+            raise OSError("Internal error while attempting to run: %s" % command)
 
-        self.__rebuild_rpmlist(path)
 
     def install(self, path, packages):
         """
@@ -107,39 +106,12 @@ metadata_expire=1800
         if not packages:
             # No packages, so nothing to do
             return
-        command = 'yum -y --installroot=%s install ' % path
+        command = '-y --installroot=%s install ' % (path)
         for p in packages:
             command += ' %s' % p
-        p = subprocess.Popen(command.split())
-        while p.poll() == None:
-            try: 
-                self.cb.iteration(process=p)
-            except:
-                pass
-        if p.returncode != 0:
+        ret = self.chroot("/usr/bin/yum", command) 
+        if ret != 0:
             raise OSError("Internal error while attempting to run: %s" % command)
-        self.__rebuild_rpmlist(path)
-
-    def __rebuild_rpmlist(self, path):
-        root_path = os.path.abspath(path)
-        # FIXME: Explain why we need this?  Yixiong put this in, I think.
-        BASE_RPM_LIST = "etc/base-rpms.list"
-        command = 'rpm --root=%s -qa > %s' % (root_path, os.path.join(root_path, BASE_RPM_LIST))
-        result = os.system(command)
-        if result != 0:
-            raise Exception("Internal error while attempting to build package list.  Command: %s" % command)
-        # Since we are using yum from the host machine, if this is a 64bit
-        # machine then yum produces 64bit database indexes, while our chroot
-        # runtime is 32bit.  To keep the target from chroot's 32bit rpm from
-        # chocking on the 64bit index, we rebuild the index from inside the
-        # chroot.
-        # TODO: there has got to be a better way of doing this
-        if os.uname()[4] == "x86_64":
-            # regenerate the rpmdb.  needed for x86_64 system.
-            rpmdb_files = glob.glob(os.path.join(root_path, "var/lib/rpm/__*"))
-            for filename in rpmdb_files:
-                os.unlink(filename)
-            self.chroot('rpm', '--rebuilddb -v -v')
 
     def mount(self):
         path = os.path.join(self.path, 'proc')
@@ -172,7 +144,9 @@ metadata_expire=1800
                 os.system("umount %s" % (mpoint))
 
     def chroot(self, cmd_path, cmd_args):
+        print "self.chroot(%s, %s)" % (cmd_path, cmd_args)
         if not os.path.isfile(os.path.join(self.path, 'bin/bash')):
+            print >> sys.stderr, "Jailroot not installed in %s" % (self.path)
             raise ValueError, "Jailroot not installed"
         self.mount()
         cmd_line = "chroot %s %s %s" % (self.path, cmd_path, cmd_args)
@@ -214,10 +188,10 @@ class Project(FileSystem):
         """
         Install all the packages defined by Platform.buildroot_packages
         """
-        FileSystem.install(self, self.path, self.platform.buildroot_packages)
+        FileSystem.install(self, "/", self.platform.buildroot_packages)
 
     def update(self):
-        FileSystem.update(self, self.path)
+        FileSystem.update(self, "/")
 
     def create_target(self, name):
         if not name:
@@ -333,15 +307,18 @@ class Target(FileSystem):
         req_fsets = seen_fsets - set( [fset.name] )
         if req_fsets:
             print "Installing required Function Set: %s" % ' '.join(req_fsets)
-        FileSystem.install(self, self.fs_path, package_set)
+        self.install("/targets/%s/fs" % (self.name), package_set)
         # and now create a simple empty file that indicates that the fsets has
         # been installed.
         for fset_name in seen_fsets:
             fset_file = open(os.path.join(self.top, fset_name), 'w')
             fset_file.close()
 
+    def install(self, path, packages):
+        FileSystem.install(self.project, "/targets/%s/fs" % (self.name), packages)
+            
     def update(self):
-        FileSystem.update(self, self.fs_path)
+        FileSystem.update(self.project, "/targets/%s/fs" % (self.name))
 
     def __str__(self):
         return ("<Target: name=%s, path=%s, fs_path=%s, image_path=%s>"
