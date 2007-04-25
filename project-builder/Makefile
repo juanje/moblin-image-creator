@@ -1,3 +1,4 @@
+SHELL="/bin/bash"
 SHAREDIR=/usr/share/pdk/
 
 ROOTSTRAP_FILES = platforms/zi9/rootstrap.tar.bz2 \
@@ -13,14 +14,14 @@ cleaninstall: cleanall install
 runtests: cleaninstall
 
 # Everytime we install the code we want the basic unit tests to run
-install: basicinstall bootstrap_install runbasictests
+install: basicinstall runbasictests
 
-basicinstall:
+basicinstall: ${ROOTSTRAP_FILES}
 	@echo -n "Installing project-builder..."
 	@mkdir -p ${DESTDIR}/${SHAREDIR}{lib,platforms,projects}
-	@cp -a platforms/* ${DESTDIR}/${SHAREDIR}/platforms/
 	@cp libs/*.py  ${DESTDIR}/${SHAREDIR}/lib
 	@cp gui/*.py  ${DESTDIR}/${SHAREDIR}/lib
+	@cp -a platforms/* ${DESTDIR}/${SHAREDIR}/platforms/
 	@cp gui/*.glade ${DESTDIR}/${SHAREDIR}
 	@cp COPYING ${DESTDIR}/${SHAREDIR}/
 	@mkdir -p ${DESTDIR}/usr/{bin,sbin}
@@ -36,20 +37,14 @@ basicinstall:
 	@cp -a help/* ${DESTDIR}/${SHAREDIR}/gnome/help/project-builder/
 	@echo "Done"
 
-bootstrap_install: basicinstall ${ROOTSTRAP_FILES}
-	@cp -a platforms/* ${DESTDIR}/${SHAREDIR}/platforms/
-
 platforms/donley/rootstrap.tar.bz2:
-	@./utils/create-rootstrap.py  donley
-	mv donley.tar.bz2 platforms/donley/rootstrap.tar.bz2
+	@./utils/create-rootstrap.py  platforms/donley
 
 platforms/zi9/rootstrap.tar.bz2:
-	@./utils/create-rootstrap.py  zi9
-	mv zi9.tar.bz2 platforms/zi9/rootstrap.tar.bz2
+	@./utils/create-rootstrap.py  platforms/zi9
 
 platforms/menlow/rootstrap.tar.bz2:
-	@./utils/create-rootstrap.py  menlow
-	mv menlow.tar.bz2 platforms/menlow/rootstrap.tar.bz2
+	@./utils/create-rootstrap.py  platforms/menlow
 
 # Cleans out the current directory cruft
 clean:
