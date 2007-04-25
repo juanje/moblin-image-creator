@@ -1,7 +1,7 @@
 #!/usr/bin/python -tt
 # vim: ai ts=4 sts=4 et sw=4
 
-import gnome, gobject, gtk, gtk.glade, pygtk, os, traceback, time, shutil
+import gnome, gobject, gtk, gtk.glade, pygtk, os, traceback, time, shutil, sys
 
 import pdk_utils
 import SDK 
@@ -161,6 +161,7 @@ class App(object):
                 proj = self.sdk.create_project(dialog.path, dialog.name, dialog.desc, self.sdk.platforms[dialog.platform]).install()
                 self.projectList.append((dialog.name, dialog.desc, dialog.path, dialog.platform))
             except:
+                print sys.exc_value
                 self.show_error_dialog("Internal error while attempting to create project!")
                 self.sdk.delete_project(dialog.name)
             progress_dialog.destroy()
