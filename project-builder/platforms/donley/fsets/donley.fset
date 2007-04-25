@@ -37,7 +37,7 @@ DEPS=core xorg gnome-mobile-core gnome-mobile-service
 [Power-Management]
 DESC=Power Management components
 PKGS=acpid acpi acpitool
-DEBUG_PKGS=pmtools iasl-compiler acpi-abat-tests
+DEBUG_PKGS=iasl-compiler acpi-abat-tests pmtools
 DEPS=core
 
 [Media]
@@ -73,7 +73,7 @@ DEPS=core xorg gnome-mobile-core gnome-mobile-service gnome-mobile-desktop-mid
 [Internet-mid]
 DESC=Firefox browser (1.5.0.10) with plugins (flash, acrobat).  
 # Future-to-be-included: java plugin and extensions (rss reader, adblock, flashblock, autohide)
-PKGS=firefox flash-plugin AdobeReader
+PKGS=firefox flash-plugin AdobeReader 
 DEBUG_PKGS=
 DEPS=core xorg gnome-mobile-core gnome-mobile-service gnome-mobile-desktop-mid
 
@@ -83,4 +83,9 @@ PKGS=
 DEBUG_PKGS=
 DEPS=core infrastructure xorg power-management gnome-mobile-core gnome-mobile-service gnome-mobile-desktop-mid internet-mid media-mid 
 
+[Demo-media]
+DESC=demo videos, mp3s, browser bookmarks and extensions
+PKGS=demo-firefox-config demo-video-umpc demo-video-trailers demo-audio-mp3
+DEBUG_PKGS=
+DEPS=internet-mid media-mid
 
