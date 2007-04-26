@@ -2,8 +2,7 @@ SHELL="/bin/bash"
 SHAREDIR=/usr/share/pdk/
 
 ROOTSTRAP_FILES = platforms/zi9/rootstrap.tar.bz2 \
-                  platforms/donley/rootstrap.tar.bz2 \
-                  platforms/menlow/rootstrap.tar.bz2
+                  platforms/donley/rootstrap.tar.bz2
 
 all:
 
