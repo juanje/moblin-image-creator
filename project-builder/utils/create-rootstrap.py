@@ -1,7 +1,7 @@
 #!/usr/bin/python -tt
 # vim: ai ts=4 sts=4 et sw=4
 
-import sys, tempfile, subprocess, shutil, os, stat
+import sys, tempfile, subprocess, shutil, os, stat, socket, time
 
 class Callback:
     def iteration(self, process):
@@ -65,6 +65,11 @@ if __name__ == '__main__':
     path = tempfile.mkdtemp()
     init_rpm_base(path, repos)
     create_devices(path)
+
+    # create a build timestamp file
+    buildstamp = open(os.path.join(path, 'etc', 'buildstamp'), 'w')
+    print >> buildstamp, "%s-%s" % (socket.gethostname(), time.strftime("%d%m%Y%Z%H%M%s"))
+    buildstamp.close()
 
     # install yum inside the project using the host tools
     cmd = 'yum -y --installroot=%s install yum' % path
