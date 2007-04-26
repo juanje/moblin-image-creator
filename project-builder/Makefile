@@ -18,7 +18,7 @@ install: basicinstall runbasictests
 
 basicinstall: ${ROOTSTRAP_FILES}
 	@echo -n "Installing project-builder..."
-	@mkdir -p ${DESTDIR}/${SHAREDIR}{lib,platforms,projects}
+	@mkdir -p ${DESTDIR}/${SHAREDIR}{lib,platforms,projects,utils}
 	@cp libs/*.py  ${DESTDIR}/${SHAREDIR}/lib
 	@cp gui/*.py  ${DESTDIR}/${SHAREDIR}/lib
 	@cp -a platforms/* ${DESTDIR}/${SHAREDIR}/platforms/
@@ -35,6 +35,7 @@ basicinstall: ${ROOTSTRAP_FILES}
 	@cp utils/project-builder-completion.bash ${DESTDIR}/etc/bash_completion.d/
 	@mkdir -p ${DESTDIR}/${SHAREDIR}/gnome/help/project-builder/
 	@cp -a help/* ${DESTDIR}/${SHAREDIR}/gnome/help/project-builder/
+	@cp utils/*.py  ${DESTDIR}/${SHAREDIR}/utils/
 	@echo "Done"
 
 platforms/donley/rootstrap.tar.bz2:
@@ -52,6 +53,7 @@ clean:
 	@rm -f *.pyc
 	@rm -f unittest/*.pyc
 	@find -name \*~ -exec rm -f {} \;
+	@rm -f ${ROOTSTRAP_FILES}
 	@echo "Done"
 
 # Cleans out the installation target
@@ -64,6 +66,7 @@ cleanall: clean
 	@rm -f ${DESTDIR}/usr/bin/project-builder
 	@rm -f ${DESTDIR}/usr/sbin/project-builder
 	@rm -f ${DESTDIR}/etc/bash_completion.d/project-builder-completion.bash
+	@rm -rf ${DESTDIR}/${SHAREDIR}/utils
 	@echo "Done"
 
 # Run the unit tests which run fairly quickly
