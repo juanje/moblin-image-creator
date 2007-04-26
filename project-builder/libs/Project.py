@@ -71,7 +71,7 @@ metadata_expire=1800
 
             # create a build timestamp file
             buildstamp = open(os.path.join(target_etc, 'buildstamp'), 'w')
-            print >> buildstamp, "%s %s-%s" % (SDK.SDK(self.cb).version, socket.gethostname(), time.strftime("%d%m%Y%Z%H%M%s"))
+            print >> buildstamp, "%s %s-%s" % (SDK.SDK(self.cb).version, socket.gethostname(), time.strftime("%d-%m-%Y %H:%M:%S %Z"))
             buildstamp.close()
 
     def __createDevices(self):
