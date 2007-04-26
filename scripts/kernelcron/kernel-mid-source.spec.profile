@@ -12,7 +12,7 @@
 %define kversion %{level}.%{sublevel}
 %define krelease %{kversion}@EXTRAVER@
 
-%define all_umd_configs $RPM_SOURCE_DIR/kernel-*.config
+%define all_mid_configs $RPM_SOURCE_DIR/kernel-*.config
 %define buildflavors default developer
 
 # we only let linux on i386 and x86_64 platform to build this package
@@ -24,7 +24,7 @@ Name: kernel-mid-source
 License: GPL
 Provides: Linux
 Autoreqprov: off
-Summary: UMD kernel-source
+Summary: MID kernel-source
 Group: Development/Sources
 PreReq: /bin/grep /bin/sed /bin/uname /bin/mkdir /bin/cat /bin/ln /bin/rm
 Version: %{kversion}@EXTRAVER2@
@@ -45,7 +45,7 @@ Source8: init
 Source9: initrd_skeleton
 Source10: installkernel.sh
 
-# put patches here for UMD add-on
+# put patches here for MID add-on
 # and do NOT forget to apply patches in setup section -- search "apply patches" in this file
 # the patch0 is reserved for RT_PREEMPT
 @PATCHRT@
@@ -57,9 +57,9 @@ AutoReq: no
 AutoProv: yes
 
 %description
-This is kernel version special for Intel UMD release.
+This is kernel version special for Intel MID release.
 
-# generate kernel code RPM patched with UMD patches
+# generate kernel code RPM patched with MID patches
 %files
 %defattr(-, root, root)
 %ghost    /usr/src/linux
@@ -92,7 +92,7 @@ Group:       System/Kernel
 Provides:    kernel = %{krelease}
 
 %description -n kernel-mid-default
-This is kernel version special for Intel UMD release.
+This is kernel version special for Intel MID release.
 
 %files -n kernel-mid-default
 %defattr(-, root, root)
@@ -123,7 +123,7 @@ Group:       System/Kernel
 Provides:    kernel = %{krelease}
 
 %description -n kernel-mid-developer
-This is kernel version special for Intel UMD release.
+This is kernel version special for Intel MID release.
 
 %files -n kernel-mid-developer
 %defattr(-, root, root)
@@ -242,7 +242,7 @@ fi
 # =====================Prepare==========================
 # here start to unpack kernel and apply patch against it
 %prep
-echo        "Start to build kernel RPMS for UMD Release"
+echo        "Start to build kernel RPMS for MID Release"
 echo        "possible configs are:"
 for i in %{all_mid_configs}
 do
