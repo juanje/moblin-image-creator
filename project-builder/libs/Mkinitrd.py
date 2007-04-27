@@ -52,7 +52,7 @@ class Busybox(object):
 
         for cmd in self.cmds:
             if not os.path.exists(cmd):
-                os.link("busybox", cmd)
+                os.symlink("busybox", cmd)
 
         os.chdir(save_cwd)
 
