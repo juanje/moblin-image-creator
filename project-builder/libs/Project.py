@@ -32,48 +32,7 @@ class FileSystem(object):
             raise ValueError("Empty argument passed in")
         self.cb = cb
         self.path = os.path.abspath(os.path.expanduser(path))
-        if not os.path.isfile(os.path.join(self.path, 'etc', 'buildstamp')):
-            """
-            Initial filesystem stub has never been created, so setup the
-            initial base directory structure with just enough done to allow yum
-            to install packages from outside the root of the filesystem
-            """
-            # Create our directories
-            for dirname in [ 'proc', 'var/log', 'var/lib/rpm', 'dev', 'etc/yum.repos.d' ]:
-                full_path = os.path.join(self.path, dirname)
-                os.makedirs(full_path)
-
-            target_etc = os.path.join(self.path, "etc")
-            for filename in [ 'hosts', 'resolv.conf' ]:
-                shutil.copy(os.path.join('/etc', filename), target_etc)
-            yumconf = open(os.path.join(target_etc, 'yum.conf'), 'w')
-            print >> yumconf, """\
-[main]
-cachedir=/var/cache/yum
-keepcache=0
-debuglevel=2
-logfile=/var/log/yum.log
-pkgpolicy=newest
-distroverpkg=redhat-release
-tolerant=1
-exactarch=1
-obsoletes=1
-gpgcheck=0
-plugins=1
-metadata_expire=1800
-"""
-            yumconf.close()
-
-            for repo in repos:
-                shutil.copy(repo, os.path.join(target_etc, 'yum.repos.d'))
-            # Create our devices
-            self.__createDevices()
-
-            # create a build timestamp file
-            buildstamp = open(os.path.join(target_etc, 'buildstamp'), 'w')
-            print >> buildstamp, "%s %s-%s" % (SDK.SDK(self.cb).version, socket.gethostname(), time.strftime("%d-%m-%Y %H:%M:%S %Z"))
-            buildstamp.close()
-            
+        
     def __createDevices(self):
         devices = [
             # name, major, minor, mode

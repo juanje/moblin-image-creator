@@ -208,24 +208,26 @@ class SDK(object):
         config.write("PLATFORM=%s\n" % (platform.name))
         config.close()
 
-        # if the platform definition provides a rootstrap file, then
-        # seed the buildroot using that archive
         rootstrap = os.path.join(platform.path, "rootstrap.tar.bz2")
-        if os.path.isfile(rootstrap):
-            if not os.path.isfile(install_path):
-                os.makedirs(install_path)
-            cmd = "tar -jxvf %s -C %s" % (rootstrap, install_path)
-            proc = subprocess.Popen(cmd.split(), stderr = subprocess.PIPE)
-            while proc.poll() == None:
-                try: 
-                    self.cb.iteration(process=proc)
-                except:
-                    pass
-            if proc.returncode != 0:
-                print >> sys.stderr, "ERROR: Unable to rootstrap %s from %s!" % (rootstrap, name)
-                shutil.rmtree(install_path)
-                os.unlink(config_path)
-                raise ValueError(" ".join(proc.stderr.readlines()))
+        if not os.path.isfile(rootstrap):
+            os.unlink(config_path)
+            raise ValueError("Internal Error: Missing %s" % (rootstrap))
+
+        if not os.path.isdir(install_path):
+            os.makedirs(install_path)
+
+        cmd = "tar -jxvf %s -C %s" % (rootstrap, install_path)
+        proc = subprocess.Popen(cmd.split(), stderr = subprocess.PIPE)
+        while proc.poll() == None:
+            try: 
+                self.cb.iteration(process=proc)
+            except:
+                pass
+        if proc.returncode != 0:
+            print >> sys.stderr, "ERROR: Unable to rootstrap %s from %s!" % (rootstrap, name)
+            shutil.rmtree(install_path)
+            os.unlink(config_path)
+            raise ValueError(" ".join(proc.stderr.readlines()))
         
         # instantiate the project
         try:
