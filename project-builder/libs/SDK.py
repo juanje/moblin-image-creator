@@ -223,10 +223,17 @@ class SDK(object):
                     pass
             if proc.returncode != 0:
                 print >> sys.stderr, "ERROR: Unable to rootstrap %s from %s!" % (rootstrap, name)
+                shutil.rmtree(install_path)
+                os.unlink(config_path)
                 raise ValueError(" ".join(proc.stderr.readlines()))
         
         # instantiate the project
-        self.projects[name] = Project.Project(install_path, name, desc, platform, self.cb)
+        try:
+            self.projects[name] = Project.Project(install_path, name, desc, platform, self.cb)
+        except:
+            shutil.rmtree(install_path)
+            os.unlink(config_path)
+            raise ValueError("%s" % (sys.exc_value))
         self.projects[name].mount()
         return self.projects[name]
     

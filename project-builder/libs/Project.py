@@ -73,7 +73,7 @@ metadata_expire=1800
             buildstamp = open(os.path.join(target_etc, 'buildstamp'), 'w')
             print >> buildstamp, "%s %s-%s" % (SDK.SDK(self.cb).version, socket.gethostname(), time.strftime("%d-%m-%Y %H:%M:%S %Z"))
             buildstamp.close()
-
+            
     def __createDevices(self):
         devices = [
             # name, major, minor, mode
@@ -146,8 +146,8 @@ metadata_expire=1800
     def chroot(self, cmd_path, cmd_args):
         print "self.chroot(%s, %s)" % (cmd_path, cmd_args)
         if not os.path.isfile(os.path.join(self.path, 'bin/bash')):
-            print >> sys.stderr, "Jailroot not installed in %s" % (self.path)
-            raise ValueError, "Jailroot not installed"
+            print >> sys.stderr, "Incomplete jailroot at %s" % (self.path)
+            raise ValueError("Internal Error: Invalid buildroot at %s" % (self.path))
         self.mount()
         cmd_line = "chroot %s %s %s" % (self.path, cmd_path, cmd_args)
         p = subprocess.Popen(cmd_line.split())

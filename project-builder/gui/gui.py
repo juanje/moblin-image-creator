@@ -162,8 +162,13 @@ class App(object):
                 self.projectList.append((dialog.name, dialog.desc, dialog.path, dialog.platform))
             except:
                 print sys.exc_value
-                self.show_error_dialog("Internal error while attempting to create project!")
-                self.sdk.delete_project(dialog.name)
+                self.show_error_dialog("%s" % (sys.exc_value))
+                try:
+                    self.sdk.delete_project(dialog.name)
+                except:
+                    # if the project creation failed before the list of
+                    # projects has been updated, then we expect failure here
+                    pass
             progress_dialog.destroy()
             
     def on_about_activate(self, event):
