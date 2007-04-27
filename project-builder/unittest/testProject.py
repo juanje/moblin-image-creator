@@ -71,4 +71,8 @@ gpgcheck=0"""
             self.assert_(os.path.exists(full_path), "Missing file/dir: %s" % etc_path)
 
 if __name__ == '__main__':
-    unittest.main()
+    if len(sys.argv) == 2 and sys.argv[1] == "-v":
+        suite = unittest.TestLoader().loadTestsFromTestCase(TestFileSystem)
+        unittest.TextTestRunner(verbosity=2).run(suite)
+    else:
+        unittest.main()
