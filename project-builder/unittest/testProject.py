@@ -56,7 +56,7 @@ gpgcheck=0"""
     def testProjectCreation(self):
         sdk = SDK.SDK(cb = Callback(), path = self.workdir)
         platform = sdk.platforms[self.platform_name]
-        print "Skipping project creation..."
+        #print "Skipping project creation..."
         #project = sdk.create_project(self.project_dir, 'unittest-proj', 'unittest project', platform)
     def testFileSystemStructure(self):
         filesystem = Project.FileSystem(self.filesystem_dir, self.repos, Callback())
