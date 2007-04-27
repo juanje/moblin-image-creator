@@ -319,6 +319,7 @@
 				    <widget class="GtkButton" id="project_delete">
 				      <property name="width_request">70</property>
 				      <property name="visible">True</property>
+				      <property name="sensitive">False</property>
 				      <property name="tooltip" translatable="yes">Delete the selected project</property>
 				      <property name="can_focus">True</property>
 				      <property name="relief">GTK_RELIEF_NORMAL</property>
@@ -387,6 +388,7 @@
 				    <widget class="GtkButton" id="term_launch">
 				      <property name="width_request">70</property>
 				      <property name="visible">True</property>
+				      <property name="sensitive">False</property>
 				      <property name="tooltip" translatable="yes">Open a terminal chrooted to the root of the selected project's file system</property>
 				      <property name="can_focus">True</property>
 				      <property name="relief">GTK_RELIEF_NORMAL</property>
@@ -700,6 +702,7 @@
 				    <widget class="GtkButton" id="new_target_add">
 				      <property name="width_request">70</property>
 				      <property name="visible">True</property>
+				      <property name="sensitive">False</property>
 				      <property name="tooltip" translatable="yes">Create a new target for the project selected above</property>
 				      <property name="can_focus">True</property>
 				      <property name="relief">GTK_RELIEF_NORMAL</property>
@@ -766,6 +769,7 @@
 				  <child>
 				    <widget class="GtkButton" id="target_install_fset">
 				      <property name="visible">True</property>
+				      <property name="sensitive">False</property>
 				      <property name="tooltip" translatable="yes">Add functional sets (groups of related software packages) to the selected target</property>
 				      <property name="can_focus">True</property>
 				      <property name="relief">GTK_RELIEF_NORMAL</property>
@@ -833,6 +837,7 @@
 				    <widget class="GtkButton" id="target_delete">
 				      <property name="width_request">70</property>
 				      <property name="visible">True</property>
+				      <property name="sensitive">False</property>
 				      <property name="tooltip" translatable="yes">Delete the selected target.  All installed functional sets will be deleted along with the file system structure.</property>
 				      <property name="can_focus">True</property>
 				      <property name="relief">GTK_RELIEF_NORMAL</property>
@@ -900,6 +905,7 @@
 				    <widget class="GtkButton" id="target_term_launch">
 				      <property name="width_request">70</property>
 				      <property name="visible">True</property>
+				      <property name="sensitive">False</property>
 				      <property name="tooltip" translatable="yes">Open a terminal chrooted to the root of the selected target's file system</property>
 				      <property name="can_focus">True</property>
 				      <property name="relief">GTK_RELIEF_NORMAL</property>
@@ -1213,6 +1219,7 @@
 				    <widget class="GtkButton" id="create_liveISO_btn">
 				      <property name="width_request">77</property>
 				      <property name="visible">True</property>
+				      <property name="sensitive">False</property>
 				      <property name="tooltip" translatable="yes">Create a Live ISO image that can be burned to a CD.  You can boot linux and run completely off the CD.  Nothing is written to the target device. </property>
 				      <property name="can_focus">True</property>
 				      <property name="relief">GTK_RELIEF_NORMAL</property>
@@ -1280,6 +1287,7 @@
 				    <widget class="GtkButton" id="create_installISO_btn">
 				      <property name="width_request">77</property>
 				      <property name="visible">True</property>
+				      <property name="sensitive">False</property>
 				      <property name="tooltip" translatable="yes">Create an Install ISO image that can be burned to a CD.  When you boot off the CD it will erase the target harddrive, then repartition and install the target image.</property>
 				      <property name="can_focus">True</property>
 				      <property name="relief">GTK_RELIEF_NORMAL</property>
@@ -1347,6 +1355,7 @@
 				    <widget class="GtkButton" id="create_liveUSB_btn">
 				      <property name="width_request">77</property>
 				      <property name="visible">True</property>
+				      <property name="sensitive">False</property>
 				      <property name="tooltip" translatable="yes">Create a Live USB image that can be burned to a USB pen drive.  You can boot linux and run completely off the USB pen drive.  Nothing is written to the target device.  All changes made while running from the USB pen drive are lost on shutdown.</property>
 				      <property name="can_focus">True</property>
 				      <property name="relief">GTK_RELIEF_NORMAL</property>
@@ -1413,6 +1422,7 @@
 				  <child>
 				    <widget class="GtkButton" id="create_liveRWUSB_btn">
 				      <property name="visible">True</property>
+				      <property name="sensitive">False</property>
 				      <property name="tooltip" translatable="yes">Create a Live read/write ISO image that can be burned to a USB pen drive  You can boot linux and run completely off the USB pen drive.  Nothing is written to the target device.  The USB pen drive supports data persistence--changes made while running from the USB pen drive are saved on the USB pen drive.</property>
 				      <property name="can_focus">True</property>
 				      <property name="relief">GTK_RELIEF_NORMAL</property>
@@ -1480,6 +1490,7 @@
 				    <widget class="GtkButton" id="create_installUSB_btn">
 				      <property name="width_request">77</property>
 				      <property name="visible">True</property>
+				      <property name="sensitive">False</property>
 				      <property name="tooltip" translatable="yes">Create an installation image that can be burned to a USB pen drive.  When you boot off the USB pen drive it will erase the target harddrive, then repartition and install the target image.</property>
 				      <property name="can_focus">True</property>
 				      <property name="relief">GTK_RELIEF_NORMAL</property>
@@ -1558,6 +1569,7 @@
 				  <child>
 				    <widget class="GtkButton" id="DD_USB">
 				      <property name="visible">True</property>
+				      <property name="sensitive">False</property>
 				      <property name="tooltip" translatable="yes">Write a USB image to the USB pen drive.  An image must first be created using one of the USB options to the left.</property>
 				      <property name="can_focus">True</property>
 				      <property name="relief">GTK_RELIEF_NORMAL</property>
