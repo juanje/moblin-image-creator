@@ -255,7 +255,7 @@
 				      <property name="can_focus">True</property>
 				      <property name="relief">GTK_RELIEF_NORMAL</property>
 				      <property name="focus_on_click">True</property>
-				      <signal name="clicked" handler="on_new_target_add_clicked" last_modification_time="Fri, 27 Apr 2007 08:21:05 GMT"/>
+				      <signal name="clicked" handler="on_new_project_clicked" last_modification_time="Fri, 27 Apr 2007 08:21:05 GMT"/>
 				      <accelerator key="A" modifiers="GDK_MOD1_MASK" signal="clicked"/>
 
 				      <child>

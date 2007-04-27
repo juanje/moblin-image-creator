@@ -19,7 +19,7 @@ class App(object):
         dic = {"on_main_destroy_event" : gtk.main_quit,
                 "on_quit_activate" : gtk.main_quit,
                 "on_help_activate" : self.on_help_activate,
-                "on_newProject_clicked" : self.on_newProject_clicked,
+                "on_new_project_clicked" : self.on_new_project_clicked,
                 "on_projectDelete_clicked": self.on_projectDelete_clicked,
                 "on_new_target_add_clicked": self.on_new_target_add_clicked,
                 "on_delete_target_clicked": self.on_delete_target_clicked,
@@ -132,7 +132,7 @@ class App(object):
         column.set_sort_column_id(id)
         self.targetView.append_column(column)
 
-    def on_newProject_clicked(self, widget):
+    def on_new_project_clicked(self, widget):
         """Instantiate a new dialogue"""
         name = ""
         desc = ""

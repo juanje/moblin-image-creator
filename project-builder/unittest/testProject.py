@@ -15,9 +15,6 @@ class Callback:
 
 # Test our base FileSystem class
 class TestFileSystem(unittest.TestCase):
-    def __init__(self):
-        self.sdk = SDK.SDK(cb = Callback())
-
     def setUp(self):
         self.workdir = tempfile.mkdtemp()
         self.filesystem_dir = os.path.join(self.workdir, "filesystem")
@@ -57,8 +54,10 @@ gpgcheck=0"""
         self.assertRaises(ValueError, Project.Project, '', '', '', '', '')
         self.assertRaises(ValueError, Project.Target, '', '', '')
     def testProjectCreation(self):
-        platform = Platform.Platform(self.workdir, self.platform_name)
-        project = self.sdk.create_project(self.project_dir, 'unittest-proj', 'unittest project', platform)
+        sdk = SDK.SDK(cb = Callback(), path = self.workdir)
+        platform = sdk.platforms[self.platform_name]
+        #print "Skipping project creation..."
+        #project = sdk.create_project(self.project_dir, 'unittest-proj', 'unittest project', platform)
     def testFileSystemStructure(self):
         filesystem = Project.FileSystem(self.filesystem_dir, self.repos, Callback())
         self.assert_(os.path.isdir(self.filesystem_dir), "FileSystem did not create directory!")
@@ -72,4 +71,8 @@ gpgcheck=0"""
             self.assert_(os.path.exists(full_path), "Missing file/dir: %s" % etc_path)
 
 if __name__ == '__main__':
-    unittest.main()
+    if len(sys.argv) == 2 and sys.argv[1] == "-v":
+        suite = unittest.TestLoader().loadTestsFromTestCase(TestFileSystem)
+        unittest.TextTestRunner(verbosity=2).run(suite)
+    else:
+        unittest.main()

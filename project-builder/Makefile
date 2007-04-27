@@ -9,8 +9,8 @@ all:
 # This target will do a cleanall and then reinstall
 cleaninstall: cleanall install
 
-# Same as cleaninstall
-runtests: cleaninstall
+# Simple tests
+runtests: runbasictests
 
 # Everytime we install the code we want the basic unit tests to run
 install: basicinstall runbasictests
@@ -38,12 +38,15 @@ basicinstall: ${ROOTSTRAP_FILES}
 	@echo "Done"
 
 platforms/donley/rootstrap.tar.bz2:
+	@echo "Creating donley/rootstrap.tar.bz2..."
 	@./utils/create-rootstrap.py  platforms/donley
 
 platforms/zi9/rootstrap.tar.bz2:
+	@echo "Creating zi9/rootstrap.tar.bz2..."
 	@./utils/create-rootstrap.py  platforms/zi9
 
 platforms/menlow/rootstrap.tar.bz2:
+	@echo "Creating menlow/rootstrap.tar.bz2..."
 	@./utils/create-rootstrap.py  platforms/menlow
 
 # Cleans out the current directory cruft
