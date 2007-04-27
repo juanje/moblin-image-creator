@@ -21,7 +21,7 @@ class SyslinuxCfg(object):
             self.msg_path = os.path.join(self.path, 'boot.msg')
             self.index = 1
 
-            welcome_mesg = "Welcome to the Linux eSDK:"
+            welcome_mesg = "Welcome to the Linux PDK:"
 
             # Create and initialize the syslinux config file
             cfg_file = open(self.cfg_path, 'w')
