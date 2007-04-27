@@ -1,7 +1,7 @@
 [Core]
 DESC=Fundamental fset that provides a root filesystem
 PKGS=kernel-mccaslin-default grub coreutils rpm passwd core-config-donley
-DEBUG_PKGS=kernel-mccaslin-developer gdb yum vim-enhanced tickless-utils
+DEBUG_PKGS=kernel-mccaslin-developer gdb yum vim-enhanced tickless-utils oprofile
 DEPS=
 
 [Infrastructure]
