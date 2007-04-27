@@ -32,7 +32,40 @@ class FileSystem(object):
             raise ValueError("Empty argument passed in")
         self.cb = cb
         self.path = os.path.abspath(os.path.expanduser(path))
-        
+        try:
+            print "FileSystem(%s, %s)" % (path, repos)
+            self.__createBase(path, repos)
+            self.__createDevices()
+        except:
+            print >> sys.stderr, "%s" % (sys.exc_value)
+            pass
+
+    def __createBase(self, path, repos):
+        for dirname in [ 'proc', 'var/log', 'var/lib/rpm', 'dev', 'etc/yum.repos.d' ]:
+            os.makedirs(os.path.join(path, dirname))
+        target_etc = os.path.join(path, "etc")
+        for filename in [ 'hosts', 'resolv.conf' ]:
+            shutil.copy(os.path.join('/etc', filename), target_etc)
+        yumconf = open(os.path.join(target_etc, 'yum.conf'), 'w')
+        print >> yumconf, """\
+[main]
+cachedir=/var/cache/yum
+keepcache=0
+debuglevel=2
+logfile=/var/log/yum.log
+pkgpolicy=newest
+distroverpkg=redhat-release
+tolerant=1
+exactarch=1
+obsoletes=1
+gpgcheck=0
+plugins=1
+metadata_expire=1800
+"""
+        yumconf.close()
+        for repo in repos:
+            shutil.copy(repo, os.path.join(target_etc, 'yum.repos.d'))
+
     def __createDevices(self):
         devices = [
             # name, major, minor, mode
