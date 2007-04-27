@@ -38,6 +38,12 @@ class FileSystem(object):
         except:
             pass
 
+        # create a build timestamp file if not present
+        if not os.path.isfile(os.path.join(self.path, 'etc', 'buildstamp')):
+            buildstamp = open(os.path.join(self.path, 'etc', 'buildstamp'), 'w')
+            print >> buildstamp, "%s %s" % (socket.gethostname(), time.strftime("%d-%m-%Y %H:%M:%S %Z"))
+            buildstamp.close()
+            
     def __createBase(self, path, repos):
         for dirname in [ 'proc', 'var/log', 'var/lib/rpm', 'dev', 'etc/yum.repos.d' ]:
             os.makedirs(os.path.join(path, dirname))

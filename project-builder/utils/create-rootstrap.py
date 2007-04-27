@@ -68,7 +68,7 @@ if __name__ == '__main__':
 
     # create a build timestamp file
     buildstamp = open(os.path.join(path, 'etc', 'buildstamp'), 'w')
-    print >> buildstamp, "%s-%s" % (socket.gethostname(), time.strftime("%d-%m-%Y %H:%M:%S %Z"))
+    print >> buildstamp, "%s %s" % (socket.gethostname(), time.strftime("%d-%m-%Y %H:%M:%S %Z"))
     buildstamp.close()
 
     # install yum inside the project using the host tools
