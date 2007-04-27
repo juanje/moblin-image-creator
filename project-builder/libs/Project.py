@@ -33,11 +33,9 @@ class FileSystem(object):
         self.cb = cb
         self.path = os.path.abspath(os.path.expanduser(path))
         try:
-            print "FileSystem(%s, %s)" % (path, repos)
             self.__createBase(path, repos)
             self.__createDevices()
         except:
-            print >> sys.stderr, "%s" % (sys.exc_value)
             pass
 
     def __createBase(self, path, repos):
