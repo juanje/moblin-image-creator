@@ -38,12 +38,15 @@ basicinstall: ${ROOTSTRAP_FILES}
 	@echo "Done"
 
 platforms/donley/rootstrap.tar.bz2:
+	@echo "Creating donley/rootstrap.tar.bz2..."
 	@./utils/create-rootstrap.py  platforms/donley
 
 platforms/zi9/rootstrap.tar.bz2:
+	@echo "Creating zi9/rootstrap.tar.bz2..."
 	@./utils/create-rootstrap.py  platforms/zi9
 
 platforms/menlow/rootstrap.tar.bz2:
+	@echo "Creating menlow/rootstrap.tar.bz2..."
 	@./utils/create-rootstrap.py  platforms/menlow
 
 # Cleans out the current directory cruft
