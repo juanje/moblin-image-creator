@@ -9,8 +9,8 @@ all:
 # This target will do a cleanall and then reinstall
 cleaninstall: cleanall install
 
-# Same as cleaninstall
-runtests: cleaninstall
+# Simple tests
+runtests: runbasictests
 
 # Everytime we install the code we want the basic unit tests to run
 install: basicinstall runbasictests
