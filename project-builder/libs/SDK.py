@@ -132,7 +132,7 @@ class ConfigFile(object):
             key = key.lower().strip()
             value = value.strip()
             if key in string_vals:
-                exec('self.%s = value' % key)
+                setattr(self, key, value)
                 continue
         config.close()
 
