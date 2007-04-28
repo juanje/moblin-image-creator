@@ -35,6 +35,7 @@ class FileSystem(object):
         try:
             self.__createBase(path, repos)
             self.__createDevices()
+            # TODO: install yum and yum-protectbase
         except:
             pass
 
@@ -126,11 +127,12 @@ metadata_expire=1800
                 for line in file:
                     if re.search(r'^\s*baseurl=file:\/\/\/', line):
                         p = line.split('baseurl=file:///')[1].strip()
-                        os.makedirs(os.path.join(self.path, p))
-                        result = os.system("mount --bind /%s %s 2> /dev/null" % (p, os.path.join(self.path, p)))
-                        if result != 0:
-                            self.umount()
-                            raise OSError("Internal error while attempting to mount /%s!" % (p))
+                        new_mount = os.path.join(self.path, p)
+                        if not os.path.isdir(new_mount):
+                            os.makedirs(new_mount)
+                        os.system("mount --bind /%s %s" % (p, new_mount))
+                        # Its no big deal if the repo is really empty, so
+                        # ignore mount errors.
                 file.close()
                 
     def umount(self):

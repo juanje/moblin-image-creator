@@ -1,3 +1,10 @@
+[localbase]
+name=Local Base
+baseurl=file:///usr/share/pdk/platforms/donley/base/
+enabled=1
+gpgcheck=0
+protect=yes
+
 [esdk-base]
 name=ESDK Base
 baseurl=http://umd-build2.jf.intel.com/yum-repos/fedora-6-core/
