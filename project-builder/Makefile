@@ -32,7 +32,7 @@ basicinstall: ${ROOTSTRAP_FILES}
 	@mkdir -p ${DESTDIR}/${SHAREDIR}/gnome/help/project-builder/
 	@cp -a help/* ${DESTDIR}/${SHAREDIR}/gnome/help/project-builder/
 	@cp utils/*.py  ${DESTDIR}/${SHAREDIR}/utils/
-	@if [ -f /etc/feodra-release ]; then \
+	@if [ -f /etc/fedora-release ]; then \
 		mkdir -p ${DESTDIR}/usr/share/applications/; \
 		sed '{s/%%EXEC_CMD%%/\/usr\/bin\/project-builder/}' project-builder.desktop.template > ${DESTDIR}/usr/share/applications/project-builder.desktop; \
 		mkdir -p ${DESTDIR}/bin; \
