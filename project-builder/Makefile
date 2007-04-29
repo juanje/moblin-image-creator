@@ -1,4 +1,3 @@
-SHELL="/bin/bash"
 SHAREDIR=/usr/share/pdk/
 
 ROOTSTRAP_FILES = platforms/zi9/rootstrap.tar.bz2 \
@@ -17,24 +16,38 @@ install: basicinstall runbasictests
 
 basicinstall: ${ROOTSTRAP_FILES}
 	@echo -n "Installing project-builder..."
-	@mkdir -p ${DESTDIR}/${SHAREDIR}{lib,platforms,projects,utils}
+	@mkdir -p ${DESTDIR}/${SHAREDIR}/lib
+	@mkdir -p ${DESTDIR}/${SHAREDIR}/platforms
+	@mkdir -p ${DESTDIR}/${SHAREDIR}/projects
+	@mkdir -p ${DESTDIR}/${SHAREDIR}/utils
 	@cp libs/*.py  ${DESTDIR}/${SHAREDIR}/lib
 	@cp gui/*.py  ${DESTDIR}/${SHAREDIR}/lib
 	@cp -a platforms/* ${DESTDIR}/${SHAREDIR}/platforms/
 	@cp gui/*.glade ${DESTDIR}/${SHAREDIR}
 	@cp COPYING ${DESTDIR}/${SHAREDIR}/
-	@mkdir -p ${DESTDIR}/usr/{bin,sbin}
+	@mkdir -p ${DESTDIR}/usr/sbin
 	@cp project-builder ${DESTDIR}/usr/sbin/
-	@ln -f -s /usr/bin/consolehelper ${DESTDIR}/usr/bin/project-builder
-	@mkdir -p ${DESTDIR}/etc/pam.d
-	@mkdir -p ${DESTDIR}/etc/security/console.apps
-	@cp project-builder.pam.d ${DESTDIR}/etc/pam.d/project-builder
-	@cp project-builder.helperconsole ${DESTDIR}/etc/security/console.apps/project-builder
 	@mkdir -p ${DESTDIR}/etc/bash_completion.d/
 	@cp utils/project-builder-completion.bash ${DESTDIR}/etc/bash_completion.d/
 	@mkdir -p ${DESTDIR}/${SHAREDIR}/gnome/help/project-builder/
 	@cp -a help/* ${DESTDIR}/${SHAREDIR}/gnome/help/project-builder/
 	@cp utils/*.py  ${DESTDIR}/${SHAREDIR}/utils/
+	@if [ -f /etc/feodra-release ]; then \
+		mkdir -p ${DESTDIR}/usr/share/applications/; \
+		sed '{s/%%EXEC_CMD%%/\/usr\/bin\/project-builder/}' project-builder.desktop.template > ${DESTDIR}/usr/share/applications/project-builder.desktop; \
+		mkdir -p ${DESTDIR}/bin; \
+		ln -f -s /usr/bin/consolehelper ${DESTDIR}/usr/bin/project-builder; \
+		mkdir -p ${DESTDIR}/etc/pam.d; \
+		mkdir -p ${DESTDIR}/etc/security/console.apps; \
+		cp project-builder.pam.d ${DESTDIR}/etc/pam.d/project-builder; \
+		cp project-builder.helperconsole ${DESTDIR}/etc/security/console.apps/project-builder; \
+	elif [ -f /etc/SuSE-release ]; then \
+		mkdir -p ${DESTDIR}/usr/share/applications/; \
+		sed '{s/%%EXEC_CMD%%/gnomesu \/usr\/sbin\/project-builder/}' project-builder.desktop.template > ${DESTDIR}/usr/share/applications/project-builder.desktop; \
+	elif [ -f /etc/debian_version ]; then \
+		mkdir -p ${DESTDIR}/usr/share/applications/; \
+		sed '{s/%%EXEC_CMD%%/gksu \/usr\/sbin\/project-builder/}' project-builder.desktop.template > ${DESTDIR}/usr/share/applications/project-builder.desktop; \
+	fi
 	@echo "Done"
 
 platforms/donley/rootstrap.tar.bz2:
@@ -69,6 +82,7 @@ cleanall: clean
 	@rm -f ${DESTDIR}/usr/sbin/project-builder
 	@rm -f ${DESTDIR}/etc/bash_completion.d/project-builder-completion.bash
 	@rm -rf ${DESTDIR}/${SHAREDIR}/utils
+	@rm -f ${DESTDIR}/usr/share/applications/project-builder.desktop
 	@echo "Done"
 
 # Run the unit tests which run fairly quickly

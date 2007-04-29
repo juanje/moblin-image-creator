@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Project-Builder 
+Comment=Developer tool for creating mobile Linux device stacks
+Exec=%%EXEC_CMD%% 
+Terminal=false
+Type=Application
+Categories=Application;Development;
+StartupNotify=false
