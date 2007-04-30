@@ -25,6 +25,7 @@ basicinstall: ${ROOTSTRAP_FILES}
 	@cp -a platforms/* ${DESTDIR}/${SHAREDIR}/platforms/
 	@cp gui/*.glade ${DESTDIR}/${SHAREDIR}
 	@cp COPYING ${DESTDIR}/${SHAREDIR}/
+	@cp -a pixmaps/ ${DESTDIR}/${SHAREDIR}
 	@mkdir -p ${DESTDIR}/usr/sbin
 	@cp project-builder ${DESTDIR}/usr/sbin/
 	@mkdir -p ${DESTDIR}/etc/bash_completion.d/
@@ -32,8 +33,8 @@ basicinstall: ${ROOTSTRAP_FILES}
 	@mkdir -p ${DESTDIR}/${SHAREDIR}/gnome/help/project-builder/
 	@cp -a help/* ${DESTDIR}/${SHAREDIR}/gnome/help/project-builder/
 	@cp utils/*.py  ${DESTDIR}/${SHAREDIR}/utils/
+	@mkdir -p ${DESTDIR}/usr/share/applications/
 	@if [ -f /etc/fedora-release ]; then \
-		mkdir -p ${DESTDIR}/usr/share/applications/; \
 		sed '{s/%%EXEC_CMD%%/\/usr\/bin\/project-builder/}' project-builder.desktop.template > ${DESTDIR}/usr/share/applications/project-builder.desktop; \
 		mkdir -p ${DESTDIR}/bin; \
 		ln -f -s /usr/bin/consolehelper ${DESTDIR}/usr/bin/project-builder; \
@@ -42,10 +43,8 @@ basicinstall: ${ROOTSTRAP_FILES}
 		cp project-builder.pam.d ${DESTDIR}/etc/pam.d/project-builder; \
 		cp project-builder.helperconsole ${DESTDIR}/etc/security/console.apps/project-builder; \
 	elif [ -f /etc/SuSE-release ]; then \
-		mkdir -p ${DESTDIR}/usr/share/applications/; \
 		sed '{s/%%EXEC_CMD%%/gnomesu \/usr\/sbin\/project-builder/}' project-builder.desktop.template > ${DESTDIR}/usr/share/applications/project-builder.desktop; \
 	elif [ -f /etc/debian_version ]; then \
-		mkdir -p ${DESTDIR}/usr/share/applications/; \
 		sed '{s/%%EXEC_CMD%%/gksu \/usr\/sbin\/project-builder/}' project-builder.desktop.template > ${DESTDIR}/usr/share/applications/project-builder.desktop; \
 	fi
 	@echo "Done"

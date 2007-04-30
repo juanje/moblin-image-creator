@@ -6,3 +6,4 @@ Terminal=false
 Type=Application
 Categories=Application;Development;
 StartupNotify=false
+Icon=/usr/share/pdk/pixmaps/project-builder-32x32.xpm
