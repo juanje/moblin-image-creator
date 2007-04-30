@@ -1,6 +1,6 @@
 [localbase]
 name=Local Base
-baseurl=file:///usr/share/pdk/platforms/zi9/base/
+baseurl=file:///usr/share/pdk/repos/fc6-mid-core/
 enabled=1
 gpgcheck=0
 protect=yes

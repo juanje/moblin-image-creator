@@ -6,7 +6,7 @@ License: GPL
 Group: Development
 Source: %{name}-%{version}.tgz
 Buildroot: %{_tmppath}/%{name}-root
-BuildRequires: bash tcsh gzip
+BuildRequires: bash tcsh gzip rsync createrepo
 Requires: python >= 2.4
 Requires: pam
 Requires: usermode
@@ -24,6 +24,11 @@ make
 
 %install
 make DESTDIR=$RPM_BUILD_ROOT basicinstall
+
+REPODEST=$RPM_BUILD_ROOT/usr/share/pdk/repos/fc6-mid-core
+mkdir -p $REPODEST
+rsync -avPH rsync://umd-build2/yum-repos/mid-core/ $REPODEST
+createrepo $REPODEST
 
 %clean
 rm -rf %{buildroot}

@@ -20,10 +20,12 @@ basicinstall: ${ROOTSTRAP_FILES}
 	@mkdir -p ${DESTDIR}/${SHAREDIR}/platforms
 	@mkdir -p ${DESTDIR}/${SHAREDIR}/projects
 	@mkdir -p ${DESTDIR}/${SHAREDIR}/utils
+	@mkdir -p ${DESTDIR}/${SHAREDIR}/repos
 	@cp libs/*.py  ${DESTDIR}/${SHAREDIR}/lib
 	@cp gui/*.py  ${DESTDIR}/${SHAREDIR}/lib
 	@cp -a platforms/* ${DESTDIR}/${SHAREDIR}/platforms/
 	@cp gui/*.glade ${DESTDIR}/${SHAREDIR}
+	@cp -a repos/* ${DESTDIR}/${SHAREDIR}/repos/
 	@cp COPYING ${DESTDIR}/${SHAREDIR}/
 	@cp -a pixmaps/ ${DESTDIR}/${SHAREDIR}
 	@mkdir -p ${DESTDIR}/usr/sbin
@@ -36,7 +38,7 @@ basicinstall: ${ROOTSTRAP_FILES}
 	@mkdir -p ${DESTDIR}/usr/share/applications/
 	@if [ -f /etc/fedora-release ]; then \
 		sed '{s/%%EXEC_CMD%%/\/usr\/bin\/project-builder/}' project-builder.desktop.template > ${DESTDIR}/usr/share/applications/project-builder.desktop; \
-		mkdir -p ${DESTDIR}/bin; \
+		mkdir -p ${DESTDIR}/usr/bin; \
 		ln -f -s /usr/bin/consolehelper ${DESTDIR}/usr/bin/project-builder; \
 		mkdir -p ${DESTDIR}/etc/pam.d; \
 		mkdir -p ${DESTDIR}/etc/security/console.apps; \
