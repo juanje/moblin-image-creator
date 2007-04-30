@@ -36,6 +36,7 @@ rm -rf %{buildroot}
 %files
 %defattr(-,root,root)
 /usr/share/pdk/*
+/usr/share/applications/project-builder.desktop
 /etc/bash_completion.d/project-builder-completion.bash
 /etc/security/console.apps/project-builder
 /etc/pam.d/project-builder
