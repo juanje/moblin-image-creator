@@ -1,10 +1,22 @@
 #!/usr/bin/python -tt
 # vim: ai ts=4 sts=4 et sw=4
 
-import gnome, gobject, gtk, gtk.glade, pygtk, os, traceback, time, shutil, sys
+import gettext
+import gnome
+import gobject
+import gtk
+import gtk.glade
+import os
+import pygtk
+import shutil
+import sys
+import time
+import traceback
 
 import pdk_utils
 import SDK 
+
+_ = gettext.lgettext
 
 class App(object):
     """This is our main"""
@@ -36,10 +48,10 @@ class App(object):
                 "on_DD_USB_clicked": self.on_DD_USB_clicked}
         self.widgets.signal_autoconnect(dic)
         # setup projectView widget
-        self.pName = "Name"
-        self.pDesc = "Description"
-        self.pPath = "Path"
-        self.pPlatform = "Platform"
+        self.pName = _("Name")
+        self.pDesc = _("Description")
+        self.pPath = _("Path")
+        self.pPlatform = _("Platform")
         self.projectView = self.widgets.get_widget("projectView")
         self.set_plist(self.pName, 0)
         self.set_plist(self.pDesc, 1)
@@ -49,8 +61,8 @@ class App(object):
         self.projectView.set_model(self.projectList)
         self.projectView.set_reorderable(1)
         # Set targetView widget
-        self.tName = "Name"
-        self.tFSet = "Function Sets"
+        self.tName = _("Name")
+        self.tFSet = _("Function Sets")
         self.targetView = self.widgets.get_widget("targetView")
         self.set_tlist(self.tName, 0)
         self.set_tlist(self.tFSet, 1)
@@ -157,7 +169,7 @@ class App(object):
                 progress_tree = gtk.glade.XML(self.gladefile, 'ProgressDialog')
                 progress_dialog = progress_tree.get_widget('ProgressDialog')
                 progress_dialog.connect('delete_event', self.ignore)
-                progress_tree.get_widget('progress_label').set_text("Please wait while installing %s" % dialog.name)
+                progress_tree.get_widget('progress_label').set_text(_("Please wait while installing %s") % dialog.name)
                 self.progressbar = progress_tree.get_widget('progressbar')
                 proj = self.sdk.create_project(dialog.path, dialog.name, dialog.desc, self.sdk.platforms[dialog.platform]).install()
                 self.projectList.append((dialog.name, dialog.desc, dialog.path, dialog.platform))
@@ -194,7 +206,7 @@ class App(object):
         dialog = gtk.AboutDialog()
         dialog.set_name('Project Builder')
         dialog.set_version(self.sdk.version)
-        dialog.set_comments("A tool for building Mobile and/or Single Purposed Linux Device Stacks")
+        dialog.set_comments(_("A tool for building Mobile and/or Single Purposed Linux Device Stacks"))
         try:
             f = open(os.path.join(self.sdk.path, "COPYING"), "r")
             dialog.set_license(f.read())
