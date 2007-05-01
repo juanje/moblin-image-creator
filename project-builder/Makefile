@@ -27,7 +27,7 @@ basicinstall: ${ROOTSTRAP_FILES}
 	@cp gui/*.glade ${DESTDIR}/${SHAREDIR}
 	@cp -a repos/* ${DESTDIR}/${SHAREDIR}/repos/
 	@cp COPYING ${DESTDIR}/${SHAREDIR}/
-	@cp -a pixmaps/ ${DESTDIR}/${SHAREDIR}
+	@cp -a gui/pixmaps/ ${DESTDIR}/${SHAREDIR}
 	@mkdir -p ${DESTDIR}/usr/sbin
 	@cp project-builder ${DESTDIR}/usr/sbin/
 	@mkdir -p ${DESTDIR}/etc/bash_completion.d/
