@@ -29,6 +29,7 @@ class App(object):
                 "on_create_liveUSB_clicked": self.on_liveUSB_clicked,
                 "on_create_liveRWUSB_clicked": self.on_liveRWUSB_clicked,
                 "on_create_installUSB_clicked": self.on_installUSB_clicked,
+                "on_properties_activate": self.on_properties_activate,
                 "on_about_activate": self.on_about_activate,
                 "on_term_launch_clicked": self.on_term_launch_clicked,
                 "on_target_term_launch_clicked": self.on_target_term_launch_clicked,
@@ -170,7 +171,25 @@ class App(object):
                     # projects has been updated, then we expect failure here
                     pass
             progress_dialog.destroy()
-            
+
+    def on_properties_activate(self, event):
+        widgets = gtk.glade.XML(self.gladefile, 'properties_dlg')
+        dialog = widgets.get_widget('properties_dlg')
+        rsync_entry = widgets.get_widget("rsync_proxy_entry")
+        http_entry = widgets.get_widget("http_proxy_entry")
+        proxy = self.sdk.proxy
+        try:
+            rsync_entry.set_text(proxy.rsync_proxy)
+            http_entry.set_text(proxy.http_proxy)
+        except:
+            pass
+        if dialog.run() == gtk.RESPONSE_OK:
+            print "http_proxy: %s\nrsync_proxy: %s" % (rsync_entry.get_text(), rsync_entry.get_text())
+            proxy.http_proxy = http_entry.get_text()
+            proxy.rsync_proxy = rsync_entry.get_text()
+            proxy.write()
+        dialog.destroy()
+        
     def on_about_activate(self, event):
         dialog = gtk.AboutDialog()
         dialog.set_name('Project Builder')
