@@ -2,7 +2,10 @@
 # vim: ai ts=4 sts=4 et sw=4
 ###############################################################################
 
-import sys, os, string, traceback
+import os
+import string
+import sys
+import traceback
 
 from optparse import OptionParser
 
@@ -14,6 +17,7 @@ debug = True
 try:
     import gui
 except RuntimeError:
+    traceback.print_exc()
     # Probably running in a text console
     pass
 
@@ -42,6 +46,7 @@ def main():
             gui.App().run()
             return 0
         except:
+            traceback.print_exc()
             print "Error: Unable to run the GUI, maybe you are in a text console"
             print "Do -h for help"
             return 1
