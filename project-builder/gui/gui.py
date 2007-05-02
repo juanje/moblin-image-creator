@@ -59,7 +59,7 @@ class App(object):
         self.set_plist(self.pPlatform, 3)
         self.projectList = gtk.ListStore(str, str, str, str)
         self.projectView.set_model(self.projectList)
-        self.projectView.set_reorderable(1)
+#        self.projectView.set_reorderable(1)
         # Set targetView widget
         self.tName = _("Name")
         self.tFSet = _("Function Sets")
@@ -269,14 +269,14 @@ class App(object):
             dialog.destroy()
             return
         cebox = tree.get_widget('installed_fsets')
+ 
         cebox.set_model(list)
-        cebox.set_text_column(0)
-        cebox.child.set_text(list[0][0])
+        cebox.set_active(0)
         cebox.connect("changed", self.fset_install_updated, label, platform, checkbox)
-        label.set_text(platform.fset[cebox.child.get_text()].desc)
+        label.set_text(platform.fset[cebox.get_active_text()].desc)
         checkbox.set_sensitive(True)
         if dialog.run() == gtk.RESPONSE_OK:
-            fset = platform.fset[cebox.child.get_text()]
+            fset = platform.fset[cebox.get_active_text()]
             debug = checkbox.get_active()
             dialog.destroy()
             progress_tree = gtk.glade.XML(self.gladefile, 'ProgressDialog')
@@ -293,6 +293,7 @@ class App(object):
                 print_exc_plus()
                 self.show_error_dialog("Unexpected error: %s" % (sys.exc_info()[1]))
             progress_dialog.destroy()
+        dialog.destroy();
 
     def ignore(self, *args):
         return True
@@ -303,7 +304,7 @@ class App(object):
         time.sleep(0.01)
             
     def fset_install_updated(self, box, label, platform, checkbox):
-        fset = platform.fset[box.child.get_text()]
+        fset = platform.fset[box.get_active_text()]
         checkbox.set_sensitive(True)
         label.set_text(fset.desc)
 
@@ -529,18 +530,17 @@ class AddNewProject(object):
         for pname in sorted(self.sdk.platforms.iterkeys()):
             platform_entry_box.append([pname])
         self.np_platform.set_model(platform_entry_box)
-        self.np_platform.set_text_column(0)
         if platform:
             self.np_platform.child.set_text(platform)
         else:
-            self.np_platform.child.set_text(platform_entry_box[0][0])
+            self.np_platform.set_active(0)
 
     def run(self):
         result = self.dialog.run()
         self.name = self.np_name.get_text()
         self.desc = self.np_desc.get_text()
         self.path = self.np_path.get_text()
-        self.platform = self.np_platform.child.get_text()
+        self.platform = self.np_platform.get_active_text()
         self.dialog.destroy()
         return result
 
