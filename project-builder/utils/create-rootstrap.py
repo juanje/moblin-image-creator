@@ -73,10 +73,10 @@ if __name__ == '__main__':
 
     # install yum inside the project using the host tools
     cmd = 'yum -y --disablerepo=localbase --installroot=%s install yum yum-protectbase' % path
-    proc = subprocess.Popen(cmd.split(), stderr = subprocess.PIPE)
+    proc = subprocess.Popen(cmd.split(), stderr = subprocess.STDOUT, stdout = subprocess.PIPE)
     if proc.wait() != 0:
         print >> sys.stderr, "ERROR: Unable to create rootstrap!"
-        for line in proc.stderr:
+        for line in proc.stdout:
             print line.strip()
             sys.exit(1)
 
@@ -85,10 +85,10 @@ if __name__ == '__main__':
     
     # Create the rootstrap archive file
     cmd = "tar -jcpvf %s/rootstrap.tar.bz2 -C %s ." % (platform_dir, path)
-    proc = subprocess.Popen(cmd.split(), stderr = subprocess.PIPE)
+    proc = subprocess.Popen(cmd.split(), stderr = subprocess.STDOUT, stdout = subprocess.PIPE)
     if proc.wait() != 0:
         print >> sys.stderr, "ERROR: Unable to create rootstrap!"
-        for line in proc.stderr:
+        for line in proc.stdout:
             print line.strip()
             sys.exit(1)
 
