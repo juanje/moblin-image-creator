@@ -62,10 +62,6 @@ platforms/zi9/rootstrap.tar.bz2:
 	@echo "Creating zi9/rootstrap.tar.bz2..."
 	@./utils/create-rootstrap.py  platforms/zi9
 
-platforms/menlow/rootstrap.tar.bz2:
-	@echo "Creating menlow/rootstrap.tar.bz2..."
-	@./utils/create-rootstrap.py  platforms/menlow
-
 # Cleans out the current directory cruft
 clean:
 	@echo -n "Cleaning up working directory files..."
