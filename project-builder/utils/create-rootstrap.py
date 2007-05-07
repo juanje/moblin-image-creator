@@ -93,8 +93,8 @@ if __name__ == '__main__':
     # nuke all the yum cache to ensure that we get the latest greatest at project creation
     shutil.rmtree(os.path.join(path, 'var', 'cache', 'yum'))
     # Create the rootstrap archive file
-    print "Creating tarball: %s ..." % tarball_name
     tarball_name = "%s/rootstrap.tar.bz2" % (platform_dir)
+    print "Creating tarball: %s ..." % tarball_name
     tar_obj = tarfile.open(tarball_name, 'w:bz2')
     tar_obj.add(path, '.')
     tar_obj.close()
