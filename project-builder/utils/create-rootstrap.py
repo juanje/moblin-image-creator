@@ -86,7 +86,7 @@ if __name__ == '__main__':
         print line.strip()
     if proc.wait() != 0:
         print >> sys.stderr, "ERROR: Unable to create rootstrap!"
-        for line in proc.stdout:
+        for line in proc.stderr:
             print line.strip()
         sys.exit(1)
     # nuke all the yum cache to ensure that we get the latest greatest at project creation

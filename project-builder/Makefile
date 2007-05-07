@@ -16,7 +16,6 @@ install: basicinstall runbasictests
 
 basicinstall: ${ROOTSTRAP_FILES}
 	@echo -n "Installing project-builder..."
-	make -C locale/
 	@mkdir -p ${DESTDIR}/${SHAREDIR}/lib
 	@mkdir -p ${DESTDIR}/${SHAREDIR}/locale
 	@mkdir -p ${DESTDIR}/${SHAREDIR}/platforms
@@ -25,7 +24,7 @@ basicinstall: ${ROOTSTRAP_FILES}
 	@mkdir -p ${DESTDIR}/${SHAREDIR}/utils
 	@cp libs/*.py  ${DESTDIR}/${SHAREDIR}/lib
 	@cp gui/*.py  ${DESTDIR}/${SHAREDIR}/lib
-	@cp -a locale/* ${DESTDIR}/${SHAREDIR}/locale/
+#	@cp -a locale/* ${DESTDIR}/${SHAREDIR}/locale/
 	@cp -a platforms/* ${DESTDIR}/${SHAREDIR}/platforms/
 	@cp gui/*.glade ${DESTDIR}/${SHAREDIR}
 	@cp -a repos/* ${DESTDIR}/${SHAREDIR}/repos/
