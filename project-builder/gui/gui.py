@@ -6,6 +6,7 @@ import gnome
 import gobject
 import gtk
 import gtk.glade
+import locale
 import os
 import pygtk
 import shutil
@@ -16,6 +17,16 @@ import traceback
 import pdk_utils
 import SDK 
 
+# Initial stuff for Internationlization and Localization support.
+# Locale stuff
+# Set the locale to the user's preferred locale
+locale.setlocale(locale.LC_ALL, '')
+USER_LOCALE = locale.getlocale(locale.LC_ALL)
+
+# More info: http://docs.python.org/lib/i18n.html
+gettext.bindtextdomain('pdk', '/usr/share/pdk/locale')
+gettext.textdomain('pdk')
+gettext.install('pdk', '/usr/share/pdk/locale')
 _ = gettext.lgettext
 
 class App(object):
