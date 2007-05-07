@@ -79,6 +79,7 @@ if __name__ == '__main__':
     print >> buildstamp, "%s %s" % (socket.gethostname(), time.strftime("%d-%m-%Y %H:%M:%S %Z"))
     buildstamp.close()
     # install yum inside the project using the host tools
+    print "Creating rootstrap directory with yum..."
     cmd = 'yum -y --disablerepo=localbase --installroot=%s install yum yum-protectbase' % path
     proc = subprocess.Popen(cmd.split(), stdin = subprocess.PIPE, stdout = subprocess.PIPE, stderr = subprocess.STDOUT, close_fds = True)
     proc.stdin.close()
@@ -92,6 +93,7 @@ if __name__ == '__main__':
     # nuke all the yum cache to ensure that we get the latest greatest at project creation
     shutil.rmtree(os.path.join(path, 'var', 'cache', 'yum'))
     # Create the rootstrap archive file
+    print "Creating tarball: %s ..." % tarball_name
     tarball_name = "%s/rootstrap.tar.bz2" % (platform_dir)
     tar_obj = tarfile.open(tarball_name, 'w:bz2')
     tar_obj.add(path, '.')
