@@ -1,7 +1,15 @@
 #!/usr/bin/python -tt
 # vim: ai ts=4 sts=4 et sw=4
 
-import sys, tempfile, subprocess, shutil, os, stat, socket, time
+import os
+import shutil
+import socket
+import stat
+import subprocess
+import sys
+import tarfile
+import tempfile
+import time
 
 class Callback:
     def iteration(self, process):
@@ -70,27 +78,23 @@ if __name__ == '__main__':
     buildstamp = open(os.path.join(path, 'etc', 'buildstamp'), 'w')
     print >> buildstamp, "%s %s" % (socket.gethostname(), time.strftime("%d-%m-%Y %H:%M:%S %Z"))
     buildstamp.close()
-
     # install yum inside the project using the host tools
     cmd = 'yum -y --disablerepo=localbase --installroot=%s install yum yum-protectbase' % path
-    proc = subprocess.Popen(cmd.split(), stderr = subprocess.STDOUT, stdout = subprocess.PIPE)
+    proc = subprocess.Popen(cmd.split(), stdin = subprocess.PIPE, stdout = subprocess.PIPE, stderr = subprocess.STDOUT, close_fds = True)
+    proc.stdin.close()
+    for line in proc.stdout:
+        print line.strip()
     if proc.wait() != 0:
         print >> sys.stderr, "ERROR: Unable to create rootstrap!"
         for line in proc.stdout:
             print line.strip()
-            sys.exit(1)
-
+        sys.exit(1)
     # nuke all the yum cache to ensure that we get the latest greatest at project creation
     shutil.rmtree(os.path.join(path, 'var', 'cache', 'yum'))
-    
     # Create the rootstrap archive file
-    cmd = "tar -jcpvf %s/rootstrap.tar.bz2 -C %s ." % (platform_dir, path)
-    proc = subprocess.Popen(cmd.split(), stderr = subprocess.STDOUT, stdout = subprocess.PIPE)
-    if proc.wait() != 0:
-        print >> sys.stderr, "ERROR: Unable to create rootstrap!"
-        for line in proc.stdout:
-            print line.strip()
-            sys.exit(1)
-
+    tarball_name = "%s/rootstrap.tar.bz2" % (platform_dir)
+    tar_obj = tarfile.open(tarball_name, 'w:bz2')
+    tar_obj.add(path, '.')
+    tar_obj.close()
     # cleanup the temporary project filesystem
     shutil.rmtree(path)
