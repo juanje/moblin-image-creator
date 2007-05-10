@@ -23,7 +23,8 @@ debug = False
 
 def findPackages(config_info, dirname = None):
     """Given a cBuildConfigInstance object.  Find all the packages in the
-    source repository"""
+    source repository
+    Returns: Dictionary of packages"""
     if dirname == None:
         dirname = config_info['packages_dir']
     package_dict = {}
@@ -175,15 +176,18 @@ class cPackageInfo:
     def getPristineForPackage(self):
         """Figure out the pristine files directory (in the PRISTINE_SOURCE
         directory) for this package"""
-        # Get the part which is not the meta data dir
-        basedir = self.dirname.split(self.config_info['packages_dir'])[1]
-        # Also remove the package name from the directory, since that package name
-        # contains the version also
-        basedir = ".%s" % os.path.split(basedir)[0]
-        package_name = self.name
-        if not package_name:
-            raise ValueError("Empty name file: %s" % package_info['dirname'])
-        tarball_dir = os.path.normpath(os.path.join(self.config_info['pristine_dir'], basedir, package_name))
+        if self.config_info:
+            # Get the part which is not the meta data dir
+            basedir = self.dirname.split(self.config_info['packages_dir'])[1]
+            # Also remove the package name from the directory, since that package name
+            # contains the version also
+            basedir = ".%s" % os.path.split(basedir)[0]
+            package_name = self.name
+            if not package_name:
+                raise ValueError("Empty name file: %s" % package_info['dirname'])
+            tarball_dir = os.path.normpath(os.path.join(self.config_info['pristine_dir'], basedir, package_name))
+        else:
+            tarball_dir = None
         return tarball_dir
 
 class cBuildConfig:
@@ -245,6 +249,8 @@ class cBuildConfigInstance:
         return self.work_dict[key]
     def __str__(self):
         return self.work_dict.__str__()
+    def __repr__(self):
+        return "cBuildConfigInstance<%s>" % self.work_dict.__repr__()
     def getLastRevision(self):
         return self.last_revision
     

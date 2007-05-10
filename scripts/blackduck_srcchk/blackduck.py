@@ -3,31 +3,120 @@
 import os
 import pprint
 import re
+import shutil
 import subprocess
 import sys
+import tempfile
 
 import repo_tools
 
 GIT_REPO = "rsync://umd-repo.jf.intel.com/repos/FC6/package-meta-data.git"
 BASE_DIR = os.path.abspath(os.path.dirname(sys.argv[0]))
+GIT_DIR = os.path.join(BASE_DIR, "package-meta-data")
 
 def main():
     ENV_VARS = {"BDSSERVER" : "http://jfipscn01.intel.com/"}
     for name, value in ENV_VARS.iteritems():
         os.environ[name] = value
 
-#    cloneRepo(GIT_REPO, os.path.join(BASE_DIR, "package-meta-data"))
+    # Find all the packages in our git repository
+    repo_pkgs = repo_tools.findPackages(None, dirname = GIT_DIR)
+
+#    cloneRepo(GIT_REPO, GIT_DIR)
     project_dict = listProjects()
+    scan_dict = {}
     for proj_id, proj_desc in sorted(project_dict.iteritems()):
+        # We are assuming that the project description field will be in the
+        # form of: mid-<package_name> for the packages we are scanning
         result = re.search(r'^mid-(?P<pkgid>.*)', proj_desc)
         if result:
             proj_pkg = result.group('pkgid')
         else:
             continue
-        print "%s\t%s\t%s" % (proj_pkg, proj_id, proj_desc)
+        specfile = "%s.spec" % proj_pkg
+        pkg_dir = findPackageBySpecfile(specfile, repo_pkgs)
+        if not pkg_dir:
+            print "Not found: %s\t%s\t%s" % (proj_pkg, proj_id, proj_desc)
+            continue
+        if not os.path.isfile(os.path.join(pkg_dir, 'info', 'pristine_tip')):
+            print "No pristine_tip file for: %s" % proj_pkg
+            continue
+        if os.path.isfile(os.path.join(pkg_dir, 'blackduck.xml')):
+            print "Already scanned: %s" % proj_pkg
+            continue
+        scan_dict[proj_id] = pkg_dir
+    pprint.pprint(scan_dict)
+    for name, dirname in sorted(scan_dict.iteritems()):
+        print name, scanPackage(name, dirname)
+        sys.exit(1)
         
-#    createProject("c_mid-busybox2")
-#    login()
+#    newProject("c_mid-busybox2")
+
+def scanPackage(proj_id, dirname):
+    tmpdir = tempfile.mkdtemp()
+    if not os.path.isdir(tmpdir):
+        return None
+    tmpfile = os.path.join(tmpdir, 'src.c')
+    print tmpfile
+    pristine = getPristineRevision(dirname)
+    cwd = os.getcwd()
+    os.chdir(GIT_DIR)
+    rel_dir = dirname[len(GIT_DIR) + 1:]
+    cmd = "git diff %s HEAD %s" % (pristine, rel_dir)
+    result = execCommand(cmd)
+    outfile = open(tmpfile, 'w')
+    for line in result:
+        line = line.rstrip()
+        if re.search(r'^[- +]', line):
+            if not re.search(r'^(---|\+\+\+)', line):
+                line = line[1:]
+        print line
+        print >> outfile, line
+    outfile.close()
+    os.chdir(tmpdir)
+    pprint.pprint(newProject(proj_id))
+#    bdsToolCommand('analyze')
+
+#    shutil.rmtree(tmpdir)
+
+#     cd ../scancodes/$gitfolder
+#     pwd
+#     echo bdstool start _________________________________________
+#     bdstool new-project $prjid
+#     bdstool analyze
+#     bdstool upload
+#     echo bdstool end __________________________________________
+#     cd -
+# done
+
+
+def getPristineRevision(dirname):
+    pristine_file = os.path.join(dirname, 'info', 'pristine_tip')
+    if not os.path.isfile(pristine_file):
+        return None
+    in_file = open(pristine_file, 'r')
+    output = []
+    for line in in_file:
+        if re.search(r'^\s*#', line):
+            continue
+        line = line.strip()
+        if len(line) != 40:
+            print "Value in pristine_tip is not 40 characters in length"
+            print "%s: %s" % (pristine_file, line)
+            sys.exit(1)
+        output.append(line)
+    if len(output) != 1:
+        print "pristine_tip file had multiple values!"
+        print "%s: %s" % (pristine_file, output)
+        sys.exit(1)
+    return output[0]
+
+def findPackageBySpecfile(specfile_name, repo_pkgs):
+    for pkg_name, pkg_cfg in repo_pkgs.iteritems():
+        t_specfile = os.path.basename(pkg_cfg.specfile)
+        if specfile_name == t_specfile:
+            return pkg_cfg.dirname
+    return None
 
 def cloneRepo(repo_url, destination_dir):
     os.system("git clone %s %s" % (repo_url, destination_dir))
@@ -44,9 +133,7 @@ def listProjects():
             output[key] = name
     return output
 
-def bdstoolCommand(cmd):
-    base_command = "bdstool"
-    cmd = "%s %s" % (base_command, cmd)
+def execCommand(cmd):
     proc = subprocess.Popen(cmd.split(), stdin = subprocess.PIPE, stdout = subprocess.PIPE, stderr = subprocess.STDOUT, close_fds = True)
     proc.stdin.close()
     output = []
@@ -54,64 +141,23 @@ def bdstoolCommand(cmd):
         output.append(line.rstrip())
     if proc.wait() != 0:
         print >> sys.stderr, "ERROR: executing command: %s" % cmd
-        for line in proc.stdout:
+        for line in output:
             print line.strip()
         sys.exit(1)
     return output
 
-def createProject(project_name):
+def bdstoolCommand(cmd):
+    base_command = "bdstool"
+    cmd = "%s %s" % (base_command, cmd)
+    return execCommand(cmd)
+
+def newProject(project_name):
     #bdstoolCommand("new-project --unattached %s" % project_name)
     bdstoolCommand("new-project %s" % project_name)
 
 def login():
     bdstoolCommand("login")
 
-# if [ -e package-meta-data ]; then
-#    echo "re-sync package-meta-data with umd-repo.jf.intel.com? [y/n]"
-#    read yesorno
-# else yesorno="Y"
-# fi
-# 
-# if [ "$yesorno" == "Y" -o "$yesorno" == "y" ]; then
-#    rm -rf package-meta-data
-#    git clone http://umd-repo.jf.intel.com/git/FC6/package-meta-data.git ./package-meta-data
-# fi
-# echo "Enter your account on jfipsca01.intel.com:"
-# read username
-# echo "Enter your password for the account:"
-# read password
-# echo "Start to login JF ProtexIP server..."
-# bdstool --server jfipscn01.intel.com --user $username  --password $password login
-
-# echo "Getting current projects..."
-# prjlist=`bdstool list-projects | sed -ne "/^c_.*/p"`
-# echo "$prjlist"
-# cd package-meta-data
-# echo "$prjlist" |
-# while read row; do
-#     echo Processing $row
-#     prjid=${row% *}
-#     echo Project $prjid
-# # remove leading space   
-#     gitid=`echo -n ${row#* }`
-#     gitid=${gitid#mid-}
-#     echo Git "$gitid"
-#     gitfolder=$(find ./ -name "$gitid.spec" | tail -n 1)
-#     gitfolder=${gitfolder%/*/*}
-#     gitfolder=${gitfolder#*/}
-#     if [ -z "$gitfolder" ]; then
-#        echo no git folder
-#        continue;
-#     fi
-#     if [ ! -e $gitfolder/info/pristine_tip ]; then
-#        echo no pristine_tip will skip
-#        continue;
-#     fi
-#     echo Git folder is $gitfolder    
-#     if [ -e ../scancodes/$gitfolder/blackduck.xml ]; then
-#        echo already blackducked
-#        continue;
-#     fi
 #     rm -rf ../scancodes/$gitfolder
 #     mkdir -p ../scancodes/$gitfolder
 #     pristine_index=`cat $gitfolder/info/pristine_tip`
