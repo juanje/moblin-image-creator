@@ -50,8 +50,6 @@ def main():
         print name, scanPackage(name, dirname)
         sys.exit(1)
         
-#    newProject("c_mid-busybox2")
-
 def scanPackage(proj_id, dirname):
     tmpdir = tempfile.mkdtemp()
     if not os.path.isdir(tmpdir):
@@ -158,27 +156,12 @@ def newProject(project_name):
 def login():
     bdstoolCommand("login")
 
-#     rm -rf ../scancodes/$gitfolder
-#     mkdir -p ../scancodes/$gitfolder
-#     pristine_index=`cat $gitfolder/info/pristine_tip`
-#     echo pristine_index is $pristine_index
-#     git diff $pristine_index HEAD $gitfolder > ../scancodes/$gitfolder/src.c
-#     echo "removing leading +,++,+-"
-#     sed -ne "s/^[+-]*\(*\)*/\1/p" -i ../scancodes/$gitfolder/src.c
-#     cd ../scancodes/$gitfolder
-#     pwd
-#     echo bdstool start _________________________________________
-#     bdstool new-project $prjid
-#     bdstool analyze
-#     bdstool upload
-#     echo bdstool end __________________________________________
-#     cd -
-# done
-
 if '__main__' == __name__:
     sys.exit(main())
 
 """
+Documentation from a 'bdstool help all' exec:
+
 Run 'bdstool usage' to see command line syntax.
 Run 'bdstool help introduction' for a quick start with some common commands.
 Run 'bdstool help overview' for an overview of the Black Duck system.
