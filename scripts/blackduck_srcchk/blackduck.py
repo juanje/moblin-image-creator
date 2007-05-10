@@ -12,19 +12,19 @@ GIT_REPO = "rsync://umd-repo.jf.intel.com/repos/FC6/package-meta-data.git"
 BASE_DIR = os.path.abspath(os.path.dirname(sys.argv[0]))
 
 def main():
-    ENV_VARS = { "BDSSERVER" : "http://jfipscn01.intel.com/", "BDSUSER" : "john.l.villalovos@intel.com", "BDSPASSWORD" : "dorkdork" }
+    ENV_VARS = {"BDSSERVER" : "http://jfipscn01.intel.com/"}
     for name, value in ENV_VARS.iteritems():
         os.environ[name] = value
 
 #    cloneRepo(GIT_REPO, os.path.join(BASE_DIR, "package-meta-data"))
     project_dict = listProjects()
-    for name, value in sorted(project_dict.iteritems()):
-        result = re.search(r'^mid-(?P<pkgid>.*)', value)
+    for proj_id, proj_desc in sorted(project_dict.iteritems()):
+        result = re.search(r'^mid-(?P<pkgid>.*)', proj_desc)
         if result:
-            value = result.group('pkgid')
+            proj_pkg = result.group('pkgid')
         else:
             continue
-        print name, value
+        print "%s\t%s\t%s" % (proj_pkg, proj_id, proj_desc)
         
 #    createProject("c_mid-busybox2")
 #    login()
@@ -82,6 +82,7 @@ def login():
 # read password
 # echo "Start to login JF ProtexIP server..."
 # bdstool --server jfipscn01.intel.com --user $username  --password $password login
+
 # echo "Getting current projects..."
 # prjlist=`bdstool list-projects | sed -ne "/^c_.*/p"`
 # echo "$prjlist"
