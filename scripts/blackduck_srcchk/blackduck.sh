@@ -5,6 +5,9 @@ if [ -e package-meta-data ]; then
 else yesorno="Y"
 fi
 
+echo "re-do code scan even if blackduck.xml exists? [y/n]"
+read redo
+
 if [ "$yesorno" == "Y" -o "$yesorno" == "y" ]; then
    rm -rf package-meta-data
    git clone http://umd-repo.jf.intel.com/git/FC6/package-meta-data.git ./package-meta-data
@@ -28,23 +31,31 @@ while read row; do
     gitid=`echo -n ${row#* }`
     gitid=${gitid#mid-}
     echo Git "$gitid"
-    gitfolder=$(find ./ -name "$gitid.spec" | tail -n 1)
-    gitfolder=${gitfolder%/*/*}
+    gitfolder=$(find ./ -name "$gitid" -type d | tail -n 1)
+    #gitfolder=${gitfolder%/*/*}
     gitfolder=${gitfolder#*/}
     if [ -z "$gitfolder" ]; then
        echo no git folder
        continue;
     fi
+    echo Git folder is $gitfolder    
     if [ ! -e $gitfolder/info/pristine_tip ]; then
        echo no pristine_tip will skip
        continue;
     fi
-    echo Git folder is $gitfolder    
     if [ -e ../scancodes/$gitfolder/blackduck.xml ]; then
        echo already blackducked
-       continue;
+       keepold=1
+       if [ "$redo" == "n" -o "$redo" == "N" ]; then
+          continue
+       fi
+       echo "will do re-scan as specified"
+    else keepold=0
     fi
-    rm -rf ../scancodes/$gitfolder
+    if [ $keepold -eq 0 ]; then
+       echo will do rm old scancodes folder
+       rm -rf ../scancodes/$gitfolder
+    fi
     mkdir -p ../scancodes/$gitfolder
     pristine_index=`cat $gitfolder/info/pristine_tip`
     echo pristine_index is $pristine_index
@@ -54,7 +65,10 @@ while read row; do
     cd ../scancodes/$gitfolder
     pwd
     echo bdstool start _________________________________________
-    bdstool new-project $prjid
+    if [ $keepold -eq 0 ]; then
+       bdstool new-project $prjid
+    else bdstool reset-analysis
+    fi
     bdstool analyze
     bdstool upload
     echo bdstool end __________________________________________
