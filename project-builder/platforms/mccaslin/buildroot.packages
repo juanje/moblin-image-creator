@@ -1,6 +1,6 @@
 # required for building device images
-squashfs-tools busybox-initramfs dosfstools syslinux module-init-tools
-mcopy
+#squashfs-tools busybox-initramfs dosfstools syslinux module-init-tools
+#mcopy
 
 # Additional kernel development packages
 
