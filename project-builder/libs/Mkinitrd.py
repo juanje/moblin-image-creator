@@ -77,7 +77,7 @@ def create(project, initrd_file, fs_type='RAMFS'):
     os.symlink('bin', os.path.join(scratch_path, 'sbin'))
 
     # Setup Busybox in the initrd
-    cmd_path = os.path.join(project.path, 'sbin/busybox')
+    cmd_path = os.path.join(project.path, '/usr/lib/initramfs-tools/bin/busybox')
     bb = Busybox(cmd_path, bin_path)
     bb.create()
 

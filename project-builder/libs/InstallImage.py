@@ -189,7 +189,7 @@ class InstallImage(object):
         image_path   = os.path.join(image_path,'rootfs.img')
         cmd_args     = "%s %s -e %s" % (fs_path, image_path, exclude_path)
 
-        self.project.chroot("/sbin/mksquashfs", cmd_args)
+        self.project.chroot("/usr/sbin/mksquashfs", cmd_args)
             
     def delete_rootfs(self):
         if self.rootfs and os.path.isfile(self.rootfs_path):
@@ -209,7 +209,7 @@ class InstallImage(object):
         image_path   = os.path.join(image_path,'bootfs.img')
         cmd_args     = "%s %s" % (fs_path, image_path)
 
-        self.project.chroot("/sbin/mksquashfs", cmd_args)
+        self.project.chroot("/usr/sbin/mksquashfs", cmd_args)
             
 
     def delete_bootfs(self):
