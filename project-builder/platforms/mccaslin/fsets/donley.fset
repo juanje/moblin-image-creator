@@ -1,0 +1,6 @@
+[Core]
+DESC=Fundamental fset that provides a root filesystem
+PKGS=grub
+DEBUG_PKGS=
+DEPS=
+

@@ -1,7 +1,5 @@
-SHAREDIR=/usr/share/pdk/
-
-ROOTSTRAP_FILES = platforms/zi9/rootstrap.tar.bz2 \
-                  platforms/donley/rootstrap.tar.bz2
+SHAREDIR = /usr/share/pdk/
+PLATFORMS = mccaslin
 
 all:
 
@@ -14,7 +12,9 @@ runtests: runbasictests
 # Everytime we install the code we want the basic unit tests to run
 install: basicinstall runbasictests
 
-basicinstall: ${ROOTSTRAP_FILES}
+basicinstall:
+	@echo "Installing platform definitions..."
+	@for p in ${PLATFORMS}; do make -C platforms/$$p; done
 	@echo -n "Installing project-builder..."
 	@mkdir -p ${DESTDIR}/${SHAREDIR}/lib
 	@mkdir -p ${DESTDIR}/${SHAREDIR}/locale
@@ -54,21 +54,12 @@ basicinstall: ${ROOTSTRAP_FILES}
 	@echo "Done"
 
 
-foo:
-	@echo "Creating donley/build-rootstrap.tar.bz2..."
-	@echo debootstrap --arch i386 $(shell cat platforms/donley/codename) .tmpdir $(shell cat platforms/donley/mirror)
-
-platforms/zi9/rootstrap.tar.bz2:
-	@echo "Creating zi9/rootstrap.tar.bz2..."
-	@./utils/create-rootstrap.py  platforms/zi9
-
 # Cleans out the current directory cruft
 clean:
 	@echo -n "Cleaning up working directory files..."
 	@rm -f *.pyc
 	@rm -f unittest/*.pyc
 	@find -name \*~ -exec rm -f {} \;
-	@rm -f ${ROOTSTRAP_FILES}
 	@echo "Done"
 
 # Cleans out the installation target

@@ -4,7 +4,7 @@
 """
 Embedded Linux SDK main module
 
-The SDK allows a developer to use any yum repository as seed material
+The SDK allows a developer to use any apt repository as seed material
 for building a target filesystem for an embedded device.
 
 User list available projects:
@@ -100,8 +100,10 @@ target.installFset(fset, 1)
 import os
 import re
 import shutil
+import socket
 import sys
 import subprocess
+import time
 
 import Platform
 import Project
@@ -234,7 +236,7 @@ class SDK(object):
         config.write("PLATFORM=%s\n" % (platform.name))
         config.close()
 
-        rootstrap = os.path.join(platform.path, "rootstrap.tar.bz2")
+        rootstrap = os.path.join(platform.path, "build-rootstrap.tar.bz2")
         if not os.path.isfile(rootstrap):
             os.unlink(config_path)
             raise ValueError("Internal Error: Missing %s" % (rootstrap))
@@ -254,6 +256,10 @@ class SDK(object):
             shutil.rmtree(install_path)
             os.unlink(config_path)
             raise ValueError(" ".join(proc.stderr.readlines()))
+
+        buildstamp = open(os.path.join(install_path, 'etc', 'buildstamp'), 'w')
+        print >> buildstamp, "%s %s" % (socket.gethostname(), time.strftime("%d-%m-%Y %H:%M:%S %Z"))
+        buildstamp.close()
         
         # instantiate the project
         try:

@@ -27,88 +27,29 @@ class FileSystem(object):
     usefull with the root filesystem will require the caller to use the
     'install' method for installing new RPM packages.
     """
-    def __init__(self, path, repos, cb):
-        if not path or not repos:
+    def __init__(self, path, cb):
+        if not path:
             raise ValueError("Empty argument passed in")
         self.cb = cb
         self.path = os.path.abspath(os.path.expanduser(path))
-        try:
-            self.__createBase(path, repos)
-            self.__createDevices()
-            # TODO: install yum and yum-protectbase
-        except:
-            pass
-
-        # create a build timestamp file if not present
-        if not os.path.isfile(os.path.join(self.path, 'etc', 'buildstamp')):
-            buildstamp = open(os.path.join(self.path, 'etc', 'buildstamp'), 'w')
-            print >> buildstamp, "%s %s" % (socket.gethostname(), time.strftime("%d-%m-%Y %H:%M:%S %Z"))
-            buildstamp.close()
-            
-    def __createBase(self, path, repos):
-        for dirname in [ 'proc', 'var/log', 'var/lib/rpm', 'dev', 'etc/yum.repos.d' ]:
-            os.makedirs(os.path.join(path, dirname))
-        target_etc = os.path.join(path, "etc")
-        for filename in [ 'hosts', 'resolv.conf' ]:
-            shutil.copy(os.path.join('/etc', filename), target_etc)
-        yumconf = open(os.path.join(target_etc, 'yum.conf'), 'w')
-        print >> yumconf, """\
-[main]
-cachedir=/var/cache/yum
-keepcache=0
-debuglevel=2
-logfile=/var/log/yum.log
-pkgpolicy=newest
-distroverpkg=redhat-release
-tolerant=1
-exactarch=1
-obsoletes=1
-gpgcheck=0
-plugins=1
-metadata_expire=1800
-"""
-        yumconf.close()
-        for repo in repos:
-            shutil.copy(repo, os.path.join(target_etc, 'yum.repos.d'))
-
-    def __createDevices(self):
-        devices = [
-            # name, major, minor, mode
-            ('console', 5, 1, (0600 | stat.S_IFCHR)),
-            ('null',    1, 3, (0666 | stat.S_IFCHR)),
-            ('random',  1, 8, (0666 | stat.S_IFCHR)),
-            ('urandom', 1, 9, (0444 | stat.S_IFCHR)),
-            ('zero',    1, 5, (0666 | stat.S_IFCHR)),
-        ]
-        for device_name, major, minor, mode in devices:
-            device_path = os.path.join(self.path, 'dev', device_name)
-            device = os.makedev(major, minor)
-            os.mknod(device_path, mode, device)
-            # Seems redundant, but mknod doesn't seem to set the mode to
-            # what we want :(
-            os.chmod(device_path, mode)
 
     def update(self, path):
-        command = '-y --installroot=%s update' % (path)
-        ret = self.chroot("/usr/bin/yum", command) 
+        command = '-y --force-yes -o Dir::State=%(t)s/var/lib/apt -o Dir::State::status=%(t)s/var/lib/dpkg/status -o Dir::Cache=%(t)s/var/cache/apt -o Dir::Etc::Sourcelist=%(t)s/etc/apt/sources.list -o Dir::Etc::main=%(t)s/etc/apt/apt.conf -o Dir::Etc::parts=%(t)s/etc/apt/apt.conf.d -o DPkg::Options::=--root=%(t)s -o DPkg::Run-Directory=%(t)s upgrade' % {'t': path}
+        ret = self.chroot("/usr/bin/apt-get", command) 
         if ret != 0:
             raise OSError("Internal error while attempting to run: %s" % command)
 
-
     def install(self, path, packages):
-        """
-        Call into yum to install RPM packages using the specified yum
-        repositories
-        """
         if not packages:
             # No packages, so nothing to do
             return
-        command = '-y --installroot=%s install ' % (path)
+        command = '-y --force-yes -o Dir::State=%(t)s/var/lib/apt -o Dir::State::status=%(t)s/var/lib/dpkg/status -o Dir::Cache=%(t)s/var/cache/apt -o Dir::Etc::Sourcelist=%(t)s/etc/apt/sources.list -o Dir::Etc::main=%(t)s/etc/apt/apt.conf -o Dir::Etc::parts=%(t)s/etc/apt/apt.conf.d -o DPkg::Options::=--root=%(t)s -o DPkg::Run-Directory=%(t)s install ' % {'t': path}
         for p in packages:
             command += ' %s' % p
-        ret = self.chroot("/usr/bin/yum", command) 
+        ret = self.chroot("/usr/bin/apt-get", command) 
         if ret != 0:
-            raise OSError("Internal error while attempting to run: %s" % command)
+            raise OSError("Internal error while attempting to run: apt-get %s" % command)
+        
 
     def mount(self):
         path = os.path.join(self.path, 'proc')
@@ -117,16 +58,16 @@ metadata_expire=1800
             if result != 0:
                 raise OSError("Internal error while attempting to mount proc filesystem!")
 
-        # search for any file:// URL's in the configured yum repositories, and
+        # search for any file:// URL's in the configured apt repositories, and
         # when we find them make the equivilant directory in the new filesystem
         # and then mount --bind the file:// path into the filesystem.
-        rdir = os.path.join(self.path, 'etc', 'yum.repos.d')
+        rdir = os.path.join(self.path, 'etc', 'apt', 'sources.list.d')
         if os.path.isdir(rdir):
             for fname in os.listdir(rdir):
                 file = open(os.path.join(rdir, fname))
                 for line in file:
-                    if re.search(r'^\s*baseurl=file:\/\/\/', line):
-                        p = line.split('baseurl=file:///')[1].strip()
+                    if re.search(r'^\s*deb file:\/\/\/', line):
+                        p = line.split(' ')[1].split('file:\/\/')[1]
                         new_mount = os.path.join(self.path, p)
                         if not os.path.isdir(new_mount):
                             os.makedirs(new_mount)
@@ -169,7 +110,7 @@ class Project(FileSystem):
         self.name = name
         self.platform = platform
         self.desc = desc
-        FileSystem.__init__(self, self.path, self.platform.buildroot_repos, cb)
+        FileSystem.__init__(self, self.path, cb)
 
         # Create our targets directory
         targets_path = os.path.join(self.path, 'targets')
@@ -195,6 +136,29 @@ class Project(FileSystem):
         if not name:
             raise ValueError("Target name was not specified")
         if not name in self.targets:
+            rootstrap = os.path.join(self.platform.path, "target-rootstrap.tar.bz2")
+            if not os.path.isfile(rootstrap):
+                raise ValueError("Internal Error: Missing %s" % (rootstrap))
+
+            install_path = os.path.join(self.path, 'targets', name, 'fs')
+            os.makedirs(install_path)
+
+            cmd = "tar -jxvf %s -C %s" % (rootstrap, install_path)
+            proc = subprocess.Popen(cmd.split(), stderr = subprocess.PIPE)
+            while proc.poll() == None:
+                try: 
+                    self.cb.iteration(process=proc)
+                except:
+                    pass
+            if proc.returncode != 0:
+                print >> sys.stderr, "ERROR: Unable to rootstrap %s from %s!" % (rootstrap, name)
+                shutil.rmtree(os.path.join(self.path, 'targets', name))
+                raise ValueError(" ".join(proc.stderr.readlines()))
+
+            buildstamp = open(os.path.join(install_path, 'etc', 'buildstamp'), 'w')
+            print >> buildstamp, "%s %s" % (socket.gethostname(), time.strftime("%d-%m-%Y %H:%M:%S %Z"))
+            buildstamp.close()
+
             self.targets[name] = Target(name, self, self.cb)
             self.targets[name].mount()
         return self.targets[name]
@@ -259,7 +223,7 @@ class Target(FileSystem):
             os.makedirs(self.image_path)
 
         # Instantiate the target filesystem
-        FileSystem.__init__(self, self.fs_path, project.platform.target_repos, cb)
+        FileSystem.__init__(self, self.fs_path, cb)
 
     def installed_fsets(self):
         result = []
