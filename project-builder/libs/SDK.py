@@ -157,25 +157,6 @@ class SDK(object):
         self.version = "0.1"
         self.path = os.path.abspath(os.path.expanduser(path))
         self.cb = cb
-
-        sdk_config_path = os.path.join(self.path, 'sdk.config')
-        try:
-            self.proxy = PackageConfig(sdk_config_path)
-        except:
-            # the config file doesn't exists, so create one and use
-            # the current environment to guess at the correct proxy settings
-            config = open(sdk_config_path, 'w')
-            if 'http_proxy' in os.environ:
-                config.write("http_proxy=%s\n" % (os.environ['http_proxy']))
-            else:
-                config.write("http_proxy=\n")
-            if 'RSYNC_PROXY' in os.environ:
-                config.write("rsync_proxy=%s\n" % (os.environ['RSYNC_PROXY']))
-            else:
-                config.write("rsync_proxy=\n")
-            config.close()
-            pass
-        
         self.config_path = os.path.join(self.path, 'projects')
         if not os.path.isdir(self.config_path):
             os.mkdir(self.config_path)

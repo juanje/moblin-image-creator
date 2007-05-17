@@ -26,15 +26,6 @@ class Callback:
         return
 
 sdk = SDK.SDK(cb = Callback())
-try:
-    os.environ['http_proxy'] = sdk.proxy.http_proxy
-    os.environ['RSYNC_PROXY'] = sdk.proxy.rsync_proxy
-except:
-    try:
-        del os.environ['http_proxy']
-        del os.environ['RSYNC_PROXY']        
-    except:
-        pass
 
 def main():
     if sys.hexversion < 0x2040000:
