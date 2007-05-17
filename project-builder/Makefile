@@ -53,9 +53,10 @@ basicinstall: ${ROOTSTRAP_FILES}
 	fi
 	@echo "Done"
 
-platforms/donley/rootstrap.tar.bz2:
-	@echo "Creating donley/rootstrap.tar.bz2..."
-	@./utils/create-rootstrap.py  platforms/donley
+
+foo:
+	@echo "Creating donley/build-rootstrap.tar.bz2..."
+	@echo debootstrap --arch i386 $(shell cat platforms/donley/codename) .tmpdir $(shell cat platforms/donley/mirror)
 
 platforms/zi9/rootstrap.tar.bz2:
 	@echo "Creating zi9/rootstrap.tar.bz2..."

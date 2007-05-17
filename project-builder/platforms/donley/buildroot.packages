@@ -1,23 +1,8 @@
-# Bring in the same stuff as the base mock buildroot
-buildsys-build
+# Additional kernel development packages
 
-# stuff needed for building pretty much any package
-tar patch gcc gcc-c++ make automake autoconf libtool file rpm-build bzip2 
+# Additional X development packages
 
-# not really needed for building, but it sure makes life easier
-vim-enhanced tree less diffutils yum
+# Additional application developement packages
+libgtk2.0-dev
 
-# stuff needed for kernel development
-module-init-tools ncurses-devel nash gzip
 
-# stuff needed for GUI development
-#gtk2-devel gconf2-devel gettext-devel gtkdoc dbus-1-devel dbus-1-glib
-
-# extras
-#perl-XML-Parser
-
-# Hildon related build stuff
-#outo libmatchbox libfakekey esound-devel
-
-# Packages required for making bootable images
-syslinux busybox squashfs-tools
