@@ -8,20 +8,22 @@ all: build-rootstrap.tar.bz2 target-rootstrap.tar.bz2
 build-rootstrap.tar.bz2:
 	@echo "Creating build-rootstrap.tar.bz2..."
 	@debootstrap --variant=buildd --include=${TOOLS} --arch i386 $(shell cat build-codename) ${TMPDIR} $(shell cat build-mirror)
-	@rm -fR ${TMPDIR}/var/cache/apt
+	@rm -fR ${TMPDIR}/var/cache/apt/archives/*.deb
 	@tar -jcpvf $@ -C ${TMPDIR} .
 	@rm -fR ${TMPDIR}
 
 target-rootstrap.tar.bz2:
 	@echo "Creating target-rootstrap.tar.bz2..."
 	@debootstrap --arch i386 $(shell cat target-codename) ${TMPDIR} $(shell cat target-mirror)
-	@rm -fR ${TMPDIR}/var/cache/apt
+	@rm -fR ${TMPDIR}/var/cache/apt/archives/*.deb
 	@tar --exclude="var/cache/apt/" -jcpvf $@ -C ${TMPDIR} .
 	@rm -fR ${TMPDIR}
 
 install:
 	@mkdir -p ${SHARE}/platforms/${PNAME}
 	@cp -a fsets ${SHARE}/platforms/${PNAME}/
+	@mkdir -p /usr/lib/debootstrap/scripts/
+	@cp gutsy /usr/lib/debootstrap/scripts/
 
 clean:
 	rm -f *.tar.bz2 *~
