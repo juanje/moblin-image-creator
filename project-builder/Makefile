@@ -2,6 +2,7 @@ SHAREDIR = /usr/share/pdk/
 PLATFORMS = mccaslin
 
 all:
+	@for p in ${PLATFORMS}; do make -C platforms/$$p; done
 
 # This target will do a cleanall and then reinstall
 cleaninstall: cleanall install
@@ -12,9 +13,9 @@ runtests: runbasictests
 # Everytime we install the code we want the basic unit tests to run
 install: basicinstall runbasictests
 
-basicinstall:
+basicinstall: all
 	@echo "Installing platform definitions..."
-	@for p in ${PLATFORMS}; do make -C platforms/$$p; done
+	@for p in ${PLATFORMS}; do make -C platforms/$$p install; done
 	@echo -n "Installing project-builder..."
 	@mkdir -p ${DESTDIR}/${SHAREDIR}/lib
 	@mkdir -p ${DESTDIR}/${SHAREDIR}/locale

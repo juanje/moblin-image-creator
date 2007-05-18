@@ -1,5 +1,7 @@
 TOOLS=squashfs-tools,busybox-initramfs,dosfstools,syslinux,module-init-tools,mtools
 TMPDIR = /tmp/.tmpbuilddir
+PNAME = mccaslin
+SHARE = /usr/share/pdk
 
 all: build-rootstrap.tar.bz2 target-rootstrap.tar.bz2
 
@@ -16,6 +18,10 @@ target-rootstrap.tar.bz2:
 	@rm -fR ${TMPDIR}/var/cache/apt
 	@tar --exclude="var/cache/apt/" -jcpvf $@ -C ${TMPDIR} .
 	@rm -fR ${TMPDIR}
+
+install:
+	@mkdir -p ${SHARE}/platforms/${PNAME}
+	@cp -a fsets ${SHARE}/platforms/${PNAME}/
 
 clean:
 	rm -f *.tar.bz2 *~
