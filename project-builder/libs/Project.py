@@ -34,16 +34,16 @@ class FileSystem(object):
         self.path = os.path.abspath(os.path.expanduser(path))
 
     def update(self, path):
-        command = '-y --force-yes -o Dir::State=%(t)s/var/lib/apt -o Dir::State::status=%(t)s/var/lib/dpkg/status -o Dir::Cache=%(t)s/var/cache/apt -o Dir::Etc::Sourcelist=%(t)s/etc/apt/sources.list -o Dir::Etc::main=%(t)s/etc/apt/apt.conf -o Dir::Etc::parts=%(t)s/etc/apt/apt.conf.d -o DPkg::Options::=--root=%(t)s -o DPkg::Run-Directory=%(t)s upgrade' % {'t': path}
+        command = '-y --force-yes -o Dir::State=%(t)s/var/lib/apt -o Dir::State::status=%(t)s/var/lib/dpkg/status -o Dir::Cache=/var/cache/apt -o Dir::Etc::Sourcelist=%(t)s/etc/apt/sources.list -o Dir::Etc::main=%(t)s/etc/apt/apt.conf -o Dir::Etc::parts=%(t)s/etc/apt/apt.conf.d -o DPkg::Options::=--root=%(t)s -o DPkg::Run-Directory=%(t)s upgrade' % {'t': path}
         ret = self.chroot("/usr/bin/apt-get", command) 
         if ret != 0:
             raise OSError("Internal error while attempting to run: %s" % command)
-
+        
     def install(self, path, packages):
         if not packages:
             # No packages, so nothing to do
             return
-        command = '-y --force-yes -o Dir::State=%(t)s/var/lib/apt -o Dir::State::status=%(t)s/var/lib/dpkg/status -o Dir::Cache=%(t)s/var/cache/apt -o Dir::Etc::Sourcelist=%(t)s/etc/apt/sources.list -o Dir::Etc::main=%(t)s/etc/apt/apt.conf -o Dir::Etc::parts=%(t)s/etc/apt/apt.conf.d -o DPkg::Options::=--root=%(t)s -o DPkg::Run-Directory=%(t)s install ' % {'t': path}
+        command = '-y --force-yes -o Dir::State=%(t)s/var/lib/apt -o Dir::State::status=%(t)s/var/lib/dpkg/status -o Dir::Cache=/var/cache/apt -o Dir::Etc::Sourcelist=%(t)s/etc/apt/sources.list -o Dir::Etc::main=%(t)s/etc/apt/apt.conf -o Dir::Etc::parts=%(t)s/etc/apt/apt.conf.d -o DPkg::Options::=--root=%(t)s -o DPkg::Run-Directory=%(t)s install ' % {'t': path}
         for p in packages:
             command += ' %s' % p
         ret = self.chroot("/usr/bin/apt-get", command) 
@@ -57,24 +57,33 @@ class FileSystem(object):
             result = os.system('mount --bind /proc ' + path + ' 2> /dev/null')
             if result != 0:
                 raise OSError("Internal error while attempting to mount proc filesystem!")
-
-        # search for any file:// URL's in the configured apt repositories, and
-        # when we find them make the equivilant directory in the new filesystem
-        # and then mount --bind the file:// path into the filesystem.
-        rdir = os.path.join(self.path, 'etc', 'apt', 'sources.list.d')
-        if os.path.isdir(rdir):
-            for fname in os.listdir(rdir):
-                file = open(os.path.join(rdir, fname))
-                for line in file:
-                    if re.search(r'^\s*deb file:\/\/\/', line):
-                        p = line.split(' ')[1].split('file:\/\/')[1]
-                        new_mount = os.path.join(self.path, p)
-                        if not os.path.isdir(new_mount):
-                            os.makedirs(new_mount)
-                        os.system("mount --bind /%s %s" % (p, new_mount))
-                        # Its no big deal if the repo is really empty, so
-                        # ignore mount errors.
-                file.close()
+        if os.path.isfile(os.path.join(self.path, '.buildroot')):
+            for mnt in ['var/cache/apt/archives']:
+                path = os.path.join(self.path, mnt)
+                if not os.path.ismount(path) and os.path.isdir(os.path.join('/', mnt)):
+                    result = os.system('mount --bind /%s %s' % (mnt, path))
+                    if result != 0:
+                        raise OSError("Internal error while attempting to bind mount /%s!" % (mnt))
+            for file in ['etc/resolv.conf']:
+                shutil.copy(os.path.join('/', file), os.path.join(self.path, file))
+                
+            # search for any file:// URL's in the configured apt repositories, and
+            # when we find them make the equivilant directory in the new filesystem
+            # and then mount --bind the file:// path into the filesystem.
+            rdir = os.path.join(self.path, 'etc', 'apt', 'sources.list.d')
+            if os.path.isdir(rdir):
+                for fname in os.listdir(rdir):
+                    file = open(os.path.join(rdir, fname))
+                    for line in file:
+                        if re.search(r'^\s*deb file:\/\/\/', line):
+                            p = line.split(' ')[1].split('file:\/\/')[1]
+                            new_mount = os.path.join(self.path, p)
+                            if not os.path.isdir(new_mount):
+                                os.makedirs(new_mount)
+                                os.system("mount --bind /%s %s" % (p, new_mount))
+                    # Its no big deal if the repo is really empty, so
+                    # ignore mount errors.
+                    file.close()
                 
     def umount(self):
         for line in os.popen('mount', 'r').readlines():

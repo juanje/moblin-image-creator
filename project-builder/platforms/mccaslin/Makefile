@@ -9,6 +9,7 @@ build-rootstrap.tar.bz2:
 	@echo "Creating build-rootstrap.tar.bz2..."
 	@debootstrap --variant=buildd --include=${TOOLS} --arch i386 $(shell cat build-codename) ${TMPDIR} $(shell cat build-mirror)
 	@rm -fR ${TMPDIR}/var/cache/apt/archives/*.deb
+	@touch ${TMPDIR}/.buildroot
 	@tar -jcpvf $@ -C ${TMPDIR} .
 	@rm -fR ${TMPDIR}
 

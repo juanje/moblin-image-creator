@@ -119,6 +119,7 @@ class App(object):
         self.buttons.DD_USB.set_sensitive(fset_state)
 
     def project_view_changed(self, selection):
+        self.current_project().mount()
         self.redraw_target_view()
 
     def redraw_target_view(self):
