@@ -179,7 +179,8 @@ class Project(FileSystem):
         target = self.targets[name]
         target.umount()
         shutil.rmtree(os.path.join(self.path, 'targets', name))
-
+        self.targets.pop(name)
+        
     def create_live_iso(self, target_name, image_name):
         target = self.targets[target_name]
         target.umount()
