@@ -19,12 +19,10 @@ basicinstall: all
 	@echo -n "Installing project-builder..."
 	@mkdir -p ${DESTDIR}/${SHAREDIR}/lib
 	@mkdir -p ${DESTDIR}/${SHAREDIR}/locale
-	@mkdir -p ${DESTDIR}/${SHAREDIR}/platforms
 	@mkdir -p ${DESTDIR}/${SHAREDIR}/projects
 	@mkdir -p ${DESTDIR}/${SHAREDIR}/utils
 	@cp libs/*.py  ${DESTDIR}/${SHAREDIR}/lib
 	@cp gui/*.py  ${DESTDIR}/${SHAREDIR}/lib
-	@cp -a platforms/* ${DESTDIR}/${SHAREDIR}/platforms/
 	@cp gui/*.glade ${DESTDIR}/${SHAREDIR}
 	@cp COPYING ${DESTDIR}/${SHAREDIR}/
 	@cp -a gui/pixmaps/ ${DESTDIR}/${SHAREDIR}
