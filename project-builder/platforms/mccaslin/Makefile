@@ -1,4 +1,4 @@
-TOOLS=squashfs-tools,busybox-initramfs,dosfstools,syslinux,module-init-tools,mtools
+TOOLS=squashfs-tools,busybox-initramfs,dosfstools,syslinux,module-init-tools,mtools,gpgv
 TMPDIR = /tmp/.tmpbuilddir
 PNAME = mccaslin
 SHARE = /usr/share/pdk

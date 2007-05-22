@@ -75,7 +75,7 @@ class FileSystem(object):
                     file = open(os.path.join(rdir, fname))
                     for line in file:
                         if re.search(r'^\s*deb file:\/\/\/', line):
-                            p = line.split(' ')[1].split('file:\/\/')[1]
+                            p = line.split('file:///')[1].split(' ')[0]
                             new_mount = os.path.join(self.path, p)
                             if not os.path.isdir(new_mount):
                                 os.makedirs(new_mount)
