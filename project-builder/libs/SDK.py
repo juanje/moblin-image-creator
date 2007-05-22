@@ -237,10 +237,6 @@ class SDK(object):
             shutil.rmtree(install_path)
             os.unlink(config_path)
             raise ValueError(" ".join(proc.stderr.readlines()))
-
-        buildstamp = open(os.path.join(install_path, 'etc', 'buildstamp'), 'w')
-        print >> buildstamp, "%s %s" % (socket.gethostname(), time.strftime("%d-%m-%Y %H:%M:%S %Z"))
-        buildstamp.close()
         
         # instantiate the project
         try:

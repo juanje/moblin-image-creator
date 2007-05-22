@@ -49,7 +49,6 @@ class FileSystem(object):
         ret = self.chroot("/usr/bin/apt-get", command) 
         if ret != 0:
             raise OSError("Internal error while attempting to run: apt-get %s" % command)
-        
 
     def mount(self):
         path = os.path.join(self.path, 'proc')
@@ -84,6 +83,14 @@ class FileSystem(object):
                     # Its no big deal if the repo is really empty, so
                     # ignore mount errors.
                     file.close()
+
+        # first time mount
+        buildstamp_path = os.path.join(self.path, 'etc', 'buildstamp')
+        if not os.path.isfile(buildstamp_path):
+            buildstamp = open(buildstamp_path, 'w')
+            print >> buildstamp, "%s %s" % (socket.gethostname(), time.strftime("%d-%m-%Y %H:%M:%S %Z"))
+            buildstamp.close()
+            self.chroot("/usr/bin/apt-get", "update")
                 
     def umount(self):
         for line in os.popen('mount', 'r').readlines():
@@ -163,10 +170,6 @@ class Project(FileSystem):
                 print >> sys.stderr, "ERROR: Unable to rootstrap %s from %s!" % (rootstrap, name)
                 shutil.rmtree(os.path.join(self.path, 'targets', name))
                 raise ValueError(" ".join(proc.stderr.readlines()))
-
-            buildstamp = open(os.path.join(install_path, 'etc', 'buildstamp'), 'w')
-            print >> buildstamp, "%s %s" % (socket.gethostname(), time.strftime("%d-%m-%Y %H:%M:%S %Z"))
-            buildstamp.close()
 
             self.targets[name] = Target(name, self, self.cb)
             self.targets[name].mount()
