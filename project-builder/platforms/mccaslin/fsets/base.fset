@@ -1,12 +1,12 @@
 [Core]
 DESC=Fundamental fset that provides a root filesystem
-PKGS=grub
-DEBUG_PKGS=
+PKGS=linux-mccaslin-default
+DEBUG_PKGS=linux-mccaslin-developer
 DEPS=
 
 [Zi9-Config]
 DESC=Packages needed for the Zi9 MID
-PKGS=
+PKGS=zi9-config
 DEBUG_PKGS=
 DEPS=core
 

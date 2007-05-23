@@ -34,7 +34,7 @@ class FileSystem(object):
         self.path = os.path.abspath(os.path.expanduser(path))
 
     def update(self, path):
-        command = '-y --force-yes -o Dir::State=%(t)s/var/lib/apt -o Dir::State::status=%(t)s/var/lib/dpkg/status -o Dir::Cache=/var/cache/apt -o Dir::Etc::Sourcelist=%(t)s/etc/apt/sources.list -o Dir::Etc::main=%(t)s/etc/apt/apt.conf -o Dir::Etc::parts=%(t)s/etc/apt/apt.conf.d -o DPkg::Options::=--root=%(t)s -o DPkg::Run-Directory=%(t)s upgrade' % {'t': path}
+        command = '-y --force-yes -o Dir::State=%(t)s/var/lib/apt -o Dir::State::status=%(t)s/var/lib/dpkg/status -o Dir::Cache=/var/cache/apt -o Dir::Etc::Sourcelist=%(t)s/etc/apt/sources.list -o Dir::Etc::main=%(t)s/etc/apt/apt.conf -o Dir::Etc::parts=%(t)s/etc/apt/apt.conf.d -o DPkg::Options::=--root=%(t)s -o DPkg::Run-Directory=%(t)s update' % {'t': path}
         ret = self.chroot("/usr/bin/apt-get", command) 
         if ret != 0:
             raise OSError("Internal error while attempting to run: %s" % command)
@@ -173,6 +173,7 @@ class Project(FileSystem):
 
             self.targets[name] = Target(name, self, self.cb)
             self.targets[name].mount()
+            self.targets[name].update()            
         return self.targets[name]
 
     def delete_target(self, name):
