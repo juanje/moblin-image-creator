@@ -83,7 +83,7 @@ def create(project, initrd_file, fs_type='RAMFS'):
 
     # Setup init script
     init_file = open(os.path.join(scratch_path, 'init'), 'w')
-    print >> init_file, "#!/bin/msh\nIMAGETYPE=%s\n" % fs_type
+    print >> init_file, "#!/bin/sh\nIMAGETYPE=%s\n" % fs_type
     print >> init_file, """\
 RUNLEVEL=3
 
@@ -103,7 +103,19 @@ mount -t devpts -o gid=5,mode=620 /dev/pts /dev/pts
 mkdir /dev/shm
 mkdir /dev/mapper
 echo Creating initial device nodes
-mdev -s
+mknod /dev/systty c 4 0
+mknod /dev/tty c 5 0
+mknod /dev/loop0 b 7 0
+mknod /dev/loop1 b 7 1
+mknod /dev/loop2 b 7 2
+mknod /dev/tty0 c 4 0
+mknod /dev/tty1 c 4 1
+mknod /dev/tty2 c 4 2
+mknod /dev/tty3 c 4 3
+mknod /dev/ttyS0 c 4 64
+mknod /dev/ttyS1 c 4 65
+mknod /dev/ttyS2 c 4 66
+mknod /dev/ttyS3 c 4 67
 mknod /dev/sda b 8 0
 mknod /dev/sda1 b 8 1
 mknod /dev/sda2 b 8 2
@@ -190,14 +202,14 @@ exec chroot . /bin/sh <<EOF
 EOF
 
 cd /
-exec /bin/msh
+exec /bin/sh
 """
     init_file.close()
     os.chmod(os.path.join(scratch_path, 'init'), 0755)
 
     # Create the initrd image file
     os.chdir(scratch_path)
-    cmd_string = "find -print | cpio --quiet -c -o | gzip -9 -c > " + initrd_file
+    cmd_string = "find . | cpio --quiet -o -H newc | gzip -9 > " + initrd_file
     os.system(cmd_string)
     os.chdir(save_cwd)
 
