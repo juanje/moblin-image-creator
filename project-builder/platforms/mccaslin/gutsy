@@ -7,8 +7,8 @@ work_out_debs () {
     LIBC6=libc6
     if [ "$ARCH" = "alpha" -o "$ARCH" = "ia64" ]; then LIBC6="libc6.1"; fi
 
-    required="$(get_debs Priority: required)"
-
+    required="$(get_debs Essential: yes)"
+    
     if doing_variant -; then 
       #required="$required $(get_debs Priority: important)"
       #  ^^ should be getting debconf here somehow maybe
@@ -21,11 +21,14 @@ work_out_debs () {
 
       base="apt binutils cpio cpp cpp-4.1 dpkg-dev g++ g++-4.1 gcc gcc-4.1 ${LIBC6}-dev libdb4.4 libgdbm3 libstdc++6 libstdc++6-4.1-dev linux-libc-dev make patch perl perl-modules"
 
+      add hppa base "libgcc4"
       add ia64 base "libunwind7-dev"
       add sparc base "lib64gcc1"
       add sparc base "libc6-dev-sparc64"
       add sparc base "libc6-sparc64"
     fi
+
+    base="$base mawk" 
 }
 
 first_stage_install () {
@@ -66,7 +69,10 @@ Status: install ok installed" >> "$TARGET/var/lib/dpkg/status"
 }
 
 second_stage_install () {
+    info INSTCORE "Inside second stage install..."
+
     x_core_install () {
+	info INSTCORE "Attempting to install: $@"
 	smallyes '' | in_target dpkg --force-depends --install $(debfor "$@")
     }
 
@@ -94,7 +100,7 @@ second_stage_install () {
     x_core_install dpkg
 
     if [ ! -e "$TARGET/etc/localtime" ]; then
-        ln -sf /usr/share/zoneinfo/UTC "$TARGET/etc/localtime"
+        ln -sf /usr/share/zoneinfo/Etc/UTC "$TARGET/etc/localtime"
     fi
 
     p; progress $baseprog $bases INSTCORE "Installing core packages" #4
