@@ -63,7 +63,7 @@ class FileSystem(object):
                     result = os.system('mount --bind /%s %s' % (mnt, path))
                     if result != 0:
                         raise OSError("Internal error while attempting to bind mount /%s!" % (mnt))
-            for file in ['etc/resolv.conf']:
+            for file in ['etc/resolv.conf', 'etc/hosts']:
                 shutil.copy(os.path.join('/', file), os.path.join(self.path, file))
                 
             # search for any file:// URL's in the configured apt repositories, and
