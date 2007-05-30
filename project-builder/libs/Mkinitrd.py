@@ -172,15 +172,16 @@ else
    mkdir /newroot
    mount -t unionfs -o dirs=/ramfs=rw:/squashfs=ro none /newroot
 
-   mknod /newroot/dev/ram0 c 1 0
+   #mknod /newroot/dev/ram0 c 1 0
+   cd /newroot/dev;./MAKEDEV hda
 fi
 
 if [ -f /mnt/tmp/install.sh ]
 then
     echo "Install Process will begin shortly..."
     RUNLEVEL=1
-    cp /mnt/tmp/install.sh /newroot/etc/rc.d/rc1.d/S10install
-    chmod 755 /newroot/etc/rc.d/rc1.d/S10install
+    cp /mnt/tmp/install.sh /newroot/etc/rcS.d/S10install
+    chmod 755 /newroot/etc/rcS.d/S10install
 fi
 
 umount /dev/pts
