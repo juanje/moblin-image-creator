@@ -5,22 +5,18 @@ SHARE = /usr/share/pdk
 
 all: build-rootstrap.tar.bz2 target-rootstrap.tar.bz2
 
-/usr/lib/debootstrap/scripts/gutsy:
-	@mkdir -p /usr/lib/debootstrap/scripts/
-	@cp gutsy /usr/lib/debootstrap/scripts/
-
-build-rootstrap.tar.bz2: /usr/lib/debootstrap/scripts/gutsy
+build-rootstrap.tar.bz2:
 	@echo "Creating build-rootstrap.tar.bz2..."
-	@debootstrap --variant=buildd --include=${TOOLS} --arch i386 $(shell cat build-codename) ${TMPDIR} $(shell cat build-mirror)
+	@DEBOOTSTRAP_DIR=debootstrap/ debootstrap --arch i386 --variant=buildd --include=${TOOLS} $(shell cat build-codename) ${TMPDIR} $(shell cat build-mirror)
 	@rm -fR ${TMPDIR}/var/cache/apt/archives/*.deb
 	@cp sources/*.list ${TMPDIR}/etc/apt/sources.list.d/ || true
 	@touch ${TMPDIR}/.buildroot
 	@tar -jcpvf $@ -C ${TMPDIR} .
 	@rm -fR ${TMPDIR}
 
-target-rootstrap.tar.bz2: /usr/lib/debootstrap/scripts/gutsy
+target-rootstrap.tar.bz2:
 	@echo "Creating target-rootstrap.tar.bz2..."
-	@debootstrap --arch i386 $(shell cat target-codename) ${TMPDIR} $(shell cat target-mirror)
+	@DEBOOTSTRAP_DIR=debootstrap/ debootstrap --arch i386 $(shell cat target-codename) ${TMPDIR} $(shell cat target-mirror)
 	@rm -fR ${TMPDIR}/var/cache/apt/archives/*.deb
 	@cp sources/*.list ${TMPDIR}/etc/apt/sources.list.d/ || true
 	@tar -jcpvf $@ -C ${TMPDIR} .
