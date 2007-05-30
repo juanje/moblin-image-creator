@@ -171,9 +171,6 @@ else
 
    mkdir /newroot
    mount -t unionfs -o dirs=/ramfs=rw:/squashfs=ro none /newroot
-
-   #mknod /newroot/dev/ram0 c 1 0
-   cd /newroot/dev;./MAKEDEV hda
 fi
 
 if [ -f /mnt/tmp/install.sh ]
@@ -199,6 +196,9 @@ cd /newroot
 exec chroot . /bin/sh <<EOF
     mount -t proc /proc /proc
     mount -t sysfs /sys /sys
+    cd /dev
+    /sbin/MAKEDEV
+    /sbin/MAKEDEV hda
     exec /sbin/init $RUNLEVEL
 EOF
 

@@ -28,7 +28,7 @@ work_out_debs () {
       add sparc base "libc6-sparc64"
     fi
 
-    base="$base mawk upstart upstart-compat-sysv" 
+    base="$base apt makedev mawk upstart upstart-compat-sysv vim" 
 }
 
 first_stage_install () {
