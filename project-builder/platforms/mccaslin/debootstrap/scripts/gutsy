@@ -7,8 +7,8 @@ work_out_debs () {
     LIBC6=libc6
     if [ "$ARCH" = "alpha" -o "$ARCH" = "ia64" ]; then LIBC6="libc6.1"; fi
 
-    required="$(get_debs Essential: yes)"
-    
+    required="$(get_debs Priority: required)"
+
     if doing_variant -; then 
       #required="$required $(get_debs Priority: important)"
       #  ^^ should be getting debconf here somehow maybe
@@ -27,8 +27,6 @@ work_out_debs () {
       add sparc base "libc6-dev-sparc64"
       add sparc base "libc6-sparc64"
     fi
-
-    base="$base apt makedev mawk locales system-services upstart upstart-compat-sysv vim" 
 }
 
 first_stage_install () {
@@ -69,10 +67,7 @@ Status: install ok installed" >> "$TARGET/var/lib/dpkg/status"
 }
 
 second_stage_install () {
-    info INSTCORE "Inside second stage install..."
-
     x_core_install () {
-	info INSTCORE "Attempting to install: $@"
 	smallyes '' | in_target dpkg --force-depends --install $(debfor "$@")
     }
 
