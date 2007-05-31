@@ -177,8 +177,14 @@ if [ -f /mnt/tmp/install.sh ]
 then
     echo "Install Process will begin shortly..."
     RUNLEVEL=1
-    cp /mnt/tmp/install.sh /newroot/etc/rcS.d/S10install
-    chmod 755 /newroot/etc/rcS.d/S10install
+    cp /mnt/tmp/install.sh /newroot/etc/rc1.d/S10install
+    chmod 755 /newroot/etc/rc1.d/S10install
+    cat > /newroot/etc/event.d/rc-default <<EOF
+start on stopped rcS
+script
+    telinit $RUNLEVEL
+end script
+EOF
 fi
 
 umount /dev/pts
