@@ -6,7 +6,7 @@ DEPS=mobile-applications power-management
 
 [Core]
 DESC=Fundamental fset that provides a root filesystem
-PKGS=linux-mccaslin-default
+PKGS=grub busybox-initramfs linux-mccaslin-default
 DEBUG_PKGS=linux-mccaslin-developer
 DEPS=
 

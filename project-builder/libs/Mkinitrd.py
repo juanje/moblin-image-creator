@@ -77,7 +77,8 @@ def create(project, initrd_file, fs_type='RAMFS'):
     os.symlink('bin', os.path.join(scratch_path, 'sbin'))
 
     # Setup Busybox in the initrd
-    cmd_path = os.path.join(project.path, '/usr/lib/initramfs-tools/bin/busybox')
+    cmd_path = os.path.join(project.path, 'usr/lib/initramfs-tools/bin/busybox')
+    print "will use %s" % cmd_path
     bb = Busybox(cmd_path, bin_path)
     bb.create()
 
@@ -103,6 +104,7 @@ mount -t devpts -o gid=5,mode=620 /dev/pts /dev/pts
 mkdir /dev/shm
 mkdir /dev/mapper
 echo Creating initial device nodes
+mknod /dev/zero c 1 5
 mknod /dev/systty c 4 0
 mknod /dev/tty c 5 0
 mknod /dev/loop0 b 7 0
