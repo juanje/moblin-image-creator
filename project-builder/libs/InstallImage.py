@@ -269,7 +269,7 @@ echo -e 'Copying system files onto hard disk drive...\n'
 cp -v /tmp/install/rootfs.img /mnt/boot
 cp -av /tmp/boot /mnt
 
-grub-install --root-directory=/mnt /dev/hda
+/usr/sbin/grub-install --root-directory=/mnt /dev/hda
 
 echo -e 'Unmounting partitions...\n'
 umount /mnt/boot
