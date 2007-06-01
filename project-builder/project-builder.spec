@@ -6,7 +6,6 @@ License: GPL
 Group: Development
 Source: %{name}-%{version}.tgz
 Buildroot: %{_tmppath}/%{name}-root
-BuildRequires: bash tcsh gzip rsync createrepo
 Requires: python >= 2.4
 Requires: pam
 Requires: usermode
@@ -24,11 +23,13 @@ make
 
 %install
 make DESTDIR=$RPM_BUILD_ROOT basicinstall
-
-REPODEST=$RPM_BUILD_ROOT/usr/share/pdk/repos/fc6-mid-core
-mkdir -p $REPODEST
-rsync -avPH rsync://umd-build2/yum-repos/mid-core/ $REPODEST
-createrepo $REPODEST
+sed '{s/%%EXEC_CMD%%/\/usr\/bin\/project-builder/}' project-builder.desktop.template > $RPM_BUILD_ROOT/usr/share/applications/project-builder.desktop
+mkdir -p $RPM_BUILD_ROOT/usr/bin
+ln -f -s /usr/bin/consolehelper $RPM_BUILD_ROOT/usr/bin/project-builder
+mkdir -p $RPM_BUILD_ROOT/etc/pam.d
+mkdir -p $RPM_BUILD_ROOT/etc/security/console.apps
+cp project-builder.pam.d $RPM_BUILD_ROOT/etc/pam.d/project-builder
+cp project-builder.helperconsole $RPM_BUILD_ROOT/etc/security/console.apps/project-builder
 
 %clean
 rm -rf %{buildroot}
@@ -44,5 +45,8 @@ rm -rf %{buildroot}
 /usr/sbin/project-builder
 
 %changelog
+* Fri Jun 01 2007 Rusty Lynch <rusty.lynch@intel.com>
+- Updating spec for building in a debian environment
+
 * Sat Apr 21 2007 Rusty Lynch <rusty.lynch@intel.com>
 - Initial package creation

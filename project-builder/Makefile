@@ -1,6 +1,6 @@
 SHAREDIR = /usr/share/pdk/
 PLATFORMS = mccaslin
-
+VERSION = 0.1
 all:
 	@for p in ${PLATFORMS}; do make -C platforms/$$p; done
 
@@ -34,21 +34,13 @@ basicinstall: all
 	@cp -a help/* ${DESTDIR}/${SHAREDIR}/gnome/help/project-builder/
 	@cp utils/*.py  ${DESTDIR}/${SHAREDIR}/utils/
 	@mkdir -p ${DESTDIR}/usr/share/applications/
-	@if [ -f /etc/fedora-release ]; then \
-		sed '{s/%%EXEC_CMD%%/\/usr\/bin\/project-builder/}' project-builder.desktop.template > ${DESTDIR}/usr/share/applications/project-builder.desktop; \
-		mkdir -p ${DESTDIR}/usr/bin; \
-		ln -f -s /usr/bin/consolehelper ${DESTDIR}/usr/bin/project-builder; \
-		mkdir -p ${DESTDIR}/etc/pam.d; \
-		mkdir -p ${DESTDIR}/etc/security/console.apps; \
-		cp project-builder.pam.d ${DESTDIR}/etc/pam.d/project-builder; \
-		cp project-builder.helperconsole ${DESTDIR}/etc/security/console.apps/project-builder; \
-	elif [ -f /etc/SuSE-release ]; then \
-		sed '{s/%%EXEC_CMD%%/gnomesu \/usr\/sbin\/project-builder/}' project-builder.desktop.template > ${DESTDIR}/usr/share/applications/project-builder.desktop; \
-	elif [ -f /etc/debian_version ]; then \
-		sed '{s/%%EXEC_CMD%%/gksu \/usr\/sbin\/project-builder/}' project-builder.desktop.template > ${DESTDIR}/usr/share/applications/project-builder.desktop; \
-	fi
+	sed '{s/%%EXEC_CMD%%/gksu \/usr\/sbin\/project-builder/}' project-builder.desktop.template > ${DESTDIR}/usr/share/applications/project-builder.desktop
 	@echo "Done"
 
+rpm:
+	@echo create the tarball...
+	cd ..; cp -a project-builder project-builder-${VERSION}; tar zcpvf /usr/src/rpm/SOURCES/project-builder-${VERSION}.tgz project-builder-${VERSION}/; rm -fR project-builder-${VERSION}
+	rpmbuild -bb project-builder.spec
 
 # Cleans out the current directory cruft
 clean:

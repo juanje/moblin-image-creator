@@ -1,7 +1,7 @@
 TOOLS=squashfs-tools,busybox-initramfs,dosfstools,syslinux,module-init-tools,mtools,gpgv
 TMPDIR = /tmp/.tmpbuilddir
 PNAME = mccaslin
-SHARE = /usr/share/pdk
+SHARE = ${DESTDIR}/usr/share/pdk
 
 all: build-rootstrap.tar.bz2 target-rootstrap.tar.bz2
 
