@@ -1,5 +1,5 @@
 SHAREDIR = /usr/share/pdk/
-PLATFORMS = mccaslin
+PLATFORMS = mccaslin menlow
 VERSION = 0.1
 all:
 	@for p in ${PLATFORMS}; do make -C platforms/$$p; done
