@@ -10,17 +10,11 @@ PKGS=grub busybox-initramfs linux-menlow-default
 DEBUG_PKGS=linux-menlow-developer
 DEPS=
 
-[Zi9-Config]
-DESC=Packages needed for the Zi9 MID
-PKGS=zi9-config
-DEBUG_PKGS=
-DEPS=core
-
 [GNOME-Mobile]
 DESC=Subset of GNOME components for building mobile Linux stacks
 PKGS=xorg xserver-xorg-input-evtouch matchbox-window-manager libglib2.0-0 dbus libdbus-1-3 libdbus-glib-1-2 gconf2 libgnomevfs2-0 libgstreamer0.10-0 libbluetooth2 libtelepathy-glib0 libavahi-glib1 libgtk2.0-0 libpango1.0-0 libcairo2 libatk1.0-0 python python-dbus python-cairo python-gconf python-gst0.10
 DEBUG_PKGS=
-DEPS=zi9-config
+DEPS=
 
 [Power-Management]
 DESC=Power management packages for a Mobile Internet Device
