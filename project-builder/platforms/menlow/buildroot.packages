@@ -1,0 +1,13 @@
+# required for building device images
+busybox-initramfs
+#squashfs-tools dosfstools syslinux module-init-tools
+#mcopy
+
+# Additional kernel development packages
+
+# Additional X development packages
+
+# Additional application developement packages
+libgtk2.0-dev
+
+
