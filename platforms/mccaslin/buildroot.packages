@@ -6,6 +6,7 @@ busybox-initramfs
 # Additional kernel development packages
 
 # Additional X development packages
+man less vim
 
 # Additional application developement packages
 libgtk2.0-dev
