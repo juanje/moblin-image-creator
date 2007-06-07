@@ -1,7 +1,7 @@
 Summary: Project Builder Mobile Linux Development Kit
 Name: project-builder
 Version: 0.1
-Release: 0 
+Release: 1 
 License: GPL
 Group: Development
 Source: %{name}-%{version}.tgz
@@ -45,6 +45,9 @@ rm -rf %{buildroot}
 /usr/sbin/project-builder
 
 %changelog
+* Wed Jun 06 2007 Rusty Lynch <rusty.lynch@intel.com>
+- Adding a workaround for a bug on SELinux enable systems
+
 * Fri Jun 01 2007 Rusty Lynch <rusty.lynch@intel.com>
 - Updating spec for building in a debian environment
 
