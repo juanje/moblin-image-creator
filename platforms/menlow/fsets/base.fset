@@ -6,7 +6,7 @@ DEPS=mobile-applications power-management
 
 [Core]
 DESC=Fundamental fset that provides a root filesystem
-PKGS=grub busybox-initramfs linux-menlow-default
+PKGS=grub busybox-initramfs libselinux1 linux-menlow-default
 DEBUG_PKGS=linux-menlow-developer
 DEPS=
 

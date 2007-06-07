@@ -1,5 +1,6 @@
 # required for building device images
 busybox-initramfs
+libselinux1
 #squashfs-tools dosfstools syslinux module-init-tools
 #mcopy
 
