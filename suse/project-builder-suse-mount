@@ -1,0 +1,8 @@
+#!/bin/bash
+cd ~/proot
+sudo mount -t proc /proc ./proc
+sudo mount --bind /usr/share/pdk ./usr/share/pdk
+sudo mount --bind /sys ./sys
+sudo mount --bind /tmp ./tmp
+sudo mount --bind /var ./var
+

@@ -30,6 +30,7 @@ mkdir -p $RPM_BUILD_ROOT/etc/pam.d
 mkdir -p $RPM_BUILD_ROOT/etc/security/console.apps
 cp project-builder.pam.d $RPM_BUILD_ROOT/etc/pam.d/project-builder
 cp project-builder.helperconsole $RPM_BUILD_ROOT/etc/security/console.apps/project-builder
+cp %_builddir/%{name}-%{version}/suse/project-builder* $RPM_BUILD_ROOT/usr/sbin/
 
 %clean
 rm -rf %{buildroot}
@@ -43,6 +44,10 @@ rm -rf %{buildroot}
 /etc/pam.d/project-builder
 /usr/bin/project-builder
 /usr/sbin/project-builder
+/usr/sbin/project-builder-suse-mount
+/usr/sbin/project-builder-suse-umount
+/usr/sbin/project-builder-suse-start
+/usr/sbin/project-builder-suse-install
 
 %changelog
 * Wed Jun 06 2007 Rusty Lynch <rusty.lynch@intel.com>

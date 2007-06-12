@@ -1,0 +1,8 @@
+#!/bin/bash
+cd ~/proot
+sudo umount  ./proc
+sudo umount  ./usr/share/pdk
+sudo umount  ./sys
+sudo umount  ./tmp
+sudo umount  ./var
+
