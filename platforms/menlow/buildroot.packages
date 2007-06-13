@@ -5,6 +5,7 @@ libselinux1
 #mcopy
 
 # Additional kernel development packages
+debhelper kernel-package dpatch grub
 
 # Additional X development packages
 man less vim
