@@ -6,6 +6,7 @@ sudo mkdir proot
 cd proot
 sudo tar xjf /usr/share/pdk/platforms/mccaslin/build-rootstrap.tar.bz2 ./
 sudo cp /usr/sbin/project-builder ./usr/sbin
+sudo cp /etc/hosts ./etc
 sudo mkdir ./usr/share/pdk
 sudo cp -R ./var/lib/apt /var/lib
 sudo cp -R ./var/lib/dpkg /var/lib
