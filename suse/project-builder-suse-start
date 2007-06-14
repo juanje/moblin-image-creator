@@ -1,4 +1,5 @@
 #!/bin/bash
+sudo cp ~/.Xauthority ~/proot$HOME
 cd ~/proot
 /usr/sbin/project-builder-suse-umount
 /usr/sbin/project-builder-suse-mount
