@@ -12,7 +12,9 @@ DEPS=
 
 [Infrastructure]
 DESC=Fundamental non-GUI system infrastructure
-PKGS=dhcp3-client network-manager wireless-tools alsa-base alsa-utils sdio-wlan-firmware mid-network-config
+PKGS=dhcp3-client language-pack-en network-manager wireless-tools alsa-base alsa-utils sdio-wlan-firmware mid-network-config
+DEBUG_PKGS=
+DEPS=core
 
 [GNOME-Mobile]
 DESC=Subset of GNOME components for building mobile Linux stacks
