@@ -14,6 +14,7 @@ sudo cp -R ./var/cache /var
 sudo cp ~/.Xauthority ./home
 /usr/sbin/project-builder-suse-mount
 sudo chroot . <<EOF
+export http_proxy=""
 export PATH=/usr/sbin:/sbin:/usr/local/sbin:/usr/local/bin:$PATH
 apt-get --assume-yes --force-yes install language-pack-en xauth bzip2 python-gnome2 python-glade2
 mkdir $HOME

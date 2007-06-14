@@ -3,6 +3,7 @@ cd ~/proot
 /usr/sbin/project-builder-suse-umount
 /usr/sbin/project-builder-suse-mount
 sudo chroot . <<EOF
+export http_proxy=""
 export PATH=/usr/sbin:/sbin:/usr/local/sbin:/usr/local/bin:$PATH
 /usr/sbin/project-builder
 EOF
