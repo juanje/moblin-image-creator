@@ -10,6 +10,10 @@ PKGS=grub busybox-initramfs libselinux1 linux-mccaslin-default
 DEBUG_PKGS=linux-mccaslin-developer
 DEPS=
 
+[Infrastructure]
+DESC=Fundamental non-GUI system infrastructure
+PKGS=dhcp3-client network-manager wireless-tools alsa-base alsa-utils sdio-wlan-firmware mid-network-config
+
 [Zi9-Config]
 DESC=Packages needed for the Zi9 MID
 PKGS=zi9-config
