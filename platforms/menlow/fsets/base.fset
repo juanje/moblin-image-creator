@@ -2,25 +2,25 @@
 DESC=Virtual Fset that installs the standard mobile stack
 PKGS=
 DEBUG_PKGS=
-DEPS=mobile-applications power-management
+DEPS=infrastructure mobile-applications power-management
 
 [Core]
 DESC=Fundamental fset that provides a root filesystem
 PKGS=grub busybox-initramfs libselinux1 linux-menlow-default
-DEBUG_PKGS=linux-menlow-developer
+DEBUG_PKGS=linux-menlow-developer man-db manpages 
 DEPS=
 
 [Infrastructure]
 DESC=Fundamental non-GUI system infrastructure
 PKGS=dhcp3-client language-pack-en network-manager wireless-tools alsa-base alsa-utils sdio-wlan-firmware mid-network-config
-DEBUG_PKGS=
+DEBUG_PKGS=openssh-client openssh-server
 DEPS=core
 
 [GNOME-Mobile]
 DESC=Subset of GNOME components for building mobile Linux stacks
 PKGS=xorg xserver-xorg-input-evtouch matchbox-window-manager libglib2.0-0 dbus libdbus-1-3 libdbus-glib-1-2 gconf2 libgnomevfs2-0 libgstreamer0.10-0 libbluetooth2 libtelepathy-glib0 libavahi-glib1 libgtk2.0-0 libpango1.0-0 libcairo2 libatk1.0-0 python python-dbus python-cairo python-gconf python-gst0.10
 DEBUG_PKGS=
-DEPS=
+DEPS=core
 
 [Power-Management]
 DESC=Power management packages for a Mobile Internet Device

@@ -2,18 +2,18 @@
 DESC=Virtual Fset that installs the standard mobile stack
 PKGS=
 DEBUG_PKGS=
-DEPS=mobile-applications power-management
+DEPS=infrastructure mobile-applications power-management
 
 [Core]
 DESC=Fundamental fset that provides a root filesystem
 PKGS=grub busybox-initramfs libselinux1 linux-mccaslin-default
-DEBUG_PKGS=linux-mccaslin-developer
+DEBUG_PKGS=linux-mccaslin-developer man-db manpages 
 DEPS=
 
 [Infrastructure]
 DESC=Fundamental non-GUI system infrastructure
 PKGS=dhcp3-client language-pack-en network-manager wireless-tools alsa-base alsa-utils sdio-wlan-firmware mid-network-config
-DEBUG_PKGS=
+DEBUG_PKGS=openssh-client openssh-server
 DEPS=core
 
 [Zi9-Config]
