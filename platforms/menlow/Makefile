@@ -25,7 +25,9 @@ target-rootstrap.tar.bz2:
 install:
 	@mkdir -p ${SHARE}/platforms/${PNAME}
 	@cp buildroot.packages ${SHARE}/platforms/${PNAME}
-	@cp -a fsets ${SHARE}/platforms/${PNAME}/
+	@mkdir -p ${SHARE}/platforms/${PNAME}
+	@mkdir -p ${SHARE}/platforms/${PNAME}/fsets
+	@cp fsets/*.fset ${SHARE}/platforms/${PNAME}/fsets/
 	@cp *-rootstrap.tar.bz2 ${SHARE}/platforms/${PNAME}/
 
 clean:
