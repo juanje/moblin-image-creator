@@ -267,10 +267,20 @@ class SDK(object):
         # first delete all contained targets
         proj = self.projects[project_name]
         for target in proj.targets:
-            proj.delete_target(target)
+            proj.delete_target(target, False)
+        proj.targets.clear()
         # and then deal with the project
         proj.umount()
-        shutil.rmtree(os.path.join(proj.path))
+        cmd = "rm -fR %s" % (os.path.join(proj.path))
+        proc = subprocess.Popen(cmd.split(), stderr = subprocess.PIPE)
+        while proc.poll() == None:
+            try: 
+                self.cb.iteration(process=proc)
+            except:
+                pass
+        if proc.returncode != 0:
+            print >> sys.stderr, "ERROR: Unable to delete %s!" % (project_name)
+            raise ValueError(" ".join(proc.stderr.readlines()))
         os.unlink(os.path.join(self.config_path, proj.name + '.proj'))
         
     def __str__(self):

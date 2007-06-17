@@ -48,12 +48,6 @@ class TestPlatform(unittest.TestCase):
     def testRepoFiles(self):
         """Test correctness of repository files"""
         platform = Platform.Platform(self.workdir, self.platform_name)
-        # Test buildroot_repos
-        self.assertEqual(len(platform.buildroot_repos), 1)
-        self.assertEqual(platform.buildroot_repos[0], os.path.join(self.platform_dir, 'buildroot_repos', self.repo_filename))
-        # Test target_repos
-        self.assertEqual(len(platform.target_repos), 1)
-        self.assertEqual(platform.target_repos[0], os.path.join(self.platform_dir, 'target_repos', self.repo_filename))
 
 def createSamplePlatformDir(platform_dir, repo_filename = "unittest.repo"):
     os.makedirs(platform_dir)

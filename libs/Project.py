@@ -66,21 +66,17 @@ class FileSystem(object):
             raise OSError("Internal error while attempting to run: apt-get %s" % command)
 
     def mount(self):
-        path = os.path.join(self.path, 'proc')
-        if not os.path.ismount(path):
-            result = os.system('mount --bind /proc ' + path + ' 2> /dev/null')
-            if result != 0:
-                raise OSError("Internal error while attempting to mount proc filesystem!")
+        for mnt in ['var/cache/apt/archives', 'tmp', 'proc']:
+            path = os.path.join(self.path, mnt)
+            if not os.path.ismount(path) and os.path.isdir(os.path.join('/', mnt)):
+                result = os.system('mount --bind /%s %s' % (mnt, path))
+                if result != 0:
+                    raise OSError("Internal error while attempting to bind mount /%s!" % (mnt))
+
+        for file in ['etc/resolv.conf', 'etc/hosts']:
+            shutil.copy(os.path.join('/', file), os.path.join(self.path, file))
+
         if os.path.isfile(os.path.join(self.path, '.buildroot')):
-            for mnt in ['var/cache/apt/archives']:
-                path = os.path.join(self.path, mnt)
-                if not os.path.ismount(path) and os.path.isdir(os.path.join('/', mnt)):
-                    result = os.system('mount --bind /%s %s' % (mnt, path))
-                    if result != 0:
-                        raise OSError("Internal error while attempting to bind mount /%s!" % (mnt))
-            for file in ['etc/resolv.conf', 'etc/hosts']:
-                shutil.copy(os.path.join('/', file), os.path.join(self.path, file))
-                
             # search for any file:// URL's in the configured apt repositories, and
             # when we find them make the equivilant directory in the new filesystem
             # and then mount --bind the file:// path into the filesystem.
@@ -191,11 +187,12 @@ class Project(FileSystem):
             self.targets[name].update()            
         return self.targets[name]
 
-    def delete_target(self, name):
+    def delete_target(self, name, do_pop=True):
         target = self.targets[name]
         target.umount()
         shutil.rmtree(os.path.join(self.path, 'targets', name))
-        self.targets.pop(name)
+        if do_pop:
+            self.targets.pop(name)
         
     def create_live_iso(self, target_name, image_name):
         target = self.targets[target_name]

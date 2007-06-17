@@ -237,11 +237,18 @@ class App(object):
         tree = gtk.glade.XML(self.gladefile, 'qDialog')
         tree.get_widget('queryLabel').set_text("Delete the %s project?" % (project.name))
         dialog = tree.get_widget('qDialog')
-        if dialog.run() == gtk.RESPONSE_OK:
+        result = dialog.run()
+        dialog.destroy()
+        if result == gtk.RESPONSE_OK:
+            progress_tree = gtk.glade.XML(self.gladefile, 'ProgressDialog')
+            progress_dialog = progress_tree.get_widget('ProgressDialog')
+            progress_dialog.connect('delete_event', self.ignore)
+            progress_tree.get_widget('progress_label').set_text(_("Please wait while deleting %s") % project.name)
+            self.progressbar = progress_tree.get_widget('progressbar')
             self.sdk.delete_project(project.name)
             self.remove_current_project()
-        dialog.destroy()
-
+            progress_dialog.destroy()
+            
     def on_new_target_add_clicked(self, widget):
         # Open the "New Target" dialog
         while True:
@@ -251,17 +258,22 @@ class App(object):
             result = dialog.run()
             target_name = widgets.get_widget('nt_name').get_text()
             target_name = target_name.strip()
+            dialog.destroy()
             if result == gtk.RESPONSE_OK:
                 if not target_name:
                     self.show_error_dialog("Must specify a target name")
-                    dialog.destroy()
                 else:
+                    progress_tree = gtk.glade.XML(self.gladefile, 'ProgressDialog')
+                    progress_dialog = progress_tree.get_widget('ProgressDialog')
+                    progress_dialog.connect('delete_event', self.ignore)
+                    progress_tree.get_widget('progress_label').set_text(_("Please wait while creating %s") % target_name)
+                    self.progressbar = progress_tree.get_widget('progressbar')
                     self.current_project().create_target(target_name)
                     self.targetList.append((target_name, ''))
+                    progress_dialog.destroy()
                     break
             else:
                 break
-        dialog.destroy()
 
     def on_install_fset(self, widget):
         tree = gtk.glade.XML(self.gladefile, 'installFsetDialog')
@@ -356,14 +368,15 @@ class App(object):
     def on_term_launch_clicked(self, widget):
         project_path = self.current_project().path
         print "Project path: %s" % project_path
-        os.system('/usr/bin/gnome-terminal -x sudo /usr/sbin/chroot %s &' % project_path)
+        os.system('/usr/bin/gnome-terminal -x sudo /usr/sbin/chroot %s su - &' % project_path)
 
     def on_target_term_launch_clicked(self, widget):
         project_path = self.current_project().path
         target = self.current_target()
+        target.mount()
         target_path= "%s/targets/%s/fs" % (project_path, target.name)
         print "Target path: %s" % target_path
-        os.system('/usr/bin/gnome-terminal -x sudo /usr/sbin/chroot %s &' % target_path)
+        os.system('/usr/bin/gnome-terminal -x sudo /usr/sbin/chroot %s su - &' % target_path)
 
     def on_liveUSB_clicked(self, widget):
         project = self.current_project()
