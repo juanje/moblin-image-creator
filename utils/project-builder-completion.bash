@@ -39,6 +39,8 @@ _project_builder()
                 list-targets \
                 update-project \
                 update-target \
+		chroot-project \
+		chroot-target \
                 ' -- $cur  ) )
             return 0
             ;;
