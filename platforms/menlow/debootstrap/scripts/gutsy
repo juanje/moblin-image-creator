@@ -12,7 +12,7 @@ work_out_debs () {
     if doing_variant -; then 
       #required="$required $(get_debs Priority: important)"
       #  ^^ should be getting debconf here somehow maybe
-      base="$(get_debs Priority: important)"
+      base="$(get_debs Priority: important) language-pack-en"
     elif doing_variant buildd; then
       # TODO: add Build-Essential: yes extraoverrides
       #base="$(get_debs Build-Essential: yes)"
