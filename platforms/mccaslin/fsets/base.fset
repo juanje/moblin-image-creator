@@ -1,8 +1,14 @@
-[Full-Mobile-Stack]
+[Zi9-Full-Mobile-Stack]
 DESC=Virtual Fset that installs the standard mobile stack
 PKGS=
 DEBUG_PKGS=
-DEPS=infrastructure mobile-applications power-management
+DEPS=zi9-config infrastructure mobile-applications power-management
+
+[Samsung-Full-Mobile-Stack]
+DESC=Virtual Fset that installs the standard mobile stack
+PKGS=
+DEBUG_PKGS=
+DEPS=samsung-q1-ultra-config infrastructure mobile-applications power-management
 
 [Core]
 DESC=Fundamental fset that provides a root filesystem
@@ -12,13 +18,13 @@ DEPS=
 
 [Infrastructure]
 DESC=Fundamental non-GUI system infrastructure
-PKGS=dhcp3-client network-manager wireless-tools alsa-base alsa-utils sdio-wlan-firmware 
+PKGS=dhcp3-client network-manager wireless-tools alsa-base alsa-utils 
 DEBUG_PKGS=openssh-client openssh-server
 DEPS=core
 
 [Zi9-Config]
 DESC=Packages needed for the Zi9 MID
-PKGS=zi9-config
+PKGS=zi9-config sdio-wlan-firmware
 DEBUG_PKGS=
 DEPS=core
 
@@ -42,7 +48,7 @@ DEPS=core
 
 [Hildon-Application-Framework]
 DESC=Hildon Application Framework for enabling Mobile Applications
-PKGS= 
+PKGS=ubuntu-mobile sdk-default-icons 
 DEBUG_PKGS=
 DEPS=gnome-mobile
 
