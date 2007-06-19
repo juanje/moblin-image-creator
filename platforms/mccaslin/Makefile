@@ -16,7 +16,7 @@ build-rootstrap.tar.bz2:
 
 target-rootstrap.tar.bz2:
 	@echo "Creating target-rootstrap.tar.bz2..."
-	@DEBOOTSTRAP_DIR=debootstrap/ debootstrap --arch i386 $(shell cat target-codename) ${TMPDIR} $(shell cat target-mirror)
+	@DEBOOTSTRAP_DIR=debootstrap/ debootstrap --arch i386 --include=apt $(shell cat target-codename) ${TMPDIR} $(shell cat target-mirror)
 	@rm -fR ${TMPDIR}/var/cache/apt/archives/*.deb
 	@cp sources/*.list ${TMPDIR}/etc/apt/sources.list.d/ || true
 	@tar -jcpvf $@ -C ${TMPDIR} .
