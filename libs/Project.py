@@ -259,6 +259,19 @@ class Target(FileSystem):
         result.sort()
         return result
 
+
+    def __list_contains(self, needles, haystack):
+        for n in needles:
+            if n in haystack:
+                return True
+        return False
+
+    def __any_fset_installed(self, needles):
+        for n in needles:
+            if os.path.isfile(os.path.join(self.top, n)):
+                return True
+        return False
+
     def installFset(self, fset, debug=0, fsets = None, seen_fsets = None):
         """
         Install a fset into the target filesystem.  If the fsets variable is
@@ -279,13 +292,13 @@ class Target(FileSystem):
 
         package_set = set()
         for dep in fset['deps']:
-            if dep in seen_fsets:
+            if self.__list_contains(dep.split('|'), seen_fsets):
                 continue
-            if not os.path.isfile(os.path.join(self.top, dep)):
+            if not self.__any_fset_installed(dep.split('|')):
                 if fsets:
-                    package_set.update(self.installFset(fsets[dep], fsets = fsets, debug = debug, seen_fsets = seen_fsets))
+                    package_set.update(self.installFset(fsets[dep.split('|')[0]], fsets = fsets, debug = debug, seen_fsets = seen_fsets))
                 else:
-                    raise ValueError("fset %s must be installed first!" % (dep))
+                    raise ValueError("fset %s must be installed first!" % (dep.split('|')[0]))
 
         package_set.update(fset['pkgs'])
         if debug == 1:
