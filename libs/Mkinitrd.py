@@ -106,7 +106,11 @@ def create(project, initrd_file, kernel_mod_path, fs_type='RAMFS'):
                'kernel/fs/vfat/vfat.ko', \
                'kernel/fs/nls/nls_cp437.ko', \
                'kernel/fs/nls/nls_iso8859-1.ko', \
-               'kernel/drivers/block/loop.ko']
+               'kernel/drivers/block/loop.ko', \
+               'kernel/fs/mbcache.ko', \
+               'kernel/fs/jbd/jbd.ko', \
+               'kernel/fs/ext2/ext2.ko', \
+               'kernel/fs/ext3/ext3.ko']
     modules_path = os.path.join(scratch_path, 'modules')
     modules_file = open(os.path.join(modules_path, 'list'), 'w')
     for m in modules:
