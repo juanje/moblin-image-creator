@@ -118,34 +118,30 @@ class InstallImage(object):
         self.tmp_path = ''
         self.rootfs = ''
         self.rootfs_path = ''
+        self.kernels = []
+        for file in os.listdir(os.path.join(self.target.fs_path, 'boot')):
+            if file.find('vmlinuz') == 0:
+                self.kernels.append(file)
+        if not self.kernels:
+            raise ValueError("no kernels were found")
+        self.kernels.sort()
+        self.default_kernel = self.kernels.pop(0)
+        self.default_kernel_mod_path = os.path.join(self.target.fs_path, 'lib', 'modules', self.default_kernel.split('vmlinuz-').pop().strip())
 
     def install_kernels(self, cfg_filename):
         if not self.tmp_path:
             raise ValueError, "tmp_path doesn't exist"
 
-        # Find installed kernels on target filesystem
-        kernels = []
-        for file in os.listdir(os.path.join(self.target.fs_path, 'boot')):
-            if file.find('vmlinuz') == 0:
-                kernels.append(file)
-
-        if not kernels:
-            raise ValueError, "no kernels were found"
-
-        # Sort the kernels, first kernel is the default kernel
-        kernels.sort()
-        
         s = SyslinuxCfg(self.tmp_path, cfg_filename)
 
         # Copy the default kernel
-        default_kernel = kernels.pop(0)
-        kernel_name = s.add_default(default_kernel, 'initrd=initrd.img root=rootfs.img')
-        src_path = os.path.join(self.target.fs_path, 'boot', default_kernel)
+        kernel_name = s.add_default(self.default_kernel, 'initrd=initrd.img root=rootfs.img')
+        src_path = os.path.join(self.target.fs_path, 'boot', self.default_kernel)
         dst_path = os.path.join(self.tmp_path, kernel_name)
         shutil.copyfile(src_path, dst_path)
 
         # Copy the remaining kernels
-        for k in kernels:
+        for k in self.kernels:
             kernel_name = s.add_target(k, 'initrd=initrd.img root=rootfs.img')
             src_path = os.path.join(self.target.fs_path, 'boot', k)
             dst_path = os.path.join(self.tmp_path, kernel_name)
@@ -373,16 +369,18 @@ class BaseUsbImage(InstallImage):
 
 class LiveUsbImage(BaseUsbImage):
     def create_image(self, fs_type='RAMFS'):
-        print "LiveUsbImage: Creating LiveUSB Image(%s) Now!" % fs_type
+        print "LiveUsbImage: Creating LiveUSB Image(%s) Now..." % fs_type
+        Mkinitrd.create(self.project, '/tmp/.tmp.initrd', kernel_mod_path=self.default_kernel_mod_path)
         self.create_rootfs()
-        stat_result = os.stat(self.rootfs_path)
-        size = (stat_result.st_size / (1024 * 1024)) + 64
+        initrd_stat_result = os.stat('/tmp/.tmp.initrd')
+        rootfs_stat_result = os.stat(self.rootfs_path)
+        size = ((rootfs_stat_result.st_size + initrd_stat_result.st_size) / (1024 * 1024)) + 64
         if fs_type == 'EXT3FS':
            size = size + 100
         self.create_container_file(size)
         self.mount_container()
         initrd_path = os.path.join(self.tmp_path, 'initrd.img')
-        Mkinitrd.create(self.project, initrd_path, fs_type)
+        shutil.move('/tmp/.tmp.initrd', initrd_path)
         self.install_kernels()
         shutil.copy(self.rootfs_path, self.tmp_path)
         self.umount_container()
@@ -396,16 +394,18 @@ class LiveUsbImage(BaseUsbImage):
 
 class InstallUsbImage(BaseUsbImage):
     def create_image(self):
-        print "InstallUsbImage: Creating InstallUSB Image Now!"
+        print "InstallUsbImage: Creating InstallUSB Image..."
+        Mkinitrd.create(self.project, '/tmp/.tmp.initrd', kernel_mod_path=self.default_kernel_mod_path)
         self.create_rootfs()
         self.create_bootfs()
-        stat_result1 = os.stat(self.rootfs_path)
-        stat_result2 = os.stat(self.bootfs_path)
-        size = ((stat_result1.st_size + stat_result2.st_size) / (1024 * 1024)) + 64
+        initrd_stat_result = os.stat('/tmp/.tmp.initrd')
+        rootfs_stat_result = os.stat(self.rootfs_path)
+        bootfs_stat_result = os.stat(self.bootfs_path)
+        size = ((rootfs_stat_result.st_size + bootfs_stat_result.st_size + initrd_stat_result) / (1024 * 1024)) + 64
         self.create_container_file(size)
         self.mount_container()
         initrd_path = os.path.join(self.tmp_path, 'initrd.img')
-        Mkinitrd.create(self.project, initrd_path)
+        shutil.move('/tmp/.tmp.initrd', initrd_path)
         self.install_kernels()
         shutil.copy(self.rootfs_path, self.tmp_path)
         shutil.copy(self.bootfs_path, self.tmp_path)

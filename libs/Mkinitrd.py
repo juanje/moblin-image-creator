@@ -71,7 +71,7 @@ class Busybox(object):
 
         os.chdir(save_cwd)
 
-def create(project, initrd_file, fs_type='RAMFS'):
+def create(project, initrd_file, kernel_mod_path, fs_type='RAMFS'):
     """Function to create an initrd file"""
     initrd_file = os.path.abspath(os.path.expanduser(initrd_file))
 
@@ -84,13 +84,43 @@ def create(project, initrd_file, fs_type='RAMFS'):
 
     # Create directories
     dirs = [ 'bin', 'boot', 'etc', 'dev', 'lib', 'mnt', \
-             'proc', 'sys', 'sysroot', 'tmp', 'usr/bin' ]
+             'proc', 'sys', 'sysroot', 'tmp', 'usr/bin', 'modules' ]
     for dirname in dirs:
         os.makedirs(os.path.join(scratch_path, dirname))
 
     os.symlink('init', os.path.join(scratch_path, 'linuxrc'))
     os.symlink('bin', os.path.join(scratch_path, 'sbin'))
 
+    # Copy over required modules in the order that we want them installed
+    modules = ['kernel/drivers/usb/core/usbcore.ko', \
+               'kernel/drivers/usb/host/ehci-hcd.ko', \
+               'kernel/drivers/usb/host/uhci-hcd.ko', \
+               'kernel/drivers/ide/ide-core.ko', \
+               'kernel/drivers/scsi/scsi_mod.ko', \
+               'kernel/drivers/scsi/sd_mod.ko', \
+               'kernel/drivers/usb/storage/libusual.ko', \
+               'kernel/drivers/usb/storage/usb-storage.ko',
+               'ubuntu/fs/unionfs/unionfs.ko', \
+               'ubuntu/fs/squashfs/squashfs.ko', \
+               'kernel/fs/fat/fat.ko', \
+               'kernel/fs/vfat/vfat.ko', \
+               'kernel/fs/nls/nls_cp437.ko', \
+               'kernel/fs/nls/nls_iso8859-1.ko', \
+               'kernel/drivers/block/loop.ko']
+    modules_path = os.path.join(scratch_path, 'modules')
+    modules_file = open(os.path.join(modules_path, 'list'), 'w')
+    for m in modules:
+        target_mod_path = os.path.join(kernel_mod_path, m)
+        try:
+            # if the modules doesn't exists, then no big deal the copy
+            # will throw an exception so the module will not show up in
+            # the list that is used in loading the modules
+            shutil.copy(target_mod_path, modules_path)
+            print >> modules_file, "%s\n" % (m.split('/').pop())
+        except:
+            pass
+    modules_file.close()
+        
     # Setup Busybox in the initrd
     cmd_path = os.path.join(project.path, 'usr/lib/initramfs-tools/bin/busybox')
     print "will use %s" % cmd_path
@@ -138,6 +168,13 @@ mknod /dev/sda1 b 8 1
 mknod /dev/sda2 b 8 2
 mknod /dev/sda3 b 8 3
 mknod /dev/sdb b 8 16
+
+
+if [ -f /modules/list ]; then
+    for mod in `cat /modules/list`; do
+        insmod /modules/$mod
+    done
+fi
 
 echo "Mounting USB Key"
 mkdir -p /mnt/tmp
@@ -245,13 +282,14 @@ class Callback:
         return
 
 if __name__ == '__main__':
-    if len(sys.argv) != 3:
-        print >> sys.stderr, "USAGE: %s PROJECT INITRD_FILE" % (sys.argv[0])
+    if len(sys.argv) != 4:
+        print >> sys.stderr, "USAGE: %s PROJECT INITRD_FILE MOD_PATH" % (sys.argv[0])
         sys.exit(1)
 
     project_name = sys.argv[1]
     initrd_file = sys.argv[2]
-
+    mod_path = sys.argv[3]
+    
     proj = SDK.SDK(Callback()).projects[project_name]
 
-    create(proj, initrd_file)
+    create(proj, initrd_file, kernel_mod_path=mod_path)

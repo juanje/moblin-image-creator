@@ -2,18 +2,24 @@
 DESC=Virtual Fset that installs the standard mobile stack
 PKGS=
 DEBUG_PKGS=
-DEPS=zi9-config infrastructure mobile-applications power-management
+DEPS=core|ubuntu-flavored-core zi9-config infrastructure mobile-applications power-management
 
 [Samsung-Full-Mobile-Stack]
 DESC=Virtual Fset that installs the standard mobile stack
 PKGS=
 DEBUG_PKGS=
-DEPS=samsung-q1-ultra-config infrastructure mobile-applications power-management
+DEPS=core|ubuntu-flavored-core samsung-q1-ultra-config infrastructure mobile-applications power-management
 
 [Core]
 DESC=Fundamental fset that provides a root filesystem
 PKGS=grub busybox-initramfs libselinux1 linux-mccaslin-default
 DEBUG_PKGS=linux-mccaslin-developer man-db manpages 
+DEPS=
+
+[Ubuntu-Flavored-Core]
+DESC=Fundamental fset that provides a root filesystem that uses the Ubuntu kernel
+PKGS=grub busybox-initramfs linux-image-386
+DEBUG_PKGS=man-db manpages 
 DEPS=
 
 [Infrastructure]
