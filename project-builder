@@ -350,7 +350,7 @@ def create_image(options):
 def chroot_project(options):
     proj = sdk.projects[options.project_name]
     proj.mount()
-    os.system("chroot %s" % (proj.path))
+    os.system("chroot %s su -" % (proj.path))
     
 def chroot_target(options):
     target = sdk.projects[options.project_name].targets[options.target_name]
