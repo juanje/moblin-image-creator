@@ -401,7 +401,7 @@ class InstallUsbImage(BaseUsbImage):
         initrd_stat_result = os.stat('/tmp/.tmp.initrd')
         rootfs_stat_result = os.stat(self.rootfs_path)
         bootfs_stat_result = os.stat(self.bootfs_path)
-        size = ((rootfs_stat_result.st_size + bootfs_stat_result.st_size + initrd_stat_result) / (1024 * 1024)) + 64
+        size = ((rootfs_stat_result.st_size + bootfs_stat_result.st_size + initrd_stat_result.st_size) / (1024 * 1024)) + 64
         self.create_container_file(size)
         self.mount_container()
         initrd_path = os.path.join(self.tmp_path, 'initrd.img')
