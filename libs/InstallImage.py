@@ -127,6 +127,7 @@ class InstallImage(object):
         self.kernels.sort()
         self.default_kernel = self.kernels.pop(0)
         self.default_kernel_mod_path = os.path.join(self.target.fs_path, 'lib', 'modules', self.default_kernel.split('vmlinuz-').pop().strip())
+        self.exclude_file = os.path.join(self.project.platform.path, 'exclude')
 
     def install_kernels(self, cfg_filename):
         if not self.tmp_path:
@@ -195,10 +196,9 @@ class InstallImage(object):
             os.remove(self.rootfs_path)
         
         fs_path      = self.target.fs_path[len(self.project.path):]
-        exclude_path = os.path.join(fs_path, 'boot')
         image_path   = self.target.image_path[len(self.project.path):]
         image_path   = os.path.join(image_path,'rootfs.img')
-        cmd_args     = "%s %s -e %s" % (fs_path, image_path, exclude_path)
+        cmd_args     = "%s %s -ef %s" % (fs_path, image_path, self.exclude_file)
 
         self.project.chroot("/usr/sbin/mksquashfs", cmd_args)
             

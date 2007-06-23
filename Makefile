@@ -1,8 +1,8 @@
 SHAREDIR = /usr/share/pdk/
-PLATFORMS = mccaslin menlow
+
 VERSION = 0.1
 all:
-	@for p in ${PLATFORMS}; do make -C platforms/$$p; done
+	${MAKE} -C platforms
 
 # This target will do a cleanall and then reinstall
 cleaninstall: cleanall install
@@ -15,7 +15,7 @@ install: basicinstall runbasictests
 
 basicinstall: all
 	@echo "Installing platform definitions..."
-	@for p in ${PLATFORMS}; do make -C platforms/$$p install; done
+	@${MAKE} -C platforms install
 	@echo -n "Installing project-builder..."
 	@mkdir -p ${DESTDIR}/${SHAREDIR}/lib
 	@mkdir -p ${DESTDIR}/${SHAREDIR}/locale
@@ -52,7 +52,7 @@ clean:
 
 # Cleans out the installation target
 cleanall: clean
-	@for p in ${PLATFORMS}; do make -C platforms/$$p clean; done
+	@${MAKE} -C platforms clean
 	@echo -n "Removing previously installed files..."
 	@rm -rf ${DESTDIR}/${SHAREDIR}/gnome
 	@rm -rf ${DESTDIR}/${SHAREDIR}/lib

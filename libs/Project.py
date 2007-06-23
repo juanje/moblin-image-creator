@@ -66,8 +66,10 @@ class FileSystem(object):
             raise OSError("Internal error while attempting to run: apt-get %s" % command)
 
     def mount(self):
-        for mnt in ['var/cache/apt/archives', 'tmp', 'proc', 'sys']:
+        for mnt in ['var/cache/apt/archives', 'tmp', 'proc', 'sys', 'usr/share/pdk']:
             path = os.path.join(self.path, mnt)
+            if not os.path.isdir(path):
+                os.makedirs(path)
             if not os.path.ismount(path) and os.path.isdir(os.path.join('/', mnt)):
                 result = os.system('mount --bind /%s %s' % (mnt, path))
                 if result != 0:
