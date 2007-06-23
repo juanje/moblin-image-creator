@@ -1,2 +1,2 @@
-/boot
-/etc/apt/sources.list.d/local.list
+boot
+etc/apt/sources.list.d/local.list
