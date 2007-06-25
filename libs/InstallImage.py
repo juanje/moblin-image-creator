@@ -370,7 +370,7 @@ class BaseUsbImage(InstallImage):
 class LiveUsbImage(BaseUsbImage):
     def create_image(self, fs_type='RAMFS'):
         print "LiveUsbImage: Creating LiveUSB Image(%s) Now..." % fs_type
-        Mkinitrd.create(self.project, '/tmp/.tmp.initrd', kernel_mod_path=self.default_kernel_mod_path, fs_type)
+        Mkinitrd.create(self.project, '/tmp/.tmp.initrd', self.default_kernel_mod_path, fs_type)
         self.create_rootfs()
         initrd_stat_result = os.stat('/tmp/.tmp.initrd')
         rootfs_stat_result = os.stat(self.rootfs_path)
