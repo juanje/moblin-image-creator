@@ -6,6 +6,7 @@ cd ~/proot
 sudo chroot . <<EOF
 export http_proxy=""
 export PATH=/usr/sbin:/sbin:/usr/local/sbin:/usr/local/bin:$PATH
+export LANG=en_US.UTF-8
 /usr/sbin/project-builder
 EOF
 
