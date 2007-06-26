@@ -22,6 +22,7 @@ devices.
 make
 
 %install
+rm -rf $RPM_BUILD_ROOT/*
 make DESTDIR=$RPM_BUILD_ROOT basicinstall
 sed '{s/%%EXEC_CMD%%/\/usr\/bin\/project-builder/}' project-builder.desktop.template > $RPM_BUILD_ROOT/usr/share/applications/project-builder.desktop
 mkdir -p $RPM_BUILD_ROOT/usr/bin

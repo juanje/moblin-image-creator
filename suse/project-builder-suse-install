@@ -16,6 +16,8 @@ sudo cp ~/.Xauthority ./home
 sudo chroot . <<EOF
 export http_proxy=""
 export PATH=/usr/sbin:/sbin:/usr/local/sbin:/usr/local/bin:$PATH
+apt-get clean
+apt-get update
 apt-get --assume-yes --force-yes install language-pack-en xauth bzip2 python-gnome2 python-glade2
 mkdir $HOME
 cp /home/.Xauthority $HOME
