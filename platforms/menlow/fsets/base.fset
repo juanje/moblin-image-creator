@@ -25,7 +25,7 @@ DEPS=core
 [Power-Management]
 DESC=Power management packages for a Mobile Internet Device
 PKGS=
-DEBUG_PKGS=
+DEBUG_PKGS=powertop
 DEPS=core
 
 [Hildon-Application-Framework]
