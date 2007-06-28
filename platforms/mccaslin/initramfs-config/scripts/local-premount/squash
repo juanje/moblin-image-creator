@@ -1,0 +1,42 @@
+#!/bin/sh
+
+PREREQ=
+
+prereqs()
+{
+	echo "$PREREQ"
+}
+
+case $1 in
+# get pre-requisites
+prereqs)
+	prereqs
+	exit 0
+	;;
+esac
+
+for x in $(cat /proc/cmdline); do
+	case $x in
+	squashfile=*)
+		squashfile=${x#squashfile=}
+		;;
+	esac
+done
+
+if [ -n "${squashfile}" ] && [ -f $squashfile ]; then
+    mkdir /squashmnt
+    mkdir /persistmnt
+
+    mount -o loop -t squashfs $squashfile /squashmnt
+
+    # FIXME This has no error checking
+    modprobe -Qb ${FSTYPE}
+
+    mount -t ${FSTYPE} ${ROOTFLAGS} ${ROOT} /persistmnt
+    cat > /conf/param.conf <<EOF
+export ROOTFLAGS="-o dirs=/persistmnt=rw:/squashmnt=ro"
+export ROOT="/"
+export FSTYPE="unionfs"
+EOF
+
+fi
