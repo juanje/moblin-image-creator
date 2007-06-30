@@ -135,8 +135,8 @@ class FileSystem(object):
             print "---------------start----------------"
             for line in output:
                 print line
-            print "---------------start----------------"
-        return p.returncode
+            print "----------------end-----------------"
+        return result
 
 class Project(FileSystem):
     """
