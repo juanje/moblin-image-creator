@@ -125,6 +125,10 @@ class FileSystem(object):
         sys.stdout.flush()
         p.stdin.close()
         for line in p.stdout:
+            try: 
+                self.cb.iteration(process=p)
+            except:
+                pass
             line = line.rstrip()
             output.append(line)
             print line
