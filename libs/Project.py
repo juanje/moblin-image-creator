@@ -121,8 +121,12 @@ class FileSystem(object):
         self.mount()
         cmd_line = "chroot %s %s %s" % (self.path, cmd_path, cmd_args)
         p = subprocess.Popen(cmd_line.split(), stdout = subprocess.PIPE, stderr = subprocess.STDOUT)
+        print "Started getting output...."
+        sys.stdout.flush()
         for line in p.stdout:
             output.append(line.rstrip())
+        print "Done getting output...."
+        sys.stdout.flush()
         while p.poll() == None:
             try: 
                 self.cb.iteration(process=p)
