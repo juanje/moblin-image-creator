@@ -121,8 +121,7 @@ class FileSystem(object):
         self.mount()
         cmd_line = "chroot %s %s %s" % (self.path, cmd_path, cmd_args)
         p = subprocess.Popen(cmd_line.split(), stdout = subprocess.PIPE, stderr = subprocess.STDOUT, stdin = subprocess.PIPE, close_fds = True)
-        print "Started getting output...."
-        sys.stdout.flush()
+        # Don't ever want the process waiting on stdin.
         p.stdin.close()
         for line in p.stdout:
             try: 
@@ -132,8 +131,6 @@ class FileSystem(object):
             line = line.rstrip()
             output.append(line)
             print line
-        print "Done getting output...."
-        sys.stdout.flush()
         while p.poll() == None:
             try: 
                 self.cb.iteration(process=p)
@@ -141,6 +138,7 @@ class FileSystem(object):
                 pass
         result = p.returncode
         if result != 0:
+            # This is probably redundant
             sys.stdout.flush()
             print "Error in chroot"
             print "Command was: %s" % cmd_line
