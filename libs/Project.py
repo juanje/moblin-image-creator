@@ -120,7 +120,7 @@ class FileSystem(object):
             raise ValueError("Internal Error: Invalid buildroot at %s" % (self.path))
         self.mount()
         cmd_line = "chroot %s %s %s" % (self.path, cmd_path, cmd_args)
-        p = subprocess.Popen(cmd_line.split(), stdout = subprocess.PIPE, stderr = stdout.STDOUT)
+        p = subprocess.Popen(cmd_line.split(), stdout = subprocess.PIPE, stderr = subprocess.STDOUT)
         for line in p.stdout:
             output.append(line.rstrip())
         while p.poll() == None:
