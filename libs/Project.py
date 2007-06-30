@@ -111,19 +111,31 @@ class FileSystem(object):
             if self.path == mpoint[:len(self.path)]:
                 os.system("umount %s" % (mpoint))
 
-    def chroot(self, cmd_path, cmd_args):
+    def chroot(self, cmd_path, cmd_args, output = None):
         print "self.chroot(%s, %s)" % (cmd_path, cmd_args)
+        if output == None:
+            output = []
         if not os.path.isfile(os.path.join(self.path, 'bin/bash')):
             print >> sys.stderr, "Incomplete jailroot at %s" % (self.path)
             raise ValueError("Internal Error: Invalid buildroot at %s" % (self.path))
         self.mount()
         cmd_line = "chroot %s %s %s" % (self.path, cmd_path, cmd_args)
-        p = subprocess.Popen(cmd_line.split())
+        p = subprocess.Popen(cmd_line.split(), stdout = subprocess.PIPE, stderr = stdout.STDOUT)
+        for line in p.stdout:
+            output.append(line.rstrip())
         while p.poll() == None:
             try: 
                 self.cb.iteration(process=p)
             except:
                 pass
+        result = p.returncode
+        if result != 0:
+            print "Error in chroot"
+            print "Command was: %s" % cmd_line
+            print "---------------start----------------"
+            for line in output:
+                print line
+            print "---------------start----------------"
         return p.returncode
 
 class Project(FileSystem):
