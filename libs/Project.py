@@ -130,12 +130,14 @@ class FileSystem(object):
                 pass
         result = p.returncode
         if result != 0:
+            sys.stdout.flush()
             print "Error in chroot"
             print "Command was: %s" % cmd_line
             print "---------------start----------------"
             for line in output:
                 print line
             print "----------------end-----------------"
+            sys.stdout.flush()
         return result
 
 class Project(FileSystem):
