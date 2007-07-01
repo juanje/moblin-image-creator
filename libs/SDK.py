@@ -117,7 +117,6 @@ import re
 import shutil
 import socket
 import sys
-import subprocess
 import time
 
 import Platform
