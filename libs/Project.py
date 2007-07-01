@@ -22,7 +22,6 @@ import re
 import shutil
 import socket
 import stat
-import subprocess
 import sys
 import time
 
@@ -122,33 +121,11 @@ class FileSystem(object):
         self.mount()
         cmd_line = "chroot %s %s %s" % (self.path, cmd_path, cmd_args)
         result = pdk_utils.execCommand(cmd_line, output = output, callback = self.cb.iteration)
-
-#         p = subprocess.Popen(cmd_line.split(), stdout = subprocess.PIPE, stderr = subprocess.STDOUT, stdin = subprocess.PIPE, close_fds = True)
-#         # Don't ever want the process waiting on stdin.
-#         p.stdin.close()
-#         for line in p.stdout:
-#             try: 
-#                 self.cb.iteration(process=p)
-#             except:
-#                 pass
-#             line = line.rstrip()
-#             output.append(line)
-#             print line
-#         while p.poll() == None:
-#             try: 
-#                 self.cb.iteration(process=p)
-#             except:
-#                 pass
-#         result = p.returncode
         if result != 0:
             # This is probably redundant
             sys.stdout.flush()
             print "Error in chroot"
             print "Command was: %s" % cmd_line
-            print "---------------start----------------"
-            for line in output:
-                print line
-            print "----------------end-----------------"
             sys.stdout.flush()
         return result
 
@@ -199,16 +176,12 @@ class Project(FileSystem):
             os.makedirs(install_path)
 
             cmd = "tar -jxvf %s -C %s" % (rootstrap, install_path)
-            proc = subprocess.Popen(cmd.split(), stderr = subprocess.PIPE)
-            while proc.poll() == None:
-                try: 
-                    self.cb.iteration(process=proc)
-                except:
-                    pass
-            if proc.returncode != 0:
+            output = []
+            result = execCommand(cmd, output = output, callback = self.cb.iteration)
+            if result != 0:
                 print >> sys.stderr, "ERROR: Unable to rootstrap %s from %s!" % (rootstrap, name)
                 shutil.rmtree(os.path.join(self.path, 'targets', name))
-                raise ValueError(" ".join(proc.stderr.readlines()))
+                raise ValueError(" ".join(output))
 
             self.targets[name] = Target(name, self, self.cb)
             self.targets[name].mount()
