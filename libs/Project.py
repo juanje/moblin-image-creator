@@ -26,6 +26,7 @@ import subprocess
 import sys
 import time
 
+import pdk_utils
 import InstallImage
 import SDK
 
@@ -120,23 +121,25 @@ class FileSystem(object):
             raise ValueError("Internal Error: Invalid buildroot at %s" % (self.path))
         self.mount()
         cmd_line = "chroot %s %s %s" % (self.path, cmd_path, cmd_args)
-        p = subprocess.Popen(cmd_line.split(), stdout = subprocess.PIPE, stderr = subprocess.STDOUT, stdin = subprocess.PIPE, close_fds = True)
-        # Don't ever want the process waiting on stdin.
-        p.stdin.close()
-        for line in p.stdout:
-            try: 
-                self.cb.iteration(process=p)
-            except:
-                pass
-            line = line.rstrip()
-            output.append(line)
-            print line
-        while p.poll() == None:
-            try: 
-                self.cb.iteration(process=p)
-            except:
-                pass
-        result = p.returncode
+        result = pdk_utils.execCommand(cmd_line, output = output, callback = self.cb.iteration)
+
+#         p = subprocess.Popen(cmd_line.split(), stdout = subprocess.PIPE, stderr = subprocess.STDOUT, stdin = subprocess.PIPE, close_fds = True)
+#         # Don't ever want the process waiting on stdin.
+#         p.stdin.close()
+#         for line in p.stdout:
+#             try: 
+#                 self.cb.iteration(process=p)
+#             except:
+#                 pass
+#             line = line.rstrip()
+#             output.append(line)
+#             print line
+#         while p.poll() == None:
+#             try: 
+#                 self.cb.iteration(process=p)
+#             except:
+#                 pass
+#         result = p.returncode
         if result != 0:
             # This is probably redundant
             sys.stdout.flush()
