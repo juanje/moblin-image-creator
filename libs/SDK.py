@@ -269,15 +269,11 @@ class SDK(object):
         # and then deal with the project
         proj.umount()
         cmd = "rm -fR %s" % (os.path.join(proj.path))
-        proc = subprocess.Popen(cmd.split(), stderr = subprocess.PIPE)
-        while proc.poll() == None:
-            try: 
-                self.cb.iteration(process=proc)
-            except:
-                pass
-        if proc.returncode != 0:
+        output = []
+        result = pdk_utils.execCommand(cmd, output = output, callback = self.cb.iteration)
+        if result != 0:
             print >> sys.stderr, "ERROR: Unable to delete %s!" % (project_name)
-            raise ValueError(" ".join(proc.stderr.readlines()))
+            raise ValueError(" ".join(output))
         os.unlink(os.path.join(self.config_path, proj.name + '.proj'))
         
     def __str__(self):
