@@ -267,6 +267,8 @@ class SDK(object):
         proj.targets.clear()
         # and then deal with the project
         proj.umount()
+        # Maybe we should just use shutil.rmtree here??  Of course our progress
+        # indicator won't move if we do that.
         cmd = "rm -fR %s" % (os.path.join(proj.path))
         output = []
         result = pdk_utils.execCommand(cmd, output = output, callback = self.cb.iteration)
