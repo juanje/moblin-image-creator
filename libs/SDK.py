@@ -122,6 +122,7 @@ import time
 
 import Platform
 import Project
+import pdk_utils
 
 class ConfigFile(object):
     """
@@ -241,17 +242,13 @@ class SDK(object):
             os.makedirs(install_path)
 
         cmd = "tar -jxvf %s -C %s" % (rootstrap, install_path)
-        proc = subprocess.Popen(cmd.split(), stderr = subprocess.PIPE)
-        while proc.poll() == None:
-            try: 
-                self.cb.iteration(process=proc)
-            except:
-                pass
-        if proc.returncode != 0:
+        output = []
+        result = pdk_utils.execCommand(cmd, output = output, callback = self.cb.iteration)
+        if result != 0:
             print >> sys.stderr, "ERROR: Unable to rootstrap %s from %s!" % (rootstrap, name)
             shutil.rmtree(install_path)
             os.unlink(config_path)
-            raise ValueError(" ".join(proc.stderr.readlines()))
+            raise ValueError(" ".join(output))
         
         # instantiate the project
         try:
