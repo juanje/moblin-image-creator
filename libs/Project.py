@@ -177,7 +177,7 @@ class Project(FileSystem):
 
             cmd = "tar -jxvf %s -C %s" % (rootstrap, install_path)
             output = []
-            result = execCommand(cmd, output = output, callback = self.cb.iteration)
+            result = pdk_utils.execCommand(cmd, output = output, callback = self.cb.iteration)
             if result != 0:
                 print >> sys.stderr, "ERROR: Unable to rootstrap %s from %s!" % (rootstrap, name)
                 shutil.rmtree(os.path.join(self.path, 'targets', name))
