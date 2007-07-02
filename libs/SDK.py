@@ -117,11 +117,11 @@ import re
 import shutil
 import socket
 import sys
-import subprocess
 import time
 
 import Platform
 import Project
+import pdk_utils
 
 class ConfigFile(object):
     """
@@ -241,17 +241,13 @@ class SDK(object):
             os.makedirs(install_path)
 
         cmd = "tar -jxvf %s -C %s" % (rootstrap, install_path)
-        proc = subprocess.Popen(cmd.split(), stderr = subprocess.PIPE)
-        while proc.poll() == None:
-            try: 
-                self.cb.iteration(process=proc)
-            except:
-                pass
-        if proc.returncode != 0:
+        output = []
+        result = pdk_utils.execCommand(cmd, output = output, callback = self.cb.iteration)
+        if result != 0:
             print >> sys.stderr, "ERROR: Unable to rootstrap %s from %s!" % (rootstrap, name)
             shutil.rmtree(install_path)
             os.unlink(config_path)
-            raise ValueError(" ".join(proc.stderr.readlines()))
+            raise ValueError(" ".join(output))
         
         # instantiate the project
         try:
@@ -271,16 +267,14 @@ class SDK(object):
         proj.targets.clear()
         # and then deal with the project
         proj.umount()
+        # Maybe we should just use shutil.rmtree here??  Of course our progress
+        # indicator won't move if we do that.
         cmd = "rm -fR %s" % (os.path.join(proj.path))
-        proc = subprocess.Popen(cmd.split(), stderr = subprocess.PIPE)
-        while proc.poll() == None:
-            try: 
-                self.cb.iteration(process=proc)
-            except:
-                pass
-        if proc.returncode != 0:
+        output = []
+        result = pdk_utils.execCommand(cmd, output = output, callback = self.cb.iteration)
+        if result != 0:
             print >> sys.stderr, "ERROR: Unable to delete %s!" % (project_name)
-            raise ValueError(" ".join(proc.stderr.readlines()))
+            raise ValueError(" ".join(output))
         os.unlink(os.path.join(self.config_path, proj.name + '.proj'))
         
     def __str__(self):

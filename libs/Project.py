@@ -22,10 +22,10 @@ import re
 import shutil
 import socket
 import stat
-import subprocess
 import sys
 import time
 
+import pdk_utils
 import InstallImage
 import SDK
 
@@ -111,20 +111,23 @@ class FileSystem(object):
             if self.path == mpoint[:len(self.path)]:
                 os.system("umount %s" % (mpoint))
 
-    def chroot(self, cmd_path, cmd_args):
+    def chroot(self, cmd_path, cmd_args, output = None):
         print "self.chroot(%s, %s)" % (cmd_path, cmd_args)
+        if output == None:
+            output = []
         if not os.path.isfile(os.path.join(self.path, 'bin/bash')):
             print >> sys.stderr, "Incomplete jailroot at %s" % (self.path)
             raise ValueError("Internal Error: Invalid buildroot at %s" % (self.path))
         self.mount()
         cmd_line = "chroot %s %s %s" % (self.path, cmd_path, cmd_args)
-        p = subprocess.Popen(cmd_line.split())
-        while p.poll() == None:
-            try: 
-                self.cb.iteration(process=p)
-            except:
-                pass
-        return p.returncode
+        result = pdk_utils.execCommand(cmd_line, output = output, callback = self.cb.iteration)
+        if result != 0:
+            # This is probably redundant
+            sys.stdout.flush()
+            print "Error in chroot"
+            print "Command was: %s" % cmd_line
+            sys.stdout.flush()
+        return result
 
 class Project(FileSystem):
     """
@@ -173,16 +176,12 @@ class Project(FileSystem):
             os.makedirs(install_path)
 
             cmd = "tar -jxvf %s -C %s" % (rootstrap, install_path)
-            proc = subprocess.Popen(cmd.split(), stderr = subprocess.PIPE)
-            while proc.poll() == None:
-                try: 
-                    self.cb.iteration(process=proc)
-                except:
-                    pass
-            if proc.returncode != 0:
+            output = []
+            result = pdk_utils.execCommand(cmd, output = output, callback = self.cb.iteration)
+            if result != 0:
                 print >> sys.stderr, "ERROR: Unable to rootstrap %s from %s!" % (rootstrap, name)
                 shutil.rmtree(os.path.join(self.path, 'targets', name))
-                raise ValueError(" ".join(proc.stderr.readlines()))
+                raise ValueError(" ".join(output))
 
             self.targets[name] = Target(name, self, self.cb)
             self.targets[name].mount()
