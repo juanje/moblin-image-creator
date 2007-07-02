@@ -21,6 +21,8 @@
 
 import os
 import re
+import select
+import subprocess
 import sys
 
 def main():
@@ -69,6 +71,27 @@ def umount_device(device_file):
                 return False
             return True
     return True
+
+def execCommand(cmd_line, quiet = False, output = None, callback = None):
+        if output == None:
+            output = []
+        p = subprocess.Popen(cmd_line.split(), stdout = subprocess.PIPE, stderr = subprocess.STDOUT, stdin = subprocess.PIPE, close_fds = True)
+        # Don't ever want the process waiting on stdin.
+        p.stdin.close()
+        # This is so that we can keep calling our callback
+        pl = select.poll()
+        pl.register(p.stdout)
+        while p.poll() == None:
+            if pl.poll(10):
+                line = p.stdout.readline()
+                line = line.rstrip()
+                output.append(line)
+                if not quiet:
+                    print line
+            elif callback:
+                callback(p)
+        result = p.returncode
+        return result
 
 if '__main__' == __name__:
     sys.exit(main())
