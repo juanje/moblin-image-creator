@@ -186,7 +186,46 @@ class Project(FileSystem):
             self.targets[name] = Target(name, self, self.cb)
             self.targets[name].mount()
             self.targets[name].update()            
+            # Install platform default kernel cmdline
+            self.set_target_usb_kernel_cmdline(name, self.platform.usb_kernel_cmdline)
+            self.set_target_hd_kernel_cmdline(name, self.platform.hd_kernel_cmdline)
         return self.targets[name]
+    
+    def get_target_usb_kernel_cmdline(self, name):
+        if not name:
+           raise ValueError("Target name was not specified")
+        cmdline = open(os.path.join(self.path, 'targets', name, 'image', 'usb_kernel_cmdline'),'r')
+        usb_kernel_cmdline = ''
+        for line in cmdline:
+            if not re.search(r'^\s*#',line): 
+                usb_kernel_cmdline += line + ' '
+        cmdline.close()
+        return usb_kernel_cmdline.strip()
+
+    def get_target_hd_kernel_cmdline(self, name):
+        if not name:
+           raise ValueError("Target name was not specified")
+        cmdline = open(os.path.join(self.path, 'targets', name, 'image', 'hd_kernel_cmdline'),'r')
+        hd_kernel_cmdline = ''
+        for line in cmdline:
+            if not re.search(r'^\s*#',line): 
+                hd_kernel_cmdline += line + ' '
+        cmdline.close()
+        return hd_kernel_cmdline.strip()
+
+    def set_target_usb_kernel_cmdline(self, name, str):
+        if not name:
+           raise ValueError("Target name was not specified")
+        cmdline = open(os.path.join(self.path, 'targets', name, 'image', 'usb_kernel_cmdline'),'w')
+        print >> cmdline, str
+        cmdline.close()
+
+    def set_target_hd_kernel_cmdline(self, name, str):
+        if not name:
+           raise ValueError("Target name was not specified")
+        cmdline = open(os.path.join(self.path, 'targets', name, 'image', 'hd_kernel_cmdline'),'w')
+        print >> cmdline, str
+        cmdline.close()
 
     def delete_target(self, name, do_pop=True):
         target = self.targets[name]

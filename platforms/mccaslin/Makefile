@@ -47,6 +47,7 @@ install:
 	@mkdir -p ${SHARE}/platforms/${PNAME}
 	@mkdir -p ${SHARE}/platforms/${PNAME}/fsets
 	@cp fsets/*.fset ${SHARE}/platforms/${PNAME}/fsets/
+	@cp *cmdline* ${SHARE}/platforms/${PNAME}/
 	@cp *-rootstrap.tar.bz2 ${SHARE}/platforms/${PNAME}/
 
 clean-repo:

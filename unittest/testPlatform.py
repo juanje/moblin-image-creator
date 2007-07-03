@@ -53,6 +53,10 @@ def createSamplePlatformDir(platform_dir, repo_filename = "unittest.repo"):
     os.makedirs(platform_dir)
     for dirname in ('buildroot_repos', 'fsets', 'target_repos'):
         os.mkdir(os.path.join(platform_dir, dirname))
+    cmdfile=open(os.path.join(platform_dir,'usb_kernel_cmdline'),'w')
+    cmdfile.close()
+    cmdfile=open(os.path.join(platform_dir,'hd_kernel_cmdline'),'w')
+    cmdfile.close()
     test_fsets.createSampleFsetFile(os.path.join(platform_dir, 'fsets', 'unittest.fset'))
     createSampleJailrootPackages(os.path.join(platform_dir, 'buildroot.packages'))
     createSampleRepos(platform_dir, repo_filename)

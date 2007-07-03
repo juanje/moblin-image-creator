@@ -136,14 +136,14 @@ class InstallImage(object):
         s = SyslinuxCfg(self.tmp_path, cfg_filename)
 
         # Copy the default kernel
-        kernel_name = s.add_default(self.default_kernel, 'initrd=initrd.img root=rootfs.img')
+        kernel_name = s.add_default(self.default_kernel, self.project.get_target_usb_kernel_cmdline(self.target.name))
         src_path = os.path.join(self.target.fs_path, 'boot', self.default_kernel)
         dst_path = os.path.join(self.tmp_path, kernel_name)
         shutil.copyfile(src_path, dst_path)
 
         # Copy the remaining kernels
         for k in self.kernels:
-            kernel_name = s.add_target(k, 'initrd=initrd.img root=rootfs.img')
+            kernel_name = s.add_target(k, self.project.get_target_usb_kernel_cmdline(self.target.name))
             src_path = os.path.join(self.target.fs_path, 'boot', k)
             dst_path = os.path.join(self.tmp_path, kernel_name)
             shutil.copyfile(src_path, dst_path)
@@ -396,6 +396,7 @@ class InstallUsbImage(BaseUsbImage):
     def create_image(self):
         print "InstallUsbImage: Creating InstallUSB Image..."
         Mkinitrd.create(self.project, '/tmp/.tmp.initrd', kernel_mod_path=self.default_kernel_mod_path)
+        self.apply_hd_kernel_cmdline()
         self.create_rootfs()
         self.create_bootfs()
         initrd_stat_result = os.stat('/tmp/.tmp.initrd')
@@ -418,6 +419,12 @@ class InstallUsbImage(BaseUsbImage):
         print "\nWARNING: Entire contents of the target devices's HDD will be erased prior to installation!"
         print "         This includes ALL partitions on the disk!\n"
         
+    def apply_hd_kernel_cmdline(self):
+        cmd = "sed -e 's/^\\tkernel=\\([/a-zA-Z0-9._-]*\\).*/\\tkernel=\\1 %s/g' -i %s" % (self.project.get_target_hd_kernel_cmdline(self.target.name), os.path.join(self.target.fs_path, 'boot', 'grub', 'grub.conf'))
+        print cmd
+        print os.popen(cmd).readlines()
+        print "grub.conf kernel cmdline changed"
+
     def __str__(self):
         return ("<InstallUsbImage: project=%s, target=%s, name=%s>"
                 % (self.project, self.target, self.name))

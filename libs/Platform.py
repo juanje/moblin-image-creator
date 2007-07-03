@@ -49,6 +49,19 @@ class Platform(object):
                 for p in line.split():
                     self.buildroot_packages.append(p)
         config.close()
+        # determine default kernel cmdline options
+        self.usb_kernel_cmdline = ''
+        self.hd_kernel_cmdline = ''
+        config = open(os.path.join(self.path, 'usb_kernel_cmdline'), 'r')
+        for line in config:
+            if not re.search(r'^\s*#',line):
+                self.usb_kernel_cmdline += line + ' '
+        config.close()
+        config = open(os.path.join(self.path, 'hd_kernel_cmdline'), 'r')
+        for line in config:
+            if not re.search(r'^\s*#',line):
+                self.hd_kernel_cmdline += line + ' '
+        config.close()
 
     def __str__(self):
         return ("<Platform Object: \n\tname=%s, \n\tfset=%s, \n\tbuildroot_packages=%s>\n" %

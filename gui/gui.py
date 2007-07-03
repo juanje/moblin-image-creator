@@ -70,6 +70,7 @@ class App(object):
                 "on_about_activate": self.on_about_activate,
                 "on_term_launch_clicked": self.on_term_launch_clicked,
                 "on_target_term_launch_clicked": self.on_target_term_launch_clicked,
+                "on_target_kernel_cmdline_clicked": self.on_target_kernel_cmdline_clicked,
                 "on_DD_USB_clicked": self.on_DD_USB_clicked}
         self.widgets.signal_autoconnect(dic)
         # setup projectView widget
@@ -131,6 +132,7 @@ class App(object):
         self.buttons.create_liverwusb.set_sensitive(fset_state)
         self.buttons.create_installusb.set_sensitive(fset_state)
         self.buttons.target_term_launch.set_sensitive(fset_state)
+        self.buttons.target_kernel_cmdline.set_sensitive(fset_state)
         self.buttons.DD_USB.set_sensitive(fset_state)
 
     def project_view_changed(self, selection):
@@ -378,6 +380,22 @@ class App(object):
         print "Target path: %s" % target_path
         os.system('/usr/bin/gnome-terminal -x sudo /usr/sbin/chroot %s su - &' % target_path)
 
+    def on_target_kernel_cmdline_clicked(self, widget):
+        project_path = self.current_project().path
+        target = self.current_target()
+        target_path= "%s/targets/%s/image" % (project_path, target.name)
+        widgets = gtk.glade.XML(self.gladefile, 'kernel_cmdline_dlg')
+        dialog = widgets.get_widget('kernel_cmdline_dlg')
+        usb_kernel_cmdline = widgets.get_widget('usb_kernel_cmdline')
+        hd_kernel_cmdline = widgets.get_widget('hd_kernel_cmdline')
+        usb_kernel_cmdline.set_text(self.current_project().get_target_usb_kernel_cmdline(target.name))
+        hd_kernel_cmdline.set_text(self.current_project().get_target_hd_kernel_cmdline(target.name))
+        result = dialog.run()
+        if result == gtk.RESPONSE_OK:
+            self.current_project().set_target_usb_kernel_cmdline(target.name, usb_kernel_cmdline.get_text())
+            self.current_project().set_target_hd_kernel_cmdline(target.name, hd_kernel_cmdline.get_text())
+        dialog.destroy()
+
     def on_liveUSB_clicked(self, widget):
         project = self.current_project()
         target = self.current_target()
@@ -594,6 +612,7 @@ class MainWindowButtons(object):
         # Terminal button
         self.term_launch = widgets.get_widget('term_launch')
         self.target_term_launch = widgets.get_widget('target_term_launch')
+        self.target_kernel_cmdline = widgets.get_widget('target_kernel_cmdline')
         self.DD_USB = widgets.get_widget('DD_USB')
 def print_exc_plus():
     # From Python Cookbook 2nd Edition.  FIXME: Will need to remove this at
