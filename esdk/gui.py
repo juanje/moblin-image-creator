@@ -30,12 +30,16 @@ menu.add_command(label="Redo", command=callback)
 def exit():
 	main.destroy()
 
-fields = 'Name', 'Path', 'Desc'#, 'Platform'
+fields = 'Name', 'Path', 'Desc', 'Platform'
 
 def create_new_project(new_project, args):
 	sdk = SDK()
-	print "%s" % args[0].get()
-	proj = sdk.create_project(args[1].get(), args[0].get(), args[2].get(), sdk.platforms['donley'])
+	i = 0
+	for arg in args:
+		print "%s" % args[i].get()
+		i +=1
+		 
+	proj = sdk.create_project(args[1].get(), args[0].get(), args[2].get(), sdk.platforms[args[3].get()])
 	proj.install()
 	new_project.destroy
 
@@ -55,28 +59,23 @@ def get_new_args(new_project, fields):
 		entries.append(ent)
 	return entries
 
-def get_platforms(new_project):
-	Label(new_project, text="Platforms").pack(fill=BOTH)
-	sdk = SDK()
-	for key in sdk.platforms.keys():
-		platform=sdk.platforms[key]
-		print '%s ' % (platform.name)
-		#platform_list.insert(END, "Test")
-		#platform_list.pack(expand=YES, fill=BOTH)
-		
-
 
 def new():
 	new_project = Tk()
 	new_project.title("Create New Project")
 	args = get_new_args(new_project, fields)
-	#p = get_platforms(new_project)
 	Label(new_project, text="Platforms").pack()
-	p = Listbox(new_project, relief=SUNKEN)
+	#Get platforms and list them
+	p = Listbox(new_project, selectmode=SINGLE, relief=SUNKEN)
 	sdk = SDK()
+	pos = 0
 	for key in sdk.platforms.keys():
 		platform=sdk.platforms[key]
-		print "%s" % (platform.name)
+		print "Available Platforms: %s" % (platform.name)
+		p.insert(pos, platform.name)
+		pos += 1
+		p.pack()
+
 	new_project.bind('<Return>', (lambda event: create_new_project(args)))
 	Button(new_project, text='Create',
 		command= (lambda: create_new_project(new_project, args))).pack(side=LEFT)
