@@ -24,7 +24,7 @@ DEPS=
 
 [Infrastructure]
 DESC=Fundamental non-GUI system infrastructure
-PKGS=dhcp3-client network-manager wireless-tools alsa-base alsa-utils 
+PKGS=dhcp3-client wireless-tools alsa-base alsa-utils 
 DEBUG_PKGS=openssh-client openssh-server
 DEPS=core
 
