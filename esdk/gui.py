@@ -8,20 +8,6 @@ from SDK import *
 def callback():
 		print "FIXME"
 
-main = Tk()
-main.title("Intel eSDK")
-
-#title
-logo = PhotoImage(file="./intel-logo.gif")
-r = Label(text = "\n\nIntel eSDK", fg="red", justify="left")
-r.pack(expand=YES, fill=BOTH)
-
-graphic = Label(main,image=logo)
-graphic.pack(side=TOP, expand=YES, fill=BOTH)
-menu = Menu(main, tearoff=0)
-menu.add_command(label="Undo", command=callback)
-menu.add_command(label="Redo", command=callback)
-
 
 #========================
 #General Functions	=
@@ -32,6 +18,7 @@ def exit():
 
 fields = 'Name', 'Path', 'Desc', 'Platform'
 
+#Call SDK to create the project
 def create_new_project(new_project, args):
 	sdk = SDK()
 	i = 0
@@ -41,10 +28,8 @@ def create_new_project(new_project, args):
 		 
 	proj = sdk.create_project(args[1].get(), args[0].get(), args[2].get(), sdk.platforms[args[3].get()])
 	proj.install()
-	new_project.destroy
 
-	
-
+#Read in user input for New Project
 def get_new_args(new_project, fields):
 
 	entries = []
@@ -59,27 +44,44 @@ def get_new_args(new_project, fields):
 		entries.append(ent)
 	return entries
 
+def pCreateButtonHandler(new_project, args):
+	create_new_project(new_project, args)
+	new_project.destroy()
 
 def new():
 	new_project = Tk()
 	new_project.title("Create New Project")
+	#Read user input for project configuration & information
 	args = get_new_args(new_project, fields)
-	Label(new_project, text="Platforms").pack()
+
 	#Get platforms and list them
-	p = Listbox(new_project, selectmode=SINGLE, relief=SUNKEN)
+	Label(new_project, text="Supported Platforms").pack()
 	sdk = SDK()
-	pos = 0
-	for key in sdk.platforms.keys():
-		platform=sdk.platforms[key]
-		print "Available Platforms: %s" % (platform.name)
-		p.insert(pos, platform.name)
-		pos += 1
-		p.pack()
+	_platforms = []
+	pVar=StringVar()
+	for p in sdk.platforms.keys():
+		platform=sdk.platforms[p]
+		print "Platforms found: %s" % (platform.name)
+		_platforms.append(p)
+		#Form an OptinMenu
+	pVar.set(_platforms[0])
+	pmenu=OptionMenu(new_project, pVar, *_platforms)
+	pmenu.pack()
+
+
 
 	new_project.bind('<Return>', (lambda event: create_new_project(args)))
 	Button(new_project, text='Create',
-		command= (lambda: create_new_project(new_project, args))).pack(side=LEFT)
+			command= (lambda: pCreateButtonHandler(new_project, args))).pack(side=LEFT)
+		#command= (lambda: create_new_project(new_project, args))).pack(side=LEFT)
 	Button(new_project, text='Cancel', command=new_project.destroy).pack(side=RIGHT)
+
+def open_project(p_list):
+	index = p_list.curselection()
+	label = p_list.get(index)
+	print 'You selected:', label
+	
+	
 
 def open():
 	print "Open"
@@ -92,6 +94,9 @@ def open():
 		print '%s ' % (project.name)
 		projects_list.insert(END, project.name)
 		projects_list.pack(side=BOTTOM, expand=YES, fill=BOTH)
+	open = Button(p_list, text='Open', command=open_project).pack()	
+	p_list.bind('<Double-1>',open(p_list))
+
 def about():
 	showinfo(
 		"Aboue Intel eSDK",
@@ -102,54 +107,42 @@ def about():
 #================
 #file menu 	=
 #================
-#def open():
-	#showinfo(title="Open existing projcts", message= "Project 1\n Project 2")
 
-menu = Menu(main)
-main.config(menu=menu)
-filemenu = Menu(menu)
+def makeMenu(main):
+	menu = Menu(main)
+	main.config(menu=menu)
+	filemenu = Menu(menu)
 
-menu.add_cascade(label="File", menu=filemenu)
-filemenu.add_command(label="New", command=new)
-filemenu.add_command(label="Open...", command=open)
-filemenu.add_separator()
-filemenu.add_command(label="Exit", command=sys.exit)
+	menu.add_cascade(label="File", menu=filemenu)
+	filemenu.add_command(label="New", command=new)
+	filemenu.add_command(label="Open...", command=open)
+	filemenu.add_separator()
+	filemenu.add_command(label="Exit", command=sys.exit)
 
-menu.add_command(label="About", command=about)
+	menu.add_command(label="About", command=about)
 
 
 
 #========================
-#Platform		=
+#    Main		=
 #========================
 
-#Function Set Listbox
+if __name__ == '__main__':
+	main = Tk()
+	main.title("Intel eSDK")
+	
+	makeMenu(main)
 
-i = Label(main, text="Function Sets Available:\n", justify=LEFT)
-i.pack()
+	#title
+	logo = PhotoImage(file="./intel-logo.gif")
+	r = Label(text = "\n\nIntel eSDK", fg="red", justify="left")
+	r.pack(expand=YES, fill=BOTH)
 
+	graphic = Label(main,image=logo)
+	graphic.pack(side=TOP, expand=YES, fill=BOTH)
 
-func_sets = Listbox(main, selectmode=MULTIPLE)
+	body = Frame(main, width=500, height=400)
+	body.pack()
 
-
-for set in ["Internet", "Media", "Core", "Navigation"]:
-	func_sets.insert(END, set)
-func_sets.pack()
-
-blank=Label(text = "\n\nFinal Image Output:")
-blank.pack()
-
-out = IntVar()
-Radiobutton(main, text="ISO", variable = out, value=1).pack(anchor=W)
-Radiobutton(main, text="Live CD", variable = out, value=0).pack(anchor=W)
-Radiobutton(main, text="Live USB", variable = out, value=2).pack(anchor=W)
-
-select_btn = Button(main, text="GO!")
-select_btn.pack(side=LEFT, fill=X)
-
-frame = Frame(main, width=100, height=100)
-frame.bind("<Button-1>", callback)
-frame.pack()
-
-mainloop()
+	mainloop()
 
