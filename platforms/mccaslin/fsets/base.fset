@@ -54,13 +54,13 @@ DEPS=core
 
 [Hildon-Application-Framework]
 DESC=Hildon Application Framework for enabling Mobile Applications
-PKGS=ubuntu-mobile sdk-default-icons mobile-application-service 
+PKGS=ubuntu-mobile sdk-default-icons mobile-application-service mobile-basic-home matchbox-keyboard hildon-theme-mobile-basic
 DEBUG_PKGS=
 DEPS=gnome-mobile
 
 [Mobile-Applications]
-DESC=browser media-player 
-PKGS=
+DESC=Standard set of flagship mobile applications
+PKGS=mobile-internet-browser
 DEBUG_PKGS=
 DEPS=hildon-application-framework
 
