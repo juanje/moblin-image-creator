@@ -194,7 +194,7 @@ class Project(FileSystem):
     def get_target_usb_kernel_cmdline(self, name):
         if not name:
            raise ValueError("Target name was not specified")
-        cmdline = open(os.path.join(self.path, 'targets', name, 'image', 'usb_kernel_cmdline'),'r')
+        cmdline = open(os.path.join(self.targets[name].config_path, 'usb_kernel_cmdline'), 'r')
         usb_kernel_cmdline = ''
         for line in cmdline:
             if not re.search(r'^\s*#',line): 
@@ -205,7 +205,7 @@ class Project(FileSystem):
     def get_target_hd_kernel_cmdline(self, name):
         if not name:
            raise ValueError("Target name was not specified")
-        cmdline = open(os.path.join(self.path, 'targets', name, 'image', 'hd_kernel_cmdline'),'r')
+        cmdline = open(os.path.join(self.targets[name].config_path, 'hd_kernel_cmdline'), 'r')
         hd_kernel_cmdline = ''
         for line in cmdline:
             if not re.search(r'^\s*#',line): 
@@ -216,14 +216,14 @@ class Project(FileSystem):
     def set_target_usb_kernel_cmdline(self, name, str):
         if not name:
            raise ValueError("Target name was not specified")
-        cmdline = open(os.path.join(self.path, 'targets', name, 'image', 'usb_kernel_cmdline'),'w')
+        cmdline = open(os.path.join(self.targets[name].config_path, 'usb_kernel_cmdline'), 'w')
         print >> cmdline, str
         cmdline.close()
 
     def set_target_hd_kernel_cmdline(self, name, str):
         if not name:
            raise ValueError("Target name was not specified")
-        cmdline = open(os.path.join(self.path, 'targets', name, 'image', 'hd_kernel_cmdline'),'w')
+        cmdline = open(os.path.join(self.targets[name].config_path, 'hd_kernel_cmdline'), 'w')
         print >> cmdline, str
         cmdline.close()
 
@@ -288,13 +288,18 @@ class Target(FileSystem):
         if not os.path.isdir(self.image_path):
             os.makedirs(self.image_path)
 
+        # Load/create our target's config directory
+        self.config_path = os.path.join(self.top, "config")
+        if not os.path.isdir(self.config_path):
+            os.makedirs(self.config_path)
+
         # Instantiate the target filesystem
         FileSystem.__init__(self, self.fs_path, cb)
 
     def installed_fsets(self):
         result = []
         for fset in os.listdir(self.top):
-            if fset not in ['fs', 'image']:
+            if fset not in ['fs', 'image', 'config']:
                 result.append(fset)
         result.sort()
         return result
@@ -362,8 +367,8 @@ class Target(FileSystem):
         FileSystem.update(self.project, "/targets/%s/fs" % (self.name))
 
     def __str__(self):
-        return ("<Target: name=%s, path=%s, fs_path=%s, image_path=%s>"
-                % (self.name, self.path, self.fs_path, self.image_path))
+        return ("<Target: name=%s, path=%s, fs_path=%s, image_path=%s, config_path=%s>"
+                % (self.name, self.path, self.fs_path, self.image_path, self.config_path))
     def __repr__(self):
         return "Target('%s', %s)" % (self.path, self.project)
 

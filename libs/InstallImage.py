@@ -420,7 +420,7 @@ class InstallUsbImage(BaseUsbImage):
         print "         This includes ALL partitions on the disk!\n"
         
     def apply_hd_kernel_cmdline(self):
-        cmd = "sed -e 's/^\\tkernel=\\([/a-zA-Z0-9._-]*\\).*/\\tkernel=\\1 %s/g' -i %s" % (self.project.get_target_hd_kernel_cmdline(self.target.name), os.path.join(self.target.fs_path, 'boot', 'grub', 'grub.conf'))
+        cmd = "sed -e 's/^\\tkernel \\([/a-zA-Z0-9._-]*\\).*/\\tkernel \\1 %s/g' -i %s" % (self.project.get_target_hd_kernel_cmdline(self.target.name), os.path.join(self.target.fs_path, 'boot', 'grub', 'grub.conf'))
         print cmd
         print os.popen(cmd).readlines()
         print "grub.conf kernel cmdline changed"
