@@ -1,2 +1,2 @@
-deb http://linux-ftp.jf.intel.com/pub/mirrors/ubuntu gutsy universe
-deb-src http://linux-ftp.jf.intel.com/pub/mirrors/ubuntu gutsy universe
+deb http://archive.ubuntu.com/ubuntu gutsy universe
+deb-src http://archive.ubuntu.com/ubuntu gutsy universe

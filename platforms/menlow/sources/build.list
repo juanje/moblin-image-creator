@@ -1,2 +1,2 @@
-deb http://umd-build.jf.intel.com/mid-repo gaston main
-deb-src http://umd-build.jf.intel.com/mid-repo gaston main
+deb http://moblin.org/apt gaston main
+deb-src http://moblin.org/apt gaston main
