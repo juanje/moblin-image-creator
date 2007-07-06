@@ -70,7 +70,6 @@ cleanall: clean
 runbasictests:
 	@echo "Running basic unit tests..."
 	unittest/test_fsets.py
-	unittest/testPlatform.py
 	unittest/testProject.py
 	unittest/testSdk.py
 	@echo "Basic unit tests completed"
