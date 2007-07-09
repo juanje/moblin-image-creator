@@ -22,6 +22,8 @@ import SDK
 import Platform
 import Project
 
+import testPlatform
+
 class Callback:
     def iteration(process):
         return
@@ -34,6 +36,7 @@ class TestFileSystem(unittest.TestCase):
         self.project_dir = os.path.join(self.workdir, "project")
         self.platform_name = 'unittest-platform'
         self.platform_dir = os.path.join(self.workdir, "platforms", self.platform_name)
+        testPlatform.createSamplePlatformDir(self.platform_dir)
     def tearDown(self):
         if os.path.isdir(self.workdir):
             shutil.rmtree(self.workdir)
