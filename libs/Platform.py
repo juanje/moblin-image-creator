@@ -40,7 +40,18 @@ class Platform(object):
         fset_path = os.path.join(self.path, 'fsets')
         for filename in os.listdir(fset_path):
             self.fset.addFile(os.path.join(fset_path, filename))
+        # determine what packages additional packages need to be installed
+        # in the buildroot roostrap
+        self.buildroot_extras = ""
+        config = open(os.path.join(self.path, 'buildroot_extras'))
+        for line in config:
+            # Ignore lines beginning with '#'
+            if not re.search(r'^\s*#', line):
+                for p in line.split():
+                    self.buildroot_extras += p + ','
+        config.close()
         # determine what packages need to be installed in the buildroot
+        # (outside the rootstrap archive)
         self.buildroot_packages = []
         config = open(os.path.join(self.path, 'buildroot.packages'))
         for line in config:
@@ -49,6 +60,34 @@ class Platform(object):
                 for p in line.split():
                     self.buildroot_packages.append(p)
         config.close()
+        # determine what mirror to use for the buildroot
+        if os.path.isfile(os.path.join(self.path, 'buildroot_mirror')):
+            t = open(os.path.join(self.path, 'buildroot_mirror'))
+            self.buildroot_mirror = t.readline()
+            t.close()
+        else:
+            self.buildroot_mirror = "http://archive.ubuntu.com/ubuntu/"
+        # determine what codename to use for the buildroot mirror
+        if os.path.isfile(os.path.join(self.path, 'buildroot_codename')):
+            t = open(os.path.join(self.path, 'buildroot_codename'))
+            self.buildroot_mirror = t.readline()
+            t.close()
+        else:
+            self.buildroot_codename = "gutsy"
+        # determine what mirror to use for the target
+        if os.path.isfile(os.path.join(self.path, 'target_mirror')):
+            t = open(os.path.join(self.path, 'target_mirror'))
+            self.target_mirror = t.readline()
+            t.close()
+        else:
+            self.target_mirror = "http://archive.ubuntu.com/ubuntu/"
+        # determine what codename to use for the buildroot mirror
+        if os.path.isfile(os.path.join(self.path, 'target_codename')):
+            t = open(os.path.join(self.path, 'target_codename'))
+            self.target_mirror = t.readline()
+            t.close()
+        else:
+            self.target_codename = "gutsy"
         # determine default kernel cmdline options
         self.usb_kernel_cmdline = ''
         self.hd_kernel_cmdline = ''

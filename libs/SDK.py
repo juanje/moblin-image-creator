@@ -221,7 +221,41 @@ class SDK(object):
         """
         if not install_path or not name or not desc or not platform:
             raise ValueError("Empty argument passed in")
+        
         install_path = os.path.abspath(os.path.expanduser(install_path))
+        if not os.path.isdir(install_path):
+            os.makedirs(install_path)
+
+        rootstrap = os.path.join(platform.path, "build-rootstrap.tar.bz2")
+        if not os.path.isfile(rootstrap):
+            # create platform rootstrap file
+            cmd = "debootstrap --arch i386 --variant=buildd --include=%s %s %s %s" % (platform.buildroot_extras, platform.buildroot_codename, install_path, platform.buildroot_mirror)
+            output = []
+            result = pdk_utils.execCommand(cmd, output = output, callback = self.cb.iteration)
+            if result != 0:
+                print >> sys.stderr, "ERROR: Unable to generate project rootstrap!"
+                shutil.rmtree(install_path)
+                raise ValueError(" ".join(output))
+            os.system('rm -fR %s/var/cache/apt/archives/*.dev' % (install_path))
+            for f in os.listdir(os.path.join(platform.path, 'sources')):
+                shutil.copy(os.path.join(platform.path, 'sources', f), os.path.join(install_path, 'etc', 'apt', 'sources.list.d'))
+            cmd = "tar -jcpvf %s -C %s ." % (rootstrap, install_path)
+            output = []
+            result = pdk_utils.execCommand(cmd, output = output, callback = self.cb.iteration)
+            if result != 0:
+                print >> sys.stderr, "ERROR: Unable to archive rootstrap!"
+                shutil.rmtree(install_path)
+                raise ValueError(" ".join(output))
+        else:
+            cmd = "tar -jxvf %s -C %s" % (rootstrap, install_path)
+            output = []
+            result = pdk_utils.execCommand(cmd, output = output, callback = self.cb.iteration)
+            if result != 0:
+                print >> sys.stderr, "ERROR: Unable to rootstrap %s from %s!" % (rootstrap, name)
+                shutil.rmtree(install_path)
+                os.unlink(config_path)
+                raise ValueError(" ".join(output))
+        
         # create the config file
         config_path = os.path.join(self.config_path, "%s.proj" % name)
         os.path.isfile(config_path)
@@ -232,23 +266,6 @@ class SDK(object):
         config.write("PLATFORM=%s\n" % (platform.name))
         config.close()
 
-        rootstrap = os.path.join(platform.path, "build-rootstrap.tar.bz2")
-        if not os.path.isfile(rootstrap):
-            os.unlink(config_path)
-            raise ValueError("Internal Error: Missing %s" % (rootstrap))
-
-        if not os.path.isdir(install_path):
-            os.makedirs(install_path)
-
-        cmd = "tar -jxvf %s -C %s" % (rootstrap, install_path)
-        output = []
-        result = pdk_utils.execCommand(cmd, output = output, callback = self.cb.iteration)
-        if result != 0:
-            print >> sys.stderr, "ERROR: Unable to rootstrap %s from %s!" % (rootstrap, name)
-            shutil.rmtree(install_path)
-            os.unlink(config_path)
-            raise ValueError(" ".join(output))
-        
         # instantiate the project
         try:
             self.projects[name] = Project.Project(install_path, name, desc, platform, self.cb)

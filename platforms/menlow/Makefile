@@ -3,36 +3,20 @@ TMPDIR = /tmp/.tmpbuilddir
 PNAME = menlow
 SHARE = ${DESTDIR}/usr/share/pdk
 
-all: build-rootstrap.tar.bz2 target-rootstrap.tar.bz2
-
-build-rootstrap.tar.bz2:
-	@echo "Creating build-rootstrap.tar.bz2..."
-	@DEBOOTSTRAP_DIR=debootstrap/ debootstrap --arch i386 --variant=buildd --include=${TOOLS} $(shell cat build-codename) ${TMPDIR} $(shell cat build-mirror)
-	@rm -fR ${TMPDIR}/var/cache/apt/archives/*.deb
-	@cp sources/*.list ${TMPDIR}/etc/apt/sources.list.d/ || true
-	@touch ${TMPDIR}/.buildroot
-	@tar -jcpvf $@ -C ${TMPDIR} .
-	@rm -fR ${TMPDIR}
-
-target-rootstrap.tar.bz2:
-	@echo "Creating target-rootstrap.tar.bz2..."
-	@DEBOOTSTRAP_DIR=debootstrap/ debootstrap --arch i386 --include=apt $(shell cat target-codename) ${TMPDIR} $(shell cat target-mirror)
-	@touch ${TMPDIR}/etc/kernel-img.conf
-	@touch ${TMPDIR}/etc/kernel-pkg.conf
-	@rm -fR ${TMPDIR}/var/cache/apt/archives/*.deb
-	@cp sources/*.list ${TMPDIR}/etc/apt/sources.list.d/ || true
-	@tar -jcpvf $@ -C ${TMPDIR} .
-	@rm -fR ${TMPDIR}
+all:
 
 install:
 	@mkdir -p ${SHARE}/platforms/${PNAME}
 	@cp buildroot.packages ${SHARE}/platforms/${PNAME}
 	@cp exclude ${SHARE}/platforms/${PNAME}
 	@mkdir -p ${SHARE}/platforms/${PNAME}
+	@cp -a sources ${SHARE}/platforms/${PNAME}
 	@mkdir -p ${SHARE}/platforms/${PNAME}/fsets
 	@cp fsets/*.fset ${SHARE}/platforms/${PNAME}/fsets/
 	@cp *cmdline* ${SHARE}/platforms/${PNAME}/
-	@cp *-rootstrap.tar.bz2 ${SHARE}/platforms/${PNAME}/
+	@cp buildroot_extras ${SHARE}/platforms/${PNAME}/
+	@cp *-mirror ${SHARE}/platforms/${PNAME}/ 2> /dev/null || true
+	@cp *-codename ${SHARE}/platforms/${PNAME}/ 2> /dev/null || true
 
 clean:
 	rm -f *.tar.bz2 *~

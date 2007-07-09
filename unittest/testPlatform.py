@@ -60,6 +60,7 @@ def createSamplePlatformDir(platform_dir, repo_filename = "unittest.repo"):
     cmdfile.close()
     test_fsets.createSampleFsetFile(os.path.join(platform_dir, 'fsets', 'unittest.fset'))
     createSampleJailrootPackages(os.path.join(platform_dir, 'buildroot.packages'))
+    createSampleJailrootExtras(os.path.join(platform_dir, 'buildroot_extras'))
 
 def createSampleJailrootPackages(filename):
     contents = """\
@@ -74,6 +75,13 @@ module-init-tools ncurses-devel nash
 
 # Packages required for making bootable images
 syslinux busybox squashfs-tools
+"""
+    text2file(filename, contents)
+
+def createSampleJailrootExtras(filename):
+    contents = """\
+squashfs-tools busybox-initramfs dosfstools
+syslinux module-init-tools mtools gpgv
 """
     text2file(filename, contents)
 

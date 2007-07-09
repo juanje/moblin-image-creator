@@ -27,7 +27,7 @@ from optparse import OptionParser
 sys.path.insert(0, '/usr/share/pdk/lib')
 import SDK
 
-debug = True
+debug = False
 
 try:
     import gui
@@ -273,11 +273,7 @@ def create_project(options):
     if cwd.find(options.project_path) == 0:
 	    print >> sys.stderr, "The project path can not be part of the current working directory"
 	    sys.exit(1)
-    try:
-        sdk.create_project(options.project_path, options.project_name, options.project_desc, sdk.platforms[options.platform_name]).install()
-    except:
-        print >> sys.stderr, "Internal error while attempting to create new project!"
-        sdk.delete_project(options.project_name)
+    sdk.create_project(options.project_path, options.project_name, options.project_desc, sdk.platforms[options.platform_name]).install()
 
 def delete_project(options):
     if not options.project_name in sdk.projects:

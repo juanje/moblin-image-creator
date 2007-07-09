@@ -168,20 +168,39 @@ class Project(FileSystem):
         if not name:
             raise ValueError("Target name was not specified")
         if not name in self.targets:
-            rootstrap = os.path.join(self.platform.path, "target-rootstrap.tar.bz2")
-            if not os.path.isfile(rootstrap):
-                raise ValueError("Internal Error: Missing %s" % (rootstrap))
-
             install_path = os.path.join(self.path, 'targets', name, 'fs')
             os.makedirs(install_path)
+            rootstrap = os.path.join(self.platform.path, "target-rootstrap.tar.bz2")
+            if not os.path.isfile(rootstrap):
+                cmd = "debootstrap --arch i386 --include=apt %s %s %s" % (self.platform.target_codename, install_path, self.platform.target_mirror)
+                output = []
+                result = pdk_utils.execCommand(cmd, output = output, callback = self.cb.iteration)
+                if result != 0:
+                    print >> sys.stderr, "ERROR: Unable to generate target rootstrap!"
+                    raise ValueError(" ".join(output))
+                os.system('rm -fR %s/var/cache/apt/archives/*.dev' % (install_path))
 
-            cmd = "tar -jxvf %s -C %s" % (rootstrap, install_path)
-            output = []
-            result = pdk_utils.execCommand(cmd, output = output, callback = self.cb.iteration)
-            if result != 0:
-                print >> sys.stderr, "ERROR: Unable to rootstrap %s from %s!" % (rootstrap, name)
-                shutil.rmtree(os.path.join(self.path, 'targets', name))
-                raise ValueError(" ".join(output))
+                # workaround for ubuntu kernel package bug
+                os.system('touch %s/etc/kernel-img.conf' % (install_path))
+                os.system('touch %s/etc/kernel-pkg.conf' % (install_path))
+                
+                for f in os.listdir(os.path.join(self.platform.path, 'sources')):
+                    shutil.copy(os.path.join(self.platform.path, 'sources', f), os.path.join(install_path, 'etc', 'apt', 'sources.list.d'))
+                cmd = "tar -jcpvf %s -C %s ." % (rootstrap, install_path)
+                output = []
+                result = pdk_utils.execCommand(cmd, output = output, callback = self.cb.iteration)
+                if result != 0:
+                    print >> sys.stderr, "ERROR: Unable to archive rootstrap!"
+                    shutil.rmtree(install_path)
+                    raise ValueError(" ".join(output))
+            else:
+                cmd = "tar -jxvf %s -C %s" % (rootstrap, install_path)
+                output = []
+                result = pdk_utils.execCommand(cmd, output = output, callback = self.cb.iteration)
+                if result != 0:
+                    print >> sys.stderr, "ERROR: Unable to rootstrap %s from %s!" % (rootstrap, name)
+                    shutil.rmtree(os.path.join(self.path, 'targets', name))
+                    raise ValueError(" ".join(output))
 
             self.targets[name] = Target(name, self, self.cb)
             self.targets[name].mount()
