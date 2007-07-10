@@ -1,1 +1,1 @@
-squashfs-tools busybox-initramfs dosfstools syslinux module-init-tools mtools gpgv
+squashfs-tools dosfstools syslinux module-init-tools mtools gpgv

@@ -23,7 +23,6 @@ import sys
 import tempfile
 import traceback
 
-import Mkinitrd
 import Project
 import SDK
 
@@ -298,7 +297,14 @@ exec init 0
 """
         install_file.close()
 
-        
+    def create_initramfs(self, initrd_file, fs_type='RAMFS'):
+        tmp = self.default_kernel_mod_path.split("/targets/%s/fs" % (self.target.name))
+        link = "%s%s" % (tmp[0], tmp[1])
+        if not os.path.lexists(link):
+            args = "-s %s %s" % ("/targets/%s/fs%s" % (self.target.name, tmp[1]), tmp[1])
+            self.project.chroot("/bin/ln", args)
+        self.project.chroot("/usr/sbin/mkinitramfs", "-d %s -o %s %s" % (os.path.join('/usr/share/pdk/platforms', self.project.platform.name, 'initramfs'), initrd_file, tmp[1]))
+
     def __str__(self):
         return ("<InstallImage: project=%s, target=%s, name=%s>"
                 % (self.project, self.target, self.name))
@@ -370,7 +376,7 @@ class BaseUsbImage(InstallImage):
 class LiveUsbImage(BaseUsbImage):
     def create_image(self, fs_type='RAMFS'):
         print "LiveUsbImage: Creating LiveUSB Image(%s) Now..." % fs_type
-        Mkinitrd.create(self.project, '/tmp/.tmp.initrd', self.default_kernel_mod_path, fs_type)
+        self.create_initramfs('/tmp/.tmp.initrd', fs_type)
         self.create_rootfs()
         initrd_stat_result = os.stat('/tmp/.tmp.initrd')
         rootfs_stat_result = os.stat(self.rootfs_path)
@@ -395,7 +401,7 @@ class LiveUsbImage(BaseUsbImage):
 class InstallUsbImage(BaseUsbImage):
     def create_image(self):
         print "InstallUsbImage: Creating InstallUSB Image..."
-        Mkinitrd.create(self.project, '/tmp/.tmp.initrd', kernel_mod_path=self.default_kernel_mod_path)
+        self.create_initramfs('/tmp/.tmp.initrd')
         self.apply_hd_kernel_cmdline()
         self.create_rootfs()
         self.create_bootfs()
@@ -471,54 +477,60 @@ def print_exc_plus():
     traceback.print_exc()
 
 class Callback:
-    def iteration(process):
+    def iteration(self, process):
         return
 
 if __name__ == '__main__':
-    cnt = len(sys.argv)
-    if (cnt != 4) and (cnt != 2):
-        print >> sys.stderr, "USAGE: %s proj_path proj_name platform_name" % (sys.argv[0])
-        print >> sys.stderr, "       %s proj_name" % (sys.argv[0])
-        sys.exit(1)
-
     sdk = SDK.SDK(Callback())
+    project = sdk.projects[sys.argv[1]]
+    target = project.targets[sys.argv[2]]
+    image = InstallImage(project, target, sys.argv[3])
+    image.create_initramfs(sys.argv[4])
 
-    if cnt == 4:
-        proj_path = sys.argv[1]
-        proj_name = sys.argv[2]
-        platform_name = sys.argv[3]
+#     cnt = len(sys.argv)
+#     if (cnt != 4) and (cnt != 2):
+#         print >> sys.stderr, "USAGE: %s proj_path proj_name platform_name" % (sys.argv[0])
+#         print >> sys.stderr, "       %s proj_name" % (sys.argv[0])
+#         sys.exit(1)
 
-        proj = sdk.create_project(proj_path, proj_name, 'test project', sdk.platforms[platform_name])
-        proj.install()
+#     sdk = SDK.SDK(Callback())
 
-        target = proj.create_target('mytest')
-        target.installFset(sdk.platforms[platform_name].fset['Core'])
+#     if cnt == 4:
+#         proj_path = sys.argv[1]
+#         proj_name = sys.argv[2]
+#         platform_name = sys.argv[3]
 
-    else:
-        proj_name = sys.argv[1]
-        proj = sdk.projects[proj_name]
+#         proj = sdk.create_project(proj_path, proj_name, 'test project', sdk.platforms[platform_name])
+#         proj.install()
 
-    proj.mount()
+#         target = proj.create_target('mytest')
+#         target.installFset(sdk.platforms[platform_name].fset['Core'])
 
-    imgLiveIso = LiveIsoImage(proj, proj.targets['mytest'], "mytest_v1-Live-DVD.iso")
-    print "\nImage File Name: %s" % imgLiveIso.name
-    imgLiveIso.create_image()
+#     else:
+#         proj_name = sys.argv[1]
+#         proj = sdk.projects[proj_name]
 
-    imgInstallIso = InstallIsoImage(proj, proj.targets['mytest'], "mytest_v2-Install-DVD.iso")
-    print "\nImage File Name: %s" % imgInstallIso.name
-    imgInstallIso.create_image()
+#     proj.mount()
 
-    imgLiveUsb = LiveUsbImage(proj, proj.targets['mytest'], "mytest_v3-Live-USB.bin")
-    print "\nImage File Name: %s" % imgLiveUsb.name
-    imgLiveUsb.create_image()
+#     imgLiveIso = LiveIsoImage(proj, proj.targets['mytest'], "mytest_v1-Live-DVD.iso")
+#     print "\nImage File Name: %s" % imgLiveIso.name
+#     imgLiveIso.create_image()
 
-    imgInstallUsb = InstallUsbImage(proj, proj.targets['mytest'], "mytest_v4-Install-USB.bin")
-    print "\nImage File Name: %s" % imgInstallUsb.name
-    imgInstallUsb.create_image()
+#     imgInstallIso = InstallIsoImage(proj, proj.targets['mytest'], "mytest_v2-Install-DVD.iso")
+#     print "\nImage File Name: %s" % imgInstallIso.name
+#     imgInstallIso.create_image()
 
-    imgHdd = HddImage(proj, proj.targets['mytest'], "mytest_v5-HDD.tar.bz2")
-    print "\nImage File Name: %s" % imgHdd.name
-    imgHdd.create_image()
+#     imgLiveUsb = LiveUsbImage(proj, proj.targets['mytest'], "mytest_v3-Live-USB.bin")
+#     print "\nImage File Name: %s" % imgLiveUsb.name
+#     imgLiveUsb.create_image()
 
-    print "\n\nFinish!\n"
+#     imgInstallUsb = InstallUsbImage(proj, proj.targets['mytest'], "mytest_v4-Install-USB.bin")
+#     print "\nImage File Name: %s" % imgInstallUsb.name
+#     imgInstallUsb.create_image()
+
+#     imgHdd = HddImage(proj, proj.targets['mytest'], "mytest_v5-HDD.tar.bz2")
+#     print "\nImage File Name: %s" % imgHdd.name
+#     imgHdd.create_image()
+
+#     print "\n\nFinish!\n"
     
