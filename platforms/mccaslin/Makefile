@@ -23,6 +23,7 @@ import-packages:
 
 install:
 	@mkdir -p ${SHARE}/platforms/${PNAME}
+	@cp install.sh ${SHARE}/platforms/${PNAME}
 	@cp buildroot.packages ${SHARE}/platforms/${PNAME}
 	@cp exclude ${SHARE}/platforms/${PNAME}
 	@mkdir -p ${SHARE}/platforms/${PNAME}
