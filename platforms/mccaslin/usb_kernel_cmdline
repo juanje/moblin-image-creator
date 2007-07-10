@@ -1,1 +1,1 @@
-initrd=initrd.img root=rootfs.img
+initrd=initrd.img boot=usb 

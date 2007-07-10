@@ -15,24 +15,19 @@ prereqs)
 	;;
 esac
 
-for x in $(cat /proc/cmdline); do
-	case $x in
-	squashfile=*)
-		squashfile=${x#squashfile=}
-		;;
-	esac
-done
+if [ -n "${squashfile}" ]; then
+    mkdir -p /container
+    mkdir -p /squashmnt
+    mkdir -p /persistmnt
 
-if [ -n "${squashfile}" ] && [ -f $squashfile ]; then
-    mkdir /squashmnt
-    mkdir /persistmnt
+    log_message_begin mount -t ${FSTYPE} ${ROOT} /container 
+    mount -t ${FSTYPE} ${ROOT} /container 
+    log_message_begin mount -o loop -t squashfs /container/$squashfile /squashmnt
+    mount -o loop -t squashfs /container/$squashfile /squashmnt
 
-    mount -o loop -t squashfs $squashfile /squashmnt
-
-    # FIXME This has no error checking
-    modprobe -Qb ${FSTYPE}
-
-    mount -t ${FSTYPE} ${ROOTFLAGS} ${ROOT} /persistmnt
+    modprobe -Qb ${pfstype}
+    log_message_begin mount -t ${pfstype} ${proot} /persistmnt
+    mount -t ${pfstype} ${proot} /persistmnt
     cat > /conf/param.conf <<EOF
 export ROOTFLAGS="-o dirs=/persistmnt=rw:/squashmnt=ro"
 export ROOT="/"
