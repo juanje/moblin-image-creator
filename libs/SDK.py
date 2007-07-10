@@ -197,7 +197,7 @@ class SDK(object):
             except:
                 print >> sys.stderr, "Project Config Error: %s" % (sys.exc_value)
             
-    def create_project(self, install_path, name, desc, platform):
+    def create_project(self, parent_path, name, desc, platform):
         """
         Create a new project by specifying an install path, a name, a
         short description, and a platform object.
@@ -219,10 +219,10 @@ class SDK(object):
         # specific packages to enable the project to be used as a jailroot
         proj.install()
         """
-        if not install_path or not name or not desc or not platform:
+        if not parent_path or not name or not desc or not platform:
             raise ValueError("Empty argument passed in")
         
-        install_path = os.path.abspath(os.path.expanduser(install_path))
+        install_path = os.path.abspath(os.path.expanduser(parent_path))
         if not os.path.isdir(install_path):
             os.makedirs(install_path)
 
