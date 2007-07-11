@@ -1,4 +1,4 @@
-moblin-image-creator (0.2) UNRELEASED; urgency=low
+moblin-image-creator (0.2) gutsy; urgency=low
 
   [ Rusty Lynch ]
   * Move rootstrap creation out of the buildsystem so that pbuilder
