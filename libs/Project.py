@@ -177,8 +177,8 @@ class Project(FileSystem):
                 output = []
 
                 # XXX Evil hack
-                if not os.path.isfile("/usr/lib/debootstrap/scripts/%s" % platform.target_codename):
-                    cmd += " /usr/share/pdk/debootstrap-scripts/%s" % platform.target_codename
+                if not os.path.isfile("/usr/lib/debootstrap/scripts/%s" % self.platform.target_codename):
+                    cmd += " /usr/share/pdk/debootstrap-scripts/%s" % self.platform.target_codename
 
                 result = pdk_utils.execCommand(cmd, output = output, callback = self.cb.iteration)
                 if result != 0:
