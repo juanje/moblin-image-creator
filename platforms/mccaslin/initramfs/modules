@@ -1,4 +1,6 @@
 usbcore
+hid
+usbhid
 ehci-hcd
 uhci-hcd
 ide-core

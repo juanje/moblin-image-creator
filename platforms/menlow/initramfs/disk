@@ -6,20 +6,13 @@ mountroot ()
     mkdir -p /squashmnt
     mkdir -p /persistmnt
 
-    if [ ! -e "/dev/hda2" ]; then
-	if [ -z "${ROOTDELAY}" ]; then
-	    slumber=180
-	else
-	    slumber=${ROOTDELAY}
-	fi
-	while [ ! -e "/dev/hda2" ]; do
-	    /bin/sleep 0.1
-	    slumber=$(( ${slumber} - 1 ))
-	    [ ${slumber} -gt 0 ] || break
-	done
-    fi
 
-    mount /dev/hda1 /container 
+    mount /dev/hda1 /container 2> /dev/null
+    while [ ! -e "/container/rootfs.img" ]; do
+	/bin/sleep 0.5
+	mount /dev/hda1 /container 2> /dev/null
+    done
+
     mount -o loop -t squashfs /container/rootfs.img /squashmnt
 
     mount /dev/hda2 /persistmnt

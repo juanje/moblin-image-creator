@@ -6,20 +6,13 @@ mountroot ()
     mkdir -p /squashmnt
     mkdir -p /persistmnt
 
-    if [ ! -e "/dev/sda" ]; then
-	if [ -z "${ROOTDELAY}" ]; then
-	    slumber=180
-	else
-	    slumber=${ROOTDELAY}
-	fi
-	while [ ! -e "/dev/sda" ]; do
-	    /bin/sleep 0.1
-	    slumber=$(( ${slumber} - 1 ))
-	    [ ${slumber} -gt 0 ] || break
-	done
-    fi
 
-    mount -t msdos /dev/sda /container 
+    mount /dev/sda /container 2> /dev/null
+    while [ ! -e "/container/rootfs.img" ]; do
+	/bin/sleep 0.5
+	mount /dev/sda /container 2> /dev/null
+    done
+
     mount -o loop -t squashfs /container/rootfs.img /squashmnt
 
     modprobe -Qb tmpfs
