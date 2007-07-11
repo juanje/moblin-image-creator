@@ -2,6 +2,7 @@ moblin-image-creator (0.3) UNRELEASED; urgency=low
 
   * Actually rename the binary package too.
   * Remove build-dependency on debootstrap.
+  * Add debootstrap, python-gnome2, python-glade2 to Depends
 
  -- Tollef Fog Heen <tfheen@ubuntu.com>  Tue, 10 Jul 2007 18:02:31 +0200
 
