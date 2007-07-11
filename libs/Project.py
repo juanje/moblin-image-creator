@@ -76,7 +76,8 @@ class FileSystem(object):
                     raise OSError("Internal error while attempting to bind mount /%s!" % (mnt))
 
         for file in ['etc/resolv.conf', 'etc/hosts']:
-            shutil.copy(os.path.join('/', file), os.path.join(self.path, file))
+            if os.path.isfile(os.path.join('/', file)):
+                shutil.copy(os.path.join('/', file), os.path.join(self.path, file))
 
         if os.path.isfile(os.path.join(self.path, '.buildroot')):
             # search for any file:// URL's in the configured apt repositories, and
@@ -174,6 +175,11 @@ class Project(FileSystem):
             if not os.path.isfile(rootstrap):
                 cmd = "debootstrap --arch i386 --include=apt %s %s %s" % (self.platform.target_codename, install_path, self.platform.target_mirror)
                 output = []
+
+                # XXX Evil hack
+                if not os.path.isfile("/usr/lib/debootstrap/scripts/%s" % self.platform.target_codename):
+                    cmd += " /usr/share/pdk/debootstrap-scripts/%s" % self.platform.target_codename
+
                 result = pdk_utils.execCommand(cmd, output = output, callback = self.cb.iteration)
                 if result != 0:
                     print >> sys.stderr, "ERROR: Unable to generate target rootstrap!"
