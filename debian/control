@@ -1,13 +1,13 @@
-Source: project-builder
+Source: moblin-image-creator
 Section: devel
 Priority: extra
 Maintainer: Rusty Lynch <rusty.lynch@intel.com>
-Build-Depends: debhelper (>= 5), debootstrap, python-support (>= 0.3)
+Build-Depends: debhelper (>= 5), python-support (>= 0.3)
 Standards-Version: 3.7.2
 
-Package: project-builder
+Package: moblin-image-creator
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}
+Depends: ${shlibs:Depends}, ${misc:Depends}, ${python:Depends}, python-gnome2, python-glade2, debootstrap
 Description: Project Builder
  The project-builder utility enables developers to build full mobile or single
  purposed Linux stacks using a mainstream distribution.

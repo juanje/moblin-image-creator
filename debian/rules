@@ -1,16 +1,9 @@
 #!/usr/bin/make -f
 # -*- makefile -*-
 
-configure: configure-stamp
-configure-stamp:
-	dh_testdir
-
-	touch configure-stamp
-
-
 build: build-stamp
 
-build-stamp: configure-stamp 
+build-stamp:
 	dh_testdir
 
 	$(MAKE)
@@ -20,9 +13,9 @@ build-stamp: configure-stamp
 clean:
 	dh_testdir
 	dh_testroot
-	rm -f build-stamp configure-stamp
+	rm -f build-stamp
 
-	-$(MAKE) cleanall
+	$(MAKE) cleanall
 
 	dh_clean 
 
@@ -32,8 +25,9 @@ install: build
 	dh_clean -k 
 	dh_installdirs
 
-	$(MAKE) DESTDIR=$(CURDIR)/debian/project-builder basicinstall
-	rm -fR $(CURDIR)/debian/project-builder/usr/lib/
+	$(MAKE) DESTDIR=$(CURDIR)/debian/moblin-image-creator basicinstall
+	rm -fR $(CURDIR)/debian/moblin-image-creator/usr/lib/
+	rm $(CURDIR)/debian/moblin-image-creator/usr/share/pdk/COPYING
 
 # Build architecture-independent files here.
 binary-indep: build install
@@ -43,11 +37,13 @@ binary-arch: build install
 	dh_testdir
 	dh_testroot
 	dh_installchangelogs 
+	dh_installdocs
 	dh_pysupport
 	dh_gencontrol
 	dh_fixperms
+	dh_compress
 	dh_installdeb
 	dh_builddeb
 
 binary: binary-indep binary-arch
-.PHONY: build clean binary-indep binary-arch binary install configure
+.PHONY: build clean binary-indep binary-arch binary install
