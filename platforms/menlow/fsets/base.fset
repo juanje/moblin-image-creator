@@ -1,6 +1,6 @@
 [Core]
 DESC=Fundamental fset that provides a root filesystem that uses the Ubuntu kernel
-PKGS=grub busybox-initramfs linux-image-2.6.22-9-ume initramfs-tools
+PKGS=grub busybox-initramfs linux-image-2.6.22-8-ume initramfs-tools
 DEBUG_PKGS=man-db manpages 
 DEPS=
 
