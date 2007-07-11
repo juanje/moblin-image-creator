@@ -37,6 +37,7 @@ binary-arch: build install
 	dh_testdir
 	dh_testroot
 	dh_installchangelogs 
+	dh_installdocs
 	dh_pysupport
 	dh_gencontrol
 	dh_fixperms
