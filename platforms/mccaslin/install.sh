@@ -32,9 +32,6 @@ mkfs.ext3 /dev/hda2
 sync
 
 echo -e 'Mounting partitions...\n'
-mkdir /tmp/install
-mount /dev/sda /tmp/install
-
 mkdir /tmp/boot
 mount -o loop -t squashfs /tmp/install/bootfs.img /tmp/boot
 
@@ -55,9 +52,10 @@ umount /tmp/boot
 umount /tmp/install
 
 echo -e '\n\n\nInstall Finished!\n\n'
-echo -e 'System shutting down!\n\n'
-echo -e 'Disconnect the USB-Key when shutdown is complete and\n'
-echo -e 'Reboot the system from HDD...\n\n'
+echo -e 'Disconnect the USB-Key and power cycle the device\n'
 
-sleep 10
-exec init 0
+while true; do
+    sleep 100
+done
+
+

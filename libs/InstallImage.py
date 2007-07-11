@@ -212,15 +212,13 @@ class InstallImage(object):
         self.bootfs_path = os.path.join(self.target.image_path, self.bootfs)
         if os.path.isfile(self.bootfs_path):
             os.remove(self.bootfs_path)
-        
         fs_path      = self.target.fs_path[len(self.project.path):]
         fs_path      = os.path.join(fs_path, 'boot')
         image_path   = self.target.image_path[len(self.project.path):]
         image_path   = os.path.join(image_path,'bootfs.img')
         cmd_args     = "%s %s" % (fs_path, image_path)
-
+        self.create_initramfs(os.path.join(fs_path, 'initrd.img'))
         self.project.chroot("/usr/sbin/mksquashfs", cmd_args)
-            
 
     def delete_bootfs(self):
         if self.bootfs and os.path.isfile(self.bootfs_path):
@@ -415,56 +413,50 @@ class Callback:
         return
 
 if __name__ == '__main__':
+    cnt = len(sys.argv)
+    if (cnt != 4) and (cnt != 2):
+        print >> sys.stderr, "USAGE: %s proj_path proj_name platform_name" % (sys.argv[0])
+        print >> sys.stderr, "       %s proj_name" % (sys.argv[0])
+        sys.exit(1)
+
     sdk = SDK.SDK(Callback())
-    project = sdk.projects[sys.argv[1]]
-    target = project.targets[sys.argv[2]]
-    image = InstallImage(project, target, sys.argv[3])
-    image.create_initramfs(sys.argv[4])
 
-#     cnt = len(sys.argv)
-#     if (cnt != 4) and (cnt != 2):
-#         print >> sys.stderr, "USAGE: %s proj_path proj_name platform_name" % (sys.argv[0])
-#         print >> sys.stderr, "       %s proj_name" % (sys.argv[0])
-#         sys.exit(1)
+    if cnt == 4:
+        proj_path = sys.argv[1]
+        proj_name = sys.argv[2]
+        platform_name = sys.argv[3]
 
-#     sdk = SDK.SDK(Callback())
+        proj = sdk.create_project(proj_path, proj_name, 'test project', sdk.platforms[platform_name])
+        proj.install()
 
-#     if cnt == 4:
-#         proj_path = sys.argv[1]
-#         proj_name = sys.argv[2]
-#         platform_name = sys.argv[3]
+        target = proj.create_target('mytest')
+        target.installFset(sdk.platforms[platform_name].fset['Core'])
 
-#         proj = sdk.create_project(proj_path, proj_name, 'test project', sdk.platforms[platform_name])
-#         proj.install()
+    else:
+        proj_name = sys.argv[1]
+        proj = sdk.projects[proj_name]
 
-#         target = proj.create_target('mytest')
-#         target.installFset(sdk.platforms[platform_name].fset['Core'])
+    proj.mount()
 
-#     else:
-#         proj_name = sys.argv[1]
-#         proj = sdk.projects[proj_name]
+    imgLiveIso = LiveIsoImage(proj, proj.targets['mytest'], "mytest_v1-Live-DVD.iso")
+    print "\nImage File Name: %s" % imgLiveIso.name
+    imgLiveIso.create_image()
 
-#     proj.mount()
+    imgInstallIso = InstallIsoImage(proj, proj.targets['mytest'], "mytest_v2-Install-DVD.iso")
+    print "\nImage File Name: %s" % imgInstallIso.name
+    imgInstallIso.create_image()
 
-#     imgLiveIso = LiveIsoImage(proj, proj.targets['mytest'], "mytest_v1-Live-DVD.iso")
-#     print "\nImage File Name: %s" % imgLiveIso.name
-#     imgLiveIso.create_image()
+    imgLiveUsb = LiveUsbImage(proj, proj.targets['mytest'], "mytest_v3-Live-USB.bin")
+    print "\nImage File Name: %s" % imgLiveUsb.name
+    imgLiveUsb.create_image()
 
-#     imgInstallIso = InstallIsoImage(proj, proj.targets['mytest'], "mytest_v2-Install-DVD.iso")
-#     print "\nImage File Name: %s" % imgInstallIso.name
-#     imgInstallIso.create_image()
+    imgInstallUsb = InstallUsbImage(proj, proj.targets['mytest'], "mytest_v4-Install-USB.bin")
+    print "\nImage File Name: %s" % imgInstallUsb.name
+    imgInstallUsb.create_image()
 
-#     imgLiveUsb = LiveUsbImage(proj, proj.targets['mytest'], "mytest_v3-Live-USB.bin")
-#     print "\nImage File Name: %s" % imgLiveUsb.name
-#     imgLiveUsb.create_image()
+    imgHdd = HddImage(proj, proj.targets['mytest'], "mytest_v5-HDD.tar.bz2")
+    print "\nImage File Name: %s" % imgHdd.name
+    imgHdd.create_image()
 
-#     imgInstallUsb = InstallUsbImage(proj, proj.targets['mytest'], "mytest_v4-Install-USB.bin")
-#     print "\nImage File Name: %s" % imgInstallUsb.name
-#     imgInstallUsb.create_image()
-
-#     imgHdd = HddImage(proj, proj.targets['mytest'], "mytest_v5-HDD.tar.bz2")
-#     print "\nImage File Name: %s" % imgHdd.name
-#     imgHdd.create_image()
-
-#     print "\n\nFinish!\n"
+    print "\n\nFinish!\n"
     

@@ -28,4 +28,20 @@ mountroot ()
     modprobe -Qb unionfs
     mount -t unionfs -o dirs=/persistmnt=rw:/squashmnt=ro none ${rootmnt}
 
+    if [ -f /container/install.sh ]; then
+	 log_begin_msg "Install Process will begin shortly..."
+	 maybe_break preinstall
+
+	 mkdir -p ${rootmnt}/tmp/install
+	 mknod ${rootmnt}/dev/hda 3 0
+	 mknod ${rootmnt}/dev/hda1 3 1
+	 mknod ${rootmnt}/dev/hda2 3 2
+
+	 mount --bind /container ${rootmnt}/tmp/install
+	 cp /container/install.sh ${rootmnt}/sbin/
+
+	 maybe_break install
+	 chroot ${rootmnt} /sbin/install.sh
+    fi
+
 }
