@@ -41,6 +41,7 @@ binary-arch: build install
 	dh_pysupport
 	dh_gencontrol
 	dh_fixperms
+	dh_compress
 	dh_installdeb
 	dh_builddeb
 
