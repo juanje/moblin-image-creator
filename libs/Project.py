@@ -76,7 +76,8 @@ class FileSystem(object):
                     raise OSError("Internal error while attempting to bind mount /%s!" % (mnt))
 
         for file in ['etc/resolv.conf', 'etc/hosts']:
-            shutil.copy(os.path.join('/', file), os.path.join(self.path, file))
+            if os.path.isfile(os.path.join('/', file)):
+                shutil.copy(os.path.join('/', file), os.path.join(self.path, file))
 
         if os.path.isfile(os.path.join(self.path, '.buildroot')):
             # search for any file:// URL's in the configured apt repositories, and

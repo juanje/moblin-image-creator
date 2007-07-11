@@ -4,6 +4,7 @@ moblin-image-creator (0.3) UNRELEASED; urgency=low
   * Remove build-dependency on debootstrap.
   * Add debootstrap, python-gnome2, python-glade2 to Depends
   * Add dosfstools to Depends for mkfs.vfat
+  * Don't fail if /etc/hosts doesn't exist.
 
  -- Tollef Fog Heen <tfheen@ubuntu.com>  Tue, 10 Jul 2007 18:02:31 +0200
 
