@@ -1,0 +1,37 @@
+#!/bin/sh
+
+PREREQ=
+
+prereqs()
+{
+	echo "$PREREQ"
+}
+
+case $1 in
+# get pre-requisites
+prereqs)
+	prereqs
+	exit 0
+	;;
+esac
+
+if [ -n "${squashfile}" ]; then
+    mkdir -p /container
+    mkdir -p /squashmnt
+    mkdir -p /persistmnt
+
+    log_message_begin mount -t ${FSTYPE} ${ROOT} /container 
+    mount -t ${FSTYPE} ${ROOT} /container 
+    log_message_begin mount -o loop -t squashfs /container/$squashfile /squashmnt
+    mount -o loop -t squashfs /container/$squashfile /squashmnt
+
+    modprobe -Qb ${pfstype}
+    log_message_begin mount -t ${pfstype} ${proot} /persistmnt
+    mount -t ${pfstype} ${proot} /persistmnt
+    cat > /conf/param.conf <<EOF
+export ROOTFLAGS="-o dirs=/persistmnt=rw:/squashmnt=ro"
+export ROOT="/"
+export FSTYPE="unionfs"
+EOF
+
+fi

@@ -1,0 +1,4 @@
+/etc/network/interfaces
+/etc/hostname
+/etc/X11/xorg.conf
+/etc/init.d/hostname.sh

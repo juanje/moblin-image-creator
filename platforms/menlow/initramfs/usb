@@ -1,0 +1,47 @@
+# Live USB filesystem mounting			-*- shell-script -*-
+
+mountroot ()
+{
+    mkdir -p /container
+    mkdir -p /squashmnt
+    mkdir -p /persistmnt
+
+    if [ ! -e "/dev/sda" ]; then
+	if [ -z "${ROOTDELAY}" ]; then
+	    slumber=180
+	else
+	    slumber=${ROOTDELAY}
+	fi
+	while [ ! -e "/dev/sda" ]; do
+	    /bin/sleep 0.1
+	    slumber=$(( ${slumber} - 1 ))
+	    [ ${slumber} -gt 0 ] || break
+	done
+    fi
+
+    mount -t msdos /dev/sda /container 
+    mount -o loop -t squashfs /container/rootfs.img /squashmnt
+
+    modprobe -Qb tmpfs
+    mount -t tmpfs none /persistmnt
+
+    modprobe -Qb unionfs
+    mount -t unionfs -o dirs=/persistmnt=rw:/squashmnt=ro none ${rootmnt}
+
+    if [ -f /container/install.sh ]; then
+	 log_begin_msg "Install Process will begin shortly..."
+	 maybe_break preinstall
+
+	 mkdir -p ${rootmnt}/tmp/install
+	 mknod ${rootmnt}/dev/hda b 3 0
+	 mknod ${rootmnt}/dev/hda1 b 3 1
+	 mknod ${rootmnt}/dev/hda2 b 3 2
+
+	 mount --bind /container ${rootmnt}/tmp/install
+	 cp /container/install.sh ${rootmnt}/sbin/
+
+	 maybe_break install
+	 chroot ${rootmnt} /sbin/install.sh
+    fi
+
+}

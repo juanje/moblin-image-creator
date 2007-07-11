@@ -1,1 +1,1 @@
-ro
+ro boot=disk nolapic_timer
