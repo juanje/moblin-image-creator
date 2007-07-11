@@ -30,7 +30,7 @@ DEPS=core
 
 [Zi9-Config]
 DESC=Packages needed for the Zi9 MID
-PKGS=zi9-config sdio-wlan-firmware
+PKGS=zi9-config 
 DEBUG_PKGS=
 DEPS=core
 
