@@ -1,4 +1,4 @@
-moblin-image-creator (0.3) UNRELEASED; urgency=low
+moblin-image-creator (0.3) gutsy; urgency=low
 
   * Actually rename the binary package too.
   * Remove build-dependency on debootstrap.
