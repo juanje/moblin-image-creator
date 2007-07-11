@@ -33,9 +33,9 @@ mountroot ()
 	 maybe_break preinstall
 
 	 mkdir -p ${rootmnt}/tmp/install
-	 mknod ${rootmnt}/dev/hda 3 0
-	 mknod ${rootmnt}/dev/hda1 3 1
-	 mknod ${rootmnt}/dev/hda2 3 2
+	 mknod ${rootmnt}/dev/hda b 3 0
+	 mknod ${rootmnt}/dev/hda1 b 3 1
+	 mknod ${rootmnt}/dev/hda2 b 3 2
 
 	 mount --bind /container ${rootmnt}/tmp/install
 	 cp /container/install.sh ${rootmnt}/sbin/
