@@ -27,6 +27,7 @@ install: build
 
 	$(MAKE) DESTDIR=$(CURDIR)/debian/project-builder basicinstall
 	rm -fR $(CURDIR)/debian/project-builder/usr/lib/
+	rm $(CURDIR)/debian/project-builder/usr/share/pdk/COPYING
 
 # Build architecture-independent files here.
 binary-indep: build install
