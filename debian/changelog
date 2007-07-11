@@ -1,9 +1,13 @@
 project-builder (0.2) UNRELEASED; urgency=low
 
+  [ Rusty Lynch ]
   * Move rootstrap creation out of the buildsystem so that pbuilder
     can build deb packages as a non-root user
 
- -- Rusty Lynch <rusty@rusty-laptop>  Mon,  9 Jul 2007 10:15:03 -0700
+  [ Tollef Fog Heen ]
+  * Add ${python:Depends} to Depends line, fixing dependencies.
+
+ -- Tollef Fog Heen <tfheen@ubuntu.com>  Tue, 10 Jul 2007 15:41:47 +0200
 
 project-builder (0.1-2) gutsy; urgency=low
 
