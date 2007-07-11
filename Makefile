@@ -21,10 +21,8 @@ basicinstall: all
 	@mkdir -p ${DESTDIR}/${SHAREDIR}/locale
 	@mkdir -p ${DESTDIR}/${SHAREDIR}/projects
 	@mkdir -p ${DESTDIR}/${SHAREDIR}/utils
-	@if [ ! -f ${DESTDIR}/usr/lib/debootstrap/scripts/gutsy ]; then \
-		mkdir -p ${DESTDIR}/usr/lib/debootstrap/scripts; \
-		cp utils/gutsy ${DESTDIR}/usr/lib/debootstrap/scripts/; \
-	fi
+	mkdir -p ${DESTDIR}/usr/share/pdk/debootstrap-scripts
+	cp utils/gutsy ${DESTDIR}/usr/share/pdk/debootstrap-scripts
 	@cp libs/*.py  ${DESTDIR}/${SHAREDIR}/lib
 	@cp gui/*.py  ${DESTDIR}/${SHAREDIR}/lib
 	@cp gui/*.glade ${DESTDIR}/${SHAREDIR}

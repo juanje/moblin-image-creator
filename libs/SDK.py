@@ -231,6 +231,9 @@ class SDK(object):
             # create platform rootstrap file
             cmd = "debootstrap --arch i386 --variant=buildd --include=%s %s %s %s" % (platform.buildroot_extras, platform.buildroot_codename, install_path, platform.buildroot_mirror)
             output = []
+            # XXX Evil hack
+            if not os.path.isfile("/usr/lib/debootstrap/scripts/%s" % platform.target_codename):
+                cmd += " /usr/share/pdk/debootstrap-scripts/%s" % platform.target_codename
             result = pdk_utils.execCommand(cmd, output = output, callback = self.cb.iteration)
             if result != 0:
                 print >> sys.stderr, "ERROR: Unable to generate project rootstrap!"

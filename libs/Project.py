@@ -175,6 +175,11 @@ class Project(FileSystem):
             if not os.path.isfile(rootstrap):
                 cmd = "debootstrap --arch i386 --include=apt %s %s %s" % (self.platform.target_codename, install_path, self.platform.target_mirror)
                 output = []
+
+                # XXX Evil hack
+                if not os.path.isfile("/usr/lib/debootstrap/scripts/%s" % platform.target_codename):
+                    cmd += " /usr/share/pdk/debootstrap-scripts/%s" % platform.target_codename
+
                 result = pdk_utils.execCommand(cmd, output = output, callback = self.cb.iteration)
                 if result != 0:
                     print >> sys.stderr, "ERROR: Unable to generate target rootstrap!"
