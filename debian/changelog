@@ -11,6 +11,7 @@ project-builder (0.2) UNRELEASED; urgency=low
   * Stop ignoring errors from make clean.
   * Run dh_installdoc to install copyright file.
   * Run dh_compress to compress docs.
+  * Update FSF address in debian/copyright.
 
  -- Tollef Fog Heen <tfheen@ubuntu.com>  Tue, 10 Jul 2007 15:41:47 +0200
 
