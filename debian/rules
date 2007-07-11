@@ -25,9 +25,9 @@ install: build
 	dh_clean -k 
 	dh_installdirs
 
-	$(MAKE) DESTDIR=$(CURDIR)/debian/project-builder basicinstall
-	rm -fR $(CURDIR)/debian/project-builder/usr/lib/
-	rm $(CURDIR)/debian/project-builder/usr/share/pdk/COPYING
+	$(MAKE) DESTDIR=$(CURDIR)/debian/moblin-image-creator basicinstall
+	rm -fR $(CURDIR)/debian/moblin-image-creator/usr/lib/
+	rm $(CURDIR)/debian/moblin-image-creator/usr/share/pdk/COPYING
 
 # Build architecture-independent files here.
 binary-indep: build install

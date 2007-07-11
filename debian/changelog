@@ -1,3 +1,9 @@
+moblin-image-creator (0.3) UNRELEASED; urgency=low
+
+  * Actually rename the binary package too.
+
+ -- Tollef Fog Heen <tfheen@ubuntu.com>  Tue, 10 Jul 2007 17:44:42 +0200
+
 moblin-image-creator (0.2) gutsy; urgency=low
 
   [ Rusty Lynch ]
