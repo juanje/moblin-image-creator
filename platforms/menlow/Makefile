@@ -1,6 +1,6 @@
 TOOLS=squashfs-tools,busybox-initramfs,dosfstools,syslinux,module-init-tools,mtools,gpgv
 TMPDIR = /tmp/.tmpbuilddir
-PNAME = menlow 
+PNAME = menlow
 SHARE = ${DESTDIR}/usr/share/pdk
 PACKAGE_DIRS=$(shell find packages/ -maxdepth 1 -type d|grep "packages/..*")
 PACKAGE_NAMES=$(shell  for p in ${PACKAGE_DIRS}; do grep 'Package:' $$p/debian/control|awk '{print $$2}'; done;)
