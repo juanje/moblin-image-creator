@@ -181,7 +181,7 @@ class App(object):
         name = ""
         desc = ""
         platform = ""
-        path = ""
+        path = os.getcwd() + os.sep
         while True:
             dialog = AddNewProject(sdk = self.sdk, name = name, gladefile = self.gladefile, desc = desc, platform = platform, path = path)
             result = dialog.run()
