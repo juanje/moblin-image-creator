@@ -194,7 +194,7 @@ class App(object):
             name = dialog.name
             desc = dialog.desc
             platform = dialog.platform
-            path = dialog.path
+            path = os.path.abspath(os.path.expanduser(dialog.path))
         if result == gtk.RESPONSE_OK:
             try:
                 progress_tree = gtk.glade.XML(self.gladefile, 'ProgressDialog')
