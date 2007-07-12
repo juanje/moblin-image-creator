@@ -1,3 +1,9 @@
+moblin-image-creator (0.4) UNRELEASED; urgency=low
+
+  * Add a Depends on bzip2.
+
+ -- Tollef Fog Heen <tfheen@ubuntu.com>  Thu, 12 Jul 2007 13:14:03 +0200
+
 moblin-image-creator (0.3) gutsy; urgency=low
 
   * Actually rename the binary package too.
