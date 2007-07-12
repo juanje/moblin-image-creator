@@ -256,7 +256,8 @@ class SDK(object):
             if result != 0:
                 print >> sys.stderr, "ERROR: Unable to rootstrap %s from %s!" % (rootstrap, name)
                 shutil.rmtree(install_path)
-                os.unlink(config_path)
+                # FIXME: What should we be deleting here?  config_path is not yet defined???
+                #os.unlink(config_path)
                 raise ValueError(" ".join(output))
         
         # create the config file
