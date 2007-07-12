@@ -217,7 +217,7 @@ class App(object):
 
     def on_about_activate(self, event):
         dialog = gtk.AboutDialog()
-        dialog.set_name('Project Builder')
+        dialog.set_name('Moblin Image Builder')
         dialog.set_version(self.sdk.version)
         dialog.set_comments(_("A tool for building Mobile and/or Single Purposed Linux Device Stacks"))
         try:
@@ -227,9 +227,9 @@ class App(object):
         except:
             print >> sys.stderr, sys.exc_value
             pass
-        dialog.set_copyright("Copyright Intel Corp. 2007")
-        dialog.set_website('http://ADDMYURLHERE')
-        dialog.set_website_label('Project Development Kit Home')
+        dialog.set_copyright("Copyright 2007 by Intel Corporation.  Licensed under the GPL version 2")
+        dialog.set_website('http://www.moblin.org/')
+        dialog.set_website_label('Mobile & Internet Linux Project')
         dialog.run()
         dialog.destroy()
 
