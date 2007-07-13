@@ -49,10 +49,10 @@ class App(object):
     def __init__(self):
 
         self.sdk = SDK.SDK(cb = self)
-        self.gladefile = os.path.join(self.sdk.path, "project-builder.glade")
+        self.gladefile = os.path.join(self.sdk.path, "image-creator.glade")
         if not os.path.isfile(self.gladefile):
             raise IOError, "Glade file is missing from: %s" % self.gladefile
-        gnome.init('project-builder', self.sdk.version, properties = {'app-datadir':self.sdk.path})
+        gnome.init('image-creator', self.sdk.version, properties = {'app-datadir':self.sdk.path})
         self.widgets = gtk.glade.XML (self.gladefile, 'main')
         dic = {"on_main_destroy_event" : gtk.main_quit,
                 "on_quit_activate" : gtk.main_quit,
@@ -108,7 +108,7 @@ class App(object):
         gtk.main()
         
     def on_help_activate(self, widget):
-        gnome.help_display('project-builder')
+        gnome.help_display('image-creator')
 
     def target_view_changed(self, selection):
         model, iter = self.targetView.get_selection().get_selected()

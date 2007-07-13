@@ -1,15 +1,16 @@
 Introduction
 ------------
 
-Project-Builder is a tool aimed at making life easier for the mobile and 
-embedded developer.  The tools is designed to be extremely flexible with
-platform specific knowledge isolated to a platform definition.  Initial
-focus is on a new class of devices known as Mobile Internet Devices (MID's),
-but the design of project-builder is not MID specific and talk is already
-in progress to add new platform definitions to build Consumer Electronics
-stacks such as TV set-top boxes.
+Moblin-Image-Creator, or Image-Creator for short, is a tool aimed at
+making life easier for the mobile and embedded developer.  The tools
+is designed to be extremely flexible with platform specific knowledge
+isolated to a platform definition.  Initial focus is on a new class of
+devices known as Mobile Internet Devices (MID's), but the design of
+image-creator is not MID specific and talk is already in progress to
+add new platform definitions to build Consumer Electronics stacks such
+as TV set-top boxes.
 
-There are three fundamental features that project-builder provides:
+There are three fundamental features that image-creator provides:
 * creation of a platform specific build environment
 * creation of platform specific target file-systems
 * providing user selectable "feature sets" (or fsets) to install 
@@ -34,21 +35,21 @@ sudo make install
 Running
 -------
 
-You must be root in order to run project-builder.  You can either start
-project-builder via the desktop menu, in which case project-builder will
+You must be root in order to run image-creator.  You can either start
+image-creator via the desktop menu, in which case image-creator will
 automatically run as root (after asking for the root password), or you can
-run project-builder from the command-line using sudo.
+run image-creator from the command-line using sudo.
 
-Also... project-builder can run as a GUI or via the command line. To run the
-GUI just start project-builder with no command line arguments:
+Also... image-creator can run as a GUI or via the command line. To run the
+GUI just start image-creator with no command line arguments:
 
-$ sudo project-builder
+$ sudo image-creator
 
 To see the available list of command-line arguments:
 
-$ sudo project-builder --help
+$ sudo image-creator --help
 
-HINT: project-builder installs a bash completion configuration file, so
+HINT: image-creator installs a bash completion configuration file, so
       if you are using bash then you can hit tab after typing a few letters
       of a given command line argument and bash will auto-complete or provide
       a list of possible completions. 
@@ -56,7 +57,7 @@ HINT: project-builder installs a bash completion configuration file, so
 Creating a new project from the command line
 --------------------------------------------
 
-$ sudo project-builder -c create-project \
+$ sudo image-creator -c create-project \
                       --platform-name mccaslin \
                       --project-name "MyProject" \
                       --project-path "/usr/src/myproject" \
@@ -66,15 +67,15 @@ The above command will extract the buildroot rootstrap in the
 /usr/src/myproject directory, and then use that new file-system to install
 additionally needed build packages into.
 
-Once the project is created you can use project-builder to chroot into
+Once the project is created you can use image-creator to chroot into
 the new buildroot via:
 
-$ sudo project-builder -c chroot-project --project-name "MyProject"
+$ sudo image-creator -c chroot-project --project-name "MyProject"
 
 Creating a new target from the command line
 -------------------------------------------
 
-$ sudo project-builder -c create-target \
+$ sudo image-creator -c create-target \
                       --project-name "MyProject" \
                       --target-name "target1"
 
@@ -83,18 +84,18 @@ command will generate a new target file-system inside the buildroot at
 BUILDROOT/targets/target1/fs/.  You can chroot inside the target file-system
 via:
 
-$ sudo project-builder -c chroot-target \
+$ sudo image-creator -c chroot-target \
                       --project-name "MyProject" \
                       --target-name "target1"
 
 Installing Target Feature Sets from the command-line
 ----------------------------------------------------
 
-In project-builder, the platform defines bundles of packages as a fset, where
+In image-creator, the platform defines bundles of packages as a fset, where
 fsets can have dependencies on other fsets, and installing an fset will
 automatically install dependent fsets.
 
-After installing project-builder, you can see an example of an fset
+After installing image-creator, you can see an example of an fset
 configuration file by looking at: 
 /usr/share/sdk/platforms/mccaslin/fsets/base.fset
 
@@ -124,7 +125,7 @@ running a Hildon desktop.
 To install all needed fsets to boot a Samsung Q1 Ultra and show the current
 Hildon Desktop, run:
 
-$ sudo project-builder -c install-fset \
+$ sudo image-creator -c install-fset \
                       --project-name MyProject \
                       --target-name target1 \
                       --fset-name "full-mobile-stack"
@@ -132,7 +133,7 @@ $ sudo project-builder -c install-fset \
 Creating a Live USB image of the new target filesystem from the command-line
 ----------------------------------------------------------------------------
 
-$ sudo project-builder -c create-live-usb \
+$ sudo image-creator -c create-live-usb \
                       --project-name MyProject \
                       --target-name target1 \
                       --image-name live-usb.img
@@ -171,7 +172,7 @@ $ export DISPLAY=:2
 To run applications from the target filesystem you must first chroot
 into the target, then set the DISPLAY and run the application.
 
-$ sudo project-builder -c chroot-target \
+$ sudo image-creator -c chroot-target \
                       --project-name MyProject \
                       --target-name target1
 # export DISPLAY=:2
@@ -180,14 +181,14 @@ $ sudo project-builder -c chroot-target \
 Getting the Source
 ------------------
 
-The project-builder source is contained in a git source repository.  You can
+The image-creator source is contained in a git source repository.  You can
 either view the source on-line via:
 
-http://www.moblin.org/repos/tools/project-builder.git
+http://www.moblin.org/repos/tools/moblin-image-creator.git
 
 ...or you can clone the git tree via:
 
-$ git clone rsync://moblin.org/repos/tools/project-builder
+$ git clone rsync://moblin.org/repos/tools/moblin-image-creator.git
 
 NOTE: To install git from Ubuntu, run "sudo apt-get install git-core"
 
@@ -203,23 +204,23 @@ Using a buildroot allows the user to isolate the build machine dependencies
 from that of the host workstation (or build server.)  Today all MID work
 is focused on Gutsy, so using Gutsy on your workstation and then installing
 all the needed build dependencies will work, but one of the goals of 
-project-builder is to provide a build environment that will continue to work
+image-creator is to provide a build environment that will continue to work
 for a given product long after the product's base distribution has fallen
 out of fashion.
 
 Q:
-In order to use project-builder to I have to install Ubuntu on my workstation?
+In order to use image-creator to I have to install Ubuntu on my workstation?
 
 A:
 When run on an Ubuntu (or any debian derivative distro), it is possible to 
 generate RPM packages that work on various RPM based distributions, so while
-building project-builder is not supported on a non-debian system, there are
+building image-creator is not supported on a non-debian system, there are
 a few pre-built RPM's available on the project download page.
 
 The list of available RPM packages will change over time (depending on demand).
 
 Q:
-Why is the project-builder dependent on debian packaging?  Why not use RPM's?
+Why is the image-creator dependent on debian packaging?  Why not use RPM's?
 
 A:
 Initial prototyping was actually based on Fedora RPM's using yum to
@@ -229,7 +230,7 @@ to use it, while at the same time the number of base Fedora package that
 we needed to touch were quickly taking us to the point of maintaining a full
 distribution.
 
-By moving project-builder to a debian package / apt based implementation and
+By moving image-creator to a debian package / apt based implementation and
 joining the Ubuntu-Mobile team, we were able to gain advantage from both 
 the richer set of debian technologies while at the same time push all of 
 our distribution requirements into the upcoming Ubuntu Gutsy repository.
@@ -238,12 +239,12 @@ Q:
 How does cross compiling work?
 
 A:
-Since the initial targets for project-builder are all x86 based, then we
+Since the initial targets for image-creator are all x86 based, then we
 are able to simplify the build by just using the native compiler either
 installed in the buildroot or installed on the host workstation (if the
 workstation is running the same base as the target.)
 
-Regardless of this, one of the advantages of making project-builder debian
+Regardless of this, one of the advantages of making image-creator debian
 based is that there is a rich set of cross-compiling packages for just
 about any architecture.  There shouldn't be any problem in creating a new
 platform definition that pulls from an apt database of packages built for

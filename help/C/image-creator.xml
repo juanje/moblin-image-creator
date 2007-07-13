@@ -2,7 +2,7 @@
 <!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN" 
 "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
   <!ENTITY legal SYSTEM "legal.xml">
-  <!ENTITY app "Project Builder">  
+  <!ENTITY app "Moblin Image Creator">  
   <!ENTITY appversion "0.1">
   <!ENTITY manrevision "0">
   <!ENTITY date "April 2007">
@@ -12,7 +12,7 @@
      <title>&app; Manual</title> 
      <abstract role="description">
        <para>
-	 User manual for the Project Builder Tool.
+	 User manual for the Moblin Image Creator Tool.
        </para>
      </abstract>
      <copyright> 
@@ -20,7 +20,7 @@
         <holder>Intel Corp.</holder> 
      </copyright> 
      <publisher> 
-        <publishername>Project Builder Documentation Team</publishername> 
+        <publishername>Moblin Image Creator Documentation Team</publishername> 
      </publisher> &legal; 
      <authorgroup> 
         <author> 
@@ -37,19 +37,19 @@
           <date>&date;</date> 
           <revdescription> 
              <para role="author">
-                Project Builder Documentation Team
+                Moblin Image Creator Documentation Team
              </para>
              <para role="publisher">
-                Project Builder Documentation Team 
+                Moblin Image Creator Documentation Team 
              </para>
           </revdescription> 
         </revision> 
 	<revision> 
-          <revnumber>Project Builder V0.1</revnumber> 
+          <revnumber>Moblin Image Creator V0.1</revnumber> 
           <date>April 2007</date> 
           <revdescription> 
-             <para role="author">Project Builder Documentation Team</para>
-             <para role="publisher">Project Builder Documentation Project</para>
+             <para role="author">Moblin Image Creator Documentation Team</para>
+             <para role="publisher">Moblin Image Creator Documentation Project</para>
           </revdescription> 
         </revision>
      </revhistory> 
@@ -57,7 +57,7 @@
         </releaseinfo> 
      <legalnotice> 
         <title>Feedback</title> 
-        <para> To report a bug or make a suggestion regarding the &app; application or this manual, follow the directions in the <ulink url="ghelp:user-guide?feedback" type="help">Project Builder Feedback Page</ulink>. </para>
+        <para> To report a bug or make a suggestion regarding the &app; application or this manual, follow the directions in the <ulink url="ghelp:user-guide?feedback" type="help">Moblin Image Creator Feedback Page</ulink>. </para>
      </legalnotice> 
   </articleinfo> 
   <indexterm> 
@@ -66,17 +66,17 @@
   <indexterm> 
      <primary>project builder application</primary> 
   </indexterm> 
-  <sect1 id="project-builder-introduction"> 
+  <sect1 id="image-creator-introduction"> 
      <title>Introduction</title> 
      <para>TODO: Add content</para>
   </sect1> 
-  <sect1 id="project-builder-get-started"> 
+  <sect1 id="image-creator-get-started"> 
      <title>Getting Started</title> 
      <para>
         The following sections describe how to start <application>&app;</application>. 
      </para>
   </sect1> 
-  <sect1 id="project-builder-usage"> 
+  <sect1 id="image-creator-usage"> 
      <title>Usage</title> 
      <para>TODO: Add content</para>
   </sect1>

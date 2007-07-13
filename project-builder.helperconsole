@@ -1,3 +1,0 @@
-USER=root
-PROGRAM=/usr/sbin/project-builder
-SESSION=true
