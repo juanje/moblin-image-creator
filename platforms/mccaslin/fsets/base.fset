@@ -54,7 +54,7 @@ DEPS=core
 
 [Hildon-Application-Framework]
 DESC=Hildon Application Framework for enabling Mobile Applications
-PKGS=ubuntu-mobile sdk-default-icons mobile-application-service mobile-basic-flash matchbox-keyboard hildon-theme-mobile-basic marquee-plugins
+PKGS=ubuntu-mobile sdk-default-icons mobile-application-service mobile-basic-flash matchbox-keyboard hildon-theme-mobile-basic marquee-plugins hildon-control-panel
 DEBUG_PKGS=
 DEPS=gnome-mobile
 
