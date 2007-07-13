@@ -580,13 +580,14 @@ class AddNewProject(object):
         self.np_path.set_text(path)
         self.np_platform = widgets.get_widget("np_platform")
         platform_entry_box = gtk.ListStore(gobject.TYPE_STRING)
-        for pname in sorted(self.sdk.platforms.iterkeys()):
+        platforms = sorted(self.sdk.platforms.iterkeys())
+        platform_idx = 0
+        for idx, pname in enumerate(platforms):
             platform_entry_box.append([pname])
+            if pname == platform:
+                platform_idx = idx
         self.np_platform.set_model(platform_entry_box)
-        if platform:
-            self.np_platform.child.set_text(platform)
-        else:
-            self.np_platform.set_active(0)
+        self.np_platform.set_active(platform_idx)
 
     def run(self):
         result = self.dialog.run()
