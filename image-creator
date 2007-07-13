@@ -135,50 +135,50 @@ def parseCommandLine():
     examples = """
 Examples:
 <Adding a new project>
-    project-builder --command=create-project \\
-                    --platform-name='donley' \\
-                    --project-name='MyProject' \\
-                    --project-desc='Example project' \\
-                    --project-path=/usr/src/projects/myproject
+    image-creator --command=create-project \\
+                  --platform-name='donley' \\
+                  --project-name='MyProject' \\
+                  --project-desc='Example project' \\
+                  --project-path=/usr/src/projects/myproject
 
 <Delete a project>
-    project-builder --command=delete-project \\
-                    --project-name='MyOtherProject'
+    image-creator --command=delete-project \\
+                  --project-name='MyOtherProject'
 
 <Adding a new target to an existing project>
-    project-builder --command=create-target \\
-                    --project-name='MyProject' \\
-                    --target-name='MyTarget'
+    image-creator --command=create-target \\
+                  --project-name='MyProject' \\
+                  --target-name='MyTarget'
 
 <Delete a target>
-    project-builder --command=delete-target \\
-                    --project-name='MyProject' \\
-                    --target-name='MyOtherTarget'
+    image-creator --command=delete-target \\
+                  --project-name='MyProject' \\
+                  --target-name='MyOtherTarget'
 
 <installing an fset into a given target>
-    project-builder --command=install-fset \\
-                    --platform-name='donley' \\
-                    --project-name='MyProject' \\
-                    --target-name='MyTarget' \\
-                    --fset='Core' \\
+    image-creator --command=install-fset \\
+                  --platform-name='donley' \\
+                  --project-name='MyProject' \\
+                  --target-name='MyTarget' \\
+                  --fset='Core' \\
 
 <change into a given project buildroot filesystem>
-    project-builder --command=chroot-project \\
-                    --project-name='MyProject' \\
+    image-creator --command=chroot-project \\
+                  --project-name='MyProject' \\
 
 <change into a given projects target filesystem>
-    project-builder --command=chroot-target \\
-                    --project-name='MyProject' \\
-                    --target-name='MyTarget' \\
+    image-creator --command=chroot-target \\
+                  --project-name='MyProject' \\
+                  --target-name='MyTarget' \\
 
 <updating a given target inside a project>
-    project-builder --command=update-target \\
-                    --project-name='MyProject' \\
-                    --target-name='MyTarget' \\
+    image-creator --command=update-target \\
+                  --project-name='MyProject' \\
+                  --target-name='MyTarget' \\
 
 <updating a given project>
-    project-builder --command=update-project \\
-                    --project-name='MyProject'"""
+    image-creator --command=update-project \\
+                  --project-name='MyProject'"""
 
     (options, args) = parser.parse_args()
     # if nothing at all is passed in then return back
