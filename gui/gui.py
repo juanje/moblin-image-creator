@@ -588,6 +588,8 @@ class AddNewProject(object):
                 platform_idx = idx
         self.np_platform.set_model(platform_entry_box)
         self.np_platform.set_active(platform_idx)
+        width, height = self.dialog.get_default_size()
+        self.dialog.set_default_size(width + 500, height)
 
     def run(self):
         result = self.dialog.run()
