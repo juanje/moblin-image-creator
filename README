@@ -183,11 +183,11 @@ Getting the Source
 The project-builder source is contained in a git source repository.  You can
 either view the source on-line via:
 
-http://source.moblin.org/project-builder.git
+http://www.moblin.org/repos/tools/project-builder.git
 
 ...or you can clone the git tree via:
 
-$ git clone http://source.moblin.org/project-builder
+$ git clone rsync://moblin.org/repos/tools/project-builder
 
 NOTE: To install git from Ubuntu, run "sudo apt-get install git-core"
 
