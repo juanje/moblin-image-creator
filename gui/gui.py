@@ -181,20 +181,31 @@ class App(object):
         name = ""
         desc = ""
         platform = ""
+        # Use current working directory as a starting point
         path = os.getcwd() + os.sep
         while True:
             dialog = AddNewProject(sdk = self.sdk, name = name, gladefile = self.gladefile, desc = desc, platform = platform, path = path)
             result = dialog.run()
             if result != gtk.RESPONSE_OK:
                 break
-            if not dialog.name or not dialog.desc or not dialog.platform or not dialog.path:
-                self.show_error_dialog("All values must be specified")
-            else:
-                break
             name = dialog.name
             desc = dialog.desc
             platform = dialog.platform
             path = os.path.abspath(os.path.expanduser(dialog.path))
+            if not dialog.name or not dialog.desc or not dialog.platform or not dialog.path:
+                self.show_error_dialog("All values must be specified")
+                continue
+            # If the path specified doesn't exist yet, then that is okay.
+            if not os.path.exists(path):
+                continue
+            if not os.path.isdir(path):
+                self.show_error_dialog("Path: %s exists but is not a directory" % path)
+                continue
+            # Make sure that the directory specified is empty
+            if len(os.listdir(path):
+                self.show_error_dialog("Path: %s is a directory which is NOT empty" % path)
+                continue
+            break
         if result == gtk.RESPONSE_OK:
             try:
                 progress_tree = gtk.glade.XML(self.gladefile, 'ProgressDialog')
@@ -217,9 +228,9 @@ class App(object):
 
     def on_about_activate(self, event):
         dialog = gtk.AboutDialog()
-        dialog.set_name('Moblin Image Builder')
+        dialog.set_name('Moblin Image Creator')
         dialog.set_version(self.sdk.version)
-        dialog.set_comments(_("A tool for building Mobile and/or Single Purposed Linux Device Stacks"))
+        dialog.set_comments(_("A tool for building Mobile and/or Single Purpose Linux Device Stacks"))
         try:
             f = open(os.path.join(self.sdk.path, "COPYING"), "r")
             dialog.set_license(f.read())
