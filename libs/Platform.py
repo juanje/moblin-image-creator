@@ -70,7 +70,7 @@ class Platform(object):
         # determine what codename to use for the buildroot mirror
         if os.path.isfile(os.path.join(self.path, 'buildroot_codename')):
             t = open(os.path.join(self.path, 'buildroot_codename'))
-            self.buildroot_mirror = t.readline()
+            self.buildroot_codename = t.readline()
             t.close()
         else:
             self.buildroot_codename = "gutsy"
@@ -84,7 +84,7 @@ class Platform(object):
         # determine what codename to use for the buildroot mirror
         if os.path.isfile(os.path.join(self.path, 'target_codename')):
             t = open(os.path.join(self.path, 'target_codename'))
-            self.target_mirror = t.readline()
+            self.target_codename = t.readline()
             t.close()
         else:
             self.target_codename = "gutsy"
