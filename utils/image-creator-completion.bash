@@ -1,19 +1,19 @@
-# bash completion for project-builder.  Must have the bash-completion package
-# installed to use this, because of use of _filedir
+# bash completion for Moblin image-creator.  Must have the bash-completion
+# package installed to use this, because of use of _filedir
 
-_project_builder_platforms()
+_image_creator_platforms()
 {
-    local platforms="$(project-builder -c list-platforms)"
+    local platforms="$(image-creator -c list-platforms)"
     COMPREPLY=( ${COMPREPLY[@]:-} $(compgen -W "$platforms" -- "$cur") )
 }
 
-_project_builder_projects()
+_image_creator_projects()
 {
-    local projects="$(project-builder -c list-projects | cut -f 1 -d ' ')"
+    local projects="$(image-creator -c list-projects | cut -f 1 -d ' ')"
     COMPREPLY=( ${COMPREPLY[@]:-} $(compgen -W "$projects" -- "$cur") )
 }
 
-_project_builder()
+_image_creator()
 {
     local cur prev
 
@@ -45,11 +45,11 @@ _project_builder()
             return 0
             ;;
         --platform-name)
-            _project_builder_platforms
+            _image_creator_platforms
             return 0
             ;;
         --project-name)
-            _project_builder_projects
+            _image_creator_projects
             return 0
             ;;
     esac
@@ -65,4 +65,4 @@ _project_builder()
         _filedir
     fi
 }
-complete -F _project_builder $filenames project-builder
+complete -F _image_creator $filenames image-creator
