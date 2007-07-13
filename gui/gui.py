@@ -197,7 +197,7 @@ class App(object):
                 continue
             # If the path specified doesn't exist yet, then that is okay.
             if not os.path.exists(path):
-                continue
+                break
             if not os.path.isdir(path):
                 self.show_error_dialog("Path: %s exists but is not a directory" % path)
                 continue
