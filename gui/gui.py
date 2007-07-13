@@ -202,7 +202,7 @@ class App(object):
                 self.show_error_dialog("Path: %s exists but is not a directory" % path)
                 continue
             # Make sure that the directory specified is empty
-            if len(os.listdir(path):
+            if len(os.listdir(path)):
                 self.show_error_dialog("Path: %s is a directory which is NOT empty" % path)
                 continue
             break
