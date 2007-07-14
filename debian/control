@@ -8,7 +8,7 @@ Standards-Version: 3.7.2
 Package: moblin-image-creator
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}, ${python:Depends}, python-gnome2, python-glade2, debootstrap, dosfstools
-Description: Project Builder
- The project-builder utility enables developers to build full mobile or single
- purposed Linux stacks using a mainstream distribution.
+Description: Mobile-Linux Image Creator
+ The moblin-image-creator utility enables developers to build full mobile 
+ or single purposed Linux stacks using a mainstream distribution.
 

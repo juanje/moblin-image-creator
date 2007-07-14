@@ -31,7 +31,7 @@ mkdir -p $RPM_BUILD_ROOT/etc/pam.d
 mkdir -p $RPM_BUILD_ROOT/etc/security/console.apps
 cp image-creator.pam.d $RPM_BUILD_ROOT/etc/pam.d/image-creator
 cp image-creator.helperconsole $RPM_BUILD_ROOT/etc/security/console.apps/image-creator
-cp %_builddir/%{name}-%{version}/suse/project-builder* $RPM_BUILD_ROOT/usr/sbin/
+cp %_builddir/%{name}-%{version}/suse/image-creator* $RPM_BUILD_ROOT/usr/sbin/
 
 %clean
 rm -rf %{buildroot}
@@ -45,10 +45,10 @@ rm -rf %{buildroot}
 /etc/pam.d/image-creator
 /usr/bin/image-creator
 /usr/sbin/image-creator
-/usr/sbin/project-builder-suse-mount
-/usr/sbin/project-builder-suse-umount
-/usr/sbin/project-builder-suse-start
-/usr/sbin/project-builder-suse-install
+/usr/sbin/image-creator-suse-mount
+/usr/sbin/image-creator-suse-umount
+/usr/sbin/image-creator-suse-start
+/usr/sbin/image-creator-suse-install
 
 %changelog
 * Wed Jun 06 2007 Rusty Lynch <rusty.lynch@intel.com>

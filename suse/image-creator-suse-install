@@ -1,18 +1,18 @@
 #!/bin/bash
 cd ~
-/usr/sbin/project-builder-suse-umount
+/usr/sbin/image-creator-suse-umount
 sudo rm -rf proot
 sudo mkdir proot
 cd proot
 sudo tar xjf /usr/share/pdk/platforms/mccaslin/build-rootstrap.tar.bz2 ./
-sudo cp /usr/sbin/project-builder ./usr/sbin
+sudo cp /usr/sbin/image-creator ./usr/sbin
 sudo cp /etc/hosts ./etc
 sudo mkdir ./usr/share/pdk
 sudo cp -R ./var/lib/apt /var/lib
 sudo cp -R ./var/lib/dpkg /var/lib
 sudo cp -R ./var/cache /var
 sudo cp ~/.Xauthority ./home
-/usr/sbin/project-builder-suse-mount
+/usr/sbin/image-creator-suse-mount
 sudo chroot . <<EOF
 export http_proxy=""
 export PATH=/usr/sbin:/sbin:/usr/local/sbin:/usr/local/bin:$PATH
