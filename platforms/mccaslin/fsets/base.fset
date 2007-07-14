@@ -60,7 +60,7 @@ DEPS=gnome-mobile
 
 [Mobile-Applications]
 DESC=Standard set of flagship mobile applications
-PKGS=mobile-internet-browser mobile-player gstreamer-dbus-media-service matchbox-keyboard libkeyboard mousepad empathy
+PKGS=mobile-internet-browser mobile-player gstreamer-dbus-media-service matchbox-keyboard libkeyboard mousepad empathy gcalctool gnome-nettool
 DEBUG_PKGS=
 DEPS=hildon-application-framework
 
