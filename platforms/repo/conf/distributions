@@ -1,8 +1,0 @@
-Origin: Rusty Lynch
-Label: Mobile-Linux 
-Suite: main
-Codename: mobile
-Version: 0.1
-Architectures: i386
-Components: main 
-Description: Local package database used by image-creator
