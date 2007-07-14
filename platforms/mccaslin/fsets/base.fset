@@ -1,9 +1,3 @@
-[Zi9-Full-Mobile-Stack]
-DESC=Virtual Fset that installs the standard mobile stack
-PKGS=
-DEBUG_PKGS=
-DEPS=core|ubuntu-flavored-core zi9-config infrastructure mobile-applications power-management
-
 [Samsung-Full-Mobile-Stack]
 DESC=Virtual Fset that installs the standard mobile stack
 PKGS=
@@ -11,12 +5,6 @@ DEBUG_PKGS=
 DEPS=core|ubuntu-flavored-core samsung-q1-ultra-config infrastructure mobile-applications power-management
 
 [Core]
-DESC=Fundamental fset that provides a root filesystem
-PKGS=grub busybox-initramfs libselinux1 linux-mccaslin-default initramfs-tools
-DEBUG_PKGS=linux-mccaslin-developer man-db manpages 
-DEPS=
-
-[Ubuntu-Flavored-Core]
 DESC=Fundamental fset that provides a root filesystem that uses the Ubuntu kernel
 PKGS=grub busybox-initramfs linux-image-386 initramfs-tools
 DEBUG_PKGS=man-db manpages 
@@ -26,12 +14,6 @@ DEPS=
 DESC=Fundamental non-GUI system infrastructure
 PKGS=dhcp3-client wireless-tools alsa-base alsa-utils 
 DEBUG_PKGS=openssh-client openssh-server
-DEPS=core
-
-[Zi9-Config]
-DESC=Packages needed for the Zi9 MID
-PKGS=zi9-config 
-DEBUG_PKGS=
 DEPS=core
 
 [Samsung-Q1-Ultra-Config]

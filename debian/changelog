@@ -6,8 +6,12 @@ moblin-image-creator (0.4) feisty; urgency=low
   * Reworked the usb installation script, and the usb and disk initramfs
     scripts to work correctly with the ubuntu kernel now that the HD shows
     up as /dev/sda.  Also performed some cleanup in the early boot process.
+  * Cleaning up the mccaslin base fset by removing references to the 
+    zi9, making the core fset use the ubuntu 386 kernel and removing the
+    previous 'ubuntu-flavored-core'
 
- -- Rusty Lynch <rusty@rusty-laptop>  Sat, 14 Jul 2007 14:17:02 -0700
+
+ -- Rusty Lynch <rusty@rusty-laptop>  Sat, 14 Jul 2007 14:29:47 -0700
 
 moblin-image-creator (0.3) UNRELEASED; urgency=low
 
