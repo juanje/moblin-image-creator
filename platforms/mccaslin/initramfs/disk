@@ -7,17 +7,13 @@ mountroot ()
     mkdir -p /persistmnt
 
 
-    mount /dev/hda1 /container 2> /dev/null
+    mount /dev/sda1 /container 2> /dev/null
     while [ ! -e "/container/rootfs.img" ]; do
 	/bin/sleep 0.5
-	mount /dev/hda1 /container 2> /dev/null
+	mount /dev/sda1 /container 2> /dev/null
     done
 
     mount -o loop -t squashfs /container/rootfs.img /squashmnt
-
-    mount /dev/hda2 /persistmnt
-
-    modprobe -Qb unionfs
+    mount /dev/sda2 /persistmnt
     mount -t unionfs -o dirs=/persistmnt=rw:/squashmnt=ro none ${rootmnt}
-
 }

@@ -3,8 +3,11 @@ moblin-image-creator (0.4) feisty; urgency=low
   * Changed the entry level script from 'project-builder
     to 'image-creator', and fixed a few random locations that
     were still using the old name.
+  * Reworked the usb installation script, and the usb and disk initramfs
+    scripts to work correctly with the ubuntu kernel now that the HD shows
+    up as /dev/sda.  Also performed some cleanup in the early boot process.
 
- -- Rusty Lynch <rusty@rusty-laptop>  Sat, 14 Jul 2007 09:00:13 -0700
+ -- Rusty Lynch <rusty@rusty-laptop>  Sat, 14 Jul 2007 14:17:02 -0700
 
 moblin-image-creator (0.3) UNRELEASED; urgency=low
 
