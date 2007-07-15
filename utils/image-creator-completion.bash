@@ -32,6 +32,8 @@ _image_creator()
                 create-target \
                 delete-project \
                 delete-target \
+                umount-project \
+                umount-target \
                 install-fset \
                 list-fsets \
                 list-platforms \

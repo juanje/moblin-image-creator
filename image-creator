@@ -70,6 +70,10 @@ def main():
         create_project(options)
     elif options.cmd == 'delete-project':
         delete_project(options)
+    elif options.cmd == 'umount-project':
+        umount_project(options)
+    elif options.cmd == 'umount-target':
+        umount_target(options)
     elif options.cmd == 'create-target':
         create_target(options)
     elif options.cmd == 'delete-target':
@@ -99,7 +103,8 @@ def parseCommandLine():
                        "create-live-iso", "create-install-iso",
                        "create-live-usb", "create-install-usb",
                        "update-project", "update-target",
-                       "chroot-project", "chroot-target"]
+                       "chroot-project", "chroot-target",
+                       "umount-project", "umount-target"]
     valid_commands.sort()
     valid_command_string = ""
     for command in valid_commands[:-1]:
@@ -144,6 +149,15 @@ Examples:
 <Delete a project>
     image-creator --command=delete-project \\
                   --project-name='MyOtherProject'
+
+<Unmount a project>
+    image-creator --command=umount-project \\
+                  --project-name='MyOtherProject'
+
+<Unmount a target>
+    image-creator --command=umount-target \\
+                  --project-name='MyOtherProject' \\
+                  --target-name='MyTarget'
 
 <Adding a new target to an existing project>
     image-creator --command=create-target \\
@@ -209,6 +223,13 @@ Examples:
             parser.error("Must specify project-path when using %s command" % options.cmd)
     if options.cmd == "delete-project" and not options.project_name:
         parser.error("Must specify project-name when using %s command" % options.cmd)
+    if options.cmd == "umount-project" and not options.project_name:
+        parser.error("Must specify project-name when using %s command" % options.cmd)
+    if options.cmd == "umount-target":
+        if not options.project_name:
+            parser.error("Must specify project-name when using %s command" % options.cmd)
+        if not options.target_name:
+            parser.error("Must specify target-name when using %s command" % options.cmd)
     if options.cmd == "update-project" and not options.project_name:
         parser.error("Must specify project-name when using %s command" % options.cmd)
     if options.cmd == "create-target" or options.cmd == "delete-target" or options.cmd == "update-target":
@@ -280,6 +301,23 @@ def delete_project(options):
         print >> sys.stderr, "Project %s does not exist" % (options.project_name)
         sys.exit(1)
     sdk.delete_project(options.project_name)
+
+def umount_project(options):
+    if not options.project_name in sdk.projects:
+        print >> sys.stderr, "Project %s does not exist" % (options.project_name)
+        sys.exit(1)
+    for target in sdk.projects[options.project_name].targets:
+        sdk.projects[options.project_name].targets[target].umount()
+    sdk.projects[options.project_name].umount()
+
+def umount_target(options):
+    if not options.project_name in sdk.projects:
+        print >> sys.stderr, "Project %s does not exist" % (options.project_name)
+        sys.exit(1)
+    if not options.target_name in sdk.projects[options.project_name].targets:
+        print >> sys.stderr, "Target %s does not exist" % (options.project_name)
+        sys.exit(1)
+    sdk.projects[options.project_name].targets[options.target_name].umount()
 
 def update_project(options):
     if not options.project_name in sdk.projects:

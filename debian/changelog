@@ -10,10 +10,11 @@ moblin-image-creator (0.4) feisty; urgency=low
     zi9, making the core fset use the ubuntu 386 kernel and removing the
     previous 'ubuntu-flavored-core'
   * Removing local apt repository code from both menlow and mccaslin
-    platforms since it has proved itself to not be needed and as a 
+    platforms since it has proved itself to not be needed and as a
     result was just complicating the build process
+  * Adding 'umount-project' and 'umount-target' command line options
 
- -- Rusty Lynch <rusty@rusty-laptop>  Sat, 14 Jul 2007 14:46:43 -0700
+ -- Rusty Lynch <rusty@rusty-laptop>  Sun, 15 Jul 2007 08:19:11 -0700
 
 moblin-image-creator (0.3) UNRELEASED; urgency=low
 
