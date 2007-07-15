@@ -50,3 +50,9 @@ umount /mnt/boot
 umount /mnt
 umount /tmp/boot
 umount /tmp/install
+
+echo "Installation complete.  Unplug the USB key and repower the device."
+while true; done
+	sleep 100
+done
+
