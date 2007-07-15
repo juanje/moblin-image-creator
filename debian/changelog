@@ -18,6 +18,8 @@ moblin-image-creator (0.4) feisty; urgency=low
     or target root file-system
   * reworked the pdk_utils.exeCommand command to use the normal stdout/stderr
     when an output array is not passed in.
+  * reworked the mccaslin base fset to fit with packaging changes from the
+    ubuntu gutsy sprint
 
  -- Rusty Lynch <rusty@rusty-laptop>  Sun, 15 Jul 2007 08:19:11 -0700
 

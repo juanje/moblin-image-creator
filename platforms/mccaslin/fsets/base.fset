@@ -2,17 +2,17 @@
 DESC=Virtual Fset that installs the standard mobile stack
 PKGS=
 DEBUG_PKGS=
-DEPS=core samsung-q1-ultra-config ubuntu-mobile
+DEPS=core ume-config-samsung-q1-ultra ubuntu-mobile
 
 [Core]
-DESC=Fundamental fset that provides a root filesystem that uses the Ubuntu kernel
+DESC=Fundamental fset that provide a basic console based system
 PKGS=grub ubuntu-minimal
 DEBUG_PKGS=man-db manpages openssh-client openssh-server
 DEPS=
 
 [Samsung-Q1-Ultra-Config]
 DESC=Packages needed for the Samsung Q1 Ultra
-PKGS=ume-config-samsung-q1 linux-image-generic
+PKGS=samsung-q1-ultra-config linux-image-generic
 DEBUG_PKGS=
 DEPS=core
 
@@ -24,6 +24,6 @@ DEPS=samsung-q1-ultra-config
 
 [Ubuntu-Mobile]
 DESC=Ubuntu Mobile using Hildon, and any base applications for same
-PKGS=ubuntu-mobile sdk-default-icons mobile-application-service mobile-basic-flash matchbox-keyboard hildon-theme-mobile-basic marquee-plugins hildon-control-panel mobile-browser mobile-player gstreamer-dbus-media-service matchbox-keyboard libkeyboard mousepad empathy gcalctool gnome-nettool
+PKGS=ubuntu-mobile sdk-default-icons mobile-application-service mobile-basic-flash matchbox-keyboard hildon-theme-mobile-basic marquee-plugins hildon-control-panel mobile-internet-browser mobile-player gstreamer-dbus-media-service matchbox-keyboard libkeyboard mousepad empathy gcalctool gnome-nettool
 DEBUG_PKGS=powertop
 DEPS=gnome-mobile
