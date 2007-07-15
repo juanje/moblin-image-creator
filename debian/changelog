@@ -13,6 +13,11 @@ moblin-image-creator (0.4) feisty; urgency=low
     platforms since it has proved itself to not be needed and as a
     result was just complicating the build process
   * Adding 'umount-project' and 'umount-target' command line options
+  * Adding 'run-project' and 'run-target' command line options
+    that allow for arbitrary execution of commands in either the buildroot
+    or target root file-system
+  * reworked the pdk_utils.exeCommand command to use the normal stdout/stderr
+    when an output array is not passed in.
 
  -- Rusty Lynch <rusty@rusty-laptop>  Sun, 15 Jul 2007 08:19:11 -0700
 
