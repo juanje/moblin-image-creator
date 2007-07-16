@@ -250,4 +250,3 @@ about any architecture.  There shouldn't be any problem in creating a new
 platform definition that pulls from an apt database of packages built for
 the target architecture, and that build additional packages using existing
 cross-compiling technologies.
-
