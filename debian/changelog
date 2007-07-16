@@ -1,9 +1,9 @@
-moblin-image-creator (0.5) UNRELEASED; urgency=low
+moblin-image-creator (0.5) gutsy; urgency=low
 
   [ Rusty Lynch ]
   * Fixing bug in McCaslin base fset
 
- --
+ -- Tollef Fog Heen <tfheen@ubuntu.com>  Mon, 16 Jul 2007 22:48:10 +0200
 
 moblin-image-creator (0.4) gutsy; urgency=low
 
