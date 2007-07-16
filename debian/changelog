@@ -25,7 +25,7 @@ moblin-image-creator (0.4) UNRELEASED; urgency=low
   [ Tollef Fog Heen ]
   * Add a Depends on bzip2.
   * Add restricted to the default list of sources.list.
-  * Make the Samsung Q1 image use linux-ume, not linux-image-386.  This
+  * Make the Samsung Q1 image use linux-386, not linux-image-386.  This
     should enable more of the hardware.
   
  -- Tollef Fog Heen <tfheen@ubuntu.com>  Mon, 16 Jul 2007 21:47:36 +0200
