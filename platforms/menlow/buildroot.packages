@@ -1,14 +1,11 @@
 # required for building device images
-busybox-initramfs
-libselinux1
-#squashfs-tools dosfstools syslinux module-init-tools
-#mcopy
+initramfs-tools
 
 # Additional packages for building deb packages
 debhelper devscripts liburi-perl
 
 # Additional kernel development packages
-kernel-package dpatch grub
+kernel-package dpatch grub libncursesw5-dev libncurses5-dev
 
 # Additional X development packages
 man less vim

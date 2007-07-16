@@ -1,12 +1,12 @@
 #!/bin/bash
 sudo cp ~/.Xauthority ~/proot$HOME
 cd ~/proot
-/usr/sbin/project-builder-suse-umount
-/usr/sbin/project-builder-suse-mount
+/usr/sbin/image-creator-suse-umount
+/usr/sbin/image-creator-suse-mount
 sudo chroot . <<EOF
 export http_proxy=""
 export PATH=/usr/sbin:/sbin:/usr/local/sbin:/usr/local/bin:$PATH
 export LANG=en_US.UTF-8
-/usr/sbin/project-builder
+/usr/sbin/image-creator
 EOF
 

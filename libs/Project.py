@@ -113,9 +113,6 @@ class FileSystem(object):
                 os.system("umount %s" % (mpoint))
 
     def chroot(self, cmd_path, cmd_args, output = None):
-        print "self.chroot(%s, %s)" % (cmd_path, cmd_args)
-        if output == None:
-            output = []
         if not os.path.isfile(os.path.join(self.path, 'bin/bash')):
             print >> sys.stderr, "Incomplete jailroot at %s" % (self.path)
             raise ValueError("Internal Error: Invalid buildroot at %s" % (self.path))

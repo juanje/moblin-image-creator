@@ -16,7 +16,7 @@ install: basicinstall runbasictests
 basicinstall: all
 	@echo "Installing platform definitions..."
 	@${MAKE} -C platforms install
-	@echo -n "Installing project-builder..."
+	@echo -n "Installing moblin-image-creator..."
 	@mkdir -p ${DESTDIR}/${SHAREDIR}/lib
 	@mkdir -p ${DESTDIR}/${SHAREDIR}/locale
 	@mkdir -p ${DESTDIR}/${SHAREDIR}/projects
@@ -29,20 +29,20 @@ basicinstall: all
 	@cp COPYING ${DESTDIR}/${SHAREDIR}/
 	@cp -a gui/pixmaps/ ${DESTDIR}/${SHAREDIR}
 	@mkdir -p ${DESTDIR}/usr/sbin
-	@cp project-builder ${DESTDIR}/usr/sbin/
+	@cp image-creator ${DESTDIR}/usr/sbin/
 	@mkdir -p ${DESTDIR}/etc/bash_completion.d/
-	@cp utils/project-builder-completion.bash ${DESTDIR}/etc/bash_completion.d/
-	@mkdir -p ${DESTDIR}/${SHAREDIR}/gnome/help/project-builder/
-	@cp -a help/* ${DESTDIR}/${SHAREDIR}/gnome/help/project-builder/
+	@cp utils/image-creator-completion.bash ${DESTDIR}/etc/bash_completion.d/
+	@mkdir -p ${DESTDIR}/${SHAREDIR}/gnome/help/image-creator/
+	@cp -a help/* ${DESTDIR}/${SHAREDIR}/gnome/help/image-creator/
 	@cp utils/*.py  ${DESTDIR}/${SHAREDIR}/utils/
 	@mkdir -p ${DESTDIR}/usr/share/applications/
-	sed '{s/%%EXEC_CMD%%/gksu \/usr\/sbin\/project-builder/}' project-builder.desktop.template > ${DESTDIR}/usr/share/applications/project-builder.desktop
+	sed '{s/%%EXEC_CMD%%/gksu \/usr\/sbin\/image-creator/}' image-creator.desktop.template > ${DESTDIR}/usr/share/applications/image-creator.desktop
 	@echo "Done"
 
 rpm:
 	@echo create the tarball...
-	cd ..; cp -a project-builder project-builder-${VERSION}; tar zcpvf /usr/src/rpm/SOURCES/project-builder-${VERSION}.tgz project-builder-${VERSION}/; rm -fR project-builder-${VERSION}
-	rpmbuild -bb project-builder.spec
+	cd ..; cp -a moblin-image-creator moblin-image-creator-${VERSION}; tar zcpvf /usr/src/rpm/SOURCES/moblin-image-creator-${VERSION}.tgz moblin-image-creator-${VERSION}/; rm -fR moblin-image-creator-${VERSION}
+	rpmbuild -bb moblin-image-creator.spec
 
 # Cleans out the current directory cruft
 clean:
@@ -61,11 +61,11 @@ cleanall: clean
 	@rm -rf ${DESTDIR}/${SHAREDIR}/locale
 	@rm -rf ${DESTDIR}/${SHAREDIR}/platforms
 	@rm -f ${DESTDIR}/${SHAREDIR}/*.glade
-	@rm -f ${DESTDIR}/usr/bin/project-builder
-	@rm -f ${DESTDIR}/usr/sbin/project-builder
-	@rm -f ${DESTDIR}/etc/bash_completion.d/project-builder-completion.bash
+	@rm -f ${DESTDIR}/usr/bin/image-creator
+	@rm -f ${DESTDIR}/usr/sbin/image-creator
+	@rm -f ${DESTDIR}/etc/bash_completion.d/image-creator-completion.bash
 	@rm -rf ${DESTDIR}/${SHAREDIR}/utils
-	@rm -f ${DESTDIR}/usr/share/applications/project-builder.desktop
+	@rm -f ${DESTDIR}/usr/share/applications/image-creator.desktop
 	@echo "Done"
 
 # Run the unit tests which run fairly quickly

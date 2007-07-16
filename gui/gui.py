@@ -49,10 +49,10 @@ class App(object):
     def __init__(self):
 
         self.sdk = SDK.SDK(cb = self)
-        self.gladefile = os.path.join(self.sdk.path, "project-builder.glade")
+        self.gladefile = os.path.join(self.sdk.path, "image-creator.glade")
         if not os.path.isfile(self.gladefile):
             raise IOError, "Glade file is missing from: %s" % self.gladefile
-        gnome.init('project-builder', self.sdk.version, properties = {'app-datadir':self.sdk.path})
+        gnome.init('image-creator', self.sdk.version, properties = {'app-datadir':self.sdk.path})
         self.widgets = gtk.glade.XML (self.gladefile, 'main')
         dic = {"on_main_destroy_event" : gtk.main_quit,
                 "on_quit_activate" : gtk.main_quit,
@@ -108,7 +108,7 @@ class App(object):
         gtk.main()
         
     def on_help_activate(self, widget):
-        gnome.help_display('project-builder')
+        gnome.help_display('image-creator')
 
     def target_view_changed(self, selection):
         model, iter = self.targetView.get_selection().get_selected()
@@ -181,20 +181,31 @@ class App(object):
         name = ""
         desc = ""
         platform = ""
-        path = ""
+        # Use current working directory as a starting point
+        path = os.getcwd() + os.sep
         while True:
             dialog = AddNewProject(sdk = self.sdk, name = name, gladefile = self.gladefile, desc = desc, platform = platform, path = path)
             result = dialog.run()
             if result != gtk.RESPONSE_OK:
                 break
-            if not dialog.name or not dialog.desc or not dialog.platform or not dialog.path:
-                self.show_error_dialog("All values must be specified")
-            else:
-                break
             name = dialog.name
             desc = dialog.desc
             platform = dialog.platform
-            path = dialog.path
+            path = os.path.abspath(os.path.expanduser(dialog.path))
+            if not dialog.name or not dialog.desc or not dialog.platform or not dialog.path:
+                self.show_error_dialog("All values must be specified")
+                continue
+            # If the path specified doesn't exist yet, then that is okay.
+            if not os.path.exists(path):
+                break
+            if not os.path.isdir(path):
+                self.show_error_dialog("Path: %s exists but is not a directory" % path)
+                continue
+            # Make sure that the directory specified is empty
+            if len(os.listdir(path)):
+                self.show_error_dialog("Path: %s is a directory which is NOT empty" % path)
+                continue
+            break
         if result == gtk.RESPONSE_OK:
             try:
                 progress_tree = gtk.glade.XML(self.gladefile, 'ProgressDialog')
@@ -217,9 +228,9 @@ class App(object):
 
     def on_about_activate(self, event):
         dialog = gtk.AboutDialog()
-        dialog.set_name('Project Builder')
+        dialog.set_name('Moblin Image Creator')
         dialog.set_version(self.sdk.version)
-        dialog.set_comments(_("A tool for building Mobile and/or Single Purposed Linux Device Stacks"))
+        dialog.set_comments(_("A tool for building Mobile and/or Single Purpose Linux Device Stacks"))
         try:
             f = open(os.path.join(self.sdk.path, "COPYING"), "r")
             dialog.set_license(f.read())
@@ -227,9 +238,9 @@ class App(object):
         except:
             print >> sys.stderr, sys.exc_value
             pass
-        dialog.set_copyright("Copyright Intel Corp. 2007")
-        dialog.set_website('http://ADDMYURLHERE')
-        dialog.set_website_label('Project Development Kit Home')
+        dialog.set_copyright("Copyright 2007 by Intel Corporation.  Licensed under the GPL version 2")
+        dialog.set_website('http://www.moblin.org/')
+        dialog.set_website_label('Mobile & Internet Linux Project')
         dialog.run()
         dialog.destroy()
 
@@ -569,13 +580,16 @@ class AddNewProject(object):
         self.np_path.set_text(path)
         self.np_platform = widgets.get_widget("np_platform")
         platform_entry_box = gtk.ListStore(gobject.TYPE_STRING)
-        for pname in sorted(self.sdk.platforms.iterkeys()):
+        platforms = sorted(self.sdk.platforms.iterkeys())
+        platform_idx = 0
+        for idx, pname in enumerate(platforms):
             platform_entry_box.append([pname])
+            if pname == platform:
+                platform_idx = idx
         self.np_platform.set_model(platform_entry_box)
-        if platform:
-            self.np_platform.child.set_text(platform)
-        else:
-            self.np_platform.set_active(0)
+        self.np_platform.set_active(platform_idx)
+        width, height = self.dialog.get_default_size()
+        self.dialog.set_default_size(width + 500, height)
 
     def run(self):
         result = self.dialog.run()

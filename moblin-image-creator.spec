@@ -1,5 +1,5 @@
-Summary: Project Builder Mobile Linux Development Kit
-Name: project-builder
+Summary: Mobline Image Creator -- Mobile & Internet Linux Development Kit
+Name: moblin-image-creator
 Version: 0.1
 Release: 1 
 License: GPL
@@ -24,14 +24,14 @@ make
 %install
 rm -rf $RPM_BUILD_ROOT/*
 make DESTDIR=$RPM_BUILD_ROOT basicinstall
-sed '{s/%%EXEC_CMD%%/\/usr\/bin\/project-builder/}' project-builder.desktop.template > $RPM_BUILD_ROOT/usr/share/applications/project-builder.desktop
+sed '{s/%%EXEC_CMD%%/\/usr\/bin\/image-creator/}' image-creator.desktop.template > $RPM_BUILD_ROOT/usr/share/applications/image-creator.desktop
 mkdir -p $RPM_BUILD_ROOT/usr/bin
-ln -f -s /usr/bin/consolehelper $RPM_BUILD_ROOT/usr/bin/project-builder
+ln -f -s /usr/bin/consolehelper $RPM_BUILD_ROOT/usr/bin/image-creator
 mkdir -p $RPM_BUILD_ROOT/etc/pam.d
 mkdir -p $RPM_BUILD_ROOT/etc/security/console.apps
-cp project-builder.pam.d $RPM_BUILD_ROOT/etc/pam.d/project-builder
-cp project-builder.helperconsole $RPM_BUILD_ROOT/etc/security/console.apps/project-builder
-cp %_builddir/%{name}-%{version}/suse/project-builder* $RPM_BUILD_ROOT/usr/sbin/
+cp image-creator.pam.d $RPM_BUILD_ROOT/etc/pam.d/image-creator
+cp image-creator.helperconsole $RPM_BUILD_ROOT/etc/security/console.apps/image-creator
+cp %_builddir/%{name}-%{version}/suse/image-creator* $RPM_BUILD_ROOT/usr/sbin/
 
 %clean
 rm -rf %{buildroot}
@@ -39,16 +39,16 @@ rm -rf %{buildroot}
 %files
 %defattr(-,root,root)
 /usr/share/pdk/*
-/usr/share/applications/project-builder.desktop
-/etc/bash_completion.d/project-builder-completion.bash
-/etc/security/console.apps/project-builder
-/etc/pam.d/project-builder
-/usr/bin/project-builder
-/usr/sbin/project-builder
-/usr/sbin/project-builder-suse-mount
-/usr/sbin/project-builder-suse-umount
-/usr/sbin/project-builder-suse-start
-/usr/sbin/project-builder-suse-install
+/usr/share/applications/image-creator.desktop
+/etc/bash_completion.d/image-creator-completion.bash
+/etc/security/console.apps/image-creator
+/etc/pam.d/image-creator
+/usr/bin/image-creator
+/usr/sbin/image-creator
+/usr/sbin/image-creator-suse-mount
+/usr/sbin/image-creator-suse-umount
+/usr/sbin/image-creator-suse-start
+/usr/sbin/image-creator-suse-install
 
 %changelog
 * Wed Jun 06 2007 Rusty Lynch <rusty.lynch@intel.com>

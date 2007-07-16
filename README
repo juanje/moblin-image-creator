@@ -1,0 +1,253 @@
+Introduction
+------------
+
+Moblin-Image-Creator, or Image-Creator for short, is a tool aimed at
+making life easier for the mobile and embedded developer.  The tools
+is designed to be extremely flexible with platform specific knowledge
+isolated to a platform definition.  Initial focus is on a new class of
+devices known as Mobile Internet Devices (MID's), but the design of
+image-creator is not MID specific and talk is already in progress to
+add new platform definitions to build Consumer Electronics stacks such
+as TV set-top boxes.
+
+There are three fundamental features that image-creator provides:
+* creation of a platform specific build environment
+* creation of platform specific target file-systems
+* providing user selectable "feature sets" (or fsets) to install 
+  bundles of packages that provide some high-level functionality
+
+In addition to this there are many other smaller features to simplify life
+for the developer, like:
+* the choice of a fully functional graphical user interface or a purely
+  command line interface
+* wrappers for chrooting into a buildroot or target file-system
+  (i.e. bind mounting important system directories and copying over network
+   configuration files)
+* wrappers for opening Xephyr windows for testing target file-systems
+* utilities for creating live USB images of target file-systems for easy
+  testing of multiple target file-systems
+
+Installation
+------------
+
+sudo make install
+
+Running
+-------
+
+You must be root in order to run image-creator.  You can either start
+image-creator via the desktop menu, in which case image-creator will
+automatically run as root (after asking for the root password), or you can
+run image-creator from the command-line using sudo.
+
+Also... image-creator can run as a GUI or via the command line. To run the
+GUI just start image-creator with no command line arguments:
+
+$ sudo image-creator
+
+To see the available list of command-line arguments:
+
+$ sudo image-creator --help
+
+HINT: image-creator installs a bash completion configuration file, so
+      if you are using bash then you can hit tab after typing a few letters
+      of a given command line argument and bash will auto-complete or provide
+      a list of possible completions. 
+
+Creating a new project from the command line
+--------------------------------------------
+
+$ sudo image-creator -c create-project \
+                      --platform-name mccaslin \
+                      --project-name "MyProject" \
+                      --project-path "/usr/src/myproject" \
+                      --project-description "My Samsung Q1 Ultra project" 
+
+The above command will extract the buildroot rootstrap in the
+/usr/src/myproject directory, and then use that new file-system to install
+additionally needed build packages into.
+
+Once the project is created you can use image-creator to chroot into
+the new buildroot via:
+
+$ sudo image-creator -c chroot-project --project-name "MyProject"
+
+Creating a new target from the command line
+-------------------------------------------
+
+$ sudo image-creator -c create-target \
+                      --project-name "MyProject" \
+                      --target-name "target1"
+
+Multiple target file-systems can be created from a single project.  The above
+command will generate a new target file-system inside the buildroot at
+BUILDROOT/targets/target1/fs/.  You can chroot inside the target file-system
+via:
+
+$ sudo image-creator -c chroot-target \
+                      --project-name "MyProject" \
+                      --target-name "target1"
+
+Installing Target Feature Sets from the command-line
+----------------------------------------------------
+
+In image-creator, the platform defines bundles of packages as a fset, where
+fsets can have dependencies on other fsets, and installing an fset will
+automatically install dependent fsets.
+
+After installing image-creator, you can see an example of an fset
+configuration file by looking at: 
+/usr/share/sdk/platforms/mccaslin/fsets/base.fset
+
+<snip>
+
+[Core]
+DESC=Fundamental fset that provides a root filesystem
+PKGS=linux-image-386
+DEBUG_PKGS=gdb man-db manpages
+DEPS=
+
+
+[Hildon-Application-Framework]
+DESC=Hildon Application Framework for enabling Mobile Applications
+PKGS=ubuntu-mobile sdk-default-icons
+DEBUG_PKGS=
+DEPS=core
+
+</snip>
+
+From the above snippet you can see two fsets, the "core" fset the provides
+additional packages to make it possible to boot a target filesystem
+and get to a command line prompt, and a "hildon-application-framework"
+fset that will install additional package (on top of core) to enable 
+running a Hildon desktop.
+
+To install all needed fsets to boot a Samsung Q1 Ultra and show the current
+Hildon Desktop, run:
+
+$ sudo image-creator -c install-fset \
+                      --project-name MyProject \
+                      --target-name target1 \
+                      --fset-name "full-mobile-stack"
+
+Creating a Live USB image of the new target filesystem from the command-line
+----------------------------------------------------------------------------
+
+$ sudo image-creator -c create-live-usb \
+                      --project-name MyProject \
+                      --target-name target1 \
+                      --image-name live-usb.img
+
+Image files for a given target are created in the
+BUILDROOT/targets/TARGETNAME/image directory.
+
+These image files need to be directly written to a usb key with a tool like dd.
+For example:
+$ sudo dd if=/usr/src/myproject/targets/target1/image/live-usb.img of=/dev/sdb
+
+WARNING: The above command is only an example!  You must determine what the
+         correct device node is for you system.  If you run this command
+         with your HD device file then you will trash your installation.
+
+Testing Applications from a Target Filesystem
+---------------------------------------------
+
+There a few options for running a virtual target X session inside your 
+existing X session running on your workstation.  One popular tool for doing
+this is something called Xephyr.  Most modern distributions provide a 
+Xephyr package to make using the tool extremely easy.
+
+On Ubuntu you can install Xephyr by running:
+$ apt-get install xserver-xephyr
+
+To start a virtual Xsession run:
+$ Xephyr :2 -host-cursor -screen 800x480x16 -dpi 96 -ac
+
+This will open a new window that is of size 800x480 and has access controls
+turned off.  Any application on your workstation can display inside this
+window (as if the window were a new display) by setting the environment 
+variable DISPLAY to ":2":
+$ export DISPLAY=:2
+
+To run applications from the target filesystem you must first chroot
+into the target, then set the DISPLAY and run the application.
+
+$ sudo image-creator -c chroot-target \
+                      --project-name MyProject \
+                      --target-name target1
+# export DISPLAY=:2
+# run-my-application
+
+Getting the Source
+------------------
+
+The image-creator source is contained in a git source repository.  You can
+either view the source on-line via:
+
+http://www.moblin.org/repos/tools/moblin-image-creator.git
+
+...or you can clone the git tree via:
+
+$ git clone rsync://moblin.org/repos/tools/moblin-image-creator.git
+
+NOTE: To install git from Ubuntu, run "sudo apt-get install git-core"
+
+FAQ's
+-----
+
+Q:
+Why bother with buildroot environment?  Why can't I just install Ubuntu
+Gutsy and build my mobile apps directly on my workstation?
+
+A:
+Using a buildroot allows the user to isolate the build machine dependencies
+from that of the host workstation (or build server.)  Today all MID work
+is focused on Gutsy, so using Gutsy on your workstation and then installing
+all the needed build dependencies will work, but one of the goals of 
+image-creator is to provide a build environment that will continue to work
+for a given product long after the product's base distribution has fallen
+out of fashion.
+
+Q:
+In order to use image-creator to I have to install Ubuntu on my workstation?
+
+A:
+When run on an Ubuntu (or any debian derivative distro), it is possible to 
+generate RPM packages that work on various RPM based distributions, so while
+building image-creator is not supported on a non-debian system, there are
+a few pre-built RPM's available on the project download page.
+
+The list of available RPM packages will change over time (depending on demand).
+
+Q:
+Why is the image-creator dependent on debian packaging?  Why not use RPM's?
+
+A:
+Initial prototyping was actually based on Fedora RPM's using yum to
+auto-resolve dependencies in the same way we use apt today.  From day one
+the use of yum has proven itself to be less then ideal for the way we wanted
+to use it, while at the same time the number of base Fedora package that
+we needed to touch were quickly taking us to the point of maintaining a full
+distribution.
+
+By moving image-creator to a debian package / apt based implementation and
+joining the Ubuntu-Mobile team, we were able to gain advantage from both 
+the richer set of debian technologies while at the same time push all of 
+our distribution requirements into the upcoming Ubuntu Gutsy repository.
+
+Q:
+How does cross compiling work?
+
+A:
+Since the initial targets for image-creator are all x86 based, then we
+are able to simplify the build by just using the native compiler either
+installed in the buildroot or installed on the host workstation (if the
+workstation is running the same base as the target.)
+
+Regardless of this, one of the advantages of making image-creator debian
+based is that there is a rich set of cross-compiling packages for just
+about any architecture.  There shouldn't be any problem in creating a new
+platform definition that pulls from an apt database of packages built for
+the target architecture, and that build additional packages using existing
+cross-compiling technologies.
+

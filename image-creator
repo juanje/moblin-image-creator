@@ -70,6 +70,14 @@ def main():
         create_project(options)
     elif options.cmd == 'delete-project':
         delete_project(options)
+    elif options.cmd == 'umount-project':
+        umount_project(options)
+    elif options.cmd == 'umount-target':
+        umount_target(options)
+    elif options.cmd == 'run-target':
+        run_target(options)
+    elif options.cmd == 'run-project':
+        run_project(options)
     elif options.cmd == 'create-target':
         create_target(options)
     elif options.cmd == 'delete-target':
@@ -99,7 +107,9 @@ def parseCommandLine():
                        "create-live-iso", "create-install-iso",
                        "create-live-usb", "create-install-usb",
                        "update-project", "update-target",
-                       "chroot-project", "chroot-target"]
+                       "chroot-project", "chroot-target",
+                       "umount-project", "umount-target",
+                       "run-project", "run-target"]
     valid_commands.sort()
     valid_command_string = ""
     for command in valid_commands[:-1]:
@@ -124,6 +134,8 @@ def parseCommandLine():
         help="Feature set identifier")
     parser.add_option("--image-name", dest="image_name",
         help="Name to use for target image file")
+    parser.add_option("--run-command", dest="run_command",
+        help="Command to execute inside a project or target chroot filesystem")
     parser.add_option("-q", "--quiet",
         action="store_false", dest="verbose", default=True,
         help="don't print status messages to stdout")
@@ -135,50 +147,70 @@ def parseCommandLine():
     examples = """
 Examples:
 <Adding a new project>
-    project-builder --command=create-project \\
-                    --platform-name='donley' \\
-                    --project-name='MyProject' \\
-                    --project-desc='Example project' \\
-                    --project-path=/usr/src/projects/myproject
+    image-creator --command=create-project \\
+                  --platform-name='donley' \\
+                  --project-name='MyProject' \\
+                  --project-desc='Example project' \\
+                  --project-path=/usr/src/projects/myproject
 
 <Delete a project>
-    project-builder --command=delete-project \\
-                    --project-name='MyOtherProject'
+    image-creator --command=delete-project \\
+                  --project-name='MyOtherProject'
+
+<Unmount a project>
+    image-creator --command=umount-project \\
+                  --project-name='MyOtherProject'
+
+<Unmount a target>
+    image-creator --command=umount-target \\
+                  --project-name='MyOtherProject' \\
+                  --target-name='MyTarget'
+
+<Run a command inside a project>
+    image-creator --command=run-project \\
+                  --project-name='MyOtherProject' \\
+                  --run-command='dpkg -l'
+
+<Run a command inside a target>
+    image-creator --command=run-target \\
+                  --project-name='MyOtherProject' \\
+                  --target-name='MyTarget' \\
+                  --run-command='dpkg -l'
 
 <Adding a new target to an existing project>
-    project-builder --command=create-target \\
-                    --project-name='MyProject' \\
-                    --target-name='MyTarget'
+    image-creator --command=create-target \\
+                  --project-name='MyProject' \\
+                  --target-name='MyTarget'
 
 <Delete a target>
-    project-builder --command=delete-target \\
-                    --project-name='MyProject' \\
-                    --target-name='MyOtherTarget'
+    image-creator --command=delete-target \\
+                  --project-name='MyProject' \\
+                  --target-name='MyOtherTarget'
 
 <installing an fset into a given target>
-    project-builder --command=install-fset \\
-                    --platform-name='donley' \\
-                    --project-name='MyProject' \\
-                    --target-name='MyTarget' \\
-                    --fset='Core' \\
+    image-creator --command=install-fset \\
+                  --platform-name='donley' \\
+                  --project-name='MyProject' \\
+                  --target-name='MyTarget' \\
+                  --fset='Core' \\
 
 <change into a given project buildroot filesystem>
-    project-builder --command=chroot-project \\
-                    --project-name='MyProject' \\
+    image-creator --command=chroot-project \\
+                  --project-name='MyProject' \\
 
 <change into a given projects target filesystem>
-    project-builder --command=chroot-target \\
-                    --project-name='MyProject' \\
-                    --target-name='MyTarget' \\
+    image-creator --command=chroot-target \\
+                  --project-name='MyProject' \\
+                  --target-name='MyTarget' \\
 
 <updating a given target inside a project>
-    project-builder --command=update-target \\
-                    --project-name='MyProject' \\
-                    --target-name='MyTarget' \\
+    image-creator --command=update-target \\
+                  --project-name='MyProject' \\
+                  --target-name='MyTarget' \\
 
 <updating a given project>
-    project-builder --command=update-project \\
-                    --project-name='MyProject'"""
+    image-creator --command=update-project \\
+                  --project-name='MyProject'"""
 
     (options, args) = parser.parse_args()
     # if nothing at all is passed in then return back
@@ -209,6 +241,25 @@ Examples:
             parser.error("Must specify project-path when using %s command" % options.cmd)
     if options.cmd == "delete-project" and not options.project_name:
         parser.error("Must specify project-name when using %s command" % options.cmd)
+    if options.cmd == "umount-project" and not options.project_name:
+        parser.error("Must specify project-name when using %s command" % options.cmd)
+    if options.cmd == "umount-target":
+        if not options.project_name:
+            parser.error("Must specify project-name when using %s command" % options.cmd)
+        if not options.target_name:
+            parser.error("Must specify target-name when using %s command" % options.cmd)
+    if options.cmd == "run-project":
+        if not options.project_name:
+            parser.error("Must specify project-name when using %s command" % options.cmd)
+        if not options.run_command:
+            parser.error("Must specify run-command when using %s command" % options.cmd)
+    if options.cmd == "run-target":
+        if not options.project_name:
+            parser.error("Must specify project-name when using %s command" % options.cmd)
+        if not options.target_name:
+            parser.error("Must specify target-name when using %s command" % options.cmd)
+        if not options.run_command:
+            parser.error("Must specify run-command when using %s command" % options.cmd)
     if options.cmd == "update-project" and not options.project_name:
         parser.error("Must specify project-name when using %s command" % options.cmd)
     if options.cmd == "create-target" or options.cmd == "delete-target" or options.cmd == "update-target":
@@ -280,6 +331,38 @@ def delete_project(options):
         print >> sys.stderr, "Project %s does not exist" % (options.project_name)
         sys.exit(1)
     sdk.delete_project(options.project_name)
+
+def umount_project(options):
+    if not options.project_name in sdk.projects:
+        print >> sys.stderr, "Project %s does not exist" % (options.project_name)
+        sys.exit(1)
+    for target in sdk.projects[options.project_name].targets:
+        sdk.projects[options.project_name].targets[target].umount()
+    sdk.projects[options.project_name].umount()
+
+def umount_target(options):
+    if not options.project_name in sdk.projects:
+        print >> sys.stderr, "Project %s does not exist" % (options.project_name)
+        sys.exit(1)
+    if not options.target_name in sdk.projects[options.project_name].targets:
+        print >> sys.stderr, "Target %s does not exist" % (options.project_name)
+        sys.exit(1)
+    sdk.projects[options.project_name].targets[options.target_name].umount()
+
+def run_project(options):
+    if not options.project_name in sdk.projects:
+        print >> sys.stderr, "Project %s does not exist" % (options.project_name)
+        sys.exit(1)
+    sys.exit(sdk.projects[options.project_name].chroot(options.run_command, ""))
+
+def run_target(options):
+    if not options.project_name in sdk.projects:
+        print >> sys.stderr, "Project %s does not exist" % (options.project_name)
+        sys.exit(1)
+    if not options.target_name in sdk.projects[options.project_name].targets:
+        print >> sys.stderr, "Target %s does not exist" % (options.project_name)
+        sys.exit(1)
+    sys.exit(sdk.projects[options.project_name].targets[options.target_name].chroot(options.run_command, ""))
 
 def update_project(options):
     if not options.project_name in sdk.projects:

@@ -5,7 +5,7 @@ initramfs-tools
 debhelper devscripts liburi-perl
 
 # Additional kernel development packages
-kernel-package dpatch grub
+kernel-package dpatch grub libncursesw5-dev libncurses5-dev
 
 # Additional X development packages
 man less vim

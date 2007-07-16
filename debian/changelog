@@ -1,8 +1,31 @@
 moblin-image-creator (0.4) UNRELEASED; urgency=low
 
-  * Add a Depends on bzip2.
+  [ Rusty Lynch ]
+  * Changed the entry level script from 'project-builder
+    to 'image-creator', and fixed a few random locations that
+    were still using the old name.
+  * Reworked the usb installation script, and the usb and disk initramfs
+    scripts to work correctly with the ubuntu kernel now that the HD shows
+    up as /dev/sda.  Also performed some cleanup in the early boot process.
+  * Cleaning up the mccaslin base fset by removing references to the
+    zi9, making the core fset use the ubuntu 386 kernel and removing the
+    previous 'ubuntu-flavored-core'
+  * Removing local apt repository code from both menlow and mccaslin
+    platforms since it has proved itself to not be needed and as a
+    result was just complicating the build process
+  * Adding 'umount-project' and 'umount-target' command line options
+  * Adding 'run-project' and 'run-target' command line options
+    that allow for arbitrary execution of commands in either the buildroot
+    or target root file-system
+  * reworked the pdk_utils.exeCommand command to use the normal stdout/stderr
+    when an output array is not passed in.
+  * reworked the mccaslin base fset to fit with packaging changes from the
+    ubuntu gutsy sprint
 
- -- Tollef Fog Heen <tfheen@ubuntu.com>  Thu, 12 Jul 2007 13:14:03 +0200
+  [ Tollef Fog Heen ]
+  * Add a Depends on bzip2.
+  
+ -- Tollef Fog Heen <tfheen@ubuntu.com>  Mon, 16 Jul 2007 21:47:36 +0200
 
 moblin-image-creator (0.3) gutsy; urgency=low
 
@@ -35,7 +58,7 @@ moblin-image-creator (0.2) gutsy; urgency=low
 
  -- Tollef Fog Heen <tfheen@ubuntu.com>  Tue, 10 Jul 2007 15:41:47 +0200
 
-project-builder (0.1-2) gutsy; urgency=low
+moblin-image-creator (0.1-2) gutsy; urgency=low
 
   * debian/control: Version python-support build-dependency (lintian)
   * debian/copyright: Add author, remove GPL, refer to common-licenses, add
@@ -43,7 +66,7 @@ project-builder (0.1-2) gutsy; urgency=low
 
  -- Matt Zimmerman <mdz@ubuntu.com>  Mon, 11 Jun 2007 15:36:17 -0700
 
-project-builder (0.1-1) unstable; urgency=low
+moblin-image-creator (0.1-1) unstable; urgency=low
 
   * Initial release
 

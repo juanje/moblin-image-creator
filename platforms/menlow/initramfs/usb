@@ -6,14 +6,19 @@ mountroot ()
     mkdir -p /squashmnt
     mkdir -p /persistmnt
 
-    mount /dev/sdb /container 2> /dev/null
+
+    mount /dev/sda /container 2> /dev/null
     while [ ! -e "/container/rootfs.img" ]; do
 	/bin/sleep 0.5
-	mount /dev/sdb /container 2> /dev/null
+	mount /dev/sda /container 2> /dev/null
     done
 
     mount -o loop -t squashfs /container/rootfs.img /squashmnt
+
+    modprobe -Qb tmpfs
     mount -t tmpfs none /persistmnt
+
+    modprobe -Qb unionfs
     mount -t unionfs -o dirs=/persistmnt=rw:/squashmnt=ro none ${rootmnt}
 
     if [ -f /container/install.sh ]; then
@@ -21,12 +26,15 @@ mountroot ()
 	 maybe_break preinstall
 
 	 mkdir -p ${rootmnt}/tmp/install
-	 mount --bind /dev ${rootmnt}/dev
+	 mknod ${rootmnt}/dev/hda b 3 0
+	 mknod ${rootmnt}/dev/hda1 b 3 1
+	 mknod ${rootmnt}/dev/hda2 b 3 2
+
 	 mount --bind /container ${rootmnt}/tmp/install
-	 cp /container/install.sh ${rootmnt}
+	 cp /container/install.sh ${rootmnt}/sbin/
 
 	 maybe_break install
-	 chroot ${rootmnt} /install.sh
+	 chroot ${rootmnt} /sbin/install.sh
     fi
 
 }
