@@ -2,7 +2,7 @@
 DESC=Virtual Fset that installs the standard mobile stack
 PKGS=
 DEBUG_PKGS=
-DEPS=core ume-config-samsung-q1-ultra ubuntu-mobile
+DEPS=core samsung-q1-ultra-config ubuntu-mobile
 
 [Core]
 DESC=Fundamental fset that provide a basic console based system

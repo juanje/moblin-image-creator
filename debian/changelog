@@ -1,3 +1,9 @@
+moblin-image-creator (0.5) feisty; urgency=low
+
+  * Fixing bug in McCaslin base fset
+
+ -- Rusty Lynch <rusty@rusty-laptop>  Mon, 16 Jul 2007 13:41:52 -0700
+
 moblin-image-creator (0.4) UNRELEASED; urgency=low
 
   [ Rusty Lynch ]
