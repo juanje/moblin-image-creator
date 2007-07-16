@@ -1,4 +1,4 @@
-moblin-image-creator (0.4) UNRELEASED; urgency=low
+moblin-image-creator (0.4) gutsy; urgency=low
 
   [ Rusty Lynch ]
   * Changed the entry level script from 'project-builder
