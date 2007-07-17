@@ -12,7 +12,7 @@ DEPS=
 
 [Samsung-Q1-Ultra-Config]
 DESC=Packages needed for the Samsung Q1 Ultra
-PKGS=samsung-q1-ultra-config linux-generic
+PKGS=ume-config-samsung-q1 linux-generic
 DEBUG_PKGS=
 DEPS=core
 
