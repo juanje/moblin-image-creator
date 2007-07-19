@@ -12,7 +12,7 @@ DEPS=core
 
 [CrownBeach-Config]
 DESC=Packages needed for the Crown Beach validation vehicle 
-PKGS=crownbeach-config 
+PKGS=ume-config-crown-beach
 DEBUG_PKGS=
 DEPS=core
 
