@@ -37,6 +37,7 @@ _image_creator()
                 run-project \
                 run-target \
                 install-fset \
+                clear-rootstraps \
                 list-fsets \
                 list-platforms \
                 list-projects \
@@ -63,7 +64,7 @@ _image_creator()
         -c --command --platform-name \
         --project-name --project-description \
         --project-path -t --target-name \
-        --fset-name --image-name -q --quiet \
+        --fset-name --image-name -q --quiet --bypass-rootstrap \
         -d --enable-debug -h --help' -- $cur ) )
     else
         _filedir

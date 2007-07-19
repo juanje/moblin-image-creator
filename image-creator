@@ -60,6 +60,8 @@ def main():
     options, args = parseCommandLine()
     if options.cmd == "list-platforms":
         list_platforms()
+    elif options.cmd == "clear-rootstraps":
+        clear_rootstraps()
     elif options.cmd == "list-projects":
         list_projects()
     elif options.cmd == 'list-targets':
@@ -109,7 +111,7 @@ def parseCommandLine():
                        "update-project", "update-target",
                        "chroot-project", "chroot-target",
                        "umount-project", "umount-target",
-                       "run-project", "run-target"]
+                       "run-project", "run-target", "clear-rootstraps"]
     valid_commands.sort()
     valid_command_string = ""
     for command in valid_commands[:-1]:
@@ -296,6 +298,11 @@ Examples:
         options.project_path = os.path.abspath(os.path.expanduser(options.project_path))
 
     return options, args
+
+def clear_rootstraps():
+    for key in sdk.platforms.iterkeys():
+        path = sdk.platforms[key].path
+        os.system("rm -f %s/*rootstrap.tar.bz2" % (path))
     
 def list_platforms():
     for key in sorted(sdk.platforms.iterkeys()):
