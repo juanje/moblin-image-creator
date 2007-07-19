@@ -1,4 +1,4 @@
-moblin-image-creator (0.7) UNRELEASED; urgency=low
+moblin-image-creator (0.7) gutsy; urgency=low
 
   * It's ume-config-samsung-q1-ultra, not just -q1.
   * Use make clean, not cleanall to be able to build the package as
