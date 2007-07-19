@@ -1,8 +1,14 @@
 moblin-image-creator (0.8) UNRELEASED; urgency=low
 
+  [ Tollef Fog Heen ]
   * Add -with-Proprietary stack for the flash UI.
 
- -- Tollef Fog Heen <tfheen@ubuntu.com>  Thu, 19 Jul 2007 17:56:24 +0200
+  [ Rusty Lynch ]
+  * Adding new --bypass-rootstrap command line argument to allow
+    for the creation of project and target filesystems without
+    using a cached rootstrap archive.
+
+ -- Rusty Lynch <rusty@rusty-laptop>  Thu, 19 Jul 2007 09:58:59 -0700
 
 moblin-image-creator (0.7) gutsy; urgency=low
 

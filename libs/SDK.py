@@ -197,7 +197,7 @@ class SDK(object):
             except:
                 print >> sys.stderr, "Project Config Error: %s" % (sys.exc_value)
             
-    def create_project(self, parent_path, name, desc, platform):
+    def create_project(self, parent_path, name, desc, platform, use_rootstrap = True):
         """
         Create a new project by specifying an install path, a name, a
         short description, and a platform object.
@@ -227,7 +227,7 @@ class SDK(object):
             os.makedirs(install_path)
 
         rootstrap = os.path.join(platform.path, "build-rootstrap.tar.bz2")
-        if not os.path.isfile(rootstrap):
+        if not os.path.isfile(rootstrap) or not use_rootstrap:
             # create platform rootstrap file
             cmd = "debootstrap --arch i386 --variant=buildd --include=%s %s %s %s" % (platform.buildroot_extras, platform.buildroot_codename, install_path, platform.buildroot_mirror)
             output = []
@@ -242,13 +242,14 @@ class SDK(object):
             os.system('rm -fR %s/var/cache/apt/archives/*.dev' % (install_path))
             for f in os.listdir(os.path.join(platform.path, 'sources')):
                 shutil.copy(os.path.join(platform.path, 'sources', f), os.path.join(install_path, 'etc', 'apt', 'sources.list.d'))
-            cmd = "tar -jcpvf %s -C %s ." % (rootstrap, install_path)
-            output = []
-            result = pdk_utils.execCommand(cmd, output = output, callback = self.cb.iteration)
-            if result != 0:
-                print >> sys.stderr, "ERROR: Unable to archive rootstrap!"
-                shutil.rmtree(install_path)
-                raise ValueError(" ".join(output))
+            if use_rootstrap:
+                cmd = "tar -jcpvf %s -C %s ." % (rootstrap, install_path)
+                output = []
+                result = pdk_utils.execCommand(cmd, output = output, callback = self.cb.iteration)
+                if result != 0:
+                    print >> sys.stderr, "ERROR: Unable to archive rootstrap!"
+                    shutil.rmtree(install_path)
+                    raise ValueError(" ".join(output))
         else:
             cmd = "tar -jxvf %s -C %s" % (rootstrap, install_path)
             output = []

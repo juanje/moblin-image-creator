@@ -139,6 +139,9 @@ def parseCommandLine():
     parser.add_option("-q", "--quiet",
         action="store_false", dest="verbose", default=True,
         help="don't print status messages to stdout")
+    parser.add_option("--bypass-rootstrap",
+        action="store_false", dest="use_rootstrap", default=True,
+        help="Disable creation or use of rootstrap files")
     parser.add_option("-d", "--enable-debug",
         action="store_true", dest="debug", default=False,
         help="Enable additional debug package while installing fsets")
@@ -324,7 +327,7 @@ def create_project(options):
     if cwd.find(options.project_path) == 0:
 	    print >> sys.stderr, "The project path can not be part of the current working directory"
 	    sys.exit(1)
-    sdk.create_project(options.project_path, options.project_name, options.project_desc, sdk.platforms[options.platform_name]).install()
+    sdk.create_project(options.project_path, options.project_name, options.project_desc, sdk.platforms[options.platform_name], options.use_rootstrap).install()
 
 def delete_project(options):
     if not options.project_name in sdk.projects:
@@ -374,7 +377,7 @@ def create_target(options):
     if not options.project_name in sdk.projects:
         print >> sys.stderr, "Project %s does not exist" % (options.project_name)
         sys.exit(1)
-    target = sdk.projects[options.project_name].create_target(options.target_name)
+    target = sdk.projects[options.project_name].create_target(options.target_name, options.use_rootstrap)
 
 def delete_target(options):
     if not options.project_name in sdk.projects:

@@ -162,14 +162,14 @@ class Project(FileSystem):
     def update(self):
         FileSystem.update(self, "/")
 
-    def create_target(self, name):
+    def create_target(self, name, use_rootstrap = True):
         if not name:
             raise ValueError("Target name was not specified")
         if not name in self.targets:
             install_path = os.path.join(self.path, 'targets', name, 'fs')
             os.makedirs(install_path)
             rootstrap = os.path.join(self.platform.path, "target-rootstrap.tar.bz2")
-            if not os.path.isfile(rootstrap):
+            if not os.path.isfile(rootstrap) or not use_rootstrap:
                 cmd = "debootstrap --arch i386 --include=apt %s %s %s" % (self.platform.target_codename, install_path, self.platform.target_mirror)
                 output = []
 
@@ -189,13 +189,14 @@ class Project(FileSystem):
                 
                 for f in os.listdir(os.path.join(self.platform.path, 'sources')):
                     shutil.copy(os.path.join(self.platform.path, 'sources', f), os.path.join(install_path, 'etc', 'apt', 'sources.list.d'))
-                cmd = "tar -jcpvf %s -C %s ." % (rootstrap, install_path)
-                output = []
-                result = pdk_utils.execCommand(cmd, output = output, callback = self.cb.iteration)
-                if result != 0:
-                    print >> sys.stderr, "ERROR: Unable to archive rootstrap!"
-                    shutil.rmtree(install_path)
-                    raise ValueError(" ".join(output))
+                if use_rootstrap:
+                    cmd = "tar -jcpvf %s -C %s ." % (rootstrap, install_path)
+                    output = []
+                    result = pdk_utils.execCommand(cmd, output = output, callback = self.cb.iteration)
+                    if result != 0:
+                        print >> sys.stderr, "ERROR: Unable to archive rootstrap!"
+                        shutil.rmtree(install_path)
+                        raise ValueError(" ".join(output))
             else:
                 cmd = "tar -jxvf %s -C %s" % (rootstrap, install_path)
                 output = []
