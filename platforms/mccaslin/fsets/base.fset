@@ -1,3 +1,9 @@
+[Samsung-Full-Mobile-Stack-with-Proprietary]
+DESC=The full samsung stack, including proprietary (non-redistributable bits)
+PKGS=flashplugin-nonfree
+DEBUG_PKGS=
+DEPS=samsung-full-mobile-stack
+
 [Samsung-Full-Mobile-Stack]
 DESC=Virtual Fset that installs the standard mobile stack
 PKGS=
