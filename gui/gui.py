@@ -275,6 +275,8 @@ class App(object):
             if result == gtk.RESPONSE_OK:
                 if not target_name:
                     self.show_error_dialog("Must specify a target name")
+                elif target_name in self.current_project().targets:
+                    self.show_error_dialog("Target: %s already exists" % target_name)
                 else:
                     progress_tree = gtk.glade.XML(self.gladefile, 'ProgressDialog')
                     progress_dialog = progress_tree.get_widget('ProgressDialog')
