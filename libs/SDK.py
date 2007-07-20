@@ -229,12 +229,19 @@ class SDK(object):
         rootstrap = os.path.join(platform.path, "build-rootstrap.tar.bz2")
         if not os.path.isfile(rootstrap) or not use_rootstrap:
             # create platform rootstrap file
+            count = 0
             cmd = "debootstrap --arch i386 --variant=buildd --include=%s %s %s %s" % (platform.buildroot_extras, platform.buildroot_codename, install_path, platform.buildroot_mirror)
             output = []
             # XXX Evil hack
             if not os.path.isfile("/usr/lib/debootstrap/scripts/%s" % platform.target_codename):
                 cmd += " /usr/share/pdk/debootstrap-scripts/%s" % platform.target_codename
-            result = pdk_utils.execCommand(cmd, output = output, callback = self.cb.iteration)
+            # Sometimes we see network issues that trigger debootstrap
+            # to claim the apt repository is corrupt.  This trick will
+            # force up to 10 attempts before bailing out with an error
+            while count < 10:
+                result = pdk_utils.execCommand(cmd, output = output, callback = self.cb.iteration)
+                if result == 0:
+                    break;
             if result != 0:
                 print >> sys.stderr, "ERROR: Unable to generate project rootstrap!"
                 shutil.rmtree(install_path)

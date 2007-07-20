@@ -166,6 +166,7 @@ class Project(FileSystem):
         if not name:
             raise ValueError("Target name was not specified")
         if not name in self.targets:
+            count =  0
             install_path = os.path.join(self.path, 'targets', name, 'fs')
             os.makedirs(install_path)
             rootstrap = os.path.join(self.platform.path, "target-rootstrap.tar.bz2")
@@ -177,7 +178,13 @@ class Project(FileSystem):
                 if not os.path.isfile("/usr/lib/debootstrap/scripts/%s" % self.platform.target_codename):
                     cmd += " /usr/share/pdk/debootstrap-scripts/%s" % self.platform.target_codename
 
-                result = pdk_utils.execCommand(cmd, output = output, callback = self.cb.iteration)
+                # Sometimes we see network issues that trigger debootstrap
+                # to claim the apt repository is corrupt.  This trick will
+                # force up to 10 attempts before bailing out with an error
+                while count < 10:
+                    result = pdk_utils.execCommand(cmd, output = output, callback = self.cb.iteration)
+                    if result == 0:
+                        break;
                 if result != 0:
                     print >> sys.stderr, "ERROR: Unable to generate target rootstrap!"
                     raise ValueError(" ".join(output))
