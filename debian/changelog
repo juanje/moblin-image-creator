@@ -1,8 +1,12 @@
 moblin-image-creator (0.9) UNRELEASED; urgency=low
 
+  [ Rusty Lynch ]
   * Updating the menlow usb and disk initramfs scripts
 
- -- Rusty Lynch <rusty@rusty-laptop>  Fri, 20 Jul 2007 16:44:17 -0700
+  [ John L. Villalovos ]
+  * If the /var/cache/apt/archives/partial is missing, then create it.
+
+ -- John L. Villalovos <john.l.villalovos@intel.com>  Fri, 20 Jul 2007 17:13:51 -0700
 
 moblin-image-creator (0.8) UNRELEASED; urgency=low
 
