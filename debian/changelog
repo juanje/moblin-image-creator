@@ -5,8 +5,9 @@ moblin-image-creator (0.9) UNRELEASED; urgency=low
 
   [ John L. Villalovos ]
   * If the /var/cache/apt/archives/partial is missing, then create it.
+  * Fix error with variable name.
 
- -- John L. Villalovos <john.l.villalovos@intel.com>  Fri, 20 Jul 2007 17:13:51 -0700
+ -- John L. Villalovos <john.l.villalovos@intel.com>  Sun, 22 Jul 2007 11:15:30 -0700
 
 moblin-image-creator (0.8) UNRELEASED; urgency=low
 
