@@ -6,10 +6,10 @@ mountroot ()
     mkdir -p /squashmnt
     mkdir -p /persistmnt
 
-    mount /dev/sdb /container 2> /dev/null
+    mount /dev/sda /container 2> /dev/null
     while [ ! -e "/container/rootfs.img" ]; do
 	/bin/sleep 0.5
-	mount /dev/sdb /container 2> /dev/null
+	mount /dev/sda /container 2> /dev/null
     done
 
     mount -o loop -t squashfs /container/rootfs.img /squashmnt
