@@ -201,6 +201,7 @@ class Project(FileSystem):
                 
                 for f in os.listdir(os.path.join(self.platform.path, 'sources')):
                     shutil.copy(os.path.join(self.platform.path, 'sources', f), os.path.join(install_path, 'etc', 'apt', 'sources.list.d'))
+                    shutil.copy(os.path.join(self.platform.path, 'preferences'), os.path.join(install_path, 'etc', 'apt'))
                 if use_rootstrap:
                     cmd = "tar -jcpvf %s -C %s ." % (rootstrap, install_path)
                     output = []
