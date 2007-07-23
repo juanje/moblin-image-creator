@@ -8,7 +8,10 @@ moblin-image-creator (0.9) UNRELEASED; urgency=low
   * Fix error with variable name.
   * Change http://moblin.org/ to http://www.moblin.org/
 
- -- John L. Villalovos <john.l.villalovos@intel.com>  Sun, 22 Jul 2007 18:39:16 -0700
+  [ Jacob Pan ]
+  * Added package pinning in menlow platform apt/preferences
+
+ -- Jacob Pan <jacob.jun.pan@intel.com>  Mon, 23 Jul 2007 10:27:34 -0700
 
 moblin-image-creator (0.8) UNRELEASED; urgency=low
 
