@@ -49,7 +49,7 @@ class FileSystem(object):
         self.path = os.path.abspath(os.path.expanduser(path))
 
     def update(self, path):
-        required_dirs = [ "/var/cahce/apt/archives/partial" ]
+        required_dirs = [ "/var/cache/apt/archives/partial" ]
         for dirname in required_dirs:
             if not os.path.isdir(dirname):
                 print "The directory: %s is missing, will create it" % dirname
