@@ -16,8 +16,9 @@ moblin-image-creator (0.9) UNRELEASED; urgency=low
 
   [ John L. Villalovos ]
   * Fix Bug 25
+  * Clean it up for the Bug 25 fix
 
- -- John L. Villalovos <john.l.villalovos@intel.com>  Mon, 23 Jul 2007 20:10:58 -0700
+ -- John L. Villalovos <john.l.villalovos@intel.com>  Mon, 23 Jul 2007 20:39:21 -0700
 
 moblin-image-creator (0.8) UNRELEASED; urgency=low
 

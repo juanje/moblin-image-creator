@@ -198,14 +198,14 @@ class Project(FileSystem):
                 # workaround for ubuntu kernel package bug
                 os.system('touch %s/etc/kernel-img.conf' % (install_path))
                 os.system('touch %s/etc/kernel-pkg.conf' % (install_path))
-                
-                for f in os.listdir(os.path.join(self.platform.path, 'sources')):
-                    source_path = os.path.join(self.platform.path, 'sources', f)
-                    if os.path.exists(source_path):
-                        shutil.copy(source_path, os.path.join(install_path, 'etc', 'apt', 'sources.list.d'))
-                    source_path = os.path.join(self.platform.path, 'preferences')
-                    if os.path.exists(source_path):
-                        shutil.copy(source_path, os.path.join(install_path, 'etc', 'apt'))
+               
+                source_dir = os.path.join(self.platform.path, 'sources')
+                for f in os.listdir(source_dir):
+                    source_path = os.path.join(source_dir, f)
+                    shutil.copy(source_path, os.path.join(install_path, 'etc', 'apt', 'sources.list.d'))
+                source_path = os.path.join(self.platform.path, 'preferences')
+                if os.path.exists(source_path):
+                    shutil.copy(source_path, os.path.join(install_path, 'etc', 'apt'))
                 if use_rootstrap:
                     cmd = "tar -jcpvf %s -C %s ." % (rootstrap, install_path)
                     output = []
