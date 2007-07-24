@@ -1,14 +1,20 @@
+[CrownBeach-Full-Mobile-Stack-with-Proprietary]
+DESC=The full samsung stack, including proprietary (non-redistributable bits)
+PKGS=flashplugin-nonfree
+DEBUG_PKGS=
+DEPS=crownbeach-full-mobile-stack
+
+[CrownBeach-Full-Mobile-Stack]
+DESC=Virtual Fset that installs the standard mobile stack
+PKGS=
+DEBUG_PKGS=
+DEPS=core crownbeach-config ubuntu-mobile
+
 [Core]
 DESC=Fundamental fset that provides a root filesystem that uses the Ubuntu kernel
 PKGS=grub busybox-initramfs linux-image-2.6.22-8-ume linux-ubuntu-modules-2.6.22-8-ume initramfs-tools
-DEBUG_PKGS=man-db manpages 
+DEBUG_PKGS=man-db manpages openssh-client openssh-server
 DEPS=
-
-[Infrastructure]
-DESC=Fundamental non-GUI system infrastructure
-PKGS=dhcp3-client wireless-tools alsa-base alsa-utils 
-DEBUG_PKGS=openssh-client openssh-server
-DEPS=core
 
 [CrownBeach-Config]
 DESC=Packages needed for the Crown Beach validation vehicle 
@@ -18,25 +24,12 @@ DEPS=core
 
 [GNOME-Mobile]
 DESC=Subset of GNOME components for building mobile Linux stacks
-PKGS=xorg xserver-xorg-input-evtouch matchbox-window-manager libglib2.0-0 dbus libdbus-1-3 libdbus-glib-1-2 gconf2 libgnomevfs2-0 libgstreamer0.10-0 libbluetooth2 libtelepathy-glib0 libavahi-glib1 libgtk2.0-0 libpango1.0-0 libcairo2 libatk1.0-0 python python-dbus python-cairo python-gconf python-gst0.10 gnome-icon-theme
+PKGS=xorg xserver-xorg-input-evtouch matchbox-window-manager libglib2.0-0 dbus libdbus-1-3 libdbus-glib-1-2 gconf2 libgnomevfs2-0 libgstreamer0.10-0 libbluetooth2 libtelepathy-glib0 libavahi-glib1 libgtk2.0-0 libpango1.0-0 libcairo2 libatk1.0-0 python python-dbus python-cairo python-gconf python-gst0.10 telepathy-core telepathy-mission-control gnome-icon-theme
 DEBUG_PKGS=
 DEPS=crownbeach-config
 
-[Power-Management]
-DESC=Power management packages for a Mobile Internet Device
-PKGS=
+[Ubuntu-Mobile]
+DESC=Ubuntu Mobile using Hildon, and any base applications for same
+PKGS=ubuntu-mobile sdk-default-icons mobile-application-service mobile-basic-flash matchbox-keyboard hildon-theme-mobile-basic marquee-plugins hildon-control-panel mobile-internet-browser mobile-player gstreamer-dbus-media-service matchbox-keyboard matchbox-keyboard-toggler mousepad empathy gcalctool gnome-nettool
 DEBUG_PKGS=powertop
-DEPS=core
-
-[Hildon-Application-Framework]
-DESC=Hildon Application Framework for enabling Mobile Applications
-PKGS=ubuntu-mobile sdk-default-icons mobile-application-service mobile-basic-flash matchbox-keyboard hildon-theme-mobile-basic marquee-plugins
-DEBUG_PKGS=
 DEPS=gnome-mobile
-
-[Mobile-Applications]
-DESC=Standard set of flagship mobile applications
-PKGS=mobile-internet-browser mobile-player gstreamer-dbus-media-service matchbox-keyboard libkeyboard mousepad
-DEBUG_PKGS=
-DEPS=hildon-application-framework
-
