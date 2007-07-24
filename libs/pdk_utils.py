@@ -72,6 +72,21 @@ def umount_device(device_file):
             return True
     return True
 
+def ismount(path):
+    """Function to see if a path is mounted, this is because os.path.ismount()
+    does not seem to detect --bind"""
+    path = os.path.abspath(os.path.expanduser(path))
+    output = []
+    cmd = "mount"
+    result = execCommand(cmd, quiet = True, output = output)
+    for line in output:
+        result = re.search(r'(?P<dev>.*) on (?P<mnt_point>.*) type', line)
+        if result:
+            mnt_point = result.group('mnt_point')
+            if mnt_point == path:
+                return True
+    return False
+
 def execCommand(cmd_line, quiet = False, output = None, callback = None):
         if output == None:
             p = subprocess.Popen(cmd_line.split())
@@ -85,15 +100,32 @@ def execCommand(cmd_line, quiet = False, output = None, callback = None):
         if output != None:
             pl.register(p.stdout)
         while p.poll() == None:
-            if pl.poll(10):
-                if output != None:
+            if output != None and pl.poll(10):
+                line = p.stdout.readline()
+                line = line.rstrip()
+                output.append(line)
+                if not quiet:
+                    print line
+            elif callback:
+                callback(p)
+        # Now have to check if any output is left over
+        if output != None:
+            while True:
+                result_list = pl.poll(10)
+                if not result_list:
+                    break
+                found = False
+                for fd, event in result_list:
+                    if (event & (select.POLLIN | select.POLLPRI)):
+                        found = True
+                if found:
                     line = p.stdout.readline()
                     line = line.rstrip()
                     output.append(line)
                     if not quiet:
                         print line
-            elif callback:
-                callback(p)
+                else:
+                    break
         result = p.returncode
         return result
 

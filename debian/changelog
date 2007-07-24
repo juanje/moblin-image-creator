@@ -1,10 +1,16 @@
 moblin-image-creator (0.10) UNRELEASED; urgency=low
 
-  * Added a feature where apt-get install's will retry on failure for 
+  [ Rusty Lynch ]
+  * Added a feature where apt-get install's will retry on failure for
     up to 10 times, with a 'apt-get update' between each attempt.
     This should resolve bug #2
 
- -- Rusty Lynch <rusty@rusty-laptop>  Tue, 24 Jul 2007 08:03:24 -0700
+  [ John L. Villalovos ]
+  * Trying to fix the issue with multiple mounting occuring
+  * Fix problem the existed in the execCommand function where not all of the
+    output would be returned.
+
+ -- John L. Villalovos <john.l.villalovos@intel.com>  Tue, 24 Jul 2007 12:13:32 -0700
 
 moblin-image-creator (0.9) gutsy; urgency=low
 

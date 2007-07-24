@@ -80,7 +80,7 @@ class FileSystem(object):
             path = os.path.join(self.path, mnt)
             if not os.path.isdir(path):
                 os.makedirs(path)
-            if not os.path.ismount(path) and os.path.isdir(os.path.join('/', mnt)):
+            if not pdk_utils.ismount(path) and os.path.isdir(os.path.join('/', mnt)):
                 result = os.system('mount --bind /%s %s' % (mnt, path))
                 if result != 0:
                     raise OSError("Internal error while attempting to bind mount /%s!" % (mnt))
