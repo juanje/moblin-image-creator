@@ -17,16 +17,14 @@ moblin-image-creator (0.9) UNRELEASED; urgency=low
   * If the /var/cache/apt/archives/partial is missing, then create it.
   * Fix error with variable name.
   * Change http://moblin.org/ to http://www.moblin.org/
+  * Fix Bug 25
+  * Clean it up for the Bug 25 fix
 
   [ Jacob Pan ]
   * Added package pinning in menlow platform apt/preferences
   * Changed scripts to copy preferences to target /etc/apt/ dir.
   * Added ume ubuntu modules which includes squashfs
   * Fix usb script in initramfs to mount sda instead of sdb
-
-  [ John L. Villalovos ]
-  * Fix Bug 25
-  * Clean it up for the Bug 25 fix
 
  -- Tollef Fog Heen <tfheen@ubuntu.com>  Tue, 24 Jul 2007 09:36:26 +0200
 
