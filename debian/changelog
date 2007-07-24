@@ -5,8 +5,10 @@ moblin-image-creator (0.11) UNRELEASED; urgency=low
 
   [ John L. Villalovos ]
   * Fixed mispelled path
+  * Fix for missing /var/cache/apt/archives/partial issue.  Now check in both
+    the update and install functions.
 
- -- John L. Villalovos <john.l.villalovos@intel.com>  Tue, 24 Jul 2007 14:54:20 -0700
+ -- John L. Villalovos <john.l.villalovos@intel.com>  Tue, 24 Jul 2007 15:47:57 -0700
 
 moblin-image-creator (0.10) UNRELEASED; urgency=low
 

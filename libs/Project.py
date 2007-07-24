@@ -49,17 +49,14 @@ class FileSystem(object):
         self.path = os.path.abspath(os.path.expanduser(path))
 
     def update(self, path):
-        required_dirs = [ "/var/cache/apt/archives/partial" ]
-        for dirname in required_dirs:
-            if not os.path.isdir(dirname):
-                print "The directory: %s is missing, will create it" % dirname
-                os.makedirs(dirname)
+        self.aptgetPreCheck()
         command = '-y --force-yes -o Dir::State=%(t)s/var/lib/apt -o Dir::State::status=%(t)s/var/lib/dpkg/status -o Dir::Cache=/var/cache/apt -o Dir::Etc::Sourcelist=%(t)s/etc/apt/sources.list -o Dir::Etc::main=%(t)s/etc/apt/apt.conf -o Dir::Etc::parts=%(t)s/etc/apt/apt.conf.d -o DPkg::Options::=--root=%(t)s -o DPkg::Run-Directory=%(t)s update' % {'t': path}
         ret = self.chroot("/usr/bin/apt-get", command) 
         if ret != 0:
             raise OSError("Internal error while attempting to run: %s" % command)
         
     def install(self, path, packages):
+        self.aptgetPreCheck()
         if not packages:
             # No packages, so nothing to do
             return
@@ -74,6 +71,14 @@ class FileSystem(object):
             retry_count = retry_count + 1
             self.chroot("/usr/bin/apt-get", "update")
         raise OSError("Internal error while attempting to run: apt-get %s" % command)
+
+    def aptgetPreCheck(self):
+        """Stuff that we want to check for before we run an apt-get command"""
+        required_dirs = [ "/var/cache/apt/archives/partial" ]
+        for dirname in required_dirs:
+            if not os.path.isdir(dirname):
+                print "The directory: %s is missing, will create it" % dirname
+                os.makedirs(dirname)
 
     def mount(self):
         for mnt in ['var/cache/apt/archives', 'tmp', 'proc', 'sys', 'usr/share/pdk']:
