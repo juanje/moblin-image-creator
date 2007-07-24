@@ -42,9 +42,20 @@ class Callback:
 
 sdk = SDK.SDK(cb = Callback())
 
+REQUIRED_EXES = [ 'debootstrap', 'apt-get' ]
+
 def main():
     if sys.hexversion < 0x2040000:
         print >> sys.stderr, "Error: %s depends on a Python version of at least 2.4!" % (sys.argv[0])
+        sys.exit(1)
+
+    exes_found = True
+    for exe_name in REQUIRED_EXES:
+        if not findExe(exe_name):
+            print "Error: Could not find the executable: '%s' in the PATH" % exe_name
+            exes_found = False
+    if not exes_found:
+        print "Without the executable(s) listed, image-creator will fail to operate"
         sys.exit(1)
 
     if len(sys.argv) == 1:
@@ -477,6 +488,23 @@ def print_exc_plus(type, value, tb):
             except:
                 print "<ERROR WHILE PRINTING VALUE>"
     traceback.print_exception(type, value, tb)
+
+def findExe(exe_name, env=None):
+    if env is None:
+        env = os.environ
+    if 'PATH' in env:
+        env_list = env['PATH'].split(os.pathsep)
+    else:
+        print "Error: No 'PATH' environment variable defined"
+        sys.exit(1)
+    for dirname in env_list:
+        file_name = os.path.join(dirname, exe_name)
+        # FIXME: Should really check to see if it is executable, but for now
+        # assume if it is in the path it is executable
+        if os.path.exists(file_name):
+            return True
+    return False
+
 
 if __name__ == '__main__':
     if debug: sys.excepthook = print_exc_plus

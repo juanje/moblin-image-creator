@@ -28,8 +28,12 @@ moblin-image-creator (0.9) UNRELEASED; urgency=low
 
   [ Tollef Fog Heen ]
   * Make the package Arch: all, not Arch: any.
-  
- -- Tollef Fog Heen <tfheen@ubuntu.com>  Tue, 24 Jul 2007 09:36:26 +0200
+
+  [ John Villalovos ]
+  * Put in some code to check for executables that are required for image
+    creator to run.
+
+ -- John Villalovos <john@john-desktop>  Tue, 24 Jul 2007 01:46:01 -0700
 
 moblin-image-creator (0.8) gutsy; urgency=low
 

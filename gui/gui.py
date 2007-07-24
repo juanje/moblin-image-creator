@@ -217,6 +217,7 @@ class App(object):
                 self.projectList.append((dialog.name, dialog.desc, dialog.path, dialog.platform))
             except:
                 print sys.exc_value
+                print_exc_plus()
                 self.show_error_dialog("%s" % (sys.exc_value))
                 try:
                     self.sdk.delete_project(dialog.name)
@@ -630,6 +631,7 @@ class MainWindowButtons(object):
         self.target_term_launch = widgets.get_widget('target_term_launch')
         self.target_kernel_cmdline = widgets.get_widget('target_kernel_cmdline')
         self.DD_USB = widgets.get_widget('DD_USB')
+
 def print_exc_plus():
     # From Python Cookbook 2nd Edition.  FIXME: Will need to remove this at
     # some point, or give attribution.
