@@ -6,9 +6,13 @@ moblin-image-creator (0.12) UNRELEASED; urgency=low
 
 moblin-image-creator (0.11) UNRELEASED; urgency=low
 
+  [ Rob Rhoads ]
   * Fixed the initramfs hooks file to properly install the menlow usb and disk scripts.
 
- -- Rob Rhoads <rob@afuente.jf.intel.com>  Tue, 24 Jul 2007 13:37:57 -0700
+  [ John L. Villalovos ]
+  * Fixed mispelled path
+
+ -- John L. Villalovos <john.l.villalovos@intel.com>  Tue, 24 Jul 2007 14:54:20 -0700
 
 moblin-image-creator (0.10) UNRELEASED; urgency=low
 
