@@ -17,5 +17,5 @@ esac
 
 . /usr/share/initramfs-tools/hook-functions
 
-copy_exec /usr/share/pdk/platforms/mccaslin/initramfs/usb /scripts/usb
-copy_exec /usr/share/pdk/platforms/mccaslin/initramfs/disk /scripts/disk
+copy_exec /usr/share/pdk/platforms/menlow/initramfs/usb /scripts/usb
+copy_exec /usr/share/pdk/platforms/menlow/initramfs/disk /scripts/disk
