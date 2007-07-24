@@ -1,3 +1,9 @@
+moblin-image-creator (0.12) UNRELEASED; urgency=low
+
+  * Updated the Menlow fsets and apt sources to mirror the changes in McCaslin.
+
+ -- Rob Rhoads <rob@afuente.jf.intel.com>  Tue, 24 Jul 2007 15:38:40 -0700
+
 moblin-image-creator (0.11) UNRELEASED; urgency=low
 
   [ Rob Rhoads ]
