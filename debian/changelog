@@ -2,6 +2,16 @@ moblin-image-creator (0.9) UNRELEASED; urgency=low
 
   [ Rusty Lynch ]
   * Updating the menlow usb and disk initramfs scripts
+  * Adding new --bypass-rootstrap command line argument to allow
+    for the creation of project and target filesystems without
+    using a cached rootstrap archive.
+  * Adding new --clear-rootstraps command line argument to allow
+    users to clear out rootstrap files
+  * Adding multiverse apt config files for mccaslin
+  * Adding a feature where a failed debootstrap call will be retried
+    for up to 10 ten times before giving up.  This helps get past
+    spurious network issues that debootstrap will call a corrupt apt
+    repository.
 
   [ John L. Villalovos ]
   * If the /var/cache/apt/archives/partial is missing, then create it.
@@ -18,30 +28,16 @@ moblin-image-creator (0.9) UNRELEASED; urgency=low
   * Fix Bug 25
   * Clean it up for the Bug 25 fix
 
-  [ Tollef Fog Heen ]
-  * libkeyboard has been renamed to matchbox-keyboard-toggler; update
-    fsets accordingly.
-
  -- Tollef Fog Heen <tfheen@ubuntu.com>  Tue, 24 Jul 2007 09:36:26 +0200
 
-moblin-image-creator (0.8) UNRELEASED; urgency=low
+moblin-image-creator (0.8) gutsy; urgency=low
 
   [ Tollef Fog Heen ]
   * Add -with-Proprietary stack for the flash UI.
+  * libkeyboard has been renamed to matchbox-keyboard-toggler; update
+    fsets accordingly.
 
-  [ Rusty Lynch ]
-  * Adding new --bypass-rootstrap command line argument to allow
-    for the creation of project and target filesystems without
-    using a cached rootstrap archive.
-  * Adding new --clear-rootstraps command line argument to allow
-    users to clear out rootstrap files
-  * Adding multiverse apt config files for mccaslin
-  * Adding a feature where a failed debootstrap call will be retried
-    for up to 10 ten times before giving up.  This helps get past
-    spurious network issues that debootstrap will call a corrupt apt
-    repository.
-
- -- Rusty Lynch <rusty@rusty-laptop>  Fri, 20 Jul 2007 07:16:19 -0700
+ -- Tollef Fog Heen <tfheen@ubuntu.com>  Thu, 19 Jul 2007 17:56:24 +0200
 
 moblin-image-creator (0.7) gutsy; urgency=low
 
