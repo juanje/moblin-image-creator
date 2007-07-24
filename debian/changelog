@@ -18,7 +18,11 @@ moblin-image-creator (0.9) UNRELEASED; urgency=low
   * Fix Bug 25
   * Clean it up for the Bug 25 fix
 
- -- John L. Villalovos <john.l.villalovos@intel.com>  Mon, 23 Jul 2007 20:39:21 -0700
+  [ Tollef Fog Heen ]
+  * libkeyboard has been renamed to matchbox-keyboard-toggler; update
+    fsets accordingly.
+
+ -- Tollef Fog Heen <tfheen@ubuntu.com>  Tue, 24 Jul 2007 09:36:26 +0200
 
 moblin-image-creator (0.8) UNRELEASED; urgency=low
 
