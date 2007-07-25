@@ -19,7 +19,11 @@ moblin-image-creator (0.10) UNRELEASED; urgency=low
   * Fix for missing /var/cache/apt/archives/partial issue.  Now check in
     both the update and install functions.
 
- -- John L. Villalovos <john.l.villalovos@intel.com>  Tue, 24 Jul 2007 12:13:32 -0700
+  [ Tollef Fog Heen ]
+  * mobile-internet-browser is called midbrowser; update mccaslin and
+    menlow fsets accordingly.
+
+ -- Tollef Fog Heen <tfheen@ubuntu.com>  Wed, 25 Jul 2007 12:22:06 +0200
 
 moblin-image-creator (0.9) gutsy; urgency=low
 
