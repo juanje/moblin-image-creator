@@ -1,5 +1,5 @@
 [CrownBeach-Full-Mobile-Stack-with-Proprietary]
-DESC=The full samsung stack, including proprietary (non-redistributable bits)
+DESC=The full Crown Beach stack, including proprietary (non-redistributable bits)
 PKGS=flashplugin-nonfree
 DEBUG_PKGS=
 DEPS=crownbeach-full-mobile-stack
