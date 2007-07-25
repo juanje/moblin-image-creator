@@ -13,7 +13,13 @@ mountroot ()
     done
 
     mount -o loop -t squashfs /container/rootfs.img /squashmnt
-    mount -t tmpfs none /persistmnt
+
+    if [ -f /container/ext3fs.img ]; then
+	mount -o loop /container/ext3fs.img /persistmnt
+    else
+	mount -t tmpfs none /persistmnt
+    fi
+
     mount -t unionfs -o dirs=/persistmnt=rw:/squashmnt=ro none ${rootmnt}
 
     if [ -f /container/install.sh ]; then

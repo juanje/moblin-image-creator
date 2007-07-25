@@ -286,6 +286,19 @@ class BaseUsbImage(InstallImage):
         jail_path = self.path[len(self.project.path):]
         self.project.chroot('/usr/bin/syslinux', jail_path)
 
+    def create_ext3fs_file(self, path, size):
+        out_file = open(path, 'w')
+        out_string = chr(0) * 1024
+        for count in range(0, size * 1024):
+            out_file.write(out_string)
+        out_file.close()
+
+        cmd_line = "/sbin/mkfs.ext3 %s -F" % path
+        result = os.system(cmd_line)
+        if result:
+            print >> sys.stderr, "Error running command: %s" % cmd_line
+            raise EnvironmentError, "Error running command: %s" % cmd_line
+
     def mount_container(self):
         if not self.tmp_path:
             self.tmp_path = tempfile.mkdtemp('','pdk-', '/tmp')
@@ -321,6 +334,8 @@ class LiveUsbImage(BaseUsbImage):
         shutil.move('/tmp/.tmp.initrd', initrd_path)
         self.install_kernels()
         shutil.copy(self.rootfs_path, self.tmp_path)
+        if fs_type == 'EXT3FS':
+            self.create_ext3fs_file(os.path.join(self.tmp_path, 'ext3fs.img'), 100)
         self.umount_container()
         self.delete_rootfs()
         print "LiveUsbImage: Finished!"
