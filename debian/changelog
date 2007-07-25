@@ -1,32 +1,23 @@
-moblin-image-creator (0.12) UNRELEASED; urgency=low
-
-  * Updated the Menlow fsets and apt sources to mirror the changes in McCaslin.
-
- -- Rob Rhoads <rob@afuente.jf.intel.com>  Tue, 24 Jul 2007 15:38:40 -0700
-
-moblin-image-creator (0.11) UNRELEASED; urgency=low
-
-  [ Rob Rhoads ]
-  * Fixed the initramfs hooks file to properly install the menlow usb and disk scripts.
-
-  [ John L. Villalovos ]
-  * Fixed mispelled path
-  * Fix for missing /var/cache/apt/archives/partial issue.  Now check in both
-    the update and install functions.
-
- -- John L. Villalovos <john.l.villalovos@intel.com>  Tue, 24 Jul 2007 15:47:57 -0700
-
 moblin-image-creator (0.10) UNRELEASED; urgency=low
 
+  [ Rob Rhoads ]
+  * Fixed the initramfs hooks file to properly install the menlow usb and
+    disk scripts.
+  * Updated the Menlow fsets and apt sources to mirror the changes in
+    McCaslin.
+
   [ Rusty Lynch ]
-  * Added a feature where apt-get install's will retry on failure for
-    up to 10 times, with a 'apt-get update' between each attempt.
-    This should resolve bug #2
+  * Added a feature where apt-get install's will retry on failure for up
+    to 10 times, with a 'apt-get update' between each attempt.  This
+    should resolve bug #2
 
   [ John L. Villalovos ]
   * Trying to fix the issue with multiple mounting occuring
-  * Fix problem the existed in the execCommand function where not all of the
-    output would be returned.
+  * Fix problem the existed in the execCommand function where not all of
+    the output would be returned.
+  * Fixed mispelled path
+  * Fix for missing /var/cache/apt/archives/partial issue.  Now check in
+    both the update and install functions.
 
  -- John L. Villalovos <john.l.villalovos@intel.com>  Tue, 24 Jul 2007 12:13:32 -0700
 
