@@ -108,24 +108,13 @@ def execCommand(cmd_line, quiet = False, output = None, callback = None):
                     print line
             elif callback:
                 callback(p)
-        # Now have to check if any output is left over
         if output != None:
-            while True:
-                result_list = pl.poll(10)
-                if not result_list:
-                    break
-                found = False
-                for fd, event in result_list:
-                    if (event & (select.POLLIN | select.POLLPRI)):
-                        found = True
-                if found:
-                    line = p.stdout.readline()
-                    line = line.rstrip()
-                    output.append(line)
-                    if not quiet:
-                        print line
-                else:
-                    break
+            # Now check if any output is left over
+            for line in p.stdout.readlines():
+                line = line.rstrip()
+                output.append(line)
+                if not quiet:
+                    print line
         result = p.returncode
         return result
 

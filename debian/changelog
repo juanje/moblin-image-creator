@@ -1,8 +1,13 @@
 moblin-image-creator (0.11) UNRELEASED; urgency=low
 
+  [ Rob Rhoads ]
   * Fixed a copy-and-paste error is the description of the crown beach fset.
 
- -- Rob Rhoads <rob@afuente.jf.intel.com>  Wed, 25 Jul 2007 09:58:32 -0700
+  [ John L. Villalovos ]
+  * Change execCommand() function.  I think this simpler method will work just
+    as well.
+
+ -- John L. Villalovos <john.l.villalovos@intel.com>  Wed, 25 Jul 2007 12:48:06 -0700
 
 moblin-image-creator (0.10) gutsy; urgency=low
 
