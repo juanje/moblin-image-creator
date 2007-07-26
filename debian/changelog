@@ -1,7 +1,13 @@
 moblin-image-creator (0.12) UNRELEASED; urgency=low
 
-  * matchbox-keyboard-toggler is now called matchbox-keyboard-manager.
+  [ Rob Rhoads ]
+  * Modified the menlow fset by breaking out kernel from the "Core" and
+    adding new fsets for the moblin.org and Ubuntu kernels. For now, the 
+    Ubuntu kernel continues to be installed by default.
 
+  [ Tollef Fog Heen ]
+  * matchbox-keyboard-toggler is now called moblin-keyboard-manager.
+    
  -- Tollef Fog Heen <tfheen@ubuntu.com>  Thu, 26 Jul 2007 17:42:40 +0200
 
 moblin-image-creator (0.11) gutsy; urgency=low
