@@ -1,3 +1,12 @@
+moblin-image-creator (0.12) UNRELEASED; urgency=low
+
+  * Modified the menlow fset by breaking out kernel from the "Core" and
+    adding new fsets for the moblin.org and Ubuntu kernels. For now, the 
+    Ubuntu kernel continues to be installed by default.
+
+
+ -- Rob Rhoads <rob@afuente.jf.intel.com>  Thu, 26 Jul 2007 10:45:27 -0700
+
 moblin-image-creator (0.11) gutsy; urgency=low
 
   [ Rob Rhoads ]
