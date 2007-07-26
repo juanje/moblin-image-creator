@@ -8,12 +8,24 @@ DEPS=crownbeach-full-mobile-stack
 DESC=Virtual Fset that installs the standard mobile stack
 PKGS=
 DEBUG_PKGS=
-DEPS=core crownbeach-config ubuntu-mobile
+DEPS=ubuntu-kernel core crownbeach-config ubuntu-mobile
+
+[Moblin-CrownBeach-Full-Mobile-Stack-with-Proprietary]
+DESC=The full Crown Beach stack, including proprietary (non-redistributable bits)
+PKGS=flashplugin-nonfree
+DEBUG_PKGS=
+DEPS=moblin-crownbeach-full-mobile-stack
+
+[Moblin-CrownBeach-Full-Mobile-Stack]
+DESC=Virtual Fset that installs the standard mobile stack
+PKGS=
+DEBUG_PKGS=
+DEPS=moblin-kernel core crownbeach-config ubuntu-mobile
 
 [Moblin-Kernel]
 DESC=Moblin Kernel Fset
 PKGS=linux-menlow-default
-DEBUG_PKGS=linux-menlow-default
+DEBUG_PKGS=linux-menlow-developer
 DEPS=
 
 [Ubuntu-Kernel]
