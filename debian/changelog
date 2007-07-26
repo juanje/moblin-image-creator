@@ -7,7 +7,11 @@ moblin-image-creator (0.11) UNRELEASED; urgency=low
   * Change execCommand() function.  I think this simpler method will work just
     as well.
 
- -- John L. Villalovos <john.l.villalovos@intel.com>  Wed, 25 Jul 2007 12:48:06 -0700
+  [ Tollef Fog Heen ]
+  * Don't bind-mount /proc and /sys, that appears to sometimes blow up in
+    interesting ways in some chroots.
+
+ -- Tollef Fog Heen <tfheen@ubuntu.com>  Thu, 26 Jul 2007 14:34:12 +0200
 
 moblin-image-creator (0.10) gutsy; urgency=low
 

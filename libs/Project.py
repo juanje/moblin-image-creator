@@ -81,12 +81,21 @@ class FileSystem(object):
                 os.makedirs(dirname)
 
     def mount(self):
-        for mnt in ['var/cache/apt/archives', 'tmp', 'proc', 'sys', 'usr/share/pdk']:
+        for mnt in ['var/cache/apt/archives', 'tmp', 'usr/share/pdk']:
             path = os.path.join(self.path, mnt)
             if not os.path.isdir(path):
                 os.makedirs(path)
             if not pdk_utils.ismount(path) and os.path.isdir(os.path.join('/', mnt)):
                 result = os.system('mount --bind /%s %s' % (mnt, path))
+                if result != 0:
+                    raise OSError("Internal error while attempting to bind mount /%s!" % (mnt))
+
+        for (mnt, fstype) in [('proc', 'proc'), ('sys', 'sysfs')]:
+            path = os.path.join(self.path, mnt)
+            if not os.path.isdir(path):
+                os.makedirs(path)
+            if not pdk_utils.ismount(path) and os.path.isdir(os.path.join('/', mnt)):
+                result = os.system('mount -t %s %s %s' % (fstype, mnt, path))
                 if result != 0:
                     raise OSError("Internal error while attempting to bind mount /%s!" % (mnt))
 
