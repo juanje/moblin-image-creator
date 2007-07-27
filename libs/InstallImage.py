@@ -237,6 +237,13 @@ class InstallImage(object):
             self.project.chroot("/bin/ln", args)
         self.project.chroot("/usr/sbin/mkinitramfs", "-d %s -o %s %s" % (os.path.join('/usr/share/pdk/platforms', self.project.platform.name, 'initramfs'), initrd_file, tmp[1]))
 
+    def create_grub_menu(self):
+        # remove previous menu.lst, since we are about to create one
+        self.target.chroot("/bin/rm", " -f /boot/grub/menu.lst")
+        self.target.chroot("/bin/mkdir", " -p /boot/grub")
+        self.target.chroot("/usr/sbin/update-grub", " -y")
+        self.target.chroot("/bin/sed", " s/\\/boot\\//\\//g -i /boot/grub/menu.lst")
+
     def __str__(self):
         return ("<InstallImage: project=%s, target=%s, name=%s>"
                 % (self.project, self.target, self.name))
@@ -349,6 +356,7 @@ class InstallUsbImage(BaseUsbImage):
     def create_image(self):
         print "InstallUsbImage: Creating InstallUSB Image..."
         self.create_initramfs('/tmp/.tmp.initrd')
+        self.create_grub_menu()
         self.apply_hd_kernel_cmdline()
         self.create_rootfs()
         self.create_bootfs()
@@ -373,7 +381,7 @@ class InstallUsbImage(BaseUsbImage):
         print "         This includes ALL partitions on the disk!\n"
         
     def apply_hd_kernel_cmdline(self):
-        cmd = "sed -e 's/^\\tkernel \\([/a-zA-Z0-9._-]*\\).*/\\tkernel \\1 %s/g' -i %s" % (self.project.get_target_hd_kernel_cmdline(self.target.name), os.path.join(self.target.fs_path, 'boot', 'grub', 'grub.conf'))
+        cmd = "sed -e 's/^\\s*kernel\\s*\\([/a-zA-Z0-9._-]*\\).*/kernel \\t\\t\\1 %s/g' -i %s" % (self.project.get_target_hd_kernel_cmdline(self.target.name), os.path.join(self.target.fs_path, 'boot', 'grub', 'menu.lst'))
         print cmd
         print os.popen(cmd).readlines()
         print "grub.conf kernel cmdline changed"
