@@ -222,7 +222,9 @@ class Project(FileSystem):
                 source_dir = os.path.join(self.platform.path, 'sources')
                 for f in os.listdir(source_dir):
                     source_path = os.path.join(source_dir, f)
-                    shutil.copy(source_path, os.path.join(install_path, 'etc', 'apt', 'sources.list.d'))
+                    dest_path = os.path.join(install_path, 'etc', 'apt', 'sources.list.d', f)
+                    pdk_utils.copySourcesListFile(source_path, dest_path)
+#                    shutil.copy(source_path, os.path.join(install_path, 'etc', 'apt', 'sources.list.d'))
                 source_path = os.path.join(self.platform.path, 'preferences')
                 if os.path.exists(source_path):
                     shutil.copy(source_path, os.path.join(install_path, 'etc', 'apt'))

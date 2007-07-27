@@ -1,17 +1,22 @@
 moblin-image-creator (0.14) UNRELEASED; urgency=low
 
+  [ Rob Rhoads ]
   * Fixing debian changelog to account for the following changes from Alek Du...
-  * Needn't to keep target's /usr/share/pdk mount, since mksquashfs runs in 
+  * Needn't to keep target's /usr/share/pdk mount, since mksquashfs runs in
     project's jail root not target's
   * Keep /usr/share/pdk mounted while making squashfs, because mksquashfs needs
     the initramfs dir in /usr/share/pdk/platform/ ...
-  * For menlow platform, our kernel-mid does not use libata yet. so the PATA 
+  * For menlow platform, our kernel-mid does not use libata yet. so the PATA
     dev nodes still are hda1 hda2, etc. So I have to modify disk scripts in this ugl
-  * umount target fs's /proc & /sys file system before making squashfs, otherwize 
+  * umount target fs's /proc & /sys file system before making squashfs, otherwize
     mksquash will encounter errors, since there are now not bind mounted. :-(
   * Add update-grub to image creator to generate menu.lst on the fly.
 
- -- Rob Rhoads <rob@afuente.jf.intel.com>  Fri, 27 Jul 2007 10:24:20 -0700
+  [ John L. Villalovos ]
+  * Allow the use of a ~/.image-creator/platforms.cfg file to set the
+    buildroot_mirror, target_mirror.
+
+ -- John L. Villalovos <john.l.villalovos@intel.com>  Fri, 27 Jul 2007 15:42:29 -0700
 
 moblin-image-creator (0.13) UNRELEASED; urgency=low
 

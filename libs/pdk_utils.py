@@ -25,6 +25,20 @@ import select
 import subprocess
 import sys
 
+# this is for the copySourcesListFile() function
+if os.path.isdir(os.path.expanduser("~/.image-creator")):
+    sources_regex_file = os.path.expanduser("~/.image-creator/sources_cfg")
+    if os.path.isfile(sources_regex_file):
+        global_dict = {}
+        try:
+            execfile(sources_regex_file, global_dict)
+            if 'sources_regex' in global_dict:
+                src_regex = global_dict['sources_regex']
+        except:
+            src_regex = None
+else:
+    src_regex = None
+
 def main():
     # Add something to exercise this code
     print "USB devices: %s" % get_current_udisks()
@@ -117,6 +131,21 @@ def execCommand(cmd_line, quiet = False, output = None, callback = None):
                     print line
         result = p.returncode
         return result
+
+def copySourcesListFile(sourcefile, destfile):
+    """The purpose of this function is allow the user to be able to point at a
+    local repository for some of the sources, rather than going out over the
+    Internet"""
+    in_file = open(sourcefile, 'r')
+    out_file = open(destfile, 'w')
+    for line in in_file:
+        if type(src_regex) == type([]):
+            for regex, sub in src_regex:
+                line = re.sub(regex, sub, line)
+        out_file.write(line)
+    in_file.close()
+    out_file.close()
+
 
 if '__main__' == __name__:
     sys.exit(main())

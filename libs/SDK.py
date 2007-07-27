@@ -239,6 +239,7 @@ class SDK(object):
             # to claim the apt repository is corrupt.  This trick will
             # force up to 10 attempts before bailing out with an error
             while count < 10:
+                print "Executing: %s" % cmd
                 result = pdk_utils.execCommand(cmd, output = output, callback = self.cb.iteration)
                 if result == 0:
                     break;
@@ -247,8 +248,12 @@ class SDK(object):
                 shutil.rmtree(install_path)
                 raise ValueError(" ".join(output))
             os.system('rm -fR %s/var/cache/apt/archives/*.dev' % (install_path))
-            for f in os.listdir(os.path.join(platform.path, 'sources')):
-                shutil.copy(os.path.join(platform.path, 'sources', f), os.path.join(install_path, 'etc', 'apt', 'sources.list.d'))
+            source_dir = os.path.join(platform.path, 'sources')
+            for f in os.listdir(source_dir):
+                source_path = os.path.join(source_dir, f)
+                dest_path = os.path.join(install_path, 'etc', 'apt', 'sources.list.d', f)
+                pdk_utils.copySourcesListFile(source_path, dest_path)
+                # shutil.copy(os.path.join(platform.path, 'sources', f), os.path.join(install_path, 'etc', 'apt', 'sources.list.d'))
             if use_rootstrap:
                 cmd = "tar -jcpvf %s -C %s ." % (rootstrap, install_path)
                 output = []

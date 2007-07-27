@@ -16,6 +16,7 @@
 #    with this program; if not, write to the Free Software Foundation, Inc., 59
 #    Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
+import ConfigParser
 import os
 import re
 import sys
@@ -61,6 +62,7 @@ class Platform(object):
                     self.buildroot_packages.append(p)
         config.close()
         # determine what mirror to use for the buildroot
+        print os.path.join(self.path, 'buildroot_mirror')
         if os.path.isfile(os.path.join(self.path, 'buildroot_mirror')):
             t = open(os.path.join(self.path, 'buildroot_mirror'))
             self.buildroot_mirror = t.readline()
@@ -101,6 +103,15 @@ class Platform(object):
             if not re.search(r'^\s*#',line):
                 self.hd_kernel_cmdline += line + ' '
         config.close()
+        config_file = os.path.expanduser("~/.image-creator/platforms.cfg")
+        if os.path.isfile(config_file):
+            config = ConfigParser.SafeConfigParser()
+            config.read(config_file)
+            if config.has_section(name):
+                for cfg_option in [ 'buildroot_mirror', 'buildroot_codename',
+                    'target_mirror', 'target_codename' ]:
+                    if config.has_option(name, cfg_option):
+                        setattr(self, cfg_option, config.get(name, cfg_option))
 
     def __str__(self):
         return ("<Platform Object: \n\tname=%s, \n\tfset=%s, \n\tbuildroot_packages=%s>\n" %
