@@ -130,11 +130,12 @@ class FileSystem(object):
             buildstamp.close()
             self.chroot("/usr/bin/apt-get", "update")
                 
-    def umount(self):
+    def umount(self, keep_mount=''):
         for line in os.popen('mount', 'r').readlines():
             mpoint = line.split()[2]
-            if self.path == mpoint[:len(self.path)]:
-                os.system("umount %s" % (mpoint))
+            if not line.split()[0] == keep_mount:
+                if self.path == mpoint[:len(self.path)]:
+                    os.system("umount %s" % (mpoint))
 
     def chroot(self, cmd_path, cmd_args, output = None):
         if not os.path.isfile(os.path.join(self.path, 'bin/bash')):
