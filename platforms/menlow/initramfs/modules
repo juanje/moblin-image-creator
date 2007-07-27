@@ -4,6 +4,8 @@ usbhid
 ehci-hcd
 uhci-hcd
 ide-core
+ide-disk
+ide-generic
 scsi_mod
 sd_mod
 libusual
