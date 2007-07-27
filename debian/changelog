@@ -15,8 +15,9 @@ moblin-image-creator (0.14) UNRELEASED; urgency=low
   [ John L. Villalovos ]
   * Allow the use of a ~/.image-creator/platforms.cfg file to set the
     buildroot_mirror, target_mirror.
+  * Delete extra print output
 
- -- John L. Villalovos <john.l.villalovos@intel.com>  Fri, 27 Jul 2007 15:42:29 -0700
+ -- John L. Villalovos <john.l.villalovos@intel.com>  Fri, 27 Jul 2007 16:33:29 -0700
 
 moblin-image-creator (0.13) UNRELEASED; urgency=low
 

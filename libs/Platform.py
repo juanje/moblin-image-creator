@@ -62,7 +62,6 @@ class Platform(object):
                     self.buildroot_packages.append(p)
         config.close()
         # determine what mirror to use for the buildroot
-        print os.path.join(self.path, 'buildroot_mirror')
         if os.path.isfile(os.path.join(self.path, 'buildroot_mirror')):
             t = open(os.path.join(self.path, 'buildroot_mirror'))
             self.buildroot_mirror = t.readline()

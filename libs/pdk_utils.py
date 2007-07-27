@@ -139,10 +139,11 @@ def copySourcesListFile(sourcefile, destfile):
     in_file = open(sourcefile, 'r')
     out_file = open(destfile, 'w')
     for line in in_file:
+        line=line.strip()
         if type(src_regex) == type([]):
             for regex, sub in src_regex:
                 line = re.sub(regex, sub, line)
-        out_file.write(line)
+        print >> out_file, line
     in_file.close()
     out_file.close()
 
