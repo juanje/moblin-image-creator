@@ -219,7 +219,23 @@ class InstallImage(object):
         image_path   = self.target.image_path[len(self.project.path):]
         image_path   = os.path.join(image_path,'bootfs.img')
         cmd_args     = "%s %s" % (fs_path, image_path)
-        self.create_initramfs(os.path.join(fs_path, 'initrd.img'))
+
+
+        # Remove old initrd images
+        for file in os.listdir(os.path.join(self.target.fs_path, 'boot')):
+            if file.find('initrd.img') == 0:
+                os.remove(os.path.join(self.target.fs_path, 'boot', file))
+        
+        kernels = self.kernels
+        kernels.append(self.default_kernel)
+
+        # Genereate initrd for each installed kernel
+        for k in kernels:
+            version_str = k.split('vmlinuz-').pop().strip()
+            kernel_mod_path = os.path.join(self.target.fs_path, 'lib', 'modules', version_str)
+            initrd_name = "initrd.img-" + version_str
+            self.create_initramfs(os.path.join(fs_path, initrd_name), kernel_mod_path)
+
         self.project.chroot("/usr/sbin/mksquashfs", cmd_args)
 
     def delete_bootfs(self):
@@ -231,12 +247,14 @@ class InstallImage(object):
     def create_install_script(self, path):
         shutil.copy(os.path.join(self.project.platform.path, 'install.sh'), path)
 
-    def create_initramfs(self, initrd_file, fs_type='RAMFS'):
-        tmp = self.default_kernel_mod_path.split("/targets/%s/fs" % (self.target.name))
+    def create_initramfs(self, initrd_file, kernel_mod_path, fs_type='RAMFS'):
+        tmp = kernel_mod_path.split("/targets/%s/fs" % (self.target.name))
         link = "%s%s" % (tmp[0], tmp[1])
+
         if not os.path.lexists(link):
             args = "-s %s %s" % ("/targets/%s/fs%s" % (self.target.name, tmp[1]), tmp[1])
             self.project.chroot("/bin/ln", args)
+
         self.project.chroot("/usr/sbin/mkinitramfs", "-d %s -o %s %s" % (os.path.join('/usr/share/pdk/platforms', self.project.platform.name, 'initramfs'), initrd_file, tmp[1]))
 
     def create_grub_menu(self):
@@ -330,7 +348,7 @@ class BaseUsbImage(InstallImage):
 class LiveUsbImage(BaseUsbImage):
     def create_image(self, fs_type='RAMFS'):
         print "LiveUsbImage: Creating LiveUSB Image(%s) Now..." % fs_type
-        self.create_initramfs('/tmp/.tmp.initrd', fs_type)
+        self.create_initramfs('/tmp/.tmp.initrd', self.default_kernel_mod_path, fs_type)
         self.create_rootfs()
         initrd_stat_result = os.stat('/tmp/.tmp.initrd')
         rootfs_stat_result = os.stat(self.rootfs_path)
@@ -357,11 +375,11 @@ class LiveUsbImage(BaseUsbImage):
 class InstallUsbImage(BaseUsbImage):
     def create_image(self):
         print "InstallUsbImage: Creating InstallUSB Image..."
-        self.create_initramfs('/tmp/.tmp.initrd')
+        self.create_initramfs('/tmp/.tmp.initrd', self.default_kernel_mod_path)
         self.create_grub_menu()
         self.apply_hd_kernel_cmdline()
-        self.create_rootfs()
         self.create_bootfs()
+        self.create_rootfs()
         initrd_stat_result = os.stat('/tmp/.tmp.initrd')
         rootfs_stat_result = os.stat(self.rootfs_path)
         bootfs_stat_result = os.stat(self.bootfs_path)
