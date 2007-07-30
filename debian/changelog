@@ -1,3 +1,10 @@
+moblin-image-creator (0.17) UNRELEASED; urgency=low
+
+  * To set moblin kernel as default booting kernel both for live (Syslinux) and install image (Grub) if moblin 
+kernel installed
+
+ -- alek <alek@xyd.sh.intel.com>  Mon, 30 Jul 2007 17:20:06 +0800
+
 moblin-image-creator (0.16) UNRELEASED; urgency=low
 
   * Fixed Menlow Core Fset to fix ubuntu kernel always install issue

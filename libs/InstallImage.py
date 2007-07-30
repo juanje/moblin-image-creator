@@ -118,13 +118,18 @@ class InstallImage(object):
         self.rootfs = ''
         self.rootfs_path = ''
         self.kernels = []
+        self.default_kernel = ''
         for file in os.listdir(os.path.join(self.target.fs_path, 'boot')):
             if file.find('vmlinuz') == 0:
-                self.kernels.append(file)
-        if not self.kernels:
-            raise ValueError("no kernels were found")
+                if (not self.default_kernel) and (file.find('default') > 0):
+                    self.default_kernel = file
+                else:
+                    self.kernels.append(file)
+        if (not self.kernels) and (not self.default_kernel):
+                raise ValueError("no kernels were found")
         self.kernels.sort()
-        self.default_kernel = self.kernels.pop(0)
+        if not self.default_kernel:
+            self.default_kernel = self.kernels.pop(0)
         self.default_kernel_mod_path = os.path.join(self.target.fs_path, 'lib', 'modules', self.default_kernel.split('vmlinuz-').pop().strip())
         self.exclude_file = os.path.join(self.project.platform.path, 'exclude')
 
@@ -266,6 +271,18 @@ class InstallImage(object):
         self.target.chroot("/bin/mkdir", " -p /boot/grub")
         self.target.chroot("/usr/sbin/update-grub", " -y")
         self.target.chroot("/bin/sed", " s/\\/boot\\//\\//g -i /boot/grub/menu.lst")
+        menu=open(os.path.join(self.target.fs_path,"boot","grub","menu.lst"),'r')
+        order = 0;
+        for line in menu:
+            if line.find('title') == 0:
+                print line
+                if line.find(self.default_kernel.split('vmlinuz-').pop().strip()) > 0:
+                    cmd=" s/^default.*/default\\t\\t%d/g -i /boot/grub/menu.lst" % order
+                    print "/bin/sed %s" % cmd
+                    self.target.chroot("/bin/sed", cmd)
+                    break;
+                order = order +1
+        menu.close()
 
     def __str__(self):
         return ("<InstallImage: project=%s, target=%s, name=%s>"
