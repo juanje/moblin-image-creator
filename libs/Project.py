@@ -292,7 +292,15 @@ class Project(FileSystem):
     def delete_target(self, name, do_pop=True):
         target = self.targets[name]
         target.umount()
-        shutil.rmtree(os.path.join(self.path, 'targets', name))
+        while True:
+            try:
+                shutil.rmtree(os.path.join(self.path, 'targets', name))
+                break
+            except OSError, e:
+                if e.errno == 16:
+                    os.system("umount %s" % (e.filename))
+                else:
+                    raise OSError, e
         if do_pop:
             self.targets.pop(name)
         
