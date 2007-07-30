@@ -1,7 +1,15 @@
+moblin-image-creator (0.18) UNRELEASED; urgency=low
+
+  * Fixed a error where lib/modules link to target fs should be created every time, if not, when the first target 
+    fs is removed, then image creator could not generate correct initrd image anymore, since the symbol link 
+    points to non-existence dir. 
+
+ -- alek <alek@xyd.sh.intel.com>  Mon, 30 Jul 2007 21:06:24 +0800
+
 moblin-image-creator (0.17) UNRELEASED; urgency=low
 
   * To set moblin kernel as default booting kernel both for live (Syslinux) and install image (Grub) if moblin 
-kernel installed
+    kernel installed
 
  -- alek <alek@xyd.sh.intel.com>  Mon, 30 Jul 2007 17:20:06 +0800
 

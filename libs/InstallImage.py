@@ -259,9 +259,10 @@ class InstallImage(object):
         tmp = kernel_mod_path.split("/targets/%s/fs" % (self.target.name))
         link = "%s%s" % (tmp[0], tmp[1])
 
-        if not os.path.lexists(link):
-            args = "-s %s %s" % ("/targets/%s/fs%s" % (self.target.name, tmp[1]), tmp[1])
-            self.project.chroot("/bin/ln", args)
+        if os.path.lexists(link):
+            self.project.chroot("/bin/rm", tmp[1])
+        args = "-s %s %s" % ("/targets/%s/fs%s" % (self.target.name, tmp[1]), tmp[1])
+        self.project.chroot("/bin/ln", args)
 
         self.project.chroot("/usr/sbin/mkinitramfs", "-d %s -o %s %s" % (os.path.join('/usr/share/pdk/platforms', self.project.platform.name, 'initramfs'), initrd_file, tmp[1]))
 
