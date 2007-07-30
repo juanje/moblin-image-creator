@@ -226,7 +226,10 @@ class InstallImage(object):
             if file.find('initrd.img') == 0:
                 os.remove(os.path.join(self.target.fs_path, 'boot', file))
         
-        kernels = self.kernels
+        # Can not use kernels=self.kernels here, since list type assignment will share mem storage, and then append to kernels will cause append to self.kernels also
+        kernels = []
+        for k in self.kernels:
+            kernels.append(k)
         kernels.append(self.default_kernel)
 
         # Genereate initrd for each installed kernel
