@@ -15,7 +15,10 @@ moblin-image-creator (0.18) UNRELEASED; urgency=low
   [ Rusty Lynch ]
   * Adding some more basic gstreamers codecs
 
- -- Rusty Lynch <rusty@rusty-laptop>  Mon, 30 Jul 2007 17:56:28 -0700
+  [ John L. Villalovos ]
+  * Fix for Bug 40, issue with src_regex being undefined
+
+ -- John L. Villalovos <john.l.villalovos@intel.com>  Mon, 30 Jul 2007 20:30:54 -0700
 
 moblin-image-creator (0.17) UNRELEASED; urgency=low
 

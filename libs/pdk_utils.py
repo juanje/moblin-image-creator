@@ -26,6 +26,7 @@ import subprocess
 import sys
 
 # this is for the copySourcesListFile() function
+src_regex = None
 if os.path.isdir(os.path.expanduser("~/.image-creator")):
     sources_regex_file = os.path.expanduser("~/.image-creator/sources_cfg")
     if os.path.isfile(sources_regex_file):
@@ -34,10 +35,6 @@ if os.path.isdir(os.path.expanduser("~/.image-creator")):
             execfile(sources_regex_file, global_dict)
             if 'sources_regex' in global_dict:
                 src_regex = global_dict['sources_regex']
-        except:
-            src_regex = None
-else:
-    src_regex = None
 
 def main():
     # Add something to exercise this code
