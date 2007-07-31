@@ -64,6 +64,7 @@ class SyslinuxCfg(object):
 
     def add_default(self, kernel, append = 'initrd=initrd.img'):
         label = 'linux'
+        append = re.sub(r'initrd.img',"initrd0.img", append)
         kernel_file = 'vmlinuz'
 
         # Add the default entry to the syslinux config file
@@ -84,6 +85,7 @@ class SyslinuxCfg(object):
     def add_target(self, kernel, append = 'initrd=initrd.img'):
         label = "linux%s" % self.index
         kernel_file = "linux%s" % self.index
+        append = re.sub(r'initrd.img',"initrd%d.img" % self.index, append)
         self.index += 1
 
         # Add the target to the syslinux config file
@@ -225,25 +227,20 @@ class InstallImage(object):
         image_path   = os.path.join(image_path,'bootfs.img')
         cmd_args     = "%s %s" % (fs_path, image_path)
 
-
         # Remove old initrd images
         for file in os.listdir(os.path.join(self.target.fs_path, 'boot')):
             if file.find('initrd.img') == 0:
                 os.remove(os.path.join(self.target.fs_path, 'boot', file))
         
-        # Can not use kernels=self.kernels here, since list type assignment will share mem storage, and then append to kernels will cause append to self.kernels also
-        kernels = []
+        self.kernels.insert(0,self.default_kernel)
+        # copy pre-created initrd img (by create_all_initramfs) for each installed kernel
+        order = 0
         for k in self.kernels:
-            kernels.append(k)
-        kernels.append(self.default_kernel)
-
-        # Genereate initrd for each installed kernel
-        for k in kernels:
             version_str = k.split('vmlinuz-').pop().strip()
-            kernel_mod_path = os.path.join(self.target.fs_path, 'lib', 'modules', version_str)
             initrd_name = "initrd.img-" + version_str
-            self.create_initramfs(os.path.join(fs_path, initrd_name), kernel_mod_path)
-
+            shutil.copy("/tmp/.tmp.initrd%d" % order, os.path.join(self.target.fs_path, 'boot', initrd_name))
+            order += 1
+        self.kernels.pop(0)
         self.project.chroot("/usr/sbin/mksquashfs", cmd_args)
 
     def delete_bootfs(self):
@@ -254,6 +251,14 @@ class InstallImage(object):
 
     def create_install_script(self, path):
         shutil.copy(os.path.join(self.project.platform.path, 'install.sh'), path)
+
+    def create_all_initramfs(self, fs_type='RAMFS'):
+        self.kernels.insert(0, self.default_kernel)
+        order=0;
+        for k in self.kernels:            
+            self.create_initramfs("/tmp/.tmp.initrd%d" % order, os.path.join(self.target.fs_path, 'lib', 'modules', k.split('vmlinuz-').pop().strip()), fs_type)
+            order += 1;
+        self.kernels.pop(0)
 
     def create_initramfs(self, initrd_file, kernel_mod_path, fs_type='RAMFS'):
         tmp = kernel_mod_path.split("/targets/%s/fs" % (self.target.name))
@@ -369,17 +374,22 @@ class BaseUsbImage(InstallImage):
 class LiveUsbImage(BaseUsbImage):
     def create_image(self, fs_type='RAMFS'):
         print "LiveUsbImage: Creating LiveUSB Image(%s) Now..." % fs_type
-        self.create_initramfs('/tmp/.tmp.initrd', self.default_kernel_mod_path, fs_type)
+        self.create_all_initramfs(fs_type)
         self.create_rootfs()
-        initrd_stat_result = os.stat('/tmp/.tmp.initrd')
+        initrd_stat_result = os.stat('/tmp/.tmp.initrd0')
         rootfs_stat_result = os.stat(self.rootfs_path)
         size = ((rootfs_stat_result.st_size + initrd_stat_result.st_size) / (1024 * 1024)) + 64
         if fs_type == 'EXT3FS':
            size = size + 100
         self.create_container_file(size)
         self.mount_container()
-        initrd_path = os.path.join(self.tmp_path, 'initrd.img')
-        shutil.move('/tmp/.tmp.initrd', initrd_path)
+        self.kernels.insert(0,self.default_kernel)
+        order = 0;
+        for k in self.kernels:            
+            initrd_path = os.path.join(self.tmp_path, "initrd%d.img" % order)
+            shutil.move("/tmp/.tmp.initrd%d" % order, initrd_path)
+            order += 1;
+        self.kernels.pop(0)
         self.install_kernels()
         shutil.copy(self.rootfs_path, self.tmp_path)
         if fs_type == 'EXT3FS':
@@ -396,19 +406,24 @@ class LiveUsbImage(BaseUsbImage):
 class InstallUsbImage(BaseUsbImage):
     def create_image(self):
         print "InstallUsbImage: Creating InstallUSB Image..."
-        self.create_initramfs('/tmp/.tmp.initrd', self.default_kernel_mod_path)
+        self.create_all_initramfs()
         self.create_grub_menu()
         self.apply_hd_kernel_cmdline()
         self.create_bootfs()
         self.create_rootfs()
-        initrd_stat_result = os.stat('/tmp/.tmp.initrd')
+        initrd_stat_result = os.stat('/tmp/.tmp.initrd0')
         rootfs_stat_result = os.stat(self.rootfs_path)
         bootfs_stat_result = os.stat(self.bootfs_path)
         size = ((rootfs_stat_result.st_size + bootfs_stat_result.st_size + initrd_stat_result.st_size) / (1024 * 1024)) + 64
         self.create_container_file(size)
         self.mount_container()
-        initrd_path = os.path.join(self.tmp_path, 'initrd.img')
-        shutil.move('/tmp/.tmp.initrd', initrd_path)
+        self.kernels.insert(0,self.default_kernel)
+        order = 0;
+        for k in self.kernels:            
+            initrd_path = os.path.join(self.tmp_path, "initrd%d.img" % order)
+            shutil.move("/tmp/.tmp.initrd%d" % order, initrd_path)
+            order += 1;
+        self.kernels.pop(0)
         self.install_kernels()
         shutil.copy(self.rootfs_path, self.tmp_path)
         shutil.copy(self.bootfs_path, self.tmp_path)

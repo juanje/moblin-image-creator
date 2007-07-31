@@ -1,3 +1,12 @@
+moblin-image-creator (0.18ubuntu1) feisty; urgency=low
+
+  * Fixed a bug where all kernel on USB dongle shared default kernel's initrd image file.
+    Changed it to the way same as HD initrd image creation.
+  * Change it to a better way to create USB and HD initrd images. We only create them once now. Previously we need to
+    call create_initramfs at least twice
+
+ -- alek <alek@xyd.sh.intel.com>  Tue, 31 Jul 2007 17:06:25 +0800
+
 moblin-image-creator (0.18) UNRELEASED; urgency=low
 
   [ alek ]
