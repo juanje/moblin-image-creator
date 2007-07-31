@@ -1,18 +1,13 @@
-moblin-image-creator (0.18ubuntu1) feisty; urgency=low
-
-  * Fixed a bug where all kernel on USB dongle shared default kernel's initrd image file.
-    Changed it to the way same as HD initrd image creation.
-  * Change it to a better way to create USB and HD initrd images. We only create them once now. Previously we need to
-    call create_initramfs at least twice
-
- -- alek <alek@xyd.sh.intel.com>  Tue, 31 Jul 2007 17:06:25 +0800
-
 moblin-image-creator (0.18) UNRELEASED; urgency=low
 
   [ alek ]
   * Fixed a error where lib/modules link to target fs should be created every time, if not, when the first target
     fs is removed, then image creator could not generate correct initrd image anymore, since the symbol link
     points to non-existence dir.
+  * Fixed a bug where all kernel on USB dongle shared default kernel's initrd image file.
+    Changed it to the way same as HD initrd image creation.
+  * Change it to a better way to create USB and HD initrd images. We only create them once now. Previously we need to
+    call create_initramfs at least twice
 
   [ John L. Villalovos ]
   * Fix Bug 15.  Unable to delete the samsung target.  Discovered that the
