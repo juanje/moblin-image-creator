@@ -17,8 +17,9 @@ moblin-image-creator (0.18) UNRELEASED; urgency=low
 
   [ John L. Villalovos ]
   * Fix for Bug 40, issue with src_regex being undefined
+  * Fix minor syntax error
 
- -- John L. Villalovos <john.l.villalovos@intel.com>  Mon, 30 Jul 2007 20:30:54 -0700
+ -- John L. Villalovos <john.l.villalovos@intel.com>  Mon, 30 Jul 2007 23:39:19 -0700
 
 moblin-image-creator (0.17) UNRELEASED; urgency=low
 

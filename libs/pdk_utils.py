@@ -35,6 +35,8 @@ if os.path.isdir(os.path.expanduser("~/.image-creator")):
             execfile(sources_regex_file, global_dict)
             if 'sources_regex' in global_dict:
                 src_regex = global_dict['sources_regex']
+        except:
+            pass
 
 def main():
     # Add something to exercise this code
