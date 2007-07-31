@@ -16,6 +16,7 @@
 #    with this program; if not, write to the Free Software Foundation, Inc., 59
 #    Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
+import errno
 import glob
 import os
 import re
@@ -292,13 +293,20 @@ class Project(FileSystem):
     def delete_target(self, name, do_pop=True):
         target = self.targets[name]
         target.umount()
+        seen_paths = []
         while True:
             try:
                 shutil.rmtree(os.path.join(self.path, 'targets', name))
                 break
             except OSError, e:
-                if e.errno == 16:
-                    os.system("umount %s" % (e.filename))
+                # See if we get a resource busy error, if so we think it is a
+                # mounted filesystem issue
+                if e.errno == errno.EBUSY:
+                    if e.filename in seen_paths:
+                        raise OSError, e
+                    else:
+                        seen_paths.append(e.filename)
+                        os.system("umount %s" % (e.filename))
                 else:
                     raise OSError, e
         if do_pop:
