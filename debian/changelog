@@ -23,10 +23,11 @@ moblin-image-creator (0.18) UNRELEASED; urgency=low
   * Fix for Bug 40, issue with src_regex being undefined
   * Fix minor syntax error
 
-  [ alek ]
-  * Change linux-image-2.6.22-8-ume to linux-image-2.6.22-9-ume for Menlow fset
-
- -- alek <alek@xyd.sh.intel.com>  Wed,  1 Aug 2007 12:05:51 +0800
+  [ Tollef Fog Heen ]
+  * Make the ubuntu-kernel fset depend on linux-image-ume so it's
+    automatically kept up to date.
+  
+ -- Tollef Fog Heen <tfheen@ubuntu.com>  Wed, 01 Aug 2007 10:00:48 +0200
 
 moblin-image-creator (0.17) UNRELEASED; urgency=low
 
