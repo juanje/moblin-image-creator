@@ -30,7 +30,7 @@ DEPS=
 
 [Ubuntu-Kernel]
 DESC=Ubuntu Kernel Fset
-PKGS=grub linux-image-2.6.22-8-ume linux-ubuntu-modules-2.6.22-8-ume
+PKGS=grub linux-image-2.6.22-9-ume linux-ubuntu-modules-2.6.22-9-ume
 DEBUG_PKGS=
 DEPS=
 

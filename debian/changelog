@@ -23,7 +23,10 @@ moblin-image-creator (0.18) UNRELEASED; urgency=low
   * Fix for Bug 40, issue with src_regex being undefined
   * Fix minor syntax error
 
- -- John L. Villalovos <john.l.villalovos@intel.com>  Mon, 30 Jul 2007 23:39:19 -0700
+  [ alek ]
+  * Change linux-image-2.6.22-8-ume to linux-image-2.6.22-9-ume for Menlow fset
+
+ -- alek <alek@xyd.sh.intel.com>  Wed,  1 Aug 2007 12:05:51 +0800
 
 moblin-image-creator (0.17) UNRELEASED; urgency=low
 
