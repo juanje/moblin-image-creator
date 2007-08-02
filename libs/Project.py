@@ -70,7 +70,8 @@ class FileSystem(object):
             if ret == 0:
                 return
             retry_count = retry_count + 1
-            self.chroot("/usr/bin/apt-get", "update")
+            command = '-y --force-yes -o Dir::State=%(t)s/var/lib/apt -o Dir::State::status=%(t)s/var/lib/dpkg/status -o Dir::Cache=/var/cache/apt -o Dir::Etc::Sourcelist=%(t)s/etc/apt/sources.list -o Dir::Etc::main=%(t)s/etc/apt/apt.conf -o Dir::Etc::parts=%(t)s/etc/apt/apt.conf.d -o DPkg::Options::=--root=%(t)s -o DPkg::Run-Directory=%(t)s update ' % {'t': path}
+            self.chroot("/usr/bin/apt-get", command)
         raise OSError("Internal error while attempting to run: apt-get %s" % command)
 
     def aptgetPreCheck(self):
