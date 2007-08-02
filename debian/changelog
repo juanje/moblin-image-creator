@@ -4,8 +4,10 @@ moblin-image-creator (0.19) UNRELEASED; urgency=low
     install will do a 10x retry with an apt update between each try.  The
     problem with the last version of this fix was that the update was performed
     on the buildroot, not the target, so it wasn't solving anything.
+  * Fixed a bug where the install script was not stopping, waiting for
+    the user to reboot the system.
 
- -- Rusty Lynch <rusty@rusty-laptop>  Thu,  2 Aug 2007 08:48:18 -0700
+ -- Rusty Lynch <rusty@rusty-laptop>  Thu,  2 Aug 2007 12:53:30 -0700
 
 moblin-image-creator (0.18) gutsy; urgency=low
 
