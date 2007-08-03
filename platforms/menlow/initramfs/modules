@@ -6,6 +6,7 @@ uhci-hcd
 ide-core
 ide-disk
 ide-generic
+piix
 scsi_mod
 sd_mod
 libusual

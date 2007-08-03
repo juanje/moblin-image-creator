@@ -1,11 +1,16 @@
 moblin-image-creator (0.19) UNRELEASED; urgency=low
 
+  [ Rusty Lynch ]
   * Another attempt at fixing bug #2 (added in versino 0.10), where an fset
     install will do a 10x retry with an apt update between each try.  The
     problem with the last version of this fix was that the update was performed
     on the buildroot, not the target, so it wasn't solving anything.
 
- -- Rusty Lynch <rusty@rusty-laptop>  Thu,  2 Aug 2007 08:48:18 -0700
+  [ Jacob Pan ]
+  * Add missing PATA driver piix to initramfs such that PATA is enabled 
+    with DMA.
+
+ -- Jacob Pan <jacob.jun.pan@intel.com>  Fri,  3 Aug 2007 13:02:41 -0700
 
 moblin-image-creator (0.18) gutsy; urgency=low
 
