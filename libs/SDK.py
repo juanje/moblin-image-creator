@@ -239,10 +239,17 @@ class SDK(object):
             # to claim the apt repository is corrupt.  This trick will
             # force up to 10 attempts before bailing out with an error
             while count < 10:
+                count += 1
+                print "--------Platform rootstrap creation try: %s ----------" % count
                 print "Executing: %s" % cmd
                 result = pdk_utils.execCommand(cmd, output = output, callback = self.cb.iteration)
                 if result == 0:
+                    print "--------Platform rootstrap creation completed successfully ----------"
                     break;
+                print "--------Platform rootstrap creation failed result: %s ----------" % result
+                sleeptime = 10
+                print "--------For try: %s.  Sleeping for %s seconds... -----------------" % (count, sleeptime)
+                time.sleep(sleeptime)
             if result != 0:
                 print >> sys.stderr, "ERROR: Unable to generate project rootstrap!"
                 shutil.rmtree(install_path)

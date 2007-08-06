@@ -19,8 +19,14 @@ moblin-image-creator (0.19) UNRELEASED; urgency=low
     scripts, I believe.
   * Run our chroot command so that stdin is closed.  This will make sure that
     we don't hang, waiting for some process that is asking for input.
+  * Increment the try count and output some descriptive messages for the
+    rootstrap creation process.
+  * Try to clean up the update and install functions.  Have a single variable
+    that contains the big honkin' command line we use.  Also do some pausing
+    when things fail so people have a chance to read stuff before the next
+    iteration happens.
 
- -- John L. Villalovos <john.l.villalovos@intel.com>  Mon,  6 Aug 2007 11:13:24 -0700
+ -- John L. Villalovos <john.l.villalovos@intel.com>  Mon,  6 Aug 2007 16:12:00 -0700
 
 moblin-image-creator (0.18) gutsy; urgency=low
 
