@@ -144,15 +144,29 @@ class FileSystem(object):
             print >> sys.stderr, "Incomplete jailroot at %s" % (self.path)
             raise ValueError("Internal Error: Invalid buildroot at %s" % (self.path))
         self.mount()
+        self.disable_init_scripts()
+        if output == None:
+            output = []
         cmd_line = "chroot %s %s %s" % (self.path, cmd_path, cmd_args)
         result = pdk_utils.execCommand(cmd_line, output = output, callback = self.cb.iteration)
         if result != 0:
-            # This is probably redundant
-            sys.stdout.flush()
             print "Error in chroot"
             print "Command was: %s" % cmd_line
             sys.stdout.flush()
         return result
+
+    def disable_init_scripts(self):
+        # In debian if we have the file /usr/sbin/policy-rc.d, which just
+        # return the value 101.  Then package postinstall scripts are not
+        # supposed to run.
+        # http://people.debian.org/~hmh/invokerc.d-policyrc.d-specification.txt
+        filename = os.path.join(self.path, "usr/sbin/policy-rc.d")
+        if not os.path.exists(filename):
+            out_file = open(filename, 'w')
+            print >> out_file, "#!/bin/sh"
+            print >> out_file, "exit 101"
+            out_file.close()
+        os.chmod(filename, 0755)
 
 class Project(FileSystem):
     """
