@@ -66,6 +66,7 @@ cleanall: clean
 	@rm -f ${DESTDIR}/etc/bash_completion.d/image-creator-completion.bash
 	@rm -rf ${DESTDIR}/${SHAREDIR}/utils
 	@rm -f ${DESTDIR}/usr/share/applications/image-creator.desktop
+	@apt-get clean
 	@echo "Done"
 
 # Run the unit tests which run fairly quickly
