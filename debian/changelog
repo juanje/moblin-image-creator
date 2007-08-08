@@ -1,8 +1,13 @@
 moblin-image-creator (0.20) UNRELEASED; urgency=low
 
+  [ Rob Rhoads ]
   * Added apt-get clean to the cleanall Makefile target.
 
- -- rob <rob.rhoads@intel.com>  Mon,  6 Aug 2007 17:05:49 -0700
+  [ Tollef Fog Heen ]
+  * Write a manifest file alongside the image when creating installation
+    images.
+
+ -- Tollef Fog Heen <tfheen@ubuntu.com>  Wed, 08 Aug 2007 15:24:38 +0200
 
 moblin-image-creator (0.19) UNRELEASED; urgency=low
 

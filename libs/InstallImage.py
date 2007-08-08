@@ -206,6 +206,7 @@ class InstallImage(object):
         image_path   = os.path.join(image_path,'rootfs.img')
         cmd_args     = "%s %s -ef %s" % (fs_path, image_path, self.exclude_file)
 
+        self.write_manifest(self.path)
         self.target.umount()
         self.project.chroot("/usr/sbin/mksquashfs", cmd_args)
         self.target.mount()
@@ -293,6 +294,14 @@ class InstallImage(object):
     def __str__(self):
         return ("<InstallImage: project=%s, target=%s, name=%s>"
                 % (self.project, self.target, self.name))
+
+
+    def write_manifest(self, image_path):
+        all_packages = []
+        self.target.chroot("/usr/bin/dpkg-query", '--show', output = all_packages)
+        manifest = open(image_path.rstrip('.img') + '.manifest', 'w')
+        print >>manifest, "\n".join(all_packages)
+        manifest.close()
 
 
 class LiveIsoImage(InstallImage):
