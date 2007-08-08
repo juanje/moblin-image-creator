@@ -7,7 +7,10 @@ moblin-image-creator (0.20) gutsy; urgency=low
   * Write a manifest file alongside the image when creating installation
     images.
 
- -- Tollef Fog Heen <tfheen@ubuntu.com>  Wed, 08 Aug 2007 15:24:38 +0200
+  [ John L. Villalovos ]
+  * Empathy was renamed to mobile-chat.  Updated Fsets.
+
+ -- John L. Villalovos <john.l.villalovos@intel.com>  Wed,  8 Aug 2007 09:17:20 -0700
 
 moblin-image-creator (0.19) UNRELEASED; urgency=low
 
