@@ -9,8 +9,10 @@ moblin-image-creator (0.20) gutsy; urgency=low
 
   [ John L. Villalovos ]
   * Empathy was renamed to mobile-chat.  Updated Fsets.
+  * Put in fix so that if you specify arguments to image-creator the gui code
+    will not be imported.  This allows it to work without issues in text mode.
 
- -- John L. Villalovos <john.l.villalovos@intel.com>  Wed,  8 Aug 2007 09:17:20 -0700
+ -- John L. Villalovos <john.l.villalovos@intel.com>  Wed,  8 Aug 2007 10:51:29 -0700
 
 moblin-image-creator (0.19) UNRELEASED; urgency=low
 

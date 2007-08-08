@@ -29,12 +29,14 @@ import SDK
 
 debug = False
 
-try:
-    import gui
-except RuntimeError:
-    traceback.print_exc()
-    # Probably running in a text console
-    pass
+# We will only load the GUI library code if we have no arguments specified
+if len(sys.argv) == 1:
+    try:
+        import gui
+    except RuntimeError:
+        traceback.print_exc()
+        # Probably running in a text console
+        pass
 
 class Callback:
     def iteration(self, process):
