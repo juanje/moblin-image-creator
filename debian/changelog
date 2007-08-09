@@ -11,8 +11,12 @@ moblin-image-creator (0.20) gutsy; urgency=low
   * Empathy was renamed to mobile-chat.  Updated Fsets.
   * Put in fix so that if you specify arguments to image-creator the gui code
     will not be imported.  This allows it to work without issues in text mode.
+  * Added mksquashfs to the list of executables to look for.
+  * Will no longer delete the /usr/sbin/policy-rc.d file, since it is listed
+    in the exclude file for when we create an image.  That way when people
+    chroot, things will hopefully work better.
 
- -- John L. Villalovos <john.l.villalovos@intel.com>  Wed,  8 Aug 2007 10:51:29 -0700
+ -- John L. Villalovos <john.l.villalovos@intel.com>  Thu,  9 Aug 2007 16:20:53 -0700
 
 moblin-image-creator (0.19) UNRELEASED; urgency=low
 

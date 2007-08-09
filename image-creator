@@ -44,7 +44,7 @@ class Callback:
 
 sdk = SDK.SDK(cb = Callback())
 
-REQUIRED_EXES = [ 'debootstrap', 'apt-get' ]
+REQUIRED_EXES = [ 'debootstrap', 'apt-get', 'mksquashfs' ]
 
 def main():
     if sys.hexversion < 0x2040000:
@@ -57,7 +57,7 @@ def main():
             print "Error: Could not find the executable: '%s' in the PATH" % exe_name
             exes_found = False
     if not exes_found:
-        print "Without the executable(s) listed, image-creator will fail to operate"
+        print "Without the executable(s) listed, image-creator will fail to operate properly."
         sys.exit(1)
 
     if len(sys.argv) == 1:
