@@ -44,7 +44,7 @@ class Callback:
 
 sdk = SDK.SDK(cb = Callback())
 
-REQUIRED_EXES = [ 'debootstrap', 'apt-get', 'mksquashfs' ]
+REQUIRED_EXES = [ 'debootstrap', 'apt-get']
 
 def main():
     if sys.hexversion < 0x2040000:

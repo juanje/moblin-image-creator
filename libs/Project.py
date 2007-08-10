@@ -56,7 +56,7 @@ class FileSystem(object):
         print "Running 'apt-get update' command: apt-get %s" % command
         ret = self.chroot("/usr/bin/apt-get", command) 
         if ret != 0:
-            raise OSError("Internal error while attempting to run: %s" % command)
+            raise OSError("Internal error while attempting to run: /usr/bin/apt-get %s" % command)
         print "Completed 'apt-get update' successfully"
         
     def install(self, path, packages):

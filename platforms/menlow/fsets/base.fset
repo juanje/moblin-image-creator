@@ -8,7 +8,7 @@ DEPS=crownbeach-full-mobile-stack
 DESC=Virtual Fset that installs the standard mobile stack
 PKGS=
 DEBUG_PKGS=
-DEPS=ubuntu-kernel core crownbeach-config ubuntu-mobile
+DEPS=ubuntu-kernel core crownbeach-config ubuntu-mobile hal
 
 [Moblin-CrownBeach-Full-Mobile-Stack-with-Proprietary]
 DESC=The full Crown Beach stack, including proprietary (non-redistributable bits)

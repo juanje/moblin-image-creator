@@ -15,8 +15,10 @@ moblin-image-creator (0.20) gutsy; urgency=low
   * Will no longer delete the /usr/sbin/policy-rc.d file, since it is listed
     in the exclude file for when we create an image.  That way when people
     chroot, things will hopefully work better.
+  * Okay mksquashfs, isn't needed on the host, since we pull it in the project
+    jailroot.
 
- -- John L. Villalovos <john.l.villalovos@intel.com>  Thu,  9 Aug 2007 16:20:53 -0700
+ -- John L. Villalovos <john.l.villalovos@intel.com>  Thu,  9 Aug 2007 21:51:17 -0700
 
 moblin-image-creator (0.19) UNRELEASED; urgency=low
 
