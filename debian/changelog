@@ -18,7 +18,10 @@ moblin-image-creator (0.20) gutsy; urgency=low
   * Okay mksquashfs, isn't needed on the host, since we pull it in the project
     jailroot.
 
- -- John L. Villalovos <john.l.villalovos@intel.com>  Thu,  9 Aug 2007 21:51:17 -0700
+  [ Alek Du ]
+  * Make menlow init scripts more flexible on detect "hda/sda(libata)"
+
+ -- Alek Du <alek.du@intel.com>  Thu, 09 Aug 2007 23:19:36 -0400
 
 moblin-image-creator (0.19) UNRELEASED; urgency=low
 

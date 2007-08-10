@@ -471,8 +471,10 @@ class App(object):
             try:
                 self.current_project().create_install_usb(target.name, img_name)
             except ValueError, e:
+                print_exc_plus()
                 self.show_error_dialog(e.args[0])
             except:
+                print_exc_plus()
                 self.show_error_dialog()
             progress_dialog.destroy()
 

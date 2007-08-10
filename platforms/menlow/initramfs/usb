@@ -6,10 +6,29 @@ mountroot ()
     mkdir -p /squashmnt
     mkdir -p /persistmnt
 
-    mount /dev/sda /container 2> /dev/null
+#find USB boot dongle
+    while true; do
+      for driver in 'sda' 'sdb' 'sdc' 'sdd'; do
+        echo "checking driver $driver"
+        if [ -e /sys/block/$driver/removable ]; then
+           if [ "$(cat /sys/block/$driver/removable)" = "1" ]; then
+              echo "found usb dongle at $driver"
+	      found="yes"
+              break
+           fi
+         fi
+      done
+      if [ "$found" = "yes" ]; then
+	break;
+      fi
+      /bin/sleep 5
+    done
+    echo "will mount root from $driver"
+
+    mount /dev/$driver /container 2> /dev/null
     while [ ! -e "/container/rootfs.img" ]; do
 	/bin/sleep 0.5
-	mount /dev/sda /container 2> /dev/null
+	mount /dev/$driver /container 2> /dev/null
     done
 
     mount -o loop -t squashfs /container/rootfs.img /squashmnt
@@ -28,6 +47,7 @@ mountroot ()
 
 	 mkdir -p ${rootmnt}/tmp/install
 	 mount --bind /dev ${rootmnt}/dev
+	 mount --bind /sys ${rootmnt}/sys
 	 mount --bind /container ${rootmnt}/tmp/install
 	 cp /container/install.sh ${rootmnt}
 
