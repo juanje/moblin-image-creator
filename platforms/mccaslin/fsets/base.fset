@@ -18,7 +18,7 @@ DEPS=core zi9-config ubuntu-mobile
 
 [Core]
 DESC=Fundamental fset that provide a basic console based system
-PKGS=grub ubuntu-minimal
+PKGS=grub ubuntu-minimal usplash-theme-ubuntu
 DEBUG_PKGS=man-db manpages openssh-client openssh-server
 DEPS=
 
