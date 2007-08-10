@@ -1,8 +1,24 @@
-moblin-image-creator (0.20) UNRELEASED; urgency=low
+moblin-image-creator (0.20) gutsy; urgency=low
 
+  [ Rob Rhoads ]
   * Added apt-get clean to the cleanall Makefile target.
 
- -- rob <rob.rhoads@intel.com>  Mon,  6 Aug 2007 17:05:49 -0700
+  [ Tollef Fog Heen ]
+  * Write a manifest file alongside the image when creating installation
+    images.
+
+  [ John L. Villalovos ]
+  * Empathy was renamed to mobile-chat.  Updated Fsets.
+  * Put in fix so that if you specify arguments to image-creator the gui code
+    will not be imported.  This allows it to work without issues in text mode.
+  * Added mksquashfs to the list of executables to look for.
+  * Will no longer delete the /usr/sbin/policy-rc.d file, since it is listed
+    in the exclude file for when we create an image.  That way when people
+    chroot, things will hopefully work better.
+  * Okay mksquashfs, isn't needed on the host, since we pull it in the project
+    jailroot.
+
+ -- John L. Villalovos <john.l.villalovos@intel.com>  Thu,  9 Aug 2007 21:51:17 -0700
 
 moblin-image-creator (0.19) UNRELEASED; urgency=low
 

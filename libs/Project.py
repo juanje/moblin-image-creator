@@ -56,7 +56,7 @@ class FileSystem(object):
         print "Running 'apt-get update' command: apt-get %s" % command
         ret = self.chroot("/usr/bin/apt-get", command) 
         if ret != 0:
-            raise OSError("Internal error while attempting to run: %s" % command)
+            raise OSError("Internal error while attempting to run: /usr/bin/apt-get %s" % command)
         print "Completed 'apt-get update' successfully"
         
     def install(self, path, packages):
@@ -179,7 +179,6 @@ class FileSystem(object):
             output = []
         cmd_line = "chroot %s %s %s" % (self.path, cmd_path, cmd_args)
         result = pdk_utils.execCommand(cmd_line, output = output, callback = self.cb.iteration)
-        self.enable_init_scripts()
         if result != 0:
             print "Error in chroot.  Result: %s" % result
             print "Command was: %s" % cmd_line
@@ -198,11 +197,6 @@ class FileSystem(object):
             print >> out_file, "exit 101"
             out_file.close()
         os.chmod(filename, 0755)
-
-    def enable_init_scripts(self):
-        filename = os.path.join(self.path, "usr/sbin/policy-rc.d")
-        if os.path.exists(filename):
-            os.unlink(filename)
 
 class Project(FileSystem):
     """

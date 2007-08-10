@@ -29,12 +29,14 @@ import SDK
 
 debug = False
 
-try:
-    import gui
-except RuntimeError:
-    traceback.print_exc()
-    # Probably running in a text console
-    pass
+# We will only load the GUI library code if we have no arguments specified
+if len(sys.argv) == 1:
+    try:
+        import gui
+    except RuntimeError:
+        traceback.print_exc()
+        # Probably running in a text console
+        pass
 
 class Callback:
     def iteration(self, process):
@@ -42,7 +44,7 @@ class Callback:
 
 sdk = SDK.SDK(cb = Callback())
 
-REQUIRED_EXES = [ 'debootstrap', 'apt-get' ]
+REQUIRED_EXES = [ 'debootstrap', 'apt-get']
 
 def main():
     if sys.hexversion < 0x2040000:
@@ -55,7 +57,7 @@ def main():
             print "Error: Could not find the executable: '%s' in the PATH" % exe_name
             exes_found = False
     if not exes_found:
-        print "Without the executable(s) listed, image-creator will fail to operate"
+        print "Without the executable(s) listed, image-creator will fail to operate properly."
         sys.exit(1)
 
     if len(sys.argv) == 1:

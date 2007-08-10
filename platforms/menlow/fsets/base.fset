@@ -8,7 +8,7 @@ DEPS=crownbeach-full-mobile-stack
 DESC=Virtual Fset that installs the standard mobile stack
 PKGS=
 DEBUG_PKGS=
-DEPS=ubuntu-kernel core crownbeach-config ubuntu-mobile
+DEPS=ubuntu-kernel core crownbeach-config ubuntu-mobile hal
 
 [Moblin-CrownBeach-Full-Mobile-Stack-with-Proprietary]
 DESC=The full Crown Beach stack, including proprietary (non-redistributable bits)
@@ -54,6 +54,6 @@ DEPS=crownbeach-config
 
 [Ubuntu-Mobile]
 DESC=Ubuntu Mobile using Hildon, and any base applications for same
-PKGS=ubuntu-mobile sdk-default-icons mobile-application-service mobile-basic-flash matchbox-keyboard hildon-theme-mobile-basic marquee-plugins hildon-control-panel midbrowser mobile-player gstreamer-dbus-media-service gstreamer0.10-x gstreamer0.10-ffmpeg gstreamer0.10-plugins-ugly matchbox-keyboard moblin-keyboard-manager mousepad empathy gcalctool gnome-nettool
+PKGS=ubuntu-mobile sdk-default-icons mobile-application-service mobile-basic-flash matchbox-keyboard hildon-theme-mobile-basic marquee-plugins hildon-control-panel midbrowser mobile-player gstreamer-dbus-media-service gstreamer0.10-x gstreamer0.10-ffmpeg gstreamer0.10-plugins-ugly matchbox-keyboard moblin-keyboard-manager mousepad moblin-chat gcalctool gnome-nettool
 DEBUG_PKGS=powertop
 DEPS=gnome-mobile
