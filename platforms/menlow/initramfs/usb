@@ -43,16 +43,6 @@ mountroot ()
 
     if [ -f /container/install.sh ]; then
 	 log_begin_msg "Install Process will begin shortly..."
-	 maybe_break preinstall
-
-	 mkdir -p ${rootmnt}/tmp/install
-	 mount --bind /dev ${rootmnt}/dev
-	 mount --bind /sys ${rootmnt}/sys
-	 mount --bind /container ${rootmnt}/tmp/install
-	 cp /container/install.sh ${rootmnt}
-
-	 maybe_break install
-	 chroot ${rootmnt} /install.sh
+	 exec /container/install.sh
     fi
-
 }

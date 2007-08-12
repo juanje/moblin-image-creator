@@ -33,14 +33,14 @@ sync
 
 echo -e 'Mounting partitions...\n'
 mkdir /tmp/boot
-mount -o loop -t squashfs /tmp/install/bootfs.img /tmp/boot
+mount -o loop -t squashfs /container/bootfs.img /tmp/boot
 
 mount /dev/sda2 /mnt
 mkdir /mnt/boot
 mount /dev/sda1 /mnt/boot
 
 echo -e 'Copying system files onto hard disk drive...\n'
-cp -v /tmp/install/rootfs.img /mnt/boot
+cp -v /container/rootfs.img /mnt/boot
 cp -av /tmp/boot /mnt
 
 /usr/sbin/grub-install --root-directory=/mnt /dev/sda
@@ -49,7 +49,6 @@ echo -e 'Unmounting partitions...\n'
 umount /mnt/boot
 umount /mnt
 umount /tmp/boot
-umount /tmp/install
 
 echo "Installation complete.  Unplug the USB key and repower the device."
 while true; do
