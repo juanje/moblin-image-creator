@@ -1,4 +1,4 @@
-moblin-image-creator (0.21) unstable; urgency=low
+moblin-image-creator (0.21) gutsy; urgency=low
 
   * Make sure to set DEBIAN_FRONTEND to noninteractive to avoid hanging
     when installing packages.
