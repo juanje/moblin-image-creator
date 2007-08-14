@@ -1,10 +1,60 @@
 #!/bin/bash
+splash=False
+progress=0
+#check the splash type
+#currently check whether usplash has been installed
 
-echo -e '\nDeleting Partition Table on /dev/sda...\n'
+splash_check_type(){
+plash_write > /dev/null 2>/dev/null && splash=True
+}
+#show the progress at status bar.
+#$1 0-100
+splash_progress(){
+    if [ splash = False ]; then
+        return 0
+    fi
+    progress=$(( $progress + $1 ))
+    usplash_write "PROGRESS $progress"
+    return 0
+}
+#display the text no matter the verbose is set or not
+splash_display(){
+    if [ splash = False ]; then
+         echo -n $1
+         return 0
+    fi
+    usplash_write "TEXT-URGENT $1"
+    return 0
+}
+#set the splash delay time
+splash_delay(){
+    if [ splash = False ]; then
+          return 0
+    fi
+    usplash_write "TIMEOUT $1"
+    return 0
+}
+
+splash_display 'INSTALL..........'
+#mount sys-filesystem
+ls /sys/class/scsi_disk > /dev/null 2>&1
+if [ $? != 0 ]; then
+    ls /sys || mkdir /sys > /dev/null 2>&1
+    mount -t sysfs /asfas /sys
+fi
+
+pre_scsi_disk_number=$( ls /sys/class/scsi_disk | wc -l)
+
+splash_display 'Deleting Partition Table on /dev/sda...'
+splash_delay 200
 dd if=/dev/zero of=/dev/sda bs=512 count=2
 sync
+splash_progress 5
+splash_delay 10
 
-echo -e 'Creating New Partiton Table on /dev/sda...\n'
+splash_display 'Creating New Partiton Table on /dev/sda...'
+splash_delay 200
+type usplash_write >/dev/null 2>/dev/null && usplash_write "TIMEOUT 200" || true
 fdisk /dev/sda <<EOF
 n
 p
@@ -22,37 +72,65 @@ w
 EOF
 
 sync
+splash_progress 5
+splash_delay 10
 
-echo -e 'Formatting /dev/sda1 w/ ext2...\n'
+splash_display 'Formatting /dev/sda1 w/ ext2...'
+type usplash_write >/dev/null 2>/dev/null && usplash_write "TIMEOUT 200" || true
 mkfs.ext2 /dev/sda1
 sync
+splash_progress 5
+splash_delay 10
 
-echo -e 'Formatting /dev/sda2 w/ ext3...\n'
+
+splash_display 'Formatting /dev/sda2 w/ ext3...'
+splash_delay 200
 mkfs.ext3 /dev/sda2
 sync
+splash_progress 50
+splash_delay 10
 
-echo -e 'Mounting partitions...\n'
+splash_display 'Mounting partitions...'
+splash_delay 200
 mkdir /tmp/boot
 mount -o loop -t squashfs /tmp/install/bootfs.img /tmp/boot
+
 
 mount /dev/sda2 /mnt
 mkdir /mnt/boot
 mount /dev/sda1 /mnt/boot
+splash_progress 2
+splash_delay 10
 
-echo -e 'Copying system files onto hard disk drive...\n'
+splash_display 'Copying system files onto hard disk drive...'
+splash_delay 200
 cp -v /tmp/install/rootfs.img /mnt/boot
 cp -av /tmp/boot /mnt
 
 /usr/sbin/grub-install --root-directory=/mnt /dev/sda
+splash_progress 30
+splash_delay 10
 
-echo -e 'Unmounting partitions...\n'
+splash_display 'Unmounting partitions...'
+plash_delay 200
+
 umount /mnt/boot
 umount /mnt
 umount /tmp/boot
 umount /tmp/install
+splash_progress 2
+splash_delay 10
+sleep 1
+splash_delay 6000
+splash_display "Install Successfully"
+splash_display "Unplug USB Key, System Will Reboot Automatically"
 
-echo "Installation complete.  Unplug the USB key and repower the device."
-while true; do
-	sleep 100
+while [ $pre_scsi_disk_number = $(ls /sys/class/scsi_disk | wc -l) ]
+do
+    sleep 1
 done
 
+splash_progress 1
+splash_delay 1
+
+reboot -f

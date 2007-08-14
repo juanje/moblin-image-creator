@@ -1,1 +1,1 @@
-ro boot=disk
+ro boot=disk splash quiet r_splash=(800,600)

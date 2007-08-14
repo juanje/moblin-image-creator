@@ -263,15 +263,12 @@ class InstallImage(object):
 
     def create_initramfs(self, initrd_file, kernel_mod_path, fs_type='RAMFS'):
         tmp = kernel_mod_path.split("/targets/%s/fs" % (self.target.name))
-        link = "%s%s" % (tmp[0], tmp[1])
-
-        if os.path.lexists(link):
-            self.project.chroot("/bin/rm", tmp[1])
-        args = "-s %s %s" % ("/targets/%s/fs%s" % (self.target.name, tmp[1]), tmp[1])
-        self.project.chroot("/bin/ln", args)
-
-        self.project.chroot("/usr/sbin/mkinitramfs", "-d %s -o %s %s" % (os.path.join('/usr/share/pdk/platforms', self.project.platform.name, 'initramfs'), initrd_file, tmp[1]))
-
+        src_path = os.path.join('/usr/share/pdk/platforms', self.project.platform.name, 'initramfs')
+        dst_path = os.path.join(self.target.fs_path, 'etc', 'initramfs-tools', )
+        shutil.rmtree(dst_path, True)
+        shutil.copytree(src_path, dst_path, True)
+        self.target.chroot("/usr/sbin/mkinitramfs", "-o %s %s" % (initrd_file , tmp[1]))
+        
     def create_grub_menu(self):
         # remove previous menu.lst, since we are about to create one
         self.target.chroot("/bin/rm", " -f /boot/grub/menu.lst")
