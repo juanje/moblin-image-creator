@@ -60,6 +60,8 @@ class FileSystem(object):
         print "Completed 'apt-get update' successfully"
         
     def install(self, path, packages):
+        debian_frontend = os.environ.get("DEBIAN_FRONTEND")
+        os.environ['DEBIAN_FRONTEND'] = 'noninteractive'
         self.aptgetPreCheck()
         if not packages:
             # No packages, so nothing to do
@@ -102,7 +104,8 @@ class FileSystem(object):
                 print "Completed 'apt-get install -f' successfully"
                 print "Will try 'apt-get install' in 15 seconds"
                 time.sleep(15)
-        raise OSError("Internal error while attempting to run: apt-get %s" % command)
+            raise OSError("Internal error while attempting to run: apt-get %s" % command)
+            os.environ['DEBIAN_FRONTEND'] = debian_frontend
 
     def aptgetPreCheck(self):
         """Stuff that we want to check for before we run an apt-get command"""
