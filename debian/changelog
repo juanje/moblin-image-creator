@@ -1,9 +1,13 @@
 moblin-image-creator (0.21) gutsy; urgency=low
 
+  [ Tollef Fog Heen ]
   * Make sure to set DEBIAN_FRONTEND to noninteractive to avoid hanging
     when installing packages.
 
- -- Tollef Fog Heen <tfheen@ubuntu.com>  Tue, 14 Aug 2007 12:18:50 +0200
+  [ John L. Villalovos ]
+  * I accidentally checked in some testing code into the FSet.
+
+ -- John L. Villalovos <john.l.villalovos@intel.com>  Tue, 14 Aug 2007 11:36:17 -0700
 
 moblin-image-creator (0.20) gutsy; urgency=low
 
