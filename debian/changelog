@@ -12,7 +12,12 @@ moblin-image-creator (0.21) gutsy; urgency=low
     Since Martin need it for installation UI improving.
   * Fix a editor indent issue.
 
- -- Alek Du <alek.du@intel.com>  Wed, 15 Aug 2007 09:41:48 +0800
+  [ Jacob Pan ]
+  * Added poulsbo 2d driver related packages to menlow fset
+  * Neutralized the /etc/apt/preference file, libdrm is up-to-date now
+  * Note that this is for moblin kernel only, xorg.conf is unchanged
+
+ -- Jacob Pan <jacob.jun.pan@intel.com>  Wed, 15 Aug 2007 14:31:28 -0700
 
 moblin-image-creator (0.20) gutsy; urgency=low
 
