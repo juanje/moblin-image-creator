@@ -19,6 +19,7 @@
 # This file contains utility functions which do not need to be inside any of
 # our current classes
 
+import exceptions
 import os
 import re
 import select
@@ -146,6 +147,10 @@ def copySourcesListFile(sourcefile, destfile):
     in_file.close()
     out_file.close()
 
+# An exception class for Image Creator
+class ImageCreatorError(exceptions.Exception):
+    def __init__(self, args=None):
+        self.args = args
 
 if '__main__' == __name__:
     sys.exit(main())

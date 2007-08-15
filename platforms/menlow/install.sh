@@ -1,11 +1,32 @@
 #!/bin/bash
 
-echo -e '\nDeleting Partition Table on /dev/hda...\n'
-dd if=/dev/zero of=/dev/hda bs=512 count=2
+
+#find install disk
+while true; do
+      for driver in 'hda' 'hdb' 'sda' 'sdb'; do
+        echo "checking driver $driver"
+        if [ -e /sys/block/$driver/removable ]; then
+           if [ "$(cat /sys/block/$driver/removable)" = "0" ]; then
+              echo "found harddisk at $driver"
+              found="yes"
+              break
+           fi
+         fi
+      done
+      if [ "$found" = "yes" ]; then
+        break;
+      fi
+      /bin/sleep 5
+done
+echo "will install to $driver"
+
+
+echo -e "\nDeleting Partition Table on /dev/$driver...\n"
+dd if=/dev/zero of=/dev/$driver bs=512 count=2
 sync
 
-echo -e 'Creating New Partiton Table on /dev/hda...\n'
-fdisk /dev/hda <<EOF
+echo -e "Creating New Partiton Table on /dev/$driver ...\n"
+fdisk /dev/$driver <<EOF
 n
 p
 1
@@ -23,27 +44,27 @@ EOF
 
 sync
 
-echo -e 'Formatting /dev/hda1 w/ ext2...\n'
-mkfs.ext2 /dev/hda1
+echo -e "Formatting /dev/${driver}1 w/ ext2...\n"
+mkfs.ext2 /dev/${driver}1
 sync
 
-echo -e 'Formatting /dev/hda2 w/ ext3...\n'
-mkfs.ext3 /dev/hda2
+echo -e "Formatting /dev/${driver}2 w/ ext3...\n"
+mkfs.ext3 /dev/${driver}2
 sync
 
 echo -e 'Mounting partitions...\n'
 mkdir /tmp/boot
 mount -o loop -t squashfs /tmp/install/bootfs.img /tmp/boot
 
-mount /dev/hda2 /mnt
+mount /dev/${driver}2 /mnt
 mkdir /mnt/boot
-mount /dev/hda1 /mnt/boot
+mount /dev/${driver}1 /mnt/boot
 
 echo -e 'Copying system files onto hard disk drive...\n'
 cp -v /tmp/install/rootfs.img /mnt/boot
 cp -av /tmp/boot /mnt
 
-/usr/sbin/grub-install --root-directory=/mnt /dev/hda
+/usr/sbin/grub-install --root-directory=/mnt /dev/${driver}
 
 echo -e 'Unmounting partitions...\n'
 umount /mnt/boot
