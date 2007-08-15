@@ -53,7 +53,7 @@ mountroot ()
 	 mknod /dev/sda2 b 8 2
 	 mknod /dev/hda1 b 3 1
 	 mknod /dev/hda2 b 3 2
-         cp -a /dev/* ${rootmnt}/dev 2> /dev/null
+	 cp -a /dev/* ${rootmnt}/dev 2> /dev/null
 	 #mount --bind /sys ${rootmnt}/sys
 	 mount -t sysfs sys ${rootmnt}/sys
 	 #mount --bind /container ${rootmnt}/tmp/install
