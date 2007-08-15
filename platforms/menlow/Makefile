@@ -10,7 +10,6 @@ install:
 	@cp exclude ${SHARE}/platforms/${PNAME}
 	@mkdir -p ${SHARE}/platforms/${PNAME}
 	@cp -a sources ${SHARE}/platforms/${PNAME}
-	@cp preferences ${SHARE}/platforms/${PNAME}
 	@cp -a initramfs ${SHARE}/platforms/${PNAME}
 	@mkdir -p ${SHARE}/platforms/${PNAME}/fsets
 	@cp fsets/*.fset ${SHARE}/platforms/${PNAME}/fsets/
