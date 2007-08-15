@@ -21,7 +21,12 @@ moblin-image-creator (0.21) gutsy; urgency=low
   * Make Rusty happy and remove the preferences file since it is all comments
   * Remove copying of preferences file from menlow/Makefile
 
- -- John L. Villalovos <john.l.villalovos@intel.com>  Wed, 15 Aug 2007 15:35:34 -0700
+  [ Rusty Lynch ]
+  * Removing the fset entries for mobile-application-service.  This
+    package is no longer needed since the home applet can directly
+    launch applications
+
+ -- Rusty Lynch <rusty.lynch@intel.com>  Wed, 15 Aug 2007 15:23:32 -0700
 
 moblin-image-creator (0.20) gutsy; urgency=low
 
