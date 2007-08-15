@@ -17,7 +17,10 @@ moblin-image-creator (0.21) gutsy; urgency=low
   * Neutralized the /etc/apt/preference file, libdrm is up-to-date now
   * Note that this is for moblin kernel only, xorg.conf is unchanged
 
- -- Jacob Pan <jacob.jun.pan@intel.com>  Wed, 15 Aug 2007 14:31:28 -0700
+  [ John L. Villalovos ]
+  * Make Rusty happy and remove the preferences file since it is all comments
+
+ -- John L. Villalovos <john.l.villalovos@intel.com>  Wed, 15 Aug 2007 15:21:07 -0700
 
 moblin-image-creator (0.20) gutsy; urgency=low
 
