@@ -24,7 +24,7 @@ DEPS=moblin-kernel core crownbeach-config ubuntu-mobile
 
 [Moblin-Kernel]
 DESC=Moblin Kernel Fset
-PKGS=grub linux-menlow-default psb-kmd-default
+PKGS=grub linux-menlow-default psb-kmd-default usplash-theme-ubuntu
 DEBUG_PKGS=linux-menlow-developer psb-kmd-developer
 DEPS=
 

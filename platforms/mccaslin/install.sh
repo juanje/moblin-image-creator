@@ -1,16 +1,17 @@
 #!/bin/bash
+#################### usplash function start ####################################
 splash=False
 progress=0
 #check the splash type
 #currently check whether usplash has been installed
 
 splash_check_type(){
-plash_write > /dev/null 2>/dev/null && splash=True
+type usplash_write > /dev/null 2>&1 && splash=False
 }
 #show the progress at status bar.
 #$1 0-100
 splash_progress(){
-    if [ splash = False ]; then
+    if [ $splash = False ]; then
         return 0
     fi
     progress=$(( $progress + $1 ))
@@ -19,8 +20,8 @@ splash_progress(){
 }
 #display the text no matter the verbose is set or not
 splash_display(){
-    if [ splash = False ]; then
-         echo -n $1
+    if [ $splash = False ]; then
+         echo  $1
          return 0
     fi
     usplash_write "TEXT-URGENT $1"
@@ -28,20 +29,23 @@ splash_display(){
 }
 #set the splash delay time
 splash_delay(){
-    if [ splash = False ]; then
+    if [ $splash = False ]; then
           return 0
     fi
     usplash_write "TIMEOUT $1"
     return 0
 }
+####################### usplash function end ###############################
+splash_check_type
 
+splash_delay 200
 splash_display 'INSTALL..........'
 #mount sys-filesystem
-ls /sys/class/scsi_disk > /dev/null 2>&1
-if [ $? != 0 ]; then
-    ls /sys || mkdir /sys > /dev/null 2>&1
-    mount -t sysfs /asfas /sys
-fi
+#ls /sys/class/scsi_disk > /dev/null 2>&1
+#if [ $? != 0 ]; then
+#    ls /sys || mkdir /sys > /dev/null 2>&1
+#    mount -t sysfs /asfas /sys
+#fi
 
 pre_scsi_disk_number=$( ls /sys/class/scsi_disk | wc -l)
 
@@ -54,7 +58,6 @@ splash_delay 10
 
 splash_display 'Creating New Partiton Table on /dev/sda...'
 splash_delay 200
-type usplash_write >/dev/null 2>/dev/null && usplash_write "TIMEOUT 200" || true
 fdisk /dev/sda <<EOF
 n
 p
@@ -76,7 +79,7 @@ splash_progress 5
 splash_delay 10
 
 splash_display 'Formatting /dev/sda1 w/ ext2...'
-type usplash_write >/dev/null 2>/dev/null && usplash_write "TIMEOUT 200" || true
+spalsh_delay 200
 mkfs.ext2 /dev/sda1
 sync
 splash_progress 5
@@ -112,7 +115,7 @@ splash_progress 30
 splash_delay 10
 
 splash_display 'Unmounting partitions...'
-plash_delay 200
+splash_delay 200
 
 umount /mnt/boot
 umount /mnt
