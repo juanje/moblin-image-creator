@@ -26,7 +26,12 @@ moblin-image-creator (0.21) gutsy; urgency=low
     package is no longer needed since the home applet can directly
     launch applications
 
- -- Rusty Lynch <rusty.lynch@intel.com>  Wed, 15 Aug 2007 15:23:32 -0700
+  [ John L. Villalovos ]
+  * We will now mount /dev/pts on the target.  I also changed some of the
+    mounting logic so that it will try to mimic how the host is mounting stuff
+    if possible.
+
+ -- John L. Villalovos <john.l.villalovos@intel.com>  Thu, 16 Aug 2007 14:04:41 -0700
 
 moblin-image-creator (0.20) gutsy; urgency=low
 

@@ -125,14 +125,27 @@ class FileSystem(object):
                 if result != 0:
                     raise OSError("Internal error while attempting to bind mount /%s!" % (mnt))
 
-        for (mnt, fstype) in [('proc', 'proc'), ('sys', 'sysfs')]:
-            path = os.path.join(self.path, mnt)
+        mounts = pdk_utils.getMountInfo()
+        for (host_dirname, target_dirname, fstype, device) in [
+            ('/proc', 'proc', 'proc', 'proc'),
+            ('/sys', 'sys', 'sysfs', 'sysfs'),
+            ('/dev/pts', 'dev/pts', 'devpts', 'devpts')]:
+            # Try to do what the host is doing
+            if host_dirname in mounts:
+                mount_info = mounts[host_dirname]
+                fstype = mount_info.fstype
+                device = mount_info.device
+                options = "-o %s" % mount_info.options
+            else:
+                options = ""
+            path = os.path.join(self.path, target_dirname)
             if not os.path.isdir(path):
                 os.makedirs(path)
-            if not pdk_utils.ismount(path) and os.path.isdir(os.path.join('/', mnt)):
-                result = os.system('mount -t %s %s %s' % (fstype, mnt, path))
+            if not pdk_utils.ismount(path):
+                cmd = 'mount %s -t %s %s %s' % (options, fstype, device, path)
+                result = pdk_utils.execCommand(cmd)
                 if result != 0:
-                    raise OSError("Internal error while attempting to bind mount /%s!" % (mnt))
+                    raise OSError("Internal error while attempting to mount %s %s!" % (device, dirname))
 
         for file in ['etc/resolv.conf', 'etc/hosts']:
             if os.path.isfile(os.path.join('/', file)):

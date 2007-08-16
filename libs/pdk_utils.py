@@ -86,6 +86,17 @@ def umount_device(device_file):
             return True
     return True
 
+def getMountInfo():
+    """Function to parse the list of mounts and return back the data"""
+    output = {}
+    mounts_file = "/etc/mtab"
+    in_file = open(mounts_file, 'r')
+    for line in in_file:
+        line = line.strip()
+        mount_info = MountInfo(line)
+        output[mount_info.dirname] = mount_info
+    return output
+
 def ismount(path):
     """Function to see if a path is mounted, this is because os.path.ismount()
     does not seem to detect --bind"""
@@ -146,6 +157,21 @@ def copySourcesListFile(sourcefile, destfile):
         print >> out_file, line
     in_file.close()
     out_file.close()
+
+class MountInfo(object):
+    def __init__(self, mount_line):
+        """Input is in the form that is found in /etc/mtab (or /proc/mounts)"""
+        mount_line = mount_line.strip()
+        result = mount_line.split()
+        self.device = result[0]
+        self.dirname = result[1]
+        self.fstype = result[2]
+        self.options = result[3]
+    def __str__(self):
+        return ("%s %s %s %s" % (self.device, self.dirname, self.fstype, self.options))
+    def __repr__(self):
+        return "MountInfo('%s')" % self.__str__()
+
 
 # An exception class for Image Creator
 class ImageCreatorError(exceptions.Exception):
