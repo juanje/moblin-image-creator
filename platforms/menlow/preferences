@@ -1,7 +1,0 @@
-Package: libdrm2
-Pin: Version 2.3.0-2
-Pin-Priority: 1001
-
-Package: libdrm-dev
-Pin: Version 2.3.0-2
-Pin-Priority: 1001
