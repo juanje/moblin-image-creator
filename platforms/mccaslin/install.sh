@@ -5,10 +5,10 @@ set -u
 
 #################### usplash functions start ####################################
 # alias usplash_write to the 'true' command if we don't have usplash_write
-type usplash_write > /dev/null 2>&1 || alias usplash_write=true
+type usplash_write > /dev/null 2>&1 || alias usplash_write="echo"
 
 # FIXME: Temporarily disable usplash_write
-alias usplash_write=true
+alias usplash_write="echo"
 
 # show the progress at status bar.
 # $1 = 0-100
