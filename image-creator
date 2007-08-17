@@ -376,7 +376,7 @@ def run_project(options):
     if not options.project_name in sdk.projects:
         print >> sys.stderr, "Project %s does not exist" % (options.project_name)
         sys.exit(1)
-    sys.exit(sdk.projects[options.project_name].chroot(options.run_command, ""))
+    sys.exit(sdk.projects[options.project_name].chroot(options.run_command))
 
 def run_target(options):
     if not options.project_name in sdk.projects:
@@ -385,7 +385,7 @@ def run_target(options):
     if not options.target_name in sdk.projects[options.project_name].targets:
         print >> sys.stderr, "Target %s does not exist" % (options.project_name)
         sys.exit(1)
-    sys.exit(sdk.projects[options.project_name].targets[options.target_name].chroot(options.run_command, ""))
+    sys.exit(sdk.projects[options.project_name].targets[options.target_name].chroot(options.run_command))
 
 def update_project(options):
     if not options.project_name in sdk.projects:

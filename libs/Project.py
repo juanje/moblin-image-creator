@@ -48,15 +48,15 @@ class FileSystem(object):
             raise ValueError("Empty argument passed in")
         self.cb = cb
         self.path = os.path.abspath(os.path.expanduser(path))
-        self.apt_params = '-y --force-yes -o Dir::State=%(t)s/var/lib/apt -o Dir::State::status=%(t)s/var/lib/dpkg/status -o Dir::Cache=/var/cache/apt -o Dir::Etc::Sourcelist=%(t)s/etc/apt/sources.list -o Dir::Etc::main=%(t)s/etc/apt/apt.conf -o Dir::Etc::parts=%(t)s/etc/apt/apt.conf.d -o DPkg::Options::=--root=%(t)s -o DPkg::Run-Directory=%(t)s'
+        self.apt_cmd = '/usr/bin/apt-get -y --force-yes -o Dir::State=%(t)s/var/lib/apt -o Dir::State::status=%(t)s/var/lib/dpkg/status -o Dir::Cache=/var/cache/apt -o Dir::Etc::Sourcelist=%(t)s/etc/apt/sources.list -o Dir::Etc::main=%(t)s/etc/apt/apt.conf -o Dir::Etc::parts=%(t)s/etc/apt/apt.conf.d -o DPkg::Options::=--root=%(t)s -o DPkg::Run-Directory=%(t)s'
 
     def update(self, path):
         self.aptgetPreCheck()
-        command = self.apt_params % {'t': path} + " update"
-        print "Running 'apt-get update' command: apt-get %s" % command
-        ret = self.chroot("/usr/bin/apt-get", command) 
+        command = self.apt_cmd % {'t': path} + " update"
+        print "Running 'apt-get update' command: %s" % command
+        ret = self.chroot(command) 
         if ret != 0:
-            raise OSError("Internal error while attempting to run: /usr/bin/apt-get %s" % command)
+            raise OSError("Internal error while attempting to run: %s" % command)
         print "Completed 'apt-get update' successfully"
         
     def install(self, path, packages):
@@ -68,43 +68,46 @@ class FileSystem(object):
             return
         retry_count = 0
         while (retry_count < 10):
-            command = self.apt_params % {'t': path} + " install"
+            # apt-get install
+            command = self.apt_cmd % {'t': path} + " install"
             for p in packages:
                 command += ' %s' % p
-            print "Running 'apt-get install' command: apt-get %s" % command
-            ret = self.chroot("/usr/bin/apt-get", command) 
+            print "Running 'apt-get install' command: %s" % command
+            ret = self.chroot(command) 
             if ret == 0:
                 print "Completed 'apt-get install' successfully"
                 return
             print
-            print "Error running 'apt-get install' command: apt-get %s" % command
+            print "Error running 'apt-get install' command: %s" % command
             print "Will try 'apt-get update' in 15 seconds"
             time.sleep(15)
             retry_count = retry_count + 1
-            command = self.apt_params % {'t': path} + " update"
-            print "Running 'apt-get update' command: apt-get %s" % command
-            result = self.chroot("/usr/bin/apt-get", command)
+            # apt-get update
+            command = self.apt_cmd % {'t': path} + " update"
+            print "Running 'apt-get update' command: %s" % command
+            result = self.chroot(command)
             if result != 0:
                 print
-                print "Error running 'apt-get update' command: apt-get %s" % command
+                print "Error running 'apt-get update' command: %s" % command
                 print "Will try 'apt-get install' in 15 seconds"
                 time.sleep(15)
             else:
                 print "Completed 'apt-get update' successfully"
                 print "Will try 'apt-get install' in 15 seconds"
                 time.sleep(15)
-            command = self.apt_params % {'t': path} + " install -f"
-            ret = self.chroot("/usr/bin/apt-get", command) 
+            # apt-get install -f
+            command = self.apt_cmd % {'t': path} + " install -f"
+            ret = self.chroot(command) 
             if result != 0:
                 print
-                print "Error running 'apt-get install -f' command: apt-get %s" % command
+                print "Error running 'apt-get install -f' command: %s" % command
                 print "Will try 'apt-get install' in 15 seconds"
                 time.sleep(15)
             else:
                 print "Completed 'apt-get install -f' successfully"
                 print "Will try 'apt-get install' in 15 seconds"
                 time.sleep(15)
-            raise OSError("Internal error while attempting to run: apt-get %s" % command)
+            raise OSError("Internal error while attempting to run: %s" % command)
             os.environ['DEBIAN_FRONTEND'] = debian_frontend
 
     def aptgetPreCheck(self):
@@ -176,7 +179,7 @@ class FileSystem(object):
             buildstamp = open(buildstamp_path, 'w')
             print >> buildstamp, "%s %s" % (socket.gethostname(), time.strftime("%d-%m-%Y %H:%M:%S %Z"))
             buildstamp.close()
-            self.chroot("/usr/bin/apt-get", "update")
+            self.chroot("/usr/bin/apt-get update")
                 
     def umount(self, keep_mount=''):
         for line in os.popen('mount', 'r').readlines():
@@ -185,7 +188,7 @@ class FileSystem(object):
                 if self.path == mpoint[:len(self.path)]:
                     os.system("umount %s" % (mpoint))
 
-    def chroot(self, cmd_path, cmd_args, output = None):
+    def chroot(self, cmd, output = None):
         if not os.path.isfile(os.path.join(self.path, 'bin/bash')):
             print >> sys.stderr, "Incomplete jailroot at %s" % (self.path)
             raise ValueError("Internal Error: Invalid buildroot at %s" % (self.path))
@@ -193,7 +196,7 @@ class FileSystem(object):
         self.disable_init_scripts()
         if output == None:
             output = []
-        cmd_line = "chroot %s %s %s" % (self.path, cmd_path, cmd_args)
+        cmd_line = "chroot %s %s" % (self.path, cmd)
         result = pdk_utils.execCommand(cmd_line, output = output, callback = self.cb.iteration)
         if result != 0:
             print "Error in chroot.  Result: %s" % result

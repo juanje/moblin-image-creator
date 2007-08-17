@@ -187,8 +187,8 @@ class InstallImage(object):
 
                 symbol_file = os.path.join(base_dir, 'boot', file)
 
-                cmd_args = "-b %s -v %s -F %s" % (base_dir, kernel_version, symbol_file)
-                self.project.chroot("/sbin/depmod", cmd_args)
+                cmd = "/sbin/depmod -b %s -v %s -F %s" % (base_dir, kernel_version, symbol_file)
+                self.project.chroot(cmd)
 
     def create_rootfs(self):
         if not os.path.isfile(os.path.join(self.target.fs_path, 'etc/fstab')):
@@ -204,11 +204,11 @@ class InstallImage(object):
         fs_path      = self.target.fs_path[len(self.project.path):]
         image_path   = self.target.image_path[len(self.project.path):]
         image_path   = os.path.join(image_path,'rootfs.img')
-        cmd_args     = "%s %s -ef %s" % (fs_path, image_path, self.exclude_file)
+        cmd          = "/usr/sbin/mksquashfs %s %s -ef %s" % (fs_path, image_path, self.exclude_file)
 
         self.write_manifest(self.path)
         self.target.umount()
-        self.project.chroot("/usr/sbin/mksquashfs", cmd_args)
+        self.project.chroot(cmd)
         self.target.mount()
             
     def delete_rootfs(self):
@@ -226,7 +226,7 @@ class InstallImage(object):
         fs_path      = os.path.join(fs_path, 'boot')
         image_path   = self.target.image_path[len(self.project.path):]
         image_path   = os.path.join(image_path,'bootfs.img')
-        cmd_args     = "%s %s" % (fs_path, image_path)
+        cmd          = "/usr/sbin/mksquashfs %s %s" % (fs_path, image_path)
 
         # Remove old initrd images
         for file in os.listdir(os.path.join(self.target.fs_path, 'boot')):
@@ -242,7 +242,7 @@ class InstallImage(object):
             shutil.copy("/tmp/.tmp.initrd%d" % order, os.path.join(self.target.fs_path, 'boot', initrd_name))
             order += 1
         self.kernels.pop(0)
-        self.project.chroot("/usr/sbin/mksquashfs", cmd_args)
+        self.project.chroot(cmd)
 
     def delete_bootfs(self):
         if self.bootfs and os.path.isfile(self.bootfs_path):
@@ -267,23 +267,23 @@ class InstallImage(object):
         dst_path = os.path.join(self.target.fs_path, 'etc', 'initramfs-tools', )
         shutil.rmtree(dst_path, True)
         shutil.copytree(src_path, dst_path, True)
-        self.target.chroot("/usr/sbin/mkinitramfs", "-o %s %s" % (initrd_file , tmp[1]))
+        self.target.chroot("/usr/sbin/mkinitramfs -o %s %s" % (initrd_file , tmp[1]))
         
     def create_grub_menu(self):
         # remove previous menu.lst, since we are about to create one
-        self.target.chroot("/bin/rm", " -f /boot/grub/menu.lst")
-        self.target.chroot("/bin/mkdir", " -p /boot/grub")
-        self.target.chroot("/usr/sbin/update-grub", " -y")
-        self.target.chroot("/bin/sed", " s/\\/boot\\//\\//g -i /boot/grub/menu.lst")
+        self.target.chroot("/bin/rm -f /boot/grub/menu.lst")
+        self.target.chroot("/bin/mkdir -p /boot/grub")
+        self.target.chroot("/usr/sbin/update-grub -y")
+        self.target.chroot("/bin/sed s/\\/boot\\//\\//g -i /boot/grub/menu.lst")
         menu=open(os.path.join(self.target.fs_path,"boot","grub","menu.lst"),'r')
         order = 0;
         for line in menu:
             if line.find('title') == 0:
                 print line
                 if line.find(self.default_kernel.split('vmlinuz-').pop().strip()) > 0:
-                    cmd=" s/^default.*/default\\t\\t%d/g -i /boot/grub/menu.lst" % order
-                    print "/bin/sed %s" % cmd
-                    self.target.chroot("/bin/sed", cmd)
+                    cmd="/bin/sed s/^default.*/default\\t\\t%d/g -i /boot/grub/menu.lst" % order
+                    print cmd
+                    self.target.chroot(cmd)
                     break;
                 order = order +1
         menu.close()
@@ -295,7 +295,7 @@ class InstallImage(object):
 
     def write_manifest(self, image_path):
         all_packages = []
-        self.target.chroot("/usr/bin/dpkg-query", '--show', output = all_packages)
+        self.target.chroot("/usr/bin/dpkg-query --show", output = all_packages)
         manifest = open(image_path.rstrip('.img') + '.manifest', 'w')
         print >>manifest, "\n".join(all_packages)
         manifest.close()
@@ -343,9 +343,10 @@ class BaseUsbImage(InstallImage):
         #       This runs syslinux inside the jailroot so the correct
         #       version of syslinux is used.
         jail_path = self.path[len(self.project.path):]
-        self.project.chroot('/usr/bin/syslinux', jail_path)
+        self.project.chroot('/usr/bin/syslinux %s' % jail_path)
 
     def create_ext3fs_file(self, path, size):
+        """Create a ext3fs file.  size is how big to make the file in megabytes"""
         out_file = open(path, 'w')
         out_string = chr(0) * 1024
         for count in range(0, size * 1024):

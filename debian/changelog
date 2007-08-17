@@ -1,3 +1,12 @@
+moblin-image-creator (0.23) UNRELEASED; urgency=low
+
+  * Got rid of the funkyness of our chroot function call.  For some reason we
+    were passing in the command executable and the command_arguments
+    separately, and then immediately putting them back together.  So now I
+    just have it pass the entire command as one string.
+
+ -- John L. Villalovos <john.l.villalovos@intel.com>  Fri, 17 Aug 2007 10:51:22 -0700
+
 moblin-image-creator (0.22) gutsy; urgency=low
 
   [ Alek Du ]
