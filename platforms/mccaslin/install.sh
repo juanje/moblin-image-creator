@@ -40,12 +40,6 @@ splash_check_type
 
 splash_delay 200
 splash_display 'INSTALL..........'
-#mount sys-filesystem
-#ls /sys/class/scsi_disk > /dev/null 2>&1
-#if [ $? != 0 ]; then
-#    ls /sys || mkdir /sys > /dev/null 2>&1
-#    mount -t sysfs /asfas /sys
-#fi
 
 pre_scsi_disk_number=$( ls /sys/class/scsi_disk | wc -l)
 
@@ -79,7 +73,7 @@ splash_progress 5
 splash_delay 10
 
 splash_display 'Formatting /dev/sda1 w/ ext2...'
-spalsh_delay 200
+splash_delay 200
 mkfs.ext2 /dev/sda1
 sync
 splash_progress 5
