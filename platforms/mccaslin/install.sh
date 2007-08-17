@@ -5,10 +5,10 @@ set -u
 
 #################### usplash functions start ####################################
 # alias usplash_write to the 'true' command if we don't have usplash_write
-type usplash_write > /dev/null 2>&1 || alias usplash_write="echo"
+type usplash_write > /dev/null 2>&1 || alias usplash_write="true"
 
 # FIXME: Temporarily disable usplash_write
-alias usplash_write="echo"
+alias usplash_write="true"
 
 # show the progress at status bar.
 # $1 = 0-100
@@ -18,7 +18,8 @@ splash_progress(){
 }
 # display the text no matter whether verbose is set or not
 splash_display(){
-    usplash_write "TEXT-URGENT $1"
+    echo "$@"
+    usplash_write TEXT-URGENT "$@"
     return 0
 }
 # set the splash delay time

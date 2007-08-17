@@ -34,6 +34,7 @@ moblin-image-creator (0.21) gutsy; urgency=low
     the USB flash drive, I am going to use dd rather than shutil.copyfile().
   * Put in usplash code from Martin Xu
   * Fix issue with no output occuring when usplash is disabled.
+  * Trying a better way of fixing the output.
 
  -- John L. Villalovos <john.l.villalovos@intel.com>  Thu, 16 Aug 2007 17:39:59 -0700
 
