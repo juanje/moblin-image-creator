@@ -1,11 +1,4 @@
-moblin-image-creator (0.21) gutsy; urgency=low
-
-  [ Tollef Fog Heen ]
-  * Make sure to set DEBIAN_FRONTEND to noninteractive to avoid hanging
-    when installing packages.
-
-  [ John L. Villalovos ]
-  * I accidentally checked in some testing code into the FSet.
+moblin-image-creator (0.22) UNRELEASED; urgency=low
 
   [ Alek Du ]
   * Add sysfs mount before call install.sh for mccaslin platform too.
@@ -16,10 +9,6 @@ moblin-image-creator (0.21) gutsy; urgency=low
   * Added poulsbo 2d driver related packages to menlow fset
   * Neutralized the /etc/apt/preference file, libdrm is up-to-date now
   * Note that this is for moblin kernel only, xorg.conf is unchanged
-
-  [ John L. Villalovos ]
-  * Make Rusty happy and remove the preferences file since it is all comments
-  * Remove copying of preferences file from menlow/Makefile
 
   [ Rusty Lynch ]
   * Removing the fset entries for mobile-application-service.  This
@@ -35,8 +24,18 @@ moblin-image-creator (0.21) gutsy; urgency=low
   * Put in usplash code from Martin Xu
   * Fix issue with no output occuring when usplash is disabled.
   * Trying a better way of fixing the output.
+  * I accidentally checked in some testing code into the FSet.
+  * Make Rusty happy and remove the preferences file since it is all comments
+  * Remove copying of preferences file from menlow/Makefile
 
- -- John L. Villalovos <john.l.villalovos@intel.com>  Thu, 16 Aug 2007 17:39:59 -0700
+ -- Tollef Fog Heen <tfheen@ubuntu.com>  Fri, 17 Aug 2007 08:23:12 +0200
+
+moblin-image-creator (0.21) gutsy; urgency=low
+
+  * Make sure to set DEBIAN_FRONTEND to noninteractive to avoid hanging
+    when installing packages.
+
+ -- Tollef Fog Heen <tfheen@ubuntu.com>  Tue, 14 Aug 2007 12:18:50 +0200
 
 moblin-image-creator (0.20) gutsy; urgency=low
 
