@@ -1,4 +1,4 @@
-moblin-image-creator (0.22) UNRELEASED; urgency=low
+moblin-image-creator (0.22) gutsy; urgency=low
 
   [ Alek Du ]
   * Add sysfs mount before call install.sh for mccaslin platform too.
