@@ -32,8 +32,9 @@ moblin-image-creator (0.21) gutsy; urgency=low
     if possible.
   * Since dd seems to be an order of magnitude faster for copying an image to
     the USB flash drive, I am going to use dd rather than shutil.copyfile().
+  * Put in usplash code from Martin Xu
 
- -- John L. Villalovos <john.l.villalovos@intel.com>  Thu, 16 Aug 2007 17:11:39 -0700
+ -- John L. Villalovos <john.l.villalovos@intel.com>  Thu, 16 Aug 2007 17:39:59 -0700
 
 moblin-image-creator (0.20) gutsy; urgency=low
 

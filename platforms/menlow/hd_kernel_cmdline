@@ -1,1 +1,1 @@
-ro boot=disk nolapic_timer
+ro boot=disk nolapic_timer splash quiet

@@ -22,3 +22,4 @@ mbcache
 jbd
 ext2
 ext3
+fbcon
