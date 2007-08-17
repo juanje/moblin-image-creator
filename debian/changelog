@@ -30,8 +30,10 @@ moblin-image-creator (0.21) gutsy; urgency=low
   * We will now mount /dev/pts on the target.  I also changed some of the
     mounting logic so that it will try to mimic how the host is mounting stuff
     if possible.
+  * Since dd seems to be an order of magnitude faster for copying an image to
+    the USB flash drive, I am going to use dd rather than shutil.copyfile().
 
- -- John L. Villalovos <john.l.villalovos@intel.com>  Thu, 16 Aug 2007 14:04:41 -0700
+ -- John L. Villalovos <john.l.villalovos@intel.com>  Thu, 16 Aug 2007 17:11:39 -0700
 
 moblin-image-creator (0.20) gutsy; urgency=low
 

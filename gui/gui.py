@@ -566,7 +566,8 @@ class App(object):
                         self.show_error_dialog("Can not umount %s. Please close any shells or opened files still under mount point and try again!" % model[iter][0])
                         dialog2.destroy()
                         return -1
-                    shutil.copyfile(targetfilename, model[iter][0])
+                    cmd = "dd if=%s of=%s" % (targetfilename, model[iter][0])
+                    pdk_utils.execCommand(cmd)
             dialog2.destroy()
 
 #Class: Adding a New Project
