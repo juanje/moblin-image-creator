@@ -6,9 +6,6 @@ set -u
 # alias usplash_write to the 'true' command if we don't have usplash_write
 type usplash_write > /dev/null 2>&1 || alias usplash_write="true"
 
-# FIXME: Temporarily disable usplash_write
-alias usplash_write="true"
-
 # show the progress at status bar.
 # $1 = 0-100
 splash_progress(){
