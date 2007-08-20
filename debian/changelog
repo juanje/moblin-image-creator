@@ -1,3 +1,9 @@
+moblin-image-creator (0.24) UNRELEASED; urgency=low
+
+  * Added console debug to indicate USB device is being written.
+
+ -- Rob Rhoads <rob.rhoads@intel.com> <rob@opusx>  Mon, 20 Aug 2007 12:26:43 -0700
+
 moblin-image-creator (0.23) UNRELEASED; urgency=low
 
   * Got rid of the funkyness of our chroot function call.  For some reason we
