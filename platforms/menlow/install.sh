@@ -15,7 +15,7 @@ splash_progress(){
 # display the text no matter whether verbose is set or not
 splash_display(){
     echo "$@"
-    usplash_write TEXT-URGENT "$@"
+    usplash_write "TEXT-URGENT $@"
     return 0
 }
 # set the splash delay time
