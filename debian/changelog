@@ -1,5 +1,6 @@
 moblin-image-creator (0.23) UNRELEASED; urgency=low
 
+  [ John L. Villalovos ]
   * Got rid of the funkyness of our chroot function call.  For some reason we
     were passing in the command executable and the command_arguments
     separately, and then immediately putting them back together.  So now I
@@ -7,7 +8,11 @@ moblin-image-creator (0.23) UNRELEASED; urgency=low
   * Added console debug to indicate USB device is being written.
   * Enabled use of usplash
 
- -- John L. Villalovos <john.l.villalovos@intel.com>  Fri, 17 Aug 2007 10:51:22 -0700
+  [ Tollef Fog Heen ]
+  * Use host_dirname and target_dirname in raise call when mount fails, so
+    avoid a NameError.
+
+ -- Tollef Fog Heen <tfheen@ubuntu.com>  Tue, 21 Aug 2007 11:48:59 +0200
 
 moblin-image-creator (0.22) gutsy; urgency=low
 

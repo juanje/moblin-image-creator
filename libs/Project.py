@@ -148,7 +148,7 @@ class FileSystem(object):
                 cmd = 'mount %s -t %s %s %s' % (options, fstype, device, path)
                 result = pdk_utils.execCommand(cmd)
                 if result != 0:
-                    raise OSError("Internal error while attempting to mount %s %s!" % (device, dirname))
+                    raise OSError("Internal error while attempting to mount %s %s!" % (host_dirname, target_dirname))
 
         for file in ['etc/resolv.conf', 'etc/hosts']:
             if os.path.isfile(os.path.join('/', file)):
