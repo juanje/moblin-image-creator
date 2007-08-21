@@ -1,1 +1,1 @@
-initrd=initrd.img boot=usb
+initrd=initrd.img boot=usb quiet splash
