@@ -1,1 +1,1 @@
-initrd=initrd.img boot=usb nolapic_timer
+initrd=initrd.img boot=usb nolapic_timer quiet splash
