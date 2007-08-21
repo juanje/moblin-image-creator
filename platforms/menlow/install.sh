@@ -26,16 +26,16 @@ splash_delay(){
 ####################### usplash functions end ###############################
 
 splash_display 'INSTALL..........'
-
+splash_delay 200
 pre_scsi_disk_number=$( ls /sys/class/scsi_disk | wc -l)
-
+found=no
 #find install disk
 while true; do
       for driver in 'hda' 'hdb' 'sda' 'sdb'; do
         echo "checking driver $driver"
         if [ -e /sys/block/$driver/removable ]; then
            if [ "$(cat /sys/block/$driver/removable)" = "0" ]; then
-              echo "found harddisk at $driver"
+              splash_display "found harddisk at $driver"
               found="yes"
               break
            fi
@@ -86,11 +86,11 @@ splash_progress 15
 splash_delay 10
 
 splash_display "Formatting /dev/${driver}2 w/ ext3..."
-splash_delay 200
+splash_delay 1000
 mkfs.ext3 /dev/${driver}2
 sync
 splash_progress 65
-splash_delay 10
+splash_delay 100
 
 splash_display 'Mounting partitions...'
 splash_delay 200
@@ -101,7 +101,7 @@ mount /dev/${driver}2 /mnt
 mkdir /mnt/boot
 mount /dev/${driver}1 /mnt/boot
 splash_progress 70
-splash_delay 10
+splash_delay 100
 
 splash_display 'Copying system files onto hard disk drive...'
 splash_delay 200
