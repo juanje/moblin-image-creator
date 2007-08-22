@@ -54,6 +54,8 @@ DEPS=crownbeach-config
 
 [Ubuntu-Mobile]
 DESC=Ubuntu Mobile using Hildon, and any base applications for same
-PKGS=ubuntu-mobile sdk-default-icons mobile-basic-flash matchbox-keyboard hildon-theme-mobile-basic marquee-plugins hildon-control-panel midbrowser mobile-player gstreamer-dbus-media-service gstreamer0.10-x gstreamer0.10-ffmpeg gstreamer0.10-plugins-ugly matchbox-keyboard moblin-keyboard-manager mousepad moblin-chat gcalctool gnome-nettool moblin-applets
+PKGS=ubuntu-mobile sdk-default-icons mobile-basic-flash matchbox-keyboard hildon-theme-mobile-basic marquee-plugins hildon-control-panel midbrowser gstreamer-dbus-media-service gstreamer0.10-x gstreamer0.10-ffmpeg gstreamer0.10-plugins-ugly matchbox-keyboard moblin-keyboard-manager mousepad gcalctool gnome-nettool
 DEBUG_PKGS=powertop
 DEPS=gnome-mobile
+
+# Not in Ubuntu yet/broken: moblin-chat moblin-applets mobile-player

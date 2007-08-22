@@ -11,6 +11,7 @@ moblin-image-creator (0.23) UNRELEASED; urgency=low
   [ Tollef Fog Heen ]
   * Use host_dirname and target_dirname in raise call when mount fails, so
     avoid a NameError.
+  * Take packages not in the archive yet out of the Ubuntu-Mobile fsets.
 
   [ Rusty Lynch ]
   * Adding moblin-applets to both the menlow and mccaslin fsets
