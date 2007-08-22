@@ -12,6 +12,9 @@ moblin-image-creator (0.23) UNRELEASED; urgency=low
   * Use host_dirname and target_dirname in raise call when mount fails, so
     avoid a NameError.
 
+  [ Rusty Lynch ]
+  * Adding moblin-applets to both the menlow and mccaslin fsets
+
  -- Tollef Fog Heen <tfheen@ubuntu.com>  Tue, 21 Aug 2007 11:48:59 +0200
 
 moblin-image-creator (0.22) gutsy; urgency=low

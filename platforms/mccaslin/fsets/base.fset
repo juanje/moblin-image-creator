@@ -42,6 +42,6 @@ DEPS=samsung-q1-ultra-config|zi9-config
 
 [Ubuntu-Mobile]
 DESC=Ubuntu Mobile using Hildon, and any base applications for same
-PKGS=ubuntu-mobile sdk-default-icons mobile-basic-flash matchbox-keyboard hildon-theme-mobile-basic marquee-plugins hildon-control-panel midbrowser mobile-player gstreamer-dbus-media-service gstreamer0.10-x gstreamer0.10-ffmpeg gstreamer0.10-plugins-ugly matchbox-keyboard moblin-keyboard-manager mousepad moblin-chat galculator gnome-nettool
+PKGS=ubuntu-mobile sdk-default-icons mobile-basic-flash matchbox-keyboard hildon-theme-mobile-basic marquee-plugins hildon-control-panel midbrowser mobile-player gstreamer-dbus-media-service gstreamer0.10-x gstreamer0.10-ffmpeg gstreamer0.10-plugins-ugly matchbox-keyboard moblin-keyboard-manager mousepad moblin-chat galculator gnome-nettool moblin-applets
 DEBUG_PKGS=powertop
 DEPS=gnome-mobile
