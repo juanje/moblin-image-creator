@@ -1,10 +1,14 @@
 moblin-image-creator (0.24) UNRELEASED; urgency=low
 
+  [ Rusty Lynch ]
   * Adding a new Ubuntu-Stagging fset that contains packages that
-    are available in moblin, and ready for inclusion into Ubuntu, 
+    are available in moblin, and ready for inclusion into Ubuntu,
     but still not available in Ubuntu Gutsy just yet.
 
- -- Rusty Lynch <rusty.lynch@intel.com>  Wed, 22 Aug 2007 18:33:12 -0700
+  [ Rob Rhoads <rob.rhoads@intel.com> ]
+  * Fixed rusty's spelling mistake. It's now "staging" instead of "stagging".
+
+ -- Rob Rhoads <rob.rhoads@intel.com> <rob@opusx>  Thu, 23 Aug 2007 09:22:12 -0700
 
 moblin-image-creator (0.23) gutsy; urgency=low
 
