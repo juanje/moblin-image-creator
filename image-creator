@@ -315,7 +315,9 @@ Examples:
 def clear_rootstraps():
     for key in sdk.platforms.iterkeys():
         path = sdk.platforms[key].path
-        os.system("rm -f %s/*rootstrap.tar.bz2" % (path))
+        root_strap_path = os.path.join(path, "rootstrap.tar.bz2")
+        if os.path.exists(root_strap_path):
+            os.unlink(root_strap_path)
     
 def list_platforms():
     for key in sorted(sdk.platforms.iterkeys()):
