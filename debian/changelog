@@ -7,8 +7,11 @@ moblin-image-creator (0.24) UNRELEASED; urgency=low
 
   [ Rob Rhoads <rob.rhoads@intel.com> ]
   * Fixed rusty's spelling mistake. It's now "staging" instead of "stagging".
+  * Merged in Jacob's changes for loading the libata driver in the initramfs
+    instead of the IDE driver. This fixes a problem where DMA was still 
+    disabled on the Ubuntu kernel.
 
- -- Rob Rhoads <rob.rhoads@intel.com> <rob@opusx>  Thu, 23 Aug 2007 09:22:12 -0700
+ -- Rob Rhoads <rob.rhoads@intel.com> <rob@opusx>  Thu, 23 Aug 2007 10:29:37 -0700
 
 moblin-image-creator (0.23) gutsy; urgency=low
 

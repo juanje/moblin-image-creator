@@ -3,10 +3,9 @@ hid
 usbhid
 ehci-hcd
 uhci-hcd
-ide-core
-ide-disk
-ide-generic
-piix
+libata
+ata_generic
+ata_piix
 scsi_mod
 sd_mod
 libusual
