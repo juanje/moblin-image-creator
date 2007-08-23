@@ -4,25 +4,36 @@
 set -u
 
 #################### usplash functions start ####################################
-# alias usplash_write to the 'true' command if we don't have usplash_write
-type usplash_write > /dev/null 2>&1 || alias usplash_write="true"
+SPLASHWRITE=0
+# Determine if we have usplash_write available
+type usplash_write > /dev/null 2>&1 && SPLASHWRITE=1
+
+# Disable usplash, since we want text mode
+SPLASHWRITE=0
 
 # show the progress at status bar.
 # $1 = 0-100
 splash_progress(){
-    usplash_write "PROGRESS $1"
+    splash_write "PROGRESS $1"
     return 0
 }
 # display the text no matter whether verbose is set or not
 splash_display(){
     echo "$@"
-    usplash_write TEXT-URGENT "$@"
+    splash_write "TEXT-URGENT $@"
     return 0
 }
 # set the splash delay time
 splash_delay(){
-    usplash_write "TIMEOUT $1"
+    splash_write "TIMEOUT $1"
     return 0
+}
+# call the usplash_write command, if enabled
+splash_write(){
+    if [ "${SPLASHWRITE}" -eq 1 ]
+    then
+        usplash_write "$@"
+    fi
 }
 ####################### usplash functions end ###############################
 

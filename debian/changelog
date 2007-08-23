@@ -16,7 +16,12 @@ moblin-image-creator (0.23) gutsy; urgency=low
   [ Rusty Lynch ]
   * Adding moblin-applets to both the menlow and mccaslin fsets
 
- -- Tollef Fog Heen <tfheen@ubuntu.com>  Tue, 21 Aug 2007 11:48:59 +0200
+  [ John L. Villalovos ]
+  * Added some more of the usplash code from Martin.  This is for the install
+    to hard drive from the USB flash drive.  Leaving it disabled because I
+    believe most developers want to see what is happening during the install.
+
+ -- John L. Villalovos <john.l.villalovos@intel.com>  Wed, 22 Aug 2007 17:58:10 -0700
 
 moblin-image-creator (0.22) gutsy; urgency=low
 
