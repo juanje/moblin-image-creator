@@ -58,4 +58,10 @@ PKGS=ubuntu-mobile sdk-default-icons mobile-basic-flash matchbox-keyboard hildon
 DEBUG_PKGS=powertop
 DEPS=gnome-mobile
 
+[Ubuntu-Stagging]
+DESC=Packages that are ready for inclusion into Ubuntu Gutsy
+PKGS=moblin-chat moblin-applets mobile-player
+DEBUG_PKGS=
+DEPS=Ubuntu-Mobile
+
 # Not in Ubuntu yet/broken: moblin-chat moblin-applets mobile-player
