@@ -21,8 +21,10 @@ moblin-image-creator (0.23) gutsy; urgency=low
     to hard drive from the USB flash drive.  Leaving it disabled because I
     believe most developers want to see what is happening during the install.
   * Remove use of os.system to delete a file
+  * Trying to keep better track of what we have mounted, so that we can use
+    the information during our umount function.
 
- -- John L. Villalovos <john.l.villalovos@intel.com>  Wed, 22 Aug 2007 18:07:15 -0700
+ -- John L. Villalovos <john.l.villalovos@intel.com>  Wed, 22 Aug 2007 18:15:45 -0700
 
 moblin-image-creator (0.22) gutsy; urgency=low
 

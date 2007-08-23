@@ -49,6 +49,7 @@ class FileSystem(object):
         self.cb = cb
         self.path = os.path.abspath(os.path.expanduser(path))
         self.apt_cmd = '/usr/bin/apt-get -y --force-yes -o Dir::State=%(t)s/var/lib/apt -o Dir::State::status=%(t)s/var/lib/dpkg/status -o Dir::Cache=/var/cache/apt -o Dir::Etc::Sourcelist=%(t)s/etc/apt/sources.list -o Dir::Etc::main=%(t)s/etc/apt/apt.conf -o Dir::Etc::parts=%(t)s/etc/apt/apt.conf.d -o DPkg::Options::=--root=%(t)s -o DPkg::Run-Directory=%(t)s'
+        self.mounted = []
 
     def update(self, path):
         self.aptgetPreCheck()
@@ -118,45 +119,63 @@ class FileSystem(object):
                 print "The directory: %s is missing, will create it" % dirname
                 os.makedirs(dirname)
 
+    mount_list = [
+        # mnt_type, host_dirname, target_dirname, fstype, device
+        ('bind', '/tmp', False, None, None),
+        ('bind', '/usr/share/pdk', False, None, None),
+        ('bind', '/var/cache/apt/archives', False, None, None),
+        ('host', '/dev/pts', 'dev/pts', 'devpts', 'devpts'),
+        ('host', '/proc', False, 'proc', 'proc'),
+        ('host', '/sys', False, 'sysfs', 'sysfs'),
+    ]
+
     def mount(self):
-        for mnt in ['var/cache/apt/archives', 'tmp', 'usr/share/pdk']:
-            path = os.path.join(self.path, mnt)
-            if not os.path.isdir(path):
-                os.makedirs(path)
-            if not pdk_utils.ismount(path) and os.path.isdir(os.path.join('/', mnt)):
-                result = os.system('mount --bind /%s %s' % (mnt, path))
-                if result != 0:
-                    raise OSError("Internal error while attempting to bind mount /%s!" % (mnt))
-
+        # We want to keep a list of everything we mount, so that we can use it
+        # in the umount portion
+        self.mounted = []
         mounts = pdk_utils.getMountInfo()
-        for (host_dirname, target_dirname, fstype, device) in [
-            ('/proc', 'proc', 'proc', 'proc'),
-            ('/sys', 'sys', 'sysfs', 'sysfs'),
-            ('/dev/pts', 'dev/pts', 'devpts', 'devpts')]:
-            # Try to do what the host is doing
-            if host_dirname in mounts:
-                mount_info = mounts[host_dirname]
-                fstype = mount_info.fstype
-                device = mount_info.device
-                options = "-o %s" % mount_info.options
-            else:
-                options = ""
-            path = os.path.join(self.path, target_dirname)
-            if not os.path.isdir(path):
-                os.makedirs(path)
-            if not pdk_utils.ismount(path):
-                cmd = 'mount %s -t %s %s %s' % (options, fstype, device, path)
-                result = pdk_utils.execCommand(cmd)
-                if result != 0:
-                    raise OSError("Internal error while attempting to mount %s %s!" % (host_dirname, target_dirname))
+        for mnt_type, host_dirname, target_dirname, fs_type, device in FileSystem.mount_list:
+            # If didn't specify target_dirname then use the host_dirname path,
+            # but we have to remove the leading '/'
+            if not target_dirname and host_dirname:
+                target_dirname = re.sub(r'^' + os.sep, '', host_dirname)
 
+            # Do the --bind mount types
+            if mnt_type == "bind":
+                path = os.path.join(self.path, target_dirname)
+                self.mounted.append(path)
+                if not os.path.isdir(path):
+                    os.makedirs(path)
+                if not pdk_utils.ismount(path) and os.path.isdir(host_dirname):
+                    result = os.system('mount --bind %s %s' % (host_dirname, path))
+                    if result != 0:
+                        raise OSError("Internal error while attempting to bind mount /%s!" % (mnt))
+            # Mimic host mounts, if possible
+            elif mnt_type == 'host':
+                if host_dirname in mounts:
+                    mount_info = mounts[host_dirname]
+                    fstype = mount_info.fstype
+                    device = mount_info.device
+                    options = "-o %s" % mount_info.options
+                else:
+                    options = ""
+                path = os.path.join(self.path, target_dirname)
+                self.mounted.append(path)
+                if not os.path.isdir(path):
+                    os.makedirs(path)
+                if not pdk_utils.ismount(path):
+                    cmd = 'mount %s -t %s %s %s' % (options, fstype, device, path)
+                    result = pdk_utils.execCommand(cmd)
+                    if result != 0:
+                        raise OSError("Internal error while attempting to mount %s %s!" % (host_dirname, target_dirname))
+        # Setup copies of some useful files from the host into the chroot
         for file in ['etc/resolv.conf', 'etc/hosts']:
             if os.path.isfile(os.path.join('/', file)):
                 shutil.copy(os.path.join('/', file), os.path.join(self.path, file))
 
         if os.path.isfile(os.path.join(self.path, '.buildroot')):
             # search for any file:// URL's in the configured apt repositories, and
-            # when we find them make the equivilant directory in the new filesystem
+            # when we find them make the equivalent directory in the new filesystem
             # and then mount --bind the file:// path into the filesystem.
             rdir = os.path.join(self.path, 'etc', 'apt', 'sources.list.d')
             if os.path.isdir(rdir):
@@ -166,6 +185,7 @@ class FileSystem(object):
                         if re.search(r'^\s*deb file:\/\/\/', line):
                             p = line.split('file:///')[1].split(' ')[0]
                             new_mount = os.path.join(self.path, p)
+                            self.mounted.append(new_mount)
                             if not os.path.isdir(new_mount):
                                 os.makedirs(new_mount)
                                 os.system("mount --bind /%s %s" % (p, new_mount))
@@ -182,6 +202,10 @@ class FileSystem(object):
             self.chroot("/usr/bin/apt-get update")
                 
     def umount(self, keep_mount=''):
+        # Go through all the mount points that we recorded during the mount
+        # function
+        for mount_point in self.mounted:
+            os.system("umount %s" % (mount_point))
         for line in os.popen('mount', 'r').readlines():
             mpoint = line.split()[2]
             if not line.split()[0] == keep_mount:
