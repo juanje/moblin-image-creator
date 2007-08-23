@@ -1,17 +1,17 @@
-moblin-image-creator (0.24) UNRELEASED; urgency=low
+moblin-image-creator (0.24) gutsy; urgency=low
 
   [ Rusty Lynch ]
   * Adding a new Ubuntu-Stagging fset that contains packages that
     are available in moblin, and ready for inclusion into Ubuntu,
     but still not available in Ubuntu Gutsy just yet.
 
-  [ Rob Rhoads <rob.rhoads@intel.com> ]
+  [ Rob Rhoads ]
   * Fixed rusty's spelling mistake. It's now "staging" instead of "stagging".
   * Merged in Jacob's changes for loading the libata driver in the initramfs
     instead of the IDE driver. This fixes a problem where DMA was still 
     disabled on the Ubuntu kernel.
 
- -- Rob Rhoads <rob.rhoads@intel.com> <rob@opusx>  Thu, 23 Aug 2007 10:29:37 -0700
+ -- Tollef Fog Heen <tfheen@ubuntu.com>  Thu, 23 Aug 2007 22:46:13 +0200
 
 moblin-image-creator (0.23) gutsy; urgency=low
 
