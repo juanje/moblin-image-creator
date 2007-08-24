@@ -12,7 +12,11 @@ moblin-image-creator (0.24) gutsy; urgency=low
     instead of the IDE driver. This fixes a problem where DMA was still
     disabled on the Ubuntu kernel.
 
- -- Rusty Lynch <rusty.lynch@intel.com>  Thu, 23 Aug 2007 17:55:56 -0700
+  [ Alek Du ]
+  * Add image create helper text for image-create -h"
+  * Add create-live-usbrw for USB LIVE RW image which was required by QA team
+
+ -- Alek Du <alek.du@intel.com>  Fri, 24 Aug 2007 22:16:39 +0800
 
 moblin-image-creator (0.23) gutsy; urgency=low
 
