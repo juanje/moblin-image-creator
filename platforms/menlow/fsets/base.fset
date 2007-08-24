@@ -62,6 +62,6 @@ DEPS=gnome-mobile
 DESC=Packages that are ready for inclusion into Ubuntu Gutsy
 PKGS=moblin-chat moblin-applets mobile-player
 DEBUG_PKGS=
-DEPS=Ubuntu-Mobile
+DEPS=ubuntu-mobile
 
 # Not in Ubuntu yet/broken: moblin-chat moblin-applets mobile-player
