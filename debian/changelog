@@ -1,4 +1,4 @@
-moblin-image-creator (0.24) gutsy; urgency=low
+moblin-image-creator (0.25) UNRELEASED; urgency=low
 
   [ Rusty Lynch ]
   * Adding a new Ubuntu-Staging fset that contains packages that
