@@ -1,4 +1,4 @@
-moblin-image-creator (0.25) UNRELEASED; urgency=low
+moblin-image-creator (0.25) gutsy; urgency=low
 
   [ Rusty Lynch ]
   * Adding a new Ubuntu-Staging fset that contains packages that
@@ -16,7 +16,7 @@ moblin-image-creator (0.25) UNRELEASED; urgency=low
   * Add image create helper text for image-create -h"
   * Add create-live-usbrw for USB LIVE RW image which was required by QA team
 
- -- Alek Du <alek.du@intel.com>  Fri, 24 Aug 2007 22:16:39 +0800
+ -- Tollef Fog Heen <tfheen@ubuntu.com>  Tue, 28 Aug 2007 00:27:57 +0200
 
 moblin-image-creator (0.23) gutsy; urgency=low
 
