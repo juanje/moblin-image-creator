@@ -3,7 +3,11 @@ moblin-image-creator (0.26) gutsy; urgency=low
   [ John Villalovos ]
   * Fix issue with fstype and fs_type spelling
 
- -- Tollef Fog Heen <tfheen@ubuntu.com>  Tue, 28 Aug 2007 17:01:19 +0200
+  [ Alek Du ]
+  * Add pm-utils and vbetool to fset for S3/S4 support
+  * Remove unnecessary busybox-initramfs workaround since mount --bind works again
+
+ -- Alek Du <alek.du@intel.com>  Wed, 29 Aug 2007 03:48:56 +0800
 
 moblin-image-creator (0.25) gutsy; urgency=low
 

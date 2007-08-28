@@ -47,16 +47,8 @@ mountroot ()
 
 	 mkdir -p ${rootmnt}/tmp/install
 	 mount --bind /dev ${rootmnt}/dev
-	 #udev currently don't know we will partition HD to 2 parts, and we don't use mount --bind ...
-	 mknod /dev/sda1 b 8 1
-	 mknod /dev/sda2 b 8 2
-	 mknod /dev/hda1 b 3 1
-	 mknod /dev/hda2 b 3 2
-	 cp -a /dev/* ${rootmnt}/dev 2> /dev/null
 	 mount --bind /sys ${rootmnt}/sys
-	 mount -t sysfs sys ${rootmnt}/sys
 	 mount --bind /container ${rootmnt}/tmp/install
-	 mount /dev/$driver ${rootmnt}/tmp/install
 	 cp /container/install.sh ${rootmnt}
 
 	 maybe_break install
