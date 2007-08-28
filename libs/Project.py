@@ -120,7 +120,7 @@ class FileSystem(object):
                 os.makedirs(dirname)
 
     mount_list = [
-        # mnt_type, host_dirname, target_dirname, fstype, device
+        # mnt_type, host_dirname, target_dirname, fs_type, device
         ('bind', '/tmp', False, None, None),
         ('bind', '/usr/share/pdk', False, None, None),
         ('bind', '/var/cache/apt/archives', False, None, None),
@@ -154,7 +154,7 @@ class FileSystem(object):
             elif mnt_type == 'host':
                 if host_dirname in mounts:
                     mount_info = mounts[host_dirname]
-                    fstype = mount_info.fstype
+                    fs_type = mount_info.fs_type
                     device = mount_info.device
                     options = "-o %s" % mount_info.options
                 else:
@@ -164,7 +164,7 @@ class FileSystem(object):
                 if not os.path.isdir(path):
                     os.makedirs(path)
                 if not pdk_utils.ismount(path):
-                    cmd = 'mount %s -t %s %s %s' % (options, fstype, device, path)
+                    cmd = 'mount %s -t %s %s %s' % (options, fs_type, device, path)
                     result = pdk_utils.execCommand(cmd)
                     if result != 0:
                         raise OSError("Internal error while attempting to mount %s %s!" % (host_dirname, target_dirname))

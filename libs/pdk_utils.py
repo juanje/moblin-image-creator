@@ -165,10 +165,10 @@ class MountInfo(object):
         result = mount_line.split()
         self.device = result[0]
         self.dirname = result[1]
-        self.fstype = result[2]
+        self.fs_type = result[2]
         self.options = result[3]
     def __str__(self):
-        return ("%s %s %s %s" % (self.device, self.dirname, self.fstype, self.options))
+        return ("%s %s %s %s" % (self.device, self.dirname, self.fs_type, self.options))
     def __repr__(self):
         return "MountInfo('%s')" % self.__str__()
 
