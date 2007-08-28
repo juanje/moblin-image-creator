@@ -1,8 +1,9 @@
-moblin-image-creator (0.25ubuntu1) UNRELEASED; urgency=low
+moblin-image-creator (0.26) gutsy; urgency=low
 
+  [ John Villalovos ]
   * Fix issue with fstype and fs_type spelling
 
- -- John Villalovos <john.l.villalovos@intel.com>  Tue, 28 Aug 2007 06:40:23 -0700
+ -- Tollef Fog Heen <tfheen@ubuntu.com>  Tue, 28 Aug 2007 17:01:19 +0200
 
 moblin-image-creator (0.25) gutsy; urgency=low
 
