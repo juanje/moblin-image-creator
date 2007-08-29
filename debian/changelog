@@ -8,6 +8,7 @@ moblin-image-creator (0.27) UNRELEASED; urgency=low
   * Created a global variable that specifies the size of the ext3 filesystem
     on a liveRW USB image.  Might move this into a config file in the future.
 
+
  -- John L. Villalovos <john.l.villalovos@intel.com>  Wed, 29 Aug 2007 07:11:44 -0700
 
 moblin-image-creator (0.26) gutsy; urgency=low
