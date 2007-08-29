@@ -14,7 +14,10 @@ moblin-image-creator (0.27) UNRELEASED; urgency=low
     use the 'apt-get clean' command in a chroot environment.
   * Creating the ~/.image-creator/ directory if it does not exist.
 
- -- John L. Villalovos <john.l.villalovos@intel.com>  Wed, 29 Aug 2007 13:19:31 -0700
+  [ Alek Du ]
+  * Add nolapic_timer to mccaslin kernel cmdline to workaround S3/S4 issue
+
+ -- Alek Du <alek.du@intel.com>  Thu, 30 Aug 2007 05:28:26 +0800
 
 moblin-image-creator (0.26) gutsy; urgency=low
 
