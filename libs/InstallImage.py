@@ -26,6 +26,9 @@ import traceback
 import Project
 import SDK
 
+# How big to make the ext3 File System on the Live RW USB image, in megabytes
+EXT3FS_FS_SIZE = 100
+
 class SyslinuxCfg(object):
     def __init__(self, path, cfg_filename):
         try:
@@ -387,7 +390,7 @@ class LiveUsbImage(BaseUsbImage):
         rootfs_stat_result = os.stat(self.rootfs_path)
         size = ((rootfs_stat_result.st_size + initrd_stat_result.st_size) / (1024 * 1024)) + 64
         if fs_type == 'EXT3FS':
-           size = size + 100
+           size = size + EXT3FS_FS_SIZE
         self.create_container_file(size)
         self.mount_container()
         self.kernels.insert(0,self.default_kernel)
@@ -400,7 +403,7 @@ class LiveUsbImage(BaseUsbImage):
         self.install_kernels()
         shutil.copy(self.rootfs_path, self.tmp_path)
         if fs_type == 'EXT3FS':
-            self.create_ext3fs_file(os.path.join(self.tmp_path, 'ext3fs.img'), 100)
+            self.create_ext3fs_file(os.path.join(self.tmp_path, 'ext3fs.img'), EXT3FS_FS_SIZE)
         self.umount_container()
         self.delete_rootfs()
         print "LiveUsbImage: Finished!"
