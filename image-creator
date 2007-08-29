@@ -322,11 +322,15 @@ Examples:
     return options, args
 
 def clear_rootstraps():
+    print "Deleting rootstraps..."
     for key in sdk.platforms.iterkeys():
         path = sdk.platforms[key].path
-        root_strap_path = os.path.join(path, "rootstrap.tar.bz2")
-        if os.path.exists(root_strap_path):
-            os.unlink(root_strap_path)
+        for prefix in [ "build", "target" ]:
+            root_strap_path = os.path.join(path, "%s-rootstrap.tar.bz2" % prefix)
+            print "Looking for: %s" % root_strap_path
+            if os.path.exists(root_strap_path):
+                print "Deleting: %s" % root_strap_path
+                os.unlink(root_strap_path)
     
 def list_platforms():
     for key in sorted(sdk.platforms.iterkeys()):
