@@ -8,8 +8,13 @@ moblin-image-creator (0.27) UNRELEASED; urgency=low
   * Created a global variable that specifies the size of the ext3 filesystem
     on a liveRW USB image.  Might move this into a config file in the future.
   * Fix broken "clear-rootstraps" command
+  * Trying to fix issue where thousands and thousands of extra new-lines are
+    printed.
+  * Changed way we clean up the /var/apt/cache/archives of the bootstraps, to
+    use the 'apt-get clean' command in a chroot environment.
+  * Creating the ~/.image-creator/ directory if it does not exist.
 
- -- John L. Villalovos <john.l.villalovos@intel.com>  Wed, 29 Aug 2007 11:30:34 -0700
+ -- John L. Villalovos <john.l.villalovos@intel.com>  Wed, 29 Aug 2007 13:19:31 -0700
 
 moblin-image-creator (0.26) gutsy; urgency=low
 

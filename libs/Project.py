@@ -309,7 +309,7 @@ class Project(FileSystem):
                 if result != 0:
                     print >> sys.stderr, "ERROR: Unable to generate target rootstrap!"
                     raise ValueError(" ".join(output))
-                os.system('rm -fR %s/var/cache/apt/archives/*.dev' % (install_path))
+                pdk_utils.execChrootCommand(install_path, 'apt-get clean')
 
                 # workaround for ubuntu kernel package bug
                 os.system('touch %s/etc/kernel-img.conf' % (install_path))

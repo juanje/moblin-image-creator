@@ -28,16 +28,20 @@ import sys
 
 # this is for the copySourcesListFile() function
 src_regex = None
-if os.path.isdir(os.path.expanduser("~/.image-creator")):
-    sources_regex_file = os.path.expanduser("~/.image-creator/sources_cfg")
-    if os.path.isfile(sources_regex_file):
-        global_dict = {}
-        try:
-            execfile(sources_regex_file, global_dict)
-            if 'sources_regex' in global_dict:
-                src_regex = global_dict['sources_regex']
-        except:
-            pass
+CONFIG_DIR = os.path.expanduser("~/.image-creator")
+if not os.path.isdir(CONFIG_DIR):
+    print "~/.image-creator/ directory did not exist.  Creating"
+    os.makedirs(CONFIG_DIR)
+
+sources_regex_file = os.path.expanduser(os.path.join(CONFIG_DIR, "sources_cfg"))
+if os.path.isfile(sources_regex_file):
+    global_dict = {}
+    try:
+        execfile(sources_regex_file, global_dict)
+        if 'sources_regex' in global_dict:
+            src_regex = global_dict['sources_regex']
+    except:
+        pass
 
 def main():
     # Add something to exercise this code
@@ -127,10 +131,11 @@ def execCommand(cmd_line, quiet = False, output = None, callback = None):
         while p.poll() == None:
             if output != None and pl.poll(10):
                 line = p.stdout.readline()
-                line = line.rstrip()
-                output.append(line)
+                newline = line.rstrip()
+                if line != newline or newline:
+                    output.append(newline)
                 if not quiet:
-                    print line
+                    sys.stdout.write(line)
             elif callback:
                 callback(p)
         if output != None:
@@ -142,6 +147,20 @@ def execCommand(cmd_line, quiet = False, output = None, callback = None):
                     print line
         result = p.returncode
         return result
+
+def execChrootCommand(path, cmd, output = None, callback = None):
+    if not os.path.isfile(os.path.join(path, 'bin/bash')):
+        print >> sys.stderr, "Incomplete jailroot at %s" % (path)
+        raise ValueError("Internal Error: Invalid buildroot at %s" % (path))
+    if output == None:
+        output = []
+    cmd_line = "chroot %s %s" % (path, cmd)
+    result = execCommand(cmd_line, output = output, callback = callback)
+    if result != 0:
+        print "Error in chroot.  Result: %s" % result
+        print "Command was: %s" % cmd_line
+        sys.stdout.flush()
+    return result
 
 def copySourcesListFile(sourcefile, destfile):
     """The purpose of this function is allow the user to be able to point at a
