@@ -125,13 +125,13 @@ class App(object):
         # Items which should be enabled if we have a target selected
         self.buttons.delete_target.set_sensitive(target_selected_state)
         self.buttons.install_fset.set_sensitive(target_selected_state)
+        self.buttons.target_term_launch.set_sensitive(target_selected_state)
         # Items which should be enabled if our selected target has an fset
         self.buttons.create_liveiso.set_sensitive(fset_state)
         self.buttons.create_installiso.set_sensitive(fset_state)
         self.buttons.create_liveusb.set_sensitive(fset_state)
         self.buttons.create_liverwusb.set_sensitive(fset_state)
         self.buttons.create_installusb.set_sensitive(fset_state)
-        self.buttons.target_term_launch.set_sensitive(fset_state)
         self.buttons.target_kernel_cmdline.set_sensitive(fset_state)
         self.buttons.DD_USB.set_sensitive(fset_state)
 
