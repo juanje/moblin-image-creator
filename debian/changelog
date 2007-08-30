@@ -20,8 +20,9 @@ moblin-image-creator (0.27) UNRELEASED; urgency=low
   [ John L. Villalovos ]
   * Make it so that you can do a terminal in a target, once the target is
     created.
+  * Have it read mounts from /proc/mounts rather than /etc/mtab
 
- -- John L. Villalovos <john.l.villalovos@intel.com>  Thu, 30 Aug 2007 08:39:17 -0700
+ -- John L. Villalovos <john.l.villalovos@intel.com>  Thu, 30 Aug 2007 08:58:10 -0700
 
 moblin-image-creator (0.26) gutsy; urgency=low
 
