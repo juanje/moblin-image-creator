@@ -3,6 +3,9 @@ moblin-image-creator (0.27) UNRELEASED; urgency=low
   [ Alek Du ]
   * Add pm-utils and vbetool to fset for S3/S4 support
   * Remove unnecessary busybox-initramfs workaround since mount --bind works again
+  * Add nolapic_timer to mccaslin kernel cmdline to workaround S3/S4 issue
+  * Add libhildon-1-dev and libhildonfm2-dev to project root, since QA guys need 
+    them for ABAT cases
 
   [ John L. Villalovos ]
   * Created a global variable that specifies the size of the ext3 filesystem
@@ -13,18 +16,9 @@ moblin-image-creator (0.27) UNRELEASED; urgency=low
   * Changed way we clean up the /var/apt/cache/archives of the bootstraps, to
     use the 'apt-get clean' command in a chroot environment.
   * Creating the ~/.image-creator/ directory if it does not exist.
-
-  [ Alek Du ]
-  * Add nolapic_timer to mccaslin kernel cmdline to workaround S3/S4 issue
-
-  [ John L. Villalovos ]
   * Make it so that you can do a terminal in a target, once the target is
     created.
   * Have it read mounts from /proc/mounts rather than /etc/mtab
-
-  [ Alek Du ]
-  * Add libhildon-1-dev and libhildonfm2-dev to project root, since QA guys need 
-    them for ABAT cases
 
  -- Alek Du <alek.du@intel.com>  Thu, 30 Aug 2007 20:18:23 +0800
 
