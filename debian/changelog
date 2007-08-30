@@ -22,7 +22,11 @@ moblin-image-creator (0.27) UNRELEASED; urgency=low
     created.
   * Have it read mounts from /proc/mounts rather than /etc/mtab
 
- -- John L. Villalovos <john.l.villalovos@intel.com>  Thu, 30 Aug 2007 08:58:10 -0700
+  [ Alek Du ]
+  * Add libhildon-1-dev and libhildonfm2-dev to project root, since QA guys need 
+    them for ABAT cases
+
+ -- Alek Du <alek.du@intel.com>  Thu, 30 Aug 2007 20:18:23 +0800
 
 moblin-image-creator (0.26) gutsy; urgency=low
 
