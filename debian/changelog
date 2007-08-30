@@ -20,7 +20,11 @@ moblin-image-creator (0.27) UNRELEASED; urgency=low
     created.
   * Have it read mounts from /proc/mounts rather than /etc/mtab
 
- -- Alek Du <alek.du@intel.com>  Thu, 30 Aug 2007 20:18:23 +0800
+  [ Tollef Fog Heen ]
+  * Get rid significant bits of the ubuntu-mobile fsets as they are now in
+    the ubuntu mobile metapackage.
+  
+ -- Tollef Fog Heen <tfheen@ubuntu.com>  Thu, 30 Aug 2007 22:51:41 +0200
 
 moblin-image-creator (0.26) gutsy; urgency=low
 
