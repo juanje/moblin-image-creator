@@ -93,7 +93,7 @@ def umount_device(device_file):
 def getMountInfo():
     """Function to parse the list of mounts and return back the data"""
     output = {}
-    mounts_file = "/etc/mtab"
+    mounts_file = "/proc/mounts"
     in_file = open(mounts_file, 'r')
     for line in in_file:
         line = line.strip()
