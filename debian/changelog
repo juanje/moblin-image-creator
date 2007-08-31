@@ -8,8 +8,9 @@ moblin-image-creator (0.28) UNRELEASED; urgency=low
     functions.
   * fixing up mic_cfg.py.  Just some cleanup.
   * Putting new config system in place.  Fingers are crossed.
+  * Removing very very verbose messages on error.
 
- -- John L. Villalovos <john.l.villalovos@intel.com>  Fri, 31 Aug 2007 12:01:36 -0700
+ -- John L. Villalovos <john.l.villalovos@intel.com>  Fri, 31 Aug 2007 12:11:35 -0700
 
 moblin-image-creator (0.27) gutsy; urgency=low
 

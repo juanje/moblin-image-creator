@@ -217,7 +217,7 @@ class App(object):
                 self.projectList.append((dialog.name, dialog.desc, dialog.path, dialog.platform))
             except:
                 print sys.exc_value
-                print_exc_plus()
+                # print_exc_plus()
                 self.show_error_dialog("%s" % (sys.exc_value))
                 try:
                     self.sdk.delete_project(dialog.name)
