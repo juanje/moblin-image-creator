@@ -17,17 +17,19 @@ basicinstall: all
 	@echo "Installing platform definitions..."
 	@${MAKE} -C platforms install
 	@echo -n "Installing moblin-image-creator..."
+	@mkdir -p ${DESTDIR}/${SHAREDIR}/default_config
 	@mkdir -p ${DESTDIR}/${SHAREDIR}/lib
 	@mkdir -p ${DESTDIR}/${SHAREDIR}/locale
 	@mkdir -p ${DESTDIR}/${SHAREDIR}/projects
 	@mkdir -p ${DESTDIR}/${SHAREDIR}/utils
-	mkdir -p ${DESTDIR}/usr/share/pdk/debootstrap-scripts
-	cp utils/gutsy ${DESTDIR}/usr/share/pdk/debootstrap-scripts
+	@mkdir -p ${DESTDIR}/${SHAREDIR}/debootstrap-scripts
+	@cp utils/gutsy ${DESTDIR}/${SHAREDIR}/debootstrap-scripts
 	@cp libs/*.py  ${DESTDIR}/${SHAREDIR}/lib
 	@cp gui/*.py  ${DESTDIR}/${SHAREDIR}/lib
 	@cp gui/*.glade ${DESTDIR}/${SHAREDIR}
 	@cp COPYING ${DESTDIR}/${SHAREDIR}/
 	@cp -a gui/pixmaps/ ${DESTDIR}/${SHAREDIR}
+	@cp default_config/defaults.cfg ${DESTDIR}/${SHAREDIR}/default_config/
 	@mkdir -p ${DESTDIR}/usr/sbin
 	@cp image-creator ${DESTDIR}/usr/sbin/
 	@mkdir -p ${DESTDIR}/etc/bash_completion.d/
@@ -81,4 +83,3 @@ runbasictests:
 runalltests: runtests
 	@echo "Running unit tests that take a long time..."
 	unittest/testInstallImage.py
-

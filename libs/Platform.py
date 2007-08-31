@@ -22,6 +22,7 @@ import re
 import sys
 
 import fsets
+import mic_cfg
 
 class Platform(object):
     """
@@ -41,54 +42,34 @@ class Platform(object):
         fset_path = os.path.join(self.path, 'fsets')
         for filename in os.listdir(fset_path):
             self.fset.addFile(os.path.join(fset_path, filename))
+        local_config = []
+        for section in [ "bootstrap.%s" % self.name, "bootstrap" ]:
+            if mic_cfg.config.has_section(section):
+                # section is now set to the appropriate section
+                break
+        else:
+            print "Error: No buildroot config file information found!"
+            raise ValueError
         # determine what packages additional packages need to be installed
         # in the buildroot roostrap
         self.buildroot_extras = ""
-        config = open(os.path.join(self.path, 'buildroot_extras'))
-        for line in config:
-            # Ignore lines beginning with '#'
-            if not re.search(r'^\s*#', line):
-                for p in line.split():
-                    self.buildroot_extras += p + ','
-        config.close()
+        packages = mic_cfg.config.get(section, "buildroot_extras")
+        for p in packages.split():
+            self.buildroot_extras += p + ','
         # determine what packages need to be installed in the buildroot
         # (outside the rootstrap archive)
         self.buildroot_packages = []
-        config = open(os.path.join(self.path, 'buildroot.packages'))
-        for line in config:
-            # Ignore lines beginning with '#'
-            if not re.search(r'^\s*#', line):
-                for p in line.split():
-                    self.buildroot_packages.append(p)
-        config.close()
+        packages = mic_cfg.config.get(section, "buildroot_packages")
+        for p in packages.split():
+            self.buildroot_packages.append(p)
         # determine what mirror to use for the buildroot
-        if os.path.isfile(os.path.join(self.path, 'buildroot_mirror')):
-            t = open(os.path.join(self.path, 'buildroot_mirror'))
-            self.buildroot_mirror = t.readline()
-            t.close()
-        else:
-            self.buildroot_mirror = "http://archive.ubuntu.com/ubuntu/"
+        self.buildroot_mirror = mic_cfg.config.get(section, "buildroot_mirror")
         # determine what codename to use for the buildroot mirror
-        if os.path.isfile(os.path.join(self.path, 'buildroot_codename')):
-            t = open(os.path.join(self.path, 'buildroot_codename'))
-            self.buildroot_codename = t.readline()
-            t.close()
-        else:
-            self.buildroot_codename = "gutsy"
+        self.buildroot_codename = mic_cfg.config.get(section, "buildroot_codename")
         # determine what mirror to use for the target
-        if os.path.isfile(os.path.join(self.path, 'target_mirror')):
-            t = open(os.path.join(self.path, 'target_mirror'))
-            self.target_mirror = t.readline()
-            t.close()
-        else:
-            self.target_mirror = "http://archive.ubuntu.com/ubuntu/"
+        self.target_mirror = mic_cfg.config.get(section, "target_mirror")
         # determine what codename to use for the buildroot mirror
-        if os.path.isfile(os.path.join(self.path, 'target_codename')):
-            t = open(os.path.join(self.path, 'target_codename'))
-            self.target_codename = t.readline()
-            t.close()
-        else:
-            self.target_codename = "gutsy"
+        self.target_codename = mic_cfg.config.get(section, "target_codename")
         # determine default kernel cmdline options
         self.usb_kernel_cmdline = ''
         self.hd_kernel_cmdline = ''
@@ -102,15 +83,6 @@ class Platform(object):
             if not re.search(r'^\s*#',line):
                 self.hd_kernel_cmdline += line + ' '
         config.close()
-        config_file = os.path.expanduser("~/.image-creator/platforms.cfg")
-        if os.path.isfile(config_file):
-            config = ConfigParser.SafeConfigParser()
-            config.read(config_file)
-            if config.has_section(name):
-                for cfg_option in [ 'buildroot_mirror', 'buildroot_codename',
-                    'target_mirror', 'target_codename' ]:
-                    if config.has_option(name, cfg_option):
-                        setattr(self, cfg_option, config.get(name, cfg_option))
 
     def __str__(self):
         return ("<Platform Object: \n\tname=%s, \n\tfset=%s, \n\tbuildroot_packages=%s>\n" %
