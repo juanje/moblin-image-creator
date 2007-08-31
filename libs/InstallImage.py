@@ -25,9 +25,10 @@ import traceback
 
 import Project
 import SDK
+import mic_cfg
 
 # How big to make the ext3 File System on the Live RW USB image, in megabytes
-EXT3FS_FS_SIZE = 100
+EXT3FS_FS_SIZE = int(mic_cfg.config.get("installimage", "ext3fs_size"))
 
 class SyslinuxCfg(object):
     def __init__(self, path, cfg_filename):
@@ -38,7 +39,7 @@ class SyslinuxCfg(object):
             self.msg_path = os.path.join(self.path, 'boot.msg')
             self.index = 1
 
-            welcome_mesg = "Welcome to the Linux PDK:"
+            welcome_mesg = mic_cfg.config.get("installimage", "welcomemessage")
 
             # Create and initialize the syslinux config file
             cfg_file = open(self.cfg_path, 'w')

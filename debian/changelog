@@ -13,8 +13,9 @@ moblin-image-creator (0.28) UNRELEASED; urgency=low
     file.
   * Decided to use [platform] rather than [bootstrap] seemed more appropriate
     as I added a few more options.
+  * Added an [installimage] section to the config
 
- -- John L. Villalovos <john.l.villalovos@intel.com>  Fri, 31 Aug 2007 15:24:57 -0700
+ -- John L. Villalovos <john.l.villalovos@intel.com>  Fri, 31 Aug 2007 15:43:25 -0700
 
 moblin-image-creator (0.27) gutsy; urgency=low
 

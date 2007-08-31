@@ -29,7 +29,8 @@ config = None
 DEFAULT_CONFIG_DIR = os.path.expanduser("/usr/share/pdk/default_config/")
 CONFIG_DIR = os.path.expanduser("~/.image-creator")
 # List of valid sections for our config file
-BASE_SECTIONS = [ "bootstrap", "platform" ]
+BASE_SECTIONS = [ "platform" ]
+VALID_SECTIONS = BASE_SECTIONS + [ "installimage", ]
 
 def main():
     readConfig()
@@ -76,14 +77,19 @@ def verifyConfig(filename):
         result = re.search(r'^(.*)\.', section)
         if result:
             section = result.group(1)
-        if section not in BASE_SECTIONS:
+            if section not in BASE_SECTIONS:
+                print "Invalid section: %s" % section
+                print "Found in file: %s" % filename
+                sys.exit(1)
+            continue
+        if section not in VALID_SECTIONS:
             print "Invalid section: %s" % section
             print "Found in file: %s" % filename
             sys.exit(1)
 
 def fixupConfig():
     """This takes care of fixing up the config data.  Main thing it does right
-    now is fix up stuff for 'bootstrap.platformname' sections"""
+    now is fix up stuff for 'platform.platformname' sections"""
     for base_section in BASE_SECTIONS:
         # If we don't have the base section, then we know we will not copy
         # anything over
