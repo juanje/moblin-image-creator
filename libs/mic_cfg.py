@@ -72,22 +72,6 @@ def fixupConfig():
                         value = config.get(base_section, option)
                         config.set(custom_section, option, value)
 
-def setDefaults(config_object):
-    """Pass in a ConfigClass object, and this will setup all the default values for program"""
-    general_defaults_list = [
-    ]
-    bootstrap_defaults_list = [
-        ('buildroot_mirror', "http://archive.ubuntu.com/ubuntu/", "For buildroot bootstrap, what mirror server debootstrap will use"),
-        ('buildroot_codename', "gutsy", "What release to use for buildroot bootstrap"),
-        ('target_mirror', "http://archive.ubuntu.com/ubuntu/", "For targets bootstrap, what mirror server debootstrap will use"),
-        ('target_codename', "gutsy", "What release to use for target bootstrap"),
-    ]
-
-    bootstrap_defaults = ConfigClass()
-    bootstrap_defaults.setAttributesWithDescription(bootstrap_defaults_list)
-    print bootstrap_defaults.buildroot_mirror
-    config_object.setKeyValue('bootstrap', bootstrap_defaults)
-
 def print_exc_plus(type, value, tb):
     # From Python Cookbook 2nd Edition.  FIXME: Will need to remove this at
     # some point, or give attribution.
