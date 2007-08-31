@@ -28,6 +28,8 @@ from ConfigParser import SafeConfigParser
 config = None
 DEFAULT_CONFIG_DIR = os.path.expanduser("/usr/share/pdk/default_config/")
 CONFIG_DIR = os.path.expanduser("~/.image-creator")
+# List of valid sections for our config file
+BASE_SECTIONS = [ "bootstrap", "platform" ]
 
 def main():
     readConfig()
@@ -61,16 +63,28 @@ def readConfig():
     for filename in sorted(os.listdir(DEFAULT_CONFIG_DIR)):
         full_name = os.path.join(DEFAULT_CONFIG_DIR, filename)
         config.read(full_name)
+        verifyConfig(full_name)
     user_config_file = os.path.join(CONFIG_DIR, "image-creator.cfg")
     if os.path.isfile(user_config_file):
         config.read(user_config_file)
+        verifyConfig(user_config_file)
     fixupConfig()
+
+def verifyConfig(filename):
+    """Make sure that we don't have any unknown sections in the config file"""
+    for section in config.sections():
+        result = re.search(r'^(.*)\.', section)
+        if result:
+            section = result.group(1)
+        if section not in BASE_SECTIONS:
+            print "Invalid section: %s" % section
+            print "Found in file: %s" % filename
+            sys.exit(1)
 
 def fixupConfig():
     """This takes care of fixing up the config data.  Main thing it does right
     now is fix up stuff for 'bootstrap.platformname' sections"""
-    base_sections = [ "bootstrap" ]
-    for base_section in base_sections:
+    for base_section in BASE_SECTIONS:
         # If we don't have the base section, then we know we will not copy
         # anything over
         if not config.has_section(base_section):

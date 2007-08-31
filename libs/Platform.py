@@ -43,7 +43,7 @@ class Platform(object):
         for filename in os.listdir(fset_path):
             self.fset.addFile(os.path.join(fset_path, filename))
         local_config = []
-        for section in [ "bootstrap.%s" % self.name, "bootstrap" ]:
+        for section in [ "platform.%s" % self.name, "platform" ]:
             if mic_cfg.config.has_section(section):
                 # section is now set to the appropriate section
                 break
@@ -71,18 +71,8 @@ class Platform(object):
         # determine what codename to use for the buildroot mirror
         self.target_codename = mic_cfg.config.get(section, "target_codename")
         # determine default kernel cmdline options
-        self.usb_kernel_cmdline = ''
-        self.hd_kernel_cmdline = ''
-        config = open(os.path.join(self.path, 'usb_kernel_cmdline'), 'r')
-        for line in config:
-            if not re.search(r'^\s*#',line):
-                self.usb_kernel_cmdline += line + ' '
-        config.close()
-        config = open(os.path.join(self.path, 'hd_kernel_cmdline'), 'r')
-        for line in config:
-            if not re.search(r'^\s*#',line):
-                self.hd_kernel_cmdline += line + ' '
-        config.close()
+        self.usb_kernel_cmdline = mic_cfg.config.get(section, "usb_kernel_cmdline")
+        self.hd_kernel_cmdline = mic_cfg.config.get(section, "hd_kernel_cmdline")
 
     def __str__(self):
         return ("<Platform Object: \n\tname=%s, \n\tfset=%s, \n\tbuildroot_packages=%s>\n" %

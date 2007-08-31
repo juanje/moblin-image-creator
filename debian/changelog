@@ -11,8 +11,10 @@ moblin-image-creator (0.28) UNRELEASED; urgency=low
   * Removing very very verbose messages on error.
   * Give a warning if people are using the old ~/.image-creator/platforms.cfg
     file.
+  * Decided to use [platform] rather than [bootstrap] seemed more appropriate
+    as I added a few more options.
 
- -- John L. Villalovos <john.l.villalovos@intel.com>  Fri, 31 Aug 2007 12:22:01 -0700
+ -- John L. Villalovos <john.l.villalovos@intel.com>  Fri, 31 Aug 2007 15:24:57 -0700
 
 moblin-image-creator (0.27) gutsy; urgency=low
 
