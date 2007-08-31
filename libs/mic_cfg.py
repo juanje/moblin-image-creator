@@ -45,6 +45,17 @@ def readConfig():
     if not os.path.isdir(CONFIG_DIR):
         print "~/.image-creator/ directory did not exist.  Creating"
         os.makedirs(CONFIG_DIR)
+
+    user_config_file = os.path.join(CONFIG_DIR, "image-creator.cfg")
+    # FIXME: This is temporary to help out people
+    old_config = os.path.join(CONFIG_DIR, "platforms.cfg")
+    if os.path.exists(old_config):
+        print "Error: The file: %s exists" % old_config
+        print "This file is no longer used.  Please convert it over to the new file and then delete it"
+        print "Please create a: %s file" % user_config_file
+        print "And set it up like the file: %s" % os.path.join(DEFAULT_CONFIG_DIR, "defaults.cfg")
+        sys.exit(1)
+
     global config
     config = SafeConfigParser()
     for filename in sorted(os.listdir(DEFAULT_CONFIG_DIR)):
