@@ -57,7 +57,7 @@ def readConfig():
 
 def fixupConfig():
     """This takes care of fixing up the config data.  Main thing it does right
-    now is fix up stuff for 'buildroot.platformname' sections"""
+    now is fix up stuff for 'bootstrap.platformname' sections"""
     base_sections = [ "bootstrap" ]
     for base_section in base_sections:
         # If we don't have the base section, then we know we will not copy
@@ -71,39 +71,6 @@ def fixupConfig():
                     if not config.has_option(custom_section, option):
                         value = config.get(base_section, option)
                         config.set(custom_section, option, value)
-
-def print_exc_plus(type, value, tb):
-    # From Python Cookbook 2nd Edition.  FIXME: Will need to remove this at
-    # some point, or give attribution.
-    # This is a modified version of recipe 8.6
-    """ Print the usual traceback information, followed by a listing of
-        all the local variables in each frame.
-    """
-    while tb.tb_next:
-        tb = tb.tb_next
-    stack = []
-    f = tb.tb_frame
-    while f:
-        stack.append(f)
-        f = f.f_back
-    stack.reverse()
-    traceback.print_exception(type, value, tb)
-    print "Locals by frame, innermost last"
-    for frame in stack:
-        print
-        print "Frame %s in %s at line %s" % (frame.f_code.co_name,
-                                             frame.f_code.co_filename,
-                                             frame.f_lineno)
-        for key, value in frame.f_locals.items():
-            print "\t%20s = " % key,
-            # we must _absolutely_ avoid propagating exceptions, and str(value)
-            # COULD cause any exception, so we MUST catch any...:
-            try:
-                print value
-            except:
-                print "<ERROR WHILE PRINTING VALUE>"
-    traceback.print_exception(type, value, tb)
-
 
 if '__main__' == __name__:
     sys.exit(main())
