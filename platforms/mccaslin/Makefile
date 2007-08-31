@@ -13,7 +13,6 @@ install:
 	@cp -a initramfs ${SHARE}/platforms/${PNAME}
 	@mkdir -p ${SHARE}/platforms/${PNAME}/fsets
 	@cp fsets/*.fset ${SHARE}/platforms/${PNAME}/fsets/
-	@cp *cmdline* ${SHARE}/platforms/${PNAME}/
 
 clean:
 	rm -f *.tar.bz2 *~ package-build-stamp
