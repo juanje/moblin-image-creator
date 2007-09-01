@@ -201,16 +201,19 @@ class FileSystem(object):
             buildstamp.close()
             self.chroot("/usr/bin/apt-get update")
                 
-    def umount(self, keep_mount=''):
+    def umount(self):
         # Go through all the mount points that we recorded during the mount
         # function
         for mount_point in self.mounted:
             os.system("umount %s" % (mount_point))
-        for line in os.popen('mount', 'r').readlines():
-            mpoint = line.split()[2]
-            if not line.split()[0] == keep_mount:
-                if self.path == mpoint[:len(self.path)]:
-                    os.system("umount %s" % (mpoint))
+        # Have to add a '/' on the end to prevent /foo/egg and /foo/egg2 being
+        # treated as if both were under /foo/egg
+        our_path = os.path.abspath(self.path) + "/"
+        mounts = pdk_utils.getMountInfo()
+        for mount_info in mounts:
+            mpoint = os.path.abspath(mount_info.dirname) + '/'
+            if our_path == mpoint[:len(our_path)]:
+                os.system("umount %s" % (mpoint))
 
     def chroot(self, cmd, output = None):
         if not os.path.isfile(os.path.join(self.path, 'bin/bash')):
