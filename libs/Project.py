@@ -210,8 +210,8 @@ class FileSystem(object):
         # treated as if both were under /foo/egg
         our_path = os.path.abspath(self.path) + "/"
         mounts = pdk_utils.getMountInfo()
-        for mount_info in mounts:
-            mpoint = os.path.abspath(mount_info.dirname) + '/'
+        for mpoint in mounts:
+            mpoint = os.path.abspath(mpoint) + '/'
             if our_path == mpoint[:len(our_path)]:
                 os.system("umount %s" % (mpoint))
 
