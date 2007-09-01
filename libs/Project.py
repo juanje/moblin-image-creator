@@ -208,10 +208,10 @@ class FileSystem(object):
             os.system("umount %s" % (mount_point))
         # Have to add a '/' on the end to prevent /foo/egg and /foo/egg2 being
         # treated as if both were under /foo/egg
-        our_path = os.path.abspath(self.path) + "/"
+        our_path = os.path.abspath(self.path) + os.sep
         mounts = pdk_utils.getMountInfo()
         for mpoint in mounts:
-            mpoint = os.path.abspath(mpoint) + '/'
+            mpoint = os.path.abspath(mpoint) + os.sep
             if our_path == mpoint[:len(our_path)]:
                 os.system("umount %s" % (mpoint))
 
