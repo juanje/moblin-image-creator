@@ -39,7 +39,7 @@ class SyslinuxCfg(object):
             self.msg_path = os.path.join(self.path, 'boot.msg')
             self.index = 1
 
-            welcome_mesg = mic_cfg.config.get("installimage", "welcomemessage")
+            welcome_mesg = mic_cfg.config.get("installimage", "welcome_message")
 
             # Create and initialize the syslinux config file
             cfg_file = open(self.cfg_path, 'w')

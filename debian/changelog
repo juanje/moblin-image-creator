@@ -17,8 +17,9 @@ moblin-image-creator (0.28) UNRELEASED; urgency=low
   * Make our umount function use the pdk_utils.getMountInfo() function.  This
     function uses /proc/mounts to determine the mounts on the system.
     Hopefully this will do a better job in umounting stuff
+  * Fix issue with misspelled variable
 
- -- John L. Villalovos <john.l.villalovos@intel.com>  Fri, 31 Aug 2007 18:39:08 -0700
+ -- John L. Villalovos <john.l.villalovos@intel.com>  Mon, 03 Sep 2007 21:25:25 -0700
 
 moblin-image-creator (0.27) gutsy; urgency=low
 
