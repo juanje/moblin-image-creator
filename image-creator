@@ -253,6 +253,10 @@ Examples:
         parser.error("Must specify a -c/--command argument")
     if options.cmd not in valid_commands:
         parser.error("Command specified for option -c/--command invalid.  Valid commands are: %s" % valid_command_string)
+    # Our FSets are converted to lowecase, so do the same for the command line
+    # argument
+    if options.fset_name:
+        options.fset_name = options.fset_name.lower()
     if options.cmd == 'list-targets' and not options.project_name:
         parser.error("Must specify a project-name when using %s command." % options.cmd)
     if options.cmd == "list-fsets" and not options.platform_name:

@@ -18,8 +18,9 @@ moblin-image-creator (0.28) UNRELEASED; urgency=low
     function uses /proc/mounts to determine the mounts on the system.
     Hopefully this will do a better job in umounting stuff
   * Fix issue with misspelled variable
+  * Convert fset names on the command line to lowercase.
 
- -- John L. Villalovos <john.l.villalovos@intel.com>  Mon, 03 Sep 2007 21:25:25 -0700
+ -- John L. Villalovos <john.l.villalovos@intel.com>  Tue,  4 Sep 2007 17:10:26 -0700
 
 moblin-image-creator (0.27) gutsy; urgency=low
 
