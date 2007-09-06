@@ -77,7 +77,7 @@ class FileSystem(object):
             ret = self.chroot(command) 
             if ret == 0:
                 print "Completed 'apt-get install' successfully"
-                return
+                break
             print
             print "Error running 'apt-get install' command: %s" % command
             print "Will try 'apt-get update' in 15 seconds"
@@ -94,7 +94,7 @@ class FileSystem(object):
                 time.sleep(15)
             else:
                 print "Completed 'apt-get update' successfully"
-                print "Will try 'apt-get install' in 15 seconds"
+                print "Will try 'apt-get install -f' in 15 seconds"
                 time.sleep(15)
             # apt-get install -f
             command = self.apt_cmd % {'t': path} + " install -f"
@@ -108,8 +108,9 @@ class FileSystem(object):
                 print "Completed 'apt-get install -f' successfully"
                 print "Will try 'apt-get install' in 15 seconds"
                 time.sleep(15)
+        else:
             raise OSError("Internal error while attempting to run: %s" % command)
-            os.environ['DEBIAN_FRONTEND'] = debian_frontend
+        os.environ['DEBIAN_FRONTEND'] = debian_frontend
 
     def aptgetPreCheck(self):
         """Stuff that we want to check for before we run an apt-get command"""
