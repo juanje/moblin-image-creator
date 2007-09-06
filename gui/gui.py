@@ -329,7 +329,7 @@ class App(object):
             except ValueError, e:
                 self.show_error_dialog(e.args[0])
             except:
-                print_exc_plus()
+                # print_exc_plus()
                 self.show_error_dialog("Unexpected error: %s" % (sys.exc_info()[1]))
             progress_dialog.destroy()
         dialog.destroy();

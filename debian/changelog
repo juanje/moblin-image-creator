@@ -20,8 +20,10 @@ moblin-image-creator (0.28) UNRELEASED; urgency=low
   * Fix issue with misspelled variable
   * Convert fset names on the command line to lowercase.
   * Fix indenation error that was causing our retries to fail
+  * Previous fix uncovered a bug in resetting an environement error.  Fixing
+    that.
 
- -- John L. Villalovos <john.l.villalovos@intel.com>  Thu,  6 Sep 2007 10:46:17 -0700
+ -- John L. Villalovos <john.l.villalovos@intel.com>  Thu,  6 Sep 2007 15:54:04 -0700
 
 moblin-image-creator (0.27) gutsy; urgency=low
 

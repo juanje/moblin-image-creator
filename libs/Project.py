@@ -62,6 +62,8 @@ class FileSystem(object):
         
     def install(self, path, packages):
         debian_frontend = os.environ.get("DEBIAN_FRONTEND")
+        if debian_frontend == None:
+            debian_frontend = ""
         os.environ['DEBIAN_FRONTEND'] = 'noninteractive'
         self.aptgetPreCheck()
         if not packages:
