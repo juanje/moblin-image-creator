@@ -23,8 +23,10 @@ moblin-image-creator (0.28) UNRELEASED; urgency=low
   * Previous fix uncovered a bug in resetting an environement error.  Fixing
     that.
   * Update so that both platforms are using galculator.
+  * Added a debug option to the config file, well make more extensive use of
+    it in the future.
 
- -- John L. Villalovos <john.l.villalovos@intel.com>  Thu,  6 Sep 2007 21:48:24 -0700
+ -- John L. Villalovos <john.l.villalovos@intel.com>  Fri,  7 Sep 2007 10:16:20 -0700
 
 moblin-image-creator (0.27) gutsy; urgency=low
 

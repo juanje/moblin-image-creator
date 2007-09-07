@@ -31,6 +31,11 @@ import traceback
 
 import pdk_utils
 import SDK 
+import mic_cfg
+
+debug = False
+if mic_cfg.config.has_option('general', 'debug'):
+    debug = int(mic_cfg.config.get('general', 'debug'))
 
 # Initial stuff for Internationlization and Localization support.
 # Locale stuff
@@ -217,7 +222,7 @@ class App(object):
                 self.projectList.append((dialog.name, dialog.desc, dialog.path, dialog.platform))
             except:
                 print sys.exc_value
-                # print_exc_plus()
+                if debug: print_exc_plus()
                 self.show_error_dialog("%s" % (sys.exc_value))
                 try:
                     self.sdk.delete_project(dialog.name)
@@ -329,7 +334,7 @@ class App(object):
             except ValueError, e:
                 self.show_error_dialog(e.args[0])
             except:
-                # print_exc_plus()
+                if debug: print_exc_plus()
                 self.show_error_dialog("Unexpected error: %s" % (sys.exc_info()[1]))
             progress_dialog.destroy()
         dialog.destroy();
@@ -471,10 +476,10 @@ class App(object):
             try:
                 self.current_project().create_install_usb(target.name, img_name)
             except ValueError, e:
-                print_exc_plus()
+                if debug: print_exc_plus()
                 self.show_error_dialog(e.args[0])
             except:
-                print_exc_plus()
+                if debug: print_exc_plus()
                 self.show_error_dialog()
             progress_dialog.destroy()
 
