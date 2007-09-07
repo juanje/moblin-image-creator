@@ -34,7 +34,7 @@ class Platform(object):
     - a set of fsets that can be installed into a target
     """
     def __init__(self, sdk_path, name):
-        self.sdk_path = os.path.abspath(os.path.expanduser(sdk_path))
+        self.sdk_path = os.path.realpath(os.path.abspath(os.path.expanduser(sdk_path)))
         self.name = name
         self.path = os.path.join(self.sdk_path, 'platforms', self.name)
         # instantiate all fsets

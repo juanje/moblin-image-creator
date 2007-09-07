@@ -170,7 +170,7 @@ class PackageConfig(ConfigFile):
 class SDK(object):
     def __init__(self, cb, path='/usr/share/pdk'):
         self.version = "0.1"
-        self.path = os.path.abspath(os.path.expanduser(path))
+        self.path = os.path.realpath(os.path.abspath(os.path.expanduser(path)))
         self.cb = cb
         self.config_path = os.path.join(self.path, 'projects')
         if not os.path.isdir(self.config_path):
@@ -222,7 +222,7 @@ class SDK(object):
         if not parent_path or not name or not desc or not platform:
             raise ValueError("Empty argument passed in")
         
-        install_path = os.path.abspath(os.path.expanduser(parent_path))
+        install_path = os.path.realpath(os.path.abspath(os.path.expanduser(parent_path)))
         if not os.path.isdir(install_path):
             os.makedirs(install_path)
 

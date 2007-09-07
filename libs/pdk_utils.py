@@ -49,7 +49,7 @@ def main():
 
 def get_current_udisks():
     usb_devices = []
-    dirname = os.path.abspath('/sys/bus/scsi')
+    dirname = os.path.realpath(os.path.abspath('/sys/bus/scsi'))
     work_list = getUsbDirTree(dirname)
     usb_list = [ x for x in work_list if re.search(r'usb', x) ]
     for filename in usb_list:
@@ -78,7 +78,7 @@ def getUsbDirTree(dirname):
 
 def umount_device(device_file):
     """umount a device if it is mounted"""
-    search_file = "%s " % os.path.abspath(device_file)
+    search_file = "%s " % os.path.realpath(os.path.abspath(device_file))
     mount_file = open('/proc/mounts', 'r')
     for line in mount_file:
         line = line.strip()
@@ -104,7 +104,7 @@ def getMountInfo():
 def ismount(path):
     """Function to see if a path is mounted, this is because os.path.ismount()
     does not seem to detect --bind"""
-    path = os.path.abspath(os.path.expanduser(path))
+    path = os.path.realpath(os.path.abspath(os.path.expanduser(path)))
     output = []
     cmd = "mount"
     result = execCommand(cmd, quiet = True, output = output)

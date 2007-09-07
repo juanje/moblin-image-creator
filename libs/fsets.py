@@ -35,7 +35,7 @@ class FSet(object):
 
     def addFile(self, filename):
         """Add a config file to the FSet"""
-        filename = os.path.abspath(os.path.expanduser(filename))
+        filename = os.path.realpath(os.path.abspath(os.path.expanduser(filename)))
         self.filenames.append(filename)
         self.__parseFile(filename)
 

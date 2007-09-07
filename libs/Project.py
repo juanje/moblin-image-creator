@@ -47,7 +47,7 @@ class FileSystem(object):
         if not path:
             raise ValueError("Empty argument passed in")
         self.cb = cb
-        self.path = os.path.abspath(os.path.expanduser(path))
+        self.path = os.path.realpath(os.path.abspath(os.path.expanduser(path)))
         self.apt_cmd = '/usr/bin/apt-get -y --force-yes -o Dir::State=%(t)s/var/lib/apt -o Dir::State::status=%(t)s/var/lib/dpkg/status -o Dir::Cache=/var/cache/apt -o Dir::Etc::Sourcelist=%(t)s/etc/apt/sources.list -o Dir::Etc::main=%(t)s/etc/apt/apt.conf -o Dir::Etc::parts=%(t)s/etc/apt/apt.conf.d -o DPkg::Options::=--root=%(t)s -o DPkg::Run-Directory=%(t)s'
         self.mounted = []
 
@@ -211,10 +211,10 @@ class FileSystem(object):
             os.system("umount %s" % (mount_point))
         # Have to add a '/' on the end to prevent /foo/egg and /foo/egg2 being
         # treated as if both were under /foo/egg
-        our_path = os.path.abspath(self.path) + os.sep
+        our_path = os.path.realpath(os.path.abspath(self.path)) + os.sep
         mounts = pdk_utils.getMountInfo()
         for mpoint in mounts:
-            mpoint = os.path.abspath(mpoint) + os.sep
+            mpoint = os.path.realpath(os.path.abspath(mpoint)) + os.sep
             if our_path == mpoint[:len(our_path)]:
                 os.system("umount %s" % (mpoint))
 
@@ -256,7 +256,7 @@ class Project(FileSystem):
     def __init__(self, path, name, desc, platform, cb):
         if not path or not name or not desc or not platform:
             raise ValueError("Empty argument passed in")
-        self.path = os.path.abspath(os.path.expanduser(path))
+        self.path = os.path.realpath(os.path.abspath(os.path.expanduser(path)))
         self.name = name
         self.platform = platform
         self.desc = desc
@@ -566,7 +566,7 @@ if __name__ == '__main__':
         sys.exit(1)
 
     name = sys.argv[1]
-    install_path = os.path.abspath(os.path.expanduser(sys.argv[2]))
+    install_path = os.path.realpath(os.path.abspath(os.path.expanduser(sys.argv[2])))
     desc = sys.argv[3]
     target_name = sys.argv[4]
     platform_name = sys.argv[5]
