@@ -196,7 +196,7 @@ class App(object):
             name = dialog.name
             desc = dialog.desc
             platform = dialog.platform
-            path = os.path.abspath(os.path.expanduser(dialog.path))
+            path = os.path.realpath(os.path.abspath(os.path.expanduser(dialog.path)))
             if not dialog.name or not dialog.desc or not dialog.platform or not dialog.path:
                 self.show_error_dialog("All values must be specified")
                 continue

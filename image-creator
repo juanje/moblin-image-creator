@@ -324,7 +324,7 @@ Examples:
         if not options.target_name:
             parser.error("Must specify target-name when using %s command" % options.cmd)
     if options.project_path:
-        options.project_path = os.path.abspath(os.path.expanduser(options.project_path))
+        options.project_path = os.path.realpath(os.path.abspath(os.path.expanduser(options.project_path)))
 
     return options, args
 
