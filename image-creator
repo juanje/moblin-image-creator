@@ -26,8 +26,11 @@ from optparse import OptionParser
 
 sys.path.insert(0, '/usr/share/pdk/lib')
 import SDK
+import mic_cfg
 
 debug = False
+if mic_cfg.config.has_option('general', 'debug'):
+    debug = int(mic_cfg.config.get('general', 'debug'))
 
 # We will only load the GUI library code if we have no arguments specified
 if len(sys.argv) == 1:

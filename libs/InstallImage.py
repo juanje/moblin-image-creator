@@ -27,6 +27,10 @@ import Project
 import SDK
 import mic_cfg
 
+debug = False
+if mic_cfg.config.has_option('general', 'debug'):
+    debug = int(mic_cfg.config.get('general', 'debug'))
+
 # How big to make the ext3 File System on the Live RW USB image, in megabytes
 EXT3FS_FS_SIZE = int(mic_cfg.config.get("installimage", "ext3fs_size"))
 
@@ -56,7 +60,7 @@ class SyslinuxCfg(object):
             print >> msg_file, "\n" + welcome_mesg + "\n"
             msg_file.close()
         except:
-            print_exc_plus()
+            if debug: print_exc_plus()
             sys.exit(1)
             
     def __repr__(self):

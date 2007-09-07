@@ -25,8 +25,9 @@ moblin-image-creator (0.28) UNRELEASED; urgency=low
   * Update so that both platforms are using galculator.
   * Added a debug option to the config file, well make more extensive use of
     it in the future.
+  * More debug option work.
 
- -- John L. Villalovos <john.l.villalovos@intel.com>  Fri,  7 Sep 2007 10:16:20 -0700
+ -- John L. Villalovos <john.l.villalovos@intel.com>  Fri,  7 Sep 2007 10:19:33 -0700
 
 moblin-image-creator (0.27) gutsy; urgency=low
 
