@@ -571,9 +571,32 @@ class App(object):
                         self.show_error_dialog("Can not umount %s. Please close any shells or opened files still under mount point and try again!" % model[iter][0])
                         dialog2.destroy()
                         return -1
-                    print "Writting image to USB disk %s" % model[iter][0]
+
+                    self.progressBarWindow = gtk.Window(gtk.WINDOW_TOPLEVEL)
+                    self.progressBarWindow.set_title("Please Wait...")
+                    self.progressBarWindow.set_border_width(5)
+                    self.progressBarWindow.set_size_request(500, 200)
+
+                    vbox = gtk.VBox(False, 5)
+                    self.progressBarWindow.add(vbox)
+
+                    label = gtk.Label("Writing image to USB disk")     
+                    frame = gtk.Frame("")            
+                    frame.add(label)
+                    vbox.pack_start(frame, False, False, 0)
+                    
+                    self.progressbar = gtk.ProgressBar()                             
+                    self.progressbar.set_pulse_step(0.01)
+                    vbox.pack_start(self.progressbar, False, False, 0)
+                    self.progressBarWindow.show_all()                 
+
+                    print "Writing image to USB disk %s" % model[iter][0]
                     cmd = "dd if=%s of=%s" % (targetfilename, model[iter][0])
-                    pdk_utils.execCommand(cmd)
+                    pdk_utils.execCommand(cmd, False, None, self.iteration)                    
+                    print "Writing Complete"                    
+
+                    self.progressBarWindow.destroy()
+
             dialog2.destroy()
 
 #Class: Adding a New Project
