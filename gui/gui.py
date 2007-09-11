@@ -67,8 +67,6 @@ class App(object):
                 "on_new_target_add_clicked": self.on_new_target_add_clicked,
                 "on_delete_target_clicked": self.on_delete_target_clicked,
                 "on_install_fset": self.on_install_fset,
-                "on_create_liveISO_clicked": self.on_liveISO_clicked,
-                "on_create_installISO_clicked": self.on_installISO_clicked,
                 "on_create_liveUSB_clicked": self.on_liveUSB_clicked,
                 "on_create_liveRWUSB_clicked": self.on_liveRWUSB_clicked,
                 "on_create_installUSB_clicked": self.on_installUSB_clicked,
@@ -132,8 +130,6 @@ class App(object):
         self.buttons.install_fset.set_sensitive(target_selected_state)
         self.buttons.target_term_launch.set_sensitive(target_selected_state)
         # Items which should be enabled if our selected target has an fset
-        self.buttons.create_liveiso.set_sensitive(fset_state)
-        self.buttons.create_installiso.set_sensitive(fset_state)
         self.buttons.create_liveusb.set_sensitive(fset_state)
         self.buttons.create_liverwusb.set_sensitive(fset_state)
         self.buttons.create_installusb.set_sensitive(fset_state)
@@ -483,50 +479,6 @@ class App(object):
                 self.show_error_dialog()
             progress_dialog.destroy()
 
-    def on_installISO_clicked(self, widget):
-        project = self.current_project()
-        target = self.current_target()
-        widgets = gtk.glade.XML(self.gladefile, 'new_img_dlg')
-        dialog = widgets.get_widget('new_img_dlg')
-        result = dialog.run()
-        img_name = widgets.get_widget('img_name').get_text()
-        dialog.destroy()
-        if result == gtk.RESPONSE_OK:
-            progress_tree = gtk.glade.XML(self.gladefile, 'ProgressDialog')
-            progress_dialog = progress_tree.get_widget('ProgressDialog')
-            progress_dialog.connect('delete_event', self.ignore)
-            progress_tree.get_widget('progress_label').set_text("Please wait while creating %s" % img_name)
-            self.progressbar = progress_tree.get_widget('progressbar')
-            try:
-                self.current_project().create_install_iso(target.name, img_name)
-            except ValueError, e:
-                self.show_error_dialog(e.args[0])
-            except:
-                self.show_error_dialog()
-            progress_dialog.destroy()
-            
-    def on_liveISO_clicked(self, widget):
-        project = self.current_project()
-        target = self.current_target()
-        widgets = gtk.glade.XML(self.gladefile, 'new_img_dlg')
-        dialog = widgets.get_widget('new_img_dlg')
-        result = dialog.run()
-        img_name = widgets.get_widget('img_name').get_text()
-        dialog.destroy()
-        if result == gtk.RESPONSE_OK:
-            progress_tree = gtk.glade.XML(self.gladefile, 'ProgressDialog')
-            progress_dialog = progress_tree.get_widget('ProgressDialog')
-            progress_dialog.connect('delete_event', self.ignore)
-            progress_tree.get_widget('progress_label').set_text("Please wait while creating %s" % img_name)
-            self.progressbar = progress_tree.get_widget('progressbar')
-            try:
-                self.current_project().create_live_iso(target.name, img_name)
-            except ValueError, e:
-                self.show_error_dialog(e.args[0])
-            except:
-                self.show_error_dialog()
-            progress_dialog.destroy()
-            
     def on_DD_USB_clicked(self, widget):
         project_path = self.current_project().path
         target = self.current_target()
@@ -653,8 +605,6 @@ class MainWindowButtons(object):
         self.delete_target = widgets.get_widget('target_delete')
         self.install_fset = widgets.get_widget('target_install_fset')
         # Action buttons
-        self.create_liveiso = widgets.get_widget('create_liveISO_btn')
-        self.create_installiso = widgets.get_widget('create_installISO_btn')
         self.create_liveusb = widgets.get_widget('create_liveUSB_btn')
         self.create_liverwusb = widgets.get_widget('create_liveRWUSB_btn')
         self.create_installusb = widgets.get_widget('create_installUSB_btn')

@@ -30,8 +30,10 @@ moblin-image-creator (0.28) UNRELEASED; urgency=low
     in an attempted fix for that.
   * More fixing for symbolic links
   * Add a "progress bar" when writing an image to a USB drive.
+  * Removed ISO buttons.  Also cleaned up the UI a little bit.  Hopefully text
+    will not be cut-off on the buttons anymore.
 
- -- John L. Villalovos <john.l.villalovos@intel.com>  Mon, 10 Sep 2007 16:13:12 -0700
+ -- John L. Villalovos <john.l.villalovos@intel.com>  Tue, 11 Sep 2007 12:18:17 -0700
 
 moblin-image-creator (0.27) gutsy; urgency=low
 
