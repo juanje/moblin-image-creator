@@ -316,7 +316,20 @@ class SDK(object):
             print >> sys.stderr, "ERROR: Unable to delete %s!" % (project_name)
             raise ValueError(" ".join(output))
         os.unlink(os.path.join(self.config_path, proj.name + '.proj'))
-        
+
+    def getProjects(self):
+        """Return back a list containing all the projects that the SDK knows about"""
+        project_list = []
+        for key in sorted(self.projects.iterkeys()):
+            project_list.append(self.projects[key])
+        return project_list
+
+    def umount(self):
+        # Unmount all of our projects
+        for key in sorted(self.projects.iterkeys()):
+            project = self.projects[key]
+            project.umount()
+
     def __str__(self):
         return ("<SDK Object: path=%s, platform=%s>" %
                 (self.path, self.platforms))
@@ -331,4 +344,3 @@ class Callback:
 if __name__ == '__main__':
     for path in sys.argv[1:]:
         print SDK(path = path, cb = Callback())
-        

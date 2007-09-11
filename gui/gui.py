@@ -112,9 +112,7 @@ class App(object):
 
     def quit(self, value):
         # Unmount all of our projects
-        for key in sorted(self.sdk.projects.iterkeys()):
-            project = self.sdk.projects[key]
-            project.umount()
+        self.sdk.umount()
         gtk.main_quit()
         
     def on_help_activate(self, widget):
