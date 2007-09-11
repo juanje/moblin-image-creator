@@ -389,16 +389,27 @@ class App(object):
 
     def on_term_launch_clicked(self, widget):
         project_path = self.current_project().path
+        project_name = self.current_project().name
+        prompt_file = open(os.path.join(project_path, "etc/debian_chroot"), 'w')
+        print >> prompt_file, "P: %s" % project_name
+        prompt_file.close()
         print "Project path: %s" % project_path
-        os.system('/usr/bin/gnome-terminal -x sudo /usr/sbin/chroot %s su - &' % project_path)
+        cmd = '/usr/bin/gnome-terminal -x sudo /usr/sbin/chroot %s su - &' % (project_path)
+        print cmd
+        os.system(cmd)
 
     def on_target_term_launch_clicked(self, widget):
         project_path = self.current_project().path
         target = self.current_target()
         target.mount()
         target_path= "%s/targets/%s/fs" % (project_path, target.name)
+        prompt_file = open(os.path.join(target_path, "etc/debian_chroot"), 'w')
+        print >> prompt_file, "T: %s" % target.name
+        prompt_file.close()
         print "Target path: %s" % target_path
-        os.system('/usr/bin/gnome-terminal -x sudo /usr/sbin/chroot %s su - &' % target_path)
+        cmd = '/usr/bin/gnome-terminal -x sudo /usr/sbin/chroot %s su - &' % (target_path)
+        print cmd
+        os.system(cmd)
 
     def on_target_kernel_cmdline_clicked(self, widget):
         project_path = self.current_project().path
