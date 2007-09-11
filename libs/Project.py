@@ -279,6 +279,13 @@ class Project(FileSystem):
         """
         FileSystem.install(self, "/", self.platform.buildroot_packages)
 
+    def umount(self):
+        """We want to umount all of our targets and then anything in our project that we have mounted"""
+        for target_name in self.targets:
+            target = self.targets[target_name]
+            target.umount()
+        FileSystem.umount(self)
+
     def update(self):
         FileSystem.update(self, "/")
 

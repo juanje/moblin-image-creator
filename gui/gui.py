@@ -59,8 +59,8 @@ class App(object):
             raise IOError, "Glade file is missing from: %s" % self.gladefile
         gnome.init('image-creator', self.sdk.version, properties = {'app-datadir':self.sdk.path})
         self.widgets = gtk.glade.XML (self.gladefile, 'main')
-        dic = {"on_main_destroy_event" : gtk.main_quit,
-                "on_quit_activate" : gtk.main_quit,
+        dic = {"on_main_destroy_event" : self.quit,
+                "on_quit_activate" : self.quit,
                 "on_help_activate" : self.on_help_activate,
                 "on_new_project_clicked" : self.on_new_project_clicked,
                 "on_projectDelete_clicked": self.on_projectDelete_clicked,
@@ -109,6 +109,13 @@ class App(object):
 
     def run(self):
         gtk.main()
+
+    def quit(self, value):
+        # Unmount all of our projects
+        for key in sorted(self.sdk.projects.iterkeys()):
+            project = self.sdk.projects[key]
+            project.umount()
+        gtk.main_quit()
         
     def on_help_activate(self, widget):
         gnome.help_display('image-creator')
