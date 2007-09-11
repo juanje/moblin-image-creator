@@ -40,8 +40,9 @@ moblin-image-creator (0.28) UNRELEASED; urgency=low
     projects that the SDK knows about.  Now call this function from the GUI,
     rather than having the GUI iterate through the projects and umounting
     them.
+  * Make the command line version also umount all of our mounts upon exit.
 
- -- John L. Villalovos <john.l.villalovos@intel.com>  Tue, 11 Sep 2007 16:17:01 -0700
+ -- John L. Villalovos <john.l.villalovos@intel.com>  Tue, 11 Sep 2007 16:21:48 -0700
 
 moblin-image-creator (0.27) gutsy; urgency=low
 

@@ -115,6 +115,7 @@ def main():
     else:
         print "Unknown command specified"
         return 1
+    sdk.umount()
     return 0
         
 
