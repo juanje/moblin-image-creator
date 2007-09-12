@@ -43,8 +43,10 @@ moblin-image-creator (0.28) UNRELEASED; urgency=low
   * Make the command line version also umount all of our mounts upon exit.
   * Create the (chroot)/etc/debian_chroot file when doing a chroot from the
     GUI.  So you can more easily tell which terminal is a chroot.
+  * Clean up the command line completion code.  Added --run-command and
+    deleted the ones relating to ISO creation, since we don't do that.
 
- -- John L. Villalovos <john.l.villalovos@intel.com>  Tue, 11 Sep 2007 16:47:11 -0700
+ -- John L. Villalovos <john.l.villalovos@intel.com>  Wed, 12 Sep 2007 10:38:22 -0700
 
 moblin-image-creator (0.27) gutsy; urgency=low
 

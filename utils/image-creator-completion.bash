@@ -24,28 +24,26 @@ _image_creator()
     case $prev in
         -@(-command|c))
             COMPREPLY=( $( compgen -W '\
-                create-install-iso \
+                chroot-project \
+                chroot-target \
+                clear-rootstraps \
                 create-install-usb \
-                create-live-iso \
                 create-live-usb \
                 create-project \
                 create-target \
                 delete-project \
                 delete-target \
-                umount-project \
-                umount-target \
-                run-project \
-                run-target \
                 install-fset \
-                clear-rootstraps \
                 list-fsets \
                 list-platforms \
                 list-projects \
                 list-targets \
+                run-project \
+                run-target \
+                umount-project \
+                umount-target \
                 update-project \
                 update-target \
-		chroot-project \
-		chroot-target \
                 ' -- $cur  ) )
             return 0
             ;;
@@ -61,11 +59,25 @@ _image_creator()
 
     if [[ "$cur" == -* ]] ; then
         COMPREPLY=( $( compgen -W '
-        -c --command --platform-name \
-        --project-name --project-description \
-        --project-path -t --target-name \
-        --fset-name --image-name -q --quiet --bypass-rootstrap \
-        -d --enable-debug -h --help' -- $cur ) )
+            --bypass-rootstrap \
+            --command \
+            --enable-debug \
+            --fset-name \
+            --help \
+            --image-name \
+            --platform-name \
+            --project-description \
+            --project-name \
+            --project-path \
+            --quiet \
+            --run-command \
+            --target-name \
+            -c \
+            -d \
+            -h \
+            -q \
+            -t \
+        ' -- $cur ) )
     else
         _filedir
     fi
