@@ -45,8 +45,10 @@ moblin-image-creator (0.28) UNRELEASED; urgency=low
     GUI.  So you can more easily tell which terminal is a chroot.
   * Clean up the command line completion code.  Added --run-command and
     deleted the ones relating to ISO creation, since we don't do that.
+  * Edited the options that image-creator accepts.  Deleted the ISO ones.
+    Also made it so that commands can be easily sorted in the text editor.
 
- -- John L. Villalovos <john.l.villalovos@intel.com>  Wed, 12 Sep 2007 10:38:22 -0700
+ -- John L. Villalovos <john.l.villalovos@intel.com>  Wed, 12 Sep 2007 10:42:56 -0700
 
 moblin-image-creator (0.27) gutsy; urgency=low
 

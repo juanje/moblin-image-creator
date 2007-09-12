@@ -106,7 +106,7 @@ def main():
         update_project(options)
     elif options.cmd == 'update-target':
         update_target(options)
-    elif options.cmd in ['create-live-iso', 'create-install-iso', 'create-live-usb', 'create-live-usbrw', 'create-install-usb']:
+    elif options.cmd in ['create-live-usb', 'create-live-usbrw', 'create-install-usb']:
         create_image(options)
     elif options.cmd == 'chroot-project':
         chroot_project(options)
@@ -120,15 +120,29 @@ def main():
         
 
 def parseCommandLine():
-    valid_commands = [ "list-platforms", "list-projects", "list-targets",
-                       "list-fsets", "create-project", "create-target",
-                       "install-fset", "delete-target", "delete-project",
-                       "create-live-iso", "create-install-iso",
-                       "create-live-usb", "create-live-usbrw", "create-install-usb",
-                       "update-project", "update-target",
-                       "chroot-project", "chroot-target",
-                       "umount-project", "umount-target",
-                       "run-project", "run-target", "clear-rootstraps"]
+    valid_commands = [
+        "chroot-project",
+        "chroot-target",
+        "clear-rootstraps"
+        "create-install-usb",
+        "create-live-usb",
+        "create-live-usbrw",
+        "create-project",
+        "create-target",
+        "delete-project",
+        "delete-target",
+        "install-fset",
+        "list-fsets",
+        "list-platforms",
+        "list-projects",
+        "list-targets",
+        "run-project",
+        "run-target",
+        "umount-project",
+        "umount-target",
+        "update-project",
+        "update-target",
+    ]
     valid_commands.sort()
     valid_command_string = ""
     for command in valid_commands[:-1]:
@@ -234,9 +248,7 @@ Examples:
     image-creator --command=update-project \\
                   --project-name='MyProject'
 <create a image>
-    image-creator --command=[create-live-iso \\
-                            |create-install-iso \\
-                            |create-live-usb \\
+    image-creator --command=|create-live-usb \\
                             |create-live-usbrw \\
                             |create-install-usb]  \\
                   --project-name='Myproject' \\
@@ -309,7 +321,7 @@ Examples:
             parser.error("Must specify target-name when using %s command" % options.cmd)
         if not options.fset_name:
             parser.error("Must specify fset-name when using %s command" % options.cmd)
-    if options.cmd == "create-live-iso" or options.cmd == "create-install-iso" or options.cmd == "create-live-usb" or options.cmd == "create-live-usbrw" or options.cmd == "create-install-usb":
+    if options.cmd == "create-live-usb" or options.cmd == "create-live-usbrw" or options.cmd == "create-install-usb":
         if not options.project_name:
             parser.error("Must specify project-name when using %s command" % options.cmd)
         if not options.target_name:
@@ -463,11 +475,7 @@ def install_fset(options):
 
 def create_image(options):
     proj = sdk.projects[options.project_name]
-    if options.cmd == 'create-live-iso':
-        proj.create_live_iso(options.target_name, options.image_name)
-    elif options.cmd == 'create-install-iso':
-        proj.create_install_iso(options.target_name, options.image_name)
-    elif options.cmd == 'create-live-usb':
+    if options.cmd == 'create-live-usb':
         proj.create_live_usb(options.target_name, options.image_name)
     elif options.cmd == 'create-live-usbrw':
         proj.create_live_usb(options.target_name, options.image_name, 'EXT3FS')
