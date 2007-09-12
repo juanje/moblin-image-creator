@@ -49,8 +49,9 @@ moblin-image-creator (0.28) UNRELEASED; urgency=low
     Also made it so that commands can be easily sorted in the text editor.
   * Fix error from previous commit.  Also starting work on save and load
     project feature
+  * Make sure the callback feature gets called for progress indication
 
- -- John L. Villalovos <john.l.villalovos@intel.com>  Wed, 12 Sep 2007 10:49:03 -0700
+ -- John L. Villalovos <john.l.villalovos@intel.com>  Wed, 12 Sep 2007 11:29:52 -0700
 
 moblin-image-creator (0.27) gutsy; urgency=low
 

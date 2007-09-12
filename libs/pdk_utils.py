@@ -136,7 +136,7 @@ def execCommand(cmd_line, quiet = False, output = None, callback = None):
                     output.append(newline)
                 if not quiet:
                     sys.stdout.write(line)
-            elif callback:
+            if callback:
                 callback(p)
         if output != None:
             # Now check if any output is left over
