@@ -123,7 +123,7 @@ def parseCommandLine():
     valid_commands = [
         "chroot-project",
         "chroot-target",
-        "clear-rootstraps"
+        "clear-rootstraps",
         "create-install-usb",
         "create-live-usb",
         "create-live-usbrw",
@@ -136,8 +136,10 @@ def parseCommandLine():
         "list-platforms",
         "list-projects",
         "list-targets",
+        "load-project",
         "run-project",
         "run-target",
+        "save-project",
         "umount-project",
         "umount-target",
         "update-project",
@@ -193,11 +195,13 @@ Examples:
     image-creator --command=delete-project \\
                   --project-name='MyOtherProject'
 
-<Unmount a project>
+<Unmount a project> Normally this will not be needed as projects are
+                    automatically unmounted upon exit.
     image-creator --command=umount-project \\
                   --project-name='MyOtherProject'
 
-<Unmount a target>
+<Unmount a target>  Normally this will not be needed as targets are
+                    automatically unmounted upon exit
     image-creator --command=umount-target \\
                   --project-name='MyOtherProject' \\
                   --target-name='MyTarget'
@@ -223,7 +227,7 @@ Examples:
                   --project-name='MyProject' \\
                   --target-name='MyOtherTarget'
 
-<installing an fset into a given target>
+<installing a Function Set (fset) into a given target>
     image-creator --command=install-fset \\
                   --platform-name='donley' \\
                   --project-name='MyProject' \\
