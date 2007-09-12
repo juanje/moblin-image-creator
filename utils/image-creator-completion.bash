@@ -38,8 +38,10 @@ _image_creator()
                 list-platforms \
                 list-projects \
                 list-targets \
+                load-project \
                 run-project \
                 run-target \
+                save-project \
                 umount-project \
                 umount-target \
                 update-project \
@@ -62,6 +64,7 @@ _image_creator()
             --bypass-rootstrap \
             --command \
             --enable-debug \
+            --file-name \
             --fset-name \
             --help \
             --image-name \
@@ -74,6 +77,7 @@ _image_creator()
             --target-name \
             -c \
             -d \
+            -f \
             -h \
             -q \
             -t \

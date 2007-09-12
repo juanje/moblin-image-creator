@@ -117,6 +117,8 @@ import re
 import shutil
 import socket
 import sys
+import tarfile
+import tempfile
 import time
 
 import Platform
@@ -298,6 +300,22 @@ class SDK(object):
             raise ValueError("%s" % (sys.exc_value))
         self.projects[name].mount()
         return self.projects[name]
+
+    def save_project(self, project_name, filename):
+        """Save the project to the specified filename"""
+        tar_filename = filename
+        if not filename.endswith(".mic.tar.bz2"):
+            tar_filename = "%s.mic.tar.bz2" % filename
+        project = self.projects[project_name]
+        config_file = os.path.join(self.config_path, "%s.proj" % project_name)
+        # Don't compress for the main tarball since the project tarball is already compressed
+        tar_file = tarfile.open(tar_filename, "w:bz2")
+        tar_file.debug = 1      # have it spew out what it is doing
+        tar_file.add(config_file, arcname = "config/%s" % os.path.basename(config_file))
+        print "Creating project tarfile.  This can take a long time..."
+        project.tar(tar_file)
+        tar_file.close()
+        print "Project tarfile created at: %s" % tar_filename
     
     def delete_project(self, project_name):
         # first delete all contained targets

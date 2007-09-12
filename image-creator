@@ -112,6 +112,8 @@ def main():
         chroot_project(options)
     elif options.cmd == 'chroot-target':
         chroot_target(options)
+    elif options.cmd == "save-project":
+        save_project(options)
     else:
         print "Unknown command specified"
         return 1
@@ -180,6 +182,8 @@ def parseCommandLine():
     parser.add_option("-d", "--enable-debug",
         action="store_true", dest="debug", default=False,
         help="Enable additional debug package while installing fsets")
+    parser.add_option("-f", "--file-name", dest="file_name",
+        help="Filename to use when saving or restoring a project, if .mic.tar.bz2 is not the extension during a save then .mic.tar.bz2 will be appended")
     parser.add_option("-h", "--help", help="show this help message and exit",
         dest = "help", action="store_true", default=False)
     examples = """
@@ -340,8 +344,15 @@ Examples:
             parser.error("Must specify project-name when using %s command" % options.cmd)
         if not options.target_name:
             parser.error("Must specify target-name when using %s command" % options.cmd)
+    if options.cmd == "save-project":
+        if not options.project_name:
+            parser.error("Must specify project-name when using %s command" % options.cmd)
+        if not options.file_name:
+            parser.error("Must specify file-name when using %s command" % options.cmd)
     if options.project_path:
         options.project_path = os.path.realpath(os.path.abspath(os.path.expanduser(options.project_path)))
+    if options.file_name:
+        options.file_name = os.path.realpath(os.path.abspath(os.path.expanduser(options.file_name)))
 
     return options, args
 
@@ -495,6 +506,9 @@ def chroot_target(options):
     target = sdk.projects[options.project_name].targets[options.target_name]
     target.mount()
     os.system("chroot %s su -" % (target.path))
+
+def save_project(options):
+    project = sdk.save_project(options.project_name, options.file_name)
 
 def print_exc_plus(type, value, tb):
     # From Python Cookbook 2nd Edition.  FIXME: Will need to remove this at

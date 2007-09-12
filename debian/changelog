@@ -50,8 +50,10 @@ moblin-image-creator (0.28) UNRELEASED; urgency=low
   * Fix error from previous commit.  Also starting work on save and load
     project feature
   * Make sure the callback feature gets called for progress indication
+  * Work in progress on adding a save-project command.  Basic functionality
+    works from the image-creator command line.
 
- -- John L. Villalovos <john.l.villalovos@intel.com>  Wed, 12 Sep 2007 11:29:52 -0700
+ -- John L. Villalovos <john.l.villalovos@intel.com>  Wed, 12 Sep 2007 15:53:33 -0700
 
 moblin-image-creator (0.27) gutsy; urgency=low
 
