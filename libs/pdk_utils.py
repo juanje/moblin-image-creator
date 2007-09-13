@@ -142,36 +142,42 @@ def execCommand(cmd_line, quiet = False, output = None, callback = None):
         # Don't ever want the process waiting on stdin.
         if output != None:
             p.stdin.close()
+            # Make the stdout of the subprocess non-blocking, so that we won't
+            # ever hang waiting for it.  This way our callback function should
+            # always keep being called.
             setblocking(p.stdout, False)
         # This is so that we can keep calling our callback
         poll = select.poll()
         if output != None:
             poll.register(p.stdout, select.POLLIN)
+        out_buffer = ""
+        # As long as our subprocess returns None, then the subprocess is still
+        # running.
         while p.poll() == None:
             if output != None:
                 # Only do this if we are capturing output
                 result = poll.poll(10)
                 if result:
-                    line = ""
-                    try:
-                        line = p.stdout.readline()
-                    except IOError, e:
-                        if e.errno != 11:
-                            raise e
-                    newline = line.rstrip()
-                    if line != newline or newline:
-                        output.append(newline)
-                    if not quiet:
-                        sys.stdout.write(line)
+                    buf = p.stdout.read()
+                    if buf != "":
+                        out_buffer += buf
+                        if not quiet:
+                            sys.stdout.write(buf)
             if callback:
                 callback(p)
         if output != None:
-            # Now check if any output is left over
-            for line in p.stdout.readlines():
-                line = line.rstrip()
-                output.append(line)
+            # Have to scan for anything remaining in the subprocess stdout
+            # buffer
+            while True:
+                buf = p.stdout.read()
+                if buf == "":
+                    break
+                out_buffer += buf
                 if not quiet:
-                    print line
+                    sys.stdout.write(buf)
+            # Now we have to package up our output
+            for line in out_buffer.splitlines():
+                output.append(line)
         result = p.returncode
         return result
 
