@@ -54,8 +54,10 @@ moblin-image-creator (0.28) UNRELEASED; urgency=low
     works from the image-creator command line.
   * Improving the execCommand() function so that it won't block and then cause
     our throbber to stop.  Also improved some of the exception printing.
+  * Changing the code in relation to the callback for the progress/throbber
+    bar.  Just making it simpler.
 
- -- John L. Villalovos <john.l.villalovos@intel.com>  Wed, 12 Sep 2007 17:46:30 -0700
+ -- John L. Villalovos <john.l.villalovos@intel.com>  Thu, 13 Sep 2007 15:38:13 -0700
 
 moblin-image-creator (0.27) gutsy; urgency=low
 

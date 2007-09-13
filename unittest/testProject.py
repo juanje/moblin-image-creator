@@ -24,9 +24,8 @@ import Project
 
 import testPlatform
 
-class Callback:
-    def iteration(process):
-        return
+def iteration(process):
+    return
 
 # Test our base FileSystem class
 class TestFileSystem(unittest.TestCase):
@@ -43,9 +42,9 @@ class TestFileSystem(unittest.TestCase):
     def testInstantiate(self):
         # Directory should not yet exist
         self.assert_(not os.path.isdir(self.filesystem_dir), "Wierd, directory exists")
-        filesystem = Project.FileSystem(self.filesystem_dir, Callback())
+        filesystem = Project.FileSystem(self.filesystem_dir, iteration)
     def testStrRepr(self):
-        filesystem = Project.FileSystem(self.filesystem_dir, Callback())
+        filesystem = Project.FileSystem(self.filesystem_dir, iteration)
         temp = filesystem.__str__()
         temp = filesystem.__repr__()
     def testEmptyValues(self):
@@ -53,7 +52,7 @@ class TestFileSystem(unittest.TestCase):
         self.assertRaises(ValueError, Project.Project, '', '', '', '', '')
         self.assertRaises(ValueError, Project.Target, '', '', '')
     def testProjectCreation(self):
-        sdk = SDK.SDK(cb = Callback(), path = self.workdir)
+        sdk = SDK.SDK(progress_callback = iteration, path = self.workdir)
         platform = sdk.platforms[self.platform_name]
 
 if __name__ == '__main__':

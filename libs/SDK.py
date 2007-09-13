@@ -170,10 +170,10 @@ class PackageConfig(ConfigFile):
         
 
 class SDK(object):
-    def __init__(self, cb, path='/usr/share/pdk'):
+    def __init__(self, progress_callback = None, path='/usr/share/pdk'):
         self.version = "0.1"
         self.path = os.path.realpath(os.path.abspath(os.path.expanduser(path)))
-        self.cb = cb
+        self.progress_callback = progress_callback
         self.config_path = os.path.join(self.path, 'projects')
         if not os.path.isdir(self.config_path):
             os.mkdir(self.config_path)
@@ -195,7 +195,7 @@ class SDK(object):
                 continue
             try:
                 config = PackageConfig(full_path)
-                self.projects[config.name] = Project.Project(config.path, config.name, config.desc, self.platforms[config.platform], self.cb)
+                self.projects[config.name] = Project.Project(config.path, config.name, config.desc, self.platforms[config.platform], self.progress_callback)
             except:
                 print >> sys.stderr, "Project Config Error: %s" % (sys.exc_value)
             
@@ -244,7 +244,7 @@ class SDK(object):
                 count += 1
                 print "--------Platform rootstrap creation try: %s ----------" % count
                 print "Executing: %s" % cmd
-                result = pdk_utils.execCommand(cmd, output = output, callback = self.cb.iteration)
+                result = pdk_utils.execCommand(cmd, output = output, callback = self.progress_callback)
                 if result == 0:
                     print "--------Platform rootstrap creation completed successfully ----------"
                     break;
@@ -267,7 +267,7 @@ class SDK(object):
             if use_rootstrap:
                 cmd = "tar -jcpvf %s -C %s ." % (rootstrap, install_path)
                 output = []
-                result = pdk_utils.execCommand(cmd, output = output, callback = self.cb.iteration)
+                result = pdk_utils.execCommand(cmd, output = output, callback = self.progress_callback)
                 if result != 0:
                     print >> sys.stderr, "ERROR: Unable to archive rootstrap!"
                     shutil.rmtree(install_path)
@@ -275,7 +275,7 @@ class SDK(object):
         else:
             cmd = "tar -jxvf %s -C %s" % (rootstrap, install_path)
             output = []
-            result = pdk_utils.execCommand(cmd, output = output, callback = self.cb.iteration)
+            result = pdk_utils.execCommand(cmd, output = output, callback = self.progress_callback)
             if result != 0:
                 print >> sys.stderr, "ERROR: Unable to rootstrap %s from %s!" % (rootstrap, name)
                 shutil.rmtree(install_path)
@@ -293,7 +293,7 @@ class SDK(object):
 
         # instantiate the project
         try:
-            self.projects[name] = Project.Project(install_path, name, desc, platform, self.cb)
+            self.projects[name] = Project.Project(install_path, name, desc, platform, self.progress_callback)
         except:
             shutil.rmtree(install_path)
             os.unlink(config_path)
@@ -329,7 +329,7 @@ class SDK(object):
         # indicator won't move if we do that.
         cmd = "rm -fR %s" % (os.path.join(proj.path))
         output = []
-        result = pdk_utils.execCommand(cmd, output = output, callback = self.cb.iteration)
+        result = pdk_utils.execCommand(cmd, output = output, callback = self.progress_callback)
         if result != 0:
             print >> sys.stderr, "ERROR: Unable to delete %s!" % (project_name)
             raise ValueError(" ".join(output))
@@ -355,10 +355,6 @@ class SDK(object):
     def __repr__(self):
         return "SDK(path='%s')" % self.path
 
-class Callback:
-    def iteration(self, process):
-        return
-
 if __name__ == '__main__':
     for path in sys.argv[1:]:
-        print SDK(path = path, cb = Callback())
+        print SDK(path = path)

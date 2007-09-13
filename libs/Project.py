@@ -43,10 +43,10 @@ class FileSystem(object):
     usefull with the root filesystem will require the caller to use the
     'install' method for installing new RPM packages.
     """
-    def __init__(self, path, cb):
+    def __init__(self, path, progress_callback = None):
         if not path:
             raise ValueError("Empty argument passed in")
-        self.cb = cb
+        self.progress_callback = progress_callback
         self.path = os.path.realpath(os.path.abspath(os.path.expanduser(path)))
         self.apt_cmd = '/usr/bin/apt-get -y --force-yes -o Dir::State=%(t)s/var/lib/apt -o Dir::State::status=%(t)s/var/lib/dpkg/status -o Dir::Cache=/var/cache/apt -o Dir::Etc::Sourcelist=%(t)s/etc/apt/sources.list -o Dir::Etc::main=%(t)s/etc/apt/apt.conf -o Dir::Etc::parts=%(t)s/etc/apt/apt.conf.d -o DPkg::Options::=--root=%(t)s -o DPkg::Run-Directory=%(t)s'
         self.mounted = []
@@ -227,7 +227,7 @@ class FileSystem(object):
         if output == None:
             output = []
         cmd_line = "chroot %s %s" % (self.path, cmd)
-        result = pdk_utils.execCommand(cmd_line, output = output, callback = self.cb.iteration)
+        result = pdk_utils.execCommand(cmd_line, output = output, callback = self.progress_callback)
         if result != 0:
             print "Error in chroot.  Result: %s" % result
             print "Command was: %s" % cmd_line
@@ -253,14 +253,14 @@ class Project(FileSystem):
     build system from the host Linux distribution.  It also knows how to create
     new 'target' filesystems.
     """
-    def __init__(self, path, name, desc, platform, cb):
+    def __init__(self, path, name, desc, platform, progress_callback = None):
         if not path or not name or not desc or not platform:
             raise ValueError("Empty argument passed in")
         self.path = os.path.realpath(os.path.abspath(os.path.expanduser(path)))
         self.name = name
         self.platform = platform
         self.desc = desc
-        FileSystem.__init__(self, self.path, cb)
+        FileSystem.__init__(self, self.path, progress_callback = progress_callback)
 
         # Create our targets directory
         targets_path = os.path.join(self.path, 'targets')
@@ -270,7 +270,7 @@ class Project(FileSystem):
         # Instantiate all targets
         self.targets = {}
         for dirname in os.listdir(targets_path):
-            target = Target(dirname, self, self.cb)
+            target = Target(dirname, self, self.progress_callback)
             self.targets[target.name] = target
 
     def install(self):
@@ -311,7 +311,7 @@ class Project(FileSystem):
                 while count < 10:
                     count += 1
                     print "--------Target rootstrap creation try: %s ----------" % count
-                    result = pdk_utils.execCommand(cmd, output = output, callback = self.cb.iteration)
+                    result = pdk_utils.execCommand(cmd, output = output, callback = self.progress_callback)
                     if result == 0:
                         print "--------Target rootstrap creation completed successfully----------"
                         break;
@@ -340,7 +340,7 @@ class Project(FileSystem):
                 if use_rootstrap:
                     cmd = "tar -jcpvf %s -C %s ." % (rootstrap, install_path)
                     output = []
-                    result = pdk_utils.execCommand(cmd, output = output, callback = self.cb.iteration)
+                    result = pdk_utils.execCommand(cmd, output = output, callback = self.progress_callback)
                     if result != 0:
                         print >> sys.stderr, "ERROR: Unable to archive rootstrap!"
                         shutil.rmtree(install_path)
@@ -348,13 +348,13 @@ class Project(FileSystem):
             else:
                 cmd = "tar -jxvf %s -C %s" % (rootstrap, install_path)
                 output = []
-                result = pdk_utils.execCommand(cmd, output = output, callback = self.cb.iteration)
+                result = pdk_utils.execCommand(cmd, output = output, callback = self.progress_callback)
                 if result != 0:
                     print >> sys.stderr, "ERROR: Unable to rootstrap %s from %s!" % (rootstrap, name)
                     shutil.rmtree(os.path.join(self.path, 'targets', name))
                     raise ValueError(" ".join(output))
 
-            self.targets[name] = Target(name, self, self.cb)
+            self.targets[name] = Target(name, self, self.progress_callback)
             self.targets[name].mount()
             self.targets[name].update()            
             # Install platform default kernel cmdline
@@ -467,7 +467,7 @@ class Target(FileSystem):
     Represents a 'target' filesystem that will eventually be installed on the
     target device.
     """
-    def __init__(self, name, project, cb):
+    def __init__(self, name, project, progress_callback = None):
         if not name or not project:
             raise ValueError("Empty argument passed in")
         self.project = project
@@ -488,7 +488,7 @@ class Target(FileSystem):
             os.makedirs(self.config_path)
 
         # Instantiate the target filesystem
-        FileSystem.__init__(self, self.fs_path, cb)
+        FileSystem.__init__(self, self.fs_path, progress_callback = progress_callback)
 
     def installed_fsets(self):
         result = []

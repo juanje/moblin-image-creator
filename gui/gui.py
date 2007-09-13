@@ -53,7 +53,7 @@ class App(object):
     """This is our main"""
     def __init__(self):
 
-        self.sdk = SDK.SDK(cb = self)
+        self.sdk = SDK.SDK(progress_callback = self.gui_throbber)
         self.gladefile = os.path.join(self.sdk.path, "image-creator.glade")
         if not os.path.isfile(self.gladefile):
             raise IOError, "Glade file is missing from: %s" % self.gladefile
@@ -344,7 +344,7 @@ class App(object):
     def ignore(self, *args):
         return True
     
-    def iteration(self, process):
+    def gui_throbber(self, process):
         self.progressbar.pulse()
         gtk.main_iteration()
         time.sleep(0.01)
@@ -567,7 +567,7 @@ class App(object):
 
                     print "Writing image to USB disk %s" % model[iter][0]
                     cmd = "dd if=%s of=%s" % (targetfilename, model[iter][0])
-                    pdk_utils.execCommand(cmd, False, None, self.iteration)                    
+                    pdk_utils.execCommand(cmd, False, None, self.gui_throbber)                    
                     print "Writing Complete"                    
 
                     self.progressBarWindow.destroy()
