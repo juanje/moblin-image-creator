@@ -222,9 +222,9 @@ class App(object):
                 proj = self.sdk.create_project(dialog.path, dialog.name, dialog.desc, self.sdk.platforms[dialog.platform]).install()
                 self.projectList.append((dialog.name, dialog.desc, dialog.path, dialog.platform))
             except:
-                print sys.exc_value
+                traceback.print_exc()
                 if debug: print_exc_plus()
-                self.show_error_dialog("%s" % (sys.exc_value))
+                self.show_error_dialog("%s" % (sys.exc_info))
                 try:
                     self.sdk.delete_project(dialog.name)
                 except:
@@ -243,7 +243,7 @@ class App(object):
             dialog.set_license(f.read())
             f.close()
         except:
-            print >> sys.stderr, sys.exc_value
+            traceback.print_exc()
             pass
         dialog.set_copyright("Copyright 2007 by Intel Corporation.  Licensed under the GPL version 2")
         dialog.set_website('http://www.moblin.org/')
@@ -335,6 +335,7 @@ class App(object):
             except ValueError, e:
                 self.show_error_dialog(e.args[0])
             except:
+                traceback.print_exc()
                 if debug: print_exc_plus()
                 self.show_error_dialog("Unexpected error: %s" % (sys.exc_info()[1]))
             progress_dialog.destroy()
@@ -446,6 +447,8 @@ class App(object):
             except ValueError, e:
                 self.show_error_dialog(e.args[0])
             except:
+                traceback.print_exc()
+                if debug: print_exc_plus()
                 self.show_error_dialog()
             progress_dialog.destroy()
 
@@ -468,6 +471,8 @@ class App(object):
             except ValueError, e:
                 self.show_error_dialog(e.args[0])
             except:
+                traceback.print_exc()
+                if debug: print_exc_plus()
                 self.show_error_dialog()
             progress_dialog.destroy()
             
@@ -488,9 +493,11 @@ class App(object):
             try:
                 self.current_project().create_install_usb(target.name, img_name)
             except ValueError, e:
+                traceback.print_exc()
                 if debug: print_exc_plus()
                 self.show_error_dialog(e.args[0])
             except:
+                traceback.print_exc()
                 if debug: print_exc_plus()
                 self.show_error_dialog()
             progress_dialog.destroy()

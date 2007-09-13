@@ -20,11 +20,13 @@
 # our current classes
 
 import exceptions
+import fcntl
 import os
 import re
 import select
 import subprocess
 import sys
+
 
 # this is for the copySourcesListFile() function
 src_regex = None
@@ -116,6 +118,22 @@ def ismount(path):
                 return True
     return False
 
+
+def setblocking(f, flag):
+    " set/clear blocking mode"
+    # get the file descriptor
+    fd = f.fileno()
+    # get the file's current flag settings
+    fl = fcntl.fcntl(fd, fcntl.F_GETFL)
+    if flag:
+        # clear non-blocking mode from flags
+        fl = fl & ~os.O_NONBLOCK
+    else:
+        # set non-blocking mode from flags
+        fl = fl | os.O_NONBLOCK
+    # update the file's flags
+    fcntl.fcntl(fd, fcntl.F_SETFL, fl)
+
 def execCommand(cmd_line, quiet = False, output = None, callback = None):
         if output == None:
             p = subprocess.Popen(cmd_line.split())
@@ -124,18 +142,27 @@ def execCommand(cmd_line, quiet = False, output = None, callback = None):
         # Don't ever want the process waiting on stdin.
         if output != None:
             p.stdin.close()
+            setblocking(p.stdout, False)
         # This is so that we can keep calling our callback
-        pl = select.poll()
+        poll = select.poll()
         if output != None:
-            pl.register(p.stdout)
+            poll.register(p.stdout, select.POLLIN)
         while p.poll() == None:
-            if output != None and pl.poll(10):
-                line = p.stdout.readline()
-                newline = line.rstrip()
-                if line != newline or newline:
-                    output.append(newline)
-                if not quiet:
-                    sys.stdout.write(line)
+            if output != None:
+                # Only do this if we are capturing output
+                result = poll.poll(10)
+                if result:
+                    line = ""
+                    try:
+                        line = p.stdout.readline()
+                    except IOError, e:
+                        if e.errno != 11:
+                            raise e
+                    newline = line.rstrip()
+                    if line != newline or newline:
+                        output.append(newline)
+                    if not quiet:
+                        sys.stdout.write(line)
             if callback:
                 callback(p)
         if output != None:

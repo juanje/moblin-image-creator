@@ -52,8 +52,10 @@ moblin-image-creator (0.28) UNRELEASED; urgency=low
   * Make sure the callback feature gets called for progress indication
   * Work in progress on adding a save-project command.  Basic functionality
     works from the image-creator command line.
+  * Improving the execCommand() function so that it won't block and then cause
+    our throbber to stop.  Also improved some of the exception printing.
 
- -- John L. Villalovos <john.l.villalovos@intel.com>  Wed, 12 Sep 2007 15:53:33 -0700
+ -- John L. Villalovos <john.l.villalovos@intel.com>  Wed, 12 Sep 2007 17:46:30 -0700
 
 moblin-image-creator (0.27) gutsy; urgency=low
 
