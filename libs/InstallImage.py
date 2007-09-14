@@ -26,6 +26,7 @@ import traceback
 import Project
 import SDK
 import mic_cfg
+import pdk_utils
 
 debug = False
 if mic_cfg.config.has_option('general', 'debug'):
@@ -119,10 +120,11 @@ class InstallImage(object):
     of installation device/medium. Such as installation of a target system
     on a LiveUSB Key, LiveCD/DVD's, Hard Disks, and Flash Parts.
     """
-    def __init__(self, project, target, name):
+    def __init__(self, project, target, name, progress_callback = None):
         self.project = project
         self.target = target
         self.name = name
+        self.progress_callback = progress_callback
         self.path = os.path.join(self.target.image_path, self.name)
         self.tmp_path = ''
         self.rootfs = ''
@@ -341,7 +343,7 @@ class BaseUsbImage(InstallImage):
         out_file.close()
 
         cmd_line = "/sbin/mkfs.vfat %s" % self.path
-        result = os.system(cmd_line)
+        result = pdk_utils.execCommand(cmd_line, callback = self.progress_callback)
         if result:
             print >> sys.stderr, "Error running command: %s" % cmd_line
             raise EnvironmentError, "Error running command: %s" % cmd_line
@@ -362,7 +364,7 @@ class BaseUsbImage(InstallImage):
         out_file.close()
 
         cmd_line = "/sbin/mkfs.ext3 %s -F" % path
-        result = os.system(cmd_line)
+        result = pdk_utils.execCommand(cmd_line, callback = self.progress_callback)
         if result:
             print >> sys.stderr, "Error running command: %s" % cmd_line
             raise EnvironmentError, "Error running command: %s" % cmd_line
@@ -371,7 +373,7 @@ class BaseUsbImage(InstallImage):
         if not self.tmp_path:
             self.tmp_path = tempfile.mkdtemp('','pdk-', '/tmp')
             cmd_line = "mount -o loop -t vfat %s %s" % (self.path, self.tmp_path)
-            result = os.system(cmd_line)
+            result = pdk_utils.execCommand(cmd_line, callback = self.progress_callback)
             if result:
                 print >> sys.stderr, "Error running command: %s" % cmd_line
                 raise EnvironmentError, "Error running command: %s" % cmd_line
@@ -379,7 +381,7 @@ class BaseUsbImage(InstallImage):
     def umount_container(self):
         if self.tmp_path:
             cmd_line = "umount %s" % self.tmp_path
-            result = os.system(cmd_line)
+            result = pdk_utils.execCommand(cmd_line, callback = self.progress_callback)
             if result:
                 print >> sys.stderr, "Error running command: %s" % cmd_line
                 raise EnvironmentError, "Error running command: %s" % cmd_line

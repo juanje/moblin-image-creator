@@ -27,7 +27,6 @@ import select
 import subprocess
 import sys
 
-
 # this is for the copySourcesListFile() function
 src_regex = None
 CONFIG_DIR = os.path.expanduser("~/.image-creator")
@@ -135,10 +134,13 @@ def setblocking(f, flag):
     fcntl.fcntl(fd, fcntl.F_SETFL, fl)
 
 def execCommand(cmd_line, quiet = False, output = None, callback = None):
-        if output == None:
+        if output == None and callback == None:
             p = subprocess.Popen(cmd_line.split())
         else:
             p = subprocess.Popen(cmd_line.split(), stdout = subprocess.PIPE, stderr = subprocess.STDOUT, stdin = subprocess.PIPE, close_fds = True)
+        # To get the callbacks to work, we need to capture the output
+        if callback != None and output == None:
+            output = []
         # Don't ever want the process waiting on stdin.
         if output != None:
             p.stdin.close()

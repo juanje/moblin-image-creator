@@ -260,6 +260,7 @@ class Project(FileSystem):
         self.name = name
         self.platform = platform
         self.desc = desc
+        self.progress_callback = progress_callback
         FileSystem.__init__(self, self.path, progress_callback = progress_callback)
 
         # Create our targets directory
@@ -423,28 +424,28 @@ class Project(FileSystem):
     def create_live_iso(self, target_name, image_name):
         target = self.targets[target_name]
         target.umount()
-        image = InstallImage.LiveIsoImage(self, self.targets[target_name], image_name)
+        image = InstallImage.LiveIsoImage(self, self.targets[target_name], image_name, progress_callback = self.progress_callback)
         image.create_image()
         target.mount()
 
     def create_install_iso(self, target_name, image_name):
         target = self.targets[target_name]
         target.umount()
-        image = InstallImage.InstallIsoImage(self, self.targets[target_name], image_name)
+        image = InstallImage.InstallIsoImage(self, self.targets[target_name], image_name, progress_callback = self.progress_callback)
         image.create_image()
         target.mount()
 
     def create_live_usb(self, target_name, image_name, type="RAMFS"):
         target = self.targets[target_name]
         target.umount()
-        image = InstallImage.LiveUsbImage(self, self.targets[target_name], image_name)
+        image = InstallImage.LiveUsbImage(self, self.targets[target_name], image_name, progress_callback = self.progress_callback)
         image.create_image(type)
         target.mount()
 
     def create_install_usb(self, target_name, image_name):
         target = self.targets[target_name]
         target.umount()
-        image = InstallImage.InstallUsbImage(self, self.targets[target_name], image_name)
+        image = InstallImage.InstallUsbImage(self, self.targets[target_name], image_name, progress_callback = self.progress_callback)
         image.create_image()
         target.mount()
 
