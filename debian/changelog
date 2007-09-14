@@ -60,11 +60,13 @@ moblin-image-creator (0.28) UNRELEASED; urgency=low
   * Who knew that writing an execCommand() function would be so complicated :(
     Work continues.
   * Try to minimize the time that the throbber stops during image creation.
+  * Add a little more documentation to the config file.
 
   [ Tollef Fog Heen ]
   * Add support for setting the architecture from the configuration file.
 
- -- Tollef Fog Heen <tfheen@ubuntu.com>  Fri, 14 Sep 2007 13:06:41 +0200
+
+ -- John L. Villalovos <john.l.villalovos@intel.com>  Fri, 14 Sep 2007 13:09:55 -0700
 
 moblin-image-creator (0.27) gutsy; urgency=low
 

@@ -33,12 +33,14 @@ BASE_SECTIONS = [ "platform" ]
 VALID_SECTIONS = BASE_SECTIONS + [ "installimage", "general" ]
 
 def main():
+    # We will print out the configuration as a debugging aid
     readConfig()
     for section in config.sections():
         print "[%s]" % section
         for option in config.options(section):
             value = config.get(section, option)
             print "%s=%s" % (option, value)
+        print
     return
 
 def configDir():
