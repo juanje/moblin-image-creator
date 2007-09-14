@@ -65,8 +65,10 @@ moblin-image-creator (0.28) UNRELEASED; urgency=low
   [ Tollef Fog Heen ]
   * Add support for setting the architecture from the configuration file.
 
-
- -- John L. Villalovos <john.l.villalovos@intel.com>  Fri, 14 Sep 2007 13:09:55 -0700
+  [ Bob Spencer ]
+  * Changed galculator to moblin-calc
+    
+ -- Bob Spencer <bob@bobuntu>  Fri, 14 Sep 2007 13:33:03 -0700
 
 moblin-image-creator (0.27) gutsy; urgency=low
 
