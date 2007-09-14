@@ -72,6 +72,7 @@ def readConfig():
         config.read(user_config_file)
         verifyConfig(user_config_file)
     fixupConfig()
+    addUserInfo()
 
 def verifyConfig(filename):
     """Make sure that we don't have any unknown sections in the config file"""
@@ -104,6 +105,27 @@ def fixupConfig():
                     if not config.has_option(custom_section, option):
                         value = config.get(base_section, option)
                         config.set(custom_section, option, value)
+
+def addUserInfo():
+    # Try to figure out if we have been invoked via sudo
+    sudo = 0
+    if os.getuid() == 0:
+        # our user ID is root, so we may have been invoked via sudo
+        if 'SUDO_USER' in os.environ:
+            username = os.environ['SUDO_USER']
+            sudo = 1
+        elif 'USER' in os.environ:
+            username = os.environ['USER']
+        else:
+            username = "root"
+    else:
+        if 'USER' in os.environ:
+            username = os.environ['USER']
+        else:
+            username = pwd.getpwuid(os.getuid()).pw_name
+    config.add_section('userinfo')
+    config.set('userinfo', 'user', username)
+    config.set('userinfo', 'sudo', "%s" % sudo)
 
 if '__main__' == __name__:
     sys.exit(main())
