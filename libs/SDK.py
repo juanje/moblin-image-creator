@@ -232,7 +232,7 @@ class SDK(object):
         if not os.path.isfile(rootstrap) or not use_rootstrap:
             # create platform rootstrap file
             count = 0
-            cmd = "debootstrap --arch i386 --variant=buildd --include=%s %s %s %s" % (platform.buildroot_extras, platform.buildroot_codename, install_path, platform.buildroot_mirror)
+            cmd = "debootstrap --arch %s --variant=buildd --include=%s %s %s %s" % (platform.architecture, platform.buildroot_extras, platform.buildroot_codename, install_path, platform.buildroot_mirror)
             output = []
             # XXX Evil hack
             if not os.path.isfile("/usr/lib/debootstrap/scripts/%s" % platform.target_codename):

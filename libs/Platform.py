@@ -74,6 +74,9 @@ class Platform(object):
         self.usb_kernel_cmdline = mic_cfg.config.get(section, "usb_kernel_cmdline")
         self.hd_kernel_cmdline = mic_cfg.config.get(section, "hd_kernel_cmdline")
 
+        # Architecture
+        self.architecture = mic_cfg.config.get(section, "architecture") or "i386"
+
     def __str__(self):
         return ("<Platform Object: \n\tname=%s, \n\tfset=%s, \n\tbuildroot_packages=%s>\n" %
                 (self.name, self.fset, self.buildroot_packages))

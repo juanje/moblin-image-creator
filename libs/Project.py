@@ -299,7 +299,7 @@ class Project(FileSystem):
             os.makedirs(install_path)
             rootstrap = os.path.join(self.platform.path, "target-rootstrap.tar.bz2")
             if not os.path.isfile(rootstrap) or not use_rootstrap:
-                cmd = "debootstrap --arch i386 --include=apt %s %s %s" % (self.platform.target_codename, install_path, self.platform.target_mirror)
+                cmd = "debootstrap --arch %s --include=apt %s %s %s" % (self.platform.architecture, self.platform.target_codename, install_path, self.platform.target_mirror)
                 output = []
 
                 # XXX Evil hack

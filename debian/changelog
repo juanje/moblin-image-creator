@@ -1,5 +1,6 @@
 moblin-image-creator (0.28) UNRELEASED; urgency=low
 
+  [ John L. Villalovos ]
   * Really change over to using /proc/mounts instead of /etc/mtab.  Forget to
     actually commit the file last time.
   * Adding in our config file processing stuff
@@ -60,7 +61,10 @@ moblin-image-creator (0.28) UNRELEASED; urgency=low
     Work continues.
   * Try to minimize the time that the throbber stops during image creation.
 
- -- John L. Villalovos <john.l.villalovos@intel.com>  Thu, 13 Sep 2007 17:56:01 -0700
+  [ Tollef Fog Heen ]
+  * Add support for setting the architecture from the configuration file.
+
+ -- Tollef Fog Heen <tfheen@ubuntu.com>  Fri, 14 Sep 2007 13:06:41 +0200
 
 moblin-image-creator (0.27) gutsy; urgency=low
 
