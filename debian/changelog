@@ -67,8 +67,11 @@ moblin-image-creator (0.28) UNRELEASED; urgency=low
 
   [ Bob Spencer ]
   * Changed galculator to moblin-calc
-    
- -- Bob Spencer <bob@bobuntu>  Fri, 14 Sep 2007 13:33:03 -0700
+
+  [ Prajwal Mohan ]
+  * Killing USB selection dialog for progress bar shows up in the front
+
+ -- Prajwal Mohan <prajwal@linux.intel.com>  Mon, 17 Sep 2007 14:16:02 -0700
 
 moblin-image-creator (0.27) gutsy; urgency=low
 

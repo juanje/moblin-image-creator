@@ -546,6 +546,8 @@ class App(object):
                         self.show_error_dialog("Can not umount %s. Please close any shells or opened files still under mount point and try again!" % model[iter][0])
                         dialog2.destroy()
                         return -1
+                
+                    dialog2.destroy()
 
                     self.progressBarWindow = gtk.Window(gtk.WINDOW_TOPLEVEL)
                     self.progressBarWindow.set_title("Please Wait...")

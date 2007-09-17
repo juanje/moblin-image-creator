@@ -466,6 +466,9 @@ def update_target(options):
     proj.targets[options.target_name].update()
     
 def install_fset(options):
+    if options.platform_name:
+        print "Ignoring Plaform name %s" % (options.platform_name)
+        print "Using %s" % (sdk.projects[options.project_name].platform.name)
     if not options.project_name in sdk.projects:
         print >> sys.stderr, "Project %s does not exist" % (options.project_name)
         sys.exit(1)
