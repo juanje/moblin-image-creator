@@ -450,8 +450,7 @@ class Project(FileSystem):
         target.mount()
 
     def tar(self, tar_obj):
-        """tar up the project to the specified filename.  Need to pass in a
-        tarfile object"""
+        """tar up the project.  Need to pass in a tarfile object"""
         self.umount()
         print "Creating a bzip2 tarfile for project: %s" % self.name
         tar_obj.debug = 1   # Have it spew out what it is doing

@@ -110,6 +110,8 @@ def main():
         chroot_target(options)
     elif options.cmd == "save-project":
         save_project(options)
+    elif options.cmd == "load-project":
+        load_project(options)
     else:
         print "Unknown command specified"
         return 1
@@ -227,37 +229,50 @@ Examples:
                   --project-name='MyProject' \\
                   --target-name='MyOtherTarget'
 
-<installing a Function Set (fset) into a given target>
+<Installing a Function Set (fset) into a given target>
     image-creator --command=install-fset \\
                   --platform-name='donley' \\
                   --project-name='MyProject' \\
                   --target-name='MyTarget' \\
                   --fset='Core' \\
 
-<change into a given project buildroot filesystem>
+<Change into a given project buildroot filesystem>
     image-creator --command=chroot-project \\
                   --project-name='MyProject' \\
 
-<change into a given projects target filesystem>
+<Change into a given projects target filesystem>
     image-creator --command=chroot-target \\
                   --project-name='MyProject' \\
                   --target-name='MyTarget' \\
 
-<updating a given target inside a project>
+<Updating a given target inside a project>
     image-creator --command=update-target \\
                   --project-name='MyProject' \\
                   --target-name='MyTarget' \\
 
-<updating a given project>
+<Updating a given project>
     image-creator --command=update-project \\
                   --project-name='MyProject'
-<create a image>
+
+<Create a image>
     image-creator --command=|create-live-usb \\
                             |create-live-usbrw \\
                             |create-install-usb]  \\
                   --project-name='Myproject' \\
                   --target-name='MyTraget' \\
-                  --image-name='MyImage'"""
+                  --image-name='MyImage'
+
+<Save a project>
+    image-creator --command=save-project \\
+        --project-name='Myproject' \\
+        --file-name='file_name_to_save_project'
+
+<Load a saved project>
+    image-creator --command=load-project \\
+        --project-name='Myproject' \\
+        --file-name='file_name_of_saved_project'
+        --project-path='path_to_restore_project_to'
+                  """
 
     (options, args) = parser.parse_args()
     # if nothing at all is passed in then return back
@@ -340,11 +355,16 @@ Examples:
             parser.error("Must specify project-name when using %s command" % options.cmd)
         if not options.target_name:
             parser.error("Must specify target-name when using %s command" % options.cmd)
-    if options.cmd == "save-project":
+    if options.cmd == "save-project" or options.cmd == "load-project":
         if not options.project_name:
             parser.error("Must specify project-name when using %s command" % options.cmd)
         if not options.file_name:
             parser.error("Must specify file-name when using %s command" % options.cmd)
+    if options.cmd == "load-project":
+        if not options.project_path:
+            parser.error("Must specify project-path when using %s command" % options.cmd)
+        if not options.file_name.endswith('.mic.tar.bz2'):
+            parser.error("Filename must have the extension: .mic.tar.bz2")
     if options.project_path:
         options.project_path = os.path.realpath(os.path.abspath(os.path.expanduser(options.project_path)))
     if options.file_name:
@@ -505,6 +525,9 @@ def chroot_target(options):
 
 def save_project(options):
     project = sdk.save_project(options.project_name, options.file_name)
+
+def load_project(options):
+    project = sdk.load_project(options.project_name, options.project_path, options.file_name)
 
 def print_exc_plus(type, value, tb):
     # From Python Cookbook 2nd Edition.  FIXME: Will need to remove this at

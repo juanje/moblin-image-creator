@@ -125,50 +125,6 @@ import Platform
 import Project
 import pdk_utils
 
-class ConfigFile(object):
-    """
-    This is a class for generically parsing configuration files that
-    contain 'NAME=VALUE' pairs, each on it's own line.
-
-    example usage:
-    
-    string_vals = ['name', 'desc']
-    config = ConfigFile('/etc/myconf', string_vals);
-    print config.name
-    print config.desc
-
-    """
-    def __init__(self, path, string_vals):
-        self.path = path
-        config = open(self.path)
-        for line in config:
-            if re.search(r'^\s*#', line):
-                continue
-            try:
-                key, value = line.split('=')
-            except:
-                continue
-            key = key.lower().strip()
-            value = value.strip()
-            if key in string_vals:
-                setattr(self, key, value)
-                continue
-        config.close()
-
-    def write(self):
-        config = open(self.path, 'w')
-        for key in self.__dict__.keys():
-            if key != 'path':
-                config.write("%s=%s\n" % (key, self.__dict__[key]))
-                os.environ[key] = self.__dict__[key]
-        config.close()
-
-class PackageConfig(ConfigFile):
-    def __init__(self, path):
-        self.path = path
-        ConfigFile.__init__(self, path, ['name', 'desc', 'path', 'platform'])
-        
-
 class SDK(object):
     def __init__(self, progress_callback = None, path='/usr/share/pdk'):
         self.version = "0.1"
@@ -193,11 +149,8 @@ class SDK(object):
             full_path = os.path.join(self.config_path, filename)
             if not os.path.isfile(full_path):
                 continue
-            try:
-                config = PackageConfig(full_path)
-                self.projects[config.name] = Project.Project(config.path, config.name, config.desc, self.platforms[config.platform], self.progress_callback)
-            except:
-                print >> sys.stderr, "Project Config Error: %s" % (sys.exc_value)
+            config = PackageConfig(full_path)
+            self.projects[config.name] = Project.Project(config.path, config.name, config.desc, self.platforms[config.platform], self.progress_callback)
             
     def create_project(self, parent_path, name, desc, platform, use_rootstrap = True):
         """
@@ -284,12 +237,12 @@ class SDK(object):
         # create the config file
         config_path = os.path.join(self.config_path, "%s.proj" % name)
         os.path.isfile(config_path)
-        config = open(config_path, 'w')
-        config.write("NAME=%s\n" % (name))
-        config.write("PATH=%s\n" % (install_path))
-        config.write("DESC=%s\n" % (desc))
-        config.write("PLATFORM=%s\n" % (platform.name))
-        config.close()
+        config_file = open(config_path, 'w')
+        config_file.write("NAME=%s\n" % (name))
+        config_file.write("PATH=%s\n" % (install_path))
+        config_file.write("DESC=%s\n" % (desc))
+        config_file.write("PLATFORM=%s\n" % (platform.name))
+        config_file.close()
 
         # instantiate the project
         try:
@@ -311,11 +264,63 @@ class SDK(object):
         # Don't compress for the main tarball since the project tarball is already compressed
         tar_file = tarfile.open(tar_filename, "w:bz2")
         tar_file.debug = 1      # have it spew out what it is doing
-        tar_file.add(config_file, arcname = "config/%s" % os.path.basename(config_file))
+        tar_file.add(config_file, arcname = "config/save.proj")
         print "Creating project tarfile.  This can take a long time..."
         project.tar(tar_file)
         tar_file.close()
         print "Project tarfile created at: %s" % tar_filename
+    
+    def load_project(self, project_name, project_path, filename):
+        """Load the specified filename as project_name and store it in
+        project_path"""
+        tar_filename = filename
+        if not filename.endswith(".mic.tar.bz2"):
+            raise ValueError("Specified project restore file: %s, does not end in .mic.tar.bz2")
+        config_file = os.path.join(self.config_path, "%s.proj" % project_name)
+        if os.path.exists(config_file):
+            raise ValueError("A project already exists with that name: %s" % config_file)
+        if project_path.find(' ') != -1:
+            raise ValueError("Specified project path contains a space character, not allowed: %s" % project_path)
+        if os.path.exists(project_path):
+            if os.path.isdir(project_path):
+                if len(os.listdir(project_path)):
+                    raise ValueError("Specified project-path, is a directory, but it is NOT empty: %s" % project_path)
+                else:
+                    os.rmdir(project_path)
+            else:
+                raise ValueError("Specified project-path, exists, but it is not a directory")
+        tempdir = tempfile.mkdtemp()
+        cwd = os.getcwd()
+        os.chdir(tempdir)
+        print "Extracting: %s to temporary directory: %s/" % (filename, tempdir)
+        time.sleep(2)
+        pdk_utils.execCommand("tar xvfj %s" % filename)
+        os.chdir(cwd)
+        source_config_file = os.path.join(tempdir, "config", "save.proj")
+        if not os.path.isfile(source_config_file):
+            raise ValueError("Project config file did not exist in project tarfile.  Could not find: %s" % source_config_file)
+        source_project = os.path.join(tempdir, "project")
+        if not os.path.isdir(source_project):
+            raise ValueError("Project directory did not exist in project tarfile.  Could not find: %s" % source_project)
+        print "Writing new config file: %s" % config_file
+        self.copyProjectConfigFile(source_config_file, config_file, project_name, project_path)
+        print "Moving project directory into place at: %s" % project_path
+        cmd_line = "mv -v %s %s" % (source_project, project_path)
+        print cmd_line
+        result = pdk_utils.execCommand(cmd_line)
+        if result:
+            print "Error doing 'mv' cmd"
+            sys.exit(1)
+        print "Removing temporary directory: %s" % tempdir
+        shutil.rmtree(tempdir)
+        print "Project: %s restored to: %s" % (project_name, project_path)
+
+    def copyProjectConfigFile(self, source_config_file, dest_config_file, project_name, project_path):
+        """Copy the config file over and update the fields that need to be updated"""
+        config = PackageConfig(source_config_file)
+        config.set('name', project_name)
+        config.set('path', project_path)
+        config.write(dest_config_file)
     
     def delete_project(self, project_name):
         # first delete all contained targets
@@ -354,6 +359,69 @@ class SDK(object):
 
     def __repr__(self):
         return "SDK(path='%s')" % self.path
+
+class ConfigFile(object):
+    """
+    This is a class for generically parsing configuration files that contain
+    'NAME=VALUE' pairs, each on it's own line.  We probably should be using the
+    ConfigParser library instead :(
+
+    example usage:
+    
+    string_vals = ['name', 'desc']
+    config = ConfigFile('/etc/myconf', string_vals);
+    print config.name
+    print config.desc
+
+    """
+    def __init__(self, filename, string_vals):
+        self.__filename = filename
+        config = open(self.__filename)
+        self.val_dict = {}
+        for line in config:
+            if re.search(r'^\s*#', line):
+                continue
+            try:
+                key, value = line.split('=')
+            except:
+                continue
+            key = key.lower().strip()
+            if key in string_vals:
+                self.set(key, value)
+        config.close()
+
+    def set(self, key, value):
+        key = key.lower().strip()
+        value = value.strip()
+        self.val_dict[key] = value
+
+    def __getattr__(self, key):
+        if key in self.val_dict:
+            return self.val_dict[key]
+        else:
+            if 'object_name' in self.__dict__:
+                object_name = self.object_name
+            else:
+                object_name = "ConfigFile"
+            raise AttributeError("'%s' object has no attribute '%s'" % (object_name, key))
+
+    def write(self, filename = None):
+        if filename == None:
+            filename = self.__filename
+        config = open(filename, 'w')
+        for key in sorted(self.val_dict.iterkeys()):
+            config.write("%s=%s\n" % (key, self.val_dict[key]))
+#            os.environ[key] = self.val_dict[key]
+        config.close()
+
+    def __str__(self):
+        return "ConfigFile('%s', %s)" % (self.__filename, self.val_dict)
+
+class PackageConfig(ConfigFile):
+    def __init__(self, path):
+        self.object_name = 'PackageConfig'
+        ConfigFile.__init__(self, path, ['name', 'desc', 'path', 'platform'])
+        
 
 if __name__ == '__main__':
     for path in sys.argv[1:]:
