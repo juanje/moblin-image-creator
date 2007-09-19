@@ -431,11 +431,7 @@ class App(object):
     def on_liveUSB_clicked(self, widget):
         project = self.current_project()
         target = self.current_target()
-        widgets = gtk.glade.XML(self.gladefile, 'new_img_dlg')
-        dialog = widgets.get_widget('new_img_dlg')
-        result = dialog.run()
-        img_name = widgets.get_widget('img_name').get_text()
-        dialog.destroy()
+        result, img_name = self.getImageName()
         if result == gtk.RESPONSE_OK:
             progress_tree = gtk.glade.XML(self.gladefile, 'ProgressDialog')
             progress_dialog = progress_tree.get_widget('ProgressDialog')
@@ -455,11 +451,7 @@ class App(object):
     def on_liveRWUSB_clicked(self, widget):
         project = self.current_project()
         target = self.current_target()
-        widgets = gtk.glade.XML(self.gladefile, 'new_img_dlg')
-        dialog = widgets.get_widget('new_img_dlg')
-        result = dialog.run()
-        img_name = widgets.get_widget('img_name').get_text()
-        dialog.destroy()
+        result, img_name = self.getImageName()
         if result == gtk.RESPONSE_OK:
             progress_tree = gtk.glade.XML(self.gladefile, 'ProgressDialog')
             progress_dialog = progress_tree.get_widget('ProgressDialog')
@@ -479,11 +471,7 @@ class App(object):
     def on_installUSB_clicked(self, widget):
         project = self.current_project()
         target = self.current_target()
-        widgets = gtk.glade.XML(self.gladefile, 'new_img_dlg')
-        dialog = widgets.get_widget('new_img_dlg')
-        result = dialog.run()
-        img_name = widgets.get_widget('img_name').get_text()
-        dialog.destroy()
+        result, img_name = self.getImageName()
         if result == gtk.RESPONSE_OK:
             progress_tree = gtk.glade.XML(self.gladefile, 'ProgressDialog')
             progress_dialog = progress_tree.get_widget('ProgressDialog')
@@ -501,6 +489,25 @@ class App(object):
                 if debug: print_exc_plus()
                 self.show_error_dialog()
             progress_dialog.destroy()
+
+    def getImageName(self):
+        """Function to query the user for the name of the image file they want
+        to create"""
+        default_name = ".img"
+        while True:
+            widgets = gtk.glade.XML(self.gladefile, 'new_img_dlg')
+            dialog = widgets.get_widget('new_img_dlg')
+            dialog.set_default_response(gtk.RESPONSE_OK)
+            widgets.get_widget('img_name').set_text(default_name)
+            result = dialog.run()
+            img_name = widgets.get_widget('img_name').get_text()
+            dialog.destroy()
+            default_name = img_name
+            if result != gtk.RESPONSE_OK:
+                break
+            if img_name and img_name != ".img":
+                break
+        return (result, img_name)
 
     def on_DD_USB_clicked(self, widget):
         project_path = self.current_project().path
