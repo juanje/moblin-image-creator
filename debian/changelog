@@ -2,8 +2,10 @@ moblin-image-creator (0.29) UNRELEASED; urgency=low
 
   * Add a .img into the input box for creating an image.  Also made a single
     function for querying the user for the name of an image.
+  * Put moblin-calc into the [Ubuntu-Staging] fset, and deleted galculator
+    from the [Ubuntu-Mobile] fset.
 
- -- John L. Villalovos <john.l.villalovos@intel.com>  Wed, 19 Sep 2007 14:36:57 -0700
+ -- John L. Villalovos <john.l.villalovos@intel.com>  Fri, 21 Sep 2007 10:48:30 -0700
 
 moblin-image-creator (0.28) gutsy; urgency=low
 
