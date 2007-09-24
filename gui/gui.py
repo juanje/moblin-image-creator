@@ -74,7 +74,8 @@ class App(object):
                 "on_term_launch_clicked": self.on_term_launch_clicked,
                 "on_target_term_launch_clicked": self.on_target_term_launch_clicked,
                 "on_target_kernel_cmdline_clicked": self.on_target_kernel_cmdline_clicked,
-                "on_DD_USB_clicked": self.on_DD_USB_clicked}
+                "on_DD_USB_clicked": self.on_DD_USB_clicked,
+                "on_WriteUsbImage_activate":self.on_WriteUsbImage_activate}
         self.widgets.signal_autoconnect(dic)
         # setup projectView widget
         self.pName = _("Name")
@@ -556,6 +557,81 @@ class App(object):
                 
                     dialog2.destroy()
 
+                    self.progressBarWindow = gtk.Window(gtk.WINDOW_TOPLEVEL)
+                    self.progressBarWindow.set_title("Please Wait...")
+                    self.progressBarWindow.set_border_width(5)
+                    self.progressBarWindow.set_size_request(500, 200)
+
+                    vbox = gtk.VBox(False, 5)
+                    self.progressBarWindow.add(vbox)
+
+                    label = gtk.Label("Writing image to USB disk")     
+                    frame = gtk.Frame("")            
+                    frame.add(label)
+                    vbox.pack_start(frame, False, False, 0)
+                    
+                    self.progressbar = gtk.ProgressBar()                             
+                    self.progressbar.set_pulse_step(0.01)
+                    vbox.pack_start(self.progressbar, False, False, 0)
+                    self.progressBarWindow.show_all()                 
+
+                    print "Writing image to USB disk %s" % model[iter][0]
+                    cmd = "dd if=%s of=%s" % (targetfilename, model[iter][0])
+                    pdk_utils.execCommand(cmd, False, None, self.gui_throbber)                    
+                    print "Writing Complete"                    
+
+                    self.progressBarWindow.destroy()
+
+            dialog2.destroy()
+
+    def on_WriteUsbImage_activate(self, widget):
+        print "In on_WriteUsbImage_activate"        
+        dialog = gtk.FileChooserDialog('Select Image File',None,gtk.FILE_CHOOSER_ACTION_OPEN,                   (gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,gtk.STOCK_OK,gtk.RESPONSE_OK),None)
+        currentFolder = dialog.get_current_folder()
+        print "Current Default Folder is %s" % (currentFolder)
+        homeDir = os.getenv("HOME")
+        print "Setting Default Folder to %s" % (homeDir)
+        dialog.set_current_folder(homeDir)
+        result = dialog.run()
+        if result == gtk.RESPONSE_CANCEL:
+            dialog.destroy()
+            print "No target image selected!"
+        if result == gtk.RESPONSE_OK:
+            targetfilename=dialog.get_filename()
+            print "Selected file name: %s " % targetfilename
+            dialog.destroy()
+            widgets = gtk.glade.XML(self.gladefile, 'select_usb_disk_dialog')
+            dialog2 = widgets.get_widget('select_usb_disk_dialog')
+            usb_dev_list = gtk.ListStore(gobject.TYPE_STRING)
+            usb_disk_list = pdk_utils.get_current_udisks()
+            if not usb_disk_list:
+                self.show_error_dialog('No USB disk detected! Please plug in your USB disk and try again!')
+                dialog2.destroy()
+                return -1
+            for iter_dev in usb_disk_list:
+                iter_obj = usb_dev_list.append([iter_dev])
+            usb_disks = widgets.get_widget('usb_disks')
+            column = gtk.TreeViewColumn('Your current USB disks', gtk.CellRendererText(), text=0)
+            column.set_resizable(True)
+            column.set_sort_column_id(0)
+            usb_disks.append_column(column)
+            usb_disks.set_model(usb_dev_list)
+            usb_disks.get_selection().select_iter(iter_obj)
+            result = dialog2.run()
+            if result == gtk.RESPONSE_CANCEL:
+                print "No USB device selected!"
+            if result == gtk.RESPONSE_OK:
+                model, iter = usb_disks.get_selection().get_selected()
+                if not iter:
+                    self.show_error_dialog('No USB disk selected!')
+                else:
+                    print "Selected USB disk %s" % model[iter][0]
+                    if not pdk_utils.umount_device(model[iter][0]):
+                        self.show_error_dialog("Can not umount %s. Please close any shells or opened files still under mount point and try again!" % model[iter][0])
+                        dialog2.destroy()
+                        return -1
+                
+                    dialog2.destroy()
                     self.progressBarWindow = gtk.Window(gtk.WINDOW_TOPLEVEL)
                     self.progressBarWindow.set_title("Please Wait...")
                     self.progressBarWindow.set_border_width(5)
