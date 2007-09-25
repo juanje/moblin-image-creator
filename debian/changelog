@@ -3,8 +3,6 @@ moblin-image-creator (0.29) UNRELEASED; urgency=low
   [ John L. Villalovos ]
   * Add a .img into the input box for creating an image.  Also made a single
     function for querying the user for the name of an image.
-  * Put moblin-calc into the [Ubuntu-Staging] fset, and deleted galculator
-    from the [Ubuntu-Mobile] fset.
 
   [ Prajwal Mohan <prajwal@linux.intel.com> ]
   * Added Write USB Image to menu. This will allow users to burn any image to

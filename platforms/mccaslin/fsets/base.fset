@@ -42,13 +42,13 @@ DEPS=samsung-q1-ultra-config|zi9-config
 
 [Ubuntu-Mobile]
 DESC=Ubuntu Mobile using Hildon, and any base applications for same
-PKGS=ubuntu-mobile gstreamer-dbus-media-service gstreamer0.10-x gstreamer0.10-ffmpeg gstreamer0.10-plugins-ugly moblin-keyboard-manager mousepad gnome-nettool
+PKGS=ubuntu-mobile gstreamer-dbus-media-service gstreamer0.10-x gstreamer0.10-ffmpeg gstreamer0.10-plugins-ugly moblin-keyboard-manager mousepad gnome-nettool galculator
 DEBUG_PKGS=powertop
 DEPS=gnome-mobile
 
 [Ubuntu-Staging]
 DESC=Packages that are ready for inclusion into Ubuntu Gutsy
-PKGS=moblin-chat moblin-applets mobile-player moblin-calc moblin-notes
+PKGS=moblin-chat moblin-applets mobile-player moblin-notes
 DEBUG_PKGS=
 DEPS=ubuntu-mobile
 
