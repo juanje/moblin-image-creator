@@ -13,7 +13,11 @@ moblin-image-creator (0.29) UNRELEASED; urgency=low
   [ Bob Spencer ]
   * Added moblin-notes to staging fset 
 
- -- Bob Spencer <bob@bobuntu>  Mon, 24 Sep 2007 21:03:48 -0700
+  [ Tollef Fog Heen ]
+  * Update fsets to depend on linux-lpia|linux-generic (or
+    linux-lpia|linux-ume as appropriate) so lpia works better.
+
+ -- Tollef Fog Heen <tfheen@ubuntu.com>  Tue, 25 Sep 2007 19:42:26 +0200
 
 moblin-image-creator (0.28) gutsy; urgency=low
 

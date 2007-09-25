@@ -24,13 +24,13 @@ DEPS=
 
 [Zi9-Config]
 DESC=Packages needed for the Zi9
-PKGS=zi9-config linux-generic
+PKGS=zi9-config linux-lpia|linux-generic
 DEBUG_PKGS=
 DEPS=core
 
 [Samsung-Q1-Ultra-Config]
 DESC=Packages needed for the Samsung Q1 Ultra
-PKGS=ume-config-samsung-q1-ultra linux-generic
+PKGS=ume-config-samsung-q1-ultra linux-lpia|linux-generic
 DEBUG_PKGS=
 DEPS=core
 
