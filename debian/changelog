@@ -10,7 +10,10 @@ moblin-image-creator (0.29) UNRELEASED; urgency=low
   * Added Write USB Image to menu. This will allow users to burn any image to
     USB drive.
 
- -- Prajwal Mohan <prajwal@linux.intel.com> <prajwal@prajwal-desktop>  Mon, 24 Sep 2007 16:56:20 -0700
+  [ Bob Spencer ]
+  * Added moblin-notes to staging fset 
+
+ -- Bob Spencer <bob@bobuntu>  Mon, 24 Sep 2007 21:03:48 -0700
 
 moblin-image-creator (0.28) gutsy; urgency=low
 
