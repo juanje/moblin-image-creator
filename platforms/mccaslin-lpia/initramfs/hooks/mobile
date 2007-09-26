@@ -1,0 +1,21 @@
+#!/bin/sh
+
+PREREQ=""
+
+prereqs()
+{
+	echo "$PREREQ"
+}
+
+case $1 in
+# get pre-requisites
+prereqs)
+	prereqs
+	exit 0
+	;;
+esac
+
+. /usr/share/initramfs-tools/hook-functions
+cp -f /etc/initramfs-tools/usplash.conf /etc/usplash.conf
+copy_exec /etc/initramfs-tools/usb /scripts/usb
+copy_exec /etc/initramfs-tools/disk /scripts/disk

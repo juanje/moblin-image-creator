@@ -1,0 +1,2 @@
+deb http://ports.ubuntu.com/ubuntu-ports gutsy restricted
+deb-src http://ports.ubuntu.com/ubuntu-ports gutsy restricted
