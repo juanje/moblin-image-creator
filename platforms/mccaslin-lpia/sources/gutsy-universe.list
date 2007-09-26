@@ -1,2 +1,2 @@
 deb http://ports.ubuntu.com/ubuntu-ports gutsy universe
-deb-src http://ports.ubuntu.com/ubuntu-ports gutsy universe
+#deb-src http://ports.ubuntu.com/ubuntu-ports gutsy universe

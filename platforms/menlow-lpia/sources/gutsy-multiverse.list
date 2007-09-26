@@ -1,2 +1,2 @@
 deb http://ports.ubuntu.com/ubuntu-ports gutsy multiverse 
-deb-src http://ports.ubuntu.com/ubuntu-ports gutsy restricted multiverse
+#deb-src http://ports.ubuntu.com/ubuntu-ports gutsy restricted multiverse

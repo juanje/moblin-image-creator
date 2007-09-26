@@ -17,8 +17,10 @@ moblin-image-creator (0.29) gutsy; urgency=low
 
   [ John L. Villalovos ]
   * Adding some lpia platforms
+  * The LPIA stuff in ports.ubuntu.com does NOT seem to have any sources.  So
+    removing the deb-src entries in the lpia platforms
 
- -- John L. Villalovos <john.l.villalovos@intel.com>  Wed, 26 Sep 2007 13:34:51 -0700
+ -- John L. Villalovos <john.l.villalovos@intel.com>  Wed, 26 Sep 2007 14:45:48 -0700
 
 moblin-image-creator (0.28) gutsy; urgency=low
 
