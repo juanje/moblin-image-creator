@@ -22,8 +22,9 @@ moblin-image-creator (0.29) gutsy; urgency=low
   * Work on creating mccaslin-i386 and menlow-lpia platforms
   * Work continues on creating mccaslin-i386 and menlow-lpia platforms
   * Work continues on creating mccaslin-i386 and menlow-lpia platforms
+  * Fix default config file to fix up platform info
 
- -- John L. Villalovos <john.l.villalovos@intel.com>  Thu, 27 Sep 2007 10:21:44 -0700
+ -- John L. Villalovos <john.l.villalovos@intel.com>  Thu, 27 Sep 2007 10:26:08 -0700
 
 moblin-image-creator (0.28) gutsy; urgency=low
 
