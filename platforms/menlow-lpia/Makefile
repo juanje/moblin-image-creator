@@ -1,4 +1,4 @@
-PNAME = menlow
+PNAME = menlow-lpia
 SHARE = ${DESTDIR}/usr/share/pdk
 
 all:
