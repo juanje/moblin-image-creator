@@ -75,7 +75,9 @@ class App(object):
                 "on_target_term_launch_clicked": self.on_target_term_launch_clicked,
                 "on_target_kernel_cmdline_clicked": self.on_target_kernel_cmdline_clicked,
                 "on_DD_USB_clicked": self.on_DD_USB_clicked,
-                "on_WriteUsbImage_activate":self.on_WriteUsbImage_activate}
+                "on_WriteUsbImage_activate":self.on_WriteUsbImage_activate,
+                "on_Load_activate":self.on_Load_activate,
+                "on_Save_activate":self.on_Save_activate}
         self.widgets.signal_autoconnect(dic)
         # setup projectView widget
         self.pName = _("Name")
@@ -658,6 +660,144 @@ class App(object):
                     self.progressBarWindow.destroy()
 
             dialog2.destroy()
+
+    def on_Load_activate(self, widget):
+        print "In on_Load_activate"
+
+        dialog = gtk.Dialog("Provide a Project Name", None, gtk.DIALOG_MODAL, (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL, gtk.STOCK_OK, gtk.RESPONSE_OK))
+        dialog.set_size_request(300, 150)
+        projectNameEntry = gtk.Entry(100)
+        projectNameEntry.set_has_frame(True)
+        #projectNameEntry.set_text("Enter Project Name Here")
+        dialog.vbox.pack_start(projectNameEntry)
+        dialog.show_all()
+        result = dialog.run()
+        if result == gtk.RESPONSE_CANCEL:
+            print "No Project Name"
+            dialog.destroy()
+        if result == gtk.RESPONSE_OK:
+            projectName = projectNameEntry.get_text()
+            print "Project name: %s" % projectName
+            dialog.destroy()
+
+            dialog = gtk.FileChooserDialog('Select Image File',None,gtk.FILE_CHOOSER_ACTION_OPEN,                   (gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,gtk.STOCK_OK,gtk.RESPONSE_OK),None)
+            fileFilter = gtk.FileFilter()
+            fileFilter.set_name(".mic.tar.bz2")
+            fileFilter.add_pattern("*.mic.tar.bz2")
+            dialog.add_filter(fileFilter)
+            result = dialog.run()
+            if result == gtk.RESPONSE_CANCEL:
+                dialog.destroy()
+                print "No target image selected!"
+            if result == gtk.RESPONSE_OK:
+                fileToLoad=dialog.get_filename()
+                print "Selected file name: %s " % fileToLoad
+                dialog.destroy()
+                
+                dialog = gtk.FileSelection("Choose the destination Folder")
+                result = dialog.run()
+                if result == gtk.RESPONSE_CANCEL:
+                    print "No Destination Folder"
+                    dialog.destroy()
+                if result == gtk.RESPONSE_OK:
+                    targetFolder = dialog.get_filename()
+                    print "Targer File Name: %s" % (targetFolder)
+                    dialog.destroy()
+
+                    self.progressBarWindow = gtk.Window(gtk.WINDOW_TOPLEVEL)
+                    self.progressBarWindow.set_title("Please Wait...")
+                    self.progressBarWindow.set_border_width(5)
+                    self.progressBarWindow.set_size_request(500, 200)
+
+                    vbox = gtk.VBox(False, 5)
+                    self.progressBarWindow.add(vbox)
+
+                    label = gtk.Label("Loading Project: %s" % projectName)     
+                    frame = gtk.Frame("")            
+                    frame.add(label)
+                    vbox.pack_start(frame, False, False, 0)
+                    
+                    self.progressbar = gtk.ProgressBar()                             
+                    self.progressbar.set_pulse_step(0.01)
+                    vbox.pack_start(self.progressbar, False, False, 0)
+                    self.progressBarWindow.show_all()                 
+
+                    print "Loading Project %s" % projectName
+                    self.sdk.load_project(projectName, targetFolder, fileToLoad, self.gui_throbber)
+                    #cmd = "image-creator --command=load-project --project-name=%s --file-name=%s --project-path=%s" % (projectName, fileToLoad, targetFolder)
+                    #print cmd
+                    #pdk_utils.execCommand(cmd, False, None, self.gui_throbber)                    
+                    print "Loading Project Complete"                    
+
+                    self.progressBarWindow.destroy()
+
+                    self.sdk.discover_projects()
+                    self.projectList.clear()
+                    for key in sorted(self.sdk.projects.iterkeys()):
+                        p = self.sdk.projects[key]
+                        self.projectList.append((p.name, p.desc, p.path, p.platform.name))
+                    self.projectView.set_model(self.projectList)
+
+
+    def on_Save_activate(self, widget):
+        print "In on_Save_activate"
+
+        dialog = gtk.Dialog("Choose Project to Save", None, gtk.DIALOG_MODAL, (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL, gtk.STOCK_OK, gtk.RESPONSE_OK))
+        currentProjectList = gtk.ListStore(str, str)
+        projectList = gtk.combo_box_new_text()
+        for key in sorted(self.sdk.projects.iterkeys()):
+            p = self.sdk.projects[key]    
+            projectList.append_text(p.name)
+        projectList.set_active(0)
+        dialog.vbox.pack_start(projectList)
+        dialog.show_all()
+        result = dialog.run()
+        if result == gtk.RESPONSE_CANCEL:
+            print "No Project Name"
+            dialog.destroy()
+        if result == gtk.RESPONSE_OK:
+            projectNameToSave = projectList.get_active_text()
+            print "Project name to Save: %s" % (projectNameToSave)
+            dialog.destroy()    
+
+            dialog = gtk.FileSelection("Choose the destination File Name")
+            result = dialog.run()
+            if result == gtk.RESPONSE_CANCEL:
+                print "No Project Name"
+                dialog.destroy()
+            if result == gtk.RESPONSE_OK:
+                targetFileName = dialog.get_filename()
+                print "Targer File Name: %s" % (targetFileName)
+                dialog.destroy()
+            
+                self.progressBarWindow = gtk.Window(gtk.WINDOW_TOPLEVEL)
+                self.progressBarWindow.set_title("Please Wait...")
+                self.progressBarWindow.set_border_width(5)
+                self.progressBarWindow.set_size_request(500, 200)
+
+                vbox = gtk.VBox(False, 5)
+                self.progressBarWindow.add(vbox)
+
+                label = gtk.Label("Saving Project: %s. Please Wait...." % projectNameToSave)     
+                frame = gtk.Frame("")            
+                frame.add(label)
+                vbox.pack_start(frame, False, False, 0)
+                    
+                #self.progressbar = gtk.ProgressBar()                             
+                #self.progressbar.set_pulse_step(0.01)
+                #vbox.pack_start(self.progressbar, False, False, 0)
+                self.progressBarWindow.show_all()                 
+
+                #print "Saving Project %s" % projectNameToSave
+                #cmd = "image-creator --command=save-project --project-name=%s --file-name=%s" % (projectNameToSave, targetFileName)
+                #print cmd
+                #pdk_utils.execCommand(cmd, False, None, self.gui_throbber)                    
+                #print "Saving Complete"                    
+
+                print "Saving Project %s" % projectNameToSave
+                self.sdk.save_project(projectNameToSave, targetFileName)
+                print "Saving Complete"                    
+                self.progressBarWindow.destroy()
 
 #Class: Adding a New Project
 class AddNewProject(object):

@@ -151,6 +151,16 @@ class SDK(object):
                 continue
             config = PackageConfig(full_path)
             self.projects[config.name] = Project.Project(config.path, config.name, config.desc, self.platforms[config.platform], self.progress_callback)
+
+    def discover_projects(self):
+        self.projects = {}
+        for filename in os.listdir(self.config_path):
+            full_path = os.path.join(self.config_path, filename)
+            if not os.path.isfile(full_path):
+                continue
+            config = PackageConfig(full_path)
+            self.projects[config.name] = Project.Project(config.path, config.name, config.desc, self.platforms[config.platform], self.progress_callback)
+       
             
     def create_project(self, parent_path, name, desc, platform, use_rootstrap = True):
         """
@@ -270,7 +280,7 @@ class SDK(object):
         tar_file.close()
         print "Project tarfile created at: %s" % tar_filename
     
-    def load_project(self, project_name, project_path, filename):
+    def load_project(self, project_name, project_path, filename, progressCallback = None):
         """Load the specified filename as project_name and store it in
         project_path"""
         tar_filename = filename
@@ -294,7 +304,7 @@ class SDK(object):
         os.chdir(tempdir)
         print "Extracting: %s to temporary directory: %s/" % (filename, tempdir)
         time.sleep(2)
-        pdk_utils.execCommand("tar xvfj %s" % filename)
+        pdk_utils.execCommand("tar xvfj %s" % filename, callback = progressCallback)
         os.chdir(cwd)
         source_config_file = os.path.join(tempdir, "config", "save.proj")
         if not os.path.isfile(source_config_file):
