@@ -1,5 +1,5 @@
 TMPDIR = /tmp/.tmpbuilddir
-PNAME = mccaslin
+PNAME = mccaslin-i386
 SHARE = ${DESTDIR}/usr/share/pdk
 
 all:
