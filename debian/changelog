@@ -25,7 +25,10 @@ moblin-image-creator (0.29) gutsy; urgency=low
   * Fix default config file to fix up platform info
   * Adding Save and Load project to the GUI.  Thanks to Prajwal for this.
 
- -- John L. Villalovos <john.l.villalovos@intel.com>  Thu, 27 Sep 2007 10:37:10 -0700
+  [ Prajwal Mohan <prajwal@linux.intel.com> ]
+  * Minor changes to Window size and menu names 
+
+ -- Prajwal Mohan <prajwal@linux.intel.com> <prajwal@prajwal-desktop>  Thu, 27 Sep 2007 13:55:18 -0700
 
 moblin-image-creator (0.28) gutsy; urgency=low
 

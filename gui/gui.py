@@ -734,6 +734,7 @@ class App(object):
         print "In on_Save_activate"
         dialog = gtk.Dialog("Choose Project to Save", None, gtk.DIALOG_MODAL,
             (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL, gtk.STOCK_OK, gtk.RESPONSE_OK))
+        dialog.set_size_request(300, 100)
         currentProjectList = gtk.ListStore(str, str)
         projectList = gtk.combo_box_new_text()
         for key in sorted(self.sdk.projects.iterkeys()):
