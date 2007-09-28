@@ -30,9 +30,13 @@ moblin-image-creator (0.29) gutsy; urgency=low
   * Minor changes to Save Project option. Calling main loop to refresh the
     screen
   * Checking if Project Name exists before accepting Project Name from user in
-    Load Project 
+    Load Project
 
- -- Prajwal Mohan <prajwal@linux.intel.com> <prajwal@prajwal-desktop>  Fri, 28 Sep 2007 12:01:46 -0700
+  [ John L. Villalovos ]
+  * Update the source.list.d files so that they get the sources from
+    archive.ubuntu.com
+
+ -- John L. Villalovos <john.l.villalovos@intel.com>  Fri, 28 Sep 2007 14:40:38 -0700
 
 moblin-image-creator (0.28) gutsy; urgency=low
 
