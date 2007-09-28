@@ -28,9 +28,11 @@ moblin-image-creator (0.29) gutsy; urgency=low
   [ Prajwal Mohan <prajwal@linux.intel.com> ]
   * Minor changes to Window size and menu names
   * Minor changes to Save Project option. Calling main loop to refresh the
-    screen 
+    screen
+  * Checking if Project Name exists before accepting Project Name from user in
+    Load Project 
 
- -- Prajwal Mohan <prajwal@linux.intel.com> <prajwal@prajwal-desktop>  Fri, 28 Sep 2007 09:53:58 -0700
+ -- Prajwal Mohan <prajwal@linux.intel.com> <prajwal@prajwal-desktop>  Fri, 28 Sep 2007 12:01:46 -0700
 
 moblin-image-creator (0.28) gutsy; urgency=low
 

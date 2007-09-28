@@ -666,21 +666,47 @@ class App(object):
         print "In on_Load_activate"
         dialog = gtk.Dialog("Provide a Project Name", None, gtk.DIALOG_MODAL,
             (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL, gtk.STOCK_OK, gtk.RESPONSE_OK))
+        dialog.set_default_response(gtk.RESPONSE_OK)
         dialog.set_size_request(300, 150)
         projectNameEntry = gtk.Entry(100)
         projectNameEntry.set_has_frame(True)
+        projectNameEntry.set_activates_default(True)
         #projectNameEntry.set_text("Enter Project Name Here")
         dialog.vbox.pack_start(projectNameEntry)
         dialog.show_all()
-        result = dialog.run()
-        if result == gtk.RESPONSE_CANCEL:
-            print "No Project Name"
-            dialog.destroy()
-        if result == gtk.RESPONSE_OK:
-            projectName = projectNameEntry.get_text()
-            print "Project name: %s" % projectName
-            dialog.destroy()
+        obtainedUniqueName = False
+        projectExistsLabel = gtk.Label("")
+        dialog.vbox.pack_start(projectExistsLabel)
+        projectName = ""
+        while obtainedUniqueName == False:
+            dialog.show_all()
+            result = dialog.run()
+            if result == gtk.RESPONSE_CANCEL:
+                print "No Project Name"
+                break        
+            if result == gtk.RESPONSE_OK:
+                projectName = projectNameEntry.get_text()
+                if projectName == "":
+                    print "Project Name is blank"
+                    dialog.set_size_request(300, 150)
+                    projectExistsLabel.set_markup("<b><span foreground=\"red\">Please provide a project name</span></b>")                        
+                else:                    
+                    print "Project name: %s" % projectName
+                    projectNameExists = False
+                    for key in sorted(self.sdk.projects.iterkeys()):
+                        p = self.sdk.projects[key]
+                        if p.name == projectName:
+                            projectNameExists = True
+                            print "Project %s already exists" % projectName
+                            dialog.set_size_request(400, 150)
+                            projectExistsLabel.set_markup("<b><span foreground=\"red\">Project %s already exists.</span></b>" % projectName)    
+                            break
+                    if projectNameExists == False:
+                        obtainedUniqueName = True
 
+        dialog.destroy()
+
+        if obtainedUniqueName == True:
             dialog = gtk.FileChooserDialog('Select Image File',None,gtk.FILE_CHOOSER_ACTION_OPEN,
                 (gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,gtk.STOCK_OK,gtk.RESPONSE_OK),None)
             fileFilter = gtk.FileFilter()
