@@ -26,9 +26,11 @@ moblin-image-creator (0.29) gutsy; urgency=low
   * Adding Save and Load project to the GUI.  Thanks to Prajwal for this.
 
   [ Prajwal Mohan <prajwal@linux.intel.com> ]
-  * Minor changes to Window size and menu names 
+  * Minor changes to Window size and menu names
+  * Minor changes to Save Project option. Calling main loop to refresh the
+    screen 
 
- -- Prajwal Mohan <prajwal@linux.intel.com> <prajwal@prajwal-desktop>  Thu, 27 Sep 2007 13:55:18 -0700
+ -- Prajwal Mohan <prajwal@linux.intel.com> <prajwal@prajwal-desktop>  Fri, 28 Sep 2007 09:53:58 -0700
 
 moblin-image-creator (0.28) gutsy; urgency=low
 

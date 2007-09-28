@@ -759,7 +759,7 @@ class App(object):
             if result == gtk.RESPONSE_OK:
                 targetFileName = dialog.get_filename()
                 print "Targer File Name: %s" % (targetFileName)
-                dialog.destroy()
+                dialog.destroy()                
                 self.progressBarWindow = gtk.Window(gtk.WINDOW_TOPLEVEL)
                 self.progressBarWindow.set_title("Please Wait...")
                 self.progressBarWindow.set_border_width(5)
@@ -771,8 +771,10 @@ class App(object):
                 frame.add(label)
                 vbox.pack_start(frame, False, False, 0)
                 self.progressBarWindow.show_all()                 
+                while gtk.events_pending():
+                    gtk.main_iteration(False) 
                 print "Saving Project %s" % projectNameToSave
-                self.sdk.save_project(projectNameToSave, targetFileName)
+                self.sdk.save_project(projectNameToSave, targetFileName)                
                 print "Saving Complete"                    
                 self.progressBarWindow.destroy()
 
