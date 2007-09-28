@@ -721,7 +721,8 @@ class App(object):
                 fileToLoad=dialog.get_filename()
                 print "Selected file name: %s " % fileToLoad
                 dialog.destroy()
-                dialog = gtk.FileSelection("Choose the destination Folder")
+                dialog = gtk.FileChooserDialog('Choose the destination Folder',None,gtk.FILE_CHOOSER_ACTION_CREATE_FOLDER,
+                (gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,gtk.STOCK_OK,gtk.RESPONSE_OK),None)
                 result = dialog.run()
                 if result == gtk.RESPONSE_CANCEL:
                     print "No Destination Folder"
@@ -777,7 +778,8 @@ class App(object):
             projectNameToSave = projectList.get_active_text()
             print "Project name to Save: %s" % (projectNameToSave)
             dialog.destroy()    
-            dialog = gtk.FileSelection("Choose the destination File Name")
+            dialog = gtk.FileChooserDialog('Choose the destination File Name',None,gtk.FILE_CHOOSER_ACTION_SAVE,
+                (gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,gtk.STOCK_OK,gtk.RESPONSE_OK),None)
             result = dialog.run()
             if result == gtk.RESPONSE_CANCEL:
                 print "No Project Name"
