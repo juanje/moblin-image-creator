@@ -37,9 +37,13 @@ moblin-image-creator (0.29) gutsy; urgency=low
     archive.ubuntu.com
 
   [ Prajwal Mohan <prajwal@linux.intel.com> ]
-  * Using FileChooserDialog instead of FileSelection to be consistant 
+  * Using FileChooserDialog instead of FileSelection to be consistant
 
- -- Prajwal Mohan <prajwal@linux.intel.com> <prajwal@prajwal-desktop>  Fri, 28 Sep 2007 15:31:13 -0700
+  [ John L. Villalovos ]
+  * Add an "uninstall" Makefile target which does the same thing as the
+    "cleanall" target.
+
+ -- John L. Villalovos <john.l.villalovos@intel.com>  Mon, 01 Oct 2007 16:48:34 -0700
 
 moblin-image-creator (0.28) gutsy; urgency=low
 

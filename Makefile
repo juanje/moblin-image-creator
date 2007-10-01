@@ -83,3 +83,5 @@ runbasictests:
 runalltests: runtests
 	@echo "Running unit tests that take a long time..."
 	unittest/testInstallImage.py
+
+uninstall: cleanall
