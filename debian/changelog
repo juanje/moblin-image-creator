@@ -43,7 +43,10 @@ moblin-image-creator (0.29) gutsy; urgency=low
   * Add an "uninstall" Makefile target which does the same thing as the
     "cleanall" target.
 
- -- John L. Villalovos <john.l.villalovos@intel.com>  Mon, 01 Oct 2007 16:48:34 -0700
+  [ Prajwal Mohan <prajwal@linux.intel.com> ]
+  * Making "Enter" default after input of image name in live USB 
+
+ -- Prajwal Mohan <prajwal@linux.intel.com> <prajwal@prajwal-desktop>  Tue, 02 Oct 2007 13:38:25 -0700
 
 moblin-image-creator (0.28) gutsy; urgency=low
 
