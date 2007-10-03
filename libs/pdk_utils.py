@@ -37,12 +37,9 @@ if not os.path.isdir(CONFIG_DIR):
 sources_regex_file = os.path.expanduser(os.path.join(CONFIG_DIR, "sources_cfg"))
 if os.path.isfile(sources_regex_file):
     global_dict = {}
-    try:
-        execfile(sources_regex_file, global_dict)
-        if 'sources_regex' in global_dict:
-            src_regex = global_dict['sources_regex']
-    except:
-        pass
+    execfile(sources_regex_file, global_dict)
+    if 'sources_regex' in global_dict:
+        src_regex = global_dict['sources_regex']
 
 def main():
     # Add something to exercise this code

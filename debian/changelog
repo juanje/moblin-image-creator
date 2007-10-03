@@ -44,9 +44,13 @@ moblin-image-creator (0.29) gutsy; urgency=low
     "cleanall" target.
 
   [ Prajwal Mohan <prajwal@linux.intel.com> ]
-  * Making "Enter" default after input of image name in live USB 
+  * Making "Enter" default after input of image name in live USB
 
- -- Prajwal Mohan <prajwal@linux.intel.com> <prajwal@prajwal-desktop>  Tue, 02 Oct 2007 13:38:25 -0700
+  [ John L. Villalovos ]
+  * If the sources_cfg file has an error in it, we want to crash.  Otherwise
+    people don't realize that they made an error in their file
+
+ -- John L. Villalovos <john.l.villalovos@intel.com>  Wed, 03 Oct 2007 13:40:07 -0700
 
 moblin-image-creator (0.28) gutsy; urgency=low
 
