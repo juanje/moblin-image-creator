@@ -1,19 +1,4 @@
-moblin-image-creator (0.29) gutsy; urgency=low
-
-  [ John L. Villalovos ]
-  * Add a .img into the input box for creating an image.  Also made a single
-    function for querying the user for the name of an image.
-
-  [ Prajwal Mohan <prajwal@linux.intel.com> ]
-  * Added Write USB Image to menu. This will allow users to burn any image to
-    USB drive.
-
-  [ Bob Spencer ]
-  * Added moblin-notes to staging fset
-
-  [ Tollef Fog Heen ]
-  * Update fsets to depend on linux-lpia|linux-generic (or
-    linux-lpia|linux-ume as appropriate) so lpia works better.
+moblin-image-creator (0.30) UNRELEASED; urgency=low
 
   [ John L. Villalovos ]
   * Adding some lpia platforms
@@ -51,7 +36,26 @@ moblin-image-creator (0.29) gutsy; urgency=low
     people don't realize that they made an error in their file
   * Create a sample ~/.image-creator/sources_cfg file if none exists.
 
- -- John L. Villalovos <john.l.villalovos@intel.com>  Thu, 04 Oct 2007 17:58:06 -0700
+ -- John L. Villalovos <john.l.villalovos@intel.com>  Fri, 05 Oct 2007 10:51:33 -0700
+
+moblin-image-creator (0.29) gutsy; urgency=low
+
+  [ John L. Villalovos ]
+  * Add a .img into the input box for creating an image.  Also made a single
+    function for querying the user for the name of an image.
+
+  [ Prajwal Mohan <prajwal@linux.intel.com> ]
+  * Added Write USB Image to menu. This will allow users to burn any image to
+    USB drive.
+
+  [ Bob Spencer ]
+  * Added moblin-notes to staging fset
+
+  [ Tollef Fog Heen ]
+  * Update fsets to depend on linux-lpia|linux-generic (or
+    linux-lpia|linux-ume as appropriate) so lpia works better.
+
+ -- Tollef Fog Heen <tfheen@ubuntu.com>  Tue, 25 Sep 2007 19:42:26 +0200
 
 moblin-image-creator (0.28) gutsy; urgency=low
 
