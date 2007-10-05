@@ -198,7 +198,7 @@ class InstallImage(object):
                 symbol_file = os.path.join(base_dir, 'boot', file)
 
                 cmd = "/sbin/depmod -b %s -v %s -F %s" % (base_dir, kernel_version, symbol_file)
-                self.project.chroot(cmd)
+                self.target.chroot(cmd)
 
     def create_rootfs(self):
         if not os.path.isfile(os.path.join(self.target.fs_path, 'etc/fstab')):

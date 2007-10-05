@@ -36,7 +36,14 @@ moblin-image-creator (0.30) UNRELEASED; urgency=low
     people don't realize that they made an error in their file
   * Create a sample ~/.image-creator/sources_cfg file if none exists.
 
- -- John L. Villalovos <john.l.villalovos@intel.com>  Fri, 05 Oct 2007 10:51:33 -0700
+  [ Rusty Lynch ]
+  * Fixed a bug where image creation was running depmod in the project
+    filesystem instead of the target filesystem.  A recent bug in the
+    linux-ubuntu-modules package (where depmod is not being correctly
+    called in the postinst) exposed this bug which ultimatly results
+    in unbootable images.
+
+ -- Rusty Lynch <rusty@rusty-smokin>  Fri, 05 Oct 2007 15:36:27 -0700
 
 moblin-image-creator (0.29) gutsy; urgency=low
 
