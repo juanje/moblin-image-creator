@@ -40,6 +40,29 @@ if os.path.isfile(sources_regex_file):
     execfile(sources_regex_file, global_dict)
     if 'sources_regex' in global_dict:
         src_regex = global_dict['sources_regex']
+else:
+    print "Creating sample %s file" % sources_regex_file
+    out_file = open(sources_regex_file, 'w')
+    print  >> out_file, """#!/usr/bin/python
+
+# If you have a local mirror of the Ubuntu and/or Moblin.org APT repositories,
+# then this configuration file will be useful to you.
+
+# This file is used when copying the files that will go into
+# /etc/apt/sources.list.d/  It consists of a list, which contains a search
+# regular expression and a replacement string.  When copying the files into the
+# /etc/apt/sources.list.d/ , of the projects and targets, a search and replace
+# will be performed.
+
+sources_regex = [
+    # source_archive,                           local mirror of source archive
+
+# Edit the following and uncomment them to enable use of a local mirror server.
+#    (r'http://ports.ubuntu.com/ubuntu-ports gutsy', 'http://<PATH_TO_YOUR_LOCAL_MIRROR_OF_PORTS_UBUNTU_COM/ gutsy'),
+#    (r'http://www.moblin.org/apt gaston',       'http://<PATH_TO_YOUR_LOCAL_MIRROR_OF_MOBLIN_ORG/ gaston'),
+
+]"""
+    out_file.close()
 
 def main():
     # Add something to exercise this code

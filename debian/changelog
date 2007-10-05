@@ -49,8 +49,9 @@ moblin-image-creator (0.29) gutsy; urgency=low
   [ John L. Villalovos ]
   * If the sources_cfg file has an error in it, we want to crash.  Otherwise
     people don't realize that they made an error in their file
+  * Create a sample ~/.image-creator/sources_cfg file if none exists.
 
- -- John L. Villalovos <john.l.villalovos@intel.com>  Wed, 03 Oct 2007 13:40:07 -0700
+ -- John L. Villalovos <john.l.villalovos@intel.com>  Thu, 04 Oct 2007 17:58:06 -0700
 
 moblin-image-creator (0.28) gutsy; urgency=low
 
