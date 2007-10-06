@@ -43,7 +43,10 @@ moblin-image-creator (0.30) UNRELEASED; urgency=low
     called in the postinst) exposed this bug which ultimatly results
     in unbootable images.
 
- -- Rusty Lynch <rusty@rusty-smokin>  Fri, 05 Oct 2007 15:36:27 -0700
+  [ John L. Villalovos ]
+  * Use the linux-lpiacompat kernel for the McCaslin kernel
+
+ -- John L. Villalovos <john.l.villalovos@intel.com>  Sat, 06 Oct 2007 09:47:14 -0700
 
 moblin-image-creator (0.29) gutsy; urgency=low
 
