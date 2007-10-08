@@ -58,7 +58,7 @@ Creating a new project from the command line
 --------------------------------------------
 
 $ sudo image-creator -c create-project \
-                      --platform-name mccaslin \
+                      --platform-name mccaslin-lpia \
                       --project-name "MyProject" \
                       --project-path "/usr/src/myproject" \
                       --project-description "My Samsung Q1 Ultra project" 
@@ -97,7 +97,7 @@ automatically install dependent fsets.
 
 After installing image-creator, you can see an example of an fset
 configuration file by looking at: 
-/usr/share/sdk/platforms/mccaslin/fsets/base.fset
+/usr/share/sdk/platforms/mccaslin-lpia/fsets/base.fset
 
 <snip>
 
@@ -250,3 +250,61 @@ about any architecture.  There shouldn't be any problem in creating a new
 platform definition that pulls from an apt database of packages built for
 the target architecture, and that build additional packages using existing
 cross-compiling technologies.
+
+--------------------------------------------------------------------------
+
+Speeding Up Image-Creator by using a local mirror server
+
+Here is some info on how to speed up image creator. This information has been
+updated for LPIA (Low Power Intel Architecture) based builds.
+
+** In order to use this, you must have a local mirror of LPIA Ubuntu Gutsy.
+debmirror is a useful command for mirroring a Debian type archive **
+
+If you don't have a mirror server or don't want to set one up, then the next
+best thing would probably be to setup a caching proxy server.  This is left as
+an exercise for the reader.
+
+Setup root strap mirror servers:
+
+    Create a directory ~/.image-creator/
+
+    Create a file called ~/.image-creator/image-creator.cfg:
+    --------------------------------
+    [platform]
+    buildroot_mirror = http://<path_to_a_local_mirror_of_ubuntu_gutsy_for_lpia>/
+    target_mirror = http://<path_to_a_local_mirror_of_ubuntu_gutsy_for_lpia>/
+    --------------------------------
+
+    You can look at the file: /usr/share/pdk/default_config/defaults.cfg for more
+    info on what can go in the: ~/.image-creator/image-creator.cfg file.
+
+Setup sources.list* rewrite rules:
+
+    Create a file called ~/.image-creator/sources_cfg (and sources_cfg is NOT a
+    typo):
+    --------------------------------
+    sources_regex = [
+        # For the Ubuntu Gutsy LPIA binaries
+        (r'http://ports.ubuntu.com/ubuntu-ports gutsy', 'http://<path_to_a_local_mirror_of_ubuntu_gutsy_for_lpia>/ gutsy'),
+        # For the Ubuntu sources, since they are not at ports.ubuntu.com
+        (r'http://archive.ubuntu.com/ubuntu gutsy', 'http://<path_to_a_local_mirror_of_ubuntu_gutsy>/'),
+        # For the Moblin.org files
+        (r'http://www.moblin.org/apt gaston', 'http://<path_to_a_local_mirror_of_moblin.org>/ gaston'),
+    ]
+    --------------------------------
+
+    The purpose of this file is to rewrite the sources.list and
+    sources.list.d/* files while they are being copied into the rootstrap. It
+    will replace the search expression with the replacement expression.
+
+Delete current rootstraps:
+
+    You have to delete your current rootstraps for this to take affect.
+
+    sudo image-creator --command clear-rootstraps
+
+Caveats:
+
+    This will only affect new projects and new targets. If you do NOT delete
+    your rootstraps after doing the above then it will NOT take affect.
