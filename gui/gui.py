@@ -39,8 +39,9 @@ if mic_cfg.config.has_option('general', 'debug'):
 
 # Initial stuff for Internationlization and Localization support.
 # Locale stuff
-# Set the locale to the user's preferred locale
-locale.setlocale(locale.LC_ALL, '')
+# Set the locale to always be the 'C' locale, since we have are not yet using
+# internationalization
+locale.setlocale(locale.LC_ALL, 'C')
 USER_LOCALE = locale.getlocale(locale.LC_ALL)
 
 # More info: http://docs.python.org/lib/i18n.html
