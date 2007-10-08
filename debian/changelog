@@ -1,3 +1,11 @@
+moblin-image-creator (0.29gutsy1) UNRELEASED; urgency=low
+
+  * Upload targetted at gutsy.
+  * Make apt_cmd in Project.py just set Dir::Etc when calling apt.  This
+    ensures our sources.list.d directory gets correctly picked up.
+
+ -- Tollef Fog Heen <tfheen@ubuntu.com>  Mon, 08 Oct 2007 15:38:50 +0200
+
 moblin-image-creator (0.29) gutsy; urgency=low
 
   [ John L. Villalovos ]

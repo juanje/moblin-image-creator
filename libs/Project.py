@@ -48,7 +48,7 @@ class FileSystem(object):
             raise ValueError("Empty argument passed in")
         self.progress_callback = progress_callback
         self.path = os.path.realpath(os.path.abspath(os.path.expanduser(path)))
-        self.apt_cmd = '/usr/bin/apt-get -y --force-yes -o Dir::State=%(t)s/var/lib/apt -o Dir::State::status=%(t)s/var/lib/dpkg/status -o Dir::Cache=/var/cache/apt -o Dir::Etc::Sourcelist=%(t)s/etc/apt/sources.list -o Dir::Etc::main=%(t)s/etc/apt/apt.conf -o Dir::Etc::parts=%(t)s/etc/apt/apt.conf.d -o DPkg::Options::=--root=%(t)s -o DPkg::Run-Directory=%(t)s'
+        self.apt_cmd = '/usr/bin/apt-get -y --force-yes -o Dir::State=%(t)s/var/lib/apt -o Dir::State::status=%(t)s/var/lib/dpkg/status -o Dir::Cache=/var/cache/apt -o Dir::Etc=%(t)s/etc/apt/ -o DPkg::Options::=--root=%(t)s -o DPkg::Run-Directory=%(t)s'
         self.mounted = []
 
     def update(self, path):
