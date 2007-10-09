@@ -171,9 +171,6 @@ def parseCommandLine():
         help="Name to use for target image file")
     parser.add_option("--run-command", dest="run_command",
         help="Command to execute inside a project or target chroot filesystem")
-    parser.add_option("-q", "--quiet",
-        action="store_false", dest="verbose", default=True,
-        help="don't print status messages to stdout")
     parser.add_option("--bypass-rootstrap",
         action="store_false", dest="use_rootstrap", default=True,
         help="Disable creation or use of rootstrap files")
