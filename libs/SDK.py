@@ -271,7 +271,7 @@ class SDK(object):
             tar_filename = "%s.mic.tar.bz2" % filename
         project = self.projects[project_name]
         config_file = os.path.join(self.config_path, "%s.proj" % project_name)
-        # Don't compress for the main tarball since the project tarball is already compressed
+        # Create the compressed tarfile
         tar_file = tarfile.open(tar_filename, "w:bz2")
         tar_file.debug = 1      # have it spew out what it is doing
         tar_file.add(config_file, arcname = "config/save.proj")
