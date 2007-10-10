@@ -123,6 +123,7 @@ import time
 
 import Platform
 import Project
+import mic_cfg
 import pdk_utils
 
 class SDK(object):
@@ -264,6 +265,19 @@ class SDK(object):
         self.projects[name].mount()
         return self.projects[name]
 
+    def isVerboseProjectTar(self):
+        """See if we should be verbose during tarring for save/load projects"""
+        try:
+            result = mic_cfg.config.get("general", "verbose_project_tar")
+            result = int(result)
+            if result:
+                result = 1
+            else:
+                result = 0
+        except:
+            result = 0
+        return result
+
     def save_project(self, project_name, filename):
         """Save the project to the specified filename"""
         tar_filename = filename
@@ -273,9 +287,10 @@ class SDK(object):
         config_file = os.path.join(self.config_path, "%s.proj" % project_name)
         # Create the compressed tarfile
         tar_file = tarfile.open(tar_filename, "w:bz2")
-        tar_file.debug = 1      # have it spew out what it is doing
+        tar_file.debug = self.isVerboseProjectTar()
         tar_file.add(config_file, arcname = "config/save.proj")
         print "Creating project tarfile.  This can take a long time..."
+        print "Filename: %s" % tar_filename
         project.tar(tar_file)
         tar_file.close()
         print "Project tarfile created at: %s" % tar_filename
@@ -304,7 +319,11 @@ class SDK(object):
         os.chdir(tempdir)
         print "Extracting: %s to temporary directory: %s/" % (filename, tempdir)
         time.sleep(2)
-        pdk_utils.execCommand("tar xvfj %s" % filename, callback = progressCallback)
+        if self.isVerboseProjectTar():
+            tar_options = "xfjv"
+        else:
+            tar_options = "xfj"
+        pdk_utils.execCommand("tar %s %s" % (tar_options, filename), callback = progressCallback)
         os.chdir(cwd)
         source_config_file = os.path.join(tempdir, "config", "save.proj")
         if not os.path.isfile(source_config_file):
