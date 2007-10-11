@@ -56,7 +56,10 @@ moblin-image-creator (0.30) UNRELEASED; urgency=low
   * Added a config file option to control the verbosity of the tar command
     during save/load projects.  The default verbosity is silent.
 
- -- John L. Villalovos <john.l.villalovos@intel.com>  Wed, 10 Oct 2007 12:46:33 -0700
+  [ prajwal ]
+  * Setting button size to make it more consistant 
+
+ -- prajwal <prajwal@prajwal-desktop>  Thu, 11 Oct 2007 10:29:31 -0700
 
 moblin-image-creator (0.29) gutsy; urgency=low
 
