@@ -57,9 +57,12 @@ moblin-image-creator (0.30) UNRELEASED; urgency=low
     during save/load projects.  The default verbosity is silent.
 
   [ prajwal ]
-  * Setting button size to make it more consistant 
+  * Setting button size to make it more consistant
 
- -- prajwal <prajwal@prajwal-desktop>  Thu, 11 Oct 2007 10:29:31 -0700
+  [ Bob Spencer ]
+  * Added developer tools fset
+
+ -- Bob Spencer <bob@bobuntu>  Thu, 11 Oct 2007 17:23:08 -0700
 
 moblin-image-creator (0.29) gutsy; urgency=low
 
