@@ -54,7 +54,7 @@ DEPS=ubuntu-mobile
 
 # Not in Ubuntu yet/broken: moblin-chat moblin-applets moblin-media
 
-[Developer Tools]
+[Developer-Tools]
 DESC=Tools for building source in the target (gcc, make, etc.)
 PKGS=gdb gcc g++ automake autotools-dev build-essential dh-make curl python libtool
 DEBUG_PKGS=
