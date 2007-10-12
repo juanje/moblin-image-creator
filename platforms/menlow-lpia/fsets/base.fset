@@ -69,7 +69,7 @@ DEPS=ubuntu-mobile
 
 [Developer Tools]
 DESC=Tools for building source in the target (gcc, make, etc.)
-PKGS=gdb gcc g++ automake autotools-dev build-essential dh-make curl python  
+PKGS=gdb gcc g++ automake autotools-dev build-essential dh-make curl python libtool
 DEBUG_PKGS=
 DEPS=core
 

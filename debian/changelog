@@ -61,8 +61,9 @@ moblin-image-creator (0.30) UNRELEASED; urgency=low
 
   [ Bob Spencer ]
   * Added developer tools fset
+  * added libtool to developer tools fset
 
- -- Bob Spencer <bob@bobuntu>  Thu, 11 Oct 2007 17:23:08 -0700
+ -- Bob Spencer <bob@bobuntu>  Thu, 11 Oct 2007 19:30:40 -0700
 
 moblin-image-creator (0.29) gutsy; urgency=low
 
