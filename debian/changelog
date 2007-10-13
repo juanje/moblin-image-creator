@@ -1,4 +1,4 @@
-moblin-image-creator (0.30) UNRELEASED; urgency=low
+moblin-image-creator (0.30) gaston; urgency=low
 
   [ John L. Villalovos ]
   * Adding some lpia platforms
@@ -66,7 +66,12 @@ moblin-image-creator (0.30) UNRELEASED; urgency=low
   [ John L. Villalovos ]
   * I prefer FSETs which do not contain spaces in their names
 
- -- John L. Villalovos <john.l.villalovos@intel.com>  Fri, 12 Oct 2007 11:34:11 -0700
+  [ Rusty Lynch ]
+  * Moving moblin-chat, moblin-applets, and moblin-media out of
+    ubuntu-staging and moving moblin-media-browser-plugin into
+    ubuntu-staging
+
+ -- Rusty Lynch <rusty.lynch@intel.com>  Fri, 12 Oct 2007 17:44:45 -0700
 
 moblin-image-creator (0.29) gutsy; urgency=low
 
