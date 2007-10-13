@@ -1,3 +1,11 @@
+moblin-image-creator (0.31) UNRELEASED; urgency=low
+
+  * Adding gstreamer plugin package that enables HTTP source access
+    (this enables the gstreamer media service to access content over
+    http)
+
+ -- Rusty Lynch <rusty@rusty.lynch@intel.com>  Fri, 12 Oct 2007 19:02:26 -0700
+
 moblin-image-creator (0.30) gaston; urgency=low
 
   [ John L. Villalovos ]

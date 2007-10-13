@@ -42,7 +42,7 @@ DEPS=samsung-q1-ultra-config|zi9-config
 
 [Ubuntu-Mobile]
 DESC=Ubuntu Mobile using Hildon, and any base applications for same
-PKGS=ubuntu-mobile gstreamer-dbus-media-service gstreamer0.10-x gstreamer0.10-ffmpeg gstreamer0.10-plugins-ugly moblin-keyboard-manager mousepad gnome-nettool galculator moblin-chat moblin-applets moblin-media 
+PKGS=ubuntu-mobile gstreamer-dbus-media-service gstreamer0.10-x gstreamer0.10-ffmpeg gstreamer0.10-plugins-ugly gstreamer0.10-plugins-bad moblin-keyboard-manager mousepad gnome-nettool galculator moblin-chat moblin-applets moblin-media 
 DEBUG_PKGS=powertop
 DEPS=gnome-mobile
 
