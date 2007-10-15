@@ -1,10 +1,12 @@
-moblin-image-creator (0.31) UNRELEASED; urgency=low
+moblin-image-creator (0.31) gaston; urgency=low
 
   * Adding gstreamer plugin package that enables HTTP source access
     (this enables the gstreamer media service to access content over
     http)
+  * Adding ppm to the ubuntu-staging fset for both platforms
+  * Cutting a gaston release
 
- -- Rusty Lynch <rusty@rusty.lynch@intel.com>  Fri, 12 Oct 2007 19:02:26 -0700
+ -- Rusty Lynch <rusty.lynch@intel.com>  Sun, 14 Oct 2007 18:09:47 -0700
 
 moblin-image-creator (0.30) gaston; urgency=low
 
