@@ -6,7 +6,10 @@ moblin-image-creator (0.33) gaston; urgency=low
   [ John L. Villalovos ]
   * Delete the linux-ume kernel from the McCaslin fsets.
 
- -- John L. Villalovos <john.l.villalovos@intel.com>  Wed, 17 Oct 2007 12:48:37 -0700
+  [ prajwal ]
+  * Added Upgrade Project and Upgrade Target buttons 
+
+ -- prajwal <prajwal@prajwal-desktop>  Wed, 17 Oct 2007 14:53:48 -0700
 
 moblin-image-creator (0.32) gaston; urgency=low
 

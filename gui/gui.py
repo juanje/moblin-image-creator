@@ -79,6 +79,8 @@ class App(object):
                 "on_WriteUsbImage_activate":self.on_WriteUsbImage_activate,
                 "on_Load_activate":self.on_Load_activate,
                 "on_Save_activate":self.on_Save_activate,
+                "on_upgrade_project_clicked":self.on_upgrade_project_clicked,
+                "on_upgrade_target_clicked":self.on_upgrade_target_clicked,
                 }
         self.widgets.signal_autoconnect(dic)
         # setup projectView widget
@@ -139,6 +141,7 @@ class App(object):
         self.buttons.delete_target.set_sensitive(target_selected_state)
         self.buttons.install_fset.set_sensitive(target_selected_state)
         self.buttons.target_term_launch.set_sensitive(target_selected_state)
+        self.buttons.upgrade_target.set_sensitive(target_selected_state)
         # Items which should be enabled if our selected target has an fset
         self.buttons.create_liveusb.set_sensitive(fset_state)
         self.buttons.create_liverwusb.set_sensitive(fset_state)
@@ -159,6 +162,7 @@ class App(object):
         if not iter:
             # No projects are selected
             self.buttons.delete_project.set_sensitive(False)
+            self.buttons.upgrade_project.set_sensitive(False)
             self.buttons.add_target.set_sensitive(False)
             self.buttons.install_fset.set_sensitive(False)
             self.buttons.delete_target.set_sensitive(False)
@@ -169,6 +173,7 @@ class App(object):
         self.buttons.delete_project.set_sensitive(True)
         self.buttons.add_target.set_sensitive(True)
         self.buttons.term_launch.set_sensitive(True)
+        self.buttons.upgrade_project.set_sensitive(True)
         for key in self.current_project().targets:
             installed_fsets = ' '.join(self.current_project().targets[key].installed_fsets())
             self.targetList.append((key, installed_fsets))
@@ -807,6 +812,62 @@ class App(object):
                 print "Saving Complete"                    
                 self.progressBarWindow.destroy()
 
+    def on_upgrade_project_clicked(self, widget):
+        print "In on_upgrade_project_clicked"
+        self.progressBarWindow = gtk.Window(gtk.WINDOW_TOPLEVEL)
+        self.progressBarWindow.set_title("Please Wait...")
+        self.progressBarWindow.set_border_width(5)
+        self.progressBarWindow.set_size_request(500, 200)
+        vbox = gtk.VBox(False, 5)
+        self.progressBarWindow.add(vbox)
+        label = gtk.Label("Upgrading Project. Please Wait....")     
+        frame = gtk.Frame("")            
+        frame.add(label)
+        vbox.pack_start(frame, False, False, 0)
+        self.progressbar = gtk.ProgressBar()                             
+        self.progressbar.set_pulse_step(0.01)
+        vbox.pack_start(self.progressbar, False, False, 0)
+
+        self.progressBarWindow.show_all()                 
+
+        self.current_project().update()
+        command = "apt-get --force-yes --yes upgrade"
+        print "Running 'apt-get upgrade' command: %s" % command
+        ret = self.current_project().chroot(command) 
+        if ret != 0:
+             raise OSError("Internal error while attempting to run: %s" % command)
+        print "Completed 'apt-get upgrade' successfully"
+        self.progressBarWindow.destroy()
+        
+
+    def on_upgrade_target_clicked(self, widget):
+        print "In on_upgrade_target_clicked"
+        self.progressBarWindow = gtk.Window(gtk.WINDOW_TOPLEVEL)
+        self.progressBarWindow.set_title("Please Wait...")
+        self.progressBarWindow.set_border_width(5)
+        self.progressBarWindow.set_size_request(500, 200)
+        vbox = gtk.VBox(False, 5)
+        self.progressBarWindow.add(vbox)
+        label = gtk.Label("Upgrading Target. Please Wait....")     
+        frame = gtk.Frame("")            
+        frame.add(label)
+        vbox.pack_start(frame, False, False, 0)
+        self.progressbar = gtk.ProgressBar()                             
+        self.progressbar.set_pulse_step(0.01)
+        vbox.pack_start(self.progressbar, False, False, 0)
+
+        self.progressBarWindow.show_all()                 
+
+        self.current_target().update()
+        command = "apt-get --force-yes --yes upgrade"
+        print "Running 'apt-get upgrade' command: %s" % command
+        ret = self.current_target().chroot(command) 
+        if ret != 0:
+             raise OSError("Internal error while attempting to run: %s" % command)
+        print "Completed 'apt-get upgrade' successfully"
+        self.progressBarWindow.destroy()
+
+
 #Class: Adding a New Project
 class AddNewProject(object):
     """Class to bring up AddNewProject dialogue"""
@@ -856,10 +917,12 @@ class MainWindowButtons(object):
         # Project button bar
         self.add_project = widgets.get_widget('new_project_add')
         self.delete_project = widgets.get_widget('project_delete')
+        self.upgrade_project = widgets.get_widget('upgrade_project')
         # Target button bar
         self.add_target = widgets.get_widget('new_target_add')
         self.delete_target = widgets.get_widget('target_delete')
         self.install_fset = widgets.get_widget('target_install_fset')
+        self.upgrade_target = widgets.get_widget('upgrade_target')
         # Action buttons
         self.create_liveusb = widgets.get_widget('create_liveUSB_btn')
         self.create_liverwusb = widgets.get_widget('create_liveRWUSB_btn')
