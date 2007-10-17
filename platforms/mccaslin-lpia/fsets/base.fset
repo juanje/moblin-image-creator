@@ -10,8 +10,7 @@ PKGS=
 DEBUG_PKGS=
 DEPS=core samsung-q1-ultra-config ubuntu-mobile
 
-[Zi9-Full-Mobile-Stack]
-DESC=Virtual Fset that installs the standard mobile stack
+[Zi9-Full-Mobile-Stack] DESC=Virtual Fset that installs the standard mobile stack
 PKGS=flashplugin-nonfree
 DEBUG_PKGS=
 DEPS=core zi9-config ubuntu-mobile
@@ -57,6 +56,12 @@ DEPS=ubuntu-mobile
 [Developer-Tools]
 DESC=Tools for building source in the target (gcc, make, etc.)
 PKGS=gdb gcc g++ automake autotools-dev build-essential dh-make curl python libtool
+DEBUG_PKGS=
+DEPS=core
+
+[Asian-Fonts]
+DESC=Fonts for viewing websites in Chinese, Japanese, and Korean (adds 34MB)
+PKGS=ttf-arphic-uming ttf-unfonts-core
 DEBUG_PKGS=
 DEPS=core
 

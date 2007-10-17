@@ -73,3 +73,9 @@ PKGS=gdb gcc g++ automake autotools-dev build-essential dh-make curl python libt
 DEBUG_PKGS=
 DEPS=core
 
+[Asian-Fonts]
+DESC=Fonts for viewing websites in Chinese, Japanese, and Korean (adds 34MB)
+PKGS=ttf-arphic-uming ttf-unfonts-core
+DEBUG_PKGS=
+DEPS=core
+
