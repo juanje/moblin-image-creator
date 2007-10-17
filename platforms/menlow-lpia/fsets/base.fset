@@ -30,7 +30,7 @@ DEPS=
 
 [Ubuntu-Kernel]
 DESC=Ubuntu Kernel Fset
-PKGS=grub linux-lpia|linux-ume
+PKGS=grub linux-lpia
 DEBUG_PKGS=
 DEPS=
 

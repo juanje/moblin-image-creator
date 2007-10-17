@@ -1,8 +1,12 @@
 moblin-image-creator (0.33) gaston; urgency=low
 
+  [ Bob Spencer ]
   * Added fset for adding Chinese, Japaense, and Korean fonts (34MB in 2pkgs)
 
- -- Bob Spencer <bob.spencer@intel.com>  Tue, 16 Oct 2007 17:48:29 -0700
+  [ John L. Villalovos ]
+  * Delete the linux-ume kernel from the McCaslin fsets.
+
+ -- John L. Villalovos <john.l.villalovos@intel.com>  Wed, 17 Oct 2007 12:48:37 -0700
 
 moblin-image-creator (0.32) gaston; urgency=low
 
