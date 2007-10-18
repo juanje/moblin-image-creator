@@ -136,6 +136,10 @@ splash_delay 6000
 splash_display 'Install Successfully'
 splash_display "Unplug USB Key, System Will Reboot Automatically"
 
+#need to call reboot --help and let file system cache hold it, since we will unplug USB disk soon, and after that, reboot command will not be accessable
+#the reason why reboot still work without this is the whole "rootfs.img" is cached when it is copied to HD. But when rootfs.img become bigger and bigger the whole "rootfs.img" will not be able to fully cached (we have found this issue when creating big installation)
+reboot --help > /dev/null 2>&1
+
 while [ $pre_scsi_disk_number = $(ls /sys/class/scsi_disk | wc -l) ]
 do
     sleep 1
