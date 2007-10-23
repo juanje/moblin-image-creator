@@ -1,8 +1,17 @@
 moblin-image-creator (0.35) UNRELEASED; urgency=low
 
-  * 
+  [ John L. Villalovos ]
+  *
 
- -- John L. Villalovos <john.l.villalovos@intel.com>  Tue, 23 Oct 2007 13:19:10 -0700
+  [ Rob Rhoads ]
+  * Fixed a bug where lapic timer wasn't being completely disabled. Added
+    kernel command-line option nolapic in addition to nolapic_timer.
+
+  * kernel command-line options in the default config file were all messed
+    up. For example the option nolapic_timer was being applied to all
+    platforms when it's only needed for menlow.
+
+ -- Rob Rhoads <rob.rhoads@intel.com>  Tue, 23 Oct 2007 14:48:54 -0700
 
 moblin-image-creator (0.34) gaston; urgency=low
 
