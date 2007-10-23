@@ -1,3 +1,9 @@
+moblin-image-creator (0.35) UNRELEASED; urgency=low
+
+  * 
+
+ -- John L. Villalovos <john.l.villalovos@intel.com>  Tue, 23 Oct 2007 12:31:59 -0700
+
 moblin-image-creator (0.34) gaston; urgency=low
 
   [ Rusty Lynch ]
@@ -14,7 +20,7 @@ moblin-image-creator (0.34) gaston; urgency=low
   * Added build.list back into mccasslin/sources
   * Changed UNRELEASED to gaston to trigger a build
 
- -- Bob Spencer <bob.spencer@intel.com>  Tue, 23 Oct 2007 12:25:43 -0700
+ -- John L. Villalovos <john.l.villalovos@intel.com>  Tue, 23 Oct 2007 12:31:24 -0700
 
 moblin-image-creator (0.33) gaston; urgency=low
 
