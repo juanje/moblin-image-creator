@@ -24,7 +24,7 @@ DEPS=moblin-kernel core crownbeach-config ubuntu-mobile
 
 [Moblin-Kernel]
 DESC=Moblin Kernel Fset
-PKGS=grub linux-menlow-default psb-kmd-default usplash-theme-ubuntu
+PKGS=grub linux-menlow-default psb-kmd-default 
 DEBUG_PKGS=linux-menlow-developer psb-kmd-developer
 DEPS=
 
@@ -36,7 +36,7 @@ DEPS=
 
 [Core]
 DESC=Fundamental fset that provides a root filesystem that uses the Ubuntu kernel
-PKGS=busybox-initramfs initramfs-tools pm-utils vbetool
+PKGS=busybox-initramfs initramfs-tools pm-utils vbetool usplash-theme-ubuntu
 DEBUG_PKGS=man-db manpages openssh-client openssh-server
 DEPS=ubuntu-kernel|moblin-kernel
 

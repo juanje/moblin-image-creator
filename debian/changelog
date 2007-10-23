@@ -6,7 +6,11 @@ moblin-image-creator (0.34) UNRELEASED; urgency=low
   [ Alek Du ]
   * Fixed a potential install script issue
 
- -- Alek Du <alek.du@intel.com>  Thu, 18 Oct 2007 12:10:36 +0800
+  [ Rob Rhoads ]
+  * Moved usplash package in menlow-lpia fset, so it will be for both
+    moblin and ubuntu kernels.
+
+ -- Rob Rhoads <rob.rhoads@intel.com>  Tue, 23 Oct 2007 11:59:58 -0700
 
 moblin-image-creator (0.33) gaston; urgency=low
 
