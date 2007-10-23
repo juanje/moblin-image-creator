@@ -1,4 +1,4 @@
-moblin-image-creator (0.34) UNRELEASED; urgency=low
+moblin-image-creator (0.34) gaston; urgency=low
 
   [ Rusty Lynch ]
   * Adding evince to ubuntu-mobile fset
@@ -10,7 +10,11 @@ moblin-image-creator (0.34) UNRELEASED; urgency=low
   * Moved usplash package in menlow-lpia fset, so it will be for both
     moblin and ubuntu kernels.
 
- -- Rob Rhoads <rob.rhoads@intel.com>  Tue, 23 Oct 2007 11:59:58 -0700
+  [ Bob Spencer ]
+  * Added build.list back into mccasslin/sources
+  * Changed UNRELEASED to gaston to trigger a build
+
+ -- Bob Spencer <bob.spencer@intel.com>  Tue, 23 Oct 2007 12:25:43 -0700
 
 moblin-image-creator (0.33) gaston; urgency=low
 
