@@ -236,17 +236,10 @@ class InstallImage(object):
         self.bootfs_path = os.path.join(self.target.image_path, self.bootfs)
         if os.path.isfile(self.bootfs_path):
             os.remove(self.bootfs_path)
-        fs_path      = self.target.fs_path[len(self.project.path):]
-        fs_path      = os.path.join(fs_path, 'boot')
-        image_path   = self.target.image_path[len(self.project.path):]
-        image_path   = os.path.join(image_path,'bootfs.img')
-        cmd          = "/usr/sbin/mksquashfs %s %s" % (fs_path, image_path)
-
         # Remove old initrd images
         for file in os.listdir(os.path.join(self.target.fs_path, 'boot')):
             if file.find('initrd.img') == 0:
                 os.remove(os.path.join(self.target.fs_path, 'boot', file))
-        
         self.kernels.insert(0,self.default_kernel)
         # copy pre-created initrd img (by create_all_initramfs) for each installed kernel
         order = 0
@@ -256,6 +249,11 @@ class InstallImage(object):
             shutil.copy("/tmp/.tmp.initrd%d" % order, os.path.join(self.target.fs_path, 'boot', initrd_name))
             order += 1
         self.kernels.pop(0)
+        fs_path    = self.target.fs_path[len(self.project.path):]
+        fs_path    = os.path.join(fs_path, 'boot')
+        image_path = self.target.image_path[len(self.project.path):]
+        image_path = os.path.join(image_path,'bootfs.img')
+        cmd        = "/usr/sbin/mksquashfs %s %s" % (fs_path, image_path)
         self.project.chroot(cmd)
 
     def delete_bootfs(self):
@@ -305,6 +303,7 @@ class InstallImage(object):
             if line.find('title') == 0:
                 print line
                 if line.find(self.default_kernel.split('vmlinuz-').pop().strip()) > 0:
+                    # FIXME: JLV: I really don't like all this sed usage, need to clean this up
                     cmd="/bin/sed s/^default.*/default\\t\\t%d/g -i /boot/grub/menu.lst" % order
                     print cmd
                     self.target.chroot(cmd)
