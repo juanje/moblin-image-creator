@@ -24,6 +24,7 @@ import fcntl
 import os
 import re
 import select
+import stat
 import subprocess
 import sys
 
@@ -66,9 +67,23 @@ sources_regex = [
 
 ]"""
     out_file.close()
-    userid = int(mic_cfg.config.get("userinfo", "userid"))
-    groupid = int(mic_cfg.config.get("userinfo", "groupid"))
-    os.chown(sources_regex_file, userid, groupid)
+
+# Make sure the file and directory are owned by the user if it is currently
+# owned by root.
+userid = int(mic_cfg.config.get("userinfo", "userid"))
+groupid = int(mic_cfg.config.get("userinfo", "groupid"))
+for filename in [ CONFIG_DIR, sources_regex_file ]:
+    stat_val = os.stat(filename)
+    st_uid = stat_val[stat.ST_UID]
+    st_gid = stat_val[stat.ST_GID]
+    do_chmod = False
+    if st_uid == 0 and userid != 0:
+        do_chmod = True
+    elif st_gid == 0 and groupid != 0:
+        do_chmod = True
+    if do_chmod:
+        os.chown(filename, userid, groupid)
+
 
 def main():
     # Add something to exercise this code
