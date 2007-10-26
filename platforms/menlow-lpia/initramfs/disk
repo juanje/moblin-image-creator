@@ -25,6 +25,9 @@ mountroot ()
     done
     echo "will mount root from $driver"
 
+#try to resume first
+    /bin/resume /dev/${driver}3
+
     mount /dev/${driver}1 /container 2> /dev/null
     while [ ! -e "/container/rootfs.img" ]; do
 	/bin/sleep 0.5

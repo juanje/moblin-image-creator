@@ -6,14 +6,35 @@ mountroot ()
     mkdir -p /squashmnt
     mkdir -p /persistmnt
 
+#find boot disk
+    while true; do
+      for driver in 'hda' 'hdb' 'sda' 'sdb'; do
+        echo "checking driver $driver"
+        if [ -e /sys/block/$driver/removable ]; then
+           if [ "$(cat /sys/block/$driver/removable)" = "0" ]; then
+              echo "found harddisk at $driver"
+              found="yes"
+              break
+           fi
+         fi
+      done
+      if [ "$found" = "yes" ]; then
+        break;
+      fi
+      /bin/sleep 5
+    done
+    echo "will mount root from $driver"
 
-    mount /dev/sda1 /container 2> /dev/null
+#try to resume first
+    /bin/resume /dev/${driver}3
+
+    mount /dev/${driver}1 /container 2> /dev/null
     while [ ! -e "/container/rootfs.img" ]; do
 	/bin/sleep 0.5
-	mount /dev/sda1 /container 2> /dev/null
+	mount /dev/${driver}1 /container 2> /dev/null
     done
 
     mount -o loop -t squashfs /container/rootfs.img /squashmnt
-    mount /dev/sda2 /persistmnt
+    mount /dev/${driver}2 /persistmnt
     mount -t unionfs -o dirs=/persistmnt=rw:/squashmnt=ro none ${rootmnt}
 }

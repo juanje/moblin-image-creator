@@ -34,6 +34,10 @@ if mic_cfg.config.has_option('general', 'debug'):
 
 # How big to make the ext3 File System on the Live RW USB image, in megabytes
 EXT3FS_FS_SIZE = int(mic_cfg.config.get("installimage", "ext3fs_size"))
+# How big to make the boot partition for the HD installation image
+BOOT_PARTITION_SIZE = int(mic_cfg.config.get("installimage", "boot_partition_size"))
+# How big to make the swap partition for the HD installation image
+SWAP_PARTITION_SIZE = int(mic_cfg.config.get("installimage", "swap_partition_size"))
 
 class SyslinuxCfg(object):
     def __init__(self, path, cfg_filename):
@@ -262,6 +266,10 @@ class InstallImage(object):
 
     def create_install_script(self, path):
         shutil.copy(os.path.join(self.project.platform.path, 'install.sh'), path)
+        cmd = "sed -e 's:@boot_partition_size_config@:%d:g' -e 's:@swap_partition_size_config@:%d:g' -i %s" % (BOOT_PARTITION_SIZE, SWAP_PARTITION_SIZE, os.path.join(path, 'install.sh'))
+        print cmd
+        print os.popen(cmd).readlines()
+        print "install.sh changed"
 
     def create_all_initramfs(self, fs_type='RAMFS'):
         self.kernels.insert(0, self.default_kernel)
@@ -454,7 +462,7 @@ class InstallUsbImage(BaseUsbImage):
         print "         This includes ALL partitions on the disk!\n"
         
     def apply_hd_kernel_cmdline(self):
-        cmd = "sed -e 's/^\\s*kernel\\s*\\([/a-zA-Z0-9._-]*\\).*/kernel \\t\\t\\1 %s/g' -i %s" % (self.project.get_target_hd_kernel_cmdline(self.target.name), os.path.join(self.target.fs_path, 'boot', 'grub', 'menu.lst'))
+        cmd = "sed -e 's:^\\s*kernel\\s*\\([/a-zA-Z0-9._-]*\\).*:kernel \\t\\t\\1 %s:g' -i %s" % (self.project.get_target_hd_kernel_cmdline(self.target.name), os.path.join(self.target.fs_path, 'boot', 'grub', 'menu.lst'))
         print cmd
         print os.popen(cmd).readlines()
         print "grub.conf kernel cmdline changed"

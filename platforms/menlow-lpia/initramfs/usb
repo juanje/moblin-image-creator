@@ -9,7 +9,7 @@ mountroot ()
 #find USB boot dongle
     while true; do
       for driver in 'sda' 'sdb' 'sdc' 'sdd'; do
-        echo "checking driver $driver"
+        echo "checking driver $driver for installation source..."
         if [ -e /sys/block/$driver/removable ]; then
            if [ "$(cat /sys/block/$driver/removable)" = "1" ]; then
               echo "found usb dongle at $driver"

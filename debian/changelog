@@ -18,7 +18,13 @@ moblin-image-creator (0.35) UNRELEASED; urgency=low
     ~/.image_creator/ directory are owned by the user who ran image-creator, if
     they are owned by root.
 
- -- John L. Villalovos <john.l.villalovos@intel.com>  Thu, 25 Oct 2007 18:10:37 -0700
+  [ Alek Du ]
+  * Add swap partition for HD installation image
+  * Add configs for boot and swap partition size
+  * Add S4 support in initrd scripts
+  * Sync mccaslin and menlow platform install and initrd scripts
+
+ -- Alek Du <alek.du@intel.com>  Fri, 26 Oct 2007 09:46:01 +0000
 
 moblin-image-creator (0.34) gaston; urgency=low
 

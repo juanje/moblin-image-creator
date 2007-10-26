@@ -41,25 +41,54 @@ splash_delay 200
 splash_display 'INSTALL..........'
 
 pre_scsi_disk_number=$( ls /sys/class/scsi_disk | wc -l)
+found=no
+#find install disk
+while true; do
+      for driver in 'hda' 'hdb' 'sda' 'sdb'; do
+        echo "checking driver $driver for installation target"
+        if [ -e /sys/block/$driver/removable ]; then
+           if [ "$(cat /sys/block/$driver/removable)" = "0" ]; then
+              splash_display "found harddisk at $driver"
+              found="yes"
+              break
+           fi
+         fi
+      done
+      if [ "$found" = "yes" ]; then
+        break;
+      fi
+      /bin/sleep 5
+done
+echo "will install to $driver"
 
-splash_display 'Deleting Partition Table on /dev/sda...'
+blocks=`fdisk -s /dev/${driver}`
+cylinders=$((blocks*2/63/255))
+boot_partition_size=@boot_partition_size_config@
+swap_partition_size=@swap_partition_size_config@
+
+splash_display "Deleting Partition Table on /dev/$driver..."
 splash_delay 200
-dd if=/dev/zero of=/dev/sda bs=512 count=2
+dd if=/dev/zero of=/dev/$driver bs=512 count=2
 sync
 splash_progress 5
 splash_delay 10
 
-splash_display 'Creating New Partiton Table on /dev/sda...'
+splash_display "Creating New Partiton Table on /dev/$driver ..."
 splash_delay 200
-fdisk /dev/sda <<EOF
+fdisk /dev/$driver <<EOF
 n
 p
 1
-1
-+1024M
+
+$((boot_partition_size*1000/8192))
 n
 p
 2
+
+$((cylinders-(swap_partition_size*1000/8192)))
+n
+p
+3
 
 
 a
@@ -71,19 +100,25 @@ sync
 splash_progress 10
 splash_delay 10
 
-splash_display 'Formatting /dev/sda1 w/ ext2...'
+splash_display "Formatting /dev/${driver}1 w/ ext2..."
 splash_delay 200
-mkfs.ext2 /dev/sda1
+mkfs.ext2 /dev/${driver}1
 sync
 splash_progress 20
 splash_delay 10
 
-
-splash_display 'Formatting /dev/sda2 w/ ext3...'
+splash_display "Formatting /dev/${driver}2 w/ ext3..."
 splash_delay 200
-mkfs.ext3 /dev/sda2
+mkfs.ext3 /dev/${driver}2
 sync
 splash_progress 60
+splash_delay 10
+
+splash_display "Formatting /dev/${driver}3 w/ swap..."
+splash_delay 1000
+mkswap /dev/${driver}3
+sync
+splash_progress 65
 splash_delay 10
 
 splash_display 'Mounting partitions...'
@@ -91,10 +126,9 @@ splash_delay 200
 mkdir /tmp/boot
 mount -o loop -t squashfs /tmp/install/bootfs.img /tmp/boot
 
-
-mount /dev/sda2 /mnt
+mount /dev/${driver}2 /mnt
 mkdir /mnt/boot
-mount /dev/sda1 /mnt/boot
+mount /dev/${driver}1 /mnt/boot
 splash_progress 70
 splash_delay 10
 
@@ -103,7 +137,7 @@ splash_delay 200
 cp -v /tmp/install/rootfs.img /mnt/boot
 cp -av /tmp/boot /mnt
 
-/usr/sbin/grub-install --root-directory=/mnt /dev/sda
+/usr/sbin/grub-install --root-directory=/mnt /dev/${driver}
 splash_progress 90
 splash_delay 10
 
@@ -114,6 +148,7 @@ umount /mnt/boot
 umount /mnt
 umount /tmp/boot
 umount /tmp/install
+
 splash_progress 95
 splash_delay 10
 sleep 1
