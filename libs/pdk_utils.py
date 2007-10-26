@@ -27,6 +27,8 @@ import select
 import subprocess
 import sys
 
+import mic_cfg
+
 # this is for the copySourcesListFile() function
 src_regex = None
 CONFIG_DIR = os.path.expanduser("~/.image-creator")
@@ -58,11 +60,15 @@ sources_regex = [
     # source_archive,                           local mirror of source archive
 
 # Edit the following and uncomment them to enable use of a local mirror server.
+#    (r'http://archive.ubuntu.com/ubuntu gutsy',       'http://<PATH_TO_YOUR_LOCAL_MIRROR_OF_ARCHIVES_UBUNTU_COM/ gutsy'),
 #    (r'http://ports.ubuntu.com/ubuntu-ports gutsy', 'http://<PATH_TO_YOUR_LOCAL_MIRROR_OF_PORTS_UBUNTU_COM/ gutsy'),
 #    (r'http://www.moblin.org/apt gaston',       'http://<PATH_TO_YOUR_LOCAL_MIRROR_OF_MOBLIN_ORG/ gaston'),
 
 ]"""
     out_file.close()
+    userid = int(mic_cfg.config.get("userinfo", "userid"))
+    groupid = int(mic_cfg.config.get("userinfo", "groupid"))
+    os.chown(sources_regex_file, userid, groupid)
 
 def main():
     # Add something to exercise this code

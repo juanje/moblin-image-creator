@@ -20,6 +20,7 @@
 # our current classes
 
 import os
+import pwd
 import re
 import sys
 
@@ -123,8 +124,12 @@ def addUserInfo():
             username = os.environ['USER']
         else:
             username = pwd.getpwuid(os.getuid()).pw_name
+    userid = pwd.getpwnam(username).pw_uid
+    groupid = pwd.getpwnam(username).pw_gid
     config.add_section('userinfo')
+    config.set('userinfo', 'groupid', "%s" % groupid)
     config.set('userinfo', 'user', username)
+    config.set('userinfo', 'userid', "%s" % userid)
     config.set('userinfo', 'sudo', "%s" % sudo)
 
 if '__main__' == __name__:
