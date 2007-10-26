@@ -266,6 +266,7 @@ class InstallImage(object):
 
     def create_install_script(self, path):
         shutil.copy(os.path.join(self.project.platform.path, 'install.sh'), path)
+        # FIXME: JLV: I really don't like all this sed usage, need to clean this up
         cmd = "sed -e 's:@boot_partition_size_config@:%d:g' -e 's:@swap_partition_size_config@:%d:g' -i %s" % (BOOT_PARTITION_SIZE, SWAP_PARTITION_SIZE, os.path.join(path, 'install.sh'))
         print cmd
         print os.popen(cmd).readlines()
@@ -289,10 +290,15 @@ class InstallImage(object):
         
     def create_grub_menu(self):
         # remove previous menu.lst, since we are about to create one
-        self.target.chroot("/bin/rm -f /boot/grub/menu.lst")
-        self.target.chroot("/bin/mkdir -p /boot/grub")
+        menu_dir = os.path.join(self.target.path, "boot/grub")
+        menu_file = os.path.join(menu_dir, "menu.lst")
+        if os.path.exists(menu_file):
+            os.unlink(menu_file)
+        if not os.path.exists(menu_dir):
+            os.makedirs(menu_dir)
         self.target.chroot("/usr/sbin/update-grub -y")
-        self.target.chroot("/bin/sed s/\\/boot\\//\\//g -i /boot/grub/menu.lst")
+        # FIXME: JLV: I really don't like all this sed usage, need to clean this up
+        self.target.chroot("/bin/sed s+/boot/+/+g -i /boot/grub/menu.lst")
         menu=open(os.path.join(self.target.fs_path,"boot","grub","menu.lst"),'r')
         order = 0;
         for line in menu:
@@ -309,7 +315,6 @@ class InstallImage(object):
     def __str__(self):
         return ("<InstallImage: project=%s, target=%s, name=%s>"
                 % (self.project, self.target, self.name))
-
 
     def write_manifest(self, image_path):
         all_packages = []

@@ -245,7 +245,7 @@ def copySourcesListFile(sourcefile, destfile):
     in_file = open(sourcefile, 'r')
     out_file = open(destfile, 'w')
     for line in in_file:
-        line=line.strip()
+        line = line.strip()
         if type(src_regex) == type([]):
             for regex, sub in src_regex:
                 line = re.sub(regex, sub, line)

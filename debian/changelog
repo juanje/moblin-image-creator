@@ -24,7 +24,10 @@ moblin-image-creator (0.35) UNRELEASED; urgency=low
   * Add S4 support in initrd scripts
   * Sync mccaslin and menlow platform install and initrd scripts
 
- -- Alek Du <alek.du@intel.com>  Fri, 26 Oct 2007 09:46:01 +0000
+  [ John L. Villalovos ]
+  * Minor cleanup
+
+ -- John L. Villalovos <john.l.villalovos@intel.com>  Fri, 26 Oct 2007 12:54:03 -0700
 
 moblin-image-creator (0.34) gaston; urgency=low
 
