@@ -31,7 +31,11 @@ moblin-image-creator (0.35) UNRELEASED; urgency=low
   * The swap_partition_size and boot_partition_size are now put into the
     dynamically generated /install.cfg file on the USB image.
 
- -- John L. Villalovos <john.l.villalovos@intel.com>  Mon, 29 Oct 2007 15:05:21 -0400
+  [ Bob Spencer ]
+  * Changed the developer tools fset to use ubuntu-mobile-dev instead of
+    adding my own list of deverloper packages.  (Includes hildon-dev pkgs)
+
+ -- Bob Spencer <bob.spencer@intel.com>  Mon, 29 Oct 2007 17:14:16 -0400
 
 moblin-image-creator (0.34) gaston; urgency=low
 
