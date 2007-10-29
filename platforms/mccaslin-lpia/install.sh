@@ -6,8 +6,14 @@ set -u
 # Read in our config file, if it exists
 if [ -f /install.cfg ]
 then
+    echo "Sourcing ./install.cfg"
     . /install.cfg
+else
+    echo "ERROR: ./install.cfg not found!"
+    sleep 10
+    halt
 fi
+
 #################### usplash functions start ####################################
 SPLASHWRITE=0
 # Determine if we have usplash_write available
