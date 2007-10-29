@@ -32,13 +32,6 @@ debug = False
 if mic_cfg.config.has_option('general', 'debug'):
     debug = int(mic_cfg.config.get('general', 'debug'))
 
-# How big to make the ext3 File System on the Live RW USB image, in megabytes
-EXT3FS_FS_SIZE = int(mic_cfg.config.get("installimage", "ext3fs_size"))
-# How big to make the boot partition for the HD installation image
-BOOT_PARTITION_SIZE = int(mic_cfg.config.get("installimage", "boot_partition_size"))
-# How big to make the swap partition for the HD installation image
-SWAP_PARTITION_SIZE = int(mic_cfg.config.get("installimage", "swap_partition_size"))
-
 class SyslinuxCfg(object):
     def __init__(self, path, cfg_filename):
         try:
@@ -262,18 +255,27 @@ class InstallImage(object):
             self.bootfs = ''
             self.bootfs_path = ''
 
-    def create_install_script(self, path):
-        shutil.copy(os.path.join(self.project.platform.path, 'install.sh'), path)
-        # FIXME: JLV: I really don't like all this sed usage, need to clean this up
-        cmd = "sed -e 's:@boot_partition_size_config@:%d:g' -e 's:@swap_partition_size_config@:%d:g' -i %s" % (BOOT_PARTITION_SIZE, SWAP_PARTITION_SIZE, os.path.join(path, 'install.sh'))
-        print cmd
-        print os.popen(cmd).readlines()
-        print "install.sh changed"
+    def create_install_script(self, output_dir):
+        shutil.copy(os.path.join(self.project.platform.path, 'install.sh'), output_dir)
+        self.create_install_cfg(output_dir)
+
+    def create_install_cfg(self, output_dir):
+        # How big to make the boot partition for the HD installation image
+        boot_partition_size = int(mic_cfg.config.get("installimage", "boot_partition_size"))
+        # How big to make the swap partition for the HD installation image
+        swap_partition_size = int(mic_cfg.config.get("installimage", "swap_partition_size"))
+        cfg_file = os.path.join(output_dir, "install.cfg")
+        output_file = open(cfg_file, 'w')
+        for key, value in [ ('boot_partition_size', boot_partition_size),
+                            ('swap_partition_size', swap_partition_size), ]:
+           print >> output_file, "%s=%s" % (key, value)
+        output_file.close()
+        print "install.cfg created"
 
     def create_all_initramfs(self, fs_type='RAMFS'):
         self.kernels.insert(0, self.default_kernel)
         order=0;
-        for k in self.kernels:            
+        for k in self.kernels:
             self.create_initramfs("/tmp/.tmp.initrd%d" % order, os.path.join(self.target.fs_path, 'lib', 'modules', k.split('vmlinuz-').pop().strip()), fs_type)
             order += 1;
         self.kernels.pop(0)
@@ -403,6 +405,8 @@ class BaseUsbImage(InstallImage):
 class LiveUsbImage(BaseUsbImage):
     def create_image(self, fs_type='RAMFS'):
         print "LiveUsbImage: Creating LiveUSB Image(%s) Now..." % fs_type
+        # How big to make the ext3 File System on the Live RW USB image, in megabytes
+        EXT3FS_FS_SIZE = int(mic_cfg.config.get("installimage", "ext3fs_size"))
         self.create_all_initramfs(fs_type)
         self.create_rootfs()
         initrd_stat_result = os.stat('/tmp/.tmp.initrd0')
@@ -414,7 +418,7 @@ class LiveUsbImage(BaseUsbImage):
         self.mount_container()
         self.kernels.insert(0,self.default_kernel)
         order = 0;
-        for k in self.kernels:            
+        for k in self.kernels:
             initrd_path = os.path.join(self.tmp_path, "initrd%d.img" % order)
             shutil.move("/tmp/.tmp.initrd%d" % order, initrd_path)
             order += 1;

@@ -28,8 +28,10 @@ moblin-image-creator (0.35) UNRELEASED; urgency=low
   * Minor cleanup
   * Adding some initial support for using a bash configuration file during the
     install phase.
+  * The swap_partition_size and boot_partition_size are now put into the
+    dynamically generated /install.cfg file on the USB image.
 
- -- John L. Villalovos <john.l.villalovos@intel.com>  Mon, 29 Oct 2007 14:35:44 -0400
+ -- John L. Villalovos <john.l.villalovos@intel.com>  Mon, 29 Oct 2007 15:05:21 -0400
 
 moblin-image-creator (0.34) gaston; urgency=low
 

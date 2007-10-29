@@ -68,8 +68,6 @@ echo "will install to $driver"
 
 blocks=`fdisk -s /dev/${driver}`
 cylinders=$((blocks*2/63/255))
-boot_partition_size=@boot_partition_size_config@
-swap_partition_size=@swap_partition_size_config@
 
 splash_display "Deleting Partition Table on /dev/$driver..."
 splash_delay 200
