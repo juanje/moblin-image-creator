@@ -26,8 +26,10 @@ moblin-image-creator (0.35) UNRELEASED; urgency=low
 
   [ John L. Villalovos ]
   * Minor cleanup
+  * Adding some initial support for using a bash configuration file during the
+    install phase.
 
- -- John L. Villalovos <john.l.villalovos@intel.com>  Fri, 26 Oct 2007 12:54:03 -0700
+ -- John L. Villalovos <john.l.villalovos@intel.com>  Mon, 29 Oct 2007 14:35:44 -0400
 
 moblin-image-creator (0.34) gaston; urgency=low
 

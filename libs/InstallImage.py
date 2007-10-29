@@ -448,7 +448,7 @@ class InstallUsbImage(BaseUsbImage):
         self.mount_container()
         self.kernels.insert(0,self.default_kernel)
         order = 0;
-        for k in self.kernels:            
+        for k in self.kernels:
             initrd_path = os.path.join(self.tmp_path, "initrd%d.img" % order)
             shutil.move("/tmp/.tmp.initrd%d" % order, initrd_path)
             order += 1;

@@ -3,6 +3,11 @@
 # I want us to error out if we use an undefined variable, so we will catch errors.
 set -u
 
+# Read in our config file, if it exists
+if [ -f /install.cfg ]
+then
+    . /install.cfg
+fi
 #################### usplash functions start ####################################
 SPLASHWRITE=0
 # Determine if we have usplash_write available
