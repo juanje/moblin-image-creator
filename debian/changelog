@@ -1,6 +1,8 @@
 moblin-image-creator (0.35) UNRELEASED; urgency=low
 
   [ Rob Rhoads ]
+  * Turned on Hyperthreading for UME kernel with kernel cmd-line option
+
   * The nolapic fix breaks USB and Hyperthreading. The nolapic kernel cmd-line
     option was added, now removed, to fix an issue with too many extra timer
     interrupts which in effects prevents the CPU from going into a lower C
@@ -30,6 +32,13 @@ moblin-image-creator (0.35) UNRELEASED; urgency=low
     install phase.
   * The swap_partition_size and boot_partition_size are now put into the
     dynamically generated /install.cfg file on the USB image.
+  * Cleaning up the code to hopefully make things easier to understand.
+
+  [ Bob Spencer ]
+  * Changed the developer tools fset to use ubuntu-mobile-dev instead of
+    adding my own list of deverloper packages.  (Includes hildon-dev pkgs)
+
+  [ John L. Villalovos ]
   * Cleaning up the code to hopefully make things easier to understand.
 
  -- John L. Villalovos <john.l.villalovos@intel.com>  Mon, 29 Oct 2007 17:37:13 -0400
