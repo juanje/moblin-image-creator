@@ -50,6 +50,7 @@ mountroot ()
 	 mount --bind /sys ${rootmnt}/sys
 	 mount --bind /container ${rootmnt}/tmp/install
 	 cp /container/install.sh ${rootmnt}
+	 cp /container/install.cfg ${rootmnt}
 
 	 maybe_break install
 	 chroot ${rootmnt} /install.sh
