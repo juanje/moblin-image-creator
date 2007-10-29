@@ -128,12 +128,12 @@ class InstallImage(object):
         self.rootfs_path = ''
         self.kernels = []
         self.default_kernel = ''
-        for file in os.listdir(os.path.join(self.target.fs_path, 'boot')):
-            if file.find('vmlinuz') == 0:
-                if (not self.default_kernel) and (file.find('default') > 0):
-                    self.default_kernel = file
+        for filename in os.listdir(os.path.join(self.target.fs_path, 'boot')):
+            if filename.find('vmlinuz') == 0:
+                if (not self.default_kernel) and (filename.find('default') > 0):
+                    self.default_kernel = filename
                 else:
-                    self.kernels.append(file)
+                    self.kernels.append(filename)
         if (not self.kernels) and (not self.default_kernel):
                 raise ValueError("no kernels were found")
         self.kernels.sort()
@@ -155,9 +155,9 @@ class InstallImage(object):
         shutil.copyfile(src_path, dst_path)
 
         # Copy the remaining kernels
-        for k in self.kernels:
-            kernel_name = s.add_target(k, self.project.get_target_usb_kernel_cmdline(self.target.name))
-            src_path = os.path.join(self.target.fs_path, 'boot', k)
+        for kernel in self.kernels:
+            kernel_name = s.add_target(kernel, self.project.get_target_usb_kernel_cmdline(self.target.name))
+            src_path = os.path.join(self.target.fs_path, 'boot', kernel)
             dst_path = os.path.join(self.tmp_path, kernel_name)
             shutil.copyfile(src_path, dst_path)
 
@@ -176,23 +176,23 @@ class InstallImage(object):
         base_dir = self.target.fs_path[len(self.project.path):]
         boot_path = os.path.join(self.target.fs_path, 'boot')
         
-        for file in os.listdir(boot_path):
-            if file.find('System.map-') == 0:
-                kernel_version = file[len('System.map-'):]
+        for filename in os.listdir(boot_path):
+            if filename.find('System.map-') == 0:
+                kernel_version = filename[len('System.map-'):]
 
                 tmp_str = "lib/modules/%s/modules.dep" % kernel_version
                 moddep_file = os.path.join(self.target.fs_path, tmp_str)
 
                 if os.path.isfile(moddep_file):
                     sr_deps = os.stat(moddep_file)
-                    sr_sym  = os.stat(os.path.join(boot_path, file))
+                    sr_sym  = os.stat(os.path.join(boot_path, filename))
                     
                     # Skip generating a new modules.dep if the Symbols are
                     # older than the current modules.dep file.
                     if sr_deps.st_mtime > sr_sym.st_mtime: 
                         continue
 
-                symbol_file = os.path.join(base_dir, 'boot', file)
+                symbol_file = os.path.join(base_dir, 'boot', filename)
 
                 cmd = "/sbin/depmod -b %s -v %s -F %s" % (base_dir, kernel_version, symbol_file)
                 self.target.chroot(cmd)
@@ -235,12 +235,10 @@ class InstallImage(object):
                 os.remove(os.path.join(self.target.fs_path, 'boot', file))
         self.kernels.insert(0,self.default_kernel)
         # copy pre-created initrd img (by create_all_initramfs) for each installed kernel
-        order = 0
-        for k in self.kernels:
-            version_str = k.split('vmlinuz-').pop().strip()
+        for count, kernel in enumerate(self.kernels):
+            version_str = kernel.split('vmlinuz-').pop().strip()
             initrd_name = "initrd.img-" + version_str
-            shutil.copy("/tmp/.tmp.initrd%d" % order, os.path.join(self.target.fs_path, 'boot', initrd_name))
-            order += 1
+            shutil.copy("/tmp/.tmp.initrd%d" % count, os.path.join(self.target.fs_path, 'boot', initrd_name))
         self.kernels.pop(0)
         fs_path    = self.target.fs_path[len(self.project.path):]
         fs_path    = os.path.join(fs_path, 'boot')
@@ -266,6 +264,8 @@ class InstallImage(object):
         swap_partition_size = int(mic_cfg.config.get("installimage", "swap_partition_size"))
         cfg_file = os.path.join(output_dir, "install.cfg")
         output_file = open(cfg_file, 'w')
+        print >> output_file, "#!/bin/bash"
+        print >> output_file, "# Dynamically generated config file, that is used by install.sh"
         for key, value in [ ('boot_partition_size', boot_partition_size),
                             ('swap_partition_size', swap_partition_size), ]:
            print >> output_file, "%s=%s" % (key, value)
@@ -274,10 +274,9 @@ class InstallImage(object):
 
     def create_all_initramfs(self, fs_type='RAMFS'):
         self.kernels.insert(0, self.default_kernel)
-        order=0;
-        for k in self.kernels:
-            self.create_initramfs("/tmp/.tmp.initrd%d" % order, os.path.join(self.target.fs_path, 'lib', 'modules', k.split('vmlinuz-').pop().strip()), fs_type)
-            order += 1;
+        for count, kernel in enumerate(self.kernels):
+            version = kernel.split('vmlinuz-').pop().strip()
+            self.create_initramfs("/tmp/.tmp.initrd%d" % count, os.path.join(self.target.fs_path, 'lib', 'modules', version), fs_type)
         self.kernels.pop(0)
 
     def create_initramfs(self, initrd_file, kernel_mod_path, fs_type='RAMFS'):
@@ -300,17 +299,15 @@ class InstallImage(object):
         # FIXME: JLV: I really don't like all this sed usage, need to clean this up
         self.target.chroot("/bin/sed s+/boot/+/+g -i /boot/grub/menu.lst")
         menu=open(os.path.join(self.target.fs_path,"boot","grub","menu.lst"),'r')
-        order = 0;
-        for line in menu:
+        for count, line in enumerate(menu):
             if line.find('title') == 0:
                 print line
                 if line.find(self.default_kernel.split('vmlinuz-').pop().strip()) > 0:
                     # FIXME: JLV: I really don't like all this sed usage, need to clean this up
-                    cmd="/bin/sed s/^default.*/default\\t\\t%d/g -i /boot/grub/menu.lst" % order
+                    cmd="/bin/sed s/^default.*/default\\t\\t%d/g -i /boot/grub/menu.lst" % count
                     print cmd
                     self.target.chroot(cmd)
                     break;
-                order = order +1
         menu.close()
 
     def __str__(self):
@@ -417,11 +414,9 @@ class LiveUsbImage(BaseUsbImage):
         self.create_container_file(size)
         self.mount_container()
         self.kernels.insert(0,self.default_kernel)
-        order = 0;
-        for k in self.kernels:
-            initrd_path = os.path.join(self.tmp_path, "initrd%d.img" % order)
-            shutil.move("/tmp/.tmp.initrd%d" % order, initrd_path)
-            order += 1;
+        for count, kernel in enumerate(self.kernels):
+            initrd_path = os.path.join(self.tmp_path, "initrd%d.img" % count)
+            shutil.move("/tmp/.tmp.initrd%d" % count, initrd_path)
         self.kernels.pop(0)
         self.install_kernels()
         shutil.copy(self.rootfs_path, self.tmp_path)
@@ -451,11 +446,9 @@ class InstallUsbImage(BaseUsbImage):
         self.create_container_file(size)
         self.mount_container()
         self.kernels.insert(0,self.default_kernel)
-        order = 0;
-        for k in self.kernels:
-            initrd_path = os.path.join(self.tmp_path, "initrd%d.img" % order)
-            shutil.move("/tmp/.tmp.initrd%d" % order, initrd_path)
-            order += 1;
+        for count, kernel in enumerate(self.kernels):
+            initrd_path = os.path.join(self.tmp_path, "initrd%d.img" % count)
+            shutil.move("/tmp/.tmp.initrd%d" % count, initrd_path)
         self.kernels.pop(0)
         self.install_kernels()
         shutil.copy(self.rootfs_path, self.tmp_path)

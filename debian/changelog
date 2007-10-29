@@ -30,8 +30,9 @@ moblin-image-creator (0.35) UNRELEASED; urgency=low
     install phase.
   * The swap_partition_size and boot_partition_size are now put into the
     dynamically generated /install.cfg file on the USB image.
+  * Cleaning up the code to hopefully make things easier to understand.
 
- -- John L. Villalovos <john.l.villalovos@intel.com>  Mon, 29 Oct 2007 15:05:21 -0400
+ -- John L. Villalovos <john.l.villalovos@intel.com>  Mon, 29 Oct 2007 17:37:13 -0400
 
 moblin-image-creator (0.34) gaston; urgency=low
 
