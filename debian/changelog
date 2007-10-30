@@ -55,8 +55,9 @@ moblin-image-creator (0.35) UNRELEASED; urgency=low
   * Some minor cleanup of the swap enabling code.
   * Cleaning up code and adding comments, all in the hopes of making the code
     more readable.
+  * Changing the text of some of the GUI components.
 
- -- John L. Villalovos <john.l.villalovos@intel.com>  Tue, 30 Oct 2007 11:26:29 -0400
+ -- John L. Villalovos <john.l.villalovos@intel.com>  Tue, 30 Oct 2007 11:32:49 -0400
 
 moblin-image-creator (0.34) gaston; urgency=low
 

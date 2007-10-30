@@ -633,7 +633,7 @@
                                         <property name="visible">True</property>
                                         <property name="sensitive">False</property>
                                         <property name="can_focus">True</property>
-                                        <property name="tooltip" translatable="yes">Open a terminal chrooted to the root of the selected target's file system</property>
+                                        <property name="tooltip" translatable="yes">Edit the kernel command lines for booting.</property>
                                         <property name="response_id">0</property>
                                         <signal name="clicked" handler="on_target_kernel_cmdline_clicked"/>
                                         <child>
@@ -834,7 +834,7 @@
                                         <property name="visible">True</property>
                                         <property name="sensitive">False</property>
                                         <property name="can_focus">True</property>
-                                        <property name="tooltip" translatable="yes">Create a Live USB image that can be burned to a USB pen drive.  You can boot linux and run completely off the USB pen drive.  Nothing is written to the target device.  All changes made while running from the USB pen drive are lost on shutdown.</property>
+                                        <property name="tooltip" translatable="yes">Create a Live USB image that can be burned to a USB flash drive.  You can boot linux and run completely off the USB flash drive.  Nothing is written to the target device.  All changes made while running from the USB flash drive are lost on shutdown.</property>
                                         <property name="response_id">0</property>
                                         <signal name="clicked" handler="on_create_liveUSB_clicked"/>
                                         <child>
@@ -870,7 +870,7 @@
                                         <property name="visible">True</property>
                                         <property name="sensitive">False</property>
                                         <property name="can_focus">True</property>
-                                        <property name="tooltip" translatable="yes">Create a Live read/write ISO image that can be burned to a USB pen drive  You can boot linux and run completely off the USB pen drive.  Nothing is written to the target device.  The USB pen drive supports data persistence--changes made while running from the USB pen drive are saved on the USB pen drive.</property>
+                                        <property name="tooltip" translatable="yes">Create a Live read/write ISO image that can be burned to a USB flash drive  You can boot linux and run completely off the USB flash drive.  Nothing is written to the target device.  The USB flash drive supports data persistence--changes made while running from the USB flash drive are saved on the USB flash drive.</property>
                                         <property name="response_id">0</property>
                                         <signal name="clicked" handler="on_create_liveRWUSB_clicked"/>
                                         <child>
@@ -907,7 +907,7 @@
                                         <property name="visible">True</property>
                                         <property name="sensitive">False</property>
                                         <property name="can_focus">True</property>
-                                        <property name="tooltip" translatable="yes">Create an installation image that can be burned to a USB pen drive.  When you boot off the USB pen drive it will erase the target harddrive, then repartition and install the target image.</property>
+                                        <property name="tooltip" translatable="yes">Create an installation image that can be burned to a USB flash drive.  When you boot off the USB flash drive it will erase the target harddrive, then repartition and install the target image.</property>
                                         <property name="response_id">0</property>
                                         <signal name="clicked" handler="on_create_installUSB_clicked"/>
                                         <child>
@@ -960,7 +960,7 @@
                                         <property name="visible">True</property>
                                         <property name="sensitive">False</property>
                                         <property name="can_focus">True</property>
-                                        <property name="tooltip" translatable="yes">Write a USB image to the USB pen drive.  An image must first be created using one of the USB options to the left.</property>
+                                        <property name="tooltip" translatable="yes">Write a USB image to the USB flash drive.  An image must first be created using one of the USB options to the left.</property>
                                         <property name="response_id">0</property>
                                         <signal name="clicked" handler="on_DD_USB_clicked"/>
                                         <child>
@@ -1916,7 +1916,7 @@
                   <widget class="GtkLabel" id="label45">
                     <property name="visible">True</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">U-Disk Booting kernel cmdline: </property>
+                    <property name="label" translatable="yes">USB Disk Booting kernel cmdline: </property>
                   </widget>
                   <packing>
                     <property name="x_options">GTK_FILL</property>
