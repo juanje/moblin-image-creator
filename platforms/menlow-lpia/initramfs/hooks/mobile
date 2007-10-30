@@ -15,8 +15,10 @@ prereqs)
 	;;
 esac
 
+# These paths are inside the target filesystem
 . /usr/share/initramfs-tools/hook-functions
-
+# These source files are put into the target's /etc/initramfs-tools/ by
+# InstallImage.py
 cp -f /etc/initramfs-tools/usplash.conf /etc/usplash.conf
 copy_exec /etc/initramfs-tools/usb /scripts/usb
 copy_exec /etc/initramfs-tools/disk /scripts/disk

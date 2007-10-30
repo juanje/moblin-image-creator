@@ -194,6 +194,7 @@ class InstallImage(object):
                 self.target.chroot(cmd)
 
     def create_rootfs(self):
+        print "Creating root file system..."
         # re-create fstab every time, since user could change fstab options on
         # the fly (by editing image-creator.cfg)
         fstab_path = os.path.join(self.target.fs_path, 'etc/fstab')
@@ -276,20 +277,22 @@ class InstallImage(object):
         output_file.close()
         print "install.cfg created"
 
-    def create_all_initramfs(self, fs_type='RAMFS'):
+    def create_all_initramfs(self):
         self.kernels.insert(0, self.default_kernel)
         for count, kernel in enumerate(self.kernels):
-            version = kernel.split('vmlinuz-').pop().strip()
-            self.create_initramfs("/tmp/.tmp.initrd%d" % count, os.path.join(self.target.fs_path, 'lib', 'modules', version), fs_type)
+            kernel_version = kernel.split('vmlinuz-').pop().strip()
+            self.create_initramfs("/tmp/.tmp.initrd%d" % count, kernel_version)
         self.kernels.pop(0)
 
-    def create_initramfs(self, initrd_file, kernel_mod_path, fs_type='RAMFS'):
-        tmp = kernel_mod_path.split("/targets/%s/fs" % (self.target.name))
+    def create_initramfs(self, initrd_file, kernel_version):
+        print "Creating initramfs for kernel version: %s" % kernel_version
+        # copy the platform initramfs stuff into /etc/initramfs-tools/ in the target
         src_path = os.path.join('/usr/share/pdk/platforms', self.project.platform.name, 'initramfs')
         dst_path = os.path.join(self.target.fs_path, 'etc', 'initramfs-tools', )
         shutil.rmtree(dst_path, True)
         shutil.copytree(src_path, dst_path, True)
-        self.target.chroot("/usr/sbin/mkinitramfs -o %s %s" % (initrd_file , tmp[1]))
+        kernel_mod_path = os.path.join('/lib/modules', kernel_version)
+        self.target.chroot("/usr/sbin/mkinitramfs -o %s %s" % (initrd_file , kernel_mod_path))
         
     def create_grub_menu(self):
         # remove previous menu.lst, since we are about to create one
@@ -407,14 +410,14 @@ class LiveUsbImage(BaseUsbImage):
     def create_image(self, fs_type='RAMFS'):
         print "LiveUsbImage: Creating LiveUSB Image(%s) Now..." % fs_type
         # How big to make the ext3 File System on the Live RW USB image, in megabytes
-        EXT3FS_FS_SIZE = int(mic_cfg.config.get("installimage", "ext3fs_size"))
-        self.create_all_initramfs(fs_type)
+        ext3fs_fs_size = int(mic_cfg.config.get("installimage", "ext3fs_size"))
+        self.create_all_initramfs()
         self.create_rootfs()
         initrd_stat_result = os.stat('/tmp/.tmp.initrd0')
         rootfs_stat_result = os.stat(self.rootfs_path)
         size = ((rootfs_stat_result.st_size + initrd_stat_result.st_size) / (1024 * 1024)) + 64
         if fs_type == 'EXT3FS':
-           size = size + EXT3FS_FS_SIZE
+           size = size + ext3fs_fs_size
         self.create_container_file(size)
         self.mount_container()
         self.kernels.insert(0,self.default_kernel)
@@ -425,7 +428,7 @@ class LiveUsbImage(BaseUsbImage):
         self.install_kernels()
         shutil.copy(self.rootfs_path, self.tmp_path)
         if fs_type == 'EXT3FS':
-            self.create_ext3fs_file(os.path.join(self.tmp_path, 'ext3fs.img'), EXT3FS_FS_SIZE)
+            self.create_ext3fs_file(os.path.join(self.tmp_path, 'ext3fs.img'), ext3fs_fs_size)
         self.umount_container()
         self.delete_rootfs()
         print "LiveUsbImage: Finished!"
@@ -465,6 +468,7 @@ class InstallUsbImage(BaseUsbImage):
         print "\nYou can now use the image to boot and install the target file-system on the target device's HDD.\n"
         print "\nWARNING: Entire contents of the target devices's HDD will be erased prior to installation!"
         print "         This includes ALL partitions on the disk!\n"
+        print "InstallUsbImage: Finished!"
         
     def apply_hd_kernel_cmdline(self):
         cmd = "sed -e 's:^\\s*kernel\\s*\\([/a-zA-Z0-9._-]*\\).*:kernel \\t\\t\\1 %s:g' -i %s" % (self.project.get_target_hd_kernel_cmdline(self.target.name), os.path.join(self.target.fs_path, 'boot', 'grub', 'menu.lst'))
