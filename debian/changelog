@@ -1,4 +1,4 @@
-moblin-image-creator (0.35) UNRELEASED; urgency=low
+moblin-image-creator (0.35) gutsy; urgency=low
 
   [ Rob Rhoads ]
   * Fixed JohnV's bug with the new install.cfg file. It now is copied to
@@ -187,6 +187,14 @@ moblin-image-creator (0.30) gaston; urgency=low
     ubuntu-staging
 
  -- Rusty Lynch <rusty.lynch@intel.com>  Fri, 12 Oct 2007 17:44:45 -0700
+
+moblin-image-creator (0.29gutsy1) gutsy; urgency=low
+
+  * Upload targetted at gutsy.
+  * Make apt_cmd in Project.py just set Dir::Etc when calling apt.  This
+    ensures our sources.list.d directory gets correctly picked up.
+
+ -- Tollef Fog Heen <tfheen@ubuntu.com>  Mon, 08 Oct 2007 15:38:50 +0200
 
 moblin-image-creator (0.29) gutsy; urgency=low
 
