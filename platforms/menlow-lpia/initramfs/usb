@@ -1,7 +1,16 @@
+#!/bin/bash
 # Live USB filesystem mounting			-*- shell-script -*-
 
 mountroot ()
 {
+    CFG_FILE=/etc/moblin-initramfs.cfg
+    if [ -f ${CFG_FILE} ]
+    then
+	. ${CFG_FILE}
+    else
+	echo "Did not find config file: ${CFG_FILE}"
+	sleep 5
+    fi
     mkdir -p /container
     mkdir -p /squashmnt
     mkdir -p /persistmnt

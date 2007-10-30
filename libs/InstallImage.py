@@ -267,15 +267,21 @@ class InstallImage(object):
         if swap_option == 0:
             swap_partition_size = 0
         cfg_file = os.path.join(output_dir, "install.cfg")
-        output_file = open(cfg_file, 'w')
+        cfg_dict = {
+            'boot_partition_size' : boot_partition_size,
+            'swap_option' : swap_option,
+            'swap_partition_size' : swap_partition_size,
+        }
+        self.writeShellConfigFile(cfg_file, cfg_dict)
+        print "install.cfg created"
+
+    def writeShellConfigFile(self, filename, value_dict):
+        output_file = open(filename, 'w')
         print >> output_file, "#!/bin/bash"
-        print >> output_file, "# Dynamically generated config file, that is used by install.sh"
-        for key, value in [ ('boot_partition_size', boot_partition_size),
-                            ('swap_option', swap_option),
-                            ('swap_partition_size', swap_partition_size), ]:
+        print >> output_file, "# Dynamically generated config file"
+        for key, value in sorted(value_dict.iteritems()):
            print >> output_file, "%s=%s" % (key, value)
         output_file.close()
-        print "install.cfg created"
 
     def create_all_initramfs(self):
         self.kernels.insert(0, self.default_kernel)
@@ -291,6 +297,17 @@ class InstallImage(object):
         dst_path = os.path.join(self.target.fs_path, 'etc', 'initramfs-tools', )
         shutil.rmtree(dst_path, True)
         shutil.copytree(src_path, dst_path, True)
+        # Create our config file that is used by our scripts during the running
+        # of initramfs.  The initramfs/hooks/mobile script in each platform
+        # takes care of putting this file into place into the initramfs image.
+        cfg_filename = os.path.join(dst_path, "moblin-initramfs.cfg")
+        # Use squashfs or not
+        use_squashfs = int(mic_cfg.config.get("installimage", "use_squashfs"))
+        cfg_dict = {
+            'use_squashfs' : use_squashfs,
+        }
+        self.writeShellConfigFile(cfg_filename, cfg_dict)
+        print "moblin-initramfs.cfg file created"
         kernel_mod_path = os.path.join('/lib/modules', kernel_version)
         self.target.chroot("/usr/sbin/mkinitramfs -o %s %s" % (initrd_file , kernel_mod_path))
         

@@ -58,8 +58,9 @@ moblin-image-creator (0.35) UNRELEASED; urgency=low
   * Changing the text of some of the GUI components.
   * Putting in support for a config file to be used during the initramfs boot
     process.
+  * Now creating a config file that is used during the initramfs boot process.
 
- -- John L. Villalovos <john.l.villalovos@intel.com>  Tue, 30 Oct 2007 12:44:02 -0400
+ -- John L. Villalovos <john.l.villalovos@intel.com>  Tue, 30 Oct 2007 14:21:37 -0400
 
 moblin-image-creator (0.34) gaston; urgency=low
 
