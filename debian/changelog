@@ -2,8 +2,10 @@ moblin-image-creator (0.36) UNRELEASED; urgency=low
 
   * Work continues on getting to being able to NOT using squashfs.  Cleaned up
     the platform/*/install.sh files.
+  * Created a "generic" platform directory that files common to all platforms
+    will be placed.  Updated the makefiles to use this directory.
 
- -- John L. Villalovos <john.l.villalovos@intel.com>  Tue, 30 Oct 2007 17:15:49 -0400
+ -- John L. Villalovos <john.l.villalovos@intel.com>  Tue, 30 Oct 2007 17:50:20 -0400
 
 moblin-image-creator (0.35) hardy; urgency=low
 
