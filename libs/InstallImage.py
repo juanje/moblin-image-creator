@@ -229,6 +229,7 @@ class InstallImage(object):
         self.bootfs_path = os.path.join(self.target.image_path, self.bootfs)
         if os.path.isfile(self.bootfs_path):
             os.remove(self.bootfs_path)
+        print "Creating bootfs at: %s" % self.bootfs_path
         # Remove old initrd images
         for file in os.listdir(os.path.join(self.target.fs_path, 'boot')):
             if file.find('initrd.img') == 0:
@@ -309,9 +310,12 @@ class InstallImage(object):
         self.writeShellConfigFile(cfg_filename, cfg_dict)
         print "moblin-initramfs.cfg file created"
         kernel_mod_path = os.path.join('/lib/modules', kernel_version)
-        self.target.chroot("/usr/sbin/mkinitramfs -o %s %s" % (initrd_file , kernel_mod_path))
+        cmd = "/usr/sbin/mkinitramfs -o %s %s" % (initrd_file , kernel_mod_path)
+        print "Executing: %s  ..." % cmd
+        self.target.chroot(cmd)
         
     def create_grub_menu(self):
+        print "Creating the grub menu"
         # remove previous menu.lst, since we are about to create one
         menu_dir = os.path.join(self.target.path, "boot/grub")
         menu_file = os.path.join(menu_dir, "menu.lst")
@@ -369,6 +373,7 @@ class BaseUsbImage(InstallImage):
         InstallImage.install_kernels(self, 'syslinux.cfg')
         
     def create_container_file(self, size):
+        print "Creating container file at: %s" % self.path
         out_file = open(self.path, 'w')
         # Make a kibibyte length string of zeroes
         out_string = chr(0) * 1024

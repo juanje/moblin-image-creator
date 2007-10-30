@@ -59,8 +59,10 @@ moblin-image-creator (0.35) UNRELEASED; urgency=low
   * Putting in support for a config file to be used during the initramfs boot
     process.
   * Now creating a config file that is used during the initramfs boot process.
+  * Added a few more status messages because I was trying to better understand
+    the image creation process.
 
- -- John L. Villalovos <john.l.villalovos@intel.com>  Tue, 30 Oct 2007 14:21:37 -0400
+ -- John L. Villalovos <john.l.villalovos@intel.com>  Tue, 30 Oct 2007 14:40:17 -0400
 
 moblin-image-creator (0.34) gaston; urgency=low
 
