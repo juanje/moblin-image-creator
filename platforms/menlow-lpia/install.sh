@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# This is the script that will be placed onto the USB flash drive, that will
+# run on bootup to install the software onto the device.
+
 # I want us to error out if we use an undefined variable, so we will catch errors.
 set -u
 
@@ -10,6 +13,7 @@ then
     . /install.cfg
 else
     echo "ERROR: ./install.cfg not found!"
+    echo "In script: $0 $*"
     sleep 10
     halt
 fi
@@ -53,13 +57,14 @@ splash_display 'INSTALL..........'
 
 pre_scsi_disk_number=$( ls /sys/class/scsi_disk | wc -l)
 found=no
-#find install disk
+# Find the install disk
 while true; do
-      for driver in 'hda' 'hdb' 'sda' 'sdb'; do
-        echo "checking driver $driver for installation target"
-        if [ -e /sys/block/$driver/removable ]; then
-           if [ "$(cat /sys/block/$driver/removable)" = "0" ]; then
-              splash_display "found harddisk at $driver"
+      for device in 'hda' 'hdb' 'sda' 'sdb'
+      do
+        echo "checking device: /dev/${device} for installation target"
+        if [ -e /sys/block/${device}/removable ]; then
+           if [ "$(cat /sys/block/${device}/removable)" = "0" ]; then
+              splash_display "found harddisk at /dev/${device}"
               found="yes"
               break
            fi
@@ -69,25 +74,26 @@ while true; do
         break;
       fi
       /bin/sleep 5
+      echo "Did not find an installation target device"
 done
-echo "will install to $driver"
+echo "will install to /dev/${device}"
 
-blocks=`fdisk -s /dev/${driver}`
+blocks=`fdisk -s /dev/${device}`
 cylinders=$((blocks*2/63/255))
 
-splash_display "Deleting Partition Table on /dev/$driver..."
+splash_display "Deleting Partition Table on /dev/${device} ..."
 splash_delay 200
-dd if=/dev/zero of=/dev/$driver bs=512 count=2
+dd if=/dev/zero of=/dev/${device} bs=512 count=2
 sync
 splash_progress 5
 splash_delay 10
 
-splash_display "Creating New Partiton Table on /dev/$driver ..."
+splash_display "Creating New Partiton Table on /dev/${device} ..."
 splash_delay 200
 
 # if swap_partition_size is zero, this script will not create the third partition
 # -- the n p 3 command will get reponse "no space left" which meets our needs.
-fdisk /dev/$driver <<EOF
+fdisk /dev/${device} <<EOF
 n
 p
 1
@@ -115,25 +121,25 @@ sync
 splash_progress 10
 splash_delay 10
 
-splash_display "Formatting /dev/${driver}1 w/ ext2..."
+splash_display "Formatting /dev/${device}1 w/ ext2..."
 splash_delay 200
-mkfs.ext2 /dev/${driver}1
+mkfs.ext2 /dev/${device}1
 sync
 splash_progress 20
 splash_delay 10
 
-splash_display "Formatting /dev/${driver}2 w/ ext3..."
+splash_display "Formatting /dev/${device}2 w/ ext3..."
 splash_delay 200
-mkfs.ext3 /dev/${driver}2
+mkfs.ext3 /dev/${device}2
 sync
 splash_progress 60
 splash_delay 10
 
 if [ $swap_partition_size -ne 0 ]
 then
-    splash_display "Formatting /dev/${driver}3 w/ swap..."
+    splash_display "Formatting /dev/${device}3 w/ swap..."
     splash_delay 1000
-    mkswap /dev/${driver}3
+    mkswap /dev/${device}3
 fi
 sync
 splash_progress 65
@@ -144,9 +150,9 @@ splash_delay 200
 mkdir /tmp/boot
 mount -o loop -t squashfs /tmp/install/bootfs.img /tmp/boot
 
-mount /dev/${driver}2 /mnt
+mount /dev/${device}2 /mnt
 mkdir /mnt/boot
-mount /dev/${driver}1 /mnt/boot
+mount /dev/${device}1 /mnt/boot
 splash_progress 70
 splash_delay 10
 
@@ -155,7 +161,7 @@ splash_delay 200
 cp -v /tmp/install/rootfs.img /mnt/boot
 cp -av /tmp/boot /mnt
 
-/usr/sbin/grub-install --root-directory=/mnt /dev/${driver}
+/usr/sbin/grub-install --root-directory=/mnt /dev/${device}
 splash_progress 90
 splash_delay 10
 
@@ -174,8 +180,12 @@ splash_delay 6000
 splash_display "Install Successfully"
 splash_display "Unplug USB Key, System Will Reboot Automatically"
 
-#need to call reboot --help and let file system cache hold it, since we will unplug USB disk soon, and after that, reboot command will not be accessable
-#the reason why reboot still work without this is the whole "rootfs.img" is cached when it is copied to HD. But when rootfs.img become bigger and bigger the whole "rootfs.img" will not be able to fully cached (we have found this issue when creating big installation)
+# need to call reboot --help and let file system cache hold it, since we will
+# unplug USB disk soon, and after that, reboot command will not be accessible.
+# The reason why reboot still works sometimes without this is the whole
+# "rootfs.img" is cached when it is copied to HD. But when rootfs.img become
+# bigger and bigger the whole "rootfs.img" will not be able to fully cached (we
+# have found this issue when creating big installation)
 reboot --help > /dev/null 2>&1
 
 while [ $pre_scsi_disk_number = $(ls /sys/class/scsi_disk | wc -l) ]

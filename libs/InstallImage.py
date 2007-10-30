@@ -311,7 +311,7 @@ class InstallImage(object):
         print "moblin-initramfs.cfg file created"
         kernel_mod_path = os.path.join('/lib/modules', kernel_version)
         cmd = "/usr/sbin/mkinitramfs -o %s %s" % (initrd_file , kernel_mod_path)
-        print "Executing: %s  ..." % cmd
+        print "Executing: %s" % cmd
         self.target.chroot(cmd)
         
     def create_grub_menu(self):
