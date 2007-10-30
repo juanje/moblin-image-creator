@@ -10,10 +10,10 @@ install:
 	@cp -a initramfs ${SHARE}/platforms/${PNAME}
 	@mkdir -p ${SHARE}/platforms/${PNAME}/fsets
 	@cp fsets/*.fset ${SHARE}/platforms/${PNAME}/fsets/
-	# Generic code install to the platform
-	@cp ../generic/exclude ${SHARE}/platforms/${PNAME}
-	@cp ../generic/install.sh ${SHARE}/platforms/${PNAME}
-	@cp -a ../generic/sources ${SHARE}/platforms/${PNAME}
+	# Install common code to the platform
+	@cp ../common/exclude ${SHARE}/platforms/${PNAME}
+	@cp ../common/install.sh ${SHARE}/platforms/${PNAME}
+	@cp -a ../common/sources ${SHARE}/platforms/${PNAME}
 clean:
 	rm -f *.tar.bz2 *~ package-build-stamp
 
