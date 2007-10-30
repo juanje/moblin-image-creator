@@ -1,0 +1,10 @@
+moblin-image-creator (0.30) gutsy; urgency=low
+
+  * This version of image-creator only supports lpia platforms and is
+    incompatible with projects created with previous versions.  It's
+    recommended that you delete your projects' chroots as returned by:
+       grep ^PATH= /usr/share/pdk/projects/*.proj
+    and then delete the /usr/share/pdk/projects/*.proj files which are still
+    using a non-lpia PLATFORM.
+
+ -- Loic Minier <lool@dooz.org>  Tue, 30 Oct 2007 21:30:43 +0100
