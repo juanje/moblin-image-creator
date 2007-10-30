@@ -19,6 +19,14 @@ esac
 . /usr/share/initramfs-tools/hook-functions
 # These source files are put into the target's /etc/initramfs-tools/ by
 # InstallImage.py
-cp -f /etc/initramfs-tools/usplash.conf /etc/usplash.conf
+
+# If we have a generated config file, copy it
+CFG_FILE=/etc/initramfs-tools/moblin-initramfs.cfg
+if [ -f ${CFG_FILE} ]
+then
+    cp -f ${CFG_FILE} ${DESTDIR}/etc/
+fi
+
+cp -f /etc/initramfs-tools/usplash.conf ${DESTDIR}/etc/usplash.conf
 copy_exec /etc/initramfs-tools/usb /scripts/usb
 copy_exec /etc/initramfs-tools/disk /scripts/disk
