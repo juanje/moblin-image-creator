@@ -161,16 +161,11 @@ class InstallImage(object):
             dst_path = os.path.join(self.tmp_path, kernel_name)
             shutil.copyfile(src_path, dst_path)
 
-    def create_fstab(self, proc=1, swap=1):
+    def create_fstab(self, swap = True):
         fstab_file = open(os.path.join(self.target.fs_path, 'etc/fstab'), 'w')
-        if proc==1:
-            print >> fstab_file, """\
-proc			/proc			proc	defaults	0 0
-"""
-        if swap==1:
-            print >> fstab_file, """\
-/dev/sda3		none			swap	sw		0 0
-"""
+        print >> fstab_file, "proc			/proc			proc	defaults	0 0"
+        if swap:
+            print >> fstab_file, "/dev/sda3		none			swap	sw		0 0"
         fstab_file.close()
 
     def create_modules_dep(self):
@@ -199,16 +194,15 @@ proc			/proc			proc	defaults	0 0
                 self.target.chroot(cmd)
 
     def create_rootfs(self):
-# re-create fstab every time, since user could change fstab options on the fly (by editing image-creator.cfg)
+        # re-create fstab every time, since user could change fstab options on
+        # the fly (by editing image-creator.cfg)
         fstab_path = os.path.join(self.target.fs_path, 'etc/fstab')
         if int(mic_cfg.config.get("installimage", "swap_option")) == 2:
-            swap = 1;
+            swap = True
         else:
-            swap = 0; 
-        self.create_fstab(1, swap)
-
+            swap = False
+        self.create_fstab(swap)
         self.create_modules_dep()
-
         self.rootfs = 'rootfs.img'
         self.rootfs_path = os.path.join(self.target.image_path, self.rootfs)
         if os.path.isfile(self.rootfs_path):
@@ -218,7 +212,6 @@ proc			/proc			proc	defaults	0 0
         image_path   = self.target.image_path[len(self.project.path):]
         image_path   = os.path.join(image_path,'rootfs.img')
         cmd          = "/usr/sbin/mksquashfs %s %s -ef %s" % (fs_path, image_path, self.exclude_file)
-
         self.write_manifest(self.path)
         self.target.umount()
         self.project.chroot(cmd)

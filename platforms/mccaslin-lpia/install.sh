@@ -129,9 +129,12 @@ sync
 splash_progress 60
 splash_delay 10
 
-splash_display "Formatting /dev/${driver}3 w/ swap..."
-splash_delay 1000
-mkswap /dev/${driver}3
+if [ $swap_partition_size -ne 0 ]
+then
+    splash_display "Formatting /dev/${driver}3 w/ swap..."
+    splash_delay 1000
+    mkswap /dev/${driver}3
+fi
 sync
 splash_progress 65
 splash_delay 10

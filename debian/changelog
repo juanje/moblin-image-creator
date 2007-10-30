@@ -51,7 +51,10 @@ moblin-image-creator (0.35) UNRELEASED; urgency=low
     2. swap and default enabled
   * Dynamically creating /etc/fstab
 
- -- Alek Du <alek.du@intel.com>  Tue, 30 Oct 2007 09:34:53 +0000
+  [ John L. Villalovos ]
+  * Some minor cleanup of the swap enabling code.
+
+ -- John L. Villalovos <john.l.villalovos@intel.com>  Tue, 30 Oct 2007 09:49:45 -0400
 
 moblin-image-creator (0.34) gaston; urgency=low
 
