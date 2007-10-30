@@ -161,14 +161,15 @@ class InstallImage(object):
             dst_path = os.path.join(self.tmp_path, kernel_name)
             shutil.copyfile(src_path, dst_path)
 
-    def create_fstab(self):
+    def create_fstab(self, proc=1, swap=1):
         fstab_file = open(os.path.join(self.target.fs_path, 'etc/fstab'), 'w')
-        print >> fstab_file, """\
-/dev/devpts             /dev/pts                devpts  gid=5,mode=620  0 0
-/dev/shm                /dev/shm                tmpfs   defaults        0 0
-/dev/proc               /proc                   proc    defaults        0 0
-/dev/sys                /sys                    sysfs   defaults        0 0
-
+        if proc==1:
+            print >> fstab_file, """\
+proc			/proc			proc	defaults	0 0
+"""
+        if swap==1:
+            print >> fstab_file, """\
+/dev/sda3		none			swap	sw		0 0
 """
         fstab_file.close()
 
@@ -198,8 +199,13 @@ class InstallImage(object):
                 self.target.chroot(cmd)
 
     def create_rootfs(self):
-        if not os.path.isfile(os.path.join(self.target.fs_path, 'etc/fstab')):
-            self.create_fstab()
+# re-create fstab every time, since user could change fstab options on the fly (by editing image-creator.cfg)
+        fstab_path = os.path.join(self.target.fs_path, 'etc/fstab')
+        if int(mic_cfg.config.get("installimage", "swap_option")) == 2:
+            swap = 1;
+        else:
+            swap = 0; 
+        self.create_fstab(1, swap)
 
         self.create_modules_dep()
 
@@ -260,13 +266,18 @@ class InstallImage(object):
     def create_install_cfg(self, output_dir):
         # How big to make the boot partition for the HD installation image
         boot_partition_size = int(mic_cfg.config.get("installimage", "boot_partition_size"))
+        # Options for swap partition: 0. No swap 1. swap always off 2. swap always on
+        swap_option = int(mic_cfg.config.get("installimage", "swap_option"))
         # How big to make the swap partition for the HD installation image
         swap_partition_size = int(mic_cfg.config.get("installimage", "swap_partition_size"))
+        if swap_option == 0:
+            swap_partition_size = 0
         cfg_file = os.path.join(output_dir, "install.cfg")
         output_file = open(cfg_file, 'w')
         print >> output_file, "#!/bin/bash"
         print >> output_file, "# Dynamically generated config file, that is used by install.sh"
         for key, value in [ ('boot_partition_size', boot_partition_size),
+                            ('swap_option', swap_option),
                             ('swap_partition_size', swap_partition_size), ]:
            print >> output_file, "%s=%s" % (key, value)
         output_file.close()

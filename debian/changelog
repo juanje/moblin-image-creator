@@ -45,7 +45,13 @@ moblin-image-creator (0.35) UNRELEASED; urgency=low
   [ John L. Villalovos ]
   * Cleaning up the code to hopefully make things easier to understand.
 
- -- Rob Rhoads <rob.rhoads@intel.com>  Mon, 29 Oct 2007 16:56:04 -0700
+  [ Alek Du ]
+  * Fixed swap partition type (0x83 ==> 0x82)
+  * Added options to config swap: 0. no swap  1. swap but default disabled
+    2. swap and default enabled
+  * Dynamically creating /etc/fstab
+
+ -- Alek Du <alek.du@intel.com>  Tue, 30 Oct 2007 09:34:53 +0000
 
 moblin-image-creator (0.34) gaston; urgency=low
 

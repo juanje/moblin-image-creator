@@ -84,6 +84,9 @@ splash_delay 10
 
 splash_display "Creating New Partiton Table on /dev/$driver ..."
 splash_delay 200
+
+# if swap_partition_size is zero, this script will not create the third partition
+# -- the n p 3 command will get reponse "no space left" which meets our needs.
 fdisk /dev/$driver <<EOF
 n
 p
@@ -100,6 +103,9 @@ p
 3
 
 
+t
+3
+82
 a
 1
 w
