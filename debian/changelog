@@ -1,4 +1,4 @@
-moblin-image-creator (0.35) gutsy; urgency=low
+moblin-image-creator (0.35) hardy; urgency=low
 
   [ Rob Rhoads ]
   * Fixed JohnV's bug with the new install.cfg file. It now is copied to
