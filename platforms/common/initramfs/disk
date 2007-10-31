@@ -26,10 +26,10 @@ mountroot ()
     # Find the boot disk
     while true; do
       for device in 'hda' 'hdb' 'sda' 'sdb'; do
-        echo "checking device /dev/${driver}"
-        if [ -e /sys/block/${driver}/removable ]; then
-           if [ "$(cat /sys/block/${driver}/removable)" = "0" ]; then
-              echo "found harddisk at /dev/${driver}"
+        echo "checking device /dev/${device}"
+        if [ -e /sys/block/${device}/removable ]; then
+           if [ "$(cat /sys/block/${device}/removable)" = "0" ]; then
+              echo "found harddisk at /dev/${device}"
               found="yes"
               break
            fi
@@ -46,7 +46,7 @@ mountroot ()
 
     # if the resume succeeded then we won't get to here, so if we have got here
     # then resume did NOT succeed, which is okay.
-    echo "Will mount root from /dev/${driver}"
+    echo "Will mount root from /dev/${device}"
     if [ "${use_squashfs}" -eq 1 ]
     then
 	# We are using squashfs
