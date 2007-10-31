@@ -9,8 +9,9 @@ moblin-image-creator (0.36) UNRELEASED; urgency=low
   * More work on putting stuff into the "common" platform directory.
   * Fix makefile targets for new "common" platform directory.
   * Support for installing without squashfs
+  * Trying to debug squashfs issues.
 
- -- John L. Villalovos <john.l.villalovos@intel.com>  Wed, 31 Oct 2007 12:29:46 -0400
+ -- John L. Villalovos <john.l.villalovos@intel.com>  Wed, 31 Oct 2007 13:34:52 -0400
 
 moblin-image-creator (0.35) hardy; urgency=low
 

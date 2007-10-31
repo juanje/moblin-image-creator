@@ -163,9 +163,13 @@ cp -av /tmp/boot /mnt
 if [ "${use_squashfs}" -eq 1 ]
 then
     echo "Copying squashfs filesystem into place..."
+    echo "Sleeping 30 seconds..."
+    sleep 30
     cp -v /tmp/install/rootfs.img /mnt/boot
 else
     echo "Setting up NON squashfs filesystem..."
+    echo "Sleeping 30 seconds..."
+    sleep 30
     mkdir /tmp/root
     mount -o loop -t squashfs /tmp/install/rootfs.img /tmp/root
     splash_display 'Copying system ROOT onto hard disk drive...'

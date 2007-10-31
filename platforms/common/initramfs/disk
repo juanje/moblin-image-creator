@@ -51,6 +51,8 @@ mountroot ()
     then
 	# We are using squashfs
 	echo "Setting up our squashfs and ext3fs unionfs system..."
+	echo "Sleeping 30 seconds..."
+	sleep 30
 	mount /dev/${device}1 /container 2> /dev/null
 	while [ ! -e "/container/rootfs.img" ]
 	do
@@ -63,6 +65,8 @@ mountroot ()
     else
 	# We are NOT using squashfs
 	echo "mounting root partition, NOT using squashfs"   
+	echo "Sleeping 30 seconds..."
+	sleep 30
 	mount /dev/${device}2 ${rootmnt}	# 2> /dev/null
 	while [ ! -e "${rootmnt}/bin" ]
 	do
