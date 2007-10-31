@@ -1,4 +1,4 @@
-DIRS = $(shell find -maxdepth 1 -type d | grep "..$*" | grep -v generic)
+DIRS = $(shell find -maxdepth 1 -type d | grep "..$*" | grep -v /common$)
 
 all:
 	@for i in ${DIRS}; do make -C $$i; done

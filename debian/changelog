@@ -7,8 +7,9 @@ moblin-image-creator (0.36) UNRELEASED; urgency=low
   * Decided to rename "generic" to a more descriptive (IMHO) "common"
     directory.
   * More work on putting stuff into the "common" platform directory.
+  * Fix makefile targets for new "common" platform directory.
 
- -- John L. Villalovos <john.l.villalovos@intel.com>  Tue, 30 Oct 2007 18:19:57 -0400
+ -- John L. Villalovos <john.l.villalovos@intel.com>  Tue, 30 Oct 2007 20:04:34 -0400
 
 moblin-image-creator (0.35) hardy; urgency=low
 

@@ -52,11 +52,11 @@ clean:
 	@rm -f *.pyc
 	@rm -f unittest/*.pyc
 	@find -name \*~ -exec rm -f {} \;
+	@${MAKE} -C platforms clean
 	@echo "Done"
 
 # Cleans out the installation target
 cleanall: clean
-	@${MAKE} -C platforms clean
 	@echo -n "Removing previously installed files..."
 	@rm -rf ${DESTDIR}/${SHAREDIR}/gnome
 	@rm -rf ${DESTDIR}/${SHAREDIR}/lib
