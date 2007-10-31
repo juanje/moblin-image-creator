@@ -215,9 +215,10 @@ class InstallImage(object):
         fs_path      = self.target.fs_path[len(self.project.path):]
         image_path   = self.target.image_path[len(self.project.path):]
         image_path   = os.path.join(image_path,'rootfs.img')
-        cmd          = "/usr/sbin/mksquashfs %s %s -ef %s" % (fs_path, image_path, self.exclude_file)
+        cmd          = "/usr/sbin/mksquashfs %s %s -no-progress -ef %s" % (fs_path, image_path, self.exclude_file)
         self.write_manifest(self.path)
         self.target.umount()
+        print "Executing the mksquashfs program: %s" % cmd
         self.project.chroot(cmd)
         self.target.mount()
             
