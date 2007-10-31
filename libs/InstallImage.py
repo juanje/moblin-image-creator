@@ -194,6 +194,9 @@ class InstallImage(object):
                 self.target.chroot(cmd)
 
     def create_rootfs(self):
+        """Create the root file system, using mksquashfs.  If we don't want to
+        use squashfs on the device then the content will be copied out of the
+        squashfs image during the install"""
         print "Creating root file system..."
         # re-create fstab every time, since user could change fstab options on
         # the fly (by editing image-creator.cfg)

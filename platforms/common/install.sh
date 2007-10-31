@@ -158,9 +158,19 @@ splash_delay 10
 
 splash_display 'Copying system files onto hard disk drive...'
 splash_delay 200
-cp -v /tmp/install/rootfs.img /mnt/boot
 cp -av /tmp/boot /mnt
 
+if [ "${use_squashfs}" -eq 1 ]
+then
+    echo "Copying squashfs filesystem into place..."
+    cp -v /tmp/install/rootfs.img /mnt/boot
+else
+    echo "Setting up NON squashfs filesystem..."
+    mkdir /tmp/root
+    mount -o loop -t squashfs /tmp/install/rootfs.img /tmp/root
+    splash_display 'Copying system ROOT onto hard disk drive...'
+    cp -av /tmp/root/. /mnt
+fi
 /usr/sbin/grub-install --root-directory=/mnt /dev/${device}
 splash_progress 90
 splash_delay 10
