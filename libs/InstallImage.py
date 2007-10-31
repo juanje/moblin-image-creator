@@ -268,6 +268,8 @@ class InstallImage(object):
         swap_option = int(mic_cfg.config.get("installimage", "swap_option"))
         # How big to make the swap partition for the HD installation image
         swap_partition_size = int(mic_cfg.config.get("installimage", "swap_partition_size"))
+        # Use squashfs or not
+        use_squashfs = int(mic_cfg.config.get("installimage", "use_squashfs"))
         if swap_option == 0:
             swap_partition_size = 0
         cfg_file = os.path.join(output_dir, "install.cfg")
@@ -275,6 +277,7 @@ class InstallImage(object):
             'boot_partition_size' : boot_partition_size,
             'swap_option' : swap_option,
             'swap_partition_size' : swap_partition_size,
+            'use_squashfs' : use_squashfs,
         }
         self.writeShellConfigFile(cfg_file, cfg_dict)
         print "install.cfg created"
