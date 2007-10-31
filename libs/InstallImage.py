@@ -262,6 +262,13 @@ class InstallImage(object):
         self.create_install_cfg(output_dir)
 
     def create_install_cfg(self, output_dir):
+        cfg_file = os.path.join(output_dir, "install.cfg")
+        self.writeShellConfigFile(cfg_file)
+        print "install.cfg created"
+
+    def writeShellConfigFile(self, filename):
+        """Write all of the config file options that we care about to the
+        specified file"""
         # How big to make the boot partition for the HD installation image
         boot_partition_size = int(mic_cfg.config.get("installimage", "boot_partition_size"))
         # Options for swap partition: 0. No swap 1. swap always off 2. swap always on
@@ -272,21 +279,16 @@ class InstallImage(object):
         use_squashfs = int(mic_cfg.config.get("installimage", "use_squashfs"))
         if swap_option == 0:
             swap_partition_size = 0
-        cfg_file = os.path.join(output_dir, "install.cfg")
         cfg_dict = {
             'boot_partition_size' : boot_partition_size,
             'swap_option' : swap_option,
             'swap_partition_size' : swap_partition_size,
             'use_squashfs' : use_squashfs,
         }
-        self.writeShellConfigFile(cfg_file, cfg_dict)
-        print "install.cfg created"
-
-    def writeShellConfigFile(self, filename, value_dict):
         output_file = open(filename, 'w')
         print >> output_file, "#!/bin/bash"
         print >> output_file, "# Dynamically generated config file"
-        for key, value in sorted(value_dict.iteritems()):
+        for key, value in sorted(cfg_dict.iteritems()):
            print >> output_file, "%s=%s" % (key, value)
         output_file.close()
 
@@ -308,12 +310,7 @@ class InstallImage(object):
         # of initramfs.  The initramfs/hooks/mobile script in each platform
         # takes care of putting this file into place into the initramfs image.
         cfg_filename = os.path.join(dst_path, "moblin-initramfs.cfg")
-        # Use squashfs or not
-        use_squashfs = int(mic_cfg.config.get("installimage", "use_squashfs"))
-        cfg_dict = {
-            'use_squashfs' : use_squashfs,
-        }
-        self.writeShellConfigFile(cfg_filename, cfg_dict)
+        self.writeShellConfigFile(cfg_filename)
         print "moblin-initramfs.cfg file created"
         kernel_mod_path = os.path.join('/lib/modules', kernel_version)
         cmd = "/usr/sbin/mkinitramfs -o %s %s" % (initrd_file , kernel_mod_path)
@@ -378,8 +375,8 @@ class BaseUsbImage(InstallImage):
     def install_kernels(self):
         InstallImage.install_kernels(self, 'syslinux.cfg')
         
-    def create_container_file(self, size):
-        print "Creating container file at: %s" % self.path
+    def create_usb_image(self, size):
+        print "Creating USB flash drive image file at: %s" % self.path
         out_file = open(self.path, 'w')
         # Make a kibibyte length string of zeroes
         out_string = chr(0) * 1024
@@ -446,7 +443,7 @@ class LiveUsbImage(BaseUsbImage):
         size = ((rootfs_stat_result.st_size + initrd_stat_result.st_size) / (1024 * 1024)) + 64
         if fs_type == 'EXT3FS':
            size = size + ext3fs_fs_size
-        self.create_container_file(size)
+        self.create_usb_image(size)
         self.mount_container()
         self.kernels.insert(0,self.default_kernel)
         for count, kernel in enumerate(self.kernels):
@@ -478,7 +475,7 @@ class InstallUsbImage(BaseUsbImage):
         rootfs_stat_result = os.stat(self.rootfs_path)
         bootfs_stat_result = os.stat(self.bootfs_path)
         size = ((rootfs_stat_result.st_size + bootfs_stat_result.st_size + initrd_stat_result.st_size) / (1024 * 1024)) + 64
-        self.create_container_file(size)
+        self.create_usb_image(size)
         self.mount_container()
         self.kernels.insert(0,self.default_kernel)
         for count, kernel in enumerate(self.kernels):

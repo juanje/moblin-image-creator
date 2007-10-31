@@ -11,8 +11,10 @@ moblin-image-creator (0.36) UNRELEASED; urgency=low
   * Support for installing without squashfs
   * Fixed issue with config info for use_squashfs not getting into the config
     file.
+  * Cleaning up config file creation so that we write all the same config
+    values to both of our config files in the install process.
 
- -- John L. Villalovos <john.l.villalovos@intel.com>  Wed, 31 Oct 2007 13:45:13 -0400
+ -- John L. Villalovos <john.l.villalovos@intel.com>  Wed, 31 Oct 2007 13:54:12 -0400
 
 moblin-image-creator (0.35) hardy; urgency=low
 
