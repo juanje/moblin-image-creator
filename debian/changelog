@@ -19,8 +19,11 @@ moblin-image-creator (0.36) UNRELEASED; urgency=low
   * Made mksquashfs NOT display progress.
   * Make our filesystems get mounted using the 'noatime' and 'nodiratime'
     mount options.  Hopefully this will help performance a little bit.
+  * Fix for https://bugs.launchpad.net/moblin-image-creator/+bug/159298, "Wrong
+    package version installed in target".  I am hopeful that this will fix the
+    bug.
 
- -- John L. Villalovos <john.l.villalovos@intel.com>  Thu, 01 Nov 2007 11:40:03 -0400
+ -- John L. Villalovos <john.l.villalovos@intel.com>  Thu, 01 Nov 2007 13:19:09 -0400
 
 moblin-image-creator (0.35) hardy; urgency=low
 

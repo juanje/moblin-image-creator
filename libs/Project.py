@@ -51,14 +51,29 @@ class FileSystem(object):
         self.apt_cmd = '/usr/bin/apt-get -y --force-yes -o Dir::State=%(t)s/var/lib/apt -o Dir::State::status=%(t)s/var/lib/dpkg/status -o Dir::Cache=/var/cache/apt -o Dir::Etc=%(t)s/etc/apt/ -o DPkg::Options::=--root=%(t)s -o DPkg::Run-Directory=%(t)s'
         self.mounted = []
 
-    def update(self, path):
+    def update(self):
         self.aptgetPreCheck()
-        command = self.apt_cmd % {'t': path} + " update"
-        print "Running 'apt-get update' command: %s" % command
+        command = self.apt_cmd % {'t': self.path} + " update"
+        command = "apt-get update"
+        print "Running 'apt-get update' command: '%s' in chroot: %s " % (command, self.path)
         ret = self.chroot(command) 
         if ret != 0:
             raise OSError("Internal error while attempting to run: %s" % command)
         print "Completed 'apt-get update' successfully"
+        
+    def upgrade(self):
+        self.aptgetPreCheck()
+        command = self.apt_cmd % {'t': self.path} + " upgrade"
+        command = "apt-get upgrade"
+        print "Running 'apt-get upgrade' command: %s in chroot: %s" % (command, self.path)
+        ret = self.chroot(command) 
+        if ret != 0:
+            raise OSError("Internal error while attempting to run: %s" % command)
+        print "Completed 'apt-get upgrade' successfully"
+
+    def updateAndUpgrade(self):
+        self.update()
+        self.upgrade()
         
     def install(self, path, packages):
         debian_frontend = os.environ.get("DEBIAN_FRONTEND")
@@ -71,6 +86,7 @@ class FileSystem(object):
             return
         retry_count = 0
         while (retry_count < 10):
+            self.updateAndUpgrade()
             # apt-get install
             command = self.apt_cmd % {'t': path} + " install"
             for p in packages:
@@ -287,9 +303,6 @@ class Project(FileSystem):
             target.umount()
         FileSystem.umount(self)
 
-    def update(self):
-        FileSystem.update(self, "/")
-
     def create_target(self, name, use_rootstrap = True):
         if not name:
             raise ValueError("Target name was not specified")
@@ -357,7 +370,7 @@ class Project(FileSystem):
 
             self.targets[name] = Target(name, self, self.progress_callback)
             self.targets[name].mount()
-            self.targets[name].update()            
+            self.targets[name].updateAndUpgrade()
             # Install platform default kernel cmdline
             self.set_target_usb_kernel_cmdline(name, self.platform.usb_kernel_cmdline)
             self.set_target_hd_kernel_cmdline(name, self.platform.hd_kernel_cmdline)
@@ -555,9 +568,6 @@ class Target(FileSystem):
     def install(self, path, packages):
         FileSystem.install(self.project, "/targets/%s/fs" % (self.name), packages)
             
-    def update(self):
-        FileSystem.update(self.project, "/targets/%s/fs" % (self.name))
-
     def __str__(self):
         return ("<Target: name=%s, path=%s, fs_path=%s, image_path=%s, config_path=%s>"
                 % (self.name, self.path, self.fs_path, self.image_path, self.config_path))
