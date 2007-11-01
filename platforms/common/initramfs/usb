@@ -15,13 +15,14 @@ mountroot ()
     mkdir -p /squashmnt
     mkdir -p /persistmnt
 
-#find USB boot dongle
-    while true; do
-      for driver in 'sda' 'sdb' 'sdc' 'sdd'; do
-        echo "checking driver $driver for installation source..."
-        if [ -e /sys/block/$driver/removable ]; then
-           if [ "$(cat /sys/block/$driver/removable)" = "1" ]; then
-              echo "found usb dongle at $driver"
+    # Find the USB flash drive
+    while true
+    do
+      for device in 'sda' 'sdb' 'sdc' 'sdd'; do
+        echo "checking device /dev/${device} for installation source..."
+        if [ -e /sys/block/${device}/removable ]; then
+           if [ "$(cat /sys/block/${device}/removable)" = "1" ]; then
+              echo "Found USB flash drive at /dev/${device}"
 	      found="yes"
               break
            fi
@@ -32,20 +33,20 @@ mountroot ()
       fi
       /bin/sleep 5
     done
-    echo "will mount root from $driver"
+    echo "will mount root from /dev/${device}"
 
-    mount /dev/$driver /container 2> /dev/null
+    mount -o ro /dev/${device} /container 2> /dev/null
     while [ ! -e "/container/rootfs.img" ]; do
 	/bin/sleep 0.5
-	mount /dev/$driver /container 2> /dev/null
+	mount -o ro /dev/${device} /container 2> /dev/null
     done
 
     mount -o loop -t squashfs /container/rootfs.img /squashmnt
 
     if [ -f /container/ext3fs.img ]; then
-        mount -o loop /container/ext3fs.img /persistmnt
+        mount -o loop,noatime,nodiratime /container/ext3fs.img /persistmnt
     else
-        mount -t tmpfs none /persistmnt
+        mount -t tmpfs -o noatime,nodiratime none /persistmnt
     fi
 
     mount -t unionfs -o dirs=/persistmnt=rw:/squashmnt=ro none ${rootmnt}
