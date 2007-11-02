@@ -242,7 +242,7 @@ class InstallImage(object):
         fs_path    = os.path.join(fs_path, 'boot')
         image_path = self.target.image_path[len(self.project.path):]
         image_path = os.path.join(image_path,'bootfs.img')
-        cmd        = "/usr/sbin/mksquashfs %s %s --no-progress" % (fs_path, image_path)
+        cmd        = "/usr/sbin/mksquashfs %s %s -no-progress" % (fs_path, image_path)
         self.project.chroot(cmd)
 
     def delete_bootfs(self):
