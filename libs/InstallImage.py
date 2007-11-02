@@ -33,6 +33,8 @@ if mic_cfg.config.has_option('general', 'debug'):
     debug = int(mic_cfg.config.get('general', 'debug'))
 
 class SyslinuxCfg(object):
+    """Class to provide helper functions for doing the syslinux stuff.
+    Syslinux home page: http://syslinux.zytor.com/"""
     def __init__(self, path, cfg_filename):
         try:
             self.path = path
@@ -42,7 +44,6 @@ class SyslinuxCfg(object):
             self.index = 1
 
             welcome_mesg = mic_cfg.config.get("installimage", "welcome_message")
-
             # Create and initialize the syslinux config file
             cfg_file = open(self.cfg_path, 'w')
             print >> cfg_file, """\
@@ -51,7 +52,6 @@ class SyslinuxCfg(object):
     display boot.msg
     """
             cfg_file.close()
-
             # Create and initialize the syslinux boot message file
             msg_file = open(self.msg_path, 'w')
             msg_file.write("\f")
@@ -72,7 +72,6 @@ class SyslinuxCfg(object):
         label = 'linux'
         append = re.sub(r'initrd.img',"initrd0.img", append)
         kernel_file = 'vmlinuz'
-
         # Add the default entry to the syslinux config file
         cfg_file = open(self.cfg_path, 'a ')
         print >> cfg_file, "default " + label
@@ -80,7 +79,6 @@ class SyslinuxCfg(object):
         print >> cfg_file, "  kernel " + kernel_file
         print >> cfg_file, "  append " + append
         cfg_file.close()
-
         # Add the default entry in the syslinux boot message file
         msg_file = open(self.msg_path, 'a ')
         msg_file.write("- To boot default " + kernel + " kernel, press " + chr(15) + \
@@ -93,14 +91,12 @@ class SyslinuxCfg(object):
         kernel_file = "linux%s" % self.index
         append = re.sub(r'initrd.img',"initrd%d.img" % self.index, append)
         self.index += 1
-
         # Add the target to the syslinux config file
         cfg_file = open(self.cfg_path, 'a ')
         print >> cfg_file, "label " + label
         print >> cfg_file, "  kernel " + kernel_file
         print >> cfg_file, "  append " + append
         cfg_file.close()
-
         # Add the target to the syslinux boot message file
         msg_file = open(self.msg_path, 'a ')
         msg_file.write("- To boot " + kernel + " kernel, type: " + chr(15) + \
@@ -147,13 +143,11 @@ class InstallImage(object):
             raise ValueError, "tmp_path doesn't exist"
 
         s = SyslinuxCfg(self.tmp_path, cfg_filename)
-
         # Copy the default kernel
         kernel_name = s.add_default(self.default_kernel, self.project.get_target_usb_kernel_cmdline(self.target.name))
         src_path = os.path.join(self.target.fs_path, 'boot', self.default_kernel)
         dst_path = os.path.join(self.tmp_path, kernel_name)
         shutil.copyfile(src_path, dst_path)
-
         # Copy the remaining kernels
         for kernel in self.kernels:
             kernel_name = s.add_target(kernel, self.project.get_target_usb_kernel_cmdline(self.target.name))
@@ -182,7 +176,6 @@ class InstallImage(object):
                 if os.path.isfile(moddep_file):
                     sr_deps = os.stat(moddep_file)
                     sr_sym  = os.stat(os.path.join(boot_path, filename))
-                    
                     # Skip generating a new modules.dep if the Symbols are
                     # older than the current modules.dep file.
                     if sr_deps.st_mtime > sr_sym.st_mtime: 
@@ -249,7 +242,7 @@ class InstallImage(object):
         fs_path    = os.path.join(fs_path, 'boot')
         image_path = self.target.image_path[len(self.project.path):]
         image_path = os.path.join(image_path,'bootfs.img')
-        cmd        = "/usr/sbin/mksquashfs %s %s" % (fs_path, image_path)
+        cmd        = "/usr/sbin/mksquashfs %s %s --no-progress" % (fs_path, image_path)
         self.project.chroot(cmd)
 
     def delete_bootfs(self):
@@ -577,14 +570,6 @@ if __name__ == '__main__':
 
     proj.mount()
 
-    imgLiveIso = LiveIsoImage(proj, proj.targets['mytest'], "mytest_v1-Live-DVD.iso")
-    print "\nImage File Name: %s" % imgLiveIso.name
-    imgLiveIso.create_image()
-
-    imgInstallIso = InstallIsoImage(proj, proj.targets['mytest'], "mytest_v2-Install-DVD.iso")
-    print "\nImage File Name: %s" % imgInstallIso.name
-    imgInstallIso.create_image()
-
     imgLiveUsb = LiveUsbImage(proj, proj.targets['mytest'], "mytest_v3-Live-USB.bin")
     print "\nImage File Name: %s" % imgLiveUsb.name
     imgLiveUsb.create_image()
@@ -598,4 +583,3 @@ if __name__ == '__main__':
     imgHdd.create_image()
 
     print "\n\nFinish!\n"
-    
