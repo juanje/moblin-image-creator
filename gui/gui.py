@@ -229,6 +229,7 @@ class App(object):
                 progress_dialog.connect('delete_event', self.ignore)
                 progress_tree.get_widget('progress_label').set_text(_("Please wait while installing %s") % dialog.name)
                 self.progressbar = progress_tree.get_widget('progressbar')
+                
                 proj = self.sdk.create_project(dialog.path, dialog.name, dialog.desc, self.sdk.platforms[dialog.platform]).install()
                 self.projectList.append((dialog.name, dialog.desc, dialog.path, dialog.platform))
             except:
@@ -566,30 +567,18 @@ class App(object):
                 
                     dialog2.destroy()
 
-                    self.progressBarWindow = gtk.Window(gtk.WINDOW_TOPLEVEL)
-                    self.progressBarWindow.set_title("Please Wait...")
-                    self.progressBarWindow.set_border_width(5)
-                    self.progressBarWindow.set_size_request(500, 200)
-
-                    vbox = gtk.VBox(False, 5)
-                    self.progressBarWindow.add(vbox)
-
-                    label = gtk.Label("Writing image to USB disk")     
-                    frame = gtk.Frame("")            
-                    frame.add(label)
-                    vbox.pack_start(frame, False, False, 0)
-                    
-                    self.progressbar = gtk.ProgressBar()                             
-                    self.progressbar.set_pulse_step(0.01)
-                    vbox.pack_start(self.progressbar, False, False, 0)
-                    self.progressBarWindow.show_all()                 
+                    progress_tree = gtk.glade.XML(self.gladefile, 'ProgressDialog')
+                    progress_dialog = progress_tree.get_widget('ProgressDialog')
+                    progress_dialog.connect('delete_event', self.ignore)
+                    progress_tree.get_widget('progress_label').set_text("Writing image to USB disk. Please Wait.....")
+                    self.progressbar = progress_tree.get_widget('progressbar')
 
                     print "Writing image to USB disk %s" % model[iter][0]
                     cmd = "dd if=%s of=%s" % (targetfilename, model[iter][0])
                     pdk_utils.execCommand(cmd, False, None, self.gui_throbber)                    
                     print "Writing Complete"                    
 
-                    self.progressBarWindow.destroy()
+                    progress_dialog.destroy()
 
             dialog2.destroy()
 
@@ -641,30 +630,18 @@ class App(object):
                         return -1
                 
                     dialog2.destroy()
-                    self.progressBarWindow = gtk.Window(gtk.WINDOW_TOPLEVEL)
-                    self.progressBarWindow.set_title("Please Wait...")
-                    self.progressBarWindow.set_border_width(5)
-                    self.progressBarWindow.set_size_request(500, 200)
-
-                    vbox = gtk.VBox(False, 5)
-                    self.progressBarWindow.add(vbox)
-
-                    label = gtk.Label("Writing image to USB disk")     
-                    frame = gtk.Frame("")            
-                    frame.add(label)
-                    vbox.pack_start(frame, False, False, 0)
-                    
-                    self.progressbar = gtk.ProgressBar()                             
-                    self.progressbar.set_pulse_step(0.01)
-                    vbox.pack_start(self.progressbar, False, False, 0)
-                    self.progressBarWindow.show_all()                 
+                    progress_tree = gtk.glade.XML(self.gladefile, 'ProgressDialog')
+                    progress_dialog = progress_tree.get_widget('ProgressDialog')
+                    progress_dialog.connect('delete_event', self.ignore)
+                    progress_tree.get_widget('progress_label').set_text("Writing image to USB disk. Please Wait.....")
+                    self.progressbar = progress_tree.get_widget('progressbar')
 
                     print "Writing image to USB disk %s" % model[iter][0]
                     cmd = "dd if=%s of=%s" % (targetfilename, model[iter][0])
                     pdk_utils.execCommand(cmd, False, None, self.gui_throbber)                    
                     print "Writing Complete"                    
 
-                    self.progressBarWindow.destroy()
+                    progress_dialog.destroy()
 
             dialog2.destroy()
 
@@ -737,24 +714,17 @@ class App(object):
                     targetFolder = dialog.get_filename()
                     print "Targer File Name: %s" % (targetFolder)
                     dialog.destroy()
-                    self.progressBarWindow = gtk.Window(gtk.WINDOW_TOPLEVEL)
-                    self.progressBarWindow.set_title("Please Wait...")
-                    self.progressBarWindow.set_border_width(5)
-                    self.progressBarWindow.set_size_request(500, 200)
-                    vbox = gtk.VBox(False, 5)
-                    self.progressBarWindow.add(vbox)
-                    label = gtk.Label("Loading Project: %s" % projectName)     
-                    frame = gtk.Frame("")            
-                    frame.add(label)
-                    vbox.pack_start(frame, False, False, 0)
-                    self.progressbar = gtk.ProgressBar()                             
-                    self.progressbar.set_pulse_step(0.01)
-                    vbox.pack_start(self.progressbar, False, False, 0)
-                    self.progressBarWindow.show_all()                 
+
+                    progress_tree = gtk.glade.XML(self.gladefile, 'ProgressDialog')
+                    progress_dialog = progress_tree.get_widget('ProgressDialog')
+                    progress_dialog.connect('delete_event', self.ignore)
+                    progress_tree.get_widget('progress_label').set_text("Loading Project: %s. Please Wait...." % projectName)
+                    self.progressbar = progress_tree.get_widget('progressbar')
+
                     print "Loading Project %s" % projectName
                     self.sdk.load_project(projectName, targetFolder, fileToLoad, self.gui_throbber)
                     print "Loading Project Complete"                    
-                    self.progressBarWindow.destroy()
+                    progress_dialog.destroy()
                     self.sdk.discover_projects()
                     self.projectList.clear()
                     for key in sorted(self.sdk.projects.iterkeys()):
@@ -793,42 +763,28 @@ class App(object):
             if result == gtk.RESPONSE_OK:
                 targetFileName = dialog.get_filename()
                 print "Targer File Name: %s" % (targetFileName)
-                dialog.destroy()                
-                self.progressBarWindow = gtk.Window(gtk.WINDOW_TOPLEVEL)
-                self.progressBarWindow.set_title("Please Wait...")
-                self.progressBarWindow.set_border_width(5)
-                self.progressBarWindow.set_size_request(500, 200)
-                vbox = gtk.VBox(False, 5)
-                self.progressBarWindow.add(vbox)
-                label = gtk.Label("Saving Project: %s. Please Wait...." % projectNameToSave)     
-                frame = gtk.Frame("")            
-                frame.add(label)
-                vbox.pack_start(frame, False, False, 0)
-                self.progressBarWindow.show_all()                 
+                dialog.destroy()        
+
+                progress_tree = gtk.glade.XML(self.gladefile, 'ProgressDialog')
+                progress_dialog = progress_tree.get_widget('ProgressDialog')
+                progress_dialog.connect('delete_event', self.ignore)
+                progress_tree.get_widget('progress_label').set_text("Saving Project: %s. Please Wait...." % projectNameToSave)
+                self.progressbar = progress_tree.get_widget('progressbar')
+        
                 while gtk.events_pending():
                     gtk.main_iteration(False) 
                 print "Saving Project %s" % projectNameToSave
                 self.sdk.save_project(projectNameToSave, targetFileName)                
                 print "Saving Complete"                    
-                self.progressBarWindow.destroy()
+                progress_dialog.destroy()
 
     def on_upgrade_project_clicked(self, widget):
         print "In on_upgrade_project_clicked"
-        self.progressBarWindow = gtk.Window(gtk.WINDOW_TOPLEVEL)
-        self.progressBarWindow.set_title("Please Wait...")
-        self.progressBarWindow.set_border_width(5)
-        self.progressBarWindow.set_size_request(500, 200)
-        vbox = gtk.VBox(False, 5)
-        self.progressBarWindow.add(vbox)
-        label = gtk.Label("Upgrading Project. Please Wait....")     
-        frame = gtk.Frame("")            
-        frame.add(label)
-        vbox.pack_start(frame, False, False, 0)
-        self.progressbar = gtk.ProgressBar()                             
-        self.progressbar.set_pulse_step(0.01)
-        vbox.pack_start(self.progressbar, False, False, 0)
-
-        self.progressBarWindow.show_all()                 
+        progress_tree = gtk.glade.XML(self.gladefile, 'ProgressDialog')
+        progress_dialog = progress_tree.get_widget('ProgressDialog')
+        progress_dialog.connect('delete_event', self.ignore)
+        progress_tree.get_widget('progress_label').set_text("Upgrading Project. Please Wait....")
+        self.progressbar = progress_tree.get_widget('progressbar')
 
         self.current_project().update()
         command = "apt-get --force-yes --yes upgrade"
@@ -837,26 +793,16 @@ class App(object):
         if ret != 0:
              raise OSError("Internal error while attempting to run: %s" % command)
         print "Completed 'apt-get upgrade' successfully"
-        self.progressBarWindow.destroy()
+        progress_dialog.destroy()
         
 
     def on_upgrade_target_clicked(self, widget):
         print "In on_upgrade_target_clicked"
-        self.progressBarWindow = gtk.Window(gtk.WINDOW_TOPLEVEL)
-        self.progressBarWindow.set_title("Please Wait...")
-        self.progressBarWindow.set_border_width(5)
-        self.progressBarWindow.set_size_request(500, 200)
-        vbox = gtk.VBox(False, 5)
-        self.progressBarWindow.add(vbox)
-        label = gtk.Label("Upgrading Target. Please Wait....")     
-        frame = gtk.Frame("")            
-        frame.add(label)
-        vbox.pack_start(frame, False, False, 0)
-        self.progressbar = gtk.ProgressBar()                             
-        self.progressbar.set_pulse_step(0.01)
-        vbox.pack_start(self.progressbar, False, False, 0)
-
-        self.progressBarWindow.show_all()                 
+        progress_tree = gtk.glade.XML(self.gladefile, 'ProgressDialog')
+        progress_dialog = progress_tree.get_widget('ProgressDialog')
+        progress_dialog.connect('delete_event', self.ignore)
+        progress_tree.get_widget('progress_label').set_text("Upgrading Target. Please Wait....")
+        self.progressbar = progress_tree.get_widget('progressbar')
 
         self.current_target().update()
         command = "apt-get --force-yes --yes upgrade"
@@ -865,7 +811,7 @@ class App(object):
         if ret != 0:
              raise OSError("Internal error while attempting to run: %s" % command)
         print "Completed 'apt-get upgrade' successfully"
-        self.progressBarWindow.destroy()
+        progress_dialog.destroy()
 
 
 #Class: Adding a New Project

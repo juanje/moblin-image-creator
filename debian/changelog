@@ -1,5 +1,6 @@
 moblin-image-creator (0.36) UNRELEASED; urgency=low
 
+  [ John L. Villalovos ]
   * Work continues on getting to being able to NOT using squashfs.  Cleaned up
     the platform/*/install.sh files.
   * Created a "generic" platform directory that files common to all platforms
@@ -23,7 +24,10 @@ moblin-image-creator (0.36) UNRELEASED; urgency=low
     package version installed in target".  I am hopeful that this will fix the
     bug.
 
- -- John L. Villalovos <john.l.villalovos@intel.com>  Thu, 01 Nov 2007 13:19:09 -0400
+  [ Prajwal Mohan <prajwal@linux.intel.com> ]
+  * Using same standard for all progress bar and adding status label 
+
+ -- Prajwal Mohan <prajwal@linux.intel.com> <prajwal@prajwal-desktop>  Fri, 02 Nov 2007 16:19:36 -0700
 
 moblin-image-creator (0.35) hardy; urgency=low
 
