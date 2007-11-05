@@ -25,9 +25,10 @@ moblin-image-creator (0.36) UNRELEASED; urgency=low
     bug.
 
   [ Prajwal Mohan <prajwal@linux.intel.com> ]
-  * Using same standard for all progress bar and adding status label 
+  * Using same standard for all progress bar and adding status label
+  * Adding status label to progress bar to indicate current action 
 
- -- Prajwal Mohan <prajwal@linux.intel.com> <prajwal@prajwal-desktop>  Fri, 02 Nov 2007 16:19:36 -0700
+ -- Prajwal Mohan <prajwal@linux.intel.com> <prajwal@prajwal-desktop>  Mon, 05 Nov 2007 10:11:15 -0800
 
 moblin-image-creator (0.35) hardy; urgency=low
 

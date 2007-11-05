@@ -54,7 +54,7 @@ class App(object):
     """This is our main"""
     def __init__(self):
 
-        self.sdk = SDK.SDK(progress_callback = self.gui_throbber)
+        self.sdk = SDK.SDK(progress_callback = self.gui_throbber, status_label_callback = self.set_status_label)
         self.gladefile = os.path.join(self.sdk.path, "image-creator.glade")
         if not os.path.isfile(self.gladefile):
             raise IOError, "Glade file is missing from: %s" % self.gladefile
@@ -226,9 +226,11 @@ class App(object):
             try:
                 progress_tree = gtk.glade.XML(self.gladefile, 'ProgressDialog')
                 progress_dialog = progress_tree.get_widget('ProgressDialog')
+                progress_dialog.set_size_request(400, 200)
                 progress_dialog.connect('delete_event', self.ignore)
                 progress_tree.get_widget('progress_label').set_text(_("Please wait while installing %s") % dialog.name)
                 self.progressbar = progress_tree.get_widget('progressbar')
+                self.statuslabel = progress_tree.get_widget('status_label')
                 
                 proj = self.sdk.create_project(dialog.path, dialog.name, dialog.desc, self.sdk.platforms[dialog.platform]).install()
                 self.projectList.append((dialog.name, dialog.desc, dialog.path, dialog.platform))
@@ -355,6 +357,10 @@ class App(object):
     def ignore(self, *args):
         return True
     
+    def set_status_label(self, newLabel):
+        print "Setting new status label: %s" % newLabel
+        self.statuslabel.set_text("Current action: %s" % newLabel)
+
     def gui_throbber(self, process):
         self.progressbar.pulse()
         gtk.main_iteration()
@@ -570,7 +576,7 @@ class App(object):
                     progress_tree = gtk.glade.XML(self.gladefile, 'ProgressDialog')
                     progress_dialog = progress_tree.get_widget('ProgressDialog')
                     progress_dialog.connect('delete_event', self.ignore)
-                    progress_tree.get_widget('progress_label').set_text("Writing image to USB disk. Please Wait.....")
+                    progress_tree.get_widget('progress_label').set_text("Please wait while writing image to USB disk")
                     self.progressbar = progress_tree.get_widget('progressbar')
 
                     print "Writing image to USB disk %s" % model[iter][0]
@@ -633,7 +639,7 @@ class App(object):
                     progress_tree = gtk.glade.XML(self.gladefile, 'ProgressDialog')
                     progress_dialog = progress_tree.get_widget('ProgressDialog')
                     progress_dialog.connect('delete_event', self.ignore)
-                    progress_tree.get_widget('progress_label').set_text("Writing image to USB disk. Please Wait.....")
+                    progress_tree.get_widget('progress_label').set_text("Please wait while writing image to USB disk")
                     self.progressbar = progress_tree.get_widget('progressbar')
 
                     print "Writing image to USB disk %s" % model[iter][0]
@@ -718,7 +724,7 @@ class App(object):
                     progress_tree = gtk.glade.XML(self.gladefile, 'ProgressDialog')
                     progress_dialog = progress_tree.get_widget('ProgressDialog')
                     progress_dialog.connect('delete_event', self.ignore)
-                    progress_tree.get_widget('progress_label').set_text("Loading Project: %s. Please Wait...." % projectName)
+                    progress_tree.get_widget('progress_label').set_text("Please wait while loading Project: %s" % projectName)
                     self.progressbar = progress_tree.get_widget('progressbar')
 
                     print "Loading Project %s" % projectName
@@ -768,7 +774,7 @@ class App(object):
                 progress_tree = gtk.glade.XML(self.gladefile, 'ProgressDialog')
                 progress_dialog = progress_tree.get_widget('ProgressDialog')
                 progress_dialog.connect('delete_event', self.ignore)
-                progress_tree.get_widget('progress_label').set_text("Saving Project: %s. Please Wait...." % projectNameToSave)
+                progress_tree.get_widget('progress_label').set_text("Please wait while saving Project: %s" % projectNameToSave)
                 self.progressbar = progress_tree.get_widget('progressbar')
         
                 while gtk.events_pending():
@@ -783,7 +789,7 @@ class App(object):
         progress_tree = gtk.glade.XML(self.gladefile, 'ProgressDialog')
         progress_dialog = progress_tree.get_widget('ProgressDialog')
         progress_dialog.connect('delete_event', self.ignore)
-        progress_tree.get_widget('progress_label').set_text("Upgrading Project. Please Wait....")
+        progress_tree.get_widget('progress_label').set_text("Please wait while upgrading Project")
         self.progressbar = progress_tree.get_widget('progressbar')
 
         self.current_project().update()
@@ -801,7 +807,7 @@ class App(object):
         progress_tree = gtk.glade.XML(self.gladefile, 'ProgressDialog')
         progress_dialog = progress_tree.get_widget('ProgressDialog')
         progress_dialog.connect('delete_event', self.ignore)
-        progress_tree.get_widget('progress_label').set_text("Upgrading Target. Please Wait....")
+        progress_tree.get_widget('progress_label').set_text("Please wait while upgrading Target")
         self.progressbar = progress_tree.get_widget('progressbar')
 
         self.current_target().update()
