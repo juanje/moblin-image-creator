@@ -26,9 +26,14 @@ moblin-image-creator (0.36) UNRELEASED; urgency=low
 
   [ Prajwal Mohan <prajwal@linux.intel.com> ]
   * Using same standard for all progress bar and adding status label
-  * Adding status label to progress bar to indicate current action 
+  * Adding status label to progress bar to indicate current action
 
- -- Prajwal Mohan <prajwal@linux.intel.com> <prajwal@prajwal-desktop>  Mon, 05 Nov 2007 10:11:15 -0800
+  [ Rob Rhoads ]
+  * Added a work around for Q1U where the local APIC timer stops working
+    after a resume from a S4 (Hibernate). The work around is to add the
+    kernel cmd-line option "nolapic_timer" to the mccaslin-lpia hd boot.
+
+ -- Rob Rhoads <rob.rhoads@intel.com>  Mon,  5 Nov 2007 18:16:40 -0800
 
 moblin-image-creator (0.35) hardy; urgency=low
 
