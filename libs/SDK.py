@@ -194,7 +194,8 @@ class SDK(object):
             os.makedirs(install_path)
 
         rootstrap = os.path.join(platform.path, "build-rootstrap.tar.bz2")
-        self.status_label_callback("Creating Rootstrap")
+        if self.status_label_callback:
+            self.status_label_callback("Creating Rootstrap")
         if not os.path.isfile(rootstrap) or not use_rootstrap:
             # create platform rootstrap file
             count = 0
@@ -248,7 +249,8 @@ class SDK(object):
                 raise ValueError(" ".join(output))
         
         # create the config file
-        self.status_label_callback("Creating Config file")
+        if self.status_label_callback:
+            self.status_label_callback("Creating Config file")
         config_path = os.path.join(self.config_path, "%s.proj" % name)
         os.path.isfile(config_path)
         config_file = open(config_path, 'w')
@@ -259,7 +261,8 @@ class SDK(object):
         config_file.close()
 
         # instantiate the project
-        self.status_label_callback("Initiating the project")
+        if self.status_label_callback:
+            self.status_label_callback("Initiating the project")
         try:
             self.projects[name] = Project.Project(install_path, name, desc, platform, self.progress_callback)
         except:

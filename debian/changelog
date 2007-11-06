@@ -33,7 +33,10 @@ moblin-image-creator (0.36) UNRELEASED; urgency=low
     after a resume from a S4 (Hibernate). The work around is to add the
     kernel cmd-line option "nolapic_timer" to the mccaslin-lpia hd boot.
 
- -- Rob Rhoads <rob.rhoads@intel.com>  Mon,  5 Nov 2007 18:16:40 -0800
+  [ Prajwal Mohan <prajwal@linux.intel.com> ]
+  * status label call back broke command line. Fixing it. 
+
+ -- Prajwal Mohan <prajwal@linux.intel.com> <prajwal@prajwal-desktop>  Tue, 06 Nov 2007 10:16:48 -0800
 
 moblin-image-creator (0.35) hardy; urgency=low
 
