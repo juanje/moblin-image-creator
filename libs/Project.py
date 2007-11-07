@@ -64,7 +64,7 @@ class FileSystem(object):
     def upgrade(self):
         self.aptgetPreCheck()
         command = self.apt_cmd % {'t': self.path} + " upgrade"
-        command = "apt-get upgrade"
+        command = "apt-get upgrade -y --force-yes"
         print "Running 'apt-get upgrade' command: %s in chroot: %s" % (command, self.path)
         ret = self.chroot(command) 
         if ret != 0:

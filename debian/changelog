@@ -40,8 +40,9 @@ moblin-image-creator (0.36) UNRELEASED; urgency=low
   * Trying to fix issue with the LiveRW USB image failing.
   * Created template files for our work on adding Yum support to
     image-creator.
+  * Fix issue with apt-get upgrade failing
 
- -- John L. Villalovos <john.l.villalovos@intel.com>  Wed, 07 Nov 2007 11:19:26 -0800
+ -- John L. Villalovos <john.l.villalovos@intel.com>  Wed, 07 Nov 2007 11:24:08 -0800
 
 moblin-image-creator (0.35) hardy; urgency=low
 
