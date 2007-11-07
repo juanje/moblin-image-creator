@@ -35,16 +35,16 @@ mountroot ()
     done
     echo "will mount root from /dev/${device}"
 
-    mount -o ro /dev/${device} /container 2> /dev/null
+    mount -o rw /dev/${device} /container 2> /dev/null
     while [ ! -e "/container/rootfs.img" ]; do
 	/bin/sleep 0.5
-	mount -o ro /dev/${device} /container 2> /dev/null
+	mount -o rw /dev/${device} /container 2> /dev/null
     done
 
-    mount -o loop -t squashfs /container/rootfs.img /squashmnt
+    mount -o ro,loop -t squashfs /container/rootfs.img /squashmnt
 
     if [ -f /container/ext3fs.img ]; then
-        mount -o loop,noatime,nodiratime /container/ext3fs.img /persistmnt
+        mount -o rw,loop,noatime,nodiratime /container/ext3fs.img /persistmnt
     else
         mount -t tmpfs -o noatime,nodiratime none /persistmnt
     fi
