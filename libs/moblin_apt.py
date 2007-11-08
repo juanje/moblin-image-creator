@@ -19,3 +19,15 @@
 # The purpose of this library is to provide an abstraction layer to the APT
 # functionality.  This way the image-creator will not care if you are using apt
 # or yum or whatever package management system you want to use.
+
+import moblin_pkgbase
+
+class AptPackageManager(moblin_pkgbase.PackageManager):
+    """Apt class for package management"""
+
+    def __init__(self):
+        pass
+
+    def installPackages(self, chroot_dir, package_list):
+        """Install the list of packages in the chroot environement"""
+        pass

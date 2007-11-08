@@ -21,8 +21,8 @@
 # image-creator will not care if you are using apt or yum or whatever package
 # management system you want to use.
 
-class PackageManger(object):
-    """Base class for the package management"""
+class PackageManager(object):
+    """Base class for the package management classes"""
 
     def __init__(self):
         pass
