@@ -20,14 +20,36 @@
 # functionality.  This way the image-creator will not care if you are using apt
 # or yum or whatever package management system you want to use.
 
+import os
+
 import moblin_pkgbase
+import pdk_utils
 
 class AptPackageManager(moblin_pkgbase.PackageManager):
     """Apt class for package management"""
 
     def __init__(self):
-        pass
+        raise NotImplementedError
 
     def installPackages(self, chroot_dir, package_list):
         """Install the list of packages in the chroot environement"""
-        pass
+        __aptgetPreCheck()
+        raise NotImplementedError
+
+    def updateChroot(self, chroot_dir, output = None, callback = None):
+        __aptgetPreCheck()
+        cmd_line = "apt-get update"
+        result = pdk_utils.execChrootCommand(chroot_dir, cmd_line, output = output, callback = callback)
+        if result:
+            return result
+        cmd_line = "apt-get upgrade -y --force-yes"
+        result = pdk_utils.execChrootCommand(chroot_dir, cmd_line, output = output, callback = callback)
+        return result
+
+    def __aptgetPreCheck(self):
+        """Stuff that we want to check for before we run an apt-get command"""
+        required_dirs = [ "/var/cache/apt/archives/partial" ]
+        for dirname in required_dirs:
+            if not os.path.isdir(dirname):
+                print "The directory: %s is missing, will create it" % dirname
+                os.makedirs(dirname)

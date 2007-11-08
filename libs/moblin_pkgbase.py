@@ -25,9 +25,13 @@ class PackageManager(object):
     """Base class for the package management classes"""
 
     def __init__(self):
-        pass
+        raise NotImplementedError
 
 
     def installPackages(self, chroot_dir, package_list):
-        """Install the list of packages in the chroot environement"""
-        pass
+        """Install the list of packages in the chroot environment"""
+        raise NotImplementedError
+
+    def updateChroot(self, chroot_dir):
+        """Update the chroot environment to have the latest packages"""
+        raise NotImplementedError

@@ -26,6 +26,7 @@ import stat
 import sys
 import time
 
+import moblin_pkg
 import pdk_utils
 import InstallImage
 import SDK

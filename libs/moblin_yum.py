@@ -26,9 +26,9 @@ class YumPackageManager(moblin_pkgbase.PackageManager):
     """Yum class for package management"""
 
     def __init__(self):
-        pass
+        raise NotImplementedError
 
 
     def installPackages(self, chroot_dir, package_list):
         """Install the list of packages in the chroot environement"""
-        pass
+        raise NotImplementedError
