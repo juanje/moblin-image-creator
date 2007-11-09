@@ -26,9 +26,9 @@ class TestPlatform(unittest.TestCase):
     def setUp(self):
         self.workdir = tempfile.mkdtemp()
         self.platform_name = 'unittest_platform'
-        self.platform_dir = os.path.join(self.workdir, 'platforms', self.platform_name)
+        self.platform_root = os.path.join(self.workdir, 'platforms')
         self.repo_filename = 'unittest.repo'
-        createSamplePlatformDir(self.platform_dir, self.repo_filename)
+        createSamplePlatform(self.platform_root, self.platform_name, self.repo_filename)
     def tearDown(self):
         if os.path.isdir(self.workdir):
             shutil.rmtree(self.workdir)
@@ -50,7 +50,8 @@ class TestPlatform(unittest.TestCase):
         """Test correctness of repository files"""
         platform = Platform.Platform(self.workdir, self.platform_name)
 
-def createSamplePlatformDir(platform_dir, repo_filename = "unittest.repo"):
+def createSamplePlatformDir(platform_root, platform_name, repo_filename = "unittest.repo"):
+    platform_dir = os.path.join(platform_root, platform_name)
     os.makedirs(platform_dir)
     for dirname in ('buildroot_repos', 'fsets', 'target_repos'):
         os.mkdir(os.path.join(platform_dir, dirname))
@@ -61,6 +62,7 @@ def createSamplePlatformDir(platform_dir, repo_filename = "unittest.repo"):
     test_fsets.createSampleFsetFile(os.path.join(platform_dir, 'fsets', 'unittest.fset'))
     createSampleJailrootPackages(os.path.join(platform_dir, 'buildroot.packages'))
     createSampleJailrootExtras(os.path.join(platform_dir, 'buildroot_extras'))
+    createSamplePlatformConfigFile(platform_name, os.path.join(platform_root, "platforms.cfg"))
 
 def createSampleJailrootPackages(filename):
     contents = """\
@@ -83,6 +85,14 @@ def createSampleJailrootExtras(filename):
 squashfs-tools busybox-initramfs dosfstools
 syslinux module-init-tools mtools gpgv
 """
+    text2file(filename, contents)
+
+def createSamplePlatformConfigFile(platform_name, filename):
+    contents = """\
+[%s]
+description = Unittest Platform
+package_manager = apt
+target_os = ubuntu""" % platform_name
     text2file(filename, contents)
 
 def text2file(filename, text):

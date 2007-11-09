@@ -112,6 +112,7 @@ target.installFset(fset, 1)
 
 """
 
+import ConfigParser
 import os
 import re
 import shutil
@@ -126,6 +127,11 @@ import Project
 import mic_cfg
 import pdk_utils
 
+# This is here for the testing of the new package manager code
+USE_NEW_PKG = False
+if mic_cfg.config.has_option('general', 'use_new_pkg'):
+    USE_NEW_PKG = int(mic_cfg.config.get('general', 'use_new_pkg'))
+
 class SDK(object):
     def __init__(self, progress_callback = None, status_label_callback = None, path='/usr/share/pdk'):
         self.version = "0.1"
@@ -138,12 +144,28 @@ class SDK(object):
 
         # instantiate all platforms
         self.platforms = {}
-        for p in os.listdir(os.path.join(self.path, 'platforms')):
-            try:
-                self.platforms[p] = Platform.Platform(self.path, p)
-            except:
-                print >> sys.stderr, "Platform Config Error for %s: %s" % (p, sys.exc_value)
-                pass
+        dirname = os.path.join(self.path, 'platforms')
+        if USE_NEW_PKG:
+            platform_config_file = os.path.join(dirname, "platforms.cfg")
+            if not os.path.isfile(platform_config_file):
+                raise ValueError("Platforms config file not found: %s" % platform_config_file)
+            config = ConfigParser.SafeConfigParser()
+            config.read(platform_config_file)
+            for section in config.sections():
+                t_dirname = os.path.join(dirname, section)
+                if not os.path.dirname(t_dirname):
+                    raise ValueError("Platform config file: %s has a section: %s but no corresponding directory: %s" % (platform_config_file, section, t_dirname))
+                self.platforms[section] = Platform.Platform(t_dirname, section, config.items(section))
+        else:
+            for filename in os.listdir(dirname):
+                full_path = os.path.join(dirname, filename)
+                if not os.path.isdir(full_path):
+                    continue
+                try:
+                    self.platforms[filename] = Platform.Platform(full_path, filename)
+                except:
+                    print >> sys.stderr, "Platform Config Error for %s: %s" % (filename, sys.exc_value)
+                    pass
             
         # discover all existing projects
         self.projects = {}

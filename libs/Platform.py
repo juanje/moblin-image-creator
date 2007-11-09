@@ -33,10 +33,10 @@ class Platform(object):
       distribution)
     - a set of fsets that can be installed into a target
     """
-    def __init__(self, sdk_path, name):
-        self.sdk_path = os.path.realpath(os.path.abspath(os.path.expanduser(sdk_path)))
-        self.name = name
-        self.path = os.path.join(self.sdk_path, 'platforms', self.name)
+    def __init__(self, platform_path, platform_name, config_info = None):
+        self.name = platform_name
+        self.path = platform_path
+        self.config_info = config_info
         # instantiate all fsets
         self.fset = fsets.FSet()
         fset_path = os.path.join(self.path, 'fsets')
@@ -82,7 +82,7 @@ class Platform(object):
                 (self.name, self.fset, self.buildroot_packages))
 
     def __repr__(self):
-        return "Platform( %s, '%s')" % (self.sdk_path, self.name)
+        return "Platform( %s, '%s')" % (self.path, self.name)
 
 if __name__ == '__main__':
     for p in sys.argv[1:]:

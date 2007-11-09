@@ -26,10 +26,20 @@ import stat
 import sys
 import time
 
+import mic_cfg
 import moblin_pkg
 import pdk_utils
 import InstallImage
 import SDK
+
+debug = False
+if mic_cfg.config.has_option('general', 'debug'):
+    debug = int(mic_cfg.config.get('general', 'debug'))
+
+# This is here for the testing of the new package manager code
+USE_NEW_PKG = False
+if mic_cfg.config.has_option('general', 'use_new_pkg'):
+    USE_NEW_PKG = int(mic_cfg.config.get('general', 'use_new_pkg'))
 
 class FileSystem(object):
     """
@@ -73,8 +83,11 @@ class FileSystem(object):
         print "Completed 'apt-get upgrade' successfully"
 
     def updateAndUpgrade(self):
-        self.update()
-        self.upgrade()
+        if not USE_NEW_PKG:
+            self.update()
+            self.upgrade()
+        else:
+            self.pkg_manager.updateChroot(self.path)
         
     def install(self, path, packages):
         debian_frontend = os.environ.get("DEBIAN_FRONTEND")

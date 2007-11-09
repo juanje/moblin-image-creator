@@ -49,7 +49,7 @@ def createPdkSampleDir(root_dir):
     for dirname in ['projects', 'platforms']:
         full_path = os.path.join(root_dir, dirname)
         os.mkdir(full_path)
-    testPlatform.createSamplePlatformDir(os.path.join(root_dir, 'platforms', 'unittest'))
+    testPlatform.createSamplePlatformDir(os.path.join(root_dir, 'platforms'), 'unittest')
     
 if __name__ == '__main__':
     unittest.main()

@@ -34,8 +34,8 @@ class TestFileSystem(unittest.TestCase):
         self.filesystem_dir = os.path.join(self.workdir, "filesystem")
         self.project_dir = os.path.join(self.workdir, "project")
         self.platform_name = 'unittest-platform'
-        self.platform_dir = os.path.join(self.workdir, "platforms", self.platform_name)
-        testPlatform.createSamplePlatformDir(self.platform_dir)
+        self.platform_root = os.path.join(self.workdir, "platforms")
+        testPlatform.createSamplePlatformDir(self.platform_root, self.platform_name)
     def tearDown(self):
         if os.path.isdir(self.workdir):
             shutil.rmtree(self.workdir)
