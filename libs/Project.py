@@ -83,11 +83,11 @@ class FileSystem(object):
         print "Completed 'apt-get upgrade' successfully"
 
     def updateAndUpgrade(self):
-        if not USE_NEW_PKG:
+        if USE_NEW_PKG:
+            self.pkg_manager.updateChroot(self.path)
+        else:
             self.update()
             self.upgrade()
-        else:
-            self.pkg_manager.updateChroot(self.path)
         
     def install(self, path, packages):
         debian_frontend = os.environ.get("DEBIAN_FRONTEND")

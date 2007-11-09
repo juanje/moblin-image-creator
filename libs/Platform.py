@@ -41,7 +41,9 @@ class Platform(object):
         self.fset = fsets.FSet()
         fset_path = os.path.join(self.path, 'fsets')
         for filename in os.listdir(fset_path):
-            self.fset.addFile(os.path.join(fset_path, filename))
+            full_path = os.path.join(fset_path, filename)
+            if os.path.isfile(full_path):
+                self.fset.addFile(full_path)
         local_config = []
         for section in [ "platform.%s" % self.name, "platform" ]:
             if mic_cfg.config.has_section(section):
@@ -52,16 +54,12 @@ class Platform(object):
             raise ValueError
         # determine what packages additional packages need to be installed
         # in the buildroot roostrap
-        self.buildroot_extras = ""
         packages = mic_cfg.config.get(section, "buildroot_extras")
-        for p in packages.split():
-            self.buildroot_extras += p + ','
+        self.buildroot_extras = ','.join(packages.split())
         # determine what packages need to be installed in the buildroot
         # (outside the rootstrap archive)
-        self.buildroot_packages = []
         packages = mic_cfg.config.get(section, "buildroot_packages")
-        for p in packages.split():
-            self.buildroot_packages.append(p)
+        self.buildroot_packages = packages.split()
         # determine what mirror to use for the buildroot
         self.buildroot_mirror = mic_cfg.config.get(section, "buildroot_mirror")
         # determine what codename to use for the buildroot mirror

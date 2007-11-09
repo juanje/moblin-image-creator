@@ -29,21 +29,29 @@ class AptPackageManager(moblin_pkgbase.PackageManager):
     """Apt class for package management"""
 
     def __init__(self):
+        self.debian_frontend = os.environ.get("DEBIAN_FRONTEND")
+        if self.debian_frontend == None:
+            self.debian_frontend = ""
         raise NotImplementedError
 
     def installPackages(self, chroot_dir, package_list):
         """Install the list of packages in the chroot environement"""
-        __aptgetPreCheck()
+        __aptgetPreRun()
+
+
+        __aptgetPostRun()
         raise NotImplementedError
 
     def updateChroot(self, chroot_dir, output = None, callback = None):
-        __aptgetPreCheck()
+        __aptgetPreRun()
         cmd_line = "apt-get update"
         result = pdk_utils.execChrootCommand(chroot_dir, cmd_line, output = output, callback = callback)
         if result:
+            __aptgetPostRun()
             return result
         cmd_line = "apt-get upgrade -y --force-yes"
         result = pdk_utils.execChrootCommand(chroot_dir, cmd_line, output = output, callback = callback)
+        __aptgetPostRun()
         return result
 
     def __aptgetPreCheck(self):
@@ -53,3 +61,12 @@ class AptPackageManager(moblin_pkgbase.PackageManager):
             if not os.path.isdir(dirname):
                 print "The directory: %s is missing, will create it" % dirname
                 os.makedirs(dirname)
+
+    def __aptPreRun(self):
+        """Stuff to do before we do any apt-get actions"""
+        __aptgetPreCheck()
+        os.environ['DEBIAN_FRONTEND'] = 'noninteractive'
+
+    def __aptPostRun(self):
+        """Stuff to do after we do any apt-get actions"""
+        os.environ['DEBIAN_FRONTEND'] = self.debian_frontend
