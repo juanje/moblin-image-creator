@@ -44,7 +44,10 @@ moblin-image-creator (0.36) UNRELEASED; urgency=low
   * Some more template files for the Yum support work.
   * More work for yum support
 
- -- John L. Villalovos <john.l.villalovos@intel.com>  Thu, 08 Nov 2007 16:16:25 -0800
+  [ Bob Spencer ]
+  * Added more tools to developer-tools
+
+ -- Bob Spencer <bob.spencer@intel.com>  Thu,  8 Nov 2007 17:03:04 -0800
 
 moblin-image-creator (0.35) hardy; urgency=low
 
