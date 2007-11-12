@@ -43,6 +43,8 @@ class FSet(object):
     def __parseFile(self, filename):
         valid_values = { 'desc' : '', 'pkgs' : [], 'debug_pkgs' : [],
             'deps' : [] }
+        if not os.path.isfile(filename):
+            return False
         p = ConfigParser.ConfigParser()
         filenames = p.read(filename)
         for section in p.sections():
@@ -56,6 +58,7 @@ class FSet(object):
             for name, value in p.items(orig_section):
                 fset.add(name, value)
             self.__fsets[section] = fset
+        return True
 
     def __getitem__(self, key):
         return self.__fsets[key.lower()]

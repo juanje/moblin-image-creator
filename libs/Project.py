@@ -71,6 +71,7 @@ class FileSystem(object):
         if ret != 0:
             raise OSError("Internal error while attempting to run: %s" % command)
         print "Completed 'apt-get update' successfully"
+        return ret
         
     def upgrade(self):
         self.aptgetPreCheck()
@@ -81,68 +82,74 @@ class FileSystem(object):
         if ret != 0:
             raise OSError("Internal error while attempting to run: %s" % command)
         print "Completed 'apt-get upgrade' successfully"
+        return ret
 
     def updateAndUpgrade(self):
         if USE_NEW_PKG:
-            self.pkg_manager.updateChroot(self.path)
+            return self.platform.pkg_manager.updateChroot(self.path)
         else:
-            self.update()
-            self.upgrade()
+            result = self.update()
+            if result:
+                return result
+            return self.upgrade()
         
     def install(self, path, packages):
-        debian_frontend = os.environ.get("DEBIAN_FRONTEND")
-        if debian_frontend == None:
-            debian_frontend = ""
-        os.environ['DEBIAN_FRONTEND'] = 'noninteractive'
-        self.aptgetPreCheck()
-        if not packages:
-            # No packages, so nothing to do
-            return
-        retry_count = 0
-        while (retry_count < 10):
-            self.updateAndUpgrade()
-            # apt-get install
-            command = self.apt_cmd % {'t': path} + " install"
-            for p in packages:
-                command += ' %s' % p
-            print "Running 'apt-get install' command: %s" % command
-            ret = self.chroot(command) 
-            if ret == 0:
-                print "Completed 'apt-get install' successfully"
-                break
-            print
-            print "Error running 'apt-get install' command: %s" % command
-            print "Will try 'apt-get update' in 15 seconds"
-            time.sleep(15)
-            retry_count = retry_count + 1
-            # apt-get update
-            command = self.apt_cmd % {'t': path} + " update"
-            print "Running 'apt-get update' command: %s" % command
-            result = self.chroot(command)
-            if result != 0:
-                print
-                print "Error running 'apt-get update' command: %s" % command
-                print "Will try 'apt-get install' in 15 seconds"
-                time.sleep(15)
-            else:
-                print "Completed 'apt-get update' successfully"
-                print "Will try 'apt-get install -f' in 15 seconds"
-                time.sleep(15)
-            # apt-get install -f
-            command = self.apt_cmd % {'t': path} + " install -f"
-            ret = self.chroot(command) 
-            if result != 0:
-                print
-                print "Error running 'apt-get install -f' command: %s" % command
-                print "Will try 'apt-get install' in 15 seconds"
-                time.sleep(15)
-            else:
-                print "Completed 'apt-get install -f' successfully"
-                print "Will try 'apt-get install' in 15 seconds"
-                time.sleep(15)
+        if USE_NEW_PKG and False:
+            return self.platform.pkg_manager.install(self.path, packages)
         else:
-            raise OSError("Internal error while attempting to run: %s" % command)
-        os.environ['DEBIAN_FRONTEND'] = debian_frontend
+            debian_frontend = os.environ.get("DEBIAN_FRONTEND")
+            if debian_frontend == None:
+                debian_frontend = ""
+            os.environ['DEBIAN_FRONTEND'] = 'noninteractive'
+            self.aptgetPreCheck()
+            if not packages:
+                # No packages, so nothing to do
+                return
+            retry_count = 0
+            while (retry_count < 10):
+                self.updateAndUpgrade()
+                # apt-get install
+                command = self.apt_cmd % {'t': path} + " install"
+                for p in packages:
+                    command += ' %s' % p
+                print "Running 'apt-get install' command: %s" % command
+                ret = self.chroot(command) 
+                if ret == 0:
+                    print "Completed 'apt-get install' successfully"
+                    break
+                print
+                print "Error running 'apt-get install' command: %s" % command
+                print "Will try 'apt-get update' in 15 seconds"
+                time.sleep(15)
+                retry_count = retry_count + 1
+                # apt-get update
+                command = self.apt_cmd % {'t': path} + " update"
+                print "Running 'apt-get update' command: %s" % command
+                result = self.chroot(command)
+                if result != 0:
+                    print
+                    print "Error running 'apt-get update' command: %s" % command
+                    print "Will try 'apt-get install' in 15 seconds"
+                    time.sleep(15)
+                else:
+                    print "Completed 'apt-get update' successfully"
+                    print "Will try 'apt-get install -f' in 15 seconds"
+                    time.sleep(15)
+                # apt-get install -f
+                command = self.apt_cmd % {'t': path} + " install -f"
+                ret = self.chroot(command) 
+                if result != 0:
+                    print
+                    print "Error running 'apt-get install -f' command: %s" % command
+                    print "Will try 'apt-get install' in 15 seconds"
+                    time.sleep(15)
+                else:
+                    print "Completed 'apt-get install -f' successfully"
+                    print "Will try 'apt-get install' in 15 seconds"
+                    time.sleep(15)
+            else:
+                raise OSError("Internal error while attempting to run: %s" % command)
+            os.environ['DEBIAN_FRONTEND'] = debian_frontend
 
     def aptgetPreCheck(self):
         """Stuff that we want to check for before we run an apt-get command"""
@@ -497,6 +504,7 @@ class Target(FileSystem):
             raise ValueError("Empty argument passed in")
         self.project = project
         self.name = name
+        self.platform = project.platform
         self.top = os.path.join(project.path, "targets", name)
 
         # Load our target's filesystem directory
