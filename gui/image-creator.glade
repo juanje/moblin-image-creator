@@ -956,13 +956,13 @@
                                       </packing>
                                     </child>
                                     <child>
-                                      <widget class="GtkButton" id="DD_USB">
+                                      <widget class="GtkButton" id="Write_USB">
                                         <property name="visible">True</property>
                                         <property name="sensitive">False</property>
                                         <property name="can_focus">True</property>
                                         <property name="tooltip" translatable="yes">Write a USB image to the USB flash drive.  An image must first be created using one of the USB options to the left.</property>
                                         <property name="response_id">0</property>
-                                        <signal name="clicked" handler="on_DD_USB_clicked"/>
+                                        <signal name="clicked" handler="on_Write_USB_clicked"/>
                                         <child>
                                           <widget class="GtkVBox" id="vbox21">
                                             <property name="visible">True</property>
@@ -1633,9 +1633,6 @@
                 <property name="justify">GTK_JUSTIFY_CENTER</property>
                 <property name="wrap">True</property>
               </widget>
-              <packing>
-                <property name="padding">10</property>
-              </packing>
             </child>
           </widget>
           <packing>

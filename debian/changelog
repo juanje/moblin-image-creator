@@ -47,7 +47,11 @@ moblin-image-creator (0.36) UNRELEASED; urgency=low
   [ Bob Spencer ]
   * Added more tools to developer-tools
 
- -- Bob Spencer <bob.spencer@intel.com>  Thu,  8 Nov 2007 17:03:04 -0800
+  [ John L. Villalovos ]
+  * Cleaned up the writeUsbImage code and will now display an error message if
+    'dd' returns an error when writing to the USB flash drive.
+
+ -- John L. Villalovos <john.l.villalovos@intel.com>  Mon, 12 Nov 2007 14:32:35 -0800
 
 moblin-image-creator (0.35) hardy; urgency=low
 
