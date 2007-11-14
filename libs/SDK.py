@@ -254,6 +254,8 @@ class SDK(object):
                 pdk_utils.copySourcesListFile(source_path, dest_path)
                 # shutil.copy(os.path.join(platform.path, 'sources', f), os.path.join(install_path, 'etc', 'apt', 'sources.list.d'))
             if use_rootstrap:
+                if self.status_label_callback:
+                    self.status_label_callback("Tarring Rootstrap")
                 cmd = "tar -jcpvf %s -C %s ." % (rootstrap, install_path)
                 output = []
                 result = pdk_utils.execCommand(cmd, output = output, callback = self.progress_callback)
@@ -262,6 +264,8 @@ class SDK(object):
                     shutil.rmtree(install_path)
                     raise ValueError(" ".join(output))
         else:
+            if self.status_label_callback:
+                self.status_label_callback("Extracting Rootstrap")
             cmd = "tar -jxvf %s -C %s" % (rootstrap, install_path)
             output = []
             result = pdk_utils.execCommand(cmd, output = output, callback = self.progress_callback)
