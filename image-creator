@@ -60,14 +60,20 @@ def main():
         sys.exit(1)
 
     if len(sys.argv) == 1:
-        try:
-            gui.App().run()
-            return 0
-        except:
-            traceback.print_exc()
-            print "Error: Unable to run the GUI, maybe you are in a text console"
-            print "Do -h for help"
-            return 1
+        if os.getenv("DISPLAY"):
+            try:
+                gui.App().run()
+                return 0
+            except:
+                traceback.print_exc()
+                print "Error: Unable to run the GUI, maybe you are in a text console"
+                print "Do -h for help"
+                return 1
+        else:
+            print
+            print "Error: Your DISPLAY environment variable is NOT set"
+            print "The Moblin Image Creator GUI can NOT run"
+            sys.exit(1)
 
     options, args = parseCommandLine()
     if options.cmd == "list-platforms":
