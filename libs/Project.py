@@ -52,7 +52,7 @@ class FileSystem(object):
     By just instantiating a FileSystem object, the caller will trigger the
     basic root filesystem components to be initialized, but to do anything
     usefull with the root filesystem will require the caller to use the
-    'install' method for installing new RPM packages.
+    'installPackages' method for installing new RPM packages.
     """
     def __init__(self, path, progress_callback = None):
         if not path:
@@ -535,20 +535,14 @@ class Target(FileSystem):
         result.sort()
         return result
 
-
-    def __list_contains(self, needles, haystack):
-        for n in needles:
-            if n in haystack:
+    def __any_fset_installed(self, fset_list):
+        """See if we have already installed the fset"""
+        for fset_name in fset_list:
+            if os.path.isfile(os.path.join(self.top, fset_name)):
                 return True
         return False
 
-    def __any_fset_installed(self, needles):
-        for n in needles:
-            if os.path.isfile(os.path.join(self.top, n)):
-                return True
-        return False
-
-    def installFset(self, fset, debug=0, fsets = None, seen_fsets = None):
+    def installFset(self, fset, debug_pkgs = 0, fsets = None, seen_fsets = None):
         """
         Install a fset into the target filesystem.  If the fsets variable is
         supplied with a list of fsets then we will try to recursively install
@@ -568,28 +562,39 @@ class Target(FileSystem):
 
         package_set = set()
         for dep in fset['deps']:
-            if self.__list_contains(dep.split('|'), seen_fsets):
+            # An fset "DEP" value can contain a dependency list of the form:
+            #   DEP=A B|C
+            # Which means the fset depends on fset A and either fset B or C.
+            # If B or C are not installed then it will attempt to install the
+            # first one (fset B).
+            dep_list = dep.split('|')
+            if seen_fsets.intersection(dep_list):
+                # If any of the fsets we have already seen satisfy the
+                # dependency, then continue
                 continue
-            if not self.__any_fset_installed(dep.split('|')):
+            if not self.__any_fset_installed(dep_list):
                 if fsets:
-                    package_set.update(self.installFset(fsets[dep.split('|')[0]], fsets = fsets, debug = debug, seen_fsets = seen_fsets))
+                    # Determine which fsets are needed to install the required fset
+                    package_set.update(self.installFset(fsets[dep_list[0]],
+                        fsets = fsets, debug_pkgs = debug_pkgs, seen_fsets = seen_fsets))
                 else:
-                    raise ValueError("fset %s must be installed first!" % (dep.split('|')[0]))
+                    raise ValueError("fset %s must be installed first!" % (dep_list[0]))
 
         package_set.update(fset['pkgs'])
-        if debug == 1:
+        if debug_pkgs == 1:
             package_set.update(fset['debug_pkgs'])
         if not root_fset:
             return package_set
-        req_fsets = seen_fsets - set( [fset.name] )
-        if req_fsets:
-            print "Installing required Function Set: %s" % ' '.join(req_fsets)
-        self.installPackages(package_set)
-        # and now create a simple empty file that indicates that the fsets has
-        # been installed.
-        for fset_name in seen_fsets:
-            fset_file = open(os.path.join(self.top, fset_name), 'w')
-            fset_file.close()
+        else:
+            req_fsets = seen_fsets - set( [fset.name] )
+            if req_fsets:
+                print "Installing required Function Set: %s" % ' '.join(req_fsets)
+            self.installPackages(package_set)
+            # and now create a simple empty file that indicates that the fsets has
+            # been installed.
+            for fset_name in seen_fsets:
+                fset_file = open(os.path.join(self.top, fset_name), 'w')
+                fset_file.close()
 
     def __str__(self):
         return ("<Target: name=%s, path=%s, fs_path=%s, image_path=%s, config_path=%s>"

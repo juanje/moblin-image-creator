@@ -30,9 +30,6 @@ class AptPackageManager(moblin_pkgbase.PackageManager):
     """Apt class for package management"""
 
     def __init__(self):
-        self.debian_frontend = os.environ.get("DEBIAN_FRONTEND")
-        if self.debian_frontend == None:
-            self.debian_frontend = ""
         self.apt_cmd = "apt-get -y --force-yes "
 
     def createChroot(self, chroot_dir):
@@ -97,8 +94,8 @@ class AptPackageManager(moblin_pkgbase.PackageManager):
             command = "%s install %s" % (self.apt_cmd, packages)
             print "Running 'apt-get install' command: %s" % (command)
             print "\t in the chroot: %s" % (chroot_dir)
-            ret = pdk_utils.execChrootCommand(chroot_dir, command, callback = callback)
-            if ret == 0:
+            result = pdk_utils.execChrootCommand(chroot_dir, command, callback = callback)
+            if result == 0:
                 print "Completed 'apt-get install' successfully"
                 break
             print
@@ -109,7 +106,7 @@ class AptPackageManager(moblin_pkgbase.PackageManager):
             # apt-get update
             command = "apt-get update"
             print "Running 'apt-get update' command: %s" % command
-            ret = pdk_utils.execChrootCommand(chroot_dir, command, callback = callback)
+            result = pdk_utils.execChrootCommand(chroot_dir, command, callback = callback)
             if result != 0:
                 print
                 print "Error running 'apt-get update' command: %s" % command
@@ -121,7 +118,7 @@ class AptPackageManager(moblin_pkgbase.PackageManager):
                 time.sleep(15)
             # apt-get install -f
             command = "apt-get install -f"
-            ret = pdk_utils.execChrootCommand(chroot_dir, command, callback = callback)
+            result = pdk_utils.execChrootCommand(chroot_dir, command, callback = callback)
             if result != 0:
                 print
                 print "Error running 'apt-get install -f' command: %s" % command
@@ -141,7 +138,7 @@ class AptPackageManager(moblin_pkgbase.PackageManager):
         cmd_line = "apt-get update"
         result = pdk_utils.execChrootCommand(chroot_dir, cmd_line, output = output, callback = callback)
         if result:
-            __aptgetPostRun()
+            self.__aptgetPostRun()
             return result
         cmd_line = "apt-get upgrade -y --force-yes"
         result = pdk_utils.execChrootCommand(chroot_dir, cmd_line, output = output, callback = callback)
@@ -159,8 +156,12 @@ class AptPackageManager(moblin_pkgbase.PackageManager):
     def __aptgetPreRun(self):
         """Stuff to do before we do any apt-get actions"""
         self.__aptgetPreCheck()
-        os.environ['DEBIAN_FRONTEND'] = 'Noninteractive'
+        self.debian_frontend = os.environ.get("DEBIAN_FRONTEND")
+        os.environ['DEBIAN_FRONTEND'] = 'noninteractive'
 
     def __aptgetPostRun(self):
         """Stuff to do after we do any apt-get actions"""
-        os.environ['DEBIAN_FRONTEND'] = self.debian_frontend
+        if self.debian_frontend == None:
+            del os.environ['DEBIAN_FRONTEND']
+        else:
+            os.environ['DEBIAN_FRONTEND'] = self.debian_frontend

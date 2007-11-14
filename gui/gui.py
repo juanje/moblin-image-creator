@@ -336,7 +336,7 @@ class App(object):
         checkbox.set_sensitive(True)
         if dialog.run() == gtk.RESPONSE_OK:
             fset = platform.fset[cebox.get_active_text()]
-            debug = checkbox.get_active()
+            debug_pkgs = checkbox.get_active()
             dialog.destroy()
             progress_tree = gtk.glade.XML(self.gladefile, 'ProgressDialog')
             progress_dialog = progress_tree.get_widget('ProgressDialog')
@@ -344,7 +344,7 @@ class App(object):
             self.progressbar = progress_tree.get_widget('progressbar')
             progress_tree.get_widget('progress_label').set_text("Please wait while installing %s" % fset.name)
             try:
-                self.current_target().installFset(fset, fsets = platform.fset, debug = debug)
+                self.current_target().installFset(fset, fsets = platform.fset, debug_pkgs = debug_pkgs)
                 self.redraw_target_view()
             except ValueError, e:
                 self.show_error_dialog(e.args[0])

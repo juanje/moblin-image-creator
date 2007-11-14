@@ -108,7 +108,7 @@ Input => fset object
 target.installFset(fset)
 
 # or you could install debug packages in addition to the normal packages
-target.installFset(fset, 1)
+target.installFset(fset, debug_pkgs = 1)
 
 """
 
