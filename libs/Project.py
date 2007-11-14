@@ -59,7 +59,7 @@ class FileSystem(object):
             raise ValueError("Empty argument passed in")
         self.progress_callback = progress_callback
         self.path = os.path.realpath(os.path.abspath(os.path.expanduser(path)))
-        self.apt_cmd = '/usr/bin/apt-get -y --force-yes -o Dir::State=%(t)s/var/lib/apt -o Dir::State::status=%(t)s/var/lib/dpkg/status -o Dir::Cache=/var/cache/apt -o Dir::Etc=%(t)s/etc/apt/ -o DPkg::Options::=--root=%(t)s -o DPkg::Run-Directory=%(t)s'
+        self.apt_cmd = '/usr/bin/apt-get -y --force-yes'
         self.mounted = []
 
     def update(self):
@@ -111,7 +111,7 @@ class FileSystem(object):
             while (retry_count < 10):
                 self.updateAndUpgrade()
                 # apt-get install
-                command = "apt-get install %s" % packages
+                command = "%s install %s" % (self.apt_cmd, packages)
                 print "Running 'apt-get install' command: %s" % command
                 ret = self.chroot(command) 
                 if ret == 0:
