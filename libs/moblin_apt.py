@@ -31,6 +31,7 @@ class AptPackageManager(moblin_pkgbase.PackageManager):
 
     def __init__(self):
         self.apt_cmd = "apt-get -y --force-yes "
+        self.debian_frontend = []
 
     def createChroot(self, chroot_dir):
         # FIXME: Not yet working :(
@@ -156,12 +157,16 @@ class AptPackageManager(moblin_pkgbase.PackageManager):
     def __aptgetPreRun(self):
         """Stuff to do before we do any apt-get actions"""
         self.__aptgetPreCheck()
-        self.debian_frontend = os.environ.get("DEBIAN_FRONTEND")
+        self.debian_frontend.append(os.environ.get("DEBIAN_FRONTEND"))
         os.environ['DEBIAN_FRONTEND'] = 'noninteractive'
 
     def __aptgetPostRun(self):
         """Stuff to do after we do any apt-get actions"""
-        if self.debian_frontend == None:
-            del os.environ['DEBIAN_FRONTEND']
+        if self.debian_frontend:
+            debian_frontend = self.debian_frontend.pop()
+            if debian_frontend == None:
+                del os.environ['DEBIAN_FRONTEND']
+            else:
+                os.environ['DEBIAN_FRONTEND'] = debian_frontend
         else:
-            os.environ['DEBIAN_FRONTEND'] = self.debian_frontend
+            print "moblin_apt.__aptgetPostRun() called without corresponding aptgetPreRun()"
