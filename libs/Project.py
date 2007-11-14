@@ -102,7 +102,7 @@ class FileSystem(object):
                 debian_frontend = ""
             os.environ['DEBIAN_FRONTEND'] = 'noninteractive'
             self.aptgetPreCheck()
-            if not packages:
+            if not packages_list:
                 # No packages, so nothing to do
                 return
             retry_count = 0
