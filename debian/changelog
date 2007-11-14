@@ -50,8 +50,9 @@ moblin-image-creator (0.36) UNRELEASED; urgency=low
   [ John L. Villalovos ]
   * Cleaned up the writeUsbImage code and will now display an error message if
     'dd' returns an error when writing to the USB flash drive.
+  * More work on the yum support
 
- -- John L. Villalovos <john.l.villalovos@intel.com>  Mon, 12 Nov 2007 14:32:35 -0800
+ -- John L. Villalovos <john.l.villalovos@intel.com>  Tue, 13 Nov 2007 16:06:39 -0800
 
 moblin-image-creator (0.35) hardy; urgency=low
 

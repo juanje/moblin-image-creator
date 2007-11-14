@@ -232,7 +232,8 @@ class App(object):
                 self.progressbar = progress_tree.get_widget('progressbar')
                 self.statuslabel = progress_tree.get_widget('status_label')
                 
-                proj = self.sdk.create_project(dialog.path, dialog.name, dialog.desc, self.sdk.platforms[dialog.platform]).install()
+                proj = self.sdk.create_project(dialog.path, dialog.name, dialog.desc, self.sdk.platforms[dialog.platform])
+                proj.install()
                 self.projectList.append((dialog.name, dialog.desc, dialog.path, dialog.platform))
             except:
                 traceback.print_exc()

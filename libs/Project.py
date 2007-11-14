@@ -86,16 +86,18 @@ class FileSystem(object):
 
     def updateAndUpgrade(self):
         if USE_NEW_PKG:
-            return self.platform.pkg_manager.updateChroot(self.path)
+            return self.platform.pkg_manager.updateChroot(self.chroot_path,
+                callback = self.progress_callback)
         else:
             result = self.update()
             if result:
                 return result
             return self.upgrade()
         
-    def install(self, path, packages):
-        if USE_NEW_PKG and False:
-            return self.platform.pkg_manager.install(self.path, packages)
+    def installPackages(self, packages):
+        if USE_NEW_PKG:
+            return self.platform.pkg_manager.installPackages(self.chroot_path,
+                packages, callback = self.progress_callback)
         else:
             debian_frontend = os.environ.get("DEBIAN_FRONTEND")
             if debian_frontend == None:
@@ -109,7 +111,7 @@ class FileSystem(object):
             while (retry_count < 10):
                 self.updateAndUpgrade()
                 # apt-get install
-                command = self.apt_cmd % {'t': path} + " install"
+                command = self.apt_cmd % {'t': self.chroot_path} + " install"
                 for p in packages:
                     command += ' %s' % p
                 print "Running 'apt-get install' command: %s" % command
@@ -123,7 +125,7 @@ class FileSystem(object):
                 time.sleep(15)
                 retry_count = retry_count + 1
                 # apt-get update
-                command = self.apt_cmd % {'t': path} + " update"
+                command = self.apt_cmd % {'t': self.chroot_path} + " update"
                 print "Running 'apt-get update' command: %s" % command
                 result = self.chroot(command)
                 if result != 0:
@@ -136,7 +138,7 @@ class FileSystem(object):
                     print "Will try 'apt-get install -f' in 15 seconds"
                     time.sleep(15)
                 # apt-get install -f
-                command = self.apt_cmd % {'t': path} + " install -f"
+                command = self.apt_cmd % {'t': self.chroot_path} + " install -f"
                 ret = self.chroot(command) 
                 if result != 0:
                     print
@@ -294,6 +296,7 @@ class Project(FileSystem):
         if not path or not name or not desc or not platform:
             raise ValueError("Empty argument passed in")
         self.path = os.path.realpath(os.path.abspath(os.path.expanduser(path)))
+        self.chroot_path = self.path
         self.name = name
         self.platform = platform
         self.desc = desc
@@ -315,7 +318,7 @@ class Project(FileSystem):
         """
         Install all the packages defined by Platform.buildroot_packages
         """
-        FileSystem.install(self, "/", self.platform.buildroot_packages)
+        return super(Project, self).installPackages(self.platform.buildroot_packages)
 
     def umount(self):
         """We want to umount all of our targets and then anything in our project that we have mounted"""
@@ -509,6 +512,7 @@ class Target(FileSystem):
 
         # Load our target's filesystem directory
         self.fs_path = os.path.join(self.top, "fs")
+        self.chroot_path = self.fs_path
 
         # Load/create our target's image directory
         self.image_path = os.path.join(self.top, "image")
@@ -580,16 +584,13 @@ class Target(FileSystem):
         req_fsets = seen_fsets - set( [fset.name] )
         if req_fsets:
             print "Installing required Function Set: %s" % ' '.join(req_fsets)
-        self.install("/targets/%s/fs" % (self.name), package_set)
+        self.installPackages(package_set)
         # and now create a simple empty file that indicates that the fsets has
         # been installed.
         for fset_name in seen_fsets:
             fset_file = open(os.path.join(self.top, fset_name), 'w')
             fset_file.close()
 
-    def install(self, path, packages):
-        FileSystem.install(self.project, "/targets/%s/fs" % (self.name), packages)
-            
     def __str__(self):
         return ("<Target: name=%s, path=%s, fs_path=%s, image_path=%s, config_path=%s>"
                 % (self.name, self.path, self.fs_path, self.image_path, self.config_path))

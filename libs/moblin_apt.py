@@ -21,6 +21,7 @@
 # or yum or whatever package management system you want to use.
 
 import os
+import time
 
 import moblin_pkgbase
 import pdk_utils
@@ -32,18 +33,111 @@ class AptPackageManager(moblin_pkgbase.PackageManager):
         self.debian_frontend = os.environ.get("DEBIAN_FRONTEND")
         if self.debian_frontend == None:
             self.debian_frontend = ""
+        self.apt_cmd = "apt-get -y --force-yes "
 
-    def installPackages(self, chroot_dir, package_list):
+    def createChroot(self, chroot_dir):
+        # FIXME: Not yet working :(
+        raise NotImplementedError
+        if not os.path.isfile(rootstrap) or not use_rootstrap:
+            # create platform rootstrap file
+            count = 0
+            cmd = "debootstrap --arch %s --variant=buildd --include=%s %s %s %s" % (platform.architecture, platform.buildroot_extras, platform.buildroot_codename, install_path, platform.buildroot_mirror)
+            output = []
+            # XXX Evil hack
+            if not os.path.isfile("/usr/lib/debootstrap/scripts/%s" % platform.target_codename):
+                cmd += " /usr/share/pdk/debootstrap-scripts/%s" % platform.target_codename
+            # Sometimes we see network issues that trigger debootstrap
+            # to claim the apt repository is corrupt.  This trick will
+            # force up to 10 attempts before bailing out with an error
+            while count < 10:
+                count += 1
+                print "--------Platform rootstrap creation try: %s ----------" % count
+                print "Executing: %s" % cmd
+                result = pdk_utils.execCommand(cmd, output = output, callback = self.progress_callback)
+                if result == 0:
+                    print "--------Platform rootstrap creation completed successfully ----------"
+                    break;
+                print "--------Platform rootstrap creation failed result: %s ----------" % result
+                sleeptime = 10
+                print "--------For try: %s.  Sleeping for %s seconds... -----------------" % (count, sleeptime)
+                time.sleep(sleeptime)
+            if result != 0:
+                print >> sys.stderr, "ERROR: Unable to generate project rootstrap!"
+                shutil.rmtree(install_path)
+                raise ValueError(" ".join(output))
+            # FIXME: Want to do an 'apt-get clean' here
+            os.system('rm -fR %s/var/cache/apt/archives/*.deb' % (install_path))
+            source_dir = os.path.join(platform.path, 'sources')
+            for f in os.listdir(source_dir):
+                source_path = os.path.join(source_dir, f)
+                dest_path = os.path.join(install_path, 'etc', 'apt', 'sources.list.d', f)
+                pdk_utils.copySourcesListFile(source_path, dest_path)
+                # shutil.copy(os.path.join(platform.path, 'sources', f), os.path.join(install_path, 'etc', 'apt', 'sources.list.d'))
+            if use_rootstrap:
+                cmd = "tar -jcpvf %s -C %s ." % (rootstrap, install_path)
+                output = []
+                result = pdk_utils.execCommand(cmd, output = output, callback = self.progress_callback)
+                if result != 0:
+                    print >> sys.stderr, "ERROR: Unable to archive rootstrap!"
+                    shutil.rmtree(install_path)
+                    raise ValueError(" ".join(output))
+
+    def installPackages(self, chroot_dir, package_list, callback = None):
         """Install the list of packages in the chroot environement"""
         self.__aptgetPreRun()
-
-
+        if not package_list:
+            # No packages, so nothing to do
+            return
+        retry_count = 0
+        # Convert our list of packages to a space separated string
+        packages = ' '.join(package_list)
+        while (retry_count < 10):
+            self.updateChroot(chroot_dir, callback = callback)
+            # apt-get install
+            command = "%s install %s" % (self.apt_cmd, packages)
+            print "Running 'apt-get install' command: %s" % (command)
+            print "\t in the chroot: %s" % (chroot_dir)
+            ret = pdk_utils.execChrootCommand(chroot_dir, command, callback = callback)
+            if ret == 0:
+                print "Completed 'apt-get install' successfully"
+                break
+            print
+            print "Error running 'apt-get install' command: %s" % command
+            print "Will try 'apt-get update' in 15 seconds"
+            time.sleep(15)
+            retry_count += 1
+            # apt-get update
+            command = "apt-get update"
+            print "Running 'apt-get update' command: %s" % command
+            ret = pdk_utils.execChrootCommand(chroot_dir, command, callback = callback)
+            if result != 0:
+                print
+                print "Error running 'apt-get update' command: %s" % command
+                print "Will try 'apt-get install -f' in 15 seconds"
+                time.sleep(15)
+            else:
+                print "Completed 'apt-get update' successfully"
+                print "Will try 'apt-get install -f' in 15 seconds"
+                time.sleep(15)
+            # apt-get install -f
+            command = "apt-get install -f"
+            ret = pdk_utils.execChrootCommand(chroot_dir, command, callback = callback)
+            if result != 0:
+                print
+                print "Error running 'apt-get install -f' command: %s" % command
+                print "Will try 'apt-get install' in 15 seconds"
+                time.sleep(15)
+            else:
+                print "Completed 'apt-get install -f' successfully"
+                print "Will try 'apt-get install' in 15 seconds"
+                time.sleep(15)
+        else:
+            raise OSError("Internal error while attempting to run: %s" % command)
         self.__aptgetPostRun()
-        raise NotImplementedError
 
     def updateChroot(self, chroot_dir, output = None, callback = None):
         self.__aptgetPreRun()
-        print "Using moblin_apt library for updateChroot()"
+        print "Updating the chroot dir: %s" % chroot_dir
         cmd_line = "apt-get update"
         result = pdk_utils.execChrootCommand(chroot_dir, cmd_line, output = output, callback = callback)
         if result:
@@ -65,7 +159,7 @@ class AptPackageManager(moblin_pkgbase.PackageManager):
     def __aptgetPreRun(self):
         """Stuff to do before we do any apt-get actions"""
         self.__aptgetPreCheck()
-        os.environ['DEBIAN_FRONTEND'] = 'noninteractive'
+        os.environ['DEBIAN_FRONTEND'] = 'Noninteractive'
 
     def __aptgetPostRun(self):
         """Stuff to do after we do any apt-get actions"""

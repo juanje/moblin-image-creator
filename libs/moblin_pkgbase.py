@@ -27,6 +27,9 @@ class PackageManager(object):
     def __init__(self):
         raise NotImplementedError
 
+    def createChroot(self, chroot_dir):
+        """Create an initial chroot environment"""
+        raise NotImplementedError
 
     def installPackages(self, chroot_dir, package_list):
         """Install the list of packages in the chroot environment"""
