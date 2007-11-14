@@ -64,7 +64,6 @@ class FileSystem(object):
 
     def update(self):
         self.aptgetPreCheck()
-        command = self.apt_cmd % {'t': self.path} + " update"
         command = "apt-get update"
         print "Running 'apt-get update' command: '%s' in chroot: %s " % (command, self.path)
         ret = self.chroot(command) 
@@ -75,7 +74,6 @@ class FileSystem(object):
         
     def upgrade(self):
         self.aptgetPreCheck()
-        command = self.apt_cmd % {'t': self.path} + " upgrade"
         command = "apt-get upgrade -y --force-yes"
         print "Running 'apt-get upgrade' command: %s in chroot: %s" % (command, self.path)
         ret = self.chroot(command) 
@@ -94,7 +92,7 @@ class FileSystem(object):
                 return result
             return self.upgrade()
         
-    def installPackages(self, packages):
+    def installPackages(self, packages_list):
         if USE_NEW_PKG:
             return self.platform.pkg_manager.installPackages(self.chroot_path,
                 packages, callback = self.progress_callback)
@@ -108,12 +106,12 @@ class FileSystem(object):
                 # No packages, so nothing to do
                 return
             retry_count = 0
+            # Convert our list of packages to a space separated string
+            packages = ' '.join(packages_list)
             while (retry_count < 10):
                 self.updateAndUpgrade()
                 # apt-get install
-                command = self.apt_cmd % {'t': self.chroot_path} + " install"
-                for p in packages:
-                    command += ' %s' % p
+                command = "apt-get install %s" % packages
                 print "Running 'apt-get install' command: %s" % command
                 ret = self.chroot(command) 
                 if ret == 0:
@@ -125,7 +123,7 @@ class FileSystem(object):
                 time.sleep(15)
                 retry_count = retry_count + 1
                 # apt-get update
-                command = self.apt_cmd % {'t': self.chroot_path} + " update"
+                command = "apt-get update"
                 print "Running 'apt-get update' command: %s" % command
                 result = self.chroot(command)
                 if result != 0:
@@ -138,17 +136,15 @@ class FileSystem(object):
                     print "Will try 'apt-get install -f' in 15 seconds"
                     time.sleep(15)
                 # apt-get install -f
-                command = self.apt_cmd % {'t': self.chroot_path} + " install -f"
-                ret = self.chroot(command) 
+                command = "apt-get install -f"
+                result = self.chroot(command)
                 if result != 0:
                     print
                     print "Error running 'apt-get install -f' command: %s" % command
-                    print "Will try 'apt-get install' in 15 seconds"
-                    time.sleep(15)
                 else:
                     print "Completed 'apt-get install -f' successfully"
-                    print "Will try 'apt-get install' in 15 seconds"
-                    time.sleep(15)
+                print "Will try 'apt-get install' in 15 seconds"
+                time.sleep(15)
             else:
                 raise OSError("Internal error while attempting to run: %s" % command)
             os.environ['DEBIAN_FRONTEND'] = debian_frontend
@@ -265,7 +261,7 @@ class FileSystem(object):
         self.disable_init_scripts()
         if output == None:
             output = []
-        cmd_line = "chroot %s %s" % (self.path, cmd)
+        cmd_line = "chroot %s %s" % (self.chroot_path, cmd)
         result = pdk_utils.execCommand(cmd_line, output = output, callback = self.progress_callback)
         if result != 0:
             print "Error in chroot.  Result: %s" % result
