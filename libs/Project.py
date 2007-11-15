@@ -71,6 +71,22 @@ class FileSystem(object):
         return self.platform.pkg_manager.installPackages(self.chroot_path,
             packages_list, callback = self.progress_callback)
 
+    def chroot(self, cmd, output = None):
+        if not os.path.isfile(os.path.join(self.chroot_path, 'bin/bash')):
+            print >> sys.stderr, "Incomplete jailroot at %s" % (self.chroot_path)
+            raise ValueError("Internal Error: Invalid buildroot at %s" % (self.chroot_path))
+        self.mount()
+        self.disable_init_scripts()
+        if output == None:
+            output = []
+        result = pdk_utils.execChrootCommand(self.chroot_path, cmd, output = output, callback = self.progress_callback)
+        if result != 0:
+            print "Error in chroot command exec.  Result: %s" % result
+            print "Command was: %s" % cmd
+            print "chroot was: %s" % chroot_path
+            sys.stdout.flush()
+        return result
+
     mount_list = [
         # mnt_type, host_dirname, target_dirname, fs_type, device
         ('bind', '/tmp', False, None, None),

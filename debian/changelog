@@ -4,8 +4,9 @@ moblin-image-creator (0.37) UNRELEASED; urgency=low
     package manager code
   * More work on yum support
   * Have our real version number show up in the GUI
+  * The libs/Project.py chroot() function is needed, restoring it.
 
- -- John L. Villalovos <john.l.villalovos@intel.com>  Wed, 14 Nov 2007 19:35:46 -0800
+ -- John L. Villalovos <john.l.villalovos@intel.com>  Thu, 15 Nov 2007 10:59:46 -0800
 
 moblin-image-creator (0.36) gaston; urgency=low
 
