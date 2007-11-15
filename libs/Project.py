@@ -76,7 +76,6 @@ class FileSystem(object):
             print >> sys.stderr, "Incomplete jailroot at %s" % (self.chroot_path)
             raise ValueError("Internal Error: Invalid buildroot at %s" % (self.chroot_path))
         self.mount()
-        self.disable_init_scripts()
         if output == None:
             output = []
         result = pdk_utils.execChrootCommand(self.chroot_path, cmd, output = output, callback = self.progress_callback)
