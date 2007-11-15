@@ -33,6 +33,12 @@ CONFIG_DIR = os.path.expanduser("~/.image-creator")
 BASE_SECTIONS = [ "platform" ]
 VALID_SECTIONS = BASE_SECTIONS + [ "installimage", "general" ]
 
+# Default values
+DEFAULTS = [
+    ('general', 'var_dir', '/var/lib/moblin-image-creator'),
+    ]
+
+
 def main():
     # We will print out the configuration as a debugging aid
     readConfig()
@@ -64,6 +70,7 @@ def readConfig():
 
     global config
     config = SafeConfigParser()
+    addDefaults()
     for filename in sorted(os.listdir(DEFAULT_CONFIG_DIR)):
         full_name = os.path.join(DEFAULT_CONFIG_DIR, filename)
         config.read(full_name)
@@ -131,6 +138,12 @@ def addUserInfo():
     config.set('userinfo', 'user', username)
     config.set('userinfo', 'userid', "%s" % userid)
     config.set('userinfo', 'sudo', "%s" % sudo)
+
+def addDefaults():
+    for section, option, value in DEFAULTS:
+        if not config.has_section(section):
+            config.add_section(section)
+        config.set(section, option, value)
 
 if '__main__' == __name__:
     sys.exit(main())

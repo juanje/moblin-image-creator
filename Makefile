@@ -1,4 +1,5 @@
 SHAREDIR = /usr/share/pdk/
+VARDIR = /var/lib/moblin-image-creator
 
 VERSION = 0.1
 all:
@@ -17,6 +18,7 @@ basicinstall: all
 	@echo "Installing platform definitions..."
 	@${MAKE} -C platforms install
 	@echo -n "Installing moblin-image-creator..."
+	@mkdir -p ${DESTDIR}/${VARDIR}
 	@mkdir -p ${DESTDIR}/${SHAREDIR}/default_config
 	@mkdir -p ${DESTDIR}/${SHAREDIR}/lib
 	@mkdir -p ${DESTDIR}/${SHAREDIR}/locale
