@@ -62,92 +62,13 @@ class FileSystem(object):
         self.apt_cmd = '/usr/bin/apt-get -y --force-yes'
         self.mounted = []
 
-    def update(self):
-        self.aptgetPreCheck()
-        command = "apt-get update"
-        print "Running 'apt-get update' command: '%s' in chroot: %s " % (command, self.path)
-        ret = self.chroot(command) 
-        if ret != 0:
-            raise OSError("Internal error while attempting to run: %s" % command)
-        print "Completed 'apt-get update' successfully"
-        return ret
-        
-    def upgrade(self):
-        self.aptgetPreCheck()
-        command = "apt-get upgrade -y --force-yes"
-        print "Running 'apt-get upgrade' command: %s in chroot: %s" % (command, self.path)
-        ret = self.chroot(command) 
-        if ret != 0:
-            raise OSError("Internal error while attempting to run: %s" % command)
-        print "Completed 'apt-get upgrade' successfully"
-        return ret
-
     def updateAndUpgrade(self):
-        if USE_NEW_PKG:
-            return self.platform.pkg_manager.updateChroot(self.chroot_path,
-                callback = self.progress_callback)
-        else:
-            result = self.update()
-            if result:
-                return result
-            return self.upgrade()
+        return self.platform.pkg_manager.updateChroot(self.chroot_path,
+            callback = self.progress_callback)
         
     def installPackages(self, packages_list):
-        if USE_NEW_PKG:
-            return self.platform.pkg_manager.installPackages(self.chroot_path,
-                packages, callback = self.progress_callback)
-        else:
-            debian_frontend = os.environ.get("DEBIAN_FRONTEND")
-            if debian_frontend == None:
-                debian_frontend = ""
-            os.environ['DEBIAN_FRONTEND'] = 'noninteractive'
-            self.aptgetPreCheck()
-            if not packages_list:
-                # No packages, so nothing to do
-                return
-            retry_count = 0
-            # Convert our list of packages to a space separated string
-            packages = ' '.join(packages_list)
-            while (retry_count < 10):
-                self.updateAndUpgrade()
-                # apt-get install
-                command = "%s install %s" % (self.apt_cmd, packages)
-                print "Running 'apt-get install' command: %s" % command
-                ret = self.chroot(command) 
-                if ret == 0:
-                    print "Completed 'apt-get install' successfully"
-                    break
-                print
-                print "Error running 'apt-get install' command: %s" % command
-                print "Will try 'apt-get update' in 15 seconds"
-                time.sleep(15)
-                retry_count = retry_count + 1
-                # apt-get update
-                command = "apt-get update"
-                print "Running 'apt-get update' command: %s" % command
-                result = self.chroot(command)
-                if result != 0:
-                    print
-                    print "Error running 'apt-get update' command: %s" % command
-                    print "Will try 'apt-get install' in 15 seconds"
-                    time.sleep(15)
-                else:
-                    print "Completed 'apt-get update' successfully"
-                    print "Will try 'apt-get install -f' in 15 seconds"
-                    time.sleep(15)
-                # apt-get install -f
-                command = "apt-get install -f"
-                result = self.chroot(command)
-                if result != 0:
-                    print
-                    print "Error running 'apt-get install -f' command: %s" % command
-                else:
-                    print "Completed 'apt-get install -f' successfully"
-                print "Will try 'apt-get install' in 15 seconds"
-                time.sleep(15)
-            else:
-                raise OSError("Internal error while attempting to run: %s" % command)
-            os.environ['DEBIAN_FRONTEND'] = debian_frontend
+        return self.platform.pkg_manager.installPackages(self.chroot_path,
+            packages_list, callback = self.progress_callback)
 
     def aptgetPreCheck(self):
         """Stuff that we want to check for before we run an apt-get command"""
@@ -237,7 +158,7 @@ class FileSystem(object):
             buildstamp = open(buildstamp_path, 'w')
             print >> buildstamp, "%s %s" % (socket.gethostname(), time.strftime("%d-%m-%Y %H:%M:%S %Z"))
             buildstamp.close()
-            self.chroot("/usr/bin/apt-get update")
+            self.updateAndUpgrade()
                 
     def umount(self):
         # Go through all the mount points that we recorded during the mount
