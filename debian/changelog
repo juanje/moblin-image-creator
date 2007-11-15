@@ -1,8 +1,9 @@
 moblin-image-creator (0.37) UNRELEASED; urgency=low
 
-  * Starting new release
+  * Fix error with the policy-rc.d file not getting created with the new
+    package manager code
 
- -- John L. Villalovos <john.l.villalovos@intel.com>  Wed, 14 Nov 2007 18:32:18 -0800
+ -- John L. Villalovos <john.l.villalovos@intel.com>  Wed, 14 Nov 2007 19:04:30 -0800
 
 moblin-image-creator (0.36) gaston; urgency=low
 

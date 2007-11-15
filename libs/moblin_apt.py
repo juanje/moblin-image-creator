@@ -82,7 +82,7 @@ class AptPackageManager(moblin_pkgbase.PackageManager):
 
     def installPackages(self, chroot_dir, package_list, callback = None):
         """Install the list of packages in the chroot environement"""
-        self.__aptgetPreRun()
+        self.__aptgetPreRun(chroot_dir)
         if not package_list:
             # No packages, so nothing to do
             return
@@ -134,7 +134,7 @@ class AptPackageManager(moblin_pkgbase.PackageManager):
         self.__aptgetPostRun()
 
     def updateChroot(self, chroot_dir, output = None, callback = None):
-        self.__aptgetPreRun()
+        self.__aptgetPreRun(chroot_dir)
         print "Updating the chroot dir: %s" % chroot_dir
         cmd_line = "apt-get update"
         result = pdk_utils.execChrootCommand(chroot_dir, cmd_line, output = output, callback = callback)
@@ -159,11 +159,12 @@ class AptPackageManager(moblin_pkgbase.PackageManager):
                 print "The directory: %s is missing, will create it" % dirname
                 os.makedirs(dirname)
 
-    def __aptgetPreRun(self):
+    def __aptgetPreRun(self, chroot_dir):
         """Stuff to do before we do any apt-get actions"""
         self.__aptgetPreCheck()
         self.debian_frontend.append(os.environ.get("DEBIAN_FRONTEND"))
         os.environ['DEBIAN_FRONTEND'] = 'noninteractive'
+        self.__disable_init_scripts(chroot_dir)
 
     def __aptgetPostRun(self):
         """Stuff to do after we do any apt-get actions"""
@@ -175,3 +176,16 @@ class AptPackageManager(moblin_pkgbase.PackageManager):
                 os.environ['DEBIAN_FRONTEND'] = debian_frontend
         else:
             print "moblin_apt.__aptgetPostRun() called without corresponding aptgetPreRun()"
+
+    def __disable_init_scripts(self, chroot_dir):
+        # In debian if we have the file /usr/sbin/policy-rc.d, which just
+        # return the value 101.  Then package postinstall scripts are not
+        # supposed to run.
+        # http://people.debian.org/~hmh/invokerc.d-policyrc.d-specification.txt
+        filename = os.path.join(chroot_dir, "usr/sbin/policy-rc.d")
+        if not os.path.exists(filename):
+            out_file = open(filename, 'w')
+            print >> out_file, "#!/bin/sh"
+            print >> out_file, "exit 101"
+            out_file.close()
+        os.chmod(filename, 0755)

@@ -169,7 +169,6 @@ class FileSystem(object):
             print >> sys.stderr, "Incomplete jailroot at %s" % (self.path)
             raise ValueError("Internal Error: Invalid buildroot at %s" % (self.path))
         self.mount()
-        self.disable_init_scripts()
         if output == None:
             output = []
         result = pdk_utils.execChrootCommand(self.chroot_path, cmd, output = output, callback = self.progress_callback)
@@ -179,19 +178,6 @@ class FileSystem(object):
             print "chroot was: %s" % chroot_dir
             sys.stdout.flush()
         return result
-
-    def disable_init_scripts(self):
-        # In debian if we have the file /usr/sbin/policy-rc.d, which just
-        # return the value 101.  Then package postinstall scripts are not
-        # supposed to run.
-        # http://people.debian.org/~hmh/invokerc.d-policyrc.d-specification.txt
-        filename = os.path.join(self.path, "usr/sbin/policy-rc.d")
-        if not os.path.exists(filename):
-            out_file = open(filename, 'w')
-            print >> out_file, "#!/bin/sh"
-            print >> out_file, "exit 101"
-            out_file.close()
-        os.chmod(filename, 0755)
 
 class Project(FileSystem):
     """
