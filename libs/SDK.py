@@ -141,7 +141,6 @@ class SDK(object):
             in_file = open(version_file, 'r')
             line = in_file.readline()
             line = line.strip()
-            print line, "*********"
             result = re.search(r'\((?P<version>.*)\) (?P<distribution>.*);', line)
             if result:
                 self.version = "- %s - %s" % (result.group('version'), result.group('distribution'))
