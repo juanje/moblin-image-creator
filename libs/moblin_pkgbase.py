@@ -38,3 +38,7 @@ class PackageManager(object):
     def updateChroot(self, chroot_dir):
         """Update the chroot environment to have the latest packages"""
         raise NotImplementedError
+
+    def cleanPackageCache(self, chroot_dir):
+        """Clean out any cached package files"""
+        raise NotImplementedError

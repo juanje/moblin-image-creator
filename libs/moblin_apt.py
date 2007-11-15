@@ -146,6 +146,11 @@ class AptPackageManager(moblin_pkgbase.PackageManager):
         self.__aptgetPostRun()
         return result
 
+    def cleanPackageCache(self, chroot_dir, output = None, callback = None):
+        """Clean out any cached package files"""
+        cmd_line = "apt-get clean"
+        return pdk_utils.execChrootCommand(chroot_dir, cmd_line, output = output, callback = callback)
+
     def __aptgetPreCheck(self):
         """Stuff that we want to check for before we run an apt-get command"""
         required_dirs = [ "/var/cache/apt/archives/partial" ]

@@ -59,7 +59,6 @@ class FileSystem(object):
             raise ValueError("Empty argument passed in")
         self.progress_callback = progress_callback
         self.path = os.path.realpath(os.path.abspath(os.path.expanduser(path)))
-        self.apt_cmd = '/usr/bin/apt-get -y --force-yes'
         self.mounted = []
 
     def updateAndUpgrade(self):
@@ -69,14 +68,6 @@ class FileSystem(object):
     def installPackages(self, packages_list):
         return self.platform.pkg_manager.installPackages(self.chroot_path,
             packages_list, callback = self.progress_callback)
-
-    def aptgetPreCheck(self):
-        """Stuff that we want to check for before we run an apt-get command"""
-        required_dirs = [ "/var/cache/apt/archives/partial" ]
-        for dirname in required_dirs:
-            if not os.path.isdir(dirname):
-                print "The directory: %s is missing, will create it" % dirname
-                os.makedirs(dirname)
 
     mount_list = [
         # mnt_type, host_dirname, target_dirname, fs_type, device
@@ -158,8 +149,7 @@ class FileSystem(object):
             buildstamp = open(buildstamp_path, 'w')
             print >> buildstamp, "%s %s" % (socket.gethostname(), time.strftime("%d-%m-%Y %H:%M:%S %Z"))
             buildstamp.close()
-            self.updateAndUpgrade()
-                
+
     def umount(self):
         # Go through all the mount points that we recorded during the mount
         # function
@@ -182,11 +172,11 @@ class FileSystem(object):
         self.disable_init_scripts()
         if output == None:
             output = []
-        cmd_line = "chroot %s %s" % (self.chroot_path, cmd)
-        result = pdk_utils.execCommand(cmd_line, output = output, callback = self.progress_callback)
+        result = pdk_utils.execChrootCommand(self.chroot_path, cmd, output = output, callback = self.progress_callback)
         if result != 0:
-            print "Error in chroot.  Result: %s" % result
-            print "Command was: %s" % cmd_line
+            print "Error in chroot command exec.  Result: %s" % result
+            print "Command was: %s" % cmd
+            print "chroot was: %s" % chroot_dir
             sys.stdout.flush()
         return result
 
@@ -277,7 +267,7 @@ class Project(FileSystem):
                 if result != 0:
                     print >> sys.stderr, "ERROR: Unable to generate target rootstrap!"
                     raise ValueError(" ".join(output))
-                pdk_utils.execChrootCommand(install_path, 'apt-get clean')
+                self.platform.pkg_manager.cleanPackageCache(install_path)
 
                 # workaround for ubuntu kernel package bug
                 os.system('touch %s/etc/kernel-img.conf' % (install_path))
@@ -288,7 +278,6 @@ class Project(FileSystem):
                     source_path = os.path.join(source_dir, f)
                     dest_path = os.path.join(install_path, 'etc', 'apt', 'sources.list.d', f)
                     pdk_utils.copySourcesListFile(source_path, dest_path)
-#                    shutil.copy(source_path, os.path.join(install_path, 'etc', 'apt', 'sources.list.d'))
                 source_path = os.path.join(self.platform.path, 'preferences')
                 if os.path.exists(source_path):
                     shutil.copy(source_path, os.path.join(install_path, 'etc', 'apt'))
