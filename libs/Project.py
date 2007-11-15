@@ -62,10 +62,12 @@ class FileSystem(object):
         self.mounted = []
 
     def updateAndUpgrade(self):
+        self.mount()
         return self.platform.pkg_manager.updateChroot(self.chroot_path,
             callback = self.progress_callback)
         
     def installPackages(self, packages_list):
+        self.mount()
         return self.platform.pkg_manager.installPackages(self.chroot_path,
             packages_list, callback = self.progress_callback)
 
@@ -163,21 +165,6 @@ class FileSystem(object):
             mpoint = os.path.realpath(os.path.abspath(mpoint)) + os.sep
             if our_path == mpoint[:len(our_path)]:
                 os.system("umount %s" % (mpoint))
-
-    def chroot(self, cmd, output = None):
-        if not os.path.isfile(os.path.join(self.path, 'bin/bash')):
-            print >> sys.stderr, "Incomplete jailroot at %s" % (self.path)
-            raise ValueError("Internal Error: Invalid buildroot at %s" % (self.path))
-        self.mount()
-        if output == None:
-            output = []
-        result = pdk_utils.execChrootCommand(self.chroot_path, cmd, output = output, callback = self.progress_callback)
-        if result != 0:
-            print "Error in chroot command exec.  Result: %s" % result
-            print "Command was: %s" % cmd
-            print "chroot was: %s" % chroot_dir
-            sys.stdout.flush()
-        return result
 
 class Project(FileSystem):
     """

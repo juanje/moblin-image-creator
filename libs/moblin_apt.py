@@ -162,6 +162,9 @@ class AptPackageManager(moblin_pkgbase.PackageManager):
     def __aptgetPreRun(self, chroot_dir):
         """Stuff to do before we do any apt-get actions"""
         self.__aptgetPreCheck()
+        if not os.path.isfile(os.path.join(chroot_dir, 'bin/bash')):
+            print >> sys.stderr, "Incomplete jailroot at %s" % (chroot_dir)
+            raise ValueError("Internal Error: Invalid buildroot at %s" % (chroot_dir))
         self.debian_frontend.append(os.environ.get("DEBIAN_FRONTEND"))
         os.environ['DEBIAN_FRONTEND'] = 'noninteractive'
         self.__disable_init_scripts(chroot_dir)
