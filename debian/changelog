@@ -1,4 +1,4 @@
-moblin-image-creator (0.36) UNRELEASED; urgency=low
+moblin-image-creator (0.36) gaston; urgency=low
 
   [ John L. Villalovos ]
   * Work continues on getting to being able to NOT using squashfs.  Cleaned up
@@ -59,7 +59,10 @@ moblin-image-creator (0.36) UNRELEASED; urgency=low
   [ Bob Spencer ]
   * Added moblin-clutter-home to ubuntu-staging fset.  Added gnome-menus to gnome-mobile fset
 
- -- Bob Spencer <bob.spencer@intel.com>  Wed, 14 Nov 2007 18:24:11 -0800
+  [ John L. Villalovos ]
+  * Pushing new release 0.36
+
+ -- John L. Villalovos <john.l.villalovos@intel.com>  Wed, 14 Nov 2007 18:31:19 -0800
 
 moblin-image-creator (0.35) hardy; urgency=low
 

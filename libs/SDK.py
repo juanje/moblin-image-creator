@@ -245,8 +245,7 @@ class SDK(object):
                 print >> sys.stderr, "ERROR: Unable to generate project rootstrap!"
                 shutil.rmtree(install_path)
                 raise ValueError(" ".join(output))
-            # FIXME: Want to do an 'apt-get clean' here
-            os.system('rm -fR %s/var/cache/apt/archives/*.deb' % (install_path))
+            platform.pkg_manager.cleanPackageCache(install_path)
             source_dir = os.path.join(platform.path, 'sources')
             for f in os.listdir(source_dir):
                 source_path = os.path.join(source_dir, f)
