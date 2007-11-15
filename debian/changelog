@@ -56,7 +56,10 @@ moblin-image-creator (0.36) UNRELEASED; urgency=low
   * More work for yum support, now by default it will be using the new
     moblin_pkg code.
 
- -- John L. Villalovos <john.l.villalovos@intel.com>  Wed, 14 Nov 2007 17:03:07 -0800
+  [ Bob Spencer ]
+  * Added moblin-clutter-home to ubuntu-staging fset.  Added gnome-menus to gnome-mobile fset
+
+ -- Bob Spencer <bob.spencer@intel.com>  Wed, 14 Nov 2007 18:24:11 -0800
 
 moblin-image-creator (0.35) hardy; urgency=low
 
