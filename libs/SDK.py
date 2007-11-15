@@ -134,8 +134,18 @@ if mic_cfg.config.has_option('general', 'use_new_pkg'):
 
 class SDK(object):
     def __init__(self, progress_callback = None, status_label_callback = None, path='/usr/share/pdk'):
-        self.version = "0.1"
         self.path = os.path.realpath(os.path.abspath(os.path.expanduser(path)))
+        self.version = "- Undefined"
+        version_file = os.path.join(self.path, "version")
+        if os.path.isfile(version_file):
+            in_file = open(version_file, 'r')
+            line = in_file.readline()
+            line = line.strip()
+            print line, "*********"
+            result = re.search(r'\((?P<version>.*)\) (?P<distribution>.*);', line)
+            if result:
+                self.version = "- %s - %s" % (result.group('version'), result.group('distribution'))
+            in_file.close()
         self.progress_callback = progress_callback
         self.status_label_callback = status_label_callback
         self.config_path = os.path.join(self.path, 'projects')

@@ -23,6 +23,7 @@ basicinstall: all
 	@mkdir -p ${DESTDIR}/${SHAREDIR}/projects
 	@mkdir -p ${DESTDIR}/${SHAREDIR}/utils
 	@mkdir -p ${DESTDIR}/${SHAREDIR}/debootstrap-scripts
+	@head -n 1 debian/changelog > ${DESTDIR}/${SHAREDIR}/version
 	@cp utils/gutsy ${DESTDIR}/${SHAREDIR}/debootstrap-scripts
 	@cp libs/*.py  ${DESTDIR}/${SHAREDIR}/lib
 	@cp gui/*.py  ${DESTDIR}/${SHAREDIR}/lib
