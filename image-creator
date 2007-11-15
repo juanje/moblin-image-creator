@@ -73,7 +73,7 @@ def main():
             print
             print "Error: Your DISPLAY environment variable is NOT set"
             print "The Moblin Image Creator GUI can NOT run"
-            sys.exit(1)
+            return 1
 
     options, args = parseCommandLine()
     if options.cmd == "list-platforms":
