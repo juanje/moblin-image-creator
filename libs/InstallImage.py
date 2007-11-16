@@ -48,7 +48,6 @@ class SyslinuxCfg(object):
             cfg_file = open(self.cfg_path, 'w')
             print >> cfg_file, """\
     prompt 1
-    timeout 600
     display boot.msg
     """
             cfg_file.close()
