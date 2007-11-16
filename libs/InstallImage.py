@@ -35,7 +35,7 @@ if mic_cfg.config.has_option('general', 'debug'):
 class SyslinuxCfg(object):
     """Class to provide helper functions for doing the syslinux stuff.
     Syslinux home page: http://syslinux.zytor.com/"""
-    def __init__(self, path, cfg_filename, image_type):
+    def __init__(self, path, cfg_filename, message_color, message):
         try:
             self.path = path
             self.cfg_filename = cfg_filename
@@ -56,15 +56,17 @@ class SyslinuxCfg(object):
             msg_file.write("\f")
             print >> msg_file, "\n" + welcome_mesg + "\n"
             msg_file.close()
-            self.setImageTypeMessage(image_type)
+            self.setMessage(message_color, message)
         except:
             if debug: print_exc_plus()
             sys.exit(1)
 
-    def setImageTypeMessage(self, message):
+    def setMessage(self, message_color, message):
+        """message_color is the 2 bytes to set the background and foreground
+        color as documented in the syslinux documentation under DISPLAY file
+        format"""
         msg_file = open(self.msg_path, 'a ')
-        # Let's make it flashing yellow on a blue background
-        msg_file.write(chr(15) + "9e")
+        msg_file.write(chr(15) + message_color)
         msg_file.write(message)
         # Set it back to light gray on black
         print >> msg_file, chr(15) + "07"
@@ -146,11 +148,11 @@ class InstallImage(object):
         self.default_kernel_mod_path = os.path.join(self.target.fs_path, 'lib', 'modules', self.default_kernel.split('vmlinuz-').pop().strip())
         self.exclude_file = os.path.join(self.project.platform.path, 'exclude')
 
-    def install_kernels(self, cfg_filename, image_type):
+    def install_kernels(self, cfg_filename, message_color, message):
         if not self.tmp_path:
             raise ValueError, "tmp_path doesn't exist"
 
-        s = SyslinuxCfg(self.tmp_path, cfg_filename, image_type)
+        s = SyslinuxCfg(self.tmp_path, cfg_filename, message_color, message)
         # Copy the default kernel
         kernel_name = s.add_default(self.default_kernel, self.project.get_target_usb_kernel_cmdline(self.target.name))
         src_path = os.path.join(self.target.fs_path, 'boot', self.default_kernel)
@@ -374,8 +376,8 @@ class InstallIsoImage(InstallImage):
 
 
 class BaseUsbImage(InstallImage):
-    def install_kernels(self, image_type):
-        InstallImage.install_kernels(self, 'syslinux.cfg', image_type)
+    def install_kernels(self, message_color, message):
+        InstallImage.install_kernels(self, 'syslinux.cfg', message_color, message)
         
     def create_usb_image(self, size):
         print "Creating USB flash drive image file at: %s" % self.path
@@ -457,7 +459,8 @@ class LiveUsbImage(BaseUsbImage):
             initrd_path = os.path.join(self.tmp_path, "initrd%d.img" % count)
             shutil.move("/tmp/.tmp.initrd%d" % count, initrd_path)
         self.kernels.pop(0)
-        self.install_kernels(image_type)
+        # Flashing yellow on a blue background
+        self.install_kernels("9e", image_type)
         shutil.copy(self.rootfs_path, self.tmp_path)
         if fs_type == 'EXT3FS':
             self.create_ext3fs_file(os.path.join(self.tmp_path, 'ext3fs.img'), ext3fs_fs_size)
@@ -473,7 +476,7 @@ class LiveUsbImage(BaseUsbImage):
 class InstallUsbImage(BaseUsbImage):
     def create_image(self):
         print "InstallUsbImage: Creating InstallUSB Image..."
-        image_type = "Install USB Image"
+        image_type = "Install USB Image.  This will DESTROY all content on your hard drive!!"
         self.create_all_initramfs()
         self.create_grub_menu()
         self.apply_hd_kernel_cmdline()
@@ -490,7 +493,8 @@ class InstallUsbImage(BaseUsbImage):
             initrd_path = os.path.join(self.tmp_path, "initrd%d.img" % count)
             shutil.move("/tmp/.tmp.initrd%d" % count, initrd_path)
         self.kernels.pop(0)
-        self.install_kernels(image_type)
+        # Flashing yellow on a red background
+        self.install_kernels("ce", image_type)
         shutil.copy(self.rootfs_path, self.tmp_path)
         shutil.copy(self.bootfs_path, self.tmp_path)
         self.create_install_script(self.tmp_path)
