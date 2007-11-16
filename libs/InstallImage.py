@@ -35,7 +35,7 @@ if mic_cfg.config.has_option('general', 'debug'):
 class SyslinuxCfg(object):
     """Class to provide helper functions for doing the syslinux stuff.
     Syslinux home page: http://syslinux.zytor.com/"""
-    def __init__(self, path, cfg_filename):
+    def __init__(self, path, cfg_filename, image_type):
         try:
             self.path = path
             self.cfg_filename = cfg_filename
@@ -57,10 +57,19 @@ class SyslinuxCfg(object):
             msg_file.write("\f")
             print >> msg_file, "\n" + welcome_mesg + "\n"
             msg_file.close()
+            self.setImageTypeMessage(image_type)
         except:
             if debug: print_exc_plus()
             sys.exit(1)
-            
+
+    def setImageTypeMessage(self, message):
+        msg_file = open(self.msg_path, 'a ')
+        # Let's make it flashing yellow on a blue background
+        msg_file.write(chr(15) + "9e")
+        msg_file.write(message)
+        # Set it back to light gray on black
+        print >> msg_file, chr(15) + "07"
+
     def __repr__(self):
         return 'SyslinuxCfg(path = "%s", cfg_filename = "%s")' % (self.path,
             self.cfg_filename)
@@ -81,8 +90,8 @@ class SyslinuxCfg(object):
         cfg_file.close()
         # Add the default entry in the syslinux boot message file
         msg_file = open(self.msg_path, 'a ')
-        msg_file.write("- To boot default " + kernel + " kernel, press " + chr(15) + \
-                       "\x01<ENTER>" +  chr(15) + "\x07\n\n")
+        msg_file.write("- To boot default " + kernel + " kernel, press " + \
+            chr(15) + "0f<ENTER>" +  chr(15) + "07\n\n")
         msg_file.close()
         return kernel_file
 
@@ -138,11 +147,11 @@ class InstallImage(object):
         self.default_kernel_mod_path = os.path.join(self.target.fs_path, 'lib', 'modules', self.default_kernel.split('vmlinuz-').pop().strip())
         self.exclude_file = os.path.join(self.project.platform.path, 'exclude')
 
-    def install_kernels(self, cfg_filename):
+    def install_kernels(self, cfg_filename, image_type):
         if not self.tmp_path:
             raise ValueError, "tmp_path doesn't exist"
 
-        s = SyslinuxCfg(self.tmp_path, cfg_filename)
+        s = SyslinuxCfg(self.tmp_path, cfg_filename, image_type)
         # Copy the default kernel
         kernel_name = s.add_default(self.default_kernel, self.project.get_target_usb_kernel_cmdline(self.target.name))
         src_path = os.path.join(self.target.fs_path, 'boot', self.default_kernel)
@@ -366,8 +375,8 @@ class InstallIsoImage(InstallImage):
 
 
 class BaseUsbImage(InstallImage):
-    def install_kernels(self):
-        InstallImage.install_kernels(self, 'syslinux.cfg')
+    def install_kernels(self, image_type):
+        InstallImage.install_kernels(self, 'syslinux.cfg', image_type)
         
     def create_usb_image(self, size):
         print "Creating USB flash drive image file at: %s" % self.path
@@ -427,7 +436,12 @@ class BaseUsbImage(InstallImage):
 
 class LiveUsbImage(BaseUsbImage):
     def create_image(self, fs_type='RAMFS'):
-        print "LiveUsbImage: Creating LiveUSB Image(%s) Now..." % fs_type
+        if fs_type == 'EXT3FS':
+            print "LiveUsbImage: Creating Live R/W USB Image(%s) Now..." % fs_type
+            image_type = "Live R/W USB Image"
+        else:
+            print "LiveUsbImage: Creating Live USB Image(%s) Now..." % fs_type
+            image_type = "Live USB Image (no persistent R/W)"
         # How big to make the ext3 File System on the Live RW USB image, in megabytes
         ext3fs_fs_size = int(mic_cfg.config.get("installimage", "ext3fs_size"))
         self.create_all_initramfs()
@@ -444,7 +458,7 @@ class LiveUsbImage(BaseUsbImage):
             initrd_path = os.path.join(self.tmp_path, "initrd%d.img" % count)
             shutil.move("/tmp/.tmp.initrd%d" % count, initrd_path)
         self.kernels.pop(0)
-        self.install_kernels()
+        self.install_kernels(image_type)
         shutil.copy(self.rootfs_path, self.tmp_path)
         if fs_type == 'EXT3FS':
             self.create_ext3fs_file(os.path.join(self.tmp_path, 'ext3fs.img'), ext3fs_fs_size)
@@ -460,6 +474,7 @@ class LiveUsbImage(BaseUsbImage):
 class InstallUsbImage(BaseUsbImage):
     def create_image(self):
         print "InstallUsbImage: Creating InstallUSB Image..."
+        image_type = "Install USB Image"
         self.create_all_initramfs()
         self.create_grub_menu()
         self.apply_hd_kernel_cmdline()
@@ -476,7 +491,7 @@ class InstallUsbImage(BaseUsbImage):
             initrd_path = os.path.join(self.tmp_path, "initrd%d.img" % count)
             shutil.move("/tmp/.tmp.initrd%d" % count, initrd_path)
         self.kernels.pop(0)
-        self.install_kernels()
+        self.install_kernels(image_type)
         shutil.copy(self.rootfs_path, self.tmp_path)
         shutil.copy(self.bootfs_path, self.tmp_path)
         self.create_install_script(self.tmp_path)
