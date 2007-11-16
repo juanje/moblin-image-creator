@@ -253,6 +253,16 @@ def copySourcesListFile(sourcefile, destfile):
     in_file.close()
     out_file.close()
 
+def touchFile(filename):
+    """Work like the 'touch' command"""
+    if not os.path.exists(filename):
+        basedir = os.path.dirname(filename)
+        if not os.path.exists(basedir):
+            os.makedirs(basedir)
+        out_file = open(filename, 'w')
+        out_file.close()
+    os.utime(filename, None)
+
 class MountInfo(object):
     def __init__(self, mount_line):
         """Input is in the form that is found in /etc/mtab (or /proc/mounts)"""
@@ -266,7 +276,6 @@ class MountInfo(object):
         return ("%s %s %s %s" % (self.device, self.dirname, self.fs_type, self.options))
     def __repr__(self):
         return "MountInfo('%s')" % self.__str__()
-
 
 # An exception class for Image Creator
 class ImageCreatorError(exceptions.Exception):

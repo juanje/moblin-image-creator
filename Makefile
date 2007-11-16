@@ -61,6 +61,7 @@ clean:
 # Cleans out the installation target
 cleanall: clean
 	@echo -n "Removing previously installed files..."
+	@rm -rf ${DESTDIR}/${VARDIR}
 	@rm -rf ${DESTDIR}/${SHAREDIR}/gnome
 	@rm -rf ${DESTDIR}/${SHAREDIR}/lib
 	@rm -rf ${DESTDIR}/${SHAREDIR}/locale

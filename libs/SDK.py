@@ -221,67 +221,7 @@ class SDK(object):
             raise ValueError("Empty argument passed in")
         
         install_path = os.path.realpath(os.path.abspath(os.path.expanduser(parent_path)))
-        if not os.path.isdir(install_path):
-            os.makedirs(install_path)
-
-        rootstrap = os.path.join(platform.path, "build-rootstrap.tar.bz2")
-        if self.status_label_callback:
-            self.status_label_callback("Creating Rootstrap")
-        if not os.path.isfile(rootstrap) or not use_rootstrap:
-            # create platform rootstrap file
-            count = 0
-            cmd = "debootstrap --arch %s --variant=buildd --include=%s %s %s %s" % (platform.architecture, platform.buildroot_extras, platform.buildroot_codename, install_path, platform.buildroot_mirror)
-            output = []
-            # XXX Evil hack
-            if not os.path.isfile("/usr/lib/debootstrap/scripts/%s" % platform.target_codename):
-                cmd += " /usr/share/pdk/debootstrap-scripts/%s" % platform.target_codename
-            # Sometimes we see network issues that trigger debootstrap
-            # to claim the apt repository is corrupt.  This trick will
-            # force up to 10 attempts before bailing out with an error
-            while count < 10:
-                count += 1
-                print "--------Platform rootstrap creation try: %s ----------" % count
-                print "Executing: %s" % cmd
-                result = pdk_utils.execCommand(cmd, output = output, callback = self.progress_callback)
-                if result == 0:
-                    print "--------Platform rootstrap creation completed successfully ----------"
-                    break;
-                print "--------Platform rootstrap creation failed result: %s ----------" % result
-                sleeptime = 10
-                print "--------For try: %s.  Sleeping for %s seconds... -----------------" % (count, sleeptime)
-                time.sleep(sleeptime)
-            if result != 0:
-                print >> sys.stderr, "ERROR: Unable to generate project rootstrap!"
-                shutil.rmtree(install_path)
-                raise ValueError(" ".join(output))
-            platform.pkg_manager.cleanPackageCache(install_path)
-            source_dir = os.path.join(platform.path, 'sources')
-            for f in os.listdir(source_dir):
-                source_path = os.path.join(source_dir, f)
-                dest_path = os.path.join(install_path, 'etc', 'apt', 'sources.list.d', f)
-                pdk_utils.copySourcesListFile(source_path, dest_path)
-                # shutil.copy(os.path.join(platform.path, 'sources', f), os.path.join(install_path, 'etc', 'apt', 'sources.list.d'))
-            if use_rootstrap:
-                if self.status_label_callback:
-                    self.status_label_callback("Tarring Rootstrap")
-                cmd = "tar -jcpvf %s -C %s ." % (rootstrap, install_path)
-                output = []
-                result = pdk_utils.execCommand(cmd, output = output, callback = self.progress_callback)
-                if result != 0:
-                    print >> sys.stderr, "ERROR: Unable to archive rootstrap!"
-                    shutil.rmtree(install_path)
-                    raise ValueError(" ".join(output))
-        else:
-            if self.status_label_callback:
-                self.status_label_callback("Extracting Rootstrap")
-            cmd = "tar -jxvf %s -C %s" % (rootstrap, install_path)
-            output = []
-            result = pdk_utils.execCommand(cmd, output = output, callback = self.progress_callback)
-            if result != 0:
-                print >> sys.stderr, "ERROR: Unable to rootstrap %s from %s!" % (rootstrap, name)
-                shutil.rmtree(install_path)
-                raise ValueError(" ".join(output))
-        
+        platform.pkg_manager.createChroot(install_path, platform, callback = self.progress_callback)
         # create the config file
         if self.status_label_callback:
             self.status_label_callback("Creating Config file")
@@ -293,7 +233,6 @@ class SDK(object):
         config_file.write("DESC=%s\n" % (desc))
         config_file.write("PLATFORM=%s\n" % (platform.name))
         config_file.close()
-
         # instantiate the project
         if self.status_label_callback:
             self.status_label_callback("Initiating the project")

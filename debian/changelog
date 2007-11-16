@@ -6,8 +6,14 @@ moblin-image-creator (0.37) UNRELEASED; urgency=low
   * Have our real version number show up in the GUI
   * The libs/Project.py chroot() function is needed, restoring it.
   * Create a /var/lib/moblin-image-creator/ directory
+  * Some major changes in adding yum support.  Now we will only create one
+    rootstrap file for each package manager/target_os combination.  So if the
+    target is ubuntu using apt only one rootstrap will be created.  Where
+    before we created four rootstraps, now we create one rootstrap.
+  * Rootstrap files have been moved to
+    /var/lib/moblin-image-creator/rootstraps/
 
- -- John L. Villalovos <john.l.villalovos@intel.com>  Thu, 15 Nov 2007 14:29:37 -0800
+ -- John L. Villalovos <john.l.villalovos@intel.com>  Thu, 15 Nov 2007 17:59:00 -0800
 
 moblin-image-creator (0.36) gaston; urgency=low
 

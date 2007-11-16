@@ -61,7 +61,7 @@ class Platform(object):
         # determine what packages additional packages need to be installed
         # in the buildroot roostrap
         packages = mic_cfg.config.get(section, "buildroot_extras")
-        self.buildroot_extras = ','.join(packages.split())
+        self.buildroot_extras = packages.split()
         # determine what packages need to be installed in the buildroot
         # (outside the rootstrap archive)
         packages = mic_cfg.config.get(section, "buildroot_packages")
@@ -70,10 +70,6 @@ class Platform(object):
         self.buildroot_mirror = mic_cfg.config.get(section, "buildroot_mirror")
         # determine what codename to use for the buildroot mirror
         self.buildroot_codename = mic_cfg.config.get(section, "buildroot_codename")
-        # determine what mirror to use for the target
-        self.target_mirror = mic_cfg.config.get(section, "target_mirror")
-        # determine what codename to use for the buildroot mirror
-        self.target_codename = mic_cfg.config.get(section, "target_codename")
         # determine default kernel cmdline options
         self.usb_kernel_cmdline = mic_cfg.config.get(section, "usb_kernel_cmdline")
         self.hd_kernel_cmdline = mic_cfg.config.get(section, "hd_kernel_cmdline")
@@ -87,8 +83,12 @@ class Platform(object):
                 self.pkg_manager = moblin_pkg.YumPackageManager()
             else:
                 raise ValueError("package manager value of: '%s' is invalid" % self.config_info['package_manager'])
+            # Target OS
+            self.target_os = self.config_info['target_os']
         else:
+            # Default to Ubuntu if not specified
             self.pkg_manager = moblin_pkg.AptPackageManager()
+            self.target_os = "ubuntu"
 
     def __str__(self):
         return ("<Platform Object: \n\tname=%s, \n\tfset=%s, \n\tbuildroot_packages=%s>\n" %

@@ -82,7 +82,7 @@ class FileSystem(object):
         if result != 0:
             print "Error in chroot command exec.  Result: %s" % result
             print "Command was: %s" % cmd
-            print "chroot was: %s" % chroot_path
+            print "chroot was: %s" % self.chroot_path
             sys.stdout.flush()
         return result
 
@@ -213,7 +213,7 @@ class Project(FileSystem):
         """
         Install all the packages defined by Platform.buildroot_packages
         """
-        return super(Project, self).installPackages(self.platform.buildroot_packages)
+        return super(Project, self).installPackages(self.platform.buildroot_packages + self.platform.buildroot_extras)
 
     def umount(self):
         """We want to umount all of our targets and then anything in our project that we have mounted"""
@@ -226,65 +226,8 @@ class Project(FileSystem):
         if not name:
             raise ValueError("Target name was not specified")
         if not name in self.targets:
-            count =  0
             install_path = os.path.join(self.path, 'targets', name, 'fs')
-            os.makedirs(install_path)
-            rootstrap = os.path.join(self.platform.path, "target-rootstrap.tar.bz2")
-            if not os.path.isfile(rootstrap) or not use_rootstrap:
-                cmd = "debootstrap --arch %s --include=apt %s %s %s" % (self.platform.architecture, self.platform.target_codename, install_path, self.platform.target_mirror)
-                output = []
-
-                # XXX Evil hack
-                if not os.path.isfile("/usr/lib/debootstrap/scripts/%s" % self.platform.target_codename):
-                    cmd += " /usr/share/pdk/debootstrap-scripts/%s" % self.platform.target_codename
-
-                # Sometimes we see network issues that trigger debootstrap
-                # to claim the apt repository is corrupt.  This trick will
-                # force up to 10 attempts before bailing out with an error
-                while count < 10:
-                    count += 1
-                    print "--------Target rootstrap creation try: %s ----------" % count
-                    result = pdk_utils.execCommand(cmd, output = output, callback = self.progress_callback)
-                    if result == 0:
-                        print "--------Target rootstrap creation completed successfully----------"
-                        break;
-                    print "--------Target rootstrap creation failed result: %s ----------" % result
-                    sleeptime = 30
-                    print "--------For try: %s.  Sleeping for %s seconds... -----------------" % (count, sleeptime)
-                    time.sleep(sleeptime)
-                if result != 0:
-                    print >> sys.stderr, "ERROR: Unable to generate target rootstrap!"
-                    raise ValueError(" ".join(output))
-                self.platform.pkg_manager.cleanPackageCache(install_path)
-
-                # workaround for ubuntu kernel package bug
-                os.system('touch %s/etc/kernel-img.conf' % (install_path))
-                os.system('touch %s/etc/kernel-pkg.conf' % (install_path))
-               
-                source_dir = os.path.join(self.platform.path, 'sources')
-                for f in os.listdir(source_dir):
-                    source_path = os.path.join(source_dir, f)
-                    dest_path = os.path.join(install_path, 'etc', 'apt', 'sources.list.d', f)
-                    pdk_utils.copySourcesListFile(source_path, dest_path)
-                source_path = os.path.join(self.platform.path, 'preferences')
-                if os.path.exists(source_path):
-                    shutil.copy(source_path, os.path.join(install_path, 'etc', 'apt'))
-                if use_rootstrap:
-                    cmd = "tar -jcpvf %s -C %s ." % (rootstrap, install_path)
-                    output = []
-                    result = pdk_utils.execCommand(cmd, output = output, callback = self.progress_callback)
-                    if result != 0:
-                        print >> sys.stderr, "ERROR: Unable to archive rootstrap!"
-                        shutil.rmtree(install_path)
-                        raise ValueError(" ".join(output))
-            else:
-                cmd = "tar -jxvf %s -C %s" % (rootstrap, install_path)
-                output = []
-                result = pdk_utils.execCommand(cmd, output = output, callback = self.progress_callback)
-                if result != 0:
-                    print >> sys.stderr, "ERROR: Unable to rootstrap %s from %s!" % (rootstrap, name)
-                    shutil.rmtree(os.path.join(self.path, 'targets', name))
-                    raise ValueError(" ".join(output))
+            self.platform.pkg_manager.createChroot(install_path, self.platform, callback = self.progress_callback)
 
             self.targets[name] = Target(name, self, self.progress_callback)
             self.targets[name].mount()
