@@ -1,5 +1,6 @@
 moblin-image-creator (0.37) UNRELEASED; urgency=low
 
+  [ John L. Villalovos ]
   * Fix error with the policy-rc.d file not getting created with the new
     package manager code
   * More work on yum support
@@ -18,7 +19,10 @@ moblin-image-creator (0.37) UNRELEASED; urgency=low
     drive.
   * Better info on what the USB image will do to the system.
 
- -- John L. Villalovos <john.l.villalovos@intel.com>  Fri, 16 Nov 2007 13:12:56 -0800
+  [ Rob Rhoads ]
+  * Added xrestop to debug pkgs so we can monitor app memory consumption.
+
+ -- Rob Rhoads <rob.rhoads@intel.com>  Mon, 19 Nov 2007 12:06:42 -0800
 
 moblin-image-creator (0.36) gaston; urgency=low
 
