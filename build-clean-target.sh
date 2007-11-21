@@ -12,15 +12,30 @@ shift
 FSET=$1
 shift
 
+IMAGE=$1
+shift 
+
 if [ "`/usr/bin/whoami`" != "root" ]; then
     echo "You must be root to run this script!"
     exit 1
 fi
 
 if [ -z "${PROJECT}" ] || [ -z "${PLATFORM}" ] || [ -z "${PPATH}" ] || [ -z "${FSET}" ]; then
-    echo "USAGE: $0 projectname platformname path fset"
+    echo ""
+    echo "USAGE: $0 projectname platformname path fset [image-name | 'xephyr']"
+    echo "       projectname       Name of project"
+    echo "       platformname      menlow-lpia or mccaslin-lpia" 
+    echo "       path              Destination directory (needs ~1.5GB free, or ~2GB if creating image)"
+    echo "       fset              e.g. samsung-full-mobile-stack or crownBeach-full-mobile-stack"
+    echo "       image | 'xephyr'  Name of image file OR 'xephyr' to skip image creation and start xephyr"
+    echo ""
     exit 1
 fi
+
+if [ -z "${IMAGE}" ]; then
+    echo -e "\033[1m No image file name given.  Image will NOT be created.\033[0m"
+fi
+
 
 if [ -e ${PPATH} ]; then
     echo "ERROR: Path already exists!"
@@ -65,6 +80,7 @@ echo -e "\tPlatform = ${PLATFORM}"
 echo -e "\tPROJECT = ${PROJECT}"
 echo -e "\tPPATH = ${PPATH}"
 echo -e "\tFSET = ${FSET}"
+echo -e "\tIMAGE = ${IMAGE}"
 
 echo "Creating a new project..."
 /usr/sbin/image-creator -c create-project                                 \
@@ -77,6 +93,7 @@ if [ $? != 0 ]; then
     echo "Bailing out on project creation error!"
     exit 1
 fi
+echo "Successfully created project '${PROJECT}'"
 
 echo "Creating a new target..."
 /usr/sbin/image-creator -c create-target          \
@@ -87,6 +104,7 @@ if [ $? != 0 ]; then
     echo "Bailing out on target creation error!"
     exit 1
 fi
+echo "Successfully created target 'test'"
 
 echo "Installing a new fset..."
 /usr/sbin/image-creator -c install-fset           \
@@ -97,17 +115,28 @@ if [ $? != 0 ]; then
     echo "Bailing out on fset install error!"
     exit 1
 fi
+echo "Successfully installed FSET '${FSET}'"
+
+if [ -z "${IMAGE}" ]; then
+    echo "No image specified.  None created."
+    exit 1
+fi
+if [ ${IMAGE} == 'xephyr' ]; then
+    xhost +SI:localuser:root
+    /usr/sbin/image-creator --command run-target --project-name ${PROJECT} --target-name test --run-command ume-xephyr-start
+    exit 1
+fi
 
 echo "Creating a new install USB key..."
 /usr/sbin/image-creator -c create-install-usb     \
                         --project-name ${PROJECT} \
                         --target-name "test"      \
-                        --image-name "install-usb.img"
+                        --image-name ${IMAGE}
 if [ $? != 0 ]; then
     echo "Bailing out on usb install creation error!"
     exit 1
 fi
-
 echo "Succesfully built a USB install image at:"
-echo "${PPATH}/targets/test/fs/image/install-usb.img"
+echo "${PPATH}/targets/test/fs/image/${IMAGE}"
+
 

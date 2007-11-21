@@ -22,7 +22,13 @@ moblin-image-creator (0.37) UNRELEASED; urgency=low
   [ Rob Rhoads ]
   * Added xrestop to debug pkgs so we can monitor app memory consumption.
 
- -- Rob Rhoads <rob.rhoads@intel.com>  Mon, 19 Nov 2007 12:06:42 -0800
+  [ Bob Spencer ]
+  * Added hildon-libs-l10n-engb to Ubuntu-Staging fset to fix bug #146102
+    Have also requested for lool to add this to go into Hardy and Gutsy PPA\
+  * Updated build-image bash script to include support for starting xephyr at
+    end instead of creating image file
+
+ -- Bob Spencer <bob@bobuntu-desktop>  Wed, 21 Nov 2007 13:02:31 -0800
 
 moblin-image-creator (0.36) gaston; urgency=low
 
