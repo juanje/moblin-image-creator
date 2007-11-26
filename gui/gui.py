@@ -174,7 +174,7 @@ class App(object):
         self.buttons.add_target.set_sensitive(True)
         self.buttons.term_launch.set_sensitive(True)
         self.buttons.upgrade_project.set_sensitive(True)
-        for key in self.current_project().targets:
+        for key in sorted(self.current_project().targets):
             installed_fsets = ' '.join(self.current_project().targets[key].installed_fsets())
             self.targetList.append((key, installed_fsets))
 
@@ -369,7 +369,8 @@ class App(object):
 
     def gui_throbber(self, process):
         self.progressbar.pulse()
-        gtk.main_iteration()
+        while gtk.events_pending():
+            gtk.main_iteration(False)
         time.sleep(0.01)
             
     def fset_install_updated(self, box, label, platform, checkbox):
@@ -384,6 +385,8 @@ class App(object):
         tree.get_widget('queryLabel').set_text("Delete target %s from project %s?" % (target.name, project.name))
         dialog = tree.get_widget('qDialog')
         if dialog.run() == gtk.RESPONSE_OK:
+            while gtk.events_pending():
+                gtk.main_iteration(False)
             self.sdk.projects[project.name].delete_target(target.name)
             self.remove_current_target()
         dialog.destroy()
