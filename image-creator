@@ -60,6 +60,12 @@ def main():
         sys.exit(1)
 
     if len(sys.argv) == 1:
+        sudo = int(mic_cfg.config.get('userinfo', 'sudo'))
+        userid = int(mic_cfg.config.get('userinfo', 'userid'))
+        if sudo == 0 and userid != 0:
+            print "Error: Must run image creator with sudo or run as root"
+            print "Example, run image creator:  sudo image-creator"
+            sys.exit(1)
         if os.getenv("DISPLAY"):
             try:
                 gui.App().run()
