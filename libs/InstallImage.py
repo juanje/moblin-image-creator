@@ -64,7 +64,27 @@ class SyslinuxCfg(object):
     def setMessage(self, message_color, message):
         """message_color is the 2 bytes to set the background and foreground
         color as documented in the syslinux documentation under DISPLAY file
-        format"""
+        format
+
+        <SI><bg><fg>                            <SI> = <Ctrl-O> = ASCII 15
+        Set the display colors to the specified background and
+        foreground colors, where <bg> and <fg> are hex digits,
+        corresponding to the standard PC display attributes:
+
+        0 = black               8 = dark grey
+        1 = dark blue           9 = bright blue
+        2 = dark green          a = bright green
+        3 = dark cyan           b = bright cyan
+        4 = dark red            c = bright red
+        5 = dark purple         d = bright purple
+        6 = brown               e = yellow
+        7 = light grey          f = white
+
+        Picking a bright color (8-f) for the background results in the
+        corresponding dark color (0-7), with the foreground flashing.
+        """
+        if len(message_color) != 2:
+            raise ValueError("message_color string must be 2 bytes long.  Passed in string was: %s bytes long.  String: %s" % (len(message_color), message(color)))
         msg_file = open(self.msg_path, 'a ')
         msg_file.write(chr(15) + message_color)
         msg_file.write(message)
