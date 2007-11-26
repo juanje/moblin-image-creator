@@ -24,6 +24,7 @@ import sys
 import fsets
 import mic_cfg
 import moblin_pkg
+import pdk_utils
 
 class Platform(object):
     """
@@ -79,8 +80,10 @@ class Platform(object):
         if self.config_info:
             if self.config_info['package_manager'] == 'apt':
                 self.pkg_manager = moblin_pkg.AptPackageManager()
+                self.createChroot = self.aptCreateChroot
             elif self.config_info['package_manager'] == 'yum':
                 self.pkg_manager = moblin_pkg.YumPackageManager()
+                self.createChroot = self.yumCreateChroot
             else:
                 raise ValueError("package manager value of: '%s' is invalid" % self.config_info['package_manager'])
             # Target OS
@@ -96,6 +99,77 @@ class Platform(object):
 
     def __repr__(self):
         return "Platform( %s, '%s')" % (self.path, self.name)
+
+    def aptCreateChroot(self, chroot_dir, callback = None):
+        """Create chroot in chroot_dir for using APT tools"""
+        if not os.path.exists(chroot_dir):
+            os.makedirs(chroot_dir)
+        target_os = self.target_os
+        var_dir = mic_cfg.config.get('general', 'var_dir')
+        rootstrap_file = os.path.join(var_dir, "rootstraps", "apt", target_os, self.name, "rootstrap.tgz")
+        if not os.path.exists(rootstrap_file):
+            self.__aptCreateRootstrap(chroot_dir, rootstrap_file, callback = callback)
+        else:
+            cmd = "tar -jxvf %s -C %s" % (rootstrap_file, chroot_dir)
+            output = []
+            result = pdk_utils.execCommand(cmd, output = output, callback = callback)
+            if result != 0:
+                print >> sys.stderr, "ERROR: Unable to rootstrap %s from %s!" % (rootstrap_file, name)
+                shutil.rmtree(chroot_dir)
+                # FIXME: Better exception here
+                raise ValueError(" ".join(output))
+
+    def __aptCreateRootstrap(self, chroot_dir, rootstrap_file, callback = None):
+        codename = self.buildroot_codename
+        mirror = self.buildroot_mirror
+        chroot_type_string = "Platform"
+        basedir = os.path.dirname(rootstrap_file)
+        if not os.path.exists(basedir):
+            os.makedirs(basedir)
+        cmd = "debootstrap --arch %s --include=apt %s %s %s" % (self.architecture, codename, chroot_dir, mirror)
+        output = []
+        # XXX Evil hack
+        if not os.path.isfile("/usr/lib/debootstrap/scripts/%s" % codename):
+            cmd += " /usr/share/pdk/debootstrap-scripts/%s" % codename
+        # Sometimes we see network issues that trigger debootstrap to claim the
+        # apt repository is corrupt.  This trick will force up to 10 attempts
+        # before bailing out with an error
+        count = 0
+        while count < 10:
+            count += 1
+            print "--------%s rootstrap creation try: %s ----------" % (chroot_type_string, count)
+            print "Execing command: %s" % cmd
+            result = pdk_utils.execCommand(cmd, output = output, callback = callback)
+            if result == 0:
+                print "--------%s rootstrap creation completed successfully----------" % chroot_type_string
+                break;
+            print "--------%s rootstrap creation failed result: %s ----------" % (chroot_type_string, result)
+            sleeptime = 30
+            print "--------For try: %s.  Sleeping for %s seconds... -----------------" % (count, sleeptime)
+            time.sleep(sleeptime)
+        if result != 0:
+            print >> sys.stderr, "ERROR: Unable to generate %s rootstrap!" % chroot_type_string
+            raise ValueError(" ".join(output))
+        self.pkg_manager.cleanPackageCache(chroot_dir)
+        # workaround for ubuntu kernel package bug
+        pdk_utils.touchFile('touch %s/etc/kernel-img.conf' % (chroot_dir))
+        pdk_utils.touchFile('touch %s/etc/kernel-pkg.conf' % (chroot_dir))
+        source_dir = os.path.join(self.path, 'sources')
+        for f in os.listdir(source_dir):
+            source_path = os.path.join(source_dir, f)
+            dest_path = os.path.join(chroot_dir, 'etc', 'apt', 'sources.list.d', f)
+            pdk_utils.copySourcesListFile(source_path, dest_path)
+        source_path = os.path.join(self.path, 'preferences')
+        if os.path.exists(source_path):
+            shutil.copy(source_path, os.path.join(chroot_dir, 'etc', 'apt'))
+        cmd = "tar -jcpvf %s -C %s ." % (rootstrap_file, chroot_dir)
+        output = []
+        result = pdk_utils.execCommand(cmd, output = output, callback = callback)
+        if result != 0:
+            print >> sys.stderr, "ERROR: Unable to archive rootstrap!"
+            shutil.rmtree(chroot_dir)
+            # FIXME: Better exception here
+            raise ValueError(" ".join(output))
 
 if __name__ == '__main__':
     for p in sys.argv[1:]:

@@ -221,7 +221,9 @@ class SDK(object):
             raise ValueError("Empty argument passed in")
         
         install_path = os.path.realpath(os.path.abspath(os.path.expanduser(parent_path)))
-        platform.pkg_manager.createChroot(install_path, platform, callback = self.progress_callback)
+        if self.status_label_callback:
+            self.status_label_callback("Creating the project chroot environment")
+        platform.createChroot(install_path, callback = self.progress_callback)
         # create the config file
         if self.status_label_callback:
             self.status_label_callback("Creating Config file")
@@ -335,6 +337,7 @@ class SDK(object):
         # first delete all contained targets
         proj = self.projects[project_name]
         for target in proj.targets:
+            self.progress_callback(None)
             proj.delete_target(target, False)
         proj.targets.clear()
         # and then deal with the project
