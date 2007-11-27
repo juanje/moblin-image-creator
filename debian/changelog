@@ -43,7 +43,7 @@ moblin-image-creator (0.37) UNRELEASED; urgency=low
   * Adding GUI for clear rootstrap
   * basic unit test for aptPackageManager
 
- -- Prajwal Mohan <prajwal@linux.intel.com> Tue, 27 Nov 2007 11:04:13 -0800
+ -- Prajwal Mohan <prajwal@linux.intel.com>  Tue, 27 Nov 2007 11:04:13 -0800
 
 moblin-image-creator (0.36) gaston; urgency=low
 
