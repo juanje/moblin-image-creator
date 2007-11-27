@@ -55,8 +55,10 @@ moblin-image-creator (0.37) UNRELEASED; urgency=low
     of the host system
   * Don't need to have the individual sources.list.d files for each gutsy
     component anymore.
+  * Only the lpiacompat kernel is allowed for the Samsung Q1 Ultra, don't
+    allow linuxgeneric kernel to be substituted
 
- -- John L. Villalovos <john.l.villalovos@intel.com>  Tue, 27 Nov 2007 14:21:31 -0800
+ -- John L. Villalovos <john.l.villalovos@intel.com>  Tue, 27 Nov 2007 14:27:54 -0800
 
 moblin-image-creator (0.36) gaston; urgency=low
 
