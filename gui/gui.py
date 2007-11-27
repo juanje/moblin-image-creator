@@ -422,7 +422,7 @@ class App(object):
         print >> prompt_file, "P: %s" % project_name
         prompt_file.close()
         print "Project path: %s" % project_path
-        cmd = '/usr/bin/gnome-terminal -x sudo /usr/sbin/chroot %s su - &' % (project_path)
+        cmd = '/usr/bin/gnome-terminal -x /usr/sbin/chroot %s env -u SHELL su -p - &' % (project_path)
         print cmd
         os.system(cmd)
 
@@ -435,7 +435,7 @@ class App(object):
         print >> prompt_file, "T: %s" % target.name
         prompt_file.close()
         print "Target path: %s" % target_path
-        cmd = '/usr/bin/gnome-terminal -x sudo /usr/sbin/chroot %s su - &' % (target_path)
+        cmd = '/usr/bin/gnome-terminal -x /usr/sbin/chroot %s env -u SHELL su -p - &' % (target_path)
         print cmd
         os.system(cmd)
 

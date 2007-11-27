@@ -1,9 +1,9 @@
 [Desktop Entry]
 Name=Image-Creator
 Comment=Developer tool for creating mobile Linux device stacks
-Exec=%%EXEC_CMD%% 
+Exec=%%EXEC_CMD%%
 Terminal=false
 Type=Application
-Categories=Application;Development;
+Categories=Development;
 StartupNotify=false
 Icon=/usr/share/pdk/pixmaps/image-creator-32x32.xpm

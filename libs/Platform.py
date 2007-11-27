@@ -71,6 +71,9 @@ class Platform(object):
         self.buildroot_mirror = mic_cfg.config.get(section, "buildroot_mirror")
         # determine what codename to use for the buildroot mirror
         self.buildroot_codename = mic_cfg.config.get(section, "buildroot_codename")
+        # determine what components to use for the buildroot mirror
+        components = mic_cfg.config.get(section, "buildroot_components")
+        self.buildroot_components = components.split()
         # determine default kernel cmdline options
         self.usb_kernel_cmdline = mic_cfg.config.get(section, "usb_kernel_cmdline")
         self.hd_kernel_cmdline = mic_cfg.config.get(section, "hd_kernel_cmdline")
@@ -122,15 +125,16 @@ class Platform(object):
 
     def __aptCreateRootstrap(self, chroot_dir, rootstrap_file, callback = None):
         codename = self.buildroot_codename
+        components = ",".join(self.buildroot_components)
         mirror = self.buildroot_mirror
         chroot_type_string = "Platform"
         basedir = os.path.dirname(rootstrap_file)
         if not os.path.exists(basedir):
             os.makedirs(basedir)
-        cmd = "debootstrap --arch %s --include=apt %s %s %s" % (self.architecture, codename, chroot_dir, mirror)
+        cmd = "debootstrap --arch %s --include=apt --components=%s %s %s %s" % (self.architecture, components, codename, chroot_dir, mirror)
         output = []
         # XXX Evil hack
-        if not os.path.isfile("/usr/lib/debootstrap/scripts/%s" % codename):
+        if not os.path.isfile("/usr/lib/debootstrap/scripts/%s" % codename) and not os.path.isfile("/usr/share/debootstrap/scripts/%s" % codename):
             cmd += " /usr/share/pdk/debootstrap-scripts/%s" % codename
         # Sometimes we see network issues that trigger debootstrap to claim the
         # apt repository is corrupt.  This trick will force up to 10 attempts

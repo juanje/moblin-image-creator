@@ -61,9 +61,10 @@ sources_regex = [
     # source_archive,                           local mirror of source archive
 
 # Edit the following and uncomment them to enable use of a local mirror server.
-#    (r'http://archive.ubuntu.com/ubuntu gutsy',       'http://<PATH_TO_YOUR_LOCAL_MIRROR_OF_ARCHIVES_UBUNTU_COM/ gutsy'),
-#    (r'http://ports.ubuntu.com/ubuntu-ports gutsy', 'http://<PATH_TO_YOUR_LOCAL_MIRROR_OF_PORTS_UBUNTU_COM/ gutsy'),
-#    (r'http://www.moblin.org/apt gaston',       'http://<PATH_TO_YOUR_LOCAL_MIRROR_OF_MOBLIN_ORG/ gaston'),
+# NOTE: The trailing space is important in the strings!!!!
+#    (r'http://archive.ubuntu.com/ubuntu ',       'http://<PATH_TO_YOUR_LOCAL_MIRROR_OF_ARCHIVES_UBUNTU_COM/ '),
+#    (r'http://ports.ubuntu.com/ubuntu-ports ', 'http://<PATH_TO_YOUR_LOCAL_MIRROR_OF_PORTS_UBUNTU_COM/ '),
+#    (r'http://www.moblin.org/apt ',       'http://<PATH_TO_YOUR_LOCAL_MIRROR_OF_MOBLIN_ORG/ '),
 
 ]"""
     out_file.close()
