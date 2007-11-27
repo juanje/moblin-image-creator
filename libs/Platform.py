@@ -91,6 +91,7 @@ class Platform(object):
         else:
             # Default to Ubuntu if not specified
             self.pkg_manager = moblin_pkg.AptPackageManager()
+            self.createChroot = self.aptCreateChroot
             self.target_os = "ubuntu"
 
     def __str__(self):

@@ -33,7 +33,10 @@ moblin-image-creator (0.37) UNRELEASED; urgency=low
   * Try to make the throbber keeps on moving
   * Making the chroot creation code part of the platform
 
- -- John L. Villalovos <john.l.villalovos@intel.com>  Mon, 26 Nov 2007 15:13:56 -0800
+  [ Prajwal Mohan <prajwal@linux.intel.com> ]
+  * Bug fix: platform.createChroot was not initialized
+
+ -- Prajwal Mohan <prajwal@linux.intel.com>  Mon, 26 Nov 2007 16:05:06 -0800
 
 moblin-image-creator (0.36) gaston; urgency=low
 
