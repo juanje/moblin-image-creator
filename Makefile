@@ -78,6 +78,7 @@ cleanall: clean
 # Run the unit tests which run fairly quickly
 runbasictests:
 	@echo "Running basic unit tests..."
+	unittest/testMoblin_apt.py
 	unittest/test_fsets.py
 	unittest/testProject.py
 	unittest/testSdk.py

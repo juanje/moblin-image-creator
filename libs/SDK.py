@@ -359,6 +359,22 @@ class SDK(object):
             project_list.append(self.projects[key])
         return project_list
 
+    def clear_rootstraps(self):
+        print "Deleting rootstraps..."
+        for key in self.platforms.iterkeys():
+            path = self.platforms[key].path
+            for prefix in [ "build", "target" ]:
+                root_strap_path = os.path.join(path, "%s-rootstrap.tar.bz2" % prefix)
+                print "Looking for: %s" % root_strap_path
+                if os.path.exists(root_strap_path):
+                    print "Deleting: %s" % root_strap_path
+                    os.unlink(root_strap_path)
+        var_dir = mic_cfg.config.get('general', 'var_dir')
+        rootstrap_dir = os.path.join(var_dir, "rootstraps")
+        if os.path.exists(rootstrap_dir):
+            print "Deleting directory: %s" % rootstrap_dir
+            os.removedirs(rootstrap_dir)
+
     def umount(self):
         # Unmount all of our projects
         for key in sorted(self.projects.iterkeys()):

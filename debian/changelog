@@ -39,7 +39,11 @@ moblin-image-creator (0.37) UNRELEASED; urgency=low
   [ Rob Rhoads ]
   * Fixed a type-o for mccaslin platforms to have nolapic_timer kernel boot param.
 
- -- Rob Rhoads <rob.rhoads@intel.com>  Mon, 26 Nov 2007 17:17:55 -0800
+  [ Prajwal Mohan <prajwal@linux.intel.com> ]
+  * Adding GUI for clear rootstrap
+  * basic unit test for aptPackageManager
+
+ -- Prajwal Mohan <prajwal@linux.intel.com> Tue, 27 Nov 2007 11:04:13 -0800
 
 moblin-image-creator (0.36) gaston; urgency=low
 

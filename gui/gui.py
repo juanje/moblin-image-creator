@@ -77,6 +77,7 @@ class App(object):
                 "on_target_kernel_cmdline_clicked": self.on_target_kernel_cmdline_clicked,
                 "on_Write_USB_clicked": self.writeUsbImage,
                 "on_WriteUsbImage_activate":self.on_WriteUsbImage_activate,
+                "on_ClearRootstraps_activate":self.on_ClearRootstraps_activate,
                 "on_Load_activate":self.on_Load_activate,
                 "on_Save_activate":self.on_Save_activate,
                 "on_upgrade_project_clicked":self.on_upgrade_project_clicked,
@@ -614,6 +615,10 @@ class App(object):
     def on_WriteUsbImage_activate(self, widget):
         home_dir = os.getenv("HOME")
         return self.writeUsbImageHelper(home_dir)
+
+    def on_ClearRootstraps_activate(self, widget):        
+        print "In on_ClearRootstraps_activate"
+        self.sdk.clear_rootstraps()
 
     def on_Load_activate(self, widget):
         print "In on_Load_activate"
