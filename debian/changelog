@@ -36,7 +36,10 @@ moblin-image-creator (0.37) UNRELEASED; urgency=low
   [ Prajwal Mohan <prajwal@linux.intel.com> ]
   * Bug fix: platform.createChroot was not initialized
 
- -- Prajwal Mohan <prajwal@linux.intel.com>  Mon, 26 Nov 2007 16:05:06 -0800
+  [ Rob Rhoads ]
+  * Fixed a type-o for mccaslin platforms to have nolapic_timer kernel boot param.
+
+ -- Rob Rhoads <rob.rhoads@intel.com>  Mon, 26 Nov 2007 17:17:55 -0800
 
 moblin-image-creator (0.36) gaston; urgency=low
 
