@@ -1,3 +1,8 @@
 *~
 *.pyc
 *-rootstrap.tar.bz2
+build-stamp
+debian/files
+debian/moblin-image-creator.substvars
+debian/moblin-image-creator
+debian/*.debhelper

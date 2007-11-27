@@ -45,8 +45,12 @@ moblin-image-creator (0.37) UNRELEASED; urgency=low
 
   [ John L. Villalovos ]
   * Fix description of the Ubuntu Staging FSET
+  * Call mksquashfs without specifying the path, so it will work with Hardy
+    and Gutsy.
+  * Update the .gitignore file (Loic Minier)
+  * Update the debian/rules file (Loic Minier)
 
- -- John L. Villalovos <john.l.villalovos@intel.com>  Tue, 27 Nov 2007 11:37:39 -0800
+ -- John L. Villalovos <john.l.villalovos@intel.com>  Tue, 27 Nov 2007 13:44:20 -0800
 
 moblin-image-creator (0.36) gaston; urgency=low
 
