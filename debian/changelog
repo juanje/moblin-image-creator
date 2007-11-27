@@ -53,8 +53,10 @@ moblin-image-creator (0.37) UNRELEASED; urgency=low
     universe when creating the rootstrap.
   * Have the terminal button create a terminal which retains the environment
     of the host system
+  * Don't need to have the individual sources.list.d files for each gutsy
+    component anymore.
 
- -- John L. Villalovos <john.l.villalovos@intel.com>  Tue, 27 Nov 2007 14:13:39 -0800
+ -- John L. Villalovos <john.l.villalovos@intel.com>  Tue, 27 Nov 2007 14:21:31 -0800
 
 moblin-image-creator (0.36) gaston; urgency=low
 
