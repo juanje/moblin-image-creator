@@ -20,6 +20,7 @@ import ConfigParser
 import os
 import re
 import sys
+import time
 
 import fsets
 import mic_cfg
