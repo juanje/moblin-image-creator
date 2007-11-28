@@ -66,8 +66,9 @@ moblin-image-creator (0.37) UNRELEASED; urgency=low
 
   [ John L. Villalovos ]
   * Work on adding yum support continues.
+  * Created a common-apt/ directory for the platforms
 
- -- John L. Villalovos <john.l.villalovos@intel.com>  Wed, 28 Nov 2007 13:41:01 -0800
+ -- John L. Villalovos <john.l.villalovos@intel.com>  Wed, 28 Nov 2007 14:22:07 -0800
 
 moblin-image-creator (0.36) gaston; urgency=low
 
