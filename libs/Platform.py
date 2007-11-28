@@ -178,7 +178,97 @@ class Platform(object):
             raise ValueError(" ".join(output))
 
     def yumCreateChroot(self, chroot_dir, callback = None):
-        pass
+        raise NotImplementedError
+        if not os.path.exists(chroot_dir):
+            os.makedirs(chroot_dir)
+        target_os = self.target_os
+        var_dir = mic_cfg.config.get('general', 'var_dir')
+        rootstrap_file = os.path.join(var_dir, "rootstraps", "apt", target_os, self.name, "rootstrap.tgz")
+        if not os.path.exists(rootstrap_file):
+            self.__yumCreateRootstrap(chroot_dir, rootstrap_file, callback = callback)
+        else:
+            cmd = "tar -jxvf %s -C %s" % (rootstrap_file, chroot_dir)
+            output = []
+            result = pdk_utils.execCommand(cmd, output = output, callback = callback)
+            if result != 0:
+                print >> sys.stderr, "ERROR: Unable to rootstrap %s from %s!" % (rootstrap_file, name)
+                pdk_utils.rmtree(chroot_dir, callback = callback)
+                # FIXME: Better exception here
+                raise ValueError(" ".join(output))
+
+    def __yumCreateRootstrap(self, chroot_dir, rootstrap_file, callback = None):
+        try:
+            self.__yumCreateBase(path, repos)
+            self.__yumCreateDevices()
+            # TODO: install yum and yum-protectbase
+        except:
+            pass
+
+    def __yumCreateBase(self, path, repos):
+        for dirname in [ 'proc', 'var/log', 'var/lib/rpm', 'dev', 'etc/yum.repos.d' ]:
+            os.makedirs(os.path.join(path, dirname))
+        target_etc = os.path.join(path, "etc")
+        for filename in [ 'hosts', 'resolv.conf' ]:
+            shutil.copy(os.path.join('/etc', filename), target_etc)
+        yumconf = open(os.path.join(target_etc, 'yum.conf'), 'w')
+        print >> yumconf, """\
+[main]
+cachedir=/var/cache/yum
+keepcache=0
+debuglevel=2
+logfile=/var/log/yum.log
+pkgpolicy=newest
+distroverpkg=redhat-release
+tolerant=1
+exactarch=1
+obsoletes=1
+gpgcheck=0
+plugins=1
+metadata_expire=1800
+"""
+        yumconf.close()
+        for repo in repos:
+            shutil.copy(repo, os.path.join(target_etc, 'yum.repos.d'))
+
+    def __yumCreateDevices(self):
+        devices = [
+            # name, major, minor, mode
+            ('console', 5, 1, (0600 | stat.S_IFCHR)),
+            ('null',    1, 3, (0666 | stat.S_IFCHR)),
+            ('random',  1, 8, (0666 | stat.S_IFCHR)),
+            ('urandom', 1, 9, (0444 | stat.S_IFCHR)),
+            ('zero',    1, 5, (0666 | stat.S_IFCHR)),
+        ]
+        for device_name, major, minor, mode in devices:
+            device_path = os.path.join(self.path, 'dev', device_name)
+            device = os.makedev(major, minor)
+            os.mknod(device_path, mode, device)
+            # Seems redundant, but mknod doesn't seem to set the mode to
+            # what we want :(
+            os.chmod(device_path, mode)
+
+    def update(self, path):
+        command = '-y --installroot=%s update' % (path)
+        ret = self.chroot("/usr/bin/yum", command) 
+        if ret != 0:
+            raise OSError("Internal error while attempting to run: %s" % command)
+
+
+    def install(self, path, packages):
+        """
+        Call into yum to install RPM packages using the specified yum
+        repositories
+        """
+        if not packages:
+            # No packages, so nothing to do
+            return
+        command = '-y --installroot=%s install ' % (path)
+        for p in packages:
+            command += ' %s' % p
+        ret = self.chroot("/usr/bin/yum", command) 
+        if ret != 0:
+            raise OSError("Internal error while attempting to run: %s" % command)
+
 
 if __name__ == '__main__':
     for p in sys.argv[1:]:
