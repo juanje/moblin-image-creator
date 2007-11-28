@@ -264,6 +264,53 @@ def touchFile(filename):
         out_file.close()
     os.utime(filename, None)
 
+def rmtree(path, ignore_errors=False, onerror=None, callback = None):
+    """Recursively delete a directory tree.
+
+    This function was copied from the shutil.py library in Python 2.5.1.  The
+    license for Python is GPL compatible so it is okay to use it.  The reason
+    for creating a custom version of this is so that we can have a callback
+    function.  This way our throbber won't die for long periods of time when
+    deleting a large directory tree.
+
+    If ignore_errors is set, errors are ignored; otherwise, if onerror
+    is set, it is called to handle the error with arguments (func,
+    path, exc_info) where func is os.listdir, os.remove, or os.rmdir;
+    path is the argument to that function that caused it to fail; and
+    exc_info is a tuple returned by sys.exc_info().  If ignore_errors
+    is false and onerror is None, an exception is raised.
+    """
+    if ignore_errors:
+        def onerror(*args):
+            pass
+    elif onerror is None:
+        def onerror(*args):
+            raise
+    names = []
+    try:
+        names = os.listdir(path)
+    except os.error, err:
+        onerror(os.listdir, path, sys.exc_info())
+    for name in names:
+        fullname = os.path.join(path, name)
+        try:
+            mode = os.lstat(fullname).st_mode
+        except os.error:
+            mode = 0
+        if stat.S_ISDIR(mode):
+            if callback:
+                callback(None)
+            rmtree(fullname, ignore_errors, onerror)
+        else:
+            try:
+                os.remove(fullname)
+            except os.error, err:
+                onerror(os.remove, fullname, sys.exc_info())
+    try:
+        os.rmdir(path)
+    except os.error:
+        onerror(os.rmdir, path, sys.exc_info())
+
 class MountInfo(object):
     def __init__(self, mount_line):
         """Input is in the form that is found in /etc/mtab (or /proc/mounts)"""

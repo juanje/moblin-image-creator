@@ -273,13 +273,13 @@ class Project(FileSystem):
         print >> cmdline, str
         cmdline.close()
 
-    def delete_target(self, name, do_pop=True):
+    def delete_target(self, name, do_pop=True, callback = None):
         target = self.targets[name]
         target.umount()
         seen_paths = []
         while True:
             try:
-                shutil.rmtree(os.path.join(self.path, 'targets', name))
+                pdk_utils.rmtree(os.path.join(self.path, 'targets', name), callback = callback)
                 break
             except OSError, e:
                 # See if we get a resource busy error, if so we think it is a

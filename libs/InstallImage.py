@@ -328,7 +328,7 @@ class InstallImage(object):
         # copy the platform initramfs stuff into /etc/initramfs-tools/ in the target
         src_path = os.path.join('/usr/share/pdk/platforms', self.project.platform.name, 'initramfs')
         dst_path = os.path.join(self.target.fs_path, 'etc', 'initramfs-tools', )
-        shutil.rmtree(dst_path, True)
+        pdk_utils.rmtree(dst_path, True, callback = self.progress_callback)
         shutil.copytree(src_path, dst_path, True)
         # Create our config file that is used by our scripts during the running
         # of initramfs.  The initramfs/hooks/mobile script in each platform

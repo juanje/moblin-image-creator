@@ -241,7 +241,7 @@ class SDK(object):
         try:
             self.projects[name] = Project.Project(install_path, name, desc, platform, self.progress_callback)
         except:
-            shutil.rmtree(install_path)
+            pdk_utils.rmtree(install_path, callback = self.progress_callback)
             os.unlink(config_path)
             raise ValueError("%s" % (sys.exc_value))
         self.projects[name].mount()
@@ -323,7 +323,7 @@ class SDK(object):
             print "Error doing 'mv' cmd"
             sys.exit(1)
         print "Removing temporary directory: %s" % tempdir
-        shutil.rmtree(tempdir)
+        pdk_utils.rmtree(tempdir, callback = self.progress_callback)
         print "Project: %s restored to: %s" % (project_name, project_path)
 
     def copyProjectConfigFile(self, source_config_file, dest_config_file, project_name, project_path):
@@ -338,18 +338,11 @@ class SDK(object):
         proj = self.projects[project_name]
         for target in proj.targets:
             self.progress_callback(None)
-            proj.delete_target(target, False)
+            proj.delete_target(target, False, callback = self.progress_callback)
         proj.targets.clear()
         # and then deal with the project
         proj.umount()
-        # Maybe we should just use shutil.rmtree here??  Of course our progress
-        # indicator won't move if we do that.
-        cmd = "rm -fR %s" % (os.path.join(proj.path))
-        output = []
-        result = pdk_utils.execCommand(cmd, output = output, callback = self.progress_callback)
-        if result != 0:
-            print >> sys.stderr, "ERROR: Unable to delete %s!" % (project_name)
-            raise ValueError(" ".join(output))
+        pdk_utils.rmtree(proj.path, callback = self.progress_callback)
         os.unlink(os.path.join(self.config_path, proj.name + '.proj'))
 
     def getProjects(self):
@@ -373,7 +366,7 @@ class SDK(object):
         rootstrap_dir = os.path.join(var_dir, "rootstraps")
         if os.path.exists(rootstrap_dir):
             print "Deleting directory: %s" % rootstrap_dir
-            os.removedirs(rootstrap_dir)
+            pdk_utils.rmtree(rootstrap_dir, callback = self.progress_callback)
 
     def umount(self):
         # Unmount all of our projects
