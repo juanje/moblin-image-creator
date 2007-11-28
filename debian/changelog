@@ -57,8 +57,9 @@ moblin-image-creator (0.37) UNRELEASED; urgency=low
     component anymore.
   * Only the lpiacompat kernel is allowed for the Samsung Q1 Ultra, don't
     allow linuxgeneric kernel to be substituted
+  * Update README file
 
- -- John L. Villalovos <john.l.villalovos@intel.com>  Tue, 27 Nov 2007 14:27:54 -0800
+ -- John L. Villalovos <john.l.villalovos@intel.com>  Tue, 27 Nov 2007 16:20:40 -0800
 
 moblin-image-creator (0.36) gaston; urgency=low
 

@@ -272,8 +272,8 @@ Setup root strap mirror servers:
     Create a file called ~/.image-creator/image-creator.cfg:
     --------------------------------
     [platform]
-    buildroot_mirror = http://<path_to_a_local_mirror_of_ubuntu_gutsy_for_lpia>/
-    target_mirror = http://<path_to_a_local_mirror_of_ubuntu_gutsy_for_lpia>/
+    buildroot_mirror = http://<path_to_a_local_mirror_of_ubuntu_for_lpia>/
+    target_mirror = http://<path_to_a_local_mirror_of_ubuntu_for_lpia>/
     --------------------------------
 
     You can look at the file: /usr/share/pdk/default_config/defaults.cfg for more
@@ -282,15 +282,16 @@ Setup root strap mirror servers:
 Setup sources.list* rewrite rules:
 
     Create a file called ~/.image-creator/sources_cfg (and sources_cfg is NOT a
-    typo):
+    typo, it is an underscore):
     --------------------------------
     sources_regex = [
-        # For the Ubuntu Gutsy LPIA binaries
-        (r'http://ports.ubuntu.com/ubuntu-ports gutsy', 'http://<path_to_a_local_mirror_of_ubuntu_gutsy_for_lpia>/ gutsy'),
+        # For the Ubuntu LPIA binaries
+        # NOTE: The trailing spaces in the strings is important!!
+        (r'http://ports.ubuntu.com/ubuntu-ports ', 'http://<path_to_a_local_mirror_of_ubuntu_gutsy_for_lpia>/ '),
         # For the Ubuntu sources, since they are not at ports.ubuntu.com
-        (r'http://archive.ubuntu.com/ubuntu gutsy', 'http://<path_to_a_local_mirror_of_ubuntu_gutsy>/'),
+        (r'http://archive.ubuntu.com/ubuntu ', 'http://<path_to_a_local_mirror_of_ubuntu_gutsy>/ '),
         # For the Moblin.org files
-        (r'http://www.moblin.org/apt gaston', 'http://<path_to_a_local_mirror_of_moblin.org>/ gaston'),
+        (r'http://www.moblin.org/apt ', 'http://<path_to_a_local_mirror_of_moblin.org>/ '),
     ]
     --------------------------------
 
