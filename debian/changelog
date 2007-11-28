@@ -69,7 +69,10 @@ moblin-image-creator (0.37) UNRELEASED; urgency=low
   * Created a common-apt/ directory for the platforms
   * Start work on being able to create a chroot using Yum
 
- -- John L. Villalovos <john.l.villalovos@intel.com>  Wed, 28 Nov 2007 14:33:09 -0800
+  [ Prajwal Mohan ]
+  * Removing absolute path 
+
+ -- Prajwal Mohan <prajwal@linux.intel.com>  Wed, 28 Nov 2007 15:01:28 -0800
 
 moblin-image-creator (0.36) gaston; urgency=low
 

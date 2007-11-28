@@ -213,7 +213,7 @@ class InstallImage(object):
 
                 symbol_file = os.path.join(base_dir, 'boot', filename)
 
-                cmd = "/sbin/depmod -b %s -v %s -F %s" % (base_dir, kernel_version, symbol_file)
+                cmd = "depmod -b %s -v %s -F %s" % (base_dir, kernel_version, symbol_file)
                 self.target.chroot(cmd)
 
     def create_rootfs(self):
@@ -272,7 +272,7 @@ class InstallImage(object):
         fs_path    = os.path.join(fs_path, 'boot')
         image_path = self.target.image_path[len(self.project.path):]
         image_path = os.path.join(image_path,'bootfs.img')
-        cmd        = "/usr/sbin/mksquashfs %s %s -no-progress" % (fs_path, image_path)
+        cmd        = "mksquashfs %s %s -no-progress" % (fs_path, image_path)
         self.project.chroot(cmd)
 
     def delete_bootfs(self):
@@ -337,7 +337,7 @@ class InstallImage(object):
         self.writeShellConfigFile(cfg_filename)
         print "moblin-initramfs.cfg file created"
         kernel_mod_path = os.path.join('/lib/modules', kernel_version)
-        cmd = "/usr/sbin/mkinitramfs -o %s %s" % (initrd_file , kernel_mod_path)
+        cmd = "mkinitramfs -o %s %s" % (initrd_file , kernel_mod_path)
         print "Executing: %s" % cmd
         self.target.chroot(cmd)
         
@@ -350,7 +350,7 @@ class InstallImage(object):
             os.unlink(menu_file)
         if not os.path.exists(menu_dir):
             os.makedirs(menu_dir)
-        self.target.chroot("/usr/sbin/update-grub -y")
+        self.target.chroot("update-grub -y")
         # FIXME: JLV: I really don't like all this sed usage, need to clean this up
         self.target.chroot("/bin/sed s+/boot/+/+g -i /boot/grub/menu.lst")
         menu=open(os.path.join(self.target.fs_path,"boot","grub","menu.lst"),'r')
@@ -359,7 +359,7 @@ class InstallImage(object):
                 print line
                 if line.find(self.default_kernel.split('vmlinuz-').pop().strip()) > 0:
                     # FIXME: JLV: I really don't like all this sed usage, need to clean this up
-                    cmd="/bin/sed s/^default.*/default\\t\\t%d/g -i /boot/grub/menu.lst" % count
+                    cmd="sed s/^default.*/default\\t\\t%d/g -i /boot/grub/menu.lst" % count
                     print cmd
                     self.target.chroot(cmd)
                     break;
@@ -371,7 +371,7 @@ class InstallImage(object):
 
     def write_manifest(self, image_path):
         all_packages = []
-        self.target.chroot("/usr/bin/dpkg-query --show", output = all_packages)
+        self.target.chroot("dpkg-query --show", output = all_packages)
         manifest = open(image_path.rstrip('.img') + '.manifest', 'w')
         print >>manifest, "\n".join(all_packages)
         manifest.close()
@@ -409,7 +409,7 @@ class BaseUsbImage(InstallImage):
             out_file.write(out_string)
         out_file.close()
 
-        cmd_line = "/sbin/mkfs.vfat %s" % self.path
+        cmd_line = "mkfs.vfat %s" % self.path
         result = pdk_utils.execCommand(cmd_line, callback = self.progress_callback)
         if result:
             print >> sys.stderr, "Error running command: %s" % cmd_line
@@ -420,7 +420,7 @@ class BaseUsbImage(InstallImage):
         #       This runs syslinux inside the jailroot so the correct
         #       version of syslinux is used.
         jail_path = self.path[len(self.project.path):]
-        self.project.chroot('/usr/bin/syslinux %s' % jail_path)
+        self.project.chroot('syslinux %s' % jail_path)
 
     def create_ext3fs_file(self, path, size):
         """Create a ext3fs file.  size is how big to make the file in megabytes"""
@@ -430,7 +430,7 @@ class BaseUsbImage(InstallImage):
             out_file.write(out_string)
         out_file.close()
 
-        cmd_line = "/sbin/mkfs.ext3 %s -F" % path
+        cmd_line = "mkfs.ext3 %s -F" % path
         result = pdk_utils.execCommand(cmd_line, callback = self.progress_callback)
         if result:
             print >> sys.stderr, "Error running command: %s" % cmd_line
