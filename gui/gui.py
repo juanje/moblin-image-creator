@@ -618,7 +618,15 @@ class App(object):
 
     def on_ClearRootstraps_activate(self, widget):        
         print "In on_ClearRootstraps_activate"
+        progress_tree = gtk.glade.XML(self.gladefile, 'ProgressDialog')
+        progress_dialog = progress_tree.get_widget('ProgressDialog')
+        progress_dialog.connect('delete_event', self.ignore)
+        progress_tree.get_widget('progress_label').set_text("Please wait while clearing rootstraps")
+        self.progressbar = progress_tree.get_widget('progressbar')
+
         self.sdk.clear_rootstraps()
+
+        progress_dialog.destroy()
 
     def on_Load_activate(self, widget):
         print "In on_Load_activate"
