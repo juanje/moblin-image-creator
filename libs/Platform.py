@@ -177,6 +177,9 @@ class Platform(object):
             # FIXME: Better exception here
             raise ValueError(" ".join(output))
 
+    def yumCreateChroot(self, chroot_dir, callback = None):
+        pass
+
 if __name__ == '__main__':
     for p in sys.argv[1:]:
         print Platform('/usr/share/pdk', p)

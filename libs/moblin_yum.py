@@ -32,3 +32,11 @@ class YumPackageManager(moblin_pkgbase.PackageManager):
     def installPackages(self, chroot_dir, package_list):
         """Install the list of packages in the chroot environement"""
         raise NotImplementedError
+
+    def updateChroot(self, chroot_dir):
+        """Update the chroot environment to have the latest packages"""
+        raise NotImplementedError
+
+    def cleanPackageCache(self, chroot_dir):
+        """Clean out any cached package files"""
+        raise NotImplementedError
