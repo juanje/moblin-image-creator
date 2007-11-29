@@ -317,49 +317,105 @@ class App(object):
             else:
                 break
 
-    def on_install_fset(self, widget):
-        tree = gtk.glade.XML(self.gladefile, 'installFsetDialog')
-        dialog = tree.get_widget('installFsetDialog')
+    def checkBoxCallback(self, widget, fSetName, label):
+        #print "Checkbox %s was clicked" % data
         platform = self.current_project().platform
-        label = tree.get_widget('fset-desc-label')
+        fset = platform.fset[fSetName]
+        i = 0
+        active = False
+        for string in self.fsetsList:
+            if fSetName == string:
+                active = self.checkBoxList[i].get_active()
+            i = i + 1  
+        if active == True:
+            i = 0
+            for string in self.fsetsList:
+                if fSetName != string:
+                    for dep in fset['deps']:                
+                        if dep == string:
+                            if self.checkBoxList[i].get_active() == False:
+                                self.checkBoxList[i].set_active(True)
+                i = i + 1
+            i = 0
+            for string in self.fsetsList:
+                if fSetName == string:
+                    self.checkBoxList[i].set_sensitive(True)
+                    self.fsetToInstall = fSetName
+                    label.set_text(platform.fset[fSetName].desc)
+                else:
+                    self.checkBoxList[i].set_sensitive(False)
+                i = i + 1
+        else:
+            i = 0
+            self.fsetToInstall = ""
+            label.set_text("")
+            for string in self.fsetsList:
+                 self.checkBoxList[i].set_active(False)
+                 self.checkBoxList[i].set_sensitive(True)
+                 i = i + 1           
+    
+
+    def on_install_fset(self, widget):
+        tree = gtk.glade.XML(self.gladefile, 'fsetsDialog')
+        dialog = tree.get_widget('fsetsDialog')
+        vbox = tree.get_widget('vbox')
         checkbox = tree.get_widget('debug-check-button')
-        list = gtk.ListStore(gobject.TYPE_STRING)
-        iter = 0
+        label = tree.get_widget('fset-desc-label')
+        self.fsetToInstall = ""
+
+        platform = self.current_project().platform
         all_fsets = set(platform.fset)
         installed_fsets = set(self.current_target().installed_fsets())
+        list = gtk.ListStore(gobject.TYPE_STRING)
+        iter = 0
+        self.checkBoxList = [1]
+        self.fsetsList = [1]
         for fset_name in sorted(all_fsets.difference(installed_fsets)):
-            iter = list.append([fset_name])
+            iter = list.append([fset_name])               
+            self.checkBoxList.append(gtk.CheckButton(fset_name))
+            self.fsetsList.append(fset_name)
         if not iter:
             self.show_error_dialog("Nothing available to install!")
             dialog.destroy()
             return
-        cebox = tree.get_widget('installed_fsets')
- 
-        cebox.set_model(list)
-        cebox.set_active(0)
-        cebox.connect("changed", self.fset_install_updated, label, platform, checkbox)
-        label.set_text(platform.fset[cebox.get_active_text()].desc)
-        checkbox.set_sensitive(True)
-        if dialog.run() == gtk.RESPONSE_OK:
-            fset = platform.fset[cebox.get_active_text()]
-            debug_pkgs = checkbox.get_active()
-            dialog.destroy()
-            progress_tree = gtk.glade.XML(self.gladefile, 'ProgressDialog')
-            progress_dialog = progress_tree.get_widget('ProgressDialog')
-            progress_dialog.connect('delete_event', self.ignore)
-            self.progressbar = progress_tree.get_widget('progressbar')
-            progress_tree.get_widget('progress_label').set_text("Please wait while installing %s" % fset.name)
-            try:
-                self.current_target().installFset(fset, fsets = platform.fset, debug_pkgs = debug_pkgs)
-                self.redraw_target_view()
-            except ValueError, e:
-                self.show_error_dialog(e.args[0])
-            except:
-                traceback.print_exc()
-                if debug: print_exc_plus()
-                self.show_error_dialog("Unexpected error: %s" % (sys.exc_info()[1]))
-            progress_dialog.destroy()
-        dialog.destroy();
+        self.checkBoxList.pop(0)
+        self.fsetsList.pop(0)
+        i = 0
+        for checkBox in self.checkBoxList:            
+            checkBox.connect("clicked", self.checkBoxCallback, self.fsetsList[i], label)
+            vbox.pack_end(checkBox)
+            i = i + 1
+
+        dialog.show_all()        
+        while True:
+            if dialog.run() == gtk.RESPONSE_OK:
+                if self.fsetToInstall != "":        
+                    debug_pkgs = checkbox.get_active()            
+                    fset = platform.fset[self.fsetToInstall]
+                    dialog.destroy()    
+                    print "Installing fset %s. Debug packages %s" % (self.fsetToInstall, debug_pkgs)
+                    progress_tree = gtk.glade.XML(self.gladefile, 'ProgressDialog')
+                    progress_dialog = progress_tree.get_widget('ProgressDialog')
+                    progress_dialog.connect('delete_event', self.ignore)
+                    self.progressbar = progress_tree.get_widget('progressbar')
+                    progress_tree.get_widget('progress_label').set_text("Please wait while installing %s" % fset.name)
+                    try:
+                        self.current_target().installFset(fset, fsets = platform.fset, debug_pkgs = debug_pkgs)
+                        self.redraw_target_view()
+                    except ValueError, e:
+                        self.show_error_dialog(e.args[0])
+                    except:
+                        traceback.print_exc()
+                        if debug: print_exc_plus()
+                        self.show_error_dialog("Unexpected error: %s" % (sys.exc_info()[1]))
+                    progress_dialog.destroy()
+                    break
+                else:
+                    print "No fset selected"
+                    self.show_error_dialog("Please Choose an Fset")
+            else:
+                break
+        dialog.destroy()
 
     def ignore(self, *args):
         return True
