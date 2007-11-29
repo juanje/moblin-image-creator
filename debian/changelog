@@ -70,9 +70,12 @@ moblin-image-creator (0.37) UNRELEASED; urgency=low
   * Start work on being able to create a chroot using Yum
 
   [ Prajwal Mohan ]
-  * Removing absolute path 
+  * Removing absolute path
 
- -- Prajwal Mohan <prajwal@linux.intel.com>  Wed, 28 Nov 2007 15:01:28 -0800
+  [ John L. Villalovos ]
+  * Need the multiverse component for the flashplugin-nonfree package
+
+ -- John L. Villalovos <john.l.villalovos@intel.com>  Wed, 28 Nov 2007 18:41:56 -0800
 
 moblin-image-creator (0.36) gaston; urgency=low
 
