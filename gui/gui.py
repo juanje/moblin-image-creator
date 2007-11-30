@@ -317,42 +317,47 @@ class App(object):
             else:
                 break
 
-    def checkBoxCallback(self, widget, fSetName, label):
-        #print "Checkbox %s was clicked" % data
+    def checkBoxCallback(self, widget, fSetName):
+        #print "Checkbox %s was clicked" % fSetName
         platform = self.current_project().platform
         fset = platform.fset[fSetName]
         i = 0
         active = False
-        for string in self.fsetsList:
-            if fSetName == string:
-                active = self.checkBoxList[i].get_active()
+        for item in self.fsetTouple:
+            if fSetName == item[0]:
+                active = self.fsetTouple[i][1].get_active()
+                self.fsetTouple[i] = (self.fsetTouple[i][0], self.fsetTouple[i][1], True, self.fsetTouple[i][3])
             i = i + 1  
         if active == True:
             i = 0
-            for string in self.fsetsList:
-                if fSetName != string:
+            for item in self.fsetTouple:
+                if fSetName != item[0]:
                     for dep in fset['deps']:                
-                        if dep == string:
-                            if self.checkBoxList[i].get_active() == False:
-                                self.checkBoxList[i].set_active(True)
-                i = i + 1
-            i = 0
-            for string in self.fsetsList:
-                if fSetName == string:
-                    self.checkBoxList[i].set_sensitive(True)
-                    self.fsetToInstall = fSetName
-                    label.set_text(platform.fset[fSetName].desc)
-                else:
-                    self.checkBoxList[i].set_sensitive(False)
+                        if dep == item[0]:
+                            if self.fsetTouple[i][1].get_active() == False:
+                                self.fsetTouple[i][1].set_active(True)
+                            self.fsetTouple[i][1].set_sensitive(False)                   
+                            self.fsetTouple[i] = (self.fsetTouple[i][0], self.fsetTouple[i][1], False, self.fsetTouple[i][3] + 1) 
                 i = i + 1
         else:
             i = 0
-            self.fsetToInstall = ""
-            label.set_text("")
-            for string in self.fsetsList:
-                 self.checkBoxList[i].set_active(False)
-                 self.checkBoxList[i].set_sensitive(True)
-                 i = i + 1           
+            for item in self.fsetTouple:
+                if fSetName != item[0]:
+                    for dep in fset['deps']:                
+                        if dep == item[0]:
+                            self.fsetTouple[i] = (self.fsetTouple[i][0], self.fsetTouple[i][1], False, self.fsetTouple[i][3] - 1) 
+                            if self.fsetTouple[i][3] == 0:
+                                if self.fsetTouple[i][1].get_active() == True:                                
+                                    self.fsetTouple[i][1].set_active(False)
+                                self.fsetTouple[i][1].set_sensitive(True)                    
+                else:    
+                    self.fsetTouple[i] = (self.fsetTouple[i][0], self.fsetTouple[i][1], False, self.fsetTouple[i][3]) 
+                i = i + 1
+
+        #for item in self.fsetTouple:            
+        #    item[1].set_label(item[0] + " : %s" % item[3])
+          
+
     
 
     def on_install_fset(self, widget):
@@ -360,7 +365,6 @@ class App(object):
         dialog = tree.get_widget('fsetsDialog')
         vbox = tree.get_widget('vbox')
         checkbox = tree.get_widget('debug-check-button')
-        label = tree.get_widget('fset-desc-label')
         self.fsetToInstall = ""
 
         platform = self.current_project().platform
@@ -368,46 +372,53 @@ class App(object):
         installed_fsets = set(self.current_target().installed_fsets())
         list = gtk.ListStore(gobject.TYPE_STRING)
         iter = 0
-        self.checkBoxList = [1]
-        self.fsetsList = [1]
+        self.fsetTouple = [("", gtk.CheckButton(""), False, 0)]
         for fset_name in sorted(all_fsets.difference(installed_fsets)):
             iter = list.append([fset_name])               
-            self.checkBoxList.append(gtk.CheckButton(fset_name))
-            self.fsetsList.append(fset_name)
+            buttonName = fset_name + "  (" + platform.fset[fset_name].desc + ")"
+            self.fsetTouple.append((fset_name, gtk.CheckButton(buttonName), False, 0))
         if not iter:
             self.show_error_dialog("Nothing available to install!")
             dialog.destroy()
             return
-        self.checkBoxList.pop(0)
-        self.fsetsList.pop(0)
+        self.fsetTouple.pop(0)
         i = 0
-        for checkBox in self.checkBoxList:            
-            checkBox.connect("clicked", self.checkBoxCallback, self.fsetsList[i], label)
-            vbox.pack_end(checkBox)
+        for checkBox in self.fsetTouple:            
+            checkBox[1].connect("clicked", self.checkBoxCallback, self.fsetTouple[i][0])
+            vbox.pack_start(checkBox[1])
             i = i + 1
 
         dialog.show_all()        
         while True:
             if dialog.run() == gtk.RESPONSE_OK:
-                if self.fsetToInstall != "":        
+                numFsetsToInstall = 0
+                for fsetName in self.fsetTouple:
+                        if fsetName[2] == True:
+                            numFsetsToInstall = numFsetsToInstall + 1
+                print "Number of fsets to install: %s" % numFsetsToInstall
+
+                if numFsetsToInstall != 0:        
                     debug_pkgs = checkbox.get_active()            
-                    fset = platform.fset[self.fsetToInstall]
                     dialog.destroy()    
-                    print "Installing fset %s. Debug packages %s" % (self.fsetToInstall, debug_pkgs)
+                    print "Debug packages = %s" % debug_pkgs
                     progress_tree = gtk.glade.XML(self.gladefile, 'ProgressDialog')
                     progress_dialog = progress_tree.get_widget('ProgressDialog')
                     progress_dialog.connect('delete_event', self.ignore)
                     self.progressbar = progress_tree.get_widget('progressbar')
-                    progress_tree.get_widget('progress_label').set_text("Please wait while installing %s" % fset.name)
-                    try:
-                        self.current_target().installFset(fset, fsets = platform.fset, debug_pkgs = debug_pkgs)
-                        self.redraw_target_view()
-                    except ValueError, e:
-                        self.show_error_dialog(e.args[0])
-                    except:
-                        traceback.print_exc()
-                        if debug: print_exc_plus()
-                        self.show_error_dialog("Unexpected error: %s" % (sys.exc_info()[1]))
+                    for fsetName in self.fsetTouple:
+                        if fsetName[2] == True:
+                            fset = platform.fset[fsetName[0]]            
+                            print "Installing fset %s.................\n" % fsetName[0]
+                            progress_tree.get_widget('progress_label').set_text("Please wait while installing %s" % fset.name)
+                            try:
+                                self.current_target().installFset(fset, fsets = platform.fset, debug_pkgs = debug_pkgs)
+                            except ValueError, e:
+                                self.show_error_dialog(e.args[0])
+                            except:
+                                traceback.print_exc()
+                                if debug: print_exc_plus()
+                                self.show_error_dialog("Unexpected error: %s" % (sys.exc_info()[1]))
+                    self.redraw_target_view()
                     progress_dialog.destroy()
                     break
                 else:

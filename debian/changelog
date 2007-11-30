@@ -76,9 +76,11 @@ moblin-image-creator (0.37) UNRELEASED; urgency=low
   * Need the multiverse component for the flashplugin-nonfree package
 
   [ Prajwal Mohan ]
-  * Adding check box for Fsets 
+  * Adding check box for Fsets
+  * Adding description along with Fset Name
+  * Can choose multiple fsets 
 
- -- Prajwal Mohan <prajwal@linux.intel.com>  Thu, 29 Nov 2007 13:43:30 -0800
+ -- Prajwal Mohan <prajwal@linux.intel.com>  Thu, 29 Nov 2007 16:22:49 -0800
 
 moblin-image-creator (0.36) gaston; urgency=low
 
