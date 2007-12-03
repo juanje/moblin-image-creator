@@ -178,7 +178,6 @@ class Platform(object):
             raise ValueError(" ".join(output))
 
     def yumCreateChroot(self, chroot_dir, callback = None):
-        raise NotImplementedError
         if not os.path.exists(chroot_dir):
             os.makedirs(chroot_dir)
         target_os = self.target_os
@@ -203,6 +202,7 @@ class Platform(object):
             # TODO: install yum and yum-protectbase
         except:
             pass
+        raise NotImplementedError
 
     def __yumCreateBase(self, path, repos):
         for dirname in [ 'proc', 'var/log', 'var/lib/rpm', 'dev', 'etc/yum.repos.d' ]:

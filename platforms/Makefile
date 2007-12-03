@@ -1,8 +1,9 @@
 SHARE = ${DESTDIR}/usr/share/pdk
 PLATFORM_DIR = ${SHARE}/platforms/
-DIRS = $(shell find -maxdepth 1 -type d | grep "..$*" | grep -v /common$)
+DIRS = $(shell find -maxdepth 1 -type d | grep "..$*" | grep -v /common)
 
 all:
+	echo ${DIRS}
 	@for i in ${DIRS}; do make -C $$i; done
 
 install:

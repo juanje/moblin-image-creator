@@ -78,9 +78,12 @@ moblin-image-creator (0.37) UNRELEASED; urgency=low
   [ Prajwal Mohan ]
   * Adding check box for Fsets
   * Adding description along with Fset Name
-  * Can choose multiple fsets 
+  * Can choose multiple fsets
 
- -- Prajwal Mohan <prajwal@linux.intel.com>  Thu, 29 Nov 2007 16:22:49 -0800
+  [ John L. Villalovos ]
+  * Adding a Fedora platform definition
+
+ -- John L. Villalovos <john.l.villalovos@intel.com>  Mon, 03 Dec 2007 15:52:03 -0800
 
 moblin-image-creator (0.36) gaston; urgency=low
 
