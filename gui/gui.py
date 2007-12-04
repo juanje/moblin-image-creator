@@ -234,9 +234,10 @@ class App(object):
                 self.statuslabel = progress_tree.get_widget('status_label')
                 while gtk.events_pending():
                     gtk.main_iteration(False) 
-                proj = self.sdk.create_project(dialog.path, dialog.name, dialog.desc, self.sdk.platforms[dialog.platform])
+                platformName = dialog.platform.split()[0]
+                proj = self.sdk.create_project(dialog.path, dialog.name, dialog.desc, self.sdk.platforms[platformName])
                 proj.install()
-                self.projectList.append((dialog.name, dialog.desc, dialog.path, dialog.platform))
+                self.projectList.append((dialog.name, dialog.desc, dialog.path, platformName))
             except:
                 traceback.print_exc()
                 if debug: print_exc_plus()
@@ -875,8 +876,7 @@ class AddNewProject(object):
         for idx, pname in enumerate(platforms):        
             pdesc = ""            
             if self.sdk.platforms[pname].config_info != None:
-                pdesc = " (" + self.sdk.platforms[pname].config_info['description'] + ")"
-            print "Platform Name: %s, Description: %s" % (pname, pdesc)
+                pdesc = " - (%s)" % self.sdk.platforms[pname].config_info['description']
             platform_entry_box.append([pname + pdesc])
             if pname == platform:
                 platform_idx = idx
