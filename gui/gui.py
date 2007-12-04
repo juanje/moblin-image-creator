@@ -872,8 +872,12 @@ class AddNewProject(object):
         platform_entry_box = gtk.ListStore(gobject.TYPE_STRING)
         platforms = sorted(self.sdk.platforms.iterkeys())
         platform_idx = 0
-        for idx, pname in enumerate(platforms):
-            platform_entry_box.append([pname])
+        for idx, pname in enumerate(platforms):        
+            pdesc = ""            
+            if self.sdk.platforms[pname].config_info != None:
+                pdesc = " (" + self.sdk.platforms[pname].config_info['description'] + ")"
+            print "Platform Name: %s, Description: %s" % (pname, pdesc)
+            platform_entry_box.append([pname + pdesc])
             if pname == platform:
                 platform_idx = idx
         self.np_platform.set_model(platform_entry_box)
