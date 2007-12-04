@@ -33,8 +33,8 @@ basicinstall: all
 	@cp COPYING ${DESTDIR}/${SHAREDIR}/
 	@cp -a gui/pixmaps/. ${DESTDIR}/${SHAREDIR}
 	@cp default_config/defaults.cfg ${DESTDIR}/${SHAREDIR}/default_config/
-	@mkdir -p ${DESTDIR}/usr/sbin
-	@cp image-creator ${DESTDIR}/usr/sbin/
+	@mkdir -p ${DESTDIR}/usr/bin
+	@cp image-creator ${DESTDIR}/usr/bin/
 	@mkdir -p ${DESTDIR}/etc/bash_completion.d/
 	@cp utils/image-creator-completion.bash ${DESTDIR}/etc/bash_completion.d/
 	@mkdir -p ${DESTDIR}/${SHAREDIR}/gnome/help/image-creator/
