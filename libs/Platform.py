@@ -19,6 +19,8 @@
 import ConfigParser
 import os
 import re
+import shutil
+import stat
 import sys
 import time
 
@@ -161,9 +163,9 @@ class Platform(object):
         pdk_utils.touchFile('touch %s/etc/kernel-img.conf' % (chroot_dir))
         pdk_utils.touchFile('touch %s/etc/kernel-pkg.conf' % (chroot_dir))
         source_dir = os.path.join(self.path, 'sources')
-        for f in os.listdir(source_dir):
-            source_path = os.path.join(source_dir, f)
-            dest_path = os.path.join(chroot_dir, 'etc', 'apt', 'sources.list.d', f)
+        for filename in os.listdir(source_dir):
+            source_path = os.path.join(source_dir, filename)
+            dest_path = os.path.join(chroot_dir, 'etc', 'apt', 'sources.list.d', filename)
             pdk_utils.copySourcesListFile(source_path, dest_path)
         source_path = os.path.join(self.path, 'preferences')
         if os.path.exists(source_path):
@@ -196,18 +198,18 @@ class Platform(object):
                 raise ValueError(" ".join(output))
 
     def __yumCreateRootstrap(self, chroot_dir, rootstrap_file, callback = None):
-        try:
-            self.__yumCreateBase(path, repos)
-            self.__yumCreateDevices()
+#        try:
+            self.__yumCreateBase(chroot_dir)
+            self.__yumCreateDevices(chroot_dir)
             # TODO: install yum and yum-protectbase
-        except:
-            pass
-        raise NotImplementedError
+#        except:
+#            pass
+            raise NotImplementedError
 
-    def __yumCreateBase(self, path, repos):
+    def __yumCreateBase(self, chroot_dir):
         for dirname in [ 'proc', 'var/log', 'var/lib/rpm', 'dev', 'etc/yum.repos.d' ]:
-            os.makedirs(os.path.join(path, dirname))
-        target_etc = os.path.join(path, "etc")
+            os.makedirs(os.path.join(chroot_dir, dirname))
+        target_etc = os.path.join(chroot_dir, "etc")
         for filename in [ 'hosts', 'resolv.conf' ]:
             shutil.copy(os.path.join('/etc', filename), target_etc)
         yumconf = open(os.path.join(target_etc, 'yum.conf'), 'w')
@@ -227,10 +229,13 @@ plugins=1
 metadata_expire=1800
 """
         yumconf.close()
-        for repo in repos:
-            shutil.copy(repo, os.path.join(target_etc, 'yum.repos.d'))
+        yum_repos_dir = os.path.join(self.path, 'yum.repos.d')
+        for filename in os.listdir(yum_repos_dir):
+            source_path = os.path.join(yum_repos_dir, filename)
+            dest_path = os.path.join(chroot_dir, 'etc', 'yum.repos.d', filename)
+            pdk_utils.copySourcesListFile(source_path, dest_path)
 
-    def __yumCreateDevices(self):
+    def __yumCreateDevices(self, chroot_dir):
         devices = [
             # name, major, minor, mode
             ('console', 5, 1, (0600 | stat.S_IFCHR)),
@@ -240,7 +245,7 @@ metadata_expire=1800
             ('zero',    1, 5, (0666 | stat.S_IFCHR)),
         ]
         for device_name, major, minor, mode in devices:
-            device_path = os.path.join(self.path, 'dev', device_name)
+            device_path = os.path.join(chroot_dir, 'dev', device_name)
             device = os.makedev(major, minor)
             os.mknod(device_path, mode, device)
             # Seems redundant, but mknod doesn't seem to set the mode to

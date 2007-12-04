@@ -171,7 +171,8 @@ class FileSystem(object):
         # Go through all the mount points that we recorded during the mount
         # function
         for mount_point in self.mounted:
-            os.system("umount %s" % (mount_point))
+            if os.path.exists(mount_point):
+                os.system("umount %s" % (mount_point))
         # Have to add a '/' on the end to prevent /foo/egg and /foo/egg2 being
         # treated as if both were under /foo/egg
         our_path = os.path.realpath(os.path.abspath(self.path)) + os.sep
