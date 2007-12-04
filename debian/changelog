@@ -89,6 +89,7 @@ moblin-image-creator (0.37) UNRELEASED; urgency=low
 
   [ John L. Villalovos ]
   * Work continuing on yum support
+  * Make the new package code, the default
 
  -- John L. Villalovos <john.l.villalovos@intel.com>  Tue, 04 Dec 2007 12:13:28 -0800
 
