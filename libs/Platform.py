@@ -46,7 +46,7 @@ class Platform(object):
             for key, value in sorted(config_info):
                 self.config_info[key] = value
         else:
-            self.config_info = None
+            raise ValueError("Platform called but config_info value not passed in")
         # instantiate all fsets
         self.fset = fsets.FSet()
         fset_path = os.path.join(self.path, 'fsets')
@@ -83,22 +83,16 @@ class Platform(object):
         # Architecture
         self.architecture = mic_cfg.config.get(section, "architecture") or "i386"
         # Package Manager
-        if self.config_info:
-            if self.config_info['package_manager'] == 'apt':
-                self.pkg_manager = moblin_pkg.AptPackageManager()
-                self.createChroot = self.aptCreateChroot
-            elif self.config_info['package_manager'] == 'yum':
-                self.pkg_manager = moblin_pkg.YumPackageManager()
-                self.createChroot = self.yumCreateChroot
-            else:
-                raise ValueError("package manager value of: '%s' is invalid" % self.config_info['package_manager'])
-            # Target OS
-            self.target_os = self.config_info['target_os']
-        else:
-            # Default to Ubuntu if not specified
+        if self.config_info['package_manager'] == 'apt':
             self.pkg_manager = moblin_pkg.AptPackageManager()
             self.createChroot = self.aptCreateChroot
-            self.target_os = "ubuntu"
+        elif self.config_info['package_manager'] == 'yum':
+            self.pkg_manager = moblin_pkg.YumPackageManager()
+            self.createChroot = self.yumCreateChroot
+        else:
+            raise ValueError("package manager value of: '%s' is invalid" % self.config_info['package_manager'])
+        # Target OS
+        self.target_os = self.config_info['target_os']
 
     def __str__(self):
         return ("<Platform Object: \n\tname=%s, \n\tfset=%s, \n\tbuildroot_packages=%s>\n" %
