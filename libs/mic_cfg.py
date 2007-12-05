@@ -30,7 +30,7 @@ config = None
 DEFAULT_CONFIG_DIR = os.path.expanduser("/usr/share/pdk/default_config/")
 CONFIG_DIR = os.path.expanduser("~/.image-creator")
 # List of valid sections for our config file
-BASE_SECTIONS = [ "platform" ]
+BASE_SECTIONS = [ "platform", "installimage" ]
 VALID_SECTIONS = BASE_SECTIONS + [ "installimage", "general" ]
 
 # Default values

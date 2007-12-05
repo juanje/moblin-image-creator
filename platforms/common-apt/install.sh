@@ -91,8 +91,6 @@ splash_delay 10
 splash_display "Creating New Partiton Table on /dev/${device} ..."
 splash_delay 200
 
-# if swap_partition_size is zero, this script will not create the third partition
-# -- the n p 3 command will get reponse "no space left" which meets our needs.
 fdisk /dev/${device} <<EOF
 n
 p
@@ -103,7 +101,42 @@ n
 p
 2
 
-$((cylinders-(swap_partition_size*1000/8192)))
+$((cylinders-((swap_partition_size+fat32_partition_size)*1000/8192)))
+a
+1
+w
+EOF
+
+if [ $swap_partition_size -ne 0 ]
+then
+   fdisk /dev/${device} <<EOF
+n
+p
+3
+
+$((cylinders-(fat32_partition_size*1000/8192)))
+t
+3
+82
+w
+EOF
+   if [ $fat32_partition_size -gt 0 ]
+   then
+      fdisk /dev/${device} <<EOF
+n
+p
+4
+
+
+t
+4
+c
+w
+EOF
+   fi
+else if  [ $fat32_partition_size -gt 0 ]
+         then
+         fdisk /dev/${device} <<EOF
 n
 p
 3
@@ -111,11 +144,11 @@ p
 
 t
 3
-82
-a
-1
+c
 w
 EOF
+    fi
+fi
 
 sync
 splash_progress 10
@@ -140,6 +173,18 @@ then
     splash_display "Formatting /dev/${device}3 w/ swap..."
     splash_delay 1000
     mkswap /dev/${device}3
+    if [ $fat32_partition_size -ne 0 ]
+    then
+       splash_display "Formatting /dev/${device}4 w/ vfat..."
+       splash_delay 1000
+       mkfs.vfat /dev/${device}4
+    fi
+else if [ $fat32_partition_size -ne 0 ]
+     then
+       splash_display "Formatting /dev/${device}3 w/ vfat..."
+       splash_delay 1000
+       mkfs.vfat /dev/${device}3
+    fi
 fi
 sync
 splash_progress 65

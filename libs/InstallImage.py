@@ -35,15 +35,20 @@ if mic_cfg.config.has_option('general', 'debug'):
 class SyslinuxCfg(object):
     """Class to provide helper functions for doing the syslinux stuff.
     Syslinux home page: http://syslinux.zytor.com/"""
-    def __init__(self, path, cfg_filename, message_color, message):
+    def __init__(self, project, path, cfg_filename, message_color, message):
         try:
+            self.project = project
             self.path = path
             self.cfg_filename = cfg_filename
             self.cfg_path = os.path.join(self.path, cfg_filename)
             self.msg_path = os.path.join(self.path, 'boot.msg')
             self.index = 1
 
-            welcome_mesg = mic_cfg.config.get("installimage", "welcome_message")
+            for section in [ "installimage.%s" % self.project.platform.name, "installimage" ]:
+                if mic_cfg.config.has_section(section):
+                   # section is now set to the appropriate section
+                   break
+            welcome_mesg = mic_cfg.config.get(section, "welcome_message")
             # Create and initialize the syslinux config file
             cfg_file = open(self.cfg_path, 'w')
             print >> cfg_file, """\
@@ -154,6 +159,12 @@ class InstallImage(object):
         self.rootfs_path = ''
         self.kernels = []
         self.default_kernel = ''
+        # Find the config section for whole class usage 
+        for section in [ "installimage.%s" % self.project.platform.name, "installimage" ]:
+            if mic_cfg.config.has_section(section):
+                # section is now set to the appropriate section
+                break
+        self.section = section
         for filename in os.listdir(os.path.join(self.target.fs_path, 'boot')):
             if filename.find('vmlinuz') == 0:
                 if (not self.default_kernel) and (filename.find('default') > 0):
@@ -172,7 +183,7 @@ class InstallImage(object):
         if not self.tmp_path:
             raise ValueError, "tmp_path doesn't exist"
 
-        s = SyslinuxCfg(self.tmp_path, cfg_filename, message_color, message)
+        s = SyslinuxCfg(self.project, self.tmp_path, cfg_filename, message_color, message)
         # Copy the default kernel
         kernel_name = s.add_default(self.default_kernel, self.project.get_target_usb_kernel_cmdline(self.target.name))
         src_path = os.path.join(self.target.fs_path, 'boot', self.default_kernel)
@@ -185,11 +196,16 @@ class InstallImage(object):
             dst_path = os.path.join(self.tmp_path, kernel_name)
             shutil.copyfile(src_path, dst_path)
 
-    def create_fstab(self, swap = True):
+    def create_fstab(self, swap = True, fat32 = True, fat32_mntpoint = '/media'):
         fstab_file = open(os.path.join(self.target.fs_path, 'etc/fstab'), 'w')
         print >> fstab_file, "proc			/proc			proc	defaults	0 0"
         if swap:
             print >> fstab_file, "/dev/sda3		none			swap	sw		0 0"
+            if fat32:
+                 print >> fstab_file, "/dev/sda4		%s			vfat	defaults	0 1" % fat32_mntpoint
+        else:
+            if fat32:
+                 print >> fstab_file, "/dev/sda3		%s			vfat	defaults	0 1" % fat32_mntpoint
         fstab_file.close()
 
     def create_modules_dep(self):
@@ -224,11 +240,17 @@ class InstallImage(object):
         # re-create fstab every time, since user could change fstab options on
         # the fly (by editing image-creator.cfg)
         fstab_path = os.path.join(self.target.fs_path, 'etc/fstab')
-        if int(mic_cfg.config.get("installimage", "swap_option")) == 2:
+        if int(mic_cfg.config.get(self.section, "swap_option")) == 2:
             swap = True
         else:
             swap = False
-        self.create_fstab(swap)
+        if int(mic_cfg.config.get(self.section, "fat32_partition_size")) > 0:
+            fat32 = True
+            fat32_mntpoint = mic_cfg.config.get(self.section, "fat32_mntpoint")
+        else:
+            fat32 = False
+            fat32_mntpoint = ''
+        self.create_fstab(swap, fat32, fat32_mntpoint)
         self.create_modules_dep()
         self.rootfs = 'rootfs.img'
         self.rootfs_path = os.path.join(self.target.image_path, self.rootfs)
@@ -294,19 +316,22 @@ class InstallImage(object):
         """Write all of the config file options that we care about to the
         specified file"""
         # How big to make the boot partition for the HD installation image
-        boot_partition_size = int(mic_cfg.config.get("installimage", "boot_partition_size"))
+        boot_partition_size = int(mic_cfg.config.get(self.section, "boot_partition_size"))
         # Options for swap partition: 0. No swap 1. swap always off 2. swap always on
-        swap_option = int(mic_cfg.config.get("installimage", "swap_option"))
+        swap_option = int(mic_cfg.config.get(self.section, "swap_option"))
         # How big to make the swap partition for the HD installation image
-        swap_partition_size = int(mic_cfg.config.get("installimage", "swap_partition_size"))
+        swap_partition_size = int(mic_cfg.config.get(self.section, "swap_partition_size"))
+        # How big to make the fat32 partition for the HD installation image
+        fat32_partition_size = int(mic_cfg.config.get(self.section, "fat32_partition_size"))
         # Use squashfs or not
-        use_squashfs = int(mic_cfg.config.get("installimage", "use_squashfs"))
+        use_squashfs = int(mic_cfg.config.get(self.section, "use_squashfs"))
         if swap_option == 0:
             swap_partition_size = 0
         cfg_dict = {
             'boot_partition_size' : boot_partition_size,
             'swap_option' : swap_option,
             'swap_partition_size' : swap_partition_size,
+            'fat32_partition_size' : fat32_partition_size,
             'use_squashfs' : use_squashfs,
         }
         output_file = open(filename, 'w')
@@ -464,7 +489,7 @@ class LiveUsbImage(BaseUsbImage):
             print "LiveUsbImage: Creating Live USB Image(%s) Now..." % fs_type
             image_type = "Live USB Image (no persistent R/W)"
         # How big to make the ext3 File System on the Live RW USB image, in megabytes
-        ext3fs_fs_size = int(mic_cfg.config.get("installimage", "ext3fs_size"))
+        ext3fs_fs_size = int(mic_cfg.config.get(self.section, "ext3fs_size"))
         self.create_all_initramfs()
         self.create_rootfs()
         initrd_stat_result = os.stat('/tmp/.tmp.initrd0')
