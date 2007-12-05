@@ -96,6 +96,10 @@ moblin-image-creator (0.37) UNRELEASED; urgency=low
   * Can now install the "core" fset using Fedora
   * Our pdk_utils.rmtree() function wasn't doing the callback to the throbber
     correctly.
+  * Yum support continues.  Removed some apt-get stuff, now have yum install
+    of packages working.  Have some very basic FSETs working.  Also have
+    updated the list of packages which get installed into a project, to work
+    with Fedora.
 
   [ Alek Du ]
   * Add vfat partition support, this includes:1. make mic config file installimage section support

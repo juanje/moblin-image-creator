@@ -1,6 +1,6 @@
 [Samsung-Full-Mobile-Stack-with-Proprietary]
-DESC=The full samsung stack, including proprietary (non-redistributable bits)
-PKGS=flashplugin-nonfree
+DESC=The full samsung stack, including proprietary (non-redistributable bits) (EMPTY)
+PKGS=
 DEBUG_PKGS=
 DEPS=samsung-full-mobile-stack
 
@@ -10,26 +10,27 @@ PKGS=
 DEBUG_PKGS=
 DEPS=core samsung-q1-ultra-config ubuntu-mobile
 
-[Zi9-Full-Mobile-Stack] DESC=Virtual Fset that installs the standard mobile stack
-PKGS=flashplugin-nonfree
+[Zi9-Full-Mobile-Stack]
+DESC=Virtual Fset that installs the standard mobile stack (EMPTY)
+PKGS=
 DEBUG_PKGS=
 DEPS=core zi9-config ubuntu-mobile
 
 [Core]
 DESC=Fundamental fset that provide a basic console based system
-PKGS=grub coreutils rpm passwd
+PKGS=grub passwd
 DEBUG_PKGS=gdb yum vim-enhanced tickless-utils oprofile
 DEPS=
 
 [Zi9-Config]
-DESC=Packages needed for the Zi9
-PKGS=zi9-config linux-lpia|linux-generic
+DESC=Packages needed for the Zi9 (EMPTY)
+PKGS=
 DEBUG_PKGS=
 DEPS=core
 
 [Samsung-Q1-Ultra-Config]
-DESC=Packages needed for the Samsung Q1 Ultra
-PKGS=ume-config-samsung-q1-ultra linux-lpiacompat
+DESC=Packages needed for the Samsung Q1 Ultra (EMPTY)
+PKGS=
 DEBUG_PKGS=
 DEPS=core
 
@@ -39,29 +40,15 @@ PKGS=xorg xserver-xorg-input-evtouch libgl1-mesa-dri matchbox-window-manager lib
 DEBUG_PKGS=xrestop
 DEPS=samsung-q1-ultra-config|zi9-config
 
-[Ubuntu-Mobile]
-DESC=Ubuntu Mobile using Hildon, and any base applications for same
-PKGS=ubuntu-mobile gstreamer-dbus-media-service gstreamer0.10-x gstreamer0.10-ffmpeg gstreamer0.10-plugins-ugly gstreamer0.10-plugins-bad moblin-keyboard-manager mousepad gnome-nettool galculator moblin-chat moblin-applets moblin-media evince hildon-libs-l10n-engb
-DEBUG_PKGS=powertop
-DEPS=gnome-mobile
-
-[Ubuntu-Staging]
-DESC=Packages that are ready for inclusion into Ubuntu
-PKGS=moblin-notes moblin-calc moblin-media-browser-plugin ppm moblin-clutter-home hildon-libs-l10n-engb
-DEBUG_PKGS=
-DEPS=ubuntu-mobile
-
-# Not in Ubuntu yet/broken: moblin-chat moblin-applets moblin-media
-
 [Developer-Tools]
 DESC=Tools for building source in the target (gcc, make, etc.)
-PKGS=ubuntu-mobile-dev libtool autoconf automake hildon-desktop-dev man manpages curl python-dev dh-make
+PKGS=libtool autoconf automake man curl
 DEBUG_PKGS=
 DEPS=core
 
 [Asian-Fonts]
-DESC=Fonts for viewing websites in Chinese, Japanese, and Korean (adds 34MB)
-PKGS=ttf-arphic-uming ttf-unfonts-core
+DESC=Fonts for viewing websites in Chinese, Japanese, and Korean (EMPTY)
+PKGS=
 DEBUG_PKGS=
 DEPS=core
 

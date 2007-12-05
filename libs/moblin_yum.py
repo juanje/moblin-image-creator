@@ -32,7 +32,7 @@ class YumPackageManager(moblin_pkgbase.PackageManager):
     """Yum class for package management"""
 
     def __init__(self):
-        self.yum_cmd = "yum -y"
+        pass
 
     def installPackages(self, chroot_dir, package_list, callback = None):
         """Install the list of packages in the chroot environement"""
@@ -47,7 +47,7 @@ class YumPackageManager(moblin_pkgbase.PackageManager):
         while (retry_count < 10):
             self.updateChroot(chroot_dir, callback = callback)
             # yum install
-            command = "%s install %s" % (self.yum_cmd, packages)
+            command = "yum -y install %s" % (packages)
             print "Running 'yum install' command: %s" % (command)
             print "\t in the chroot: %s" % (chroot_dir)
             result = pdk_utils.execChrootCommand(chroot_dir, command, callback = callback)
@@ -77,12 +77,17 @@ class YumPackageManager(moblin_pkgbase.PackageManager):
 
     def updateChroot(self, chroot_dir, callback = None):
         """Update the chroot environment to have the latest packages"""
-        print "Not implemented yet!!!!"
-        print "yum.updateChroot: Not implemented yet!!!!"
+        command = "yum -y update"
+        print "Running 'yum update' command: %s" % (command)
+        print "\t in the chroot: %s" % (chroot_dir)
+        result = pdk_utils.execChrootCommand(chroot_dir, command, callback = callback)
 
     def cleanPackageCache(self, chroot_dir):
         """Clean out any cached package files"""
-        print "yum.cleanPackageCache: Not implemented yet!!!!"
+        command = "yum clean all"
+        print "Running 'yum clean' command: %s" % (command)
+        print "\t in the chroot: %s" % (chroot_dir)
+        result = pdk_utils.execChrootCommand(chroot_dir, command, callback = callback)
 
     def mount(self, chroot_dir):
         return []
