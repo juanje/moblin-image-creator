@@ -274,7 +274,7 @@ def touchFile(filename):
         out_file.close()
     os.utime(filename, None)
 
-def rmtree(path, ignore_errors=False, onerror=None, callback = None):
+def rmtree(path, ignore_errors=False, onerror=None, callback = None, count = 0):
     """Recursively delete a directory tree.
 
     This function was copied from the shutil.py library in Python 2.5.1.  The
@@ -302,15 +302,17 @@ def rmtree(path, ignore_errors=False, onerror=None, callback = None):
     except os.error, err:
         onerror(os.listdir, path, sys.exc_info())
     for name in names:
+        count += 1
+        # For every 200 files deleted, lets call our callback
+        if count % 200 == 0 and callback:
+            callback(None)
         fullname = os.path.join(path, name)
         try:
             mode = os.lstat(fullname).st_mode
         except os.error:
             mode = 0
         if stat.S_ISDIR(mode):
-            if callback:
-                callback(None)
-            rmtree(fullname, ignore_errors, onerror, callback = callback)
+            rmtree(fullname, ignore_errors, onerror, callback = callback, count = count)
         else:
             try:
                 os.remove(fullname)
