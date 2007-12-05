@@ -35,35 +35,6 @@ class AptPackageManager(moblin_pkgbase.PackageManager):
         self.apt_cmd = "apt-get -y --force-yes "
         self.debian_frontend = []
 
-    def mount(self, chroot_dir):
-        """Mount stuff specific to apt-get"""
-        mount_list = [
-            # mnt_type, host_dirname, target_dirname, fs_type, device
-            ('bind', '/var/cache/apt/archives', False, None, None),
-        ]
-        mounted_list = pdk_utils.mountList(mount_list, chroot_dir)
-        if os.path.isfile(os.path.join(chroot_dir, '.buildroot')):
-            # search for any file:// URL's in the configured apt repositories, and
-            # when we find them make the equivalent directory in the new filesystem
-            # and then mount --bind the file:// path into the filesystem.
-            rdir = os.path.join(chroot_dir, 'etc', 'apt', 'sources.list.d')
-            if os.path.isdir(rdir):
-                for fname in os.listdir(rdir):
-                    file = open(os.path.join(rdir, fname))
-                    for line in file:
-                        if re.search(r'^\s*deb file:\/\/\/', line):
-                            p = line.split('file:///')[1].split(' ')[0]
-                            new_mount = os.path.join(chroot_dir, p)
-                            mounted_list.append(new_mount)
-                            if not os.path.isdir(new_mount):
-                                os.makedirs(new_mount)
-                                os.system("mount --bind /%s %s" % (p, new_mount))
-                    # Its no big deal if the repo is really empty, so
-                    # ignore mount errors.
-                    file.close()
-        return mounted_list
-
-
     def installPackages(self, chroot_dir, package_list, callback = None):
         """Install the list of packages in the chroot environement"""
         self.__aptgetPreRun(chroot_dir)
@@ -176,3 +147,31 @@ class AptPackageManager(moblin_pkgbase.PackageManager):
             print >> out_file, "exit 101"
             out_file.close()
         os.chmod(filename, 0755)
+
+    def mount(self, chroot_dir):
+        """Mount stuff specific to apt-get"""
+        mount_list = [
+            # mnt_type, host_dirname, target_dirname, fs_type, device
+            ('bind', '/var/cache/apt/archives', False, None, None),
+        ]
+        mounted_list = pdk_utils.mountList(mount_list, chroot_dir)
+        if os.path.isfile(os.path.join(chroot_dir, '.buildroot')):
+            # search for any file:// URL's in the configured apt repositories, and
+            # when we find them make the equivalent directory in the new filesystem
+            # and then mount --bind the file:// path into the filesystem.
+            rdir = os.path.join(chroot_dir, 'etc', 'apt', 'sources.list.d')
+            if os.path.isdir(rdir):
+                for fname in os.listdir(rdir):
+                    file = open(os.path.join(rdir, fname))
+                    for line in file:
+                        if re.search(r'^\s*deb file:\/\/\/', line):
+                            p = line.split('file:///')[1].split(' ')[0]
+                            new_mount = os.path.join(chroot_dir, p)
+                            mounted_list.append(new_mount)
+                            if not os.path.isdir(new_mount):
+                                os.makedirs(new_mount)
+                                os.system("mount --bind /%s %s" % (p, new_mount))
+                    # Its no big deal if the repo is really empty, so
+                    # ignore mount errors.
+                    file.close()
+        return mounted_list

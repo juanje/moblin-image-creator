@@ -241,7 +241,7 @@ def execChrootCommand(path, cmd, output = None, callback = None):
         raise ValueError("Internal Error: Invalid buildroot at %s" % (path))
     if output == None:
         output = []
-    cmd_line = "chroot %s %s" % (path, cmd)
+    cmd_line = "/usr/sbin/chroot %s %s" % (path, cmd)
     result = execCommand(cmd_line, output = output, callback = callback)
     if result != 0:
         print "Error in chroot.  Result: %s" % result
