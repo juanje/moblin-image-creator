@@ -42,18 +42,18 @@ class AptPackageManager(moblin_pkgbase.PackageManager):
             ('bind', '/var/cache/apt/archives', False, None, None),
         ]
         mounted_list = pdk_utils.mountList(mount_list, chroot_dir)
-        if os.path.isfile(os.path.join(chroot_path, '.buildroot')):
+        if os.path.isfile(os.path.join(chroot_dir, '.buildroot')):
             # search for any file:// URL's in the configured apt repositories, and
             # when we find them make the equivalent directory in the new filesystem
             # and then mount --bind the file:// path into the filesystem.
-            rdir = os.path.join(chroot_path, 'etc', 'apt', 'sources.list.d')
+            rdir = os.path.join(chroot_dir, 'etc', 'apt', 'sources.list.d')
             if os.path.isdir(rdir):
                 for fname in os.listdir(rdir):
                     file = open(os.path.join(rdir, fname))
                     for line in file:
                         if re.search(r'^\s*deb file:\/\/\/', line):
                             p = line.split('file:///')[1].split(' ')[0]
-                            new_mount = os.path.join(chroot_path, p)
+                            new_mount = os.path.join(chroot_dir, p)
                             mounted_list.append(new_mount)
                             if not os.path.isdir(new_mount):
                                 os.makedirs(new_mount)
