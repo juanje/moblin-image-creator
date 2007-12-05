@@ -90,7 +90,6 @@ class FileSystem(object):
         # mnt_type, host_dirname, target_dirname, fs_type, device
         ('bind', '/tmp', False, None, None),
         ('bind', '/usr/share/pdk', False, None, None),
-        ('bind', '/var/cache/apt/archives', False, None, None),
         ('host', '/dev/pts', 'dev/pts', 'devpts', 'devpts'),
         ('host', '/proc', False, 'proc', 'proc'),
         ('host', '/sys', False, 'sysfs', 'sysfs'),
@@ -99,67 +98,12 @@ class FileSystem(object):
     def mount(self):
         # We want to keep a list of everything we mount, so that we can use it
         # in the umount portion
-        self.mounted = []
-        mounts = pdk_utils.getMountInfo()
-        for mnt_type, host_dirname, target_dirname, fs_type, device in FileSystem.mount_list:
-            # If didn't specify target_dirname then use the host_dirname path,
-            # but we have to remove the leading '/'
-            if not target_dirname and host_dirname:
-                target_dirname = re.sub(r'^' + os.sep, '', host_dirname)
-
-            # Do the --bind mount types
-            if mnt_type == "bind":
-                path = os.path.join(self.path, target_dirname)
-                self.mounted.append(path)
-                if not os.path.isdir(path):
-                    os.makedirs(path)
-                if not pdk_utils.ismount(path) and os.path.isdir(host_dirname):
-                    result = os.system('mount --bind %s %s' % (host_dirname, path))
-                    if result != 0:
-                        raise OSError("Internal error while attempting to bind mount /%s!" % (mnt))
-            # Mimic host mounts, if possible
-            elif mnt_type == 'host':
-                if host_dirname in mounts:
-                    mount_info = mounts[host_dirname]
-                    fs_type = mount_info.fs_type
-                    device = mount_info.device
-                    options = "-o %s" % mount_info.options
-                else:
-                    options = ""
-                path = os.path.join(self.path, target_dirname)
-                self.mounted.append(path)
-                if not os.path.isdir(path):
-                    os.makedirs(path)
-                if not pdk_utils.ismount(path):
-                    cmd = 'mount %s -t %s %s %s' % (options, fs_type, device, path)
-                    result = pdk_utils.execCommand(cmd)
-                    if result != 0:
-                        raise OSError("Internal error while attempting to mount %s %s!" % (host_dirname, target_dirname))
+        self.mounted = pdk_utils.mountList(FileSystem.mount_list, self.chroot_path)
+        self.mounted.extend(self.platform.pkg_manager.mount(self.chroot_path))
         # Setup copies of some useful files from the host into the chroot
         for file in ['etc/resolv.conf', 'etc/hosts']:
             if os.path.isfile(os.path.join('/', file)):
-                shutil.copy(os.path.join('/', file), os.path.join(self.path, file))
-
-        if os.path.isfile(os.path.join(self.path, '.buildroot')):
-            # search for any file:// URL's in the configured apt repositories, and
-            # when we find them make the equivalent directory in the new filesystem
-            # and then mount --bind the file:// path into the filesystem.
-            rdir = os.path.join(self.path, 'etc', 'apt', 'sources.list.d')
-            if os.path.isdir(rdir):
-                for fname in os.listdir(rdir):
-                    file = open(os.path.join(rdir, fname))
-                    for line in file:
-                        if re.search(r'^\s*deb file:\/\/\/', line):
-                            p = line.split('file:///')[1].split(' ')[0]
-                            new_mount = os.path.join(self.path, p)
-                            self.mounted.append(new_mount)
-                            if not os.path.isdir(new_mount):
-                                os.makedirs(new_mount)
-                                os.system("mount --bind /%s %s" % (p, new_mount))
-                    # Its no big deal if the repo is really empty, so
-                    # ignore mount errors.
-                    file.close()
-
+                shutil.copy(os.path.join('/', file), os.path.join(self.chroot_path, file))
         # first time mount
         buildstamp_path = os.path.join(self.path, 'etc', 'buildstamp')
         if not os.path.isfile(buildstamp_path):
@@ -173,14 +117,7 @@ class FileSystem(object):
         for mount_point in self.mounted:
             if os.path.exists(mount_point):
                 os.system("umount %s" % (mount_point))
-        # Have to add a '/' on the end to prevent /foo/egg and /foo/egg2 being
-        # treated as if both were under /foo/egg
-        our_path = os.path.realpath(os.path.abspath(self.path)) + os.sep
-        mounts = pdk_utils.getMountInfo()
-        for mpoint in mounts:
-            mpoint = os.path.realpath(os.path.abspath(mpoint)) + os.sep
-            if our_path == mpoint[:len(our_path)]:
-                os.system("umount %s" % (mpoint))
+        pdk_utils.umountAllInPath(self.path)
 
 class Project(FileSystem):
     """

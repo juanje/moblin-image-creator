@@ -119,6 +119,16 @@ def getUsbDirTree(dirname):
             file_set.add(full_path)
     return file_set
 
+def umountAllInPath(dirname):
+    # Have to add a '/' on the end to prevent /foo/egg and /foo/egg2 being
+    # treated as if both were under /foo/egg
+    our_path = os.path.realpath(os.path.abspath(dirname)) + os.sep
+    mounts = getMountInfo()
+    for mpoint in mounts:
+        mpoint = os.path.realpath(os.path.abspath(mpoint)) + os.sep
+        if our_path == mpoint[:len(our_path)]:
+            os.system("umount %s" % (mpoint))
+
 def umount_device(device_file):
     """umount a device if it is mounted"""
     search_file = "%s " % os.path.realpath(os.path.abspath(device_file))
@@ -310,6 +320,48 @@ def rmtree(path, ignore_errors=False, onerror=None, callback = None):
         os.rmdir(path)
     except os.error:
         onerror(os.rmdir, path, sys.exc_info())
+
+def mountList(mount_list, chroot_dir):
+    """Mount the items specified in the mount list.  Return back a list of what
+    got mounted"""
+    # We want to keep a list of everything we mount, so that we can use it in
+    # the umount portion
+    mounted_list = []
+    mounts = getMountInfo()
+    for mnt_type, host_dirname, target_dirname, fs_type, device in mount_list:
+        # If didn't specify target_dirname then use the host_dirname path,
+        # but we have to remove the leading '/'
+        if not target_dirname and host_dirname:
+            target_dirname = re.sub(r'^' + os.sep, '', host_dirname)
+        # Do the --bind mount types
+        if mnt_type == "bind":
+            path = os.path.join(chroot_dir, target_dirname)
+            mounted_list.append(path)
+            if not os.path.isdir(path):
+                os.makedirs(path)
+            if not ismount(path) and os.path.isdir(host_dirname):
+                result = os.system('mount --bind %s %s' % (host_dirname, path))
+                if result != 0:
+                    raise OSError("Internal error while attempting to bind mount /%s!" % (mnt))
+        # Mimic host mounts, if possible
+        elif mnt_type == 'host':
+            if host_dirname in mounts:
+                mount_info = mounts[host_dirname]
+                fs_type = mount_info.fs_type
+                device = mount_info.device
+                options = "-o %s" % mount_info.options
+            else:
+                options = ""
+            path = os.path.join(chroot_dir, target_dirname)
+            mounted_list.append(path)
+            if not os.path.isdir(path):
+                os.makedirs(path)
+            if not ismount(path):
+                cmd = 'mount %s -t %s %s %s' % (options, fs_type, device, path)
+                result = execCommand(cmd)
+                if result != 0:
+                    raise OSError("Internal error while attempting to mount %s %s!" % (host_dirname, target_dirname))
+    return mounted_list
 
 class MountInfo(object):
     def __init__(self, mount_line):

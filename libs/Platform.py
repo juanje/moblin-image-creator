@@ -178,7 +178,7 @@ class Platform(object):
             os.makedirs(chroot_dir)
         target_os = self.target_os
         var_dir = mic_cfg.config.get('general', 'var_dir')
-        rootstrap_file = os.path.join(var_dir, "rootstraps", "apt", target_os, self.name, "rootstrap.tgz")
+        rootstrap_file = os.path.join(var_dir, "rootstraps", "yum", target_os, "rootstrap.tgz")
         if not os.path.exists(rootstrap_file):
             self.__yumCreateRootstrap(chroot_dir, rootstrap_file, callback = callback)
         else:
@@ -192,16 +192,56 @@ class Platform(object):
                 raise ValueError(" ".join(output))
 
     def __yumCreateRootstrap(self, chroot_dir, rootstrap_file, callback = None):
-#        try:
-            self.__yumCreateBase(chroot_dir)
-            self.__yumCreateDevices(chroot_dir)
-            # TODO: install yum and yum-protectbase
-#        except:
-#            pass
-            raise NotImplementedError
+        basedir = os.path.dirname(rootstrap_file)
+        if not os.path.exists(basedir):
+            os.makedirs(basedir)
+        self.__yumCreateBase(chroot_dir)
+        self.__yumCreateDevices(chroot_dir)
+        self.__yumDoMounts(chroot_dir)
+        # install yum inside the project using the host tools
+        print "Creating rootstrap directory with yum..."
+        output = []
+        cmd = 'yum -y --disablerepo=localbase --installroot=%s install yum yum-protectbase' % chroot_dir
+        cmd = 'yum -y --installroot=%s install yum yum-protectbase' % chroot_dir
+        #cmd = 'yum -y --installroot=%s groupinstall buildsys-build' % chroot_dir
+        print "Exec command: %s" % cmd
+        result = pdk_utils.execCommand(cmd, output = output, callback = callback)
+        if result != 0:
+            raise RuntimeError("Failed to create Yum based rootstrap")
+        # nuke all the yum cache to ensure that we get the latest greatest at project creation
+        shutil.rmtree(os.path.join(chroot_dir, 'var', 'cache', 'yum'))
+        self.__yumDoUmounts(chroot_dir)
+        # Create the rootstrap archive file
+        cmd = "tar -jcpvf %s -C %s ." % (rootstrap_file, chroot_dir)
+        output = []
+        result = pdk_utils.execCommand(cmd, output = output, callback = callback)
+        if result != 0:
+            print >> sys.stderr, "ERROR: Unable to archive rootstrap!"
+            pdk_utils.rmtree(chroot_dir, callback = callback)
+            # FIXME: Better exception here
+            raise ValueError(" ".join(output))
+
+    def __yumDoMounts(self, chroot_dir):
+        for cmd in ['mount -n -t proc mic_chroot_proc   %s/proc' % chroot_dir,
+                'mount -n -t devpts mic_chroot_devpts %s/dev/pts' % chroot_dir,
+                'mount -n -t sysfs  mic_chroot_sysfs  %s/sys' % chroot_dir,
+            ]:
+            pdk_utils.execCommand(cmd)
+
+    def __yumDoUmounts(self, chroot_dir):
+        pdk_utils.umountAllInPath(chroot_dir)
 
     def __yumCreateBase(self, chroot_dir):
-        for dirname in [ 'proc', 'var/log', 'var/lib/rpm', 'dev', 'etc/yum.repos.d' ]:
+        for dirname in [
+            'dev',
+            'dev/pts',
+            'etc/yum.repos.d',
+            'proc',
+            'var/lib/rpm', 
+            'var/lib/yum',
+            'var/log',
+            'sys',
+            ]:
             os.makedirs(os.path.join(chroot_dir, dirname))
         target_etc = os.path.join(chroot_dir, "etc")
         for filename in [ 'hosts', 'resolv.conf' ]:
@@ -221,6 +261,7 @@ obsoletes=1
 gpgcheck=0
 plugins=1
 metadata_expire=1800
+releasever=8
 """
         yumconf.close()
         yum_repos_dir = os.path.join(self.path, 'yum.repos.d')

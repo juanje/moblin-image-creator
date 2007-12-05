@@ -28,14 +28,18 @@ class YumPackageManager(moblin_pkgbase.PackageManager):
     def __init__(self):
         pass
 
-    def installPackages(self, chroot_dir, package_list):
+    def mount(self, chroot_dir):
+        return []
+
+    def installPackages(self, chroot_dir, package_list, callback = None):
         """Install the list of packages in the chroot environement"""
-        raise NotImplementedError
+        print "yum.installPackages: Not implemented yet!!!!"
 
     def updateChroot(self, chroot_dir):
         """Update the chroot environment to have the latest packages"""
-        raise NotImplementedError
+        print "Not implemented yet!!!!"
+        print "yum.updateChroot: Not implemented yet!!!!"
 
     def cleanPackageCache(self, chroot_dir):
         """Clean out any cached package files"""
-        raise NotImplementedError
+        print "yum.cleanPackageCache: Not implemented yet!!!!"
