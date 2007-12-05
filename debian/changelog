@@ -101,8 +101,9 @@ moblin-image-creator (0.37) UNRELEASED; urgency=low
   * Add vfat partition support, this includes:1. make mic config file installimage section support
     platform aspect. 2. add vfat options 3. change install.sh to support vfat partition creation
     4. add dosfstool to core fset
+  * Add psmisc package to fset core (need fuser utils inside for USBC framework)
 
- -- Alek Du <alek.du@intel.com>  Wed, 05 Dec 2007 12:01:10 +0800
+ -- Alek Du <alek.du@intel.com>  Wed, 05 Dec 2007 16:33:09 +0800
 
 moblin-image-creator (0.36) gaston; urgency=low
 
