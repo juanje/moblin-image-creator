@@ -310,7 +310,7 @@ def rmtree(path, ignore_errors=False, onerror=None, callback = None):
         if stat.S_ISDIR(mode):
             if callback:
                 callback(None)
-            rmtree(fullname, ignore_errors, onerror)
+            rmtree(fullname, ignore_errors, onerror, callback = callback)
         else:
             try:
                 os.remove(fullname)
