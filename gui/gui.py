@@ -82,6 +82,7 @@ class App(object):
                 "on_Save_activate":self.on_Save_activate,
                 "on_upgrade_project_clicked":self.on_upgrade_project_clicked,
                 "on_upgrade_target_clicked":self.on_upgrade_target_clicked,
+                "on_MirrorSettings_activate":self.on_MirrorSettings_activate
                 }
         self.widgets.signal_autoconnect(dic)
         # setup projectView widget
@@ -234,6 +235,7 @@ class App(object):
                 self.statuslabel = progress_tree.get_widget('status_label')
                 while gtk.events_pending():
                     gtk.main_iteration(False) 
+
                 platformName = dialog.platform.split()[0]
                 proj = self.sdk.create_project(dialog.path, dialog.name, dialog.desc, self.sdk.platforms[platformName])
                 proj.install()
@@ -853,6 +855,175 @@ class App(object):
         if result != 0:
              raise OSError("Internal error while attempting to run update/upgrade: %s" % result)
         progress_dialog.destroy()
+
+    def formatMirrorSection(self, sectionName, sectionSearch, sectionReplace):
+        sectionTextFormatted = "\n%s = [\n" % sectionName
+        index = 0        
+        for line in sectionSearch:
+                sectionTextFormatted += "\t(r'%s','%s'),\n" % (sectionSearch[index], sectionReplace[index])
+                index += 1
+        sectionTextFormatted += "]"
+        return sectionTextFormatted
+        
+    def saveMirrorConfigFile(self, saveType, sectionName, sectionText):
+        configFile = os.path.join(os.path.expanduser("~/.image-creator"), "sources_cfg")
+        #if saveType == "saveSection":
+        #if saveType == "add":    
+        if saveType == "save":
+            if os.path.isfile(configFile):
+                f = open(configFile, "w")
+                if self.noMirror.get_active() == True:
+                    f.write("use_mirror=\"no_mirror\"")
+                else:
+                    f.write("use_mirror=\"%s\"" % self.mirrorSelection.get_active_text())
+                for mirrorListItem in self.global_dict:
+                    sectionSearch = []
+                    sectionReplace = []         
+                    if mirrorListItem != '__builtins__':
+                        if mirrorListItem != 'use_mirror':
+                            sectionData = ""
+                            sectionDataList = self.global_dict[mirrorListItem]            
+                            for item in sectionDataList:
+                                sectionSearch.append(item[0])
+                                sectionReplace.append(item[1])
+                            f.write(self.formatMirrorSection(mirrorListItem, sectionSearch, sectionReplace))
+                f.close()        
+    
+    def mirrorSettings_callback(self, widget, buttonName):
+        if buttonName == "nomirror":
+            self.mirrorSelection.set_active(-1)              
+            self.mirrorSelection.set_sensitive(False)
+        else:
+            self.mirrorSelection.set_sensitive(True)
+            #self.mirrorSelection.set_active(0)  
+            currentMirror = self.getCurrentMirror()
+            if currentMirror == "no_mirror":
+                self.mirrorSelection.set_active(-1)
+            else:
+                self.mirrorSelection.set_active(self.mirrorSelectionList[currentMirror])
+            
+     
+            
+#    def saveMirrorChanges_callback(self, widget, saveType):
+#        if saveType == 'buttonClick':
+#            sectionName = self.mirrorSelection.get_active_text()
+#            sectionText = self.configTextBuffer.get_text(self.configTextBuffer.get_start_iter(), self.configTextBuffer.get_end_iter())
+#            self.saveMirrorConfigFile("saveSection", sectionName, sectionText)
+#            self.saveChanges.set_sensitive(False)
+#        if saveType == 'textChanged':
+#            self.saveChanges.set_sensitive(True)
+
+    def mirrorSelection_callback(self, widget):
+        selection = self.mirrorSelection.get_active_text()
+        if selection in self.global_dict:
+            self.mirrorDetailsList = gtk.TreeStore(gobject.TYPE_STRING, gobject.TYPE_STRING)
+            src_regex = self.global_dict[selection]            
+            for item in src_regex:
+                self.mirrorDetailsList.append(None, [item[0], item[1]])
+            self.mirrorDetails.set_model(self.mirrorDetailsList)        
+        if selection == 'Add a Section':        
+            dialog_tree = gtk.glade.XML(self.gladefile, 'addNewMirror')
+            dialog = dialog_tree.get_widget('addNewMirror')                    
+            sectionNameEntry = dialog_tree.get_widget('sectionName')
+            mirrorListEntry = dialog_tree.get_widget('mirrorList')
+            while True:
+                result = dialog.run()
+                if result == gtk.RESPONSE_OK:
+                    sectionName = sectionNameEntry.get_text()
+                    mirrorListBuffer = mirrorListEntry.get_buffer()
+                    mirrorList = mirrorListBuffer.get_text(mirrorListBuffer.get_start_iter(), mirrorListBuffer.get_end_iter())
+                    if sectionName == "":
+                        self.show_error_dialog("All fields are required")
+                        continue
+                    elif  mirrorList == "":
+                        self.show_error_dialog("All fields are required")
+                        continue
+                    else:
+                        self.mirrorSelection_entry_box.append([sectionName])                
+                        self.saveMirrorConfigFile("add", sectionName, mirrorList)
+                        self.populateMirrorSections()
+                        self.mirrorSelection.set_active(0)
+                        break
+                else:
+                    break
+            dialog.destroy()     
+
+    def populateMirrorSections(self):         
+        configFile = os.path.join(os.path.expanduser("~/.image-creator"), "sources_cfg")
+        self.mirrorSelection_entry_box = gtk.ListStore(gobject.TYPE_STRING)
+        self.mirrorSelectionList = {}
+        if os.path.isfile(configFile):
+            self.global_dict = {}
+            execfile(configFile, self.global_dict)
+            index = 0
+            for mirrorListItem in self.global_dict:
+                if mirrorListItem != '__builtins__':
+                    if mirrorListItem != 'use_mirror':
+                        self.mirrorSelectionList[mirrorListItem] = index
+                        index += 1
+                        self.mirrorSelection_entry_box.append([mirrorListItem])
+        #self.mirrorSelection_entry_box.append(['Add a Section'])
+        self.mirrorSelection.set_model(self.mirrorSelection_entry_box)
+
+    def getCurrentMirror(self):
+        configFile = os.path.join(os.path.expanduser("~/.image-creator"), "sources_cfg")
+        if os.path.isfile(configFile):
+            f = open(configFile, "r")
+            mirrorSelectionLine = f.readline()
+            f.close()       
+            if mirrorSelectionLine.find("=") != -1:
+                mirrorToUse = mirrorSelectionLine.split('=')[1]
+                mirrorToUse = mirrorToUse[1:-2]
+                if mirrorToUse in self.global_dict:
+                    return mirrorToUse
+                else:
+                    return "no_mirror"
+        else:
+            return "no_mirror"
+
+
+    def on_MirrorSettings_activate(self, widget):
+        dialog_tree = gtk.glade.XML(self.gladefile, 'mirror')
+        dialog = dialog_tree.get_widget('mirror')        
+        self.noMirror = dialog_tree.get_widget('noMirror')
+        self.useMirror = dialog_tree.get_widget('useMirror')
+        self.mirrorDetails = dialog_tree.get_widget('mirrorDetails')
+        self.noMirror.connect('clicked', self.mirrorSettings_callback, "nomirror")
+        self.useMirror.connect('clicked', self.mirrorSettings_callback, "usemirror")
+
+        self.mirrorSelection = dialog_tree.get_widget('mirrorSelection')
+        self.mirrorSelection.connect('changed', self.mirrorSelection_callback)
+        self.populateMirrorSections()
+
+
+        cellRenderC0 = gtk.CellRendererText()
+        cellRenderC1 = gtk.CellRendererText()
+        col0 = gtk.TreeViewColumn("Search", cellRenderC0)
+        col1 = gtk.TreeViewColumn("Replace", cellRenderC1)
+
+        self.mirrorDetails.append_column(col0)
+        self.mirrorDetails.append_column(col1)
+
+        col0.add_attribute(cellRenderC0, 'text', 0)
+        col0.set_resizable(True)
+        col1.add_attribute(cellRenderC1, 'text', 1)
+        col1.set_resizable(True)
+        
+        self.mirrorDetails.set_headers_clickable(True)
+        self.mirrorDetailsList = gtk.TreeStore(gobject.TYPE_STRING, gobject.TYPE_STRING)
+        self.mirrorDetails.set_grid_lines(gtk.TREE_VIEW_GRID_LINES_BOTH)
+        self.mirrorDetails.set_model(self.mirrorDetailsList)        
+
+        currentMirror = self.getCurrentMirror()
+        if currentMirror == "no_mirror":
+            self.noMirror.set_active(True)
+        else:
+            self.useMirror.set_active(True)
+        
+        result = dialog.run()
+        if result == gtk.RESPONSE_OK:
+            self.saveMirrorConfigFile("save", None, None)
+        dialog.destroy()
 
 
 #Class: Adding a New Project

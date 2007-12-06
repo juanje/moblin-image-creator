@@ -113,7 +113,10 @@ moblin-image-creator (0.37) UNRELEASED; urgency=low
     list is now in there.  The config file will now contain a
     general->distribution entry for the distribution we are running on
 
- -- Alek Du <alek.du@intel.com>  Thu, 06 Dec 2007 10:34:39 +0800
+  [ Prajwal Mohan ]
+  * Adding mirror choosing dialog to tools 
+
+ -- Prajwal Mohan <prajwal@linux.intel.com>  Thu, 06 Dec 2007 15:49:57 -0800
 
 moblin-image-creator (0.36) gaston; urgency=low
 

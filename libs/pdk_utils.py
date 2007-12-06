@@ -39,10 +39,23 @@ if not os.path.isdir(CONFIG_DIR):
 
 sources_regex_file = os.path.expanduser(os.path.join(CONFIG_DIR, "sources_cfg"))
 if os.path.isfile(sources_regex_file):
+    f = open(sources_regex_file, "r")
+    mirrorSelectionLine = f.readline()
+    f.close()       
     global_dict = {}
     execfile(sources_regex_file, global_dict)
-    if 'sources_regex' in global_dict:
-        src_regex = global_dict['sources_regex']
+    if mirrorSelectionLine.find("=") != -1:
+        mirrorToUse = mirrorSelectionLine.split('=')[1]
+        mirrorToUse = mirrorToUse[1:-2]
+        if mirrorToUse != "no_mirror":
+            if mirrorToUse in global_dict:
+                src_regex = global_dict[mirrorToUse]
+            else:
+                if 'sources_regex' in global_dict:
+                    src_regex = global_dict['sources_regex']                
+    else:
+        if 'sources_regex' in global_dict:
+            src_regex = global_dict['sources_regex']
 else:
     print "Creating sample %s file" % sources_regex_file
     out_file = open(sources_regex_file, 'w')
