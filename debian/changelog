@@ -107,7 +107,12 @@ moblin-image-creator (0.37) UNRELEASED; urgency=low
     4. add dosfstool to core fset
   * Add psmisc package to fset core (need fuser utils inside for USBC framework)
 
- -- Alek Du <alek.du@intel.com>  Wed, 05 Dec 2007 16:33:09 +0800
+  [ John L. Villalovos ]
+  * Added a [distribution.*] section to the config file.  The required_exe
+    list is now in there.  The config file will now contain a
+    general->distribution entry for the distribution we are running on
+
+ -- John L. Villalovos <john.l.villalovos@intel.com>  Thu, 06 Dec 2007 16:21:09 -0800
 
 moblin-image-creator (0.36) gaston; urgency=low
 

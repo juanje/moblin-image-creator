@@ -18,6 +18,7 @@
 
 
 import os
+import platform
 import string
 import sys
 import traceback
@@ -43,22 +44,12 @@ if len(sys.argv) == 1:
 
 sdk = SDK.SDK()
 
-REQUIRED_EXES = [ 'debootstrap', 'apt-get']
-
 def main():
     if sys.hexversion < 0x2040000:
         print >> sys.stderr, "Error: %s depends on a Python version of at least 2.4!" % (sys.argv[0])
         sys.exit(1)
-
-    exes_found = True
-    for exe_name in REQUIRED_EXES:
-        if not findExe(exe_name):
-            print "Error: Could not find the executable: '%s' in the PATH" % exe_name
-            exes_found = False
-    if not exes_found:
-        print "Without the executable(s) listed, image-creator will fail to operate properly."
-        sys.exit(1)
-
+    # Make sure the executables we need are on the system
+    verifyExes()
     if len(sys.argv) == 1:
         sudo = int(mic_cfg.config.get('userinfo', 'sudo'))
         userid = int(mic_cfg.config.get('userinfo', 'userid'))
@@ -581,6 +572,22 @@ def findExe(exe_name, env=None):
         if os.path.exists(file_name):
             return True
     return False
+
+def verifyExes():
+    dist = "distribution.%s" %  mic_cfg.config.get('general', 'distribution')
+    if not mic_cfg.config.has_section(dist):
+        print "Unsupported distribution: %s" % dist
+        sys.exit(1)
+    required_exes = mic_cfg.config.get(dist, 'required_exes')
+    exe_list = required_exes.split()
+    exes_found = True
+    for exe_name in exe_list:
+        if not findExe(exe_name):
+            print "Error: Could not find the executable: '%s' in the PATH" % exe_name
+            exes_found = False
+    if not exes_found:
+        print "Without the executable(s) listed, image-creator will fail to operate properly."
+        sys.exit(1)
 
 
 if __name__ == '__main__':

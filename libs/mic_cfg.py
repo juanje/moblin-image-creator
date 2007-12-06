@@ -20,6 +20,7 @@
 # our current classes
 
 import os
+import platform
 import pwd
 import re
 import sys
@@ -30,8 +31,8 @@ config = None
 DEFAULT_CONFIG_DIR = os.path.expanduser("/usr/share/pdk/default_config/")
 CONFIG_DIR = os.path.expanduser("~/.image-creator")
 # List of valid sections for our config file
-BASE_SECTIONS = [ "platform", "installimage" ]
-VALID_SECTIONS = BASE_SECTIONS + [ "installimage", "general" ]
+BASE_SECTIONS = [ "platform", "installimage", "distribution" ]
+VALID_SECTIONS = BASE_SECTIONS + [ "general" ]
 
 # Default values
 DEFAULTS = [
@@ -144,6 +145,9 @@ def addDefaults():
         if not config.has_section(section):
             config.add_section(section)
         config.set(section, option, value)
+    # What distribution are we running on
+    dist = platform.dist()[0]
+    config.set('general', 'distribution', dist)
 
 if '__main__' == __name__:
     sys.exit(main())
