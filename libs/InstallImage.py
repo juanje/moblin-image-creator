@@ -196,16 +196,11 @@ class InstallImage(object):
             dst_path = os.path.join(self.tmp_path, kernel_name)
             shutil.copyfile(src_path, dst_path)
 
-    def create_fstab(self, swap = True, fat32 = True, fat32_mntpoint = '/media'):
+    def create_fstab(self, swap = True):
         fstab_file = open(os.path.join(self.target.fs_path, 'etc/fstab'), 'w')
         print >> fstab_file, "proc			/proc			proc	defaults	0 0"
         if swap:
             print >> fstab_file, "/dev/sda3		none			swap	sw		0 0"
-            if fat32:
-                 print >> fstab_file, "/dev/sda4		%s			vfat	defaults	0 1" % fat32_mntpoint
-        else:
-            if fat32:
-                 print >> fstab_file, "/dev/sda3		%s			vfat	defaults	0 1" % fat32_mntpoint
         fstab_file.close()
 
     def create_modules_dep(self):
@@ -244,13 +239,7 @@ class InstallImage(object):
             swap = True
         else:
             swap = False
-        if int(mic_cfg.config.get(self.section, "fat32_partition_size")) > 0:
-            fat32 = True
-            fat32_mntpoint = mic_cfg.config.get(self.section, "fat32_mntpoint")
-        else:
-            fat32 = False
-            fat32_mntpoint = ''
-        self.create_fstab(swap, fat32, fat32_mntpoint)
+        self.create_fstab(swap)
         self.create_modules_dep()
         self.rootfs = 'rootfs.img'
         self.rootfs_path = os.path.join(self.target.image_path, self.rootfs)
