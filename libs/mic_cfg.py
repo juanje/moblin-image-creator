@@ -43,7 +43,7 @@ DEFAULTS = [
 def main():
     # We will print out the configuration as a debugging aid
     readConfig()
-    for section in config.sections():
+    for section in sorted(config.sections()):
         print "[%s]" % section
         for option in config.options(section):
             value = config.get(section, option)
