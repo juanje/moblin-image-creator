@@ -148,6 +148,13 @@ def addDefaults():
     # What distribution are we running on
     dist = platform.dist()[0]
     config.set('general', 'distribution', dist)
+    if dist == "debian":
+        pkg_manager = "apt"
+    elif dist == "fedora":
+        pkg_manager = "yum"
+    else:
+        pkg_manager = "unsupported distribution"
+    config.set('general', 'package_manager', pkg_manager)
 
 if '__main__' == __name__:
     sys.exit(main())
