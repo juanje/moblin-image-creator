@@ -892,11 +892,11 @@ class App(object):
         if saveType == "save":
             if os.path.isfile(configFile):
                 f = open(configFile, "w")
-                f.write(comments)
                 if self.noMirror.get_active() == True:
-                    f.write("use_mirror=\"no_mirror\"")
+                    f.write("use_mirror=\"no_mirror\"\n")
                 else:
-                    f.write("use_mirror=\"%s\"" % self.mirrorSelection.get_active_text())
+                    f.write("use_mirror=\"%s\"\n" % self.mirrorSelection.get_active_text())
+                f.write(comments)
                 for mirrorListItem in self.global_dict:
                     sectionSearch = []
                     sectionReplace = []         
