@@ -115,9 +115,10 @@ moblin-image-creator (0.37) UNRELEASED; urgency=low
 
   [ Prajwal Mohan ]
   * Adding mirror choosing dialog to tools
-  * Adding only relevant platforms to combo box of add projects 
+  * Adding only relevant platforms to combo box of add projects
+  * Bug fix for Mirror Setting dialog
 
- -- Prajwal Mohan <prajwal@linux.intel.com>  Thu, 06 Dec 2007 16:38:01 -0800
+ -- Prajwal Mohan <prajwal@linux.intel.com>  Thu, 06 Dec 2007 16:48:25 -0800
 
 moblin-image-creator (0.36) gaston; urgency=low
 

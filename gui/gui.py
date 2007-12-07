@@ -898,7 +898,7 @@ class App(object):
             #self.mirrorSelection.set_active(0)  
             currentMirror = self.getCurrentMirror()
             if currentMirror == "no_mirror":
-                self.mirrorSelection.set_active(-1)
+                self.mirrorSelection.set_active(0)
             else:
                 self.mirrorSelection.set_active(self.mirrorSelectionList[currentMirror])
             
@@ -978,6 +978,8 @@ class App(object):
                     return mirrorToUse
                 else:
                     return "no_mirror"
+            else:
+                return "no_mirror"
         else:
             return "no_mirror"
 
