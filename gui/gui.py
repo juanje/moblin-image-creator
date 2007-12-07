@@ -1030,6 +1030,9 @@ class App(object):
 class AddNewProject(object):
     """Class to bring up AddNewProject dialogue"""
     def __init__(self, sdk, gladefile, name="", desc="", path="", platform=""):
+        packageManager = ""
+        if mic_cfg.config.has_option('general', 'package_manager'):
+            packageManager = mic_cfg.config.get('general', 'package_manager')
         self.sdk = sdk
         widgets = gtk.glade.XML (gladefile, 'newProject')
         widgets.signal_autoconnect({"on_browse": self.on_browse})
@@ -1046,9 +1049,15 @@ class AddNewProject(object):
         platform_idx = 0
         for idx, pname in enumerate(platforms):        
             pdesc = ""            
+            packageManagerDesc = ""
             if self.sdk.platforms[pname].config_info != None:
                 pdesc = " - (%s)" % self.sdk.platforms[pname].config_info['description']
-            platform_entry_box.append([pname + pdesc])
+                packageManagerDesc = self.sdk.platforms[pname].config_info['package_manager']
+            if packageManager == packageManagerDesc:
+                platform_entry_box.append([pname + pdesc])
+            else:
+                if packageManagerDesc == "":
+                    platform_entry_box.append([pname + pdesc])
             if pname == platform:
                 platform_idx = idx
         self.np_platform.set_model(platform_entry_box)

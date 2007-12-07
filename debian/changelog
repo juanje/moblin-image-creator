@@ -114,9 +114,10 @@ moblin-image-creator (0.37) UNRELEASED; urgency=low
     general->distribution entry for the distribution we are running on
 
   [ Prajwal Mohan ]
-  * Adding mirror choosing dialog to tools 
+  * Adding mirror choosing dialog to tools
+  * Adding only relevant platforms to combo box of add projects 
 
- -- Prajwal Mohan <prajwal@linux.intel.com>  Thu, 06 Dec 2007 15:49:57 -0800
+ -- Prajwal Mohan <prajwal@linux.intel.com>  Thu, 06 Dec 2007 16:38:01 -0800
 
 moblin-image-creator (0.36) gaston; urgency=low
 
