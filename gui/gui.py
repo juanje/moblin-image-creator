@@ -866,12 +866,33 @@ class App(object):
         return sectionTextFormatted
         
     def saveMirrorConfigFile(self, saveType, sectionName, sectionText):
+        comments = """#!/usr/bin/python
+    # If you have a local mirror of the Ubuntu and/or Moblin.org APT repositories,
+    # then this configuration file will be useful to you.
+
+    # This file is used when copying the files that will go into
+    # /etc/apt/sources.list.d/  It consists of a list, which contains a search
+    # regular expression and a replacement string.  When copying the files into the
+    # /etc/apt/sources.list.d/ , of the projects and targets, a search and replace
+    # will be performed.
+
+    #sources_regex = [
+        # source_archive,                           local mirror of source archive
+
+    # Edit the following and uncomment them to enable use of a local mirror server.
+    # NOTE: The trailing space is important in the strings!!!!
+    #    (r'http://archive.ubuntu.com/ubuntu ',       'http://<PATH_TO_YOUR_LOCAL_MIRROR_OF_ARCHIVES_UBUNTU_COM/ '),
+    #    (r'http://ports.ubuntu.com/ubuntu-ports ', 'http://<PATH_TO_YOUR_LOCAL_MIRROR_OF_PORTS_UBUNTU_COM/ '),
+    #    (r'http://www.moblin.org/apt ',       'http://<PATH_TO_YOUR_LOCAL_MIRROR_OF_MOBLIN_ORG/ '),
+
+    #]"""
         configFile = os.path.join(os.path.expanduser("~/.image-creator"), "sources_cfg")
         #if saveType == "saveSection":
         #if saveType == "add":    
         if saveType == "save":
             if os.path.isfile(configFile):
                 f = open(configFile, "w")
+                f.write(comments)
                 if self.noMirror.get_active() == True:
                     f.write("use_mirror=\"no_mirror\"")
                 else:
@@ -893,8 +914,13 @@ class App(object):
         if buttonName == "nomirror":
             self.mirrorSelection.set_active(-1)              
             self.mirrorSelection.set_sensitive(False)
+            self.mirrorDetailsList = gtk.TreeStore(gobject.TYPE_STRING, gobject.TYPE_STRING)
+            self.mirrorDetails.set_model(self.mirrorDetailsList)        
+            self.mirrorDetails.set_sensitive(False)
+ 
         else:
             self.mirrorSelection.set_sensitive(True)
+            self.mirrorDetails.set_sensitive(True)
             #self.mirrorSelection.set_active(0)  
             currentMirror = self.getCurrentMirror()
             if currentMirror == "no_mirror":
@@ -1000,8 +1026,8 @@ class App(object):
 
         cellRenderC0 = gtk.CellRendererText()
         cellRenderC1 = gtk.CellRendererText()
-        col0 = gtk.TreeViewColumn("Search", cellRenderC0)
-        col1 = gtk.TreeViewColumn("Replace", cellRenderC1)
+        col0 = gtk.TreeViewColumn("Search Expression", cellRenderC0)
+        col1 = gtk.TreeViewColumn("Replace Expression", cellRenderC1)
 
         self.mirrorDetails.append_column(col0)
         self.mirrorDetails.append_column(col1)
