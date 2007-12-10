@@ -60,7 +60,7 @@ DEPS=gnome-mobile
 
 [Ubuntu-Staging]
 DESC=Packages that are ready for inclusion into Ubuntu
-PKGS=moblin-notes moblin-calc moblin-media-browser-plugin ppm moblin-clutter-home hildon-libs-l10n-engb 
+PKGS=moblin-notes moblin-calc moblin-media-browser-plugin ppm moblin-clutter-home hildon-libs-l10n-engb libval
 DEBUG_PKGS=
 DEPS=ubuntu-mobile
 
