@@ -29,6 +29,12 @@ sys.path.insert(0, '/usr/share/pdk/lib')
 import SDK
 import mic_cfg
 
+
+ENVIRONMENT_VARS = {
+    'LANG' : 'C',
+    'LC_ALL' : 'C',
+}
+
 debug = False
 if mic_cfg.config.has_option('general', 'debug'):
     debug = int(mic_cfg.config.get('general', 'debug'))
@@ -50,6 +56,8 @@ def main():
         sys.exit(1)
     # Make sure the executables we need are on the system
     verifyExes()
+    # Set needed environment variables
+    setEnvironmentVariables()
     if len(sys.argv) == 1:
         sudo = int(mic_cfg.config.get('userinfo', 'sudo'))
         userid = int(mic_cfg.config.get('userinfo', 'userid'))
@@ -589,6 +597,9 @@ def verifyExes():
         print "Without the executable(s) listed, image-creator will fail to operate properly."
         sys.exit(1)
 
+def setEnvironmentVariables():
+    for key, value in ENVIRONMENT_VARS.iteritems():
+        os.environ[key] =  value
 
 if __name__ == '__main__':
     if debug: sys.excepthook = print_exc_plus

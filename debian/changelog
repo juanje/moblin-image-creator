@@ -118,9 +118,13 @@ moblin-image-creator (0.37) UNRELEASED; urgency=low
   * Adding only relevant platforms to combo box of add projects
   * Bug fix for Mirror Setting dialog
   * Adding tip to mirror setting dialog
-  * Moving comments out of first line of config file 
+  * Moving comments out of first line of config file
 
- -- Prajwal Mohan <prajwal@linux.intel.com>  Thu, 06 Dec 2007 17:20:58 -0800
+  [ John L. Villalovos ]
+  * Setting the LANG and LC_ALL environment variables to 'C' on startup.  This
+    should stop some of the locale errors that come up during image creation.
+
+ -- John L. Villalovos <john.l.villalovos@intel.com>  Mon, 10 Dec 2007 12:17:42 -0800
 
 moblin-image-creator (0.36) gaston; urgency=low
 
