@@ -42,7 +42,7 @@ if [ -e ${PPATH} ]; then
     exit 1
 fi
 
-for i in `/usr/sbin/image-creator -c list-projects`; do
+for i in `image-creator -c list-projects`; do
     if [ $i = ${PROJECT} ]; then
 	echo "ERROR: A project called ${PROJECT} already exists!"
 	exit 1
@@ -50,7 +50,7 @@ for i in `/usr/sbin/image-creator -c list-projects`; do
 done
 
 FOUND=0
-for i in `/usr/sbin/image-creator -c list-platforms`; do
+for i in `image-creator -c list-platforms`; do
     if [ $i = ${PLATFORM} ]; then
 	FOUND=1
     fi
@@ -58,12 +58,12 @@ done
 if [ ${FOUND} -eq 0 ]; then
     echo "ERROR: A platform of the name ${PLATFORM} does not exists!"
     echo "Available platforms include:"
-    /usr/sbin/image-creator -c list-platforms
+    image-creator -c list-platforms
     exit 1
 fi
 
 FOUND=0
-for i in `/usr/sbin/image-creator -c list-fsets --platform-name ${PLATFORM}`; do
+for i in `image-creator -c list-fsets --platform-name ${PLATFORM}`; do
     if [ $i = ${FSET} ]; then
 	FOUND=1
     fi
@@ -71,7 +71,7 @@ done
 if [ ${FOUND} -eq 0 ]; then
     echo "ERROR: A fset of the name ${FSET} does not exists!"
     echo "Available fsets include:"
-    /usr/sbin/image-creator -c list-fsets --platform-name ${PLATFORM}
+    image-creator -c list-fsets --platform-name ${PLATFORM}
     exit 1
 fi
 
@@ -83,7 +83,7 @@ echo -e "\tFSET = ${FSET}"
 echo -e "\tIMAGE = ${IMAGE}"
 
 echo "Creating a new project..."
-/usr/sbin/image-creator -c create-project                                 \
+image-creator -c create-project                                 \
                         --project-name ${PROJECT}                         \
                         --project-description "Clean build of ${PROJECT}" \
                         --project-path ${PPATH}                            \
@@ -96,7 +96,7 @@ fi
 echo "Successfully created project '${PROJECT}'"
 
 echo "Creating a new target..."
-/usr/sbin/image-creator -c create-target          \
+image-creator -c create-target          \
                         --project-name ${PROJECT} \
                         --target-name "test"      \
                         --bypass-rootstrap
@@ -107,7 +107,7 @@ fi
 echo "Successfully created target 'test'"
 
 echo "Installing a new fset..."
-/usr/sbin/image-creator -c install-fset           \
+image-creator -c install-fset           \
                         --project-name ${PROJECT} \
                         --target-name "test"      \
                         --fset-name ${FSET}
@@ -123,12 +123,12 @@ if [ -z "${IMAGE}" ]; then
 fi
 if [ ${IMAGE} == 'xephyr' ]; then
     xhost +SI:localuser:root
-    /usr/sbin/image-creator --command run-target --project-name ${PROJECT} --target-name test --run-command ume-xephyr-start
+    image-creator --command run-target --project-name ${PROJECT} --target-name test --run-command ume-xephyr-start
     exit 1
 fi
 
 echo "Creating a new install USB key..."
-/usr/sbin/image-creator -c create-install-usb     \
+image-creator -c create-install-usb     \
                         --project-name ${PROJECT} \
                         --target-name "test"      \
                         --image-name ${IMAGE}
