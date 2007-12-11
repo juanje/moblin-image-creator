@@ -1,4 +1,4 @@
-moblin-image-creator (0.37) UNRELEASED; urgency=low
+moblin-image-creator (0.37) gaston; urgency=low
 
   [ John L. Villalovos ]
   * Fix error with the policy-rc.d file not getting created with the new
@@ -130,7 +130,10 @@ moblin-image-creator (0.37) UNRELEASED; urgency=low
     /usr/sbin/image-creator.  Now just uses "image-creator"
   * Added libhildondesktop-dev to the default.cfg for projects
 
- -- Bob Spencer <bob.spencer@intel.com>  Mon, 10 Dec 2007 16:00:56 -0800
+  [ John L. Villalovos ]
+  * Pushing version 0.37
+
+ -- John L. Villalovos <john.l.villalovos@intel.com>  Tue, 11 Dec 2007 09:10:49 -0800
 
 moblin-image-creator (0.36) gaston; urgency=low
 
