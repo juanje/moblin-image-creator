@@ -128,8 +128,9 @@ moblin-image-creator (0.37) UNRELEASED; urgency=low
   [ Bob Spencer ]
   * Changed build script to not have absolute path.  Was breaking with
     /usr/sbin/image-creator.  Now just uses "image-creator"
+  * Added libhildondesktop-dev to the default.cfg for projects
 
- -- Bob Spencer <bob.spencer@intel.com>  Mon, 10 Dec 2007 13:44:20 -0800
+ -- Bob Spencer <bob.spencer@intel.com>  Mon, 10 Dec 2007 16:00:56 -0800
 
 moblin-image-creator (0.36) gaston; urgency=low
 
