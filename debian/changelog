@@ -1,3 +1,9 @@
+moblin-image-creator (0.38) UNRELEASED; urgency=low
+
+  * Starting new 0.38 version
+
+ -- John L. Villalovos <john.l.villalovos@intel.com>  Tue, 11 Dec 2007 09:11:38 -0800
+
 moblin-image-creator (0.37) gaston; urgency=low
 
   [ John L. Villalovos ]
