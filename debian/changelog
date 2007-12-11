@@ -1,8 +1,8 @@
 moblin-image-creator (0.38) UNRELEASED; urgency=low
 
-  * Starting new 0.38 version
+  * Changed libval (libvaL) to libva1 (libva #1)
 
- -- John L. Villalovos <john.l.villalovos@intel.com>  Tue, 11 Dec 2007 09:11:38 -0800
+ -- John L. Villalovos <john.l.villalovos@intel.com>  Tue, 11 Dec 2007 09:43:55 -0800
 
 moblin-image-creator (0.37) gaston; urgency=low
 
