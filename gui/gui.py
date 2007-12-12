@@ -208,6 +208,7 @@ class App(object):
                 break
             name = dialog.name
             desc = dialog.desc
+            target_name = dialog.target_name            
             platform = dialog.platform
             path = os.path.realpath(os.path.abspath(os.path.expanduser(dialog.path)))
             if not dialog.name or not dialog.desc or not dialog.platform or not dialog.path:
@@ -240,6 +241,11 @@ class App(object):
                 proj = self.sdk.create_project(dialog.path, dialog.name, dialog.desc, self.sdk.platforms[platformName])
                 proj.install()
                 self.projectList.append((dialog.name, dialog.desc, dialog.path, platformName))
+
+                progress_dialog.destroy()
+                if target_name != None:
+                    self.create_new_target(proj, target_name)
+
             except:
                 traceback.print_exc()
                 if debug: print_exc_plus()
@@ -250,7 +256,8 @@ class App(object):
                     # if the project creation failed before the list of
                     # projects has been updated, then we expect failure here
                     pass
-            progress_dialog.destroy()
+                progress_dialog.destroy()
+            
 
     def on_about_activate(self, event):
         dialog = gtk.AboutDialog()
@@ -305,20 +312,24 @@ class App(object):
                     self.show_error_dialog("Must specify a target name")
                 elif target_name in self.current_project().targets:
                     self.show_error_dialog("Target: %s already exists" % target_name)
-                else:
-                    progress_tree = gtk.glade.XML(self.gladefile, 'ProgressDialog')
-                    progress_dialog = progress_tree.get_widget('ProgressDialog')
-                    progress_dialog.connect('delete_event', self.ignore)
-                    progress_tree.get_widget('progress_label').set_text(_("Please wait while creating %s") % target_name)
-                    self.progressbar = progress_tree.get_widget('progressbar')
-                    while gtk.events_pending():
-                        gtk.main_iteration(False) 
-                    self.current_project().create_target(target_name)
-                    self.targetList.append((target_name, ''))
-                    progress_dialog.destroy()
+                else:                    
+                    self.create_new_target(self.current_project(), target_name)
                     break
             else:
                 break
+
+    def create_new_target(self, project, target_name):
+        progress_tree = gtk.glade.XML(self.gladefile, 'ProgressDialog')
+        progress_dialog = progress_tree.get_widget('ProgressDialog')
+        progress_dialog.connect('delete_event', self.ignore)
+        progress_tree.get_widget('progress_label').set_text(_("Please wait while creating %s") % target_name)
+        self.progressbar = progress_tree.get_widget('progressbar')
+        while gtk.events_pending():
+            gtk.main_iteration(False) 
+        project.create_target(target_name)
+        self.redraw_target_view()
+        progress_dialog.destroy()
+
 
     def checkBoxCallback(self, widget, fSetName):
         #print "Checkbox %s was clicked" % fSetName
@@ -1072,6 +1083,10 @@ class AddNewProject(object):
         self.np_path = widgets.get_widget("np_path")
         self.np_path.set_text(path)
         self.np_platform = widgets.get_widget("np_platform")
+        self.np_addTarget = widgets.get_widget("np_addTarget")
+        self.np_targetName_label = widgets.get_widget("np_targetName_label")
+        self.np_addTarget.connect("clicked", self.addTarget_callback)
+        self.target_name = None
         platform_entry_box = gtk.ListStore(gobject.TYPE_STRING)
         platforms = sorted(self.sdk.platforms.iterkeys())
         platform_idx = 0
@@ -1092,6 +1107,31 @@ class AddNewProject(object):
         self.np_platform.set_active(platform_idx)
         width, height = self.dialog.get_default_size()
         self.dialog.set_default_size(width + 500, height)
+
+    def addTarget_callback(self, widget):        
+        while True:
+            gladefile = os.path.join(self.sdk.path, "image-creator.glade")
+            widgets = gtk.glade.XML(gladefile, 'nt_dlg')
+            dialog = widgets.get_widget('nt_dlg')
+            dialog.set_default_response(gtk.RESPONSE_OK)
+            result = dialog.run()
+            target_name = widgets.get_widget('nt_name').get_text()
+            target_name = target_name.strip()
+            dialog.destroy()
+            if result == gtk.RESPONSE_OK:
+                if not target_name:
+                    widgets = gtk.glade.XML(gladefile, 'error_dialog')
+                    widgets.get_widget('error_label').set_text("Must specify a target name")
+                    dialog = widgets.get_widget('error_dialog')
+                    dialog.run()
+                    dialog.destroy()
+                else:
+                    self.target_name = target_name
+                    self.np_targetName_label.set_text("Adding Target: %s" % self.target_name)
+                    break
+            else:
+                break
+
 
     def run(self):
         result = self.dialog.run()

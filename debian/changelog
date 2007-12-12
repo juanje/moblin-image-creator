@@ -1,8 +1,12 @@
 moblin-image-creator (0.38) UNRELEASED; urgency=low
 
+  [ John L. Villalovos ]
   * Changed libval (libvaL) to libva1 (libva #1)
 
- -- John L. Villalovos <john.l.villalovos@intel.com>  Tue, 11 Dec 2007 09:43:55 -0800
+  [ Prajwal Mohan ]
+  * Adding Add Target button in the new project dialog. 
+
+ -- Prajwal Mohan <prajwal@linux.intel.com>  Tue, 11 Dec 2007 16:36:07 -0800
 
 moblin-image-creator (0.37) gaston; urgency=low
 
