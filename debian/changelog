@@ -8,8 +8,9 @@ moblin-image-creator (0.38) UNRELEASED; urgency=low
 
   [ John L. Villalovos ]
   * Adding a mccaslin-lpia-ubuntu-hardy platform
+  * Adding a menlow-lpia-ubuntu-hardy platform
 
- -- John L. Villalovos <john.l.villalovos@intel.com>  Thu, 13 Dec 2007 13:50:11 -0800
+ -- John L. Villalovos <john.l.villalovos@intel.com>  Thu, 13 Dec 2007 14:52:18 -0800
 
 moblin-image-creator (0.37) gaston; urgency=low
 
