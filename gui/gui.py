@@ -1090,19 +1090,25 @@ class AddNewProject(object):
         platform_entry_box = gtk.ListStore(gobject.TYPE_STRING)
         platforms = sorted(self.sdk.platforms.iterkeys())
         platform_idx = 0
-        for idx, pname in enumerate(platforms):        
+        idx = 0
+        for pname in platforms:
             pdesc = ""            
+            added = False
             packageManagerDesc = ""
             if self.sdk.platforms[pname].config_info != None:
                 pdesc = " - (%s)" % self.sdk.platforms[pname].config_info['description']
                 packageManagerDesc = self.sdk.platforms[pname].config_info['package_manager']
             if packageManager == packageManagerDesc:
                 platform_entry_box.append([pname + pdesc])
-            else:
-                if packageManagerDesc == "":
-                    platform_entry_box.append([pname + pdesc])
-            if pname == platform:
-                platform_idx = idx
+                added = True
+            elif packageManagerDesc == "":
+                platform_entry_box.append([pname + pdesc])
+                added = True
+            # If previously selected an entry, select it again
+            if added:
+                if  (pname + pdesc) == platform:
+                    platform_idx = idx
+                idx += 1
         self.np_platform.set_model(platform_entry_box)
         self.np_platform.set_active(platform_idx)
         width, height = self.dialog.get_default_size()
