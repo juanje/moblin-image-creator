@@ -10,7 +10,11 @@ moblin-image-creator (0.38) UNRELEASED; urgency=low
   * Adding a mccaslin-lpia-ubuntu-hardy platform
   * Adding a menlow-lpia-ubuntu-hardy platform
 
- -- John L. Villalovos <john.l.villalovos@intel.com>  Thu, 13 Dec 2007 14:52:18 -0800
+  [ Prajwal Mohan ]
+  * Changing the title for Delete Target dialog
+  * Changing tooltip for Create LiveRW USB button 
+
+ -- Prajwal Mohan <prajwal@linux.intel.com>  Wed, 19 Dec 2007 10:44:37 -0800
 
 moblin-image-creator (0.37) gaston; urgency=low
 

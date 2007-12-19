@@ -466,6 +466,7 @@ class App(object):
         tree = gtk.glade.XML(self.gladefile, 'qDialog')
         tree.get_widget('queryLabel').set_text("Delete target %s from project %s?" % (target.name, project.name))
         dialog = tree.get_widget('qDialog')
+        dialog.set_title("Delete Target")
         if dialog.run() == gtk.RESPONSE_OK:
             while gtk.events_pending():
                 gtk.main_iteration(False)
