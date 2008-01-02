@@ -115,7 +115,7 @@ class Platform(object):
             output = []
             result = pdk_utils.execCommand(cmd, output = output, callback = callback)
             if result != 0:
-                print >> sys.stderr, "ERROR: Unable to rootstrap %s from %s!" % (rootstrap_file, name)
+                print >> sys.stderr, "ERROR: Unable to rootstrap %s from %s!" % (rootstrap_file, self.name)
                 pdk_utils.rmtree(chroot_dir, callback = callback)
                 # FIXME: Better exception here
                 raise ValueError(" ".join(output))
