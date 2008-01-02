@@ -141,7 +141,7 @@ class SDK(object):
                 self.version = "- %s - %s" % (result.group('version'), result.group('distribution'))
             in_file.close()
         self.progress_callback_func = progress_callback
-        self.status_label_callback = status_label_callback
+        self.status_label_callback_func = status_label_callback
         self.config_path = os.path.join(self.path, 'projects')
         if not os.path.isdir(self.config_path):
             os.mkdir(self.config_path)
@@ -173,6 +173,11 @@ class SDK(object):
         if not self.progress_callback_func:
             return
         self.progress_callback_func(*args)
+
+    def status_label_callback(self, *args):
+        if not self.status_label_callback_func:
+            return
+        self.status_label_callback_func(*args)
 
     def discover_projects(self):
         self.projects = {}
@@ -210,12 +215,10 @@ class SDK(object):
             raise ValueError("Empty argument passed in")
         
         install_path = os.path.realpath(os.path.abspath(os.path.expanduser(parent_path)))
-        if self.status_label_callback:
-            self.status_label_callback("Creating the project chroot environment")
+        self.status_label_callback("Creating the project chroot environment")
         platform.createChroot(install_path, callback = self.progress_callback)
         # create the config file
-        if self.status_label_callback:
-            self.status_label_callback("Creating Config file")
+        self.status_label_callback("Creating Config file")
         config_path = os.path.join(self.config_path, "%s.proj" % name)
         os.path.isfile(config_path)
         config_file = open(config_path, 'w')
@@ -225,8 +228,7 @@ class SDK(object):
         config_file.write("PLATFORM=%s\n" % (platform.name))
         config_file.close()
         # instantiate the project
-        if self.status_label_callback:
-            self.status_label_callback("Initiating the project")
+        self.status_label_callback("Initiating the project")
         try:
             self.projects[name] = Project.Project(install_path, name, desc, platform, self.progress_callback)
         except:
