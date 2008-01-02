@@ -140,7 +140,7 @@ class SDK(object):
             if result:
                 self.version = "- %s - %s" % (result.group('version'), result.group('distribution'))
             in_file.close()
-        self.progress_callback = progress_callback
+        self.progress_callback_func = progress_callback
         self.status_label_callback = status_label_callback
         self.config_path = os.path.join(self.path, 'projects')
         if not os.path.isdir(self.config_path):
@@ -168,6 +168,11 @@ class SDK(object):
                 continue
             config = PackageConfig(full_path)
             self.projects[config.name] = Project.Project(config.path, config.name, config.desc, self.platforms[config.platform], self.progress_callback)
+
+    def progress_callback(self, *args):
+        if not self.progress_callback_func:
+            return
+        self.progress_callback_func(*args)
 
     def discover_projects(self):
         self.projects = {}
