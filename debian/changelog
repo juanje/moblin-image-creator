@@ -17,8 +17,9 @@ moblin-image-creator (0.38) UNRELEASED; urgency=low
   [ John L. Villalovos ]
   * Fixed issue with progress_callback breaking command line operation
   * Update maintainer in control file
+  * Make some of the icons more colorful and/or more descriptive
 
- -- John L. Villalovos <john.l.villalovos@intel.com>  Thu, 03 Jan 2008 15:49:30 -0800
+ -- John L. Villalovos <john.l.villalovos@intel.com>  Fri, 04 Jan 2008 10:47:21 -0800
 
 moblin-image-creator (0.37) gaston; urgency=low
 
