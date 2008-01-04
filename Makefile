@@ -28,6 +28,7 @@ basicinstall: all
 	@cp libs/*.py  ${DESTDIR}/${SHAREDIR}/lib
 	@cp gui/*.py  ${DESTDIR}/${SHAREDIR}/lib
 	@cp gui/*.glade ${DESTDIR}/${SHAREDIR}
+	@cp gui/*.png ${DESTDIR}/${SHAREDIR}
 	@cp COPYING ${DESTDIR}/${SHAREDIR}/
 	@cp -a gui/pixmaps/. ${DESTDIR}/${SHAREDIR}
 	@cp default_config/defaults.cfg ${DESTDIR}/${SHAREDIR}/default_config/
