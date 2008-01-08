@@ -20,7 +20,15 @@ moblin-image-creator (0.38) UNRELEASED; urgency=low
   * Make some of the icons more colorful and/or more descriptive
   * Added a progress indicator when deleting a target
 
- -- John L. Villalovos <john.l.villalovos@intel.com>  Mon, 07 Jan 2008 20:05:13 -0800
+  [ Alek Du ]
+  * Changed fsets to reflect the change of kernel and psb-kmd module 
+    package numbering
+  * Fixed a bug where MIC call depmod (1. use project.chroot 
+    2. remove the wrong and unnecessary comparison between System.map 
+    and modules.dep file, since we have out of tree modules like psb-kmd,
+    in that case we must call depmod unconditionally)
+
+ -- Alek Du <alek.du@intel.com>  Tue, 08 Jan 2008 16:22:33 +0800
 
 moblin-image-creator (0.37) gaston; urgency=low
 

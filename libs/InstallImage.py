@@ -214,18 +214,10 @@ class InstallImage(object):
                 tmp_str = "lib/modules/%s/modules.dep" % kernel_version
                 moddep_file = os.path.join(self.target.fs_path, tmp_str)
 
-                if os.path.isfile(moddep_file):
-                    sr_deps = os.stat(moddep_file)
-                    sr_sym  = os.stat(os.path.join(boot_path, filename))
-                    # Skip generating a new modules.dep if the Symbols are
-                    # older than the current modules.dep file.
-                    if sr_deps.st_mtime > sr_sym.st_mtime: 
-                        continue
-
                 symbol_file = os.path.join(base_dir, 'boot', filename)
 
                 cmd = "depmod -b %s -v %s -F %s" % (base_dir, kernel_version, symbol_file)
-                self.target.chroot(cmd)
+                self.project.chroot(cmd)
 
     def create_rootfs(self):
         """Create the root file system, using mksquashfs.  If we don't want to
