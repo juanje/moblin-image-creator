@@ -236,7 +236,6 @@ class App(object):
                 self.statuslabel = progress_tree.get_widget('status_label')
                 while gtk.events_pending():
                     gtk.main_iteration(False) 
-
                 platformName = dialog.platform.split()[0]
                 proj = self.sdk.create_project(dialog.path, dialog.name, dialog.desc, self.sdk.platforms[platformName])
                 proj.install()
@@ -468,11 +467,17 @@ class App(object):
         dialog = tree.get_widget('qDialog')
         dialog.set_title("Delete Target")
         if dialog.run() == gtk.RESPONSE_OK:
+            dialog.destroy()
+            progress_tree = gtk.glade.XML(self.gladefile, 'ProgressDialog')
+            progress_dialog = progress_tree.get_widget('ProgressDialog')
+            progress_dialog.connect('delete_event', self.ignore)
+            progress_tree.get_widget('progress_label').set_text(_("Please wait while deleting %s") % project.name)
+            self.progressbar = progress_tree.get_widget('progressbar')
             while gtk.events_pending():
                 gtk.main_iteration(False)
-            self.sdk.projects[project.name].delete_target(target.name)
+            self.sdk.projects[project.name].delete_target(target.name, callback = self.gui_throbber)
             self.remove_current_target()
-        dialog.destroy()
+            progress_dialog.destroy()
 
     def current_project(self):
         model, iter = self.projectView.get_selection().get_selected()

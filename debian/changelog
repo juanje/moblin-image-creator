@@ -18,8 +18,9 @@ moblin-image-creator (0.38) UNRELEASED; urgency=low
   * Fixed issue with progress_callback breaking command line operation
   * Update maintainer in control file
   * Make some of the icons more colorful and/or more descriptive
+  * Added a progress indicator when deleting a target
 
- -- John L. Villalovos <john.l.villalovos@intel.com>  Fri, 04 Jan 2008 10:47:21 -0800
+ -- John L. Villalovos <john.l.villalovos@intel.com>  Mon, 07 Jan 2008 20:05:13 -0800
 
 moblin-image-creator (0.37) gaston; urgency=low
 
