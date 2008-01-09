@@ -466,8 +466,9 @@ class App(object):
         tree.get_widget('queryLabel').set_text("Delete target %s from project %s?" % (target.name, project.name))
         dialog = tree.get_widget('qDialog')
         dialog.set_title("Delete Target")
-        if dialog.run() == gtk.RESPONSE_OK:
-            dialog.destroy()
+        result = dialog.run()
+        dialog.destroy()
+        if result == gtk.RESPONSE_OK:
             progress_tree = gtk.glade.XML(self.gladefile, 'ProgressDialog')
             progress_dialog = progress_tree.get_widget('ProgressDialog')
             progress_dialog.connect('delete_event', self.ignore)
