@@ -154,9 +154,9 @@ sync
 splash_progress 10
 splash_delay 10
 
-splash_display "Formatting /dev/${device}1 w/ ext2..."
+splash_display "Formatting /dev/${device}1 w/ ext3..."
 splash_delay 200
-mkfs.ext2 /dev/${device}1
+mkfs.ext3 /dev/${device}1
 sync
 splash_progress 20
 splash_delay 10

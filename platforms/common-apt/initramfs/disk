@@ -51,30 +51,30 @@ mountroot ()
     then
 	# We are using squashfs
 	echo "Setting up our squashfs and ext3fs unionfs system..."
-	mount -o rw /dev/${device}1 /container
+	mount -t ext3 -o ro /dev/${device}1 /container
 	while [ ! -e "/container/rootfs.img" ]
 	do
 	    echo "Did not find /container/rootfs.img"
 	    echo "sleeping for 0.5 seconds..."
 	    /bin/sleep 0.5
-	    echo "Mounting: mount -o rw /dev/${device}1 /container"
-	    mount -o rw /dev/${device}1 /container
+	    echo "Mounting: mount -o ro /dev/${device}1 /container"
+	    mount -t ext3 -o ro /dev/${device}1 /container
 	done
 	mount -o ro,loop -t squashfs /container/rootfs.img /squashmnt
-	mount -o rw,noatime,nodiratime /dev/${device}2 /persistmnt
+	mount -t ext3 -o rw,noatime,nodiratime /dev/${device}2 /persistmnt
 	mount -t unionfs -o dirs=/persistmnt=rw:/squashmnt=ro none ${rootmnt}
     else
 	# We are NOT using squashfs
 	echo "mounting root partition, NOT using squashfs"   
-	mount -o rw,noatime,nodiratime /dev/${device}2 ${rootmnt}
+	mount -t ext3 -o rw,noatime,nodiratime /dev/${device}2 ${rootmnt}
 	while [ ! -e "${rootmnt}/bin" ]
 	do
 	    echo "Did not find ${rootmnt}/bin"
 	    echo "sleeping for 2 seconds..."
 	    /bin/sleep 2
 	    echo "Mounting: mount -o rw,noatime,nodiratime /dev/${device}2 ${rootmnt}"
-	    mount -o rw,noatime,nodiratime /dev/${device}2 ${rootmnt}
+	    mount -t ext3 -o rw,noatime,nodiratime /dev/${device}2 ${rootmnt}
 	done
-	mount -o rw,noatime,nodiratime /dev/${device}1 ${rootmnt}/boot 
+	mount -t ext3 -o rw,noatime,nodiratime /dev/${device}1 ${rootmnt}/boot 
     fi
 }

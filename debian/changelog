@@ -29,9 +29,13 @@ moblin-image-creator (0.38) UNRELEASED; urgency=low
     in that case we must call depmod unconditionally)
 
   [ Prajwal Mohan ]
-  * UI Changes to make it HIG conformant 
+  * UI Changes to make it HIG conformant
 
- -- Prajwal Mohan <prajwal@linux.intel.com>  Wed, 09 Jan 2008 13:46:04 -0800
+  [ Alek Du ]
+  * Applied squashfs disk corruption fixing patch from Michael Frey
+    (michael.frey@canonical.com)
+
+ -- Alek Du <alek.du@intel.com>  Fri, 11 Jan 2008 14:13:28 +0800
 
 moblin-image-creator (0.37) gaston; urgency=low
 
