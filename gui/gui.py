@@ -97,7 +97,6 @@ class App(object):
         self.set_plist(self.pPlatform, 3)
         self.projectList = gtk.ListStore(str, str, str, str)
         self.projectView.set_model(self.projectList)
-#        self.projectView.set_reorderable(1)
         # Set targetView widget
         self.tName = _("Name")
         self.tFSet = _("Function Sets")
@@ -331,7 +330,6 @@ class App(object):
 
 
     def checkBoxCallback(self, widget, fSetName):
-        #print "Checkbox %s was clicked" % fSetName
         platform = self.current_project().platform
         fset = platform.fset[fSetName]
         i = 0
@@ -366,12 +364,6 @@ class App(object):
                 else:    
                     self.fsetTouple[i] = (self.fsetTouple[i][0], self.fsetTouple[i][1], False, self.fsetTouple[i][3]) 
                 i = i + 1
-
-        #for item in self.fsetTouple:            
-        #    item[1].set_label(item[0] + " : %s" % item[3])
-          
-
-    
 
     def on_install_fset(self, widget):
         tree = gtk.glade.XML(self.gladefile, 'fsetsDialog')
@@ -939,23 +931,11 @@ class App(object):
         else:
             self.mirrorSelection.set_sensitive(True)
             self.mirrorDetails.set_sensitive(True)
-            #self.mirrorSelection.set_active(0)  
             currentMirror = self.getCurrentMirror()
             if currentMirror == "no_mirror":
                 self.mirrorSelection.set_active(0)
             else:
                 self.mirrorSelection.set_active(self.mirrorSelectionList[currentMirror])
-            
-     
-            
-#    def saveMirrorChanges_callback(self, widget, saveType):
-#        if saveType == 'buttonClick':
-#            sectionName = self.mirrorSelection.get_active_text()
-#            sectionText = self.configTextBuffer.get_text(self.configTextBuffer.get_start_iter(), self.configTextBuffer.get_end_iter())
-#            self.saveMirrorConfigFile("saveSection", sectionName, sectionText)
-#            self.saveChanges.set_sensitive(False)
-#        if saveType == 'textChanged':
-#            self.saveChanges.set_sensitive(True)
 
     def mirrorSelection_callback(self, widget):
         selection = self.mirrorSelection.get_active_text()
@@ -1006,7 +986,6 @@ class App(object):
                         self.mirrorSelectionList[mirrorListItem] = index
                         index += 1
                         self.mirrorSelection_entry_box.append([mirrorListItem])
-        #self.mirrorSelection_entry_box.append(['Add a Section'])
         self.mirrorSelection.set_model(self.mirrorSelection_entry_box)
 
     def getCurrentMirror(self):
@@ -1026,7 +1005,6 @@ class App(object):
                 return "no_mirror"
         else:
             return "no_mirror"
-
 
     def on_MirrorSettings_activate(self, widget):
         dialog_tree = gtk.glade.XML(self.gladefile, 'mirror')
