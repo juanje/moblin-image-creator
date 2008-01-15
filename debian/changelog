@@ -35,7 +35,11 @@ moblin-image-creator (0.38) UNRELEASED; urgency=low
   * Applied squashfs disk corruption fixing patch from Michael Frey
     (michael.frey@canonical.com)
 
- -- Alek Du <alek.du@intel.com>  Fri, 11 Jan 2008 14:13:28 +0800
+  [ John L. Villalovos ]
+  * Fix for target naming bug
+    https://bugs.launchpad.net/moblin-image-creator/+bug/182161
+
+ -- John L. Villalovos <john.l.villalovos@intel.com>  Mon, 14 Jan 2008 19:54:42 -0800
 
 moblin-image-creator (0.37) gaston; urgency=low
 

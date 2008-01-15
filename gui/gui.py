@@ -24,6 +24,7 @@ import gtk.glade
 import locale
 import os
 import pygtk
+import re
 import shutil
 import sys
 import time
@@ -296,9 +297,11 @@ class App(object):
             progress_dialog.destroy()
             
     def on_new_target_add_clicked(self, widget):
+        target_name = ""
         # Open the "New Target" dialog
         while True:
             widgets = gtk.glade.XML(self.gladefile, 'nt_dlg')
+            widgets.get_widget('nt_name').set_text(target_name)
             dialog = widgets.get_widget('nt_dlg')
             dialog.set_default_response(gtk.RESPONSE_OK)
             result = dialog.run()
@@ -310,6 +313,9 @@ class App(object):
                     self.show_error_dialog("Must specify a target name")
                 elif target_name in self.current_project().targets:
                     self.show_error_dialog("Target: %s already exists" % target_name)
+                elif re.search(r'\W', target_name):
+                    target_name = re.sub('\W', '', target_name)
+                    self.show_error_dialog("Target names can only contain alpha/numeric characters")
                 else:                    
                     self.create_new_target(self.current_project(), target_name)
                     break
