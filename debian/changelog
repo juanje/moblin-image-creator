@@ -1,8 +1,9 @@
 moblin-image-creator (0.39) UNRELEASED; urgency=low
 
   * Starting 0.39 version
+  * Trying to fix wireless not working bug.
 
- -- John L. Villalovos <john.l.villalovos@intel.com>  Fri, 18 Jan 2008 14:14:53 -0800
+ -- John L. Villalovos <john.l.villalovos@intel.com>  Fri, 18 Jan 2008 16:36:21 -0800
 
 moblin-image-creator (0.38) gaston; urgency=low
 

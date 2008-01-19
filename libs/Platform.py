@@ -153,9 +153,6 @@ class Platform(object):
             print >> sys.stderr, "ERROR: Unable to generate %s rootstrap!" % chroot_type_string
             raise ValueError(" ".join(output))
         self.pkg_manager.cleanPackageCache(chroot_dir)
-        # workaround for ubuntu kernel package bug
-        pdk_utils.touchFile('%s/etc/kernel-img.conf' % (chroot_dir))
-        # pdk_utils.touchFile('%s/etc/kernel-pkg.conf' % (chroot_dir))
         source_dir = os.path.join(self.path, 'sources')
         for filename in os.listdir(source_dir):
             source_path = os.path.join(source_dir, filename)
