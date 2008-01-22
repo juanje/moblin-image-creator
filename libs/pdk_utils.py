@@ -27,7 +27,8 @@ import select
 import stat
 import subprocess
 import sys
-
+import tempfile
+import shutil
 import mic_cfg
 
 # this is for the copySourcesListFile() function
@@ -138,9 +139,18 @@ def umountAllInPath(dirname):
     our_path = os.path.realpath(os.path.abspath(dirname)) + os.sep
     mounts = getMountInfo()
     for mpoint in mounts:
+        fs_type=mounts[mpoint].fs_type
         mpoint = os.path.realpath(os.path.abspath(mpoint)) + os.sep
         if our_path == mpoint[:len(our_path)]:
+            # need save tmpfs to 'real' dir
+            if fs_type == 'tmpfs':
+                tmp_path = tempfile.mkdtemp('','pdk-', '/tmp')
+                os.rmdir(tmp_path)
+                shutil.copytree(mpoint, tmp_path) 
             os.system("umount %s" % (mpoint))
+            if fs_type == 'tmpfs':
+                os.rmdir(mpoint)
+                shutil.move(tmp_path, mpoint) 
 
 def umount_device(device_file):
     """umount a device if it is mounted"""
