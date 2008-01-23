@@ -99,10 +99,17 @@ for filename in [ CONFIG_DIR, sources_regex_file ]:
     if do_chmod:
         os.chown(filename, userid, groupid)
 
-
 def main():
     # Add something to exercise this code
     print "USB devices: %s" % get_current_udisks()
+
+def areWeRoot():
+    """Figure out if we are running as root"""
+    sudo = int(mic_cfg.config.get('userinfo', 'sudo'))
+    userid = int(mic_cfg.config.get('userinfo', 'userid'))
+    if sudo == 0 and userid != 0:
+        return False
+    return True
 
 def get_current_udisks():
     usb_devices = []

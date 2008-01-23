@@ -28,6 +28,7 @@ from optparse import OptionParser
 sys.path.insert(0, '/usr/share/pdk/lib')
 import SDK
 import mic_cfg
+import pdk_utils
 
 
 ENVIRONMENT_VARS = {
@@ -59,9 +60,7 @@ def main():
     # Set needed environment variables
     setEnvironmentVariables()
     if len(sys.argv) == 1:
-        sudo = int(mic_cfg.config.get('userinfo', 'sudo'))
-        userid = int(mic_cfg.config.get('userinfo', 'userid'))
-        if sudo == 0 and userid != 0:
+        if not pdk_utils.areWeRoot():
             print "Error: Must run image creator with sudo or run as root"
             print "Example, run image creator:  sudo image-creator"
             sys.exit(1)
@@ -131,36 +130,39 @@ def main():
         
 
 def parseCommandLine():
-    valid_commands = [
-        "chroot-project",
-        "chroot-target",
-        "clear-rootstraps",
-        "create-install-usb",
-        "create-live-usb",
-        "create-live-usbrw",
-        "create-project",
-        "create-target",
-        "delete-project",
-        "delete-target",
-        "install-fset",
-        "list-fsets",
-        "list-platforms",
-        "list-projects",
-        "list-targets",
-        "load-project",
-        "run-project",
-        "run-target",
-        "save-project",
-        "umount-project",
-        "umount-target",
-        "update-project",
-        "update-target",
-    ]
-    valid_commands.sort()
+    valid_commands = {
+        # command name,         requires root priviledge
+        "chroot-project" :      1,
+        "chroot-target" :       1,
+        "clear-rootstraps" :    1,
+        "create-install-usb" :  1,
+        "create-live-usb" :     1,
+        "create-live-usbrw" :   1,
+        "create-project" :      1,
+        "create-target" :       1,
+        "delete-project" :      1,
+        "delete-target" :       1,
+        "install-fset" :        1,
+        "list-fsets" :          0,
+        "list-platforms" :      0,
+        "list-projects" :       0,
+        "list-targets" :        0,
+        "load-project" :        1,
+        "run-project" :         1,
+        "run-target" :          1,
+        "save-project" :        1,
+        "umount-project" :      1,
+        "umount-target" :       1,
+        "update-project" :      1,
+        "update-target" :       1,
+    }
     valid_command_string = ""
-    for command in valid_commands[:-1]:
+    commands = valid_commands.keys()
+    commands.sort()
+    # Get all but the last one
+    for command in commands[:-1]:
         valid_command_string += "%s, " %  command
-    valid_command_string += "or %s" % valid_commands[-1]
+    valid_command_string += "or %s" % commands[-1]
 
     parser = OptionParser(add_help_option=False)
 
@@ -296,6 +298,9 @@ Examples:
         parser.error("Must specify a -c/--command argument")
     if options.cmd not in valid_commands:
         parser.error("Command specified for option -c/--command invalid.  Valid commands are: %s" % valid_command_string)
+    need_root = valid_commands[options.cmd]
+    if need_root and not pdk_utils.areWeRoot():
+        parser.error("Command specified requires you to run as root or using sudo.  Command is: %s" % options.cmd)
     # Our FSets are converted to lowecase, so do the same for the command line
     # argument
     if options.fset_name:
