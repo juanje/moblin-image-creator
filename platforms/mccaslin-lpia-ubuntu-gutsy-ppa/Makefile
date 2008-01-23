@@ -1,5 +1,5 @@
 TMPDIR = /tmp/.tmpbuilddir
-PNAME = mccaslin-lpia-gutsy-ppa
+PNAME = mccaslin-lpia-ubuntu-gutsy-ppa
 SHARE = ${DESTDIR}/usr/share/pdk
 PLATFORM_DIR = ${SHARE}/platforms/${PNAME}
 
