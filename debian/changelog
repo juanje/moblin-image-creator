@@ -13,8 +13,9 @@ moblin-image-creator (0.39) UNRELEASED; urgency=low
   * Added a new mccaslin-lpia-gutsy-ppa platform.  This platform is the same
     as mccaslin-lpia but it adds in pulling from the Ubuntu Personal Package
     Archive (PPA)
+  * Changing name of new platform to mccaslin-lpia-ubuntu-gutsy-ppa
 
- -- John L. Villalovos <john.l.villalovos@intel.com>  Wed, 23 Jan 2008 12:06:19 -0800
+ -- John L. Villalovos <john.l.villalovos@intel.com>  Wed, 23 Jan 2008 13:14:32 -0800
 
 moblin-image-creator (0.38) gaston; urgency=low
 
