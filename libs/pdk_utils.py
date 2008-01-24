@@ -374,7 +374,7 @@ def mountList(mount_list, chroot_dir):
             if not ismount(path) and os.path.isdir(host_dirname):
                 result = os.system('mount --bind %s %s' % (host_dirname, path))
                 if result != 0:
-                    raise OSError("Internal error while attempting to bind mount /%s!" % (mnt))
+                    raise OSError("Internal error while attempting to bind mount /%s!" % (host_dirname))
         # Mimic host mounts, if possible
         elif mnt_type == 'host':
             if host_dirname in mounts:
