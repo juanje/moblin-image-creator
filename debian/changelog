@@ -22,8 +22,9 @@ moblin-image-creator (0.39) UNRELEASED; urgency=low
   * Only load files in the FSET directory that end in .fset  Fix for bug
     https://bugs.launchpad.net/moblin-image-creator/+bug/153651
   * Add the sources for the gutsy-updates and gutsy-security repositories.
+  * Add the sources for the Ubuntu PPA
 
- -- John L. Villalovos <john.l.villalovos@intel.com>  Thu, 24 Jan 2008 12:51:01 -0800
+ -- John L. Villalovos <john.l.villalovos@intel.com>  Thu, 24 Jan 2008 13:03:57 -0800
 
 moblin-image-creator (0.38) gaston; urgency=low
 
