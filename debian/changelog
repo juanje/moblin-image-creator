@@ -19,8 +19,10 @@ moblin-image-creator (0.39) UNRELEASED; urgency=low
   * Only copy the resolv.conf and hosts file from the host to the target if
     they don't already exist
   * Created a menlow-lpia-ubuntu-gutsy-ppa platform.
+  * Only load files in the FSET directory that end in .fset  Fix for bug
+    https://bugs.launchpad.net/moblin-image-creator/+bug/153651
 
- -- John L. Villalovos <john.l.villalovos@intel.com>  Thu, 24 Jan 2008 12:38:35 -0800
+ -- John L. Villalovos <john.l.villalovos@intel.com>  Thu, 24 Jan 2008 12:43:35 -0800
 
 moblin-image-creator (0.38) gaston; urgency=low
 

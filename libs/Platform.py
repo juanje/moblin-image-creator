@@ -51,6 +51,9 @@ class Platform(object):
         self.fset = fsets.FSet()
         fset_path = os.path.join(self.path, 'fsets')
         for filename in os.listdir(fset_path):
+            # Only load files which end with the .fset extension
+            if not filename.endswith('.fset'):
+                continue
             full_path = os.path.join(fset_path, filename)
             self.fset.addFile(full_path)
         local_config = []
