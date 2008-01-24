@@ -241,8 +241,13 @@ class Platform(object):
             ]:
             os.makedirs(os.path.join(chroot_dir, dirname))
         target_etc = os.path.join(chroot_dir, "etc")
+        # Setup copies of some useful files from the host into the chroot
         for filename in [ 'hosts', 'resolv.conf' ]:
-            shutil.copy(os.path.join('/etc', filename), target_etc)
+            source_file = os.path.join("/etc", filename)
+            target_file = os.path.join(target_etc, filename)
+            # Only copy if it doesn't already exist
+            if os.path.isfile(source_file) and not os.path.isfile(target_file):
+                shutil.copy(source_file, target_file)
         yumconf = open(os.path.join(target_etc, 'yum.conf'), 'w')
         print >> yumconf, """\
 [main]

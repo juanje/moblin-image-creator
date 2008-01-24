@@ -101,9 +101,12 @@ class FileSystem(object):
         self.mounted = pdk_utils.mountList(FileSystem.mount_list, self.chroot_path)
         self.mounted.extend(self.platform.pkg_manager.mount(self.chroot_path))
         # Setup copies of some useful files from the host into the chroot
-        for file in ['etc/resolv.conf', 'etc/hosts']:
-            if os.path.isfile(os.path.join('/', file)):
-                shutil.copy(os.path.join('/', file), os.path.join(self.chroot_path, file))
+        for filename in ['etc/resolv.conf', 'etc/hosts']:
+            source_file = os.path.join(os.sep, filename)
+            target_file = os.path.join(self.chroot_path, filename)
+            # Let's only copy if they don't already exist
+            if os.path.isfile(source_file) and not os.path.isfile(target_file):
+                shutil.copy(source_file, target_file)
         # first time mount
         buildstamp_path = os.path.join(self.path, 'etc', 'buildstamp')
         if not os.path.isfile(buildstamp_path):
