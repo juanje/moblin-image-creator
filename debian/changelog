@@ -18,8 +18,9 @@ moblin-image-creator (0.39) UNRELEASED; urgency=low
     mccaslin-lpia-ubuntu-gutsy-ppa platform.  Otherwise it won't work.
   * Only copy the resolv.conf and hosts file from the host to the target if
     they don't already exist
+  * Created a menlow-lpia-ubuntu-gutsy-ppa platform.
 
- -- John L. Villalovos <john.l.villalovos@intel.com>  Thu, 24 Jan 2008 10:59:52 -0800
+ -- John L. Villalovos <john.l.villalovos@intel.com>  Thu, 24 Jan 2008 12:38:35 -0800
 
 moblin-image-creator (0.38) gaston; urgency=low
 
