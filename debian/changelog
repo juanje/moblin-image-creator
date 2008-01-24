@@ -14,8 +14,10 @@ moblin-image-creator (0.39) UNRELEASED; urgency=low
     as mccaslin-lpia but it adds in pulling from the Ubuntu Personal Package
     Archive (PPA)
   * Changing name of new platform to mccaslin-lpia-ubuntu-gutsy-ppa
+  * Add usage of gutsy-updates and gutsy-security when using the
+    mccaslin-lpia-ubuntu-gutsy-ppa platform.  Otherwise it won't work.
 
- -- John L. Villalovos <john.l.villalovos@intel.com>  Wed, 23 Jan 2008 13:14:32 -0800
+ -- John L. Villalovos <john.l.villalovos@intel.com>  Wed, 23 Jan 2008 17:25:35 -0800
 
 moblin-image-creator (0.38) gaston; urgency=low
 
