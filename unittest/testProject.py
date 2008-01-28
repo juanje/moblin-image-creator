@@ -32,7 +32,10 @@ class TestFileSystem(unittest.TestCase):
     def setUp(self):
         self.workdir = tempfile.mkdtemp()
         self.filesystem_dir = os.path.join(self.workdir, "filesystem")
-        self.project_dir = os.path.join(self.workdir, "project")
+        self.project_dir = os.path.join(self.workdir, "projects")
+        os.mkdir(self.project_dir)
+        self.var_dir = os.path.join(self.workdir, "var")
+        os.mkdir(self.var_dir)
         self.platform_name = 'unittest-platform'
         self.platform_root = os.path.join(self.workdir, "platforms")
         testPlatform.createSamplePlatformDir(self.platform_root, self.platform_name)
@@ -52,7 +55,7 @@ class TestFileSystem(unittest.TestCase):
         self.assertRaises(ValueError, Project.Project, '', '', '', '', '')
         self.assertRaises(ValueError, Project.Target, '', '', '')
     def testProjectCreation(self):
-        sdk = SDK.SDK(progress_callback = iteration, path = self.workdir)
+        sdk = SDK.SDK(progress_callback = iteration, path = self.workdir, var_dir = self.var_dir)
         platform = sdk.platforms[self.platform_name]
 
 if __name__ == '__main__':

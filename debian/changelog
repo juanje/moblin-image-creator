@@ -40,9 +40,13 @@ moblin-image-creator (0.39) UNRELEASED; urgency=low
   * Created a mccaslin-lpia-ubuntu-hardy-ppa and menlow-lpia-ubuntu-hardy-ppa
 
   [ Prajwal Mohan ]
-  * Fixing UI problem in Add Project 
+  * Fixing UI problem in Add Project
 
- -- Prajwal Mohan <prajwal@linux.intel.com>  Mon, 28 Jan 2008 14:48:22 -0800
+  [ John L. Villalovos ]
+  * New projects will have their config info stored in
+    /var/lib/image-creator/projects/
+
+ -- John L. Villalovos <john.l.villalovos@intel.com>  Mon, 28 Jan 2008 14:59:14 -0800
 
 moblin-image-creator (0.38) gaston; urgency=low
 

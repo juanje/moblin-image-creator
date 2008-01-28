@@ -125,7 +125,9 @@ import mic_cfg
 import pdk_utils
 
 class SDK(object):
-    def __init__(self, progress_callback = None, status_label_callback = None, path='/usr/share/pdk'):
+    def __init__(self, progress_callback = None, status_label_callback = None,
+            path='/usr/share/pdk', var_dir = '/var/lib/image-creator/'):
+        self.var_dir = var_dir
         self.path = os.path.realpath(os.path.abspath(os.path.expanduser(path)))
         self.version = "- Undefined"
         version_file = os.path.join(self.path, "version")
@@ -139,7 +141,7 @@ class SDK(object):
             in_file.close()
         self.progress_callback_func = progress_callback
         self.status_label_callback_func = status_label_callback
-        self.config_path = os.path.join(self.path, 'projects')
+        self.config_path = os.path.join(self.var_dir, 'projects')
         if not os.path.isdir(self.config_path):
             os.mkdir(self.config_path)
 
@@ -158,13 +160,7 @@ class SDK(object):
             self.platforms[section] = Platform.Platform(t_dirname, section, config.items(section))
             
         # discover all existing projects
-        self.projects = {}
-        for filename in os.listdir(self.config_path):
-            full_path = os.path.join(self.config_path, filename)
-            if not os.path.isfile(full_path):
-                continue
-            config = PackageConfig(full_path)
-            self.projects[config.name] = Project.Project(config.path, config.name, config.desc, self.platforms[config.platform], self.progress_callback)
+        self.discover_projects()
 
     def progress_callback(self, *args):
         if not self.progress_callback_func:
@@ -178,8 +174,14 @@ class SDK(object):
 
     def discover_projects(self):
         self.projects = {}
-        for filename in os.listdir(self.config_path):
+        directories = [ os.path.join(self.config_path, x) for x in os.listdir(self.config_path) ]
+        # FIXME: This is here for backwards compatibility, I would think that
+        # after Jun-2008, we can delete this list
+        old_directories = [ os.path.join(self.path, 'projects', x) for x in os.listdir(os.path.join(self.path, 'projects')) ]
+        directories.extend(old_directories)
+        for filename in directories:
             full_path = os.path.join(self.config_path, filename)
+            full_path = filename
             if not os.path.isfile(full_path):
                 continue
             config = PackageConfig(full_path)
@@ -217,7 +219,6 @@ class SDK(object):
         # create the config file
         self.status_label_callback("Creating Config file")
         config_path = os.path.join(self.config_path, "%s.proj" % name)
-        os.path.isfile(config_path)
         config_file = open(config_path, 'w')
         config_file.write("NAME=%s\n" % (name))
         config_file.write("PATH=%s\n" % (install_path))
