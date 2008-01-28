@@ -29,9 +29,12 @@ moblin-image-creator (0.39) UNRELEASED; urgency=low
   * Fixed more platform cfgs
 
   [ Prajwal Mohan ]
-  * Checking in changes from Michael to fix fstab 
+  * Checking in changes from Michael to fix fstab
 
- -- Prajwal Mohan <prajwal@linux.intel.com>  Mon, 28 Jan 2008 10:53:40 -0800
+  [ Bob Spencer ]
+  * Changed mirror dialog to not stretch components that aren't the listbox
+
+ -- Bob Spencer <bob.spencer@intel.com>  Mon, 28 Jan 2008 12:06:54 -0800
 
 moblin-image-creator (0.38) gaston; urgency=low
 
