@@ -198,6 +198,7 @@ class InstallImage(object):
 
     def create_fstab(self, swap = True):
         fstab_file = open(os.path.join(self.target.fs_path, 'etc/fstab'), 'w')
+        print >> fstab_file, "unionfs	    /	            unionfs defaults	0 0"
         print >> fstab_file, "proc			/proc			proc	defaults	0 0"
         if swap:
             print >> fstab_file, "/dev/sda3		none			swap	sw		0 0"

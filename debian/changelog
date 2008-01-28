@@ -28,7 +28,10 @@ moblin-image-creator (0.39) UNRELEASED; urgency=low
   * Fixed menlow gutsy-ppa and menlow hardy platform lacked fat32 USBC partition issue.
   * Fixed more platform cfgs
 
- -- Alek Du <alek.du@intel.com>  Mon, 28 Jan 2008 14:36:14 +0800
+  [ Prajwal Mohan ]
+  * Checking in changes from Michael to fix fstab 
+
+ -- Prajwal Mohan <prajwal@linux.intel.com>  Mon, 28 Jan 2008 10:53:40 -0800
 
 moblin-image-creator (0.38) gaston; urgency=low
 
