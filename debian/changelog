@@ -24,7 +24,10 @@ moblin-image-creator (0.39) UNRELEASED; urgency=low
   * Add the sources for the gutsy-updates and gutsy-security repositories.
   * Add the sources for the Ubuntu PPA
 
- -- John L. Villalovos <john.l.villalovos@intel.com>  Thu, 24 Jan 2008 13:03:57 -0800
+  [ Alek Du ]
+  * Fixed menlow gutsy-ppa and menlow hardy platform lacked fat32 USBC partition issue.
+
+ -- Alek Du <alek.du@intel.com>  Mon, 28 Jan 2008 14:15:14 +0800
 
 moblin-image-creator (0.38) gaston; urgency=low
 
