@@ -37,8 +37,9 @@ moblin-image-creator (0.39) UNRELEASED; urgency=low
   [ John L. Villalovos ]
   * Fix the menlow-lpia-ubuntu-gutsy-ppa platform.  The PPA sources file was
     not getting copied :(
+  * Created a mccaslin-lpia-ubuntu-hardy-ppa and menlow-lpia-ubuntu-hardy-ppa
 
- -- John L. Villalovos <john.l.villalovos@intel.com>  Mon, 28 Jan 2008 13:55:24 -0800
+ -- John L. Villalovos <john.l.villalovos@intel.com>  Mon, 28 Jan 2008 14:05:16 -0800
 
 moblin-image-creator (0.38) gaston; urgency=low
 
