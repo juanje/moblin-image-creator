@@ -34,7 +34,11 @@ moblin-image-creator (0.39) UNRELEASED; urgency=low
   [ Bob Spencer ]
   * Changed mirror dialog to not stretch components that aren't the listbox
 
- -- Bob Spencer <bob.spencer@intel.com>  Mon, 28 Jan 2008 12:06:54 -0800
+  [ John L. Villalovos ]
+  * Fix the menlow-lpia-ubuntu-gutsy-ppa platform.  The PPA sources file was
+    not getting copied :(
+
+ -- John L. Villalovos <john.l.villalovos@intel.com>  Mon, 28 Jan 2008 13:55:24 -0800
 
 moblin-image-creator (0.38) gaston; urgency=low
 
