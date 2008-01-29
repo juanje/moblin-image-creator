@@ -516,23 +516,19 @@ class App(object):
         dialog.run()
         dialog.destroy()
 
-    def show_umount_error_dialog(self, error_list=[]):
+    def show_umount_error_dialog(self, directory_list = []):
         widgets = gtk.glade.XML(self.gladefile, 'error_dialog_umount')
         #widgets.get_widget('error_label').set_text("Could not unmount the following directories:")
         dirTree = widgets.get_widget('umount_dirs')
         dialog = widgets.get_widget('error_dialog_umount')
         dirList = gtk.ListStore(gobject.TYPE_STRING)
-
         cellRenderC0 = gtk.CellRendererText()
         col0 = gtk.TreeViewColumn("Directory List", cellRenderC0)
-
         dirTree.append_column(col0)
-
         col0.add_attribute(cellRenderC0, 'text', 0)
         col0.set_resizable(True)
-        
-        for dirs in error_list:
-            dirList.append([dirs])        
+        for dirname in directory_list:
+            dirList.append([dirname])
         dirTree.set_model(dirList)
         dialog.run()
         dialog.destroy()

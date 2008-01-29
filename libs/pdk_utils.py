@@ -144,7 +144,7 @@ def umountAllInPath(dirname):
     """Unmount all mounts that are found underneath the dirname specified"""
     # Have to add a '/' on the end to prevent /foo/egg and /foo/egg2 being
     # treated as if both were under /foo/egg
-    error_list = []
+    directory_list = []
     our_path = os.path.realpath(os.path.abspath(dirname)) + os.sep
     mounts = getMountInfo()
     for mpoint in mounts:
@@ -158,15 +158,15 @@ def umountAllInPath(dirname):
                 shutil.copytree(mpoint, tmp_path)
             result = os.system("umount %s" % (mpoint))
             if result:
-                error_list.append(dirname)
+                directory_list.append(mpoint)
                 if fs_type == 'tmpfs':
                     shutil.rmtree(tmp_path)
             elif fs_type == 'tmpfs':
                 os.rmdir(mpoint)
                 shutil.move(tmp_path, mpoint)
-    if error_list:
-        return (False, error_list)
-    return (True, "")
+    if directory_list:
+        return (False, directory_list)
+    return (True, directory_list)
 
 def umount_device(device_file):
     """umount a device if it is mounted"""
@@ -425,8 +425,8 @@ class ImageCreatorError(exceptions.Exception):
 
 
 class ImageCreatorUmountError(ImageCreatorError):
-    def __init__(self, error_list=[]):
-        self.error_list=error_list
+    def __init__(self, directory_list = []):
+        self.directory_list = directory_list
 
 if '__main__' == __name__:
     sys.exit(main())

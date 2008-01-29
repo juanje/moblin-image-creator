@@ -117,16 +117,16 @@ class FileSystem(object):
     def umount(self):
         # Go through all the mount points that we recorded during the mount
         # function
-        error_list = []
+        directory_list = []
         for mount_point in self.mounted:
             if os.path.exists(mount_point):
                 result = os.system("umount %s" % (mount_point))
                 if result:
-                    error_list.append(mount_point)
+                    directory_list.append(mount_point)
         result, directories = pdk_utils.umountAllInPath(self.path)
-        if error_list:
-            error_list.extend(directories)
-            return (False, error_list)
+        if directory_list:
+            directory_list.extend(directories)
+            return (False, directory_list)
         return result, directories
 
 class Project(FileSystem):
