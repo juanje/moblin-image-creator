@@ -330,7 +330,10 @@ class SDK(object):
             proj.delete_target(target, False, callback = self.progress_callback)
         proj.targets.clear()
         # and then deal with the project
-        proj.umount()
+        result, dirname = proj.umount()
+        if not result:
+            # Prajwal to fix this
+            pass
         pdk_utils.rmtree(proj.path, callback = self.progress_callback)
         os.unlink(os.path.join(self.config_path, proj.name + '.proj'))
 
@@ -361,7 +364,10 @@ class SDK(object):
         # Unmount all of our projects
         for key in sorted(self.projects.iterkeys()):
             project = self.projects[key]
-            project.umount()
+            result, dirname = project.umount()
+            if not result:
+                # Prajwal to fix this
+                pass
 
     def __str__(self):
         return ("<SDK Object: path=%s, platform=%s>" %
