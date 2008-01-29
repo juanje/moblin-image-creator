@@ -144,6 +144,7 @@ def umountAllInPath(dirname):
     """Unmount all mounts that are found underneath the dirname specified"""
     # Have to add a '/' on the end to prevent /foo/egg and /foo/egg2 being
     # treated as if both were under /foo/egg
+    error_list = []
     our_path = os.path.realpath(os.path.abspath(dirname)) + os.sep
     mounts = getMountInfo()
     for mpoint in mounts:
@@ -154,14 +155,17 @@ def umountAllInPath(dirname):
             if fs_type == 'tmpfs':
                 tmp_path = tempfile.mkdtemp('','pdk-', '/tmp')
                 os.rmdir(tmp_path)
-                shutil.copytree(mpoint, tmp_path) 
+                shutil.copytree(mpoint, tmp_path)
             result = os.system("umount %s" % (mpoint))
             if result:
-                # If error, return failure along with directory name of failure
-                return (False, dirname)
-            if fs_type == 'tmpfs':
+                error_list.append(dirname)
+                if fs_type == 'tmpfs':
+                    shutil.rmtree(tmp_path)
+            elif fs_type == 'tmpfs':
                 os.rmdir(mpoint)
-                shutil.move(tmp_path, mpoint) 
+                shutil.move(tmp_path, mpoint)
+    if error_list:
+        return (False, error_list)
     return (True, "")
 
 def umount_device(device_file):
