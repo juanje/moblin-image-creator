@@ -141,6 +141,7 @@ def getUsbDirTree(dirname):
     return file_set
 
 def umountAllInPath(dirname):
+    """Unmount all mounts that are found underneath the dirname specified"""
     # Have to add a '/' on the end to prevent /foo/egg and /foo/egg2 being
     # treated as if both were under /foo/egg
     our_path = os.path.realpath(os.path.abspath(dirname)) + os.sep
@@ -154,10 +155,14 @@ def umountAllInPath(dirname):
                 tmp_path = tempfile.mkdtemp('','pdk-', '/tmp')
                 os.rmdir(tmp_path)
                 shutil.copytree(mpoint, tmp_path) 
-            os.system("umount %s" % (mpoint))
+            result = os.system("umount %s" % (mpoint))
+            if result:
+                # If error, return failure along with directory name of failure
+                return (False, dirname)
             if fs_type == 'tmpfs':
                 os.rmdir(mpoint)
                 shutil.move(tmp_path, mpoint) 
+    return (True, "")
 
 def umount_device(device_file):
     """umount a device if it is mounted"""

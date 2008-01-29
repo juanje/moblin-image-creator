@@ -119,8 +119,11 @@ class FileSystem(object):
         # function
         for mount_point in self.mounted:
             if os.path.exists(mount_point):
-                os.system("umount %s" % (mount_point))
-        pdk_utils.umountAllInPath(self.path)
+                result = os.system("umount %s" % (mount_point))
+                if result:
+                    # If error, return failure along with directory name of failure
+                    return (False, mount_pount)
+        return pdk_utils.umountAllInPath(self.path)
 
 class Project(FileSystem):
     """
@@ -160,8 +163,10 @@ class Project(FileSystem):
         """We want to umount all of our targets and then anything in our project that we have mounted"""
         for target_name in self.targets:
             target = self.targets[target_name]
-            target.umount()
-        FileSystem.umount(self)
+            result, dirname = target.umount()
+            if not result:
+                return result, dirname
+        return FileSystem.umount(self)
 
     def create_target(self, name, use_rootstrap = True):
         if not name:
@@ -216,7 +221,10 @@ class Project(FileSystem):
 
     def delete_target(self, name, do_pop=True, callback = None):
         target = self.targets[name]
-        target.umount()
+        result, dirname = target.umount()
+        if not result:
+            # FIXME: Prajwal to add error dialog
+            pass
         seen_paths = []
         while True:
             try:
@@ -238,35 +246,50 @@ class Project(FileSystem):
         
     def create_live_iso(self, target_name, image_name):
         target = self.targets[target_name]
-        target.umount()
+        result, dirname = target.umount()
+        if not result:
+            # FIXME: Prajwal to add error dialog
+            pass
         image = InstallImage.LiveIsoImage(self, self.targets[target_name], image_name, progress_callback = self.progress_callback)
         image.create_image()
         target.mount()
 
     def create_install_iso(self, target_name, image_name):
         target = self.targets[target_name]
-        target.umount()
+        result, dirname = target.umount()
+        if not result:
+            # FIXME: Prajwal to add error dialog
+            pass
         image = InstallImage.InstallIsoImage(self, self.targets[target_name], image_name, progress_callback = self.progress_callback)
         image.create_image()
         target.mount()
 
     def create_live_usb(self, target_name, image_name, type="RAMFS"):
         target = self.targets[target_name]
-        target.umount()
+        result, dirname = target.umount()
+        if not result:
+            # FIXME: Prajwal to add error dialog
+            pass
         image = InstallImage.LiveUsbImage(self, self.targets[target_name], image_name, progress_callback = self.progress_callback)
         image.create_image(type)
         target.mount()
 
     def create_install_usb(self, target_name, image_name):
         target = self.targets[target_name]
-        target.umount()
+        result, dirname = target.umount()
+        if not result:
+            # FIXME: Prajwal to add error dialog
+            pass
         image = InstallImage.InstallUsbImage(self, self.targets[target_name], image_name, progress_callback = self.progress_callback)
         image.create_image()
         target.mount()
 
     def tar(self, tar_obj):
         """tar up the project.  Need to pass in a tarfile object"""
-        self.umount()
+        result, dirname = self.umount()
+        if not result:
+            # FIXME: Prajwal to add error dialog
+            pass
         tar_obj.add(self.path, arcname = "project/")
 
     def __str__(self):
