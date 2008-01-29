@@ -58,14 +58,6 @@ PKGS=ubuntu-mobile gstreamer-dbus-media-service gstreamer0.10-x gstreamer0.10-ff
 DEBUG_PKGS=powertop
 DEPS=gnome-mobile
 
-[Ubuntu-Staging]
-DESC=Packages that are ready for inclusion into Ubuntu
-PKGS=moblin-notes moblin-calc moblin-media-browser-plugin ppm moblin-clutter-home hildon-libs-l10n-engb libva1
-DEBUG_PKGS=
-DEPS=ubuntu-mobile
-
-# Not in Ubuntu yet/broken: moblin-chat moblin-applets moblin-media
-
 [Developer-Tools]
 DESC=Tools for building source in the target (gcc, make, etc.)
 PKGS=ubuntu-mobile-dev libtool autoconf automake hildon-desktop-dev man manpages curl python-dev dh-make
@@ -77,4 +69,3 @@ DESC=Fonts for viewing websites in Chinese, Japanese, and Korean (adds 34MB)
 PKGS=ttf-arphic-uming ttf-unfonts-core
 DEBUG_PKGS=
 DEPS=core
-

@@ -59,8 +59,9 @@ moblin-image-creator (0.39) UNRELEASED; urgency=low
   * Try to keep the project list sorted at all times.
   * Return back a list of the mount points that failed to unmount, if there is
     an error.
+  * Remove the 'Ubuntu-Staging' fset from the *-ppa platforms
 
- -- John L. Villalovos <john.l.villalovos@intel.com>  Tue, 29 Jan 2008 12:32:07 -0800
+ -- John L. Villalovos <john.l.villalovos@intel.com>  Tue, 29 Jan 2008 12:51:49 -0800
 
 moblin-image-creator (0.38) gaston; urgency=low
 
