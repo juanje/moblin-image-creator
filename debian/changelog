@@ -55,7 +55,10 @@ moblin-image-creator (0.39) UNRELEASED; urgency=low
   * Fix references to Gutsy in Hardy platform configs
   * Add multiverse to PPA sources.list
 
- -- Steve Magoun <steve.magoun@canonical.com>  Tue, 29 Jan 2008 11:57:23 -0800
+  [ John L. Villalovos ]
+  * Try to keep the project list sorted at all times.
+
+ -- John L. Villalovos <john.l.villalovos@intel.com>  Tue, 29 Jan 2008 12:30:38 -0800
 
 moblin-image-creator (0.38) gaston; urgency=low
 

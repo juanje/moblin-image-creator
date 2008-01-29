@@ -97,7 +97,6 @@ class App(object):
         self.set_plist(self.pPath, 2)
         self.set_plist(self.pPlatform, 3)
         self.projectList = gtk.ListStore(str, str, str, str)
-        self.projectView.set_model(self.projectList)
         # Set targetView widget
         self.tName = _("Name")
         self.tFSet = _("Function Sets")
@@ -106,11 +105,9 @@ class App(object):
         self.set_tlist(self.tFSet, 1)
         self.targetList = gtk.ListStore(str, str)
         self.targetView.set_model(self.targetList)
-        # read in project list using SDK()
-        for key in sorted(self.sdk.projects.iterkeys()):
-            p = self.sdk.projects[key]
-            self.projectList.append((p.name, p.desc, p.path, p.platform.name))
         self.buttons = MainWindowButtons(self.widgets)
+        # read in project list using SDK()
+        self.refreshProjectList()
         # Connect project selection signal to list targets in the targetList
         # widget: targetView
         self.projectView.get_selection().connect("changed", self.project_view_changed)
@@ -240,6 +237,8 @@ class App(object):
                 proj = self.sdk.create_project(dialog.path, dialog.name, dialog.desc, self.sdk.platforms[platformName])
                 proj.install()
                 self.projectList.append((dialog.name, dialog.desc, dialog.path, platformName))
+                self.refreshProjectList()
+                self.makeActiveProject(dialog.name)
 
                 progress_dialog.destroy()
                 if target_name != None:
@@ -256,7 +255,6 @@ class App(object):
                     # projects has been updated, then we expect failure here
                     pass
                 progress_dialog.destroy()
-
 
     def on_about_activate(self, event):
         dialog = gtk.AboutDialog()
@@ -503,6 +501,7 @@ class App(object):
     def remove_current_project(self):
         model, iter = self.projectView.get_selection().get_selected()
         self.projectList.remove(iter)
+        self.refreshProjectList()
 
     def remove_current_target(self):
         model, iter = self.targetView.get_selection().get_selected()
@@ -808,13 +807,26 @@ class App(object):
                     self.sdk.load_project(projectName, targetFolder, fileToLoad, self.gui_throbber)
                     print "Loading Project Complete"
                     progress_dialog.destroy()
-                    self.sdk.discover_projects()
-                    self.projectList.clear()
-                    for key in sorted(self.sdk.projects.iterkeys()):
-                        p = self.sdk.projects[key]
-                        self.projectList.append((p.name, p.desc, p.path, p.platform.name))
-                    self.projectView.set_model(self.projectList)
+                    self.refreshProjectList()
 
+    def refreshProjectList(self):
+        self.sdk.discover_projects()
+        self.projectList.clear()
+        for key in sorted(self.sdk.projects.iterkeys()):
+            p = self.sdk.projects[key]
+            self.projectList.append((p.name, p.desc, p.path, p.platform.name))
+        self.projectView.set_model(self.projectList)
+
+    def makeActiveProject(self, project_name):
+        print project_name
+        selection = self.projectView.get_selection()
+        for count, row in enumerate(self.projectList):
+            name = row[0]
+            print name
+            if name == project_name:
+                selection.select_path(count)
+                self.redraw_target_view()
+                break
 
     def on_Save_activate(self, widget):
         print "In on_Save_activate"
