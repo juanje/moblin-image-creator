@@ -296,7 +296,7 @@ class App(object):
                 self.sdk.delete_project(project.name)
                 self.remove_current_project()
             except pdk_utils.ImageCreatorUmountError, e:
-                self.show_umount_error_dialog(e.error_list)
+                self.show_umount_error_dialog(e.directory_set)
             except:
                 traceback.print_exc()
                 if debug: print_exc_plus()
@@ -485,7 +485,7 @@ class App(object):
                 self.sdk.projects[project.name].delete_target(target.name, callback = self.gui_throbber)
                 self.remove_current_target()
             except pdk_utils.ImageCreatorUmountError, e:
-                self.show_umount_error_dialog(e.error_list)
+                self.show_umount_error_dialog(e.directory_set)
             except:
                 traceback.print_exc()
                 if debug: print_exc_plus()

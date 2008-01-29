@@ -424,8 +424,8 @@ class ImageCreatorError(exceptions.Exception):
 
 
 class ImageCreatorUmountError(ImageCreatorError):
-    def __init__(self, directory_list = []):
-        self.directory_list = directory_list
+    def __init__(self, directory_set = set()):
+        self.directory_set = directory_set
 
 if '__main__' == __name__:
     sys.exit(main())
