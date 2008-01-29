@@ -126,7 +126,7 @@ import pdk_utils
 
 class SDK(object):
     def __init__(self, progress_callback = None, status_label_callback = None,
-            path='/usr/share/pdk', var_dir = '/var/lib/image-creator/'):
+            path='/usr/share/pdk', var_dir = '/var/lib/moblin-image-creator/'):
         self.var_dir = var_dir
         self.path = os.path.realpath(os.path.abspath(os.path.expanduser(path)))
         self.version = "- Undefined"
