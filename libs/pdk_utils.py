@@ -423,5 +423,10 @@ class ImageCreatorError(exceptions.Exception):
     def __init__(self, args=None):
         self.args = args
 
+
+class ImageCreatorUmountError(ImageCreatorError):
+    def __init__(self, error_list=[]):
+        self.error_list=error_list
+
 if '__main__' == __name__:
     sys.exit(main())

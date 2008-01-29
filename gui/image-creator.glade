@@ -1143,39 +1143,58 @@
                 <property name="n_rows">4</property>
                 <property name="n_columns">2</property>
                 <child>
-                  <widget class="GtkLabel" id="np_name_label">
+                  <widget class="GtkLabel" id="np_platform_label">
                     <property name="visible">True</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Name</property>
+                    <property name="label" translatable="yes">Platform</property>
                   </widget>
                   <packing>
+                    <property name="top_attach">3</property>
+                    <property name="bottom_attach">4</property>
                     <property name="x_options"></property>
                     <property name="y_options"></property>
                   </packing>
                 </child>
                 <child>
-                  <widget class="GtkLabel" id="np_desc_label">
+                  <widget class="GtkComboBox" id="np_platform">
                     <property name="visible">True</property>
-                    <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Desc</property>
+                    <property name="items" translatable="yes">
+</property>
                   </widget>
                   <packing>
+                    <property name="left_attach">1</property>
+                    <property name="right_attach">2</property>
+                    <property name="top_attach">3</property>
+                    <property name="bottom_attach">4</property>
+                    <property name="x_options"></property>
+                    <property name="y_options"></property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkEntry" id="np_name">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="invisible_char">•</property>
+                    <property name="text" translatable="yes">Project Name</property>
+                  </widget>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="right_attach">2</property>
+                    <property name="y_options"></property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkEntry" id="np_desc">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="invisible_char">•</property>
+                    <property name="text" translatable="yes">Describe project</property>
+                  </widget>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="right_attach">2</property>
                     <property name="top_attach">1</property>
                     <property name="bottom_attach">2</property>
-                    <property name="x_options"></property>
-                    <property name="y_options"></property>
-                  </packing>
-                </child>
-                <child>
-                  <widget class="GtkLabel" id="np_path_lable">
-                    <property name="visible">True</property>
-                    <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Path</property>
-                  </widget>
-                  <packing>
-                    <property name="top_attach">2</property>
-                    <property name="bottom_attach">3</property>
-                    <property name="x_options"></property>
                     <property name="y_options"></property>
                   </packing>
                 </child>
@@ -1215,57 +1234,38 @@
                   </packing>
                 </child>
                 <child>
-                  <widget class="GtkEntry" id="np_desc">
+                  <widget class="GtkLabel" id="np_path_lable">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="invisible_char">•</property>
-                    <property name="text" translatable="yes">Describe project</property>
+                    <property name="xalign">0</property>
+                    <property name="label" translatable="yes">Path</property>
                   </widget>
                   <packing>
-                    <property name="left_attach">1</property>
-                    <property name="right_attach">2</property>
-                    <property name="top_attach">1</property>
-                    <property name="bottom_attach">2</property>
-                    <property name="y_options"></property>
-                  </packing>
-                </child>
-                <child>
-                  <widget class="GtkEntry" id="np_name">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="invisible_char">•</property>
-                    <property name="text" translatable="yes">Project Name</property>
-                  </widget>
-                  <packing>
-                    <property name="left_attach">1</property>
-                    <property name="right_attach">2</property>
-                    <property name="y_options"></property>
-                  </packing>
-                </child>
-                <child>
-                  <widget class="GtkComboBox" id="np_platform">
-                    <property name="visible">True</property>
-                    <property name="items" translatable="yes">
-</property>
-                  </widget>
-                  <packing>
-                    <property name="left_attach">1</property>
-                    <property name="right_attach">2</property>
-                    <property name="top_attach">3</property>
-                    <property name="bottom_attach">4</property>
+                    <property name="top_attach">2</property>
+                    <property name="bottom_attach">3</property>
                     <property name="x_options"></property>
                     <property name="y_options"></property>
                   </packing>
                 </child>
                 <child>
-                  <widget class="GtkLabel" id="np_platform_label">
+                  <widget class="GtkLabel" id="np_desc_label">
                     <property name="visible">True</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">Platform</property>
+                    <property name="label" translatable="yes">Desc</property>
                   </widget>
                   <packing>
-                    <property name="top_attach">3</property>
-                    <property name="bottom_attach">4</property>
+                    <property name="top_attach">1</property>
+                    <property name="bottom_attach">2</property>
+                    <property name="x_options"></property>
+                    <property name="y_options"></property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkLabel" id="np_name_label">
+                    <property name="visible">True</property>
+                    <property name="xalign">0</property>
+                    <property name="label" translatable="yes">Name</property>
+                  </widget>
+                  <packing>
                     <property name="x_options"></property>
                     <property name="y_options"></property>
                   </packing>
@@ -1978,24 +1978,15 @@
                   <placeholder/>
                 </child>
                 <child>
-                  <widget class="GtkLabel" id="label45">
-                    <property name="visible">True</property>
-                    <property name="xalign">0</property>
-                    <property name="label" translatable="yes">USB Disk Booting kernel cmdline: </property>
-                  </widget>
-                  <packing>
-                    <property name="x_options"></property>
-                    <property name="y_options"></property>
-                  </packing>
-                </child>
-                <child>
-                  <widget class="GtkEntry" id="usb_kernel_cmdline">
+                  <widget class="GtkEntry" id="hd_kernel_cmdline">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                   </widget>
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="right_attach">2</property>
+                    <property name="top_attach">2</property>
+                    <property name="bottom_attach">3</property>
                     <property name="y_options"></property>
                   </packing>
                 </child>
@@ -2013,15 +2004,24 @@
                   </packing>
                 </child>
                 <child>
-                  <widget class="GtkEntry" id="hd_kernel_cmdline">
+                  <widget class="GtkEntry" id="usb_kernel_cmdline">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                   </widget>
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="right_attach">2</property>
-                    <property name="top_attach">2</property>
-                    <property name="bottom_attach">3</property>
+                    <property name="y_options"></property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkLabel" id="label45">
+                    <property name="visible">True</property>
+                    <property name="xalign">0</property>
+                    <property name="label" translatable="yes">USB Disk Booting kernel cmdline: </property>
+                  </widget>
+                  <packing>
+                    <property name="x_options"></property>
                     <property name="y_options"></property>
                   </packing>
                 </child>
@@ -2441,6 +2441,65 @@
               <packing>
                 <property name="position">1</property>
               </packing>
+            </child>
+          </widget>
+          <packing>
+            <property name="expand">False</property>
+            <property name="pack_type">GTK_PACK_END</property>
+          </packing>
+        </child>
+      </widget>
+    </child>
+  </widget>
+  <widget class="GtkDialog" id="error_dialog_umount">
+    <property name="visible">True</property>
+    <property name="title" translatable="yes">ERROR!</property>
+    <property name="window_position">GTK_WIN_POS_CENTER</property>
+    <property name="type_hint">GDK_WINDOW_TYPE_HINT_DIALOG</property>
+    <child internal-child="vbox">
+      <widget class="GtkVBox" id="dialog-vbox15">
+        <property name="visible">True</property>
+        <child>
+          <widget class="GtkVBox" id="vbox26">
+            <property name="visible">True</property>
+            <child>
+              <widget class="GtkLabel" id="error_label">
+                <property name="visible">True</property>
+                <property name="label" translatable="yes">Warning: Some of the directories could not be unmounted.
+</property>
+                <property name="justify">GTK_JUSTIFY_CENTER</property>
+                <property name="wrap">True</property>
+              </widget>
+            </child>
+          </widget>
+          <packing>
+            <property name="position">2</property>
+          </packing>
+        </child>
+        <child>
+          <widget class="GtkTreeView" id="umount_dirs">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+            <property name="headers_clickable">True</property>
+          </widget>
+          <packing>
+            <property name="position">3</property>
+          </packing>
+        </child>
+        <child internal-child="action_area">
+          <widget class="GtkHButtonBox" id="dialog-action_area15">
+            <property name="visible">True</property>
+            <property name="layout_style">GTK_BUTTONBOX_END</property>
+            <child>
+              <widget class="GtkButton" id="okbutton7">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="can_default">True</property>
+                <property name="label">gtk-ok</property>
+                <property name="use_stock">True</property>
+                <property name="response_id">-5</property>
+              </widget>
             </child>
           </widget>
           <packing>

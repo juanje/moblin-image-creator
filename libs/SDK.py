@@ -330,9 +330,9 @@ class SDK(object):
             proj.delete_target(target, False, callback = self.progress_callback)
         proj.targets.clear()
         # and then deal with the project
-        result, dirname = proj.umount()
+        result, error_list = proj.umount()
         if not result:
-            raise RuntimeError, "Could not unmount dir: %s" % dirname
+            raise pdk_utils.ImageCreatorUmountError, error_list
         pdk_utils.rmtree(proj.path, callback = self.progress_callback)
         os.unlink(os.path.join(self.config_path, proj.name + '.proj'))
 
@@ -363,9 +363,11 @@ class SDK(object):
         # Unmount all of our projects
         for key in sorted(self.projects.iterkeys()):
             project = self.projects[key]
-            result, dirname = project.umount()
-            if not result:
-                raise RuntimeError, "Operation Failed. Could not unmount dir: %s" % dirname
+            result, error_list = project.umount()
+        if error_list:
+            return (False, error_list)
+        return (True, "")
+
     def __str__(self):
         return ("<SDK Object: path=%s, platform=%s>" %
                 (self.path, self.platforms))

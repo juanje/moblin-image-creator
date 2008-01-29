@@ -62,7 +62,10 @@ moblin-image-creator (0.39) UNRELEASED; urgency=low
   * Remove the 'Ubuntu-Staging' fset from the *-ppa platforms
   * Making the UI show more stuff
 
- -- John L. Villalovos <john.l.villalovos@intel.com>  Tue, 29 Jan 2008 12:55:28 -0800
+  [ Prajwal Mohan ]
+  * Adding Error Dialog listing all dirs that could not be unmounted 
+
+ -- Prajwal Mohan <prajwal@linux.intel.com>  Tue, 29 Jan 2008 14:51:52 -0800
 
 moblin-image-creator (0.38) gaston; urgency=low
 

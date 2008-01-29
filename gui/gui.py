@@ -118,7 +118,9 @@ class App(object):
 
     def quit(self, value):
         # Unmount all of our projects
-        self.sdk.umount()
+        result, error_list = self.sdk.umount()
+        if not result:
+            self.show_umount_error_dialog(error_list)
         gtk.main_quit()
 
     def on_help_activate(self, widget):
@@ -293,8 +295,8 @@ class App(object):
             try:
                 self.sdk.delete_project(project.name)
                 self.remove_current_project()
-            except RuntimeError, e:
-                self.show_error_dialog(e.args[0])
+            except pdk_utils.ImageCreatorUmountError, e:
+                self.show_umount_error_dialog(e.error_list)
             except:
                 traceback.print_exc()
                 if debug: print_exc_plus()
@@ -482,8 +484,8 @@ class App(object):
             try:
                 self.sdk.projects[project.name].delete_target(target.name, callback = self.gui_throbber)
                 self.remove_current_target()
-            except RuntimeError, e:
-                self.show_error_dialog(e.args[0])
+            except pdk_utils.ImageCreatorUmountError, e:
+                self.show_umount_error_dialog(e.error_list)
             except:
                 traceback.print_exc()
                 if debug: print_exc_plus()
@@ -511,6 +513,27 @@ class App(object):
         widgets = gtk.glade.XML(self.gladefile, 'error_dialog')
         widgets.get_widget('error_label').set_text(message)
         dialog = widgets.get_widget('error_dialog')
+        dialog.run()
+        dialog.destroy()
+
+    def show_umount_error_dialog(self, error_list=[]):
+        widgets = gtk.glade.XML(self.gladefile, 'error_dialog_umount')
+        #widgets.get_widget('error_label').set_text("Could not unmount the following directories:")
+        dirTree = widgets.get_widget('umount_dirs')
+        dialog = widgets.get_widget('error_dialog_umount')
+        dirList = gtk.ListStore(gobject.TYPE_STRING)
+
+        cellRenderC0 = gtk.CellRendererText()
+        col0 = gtk.TreeViewColumn("Directory List", cellRenderC0)
+
+        dirTree.append_column(col0)
+
+        col0.add_attribute(cellRenderC0, 'text', 0)
+        col0.set_resizable(True)
+        
+        for dirs in error_list:
+            dirList.append([dirs])        
+        dirTree.set_model(dirList)
         dialog.run()
         dialog.destroy()
 
