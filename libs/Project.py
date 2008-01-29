@@ -114,20 +114,17 @@ class FileSystem(object):
             print >> buildstamp, "%s %s" % (socket.gethostname(), time.strftime("%d-%m-%Y %H:%M:%S %Z"))
             buildstamp.close()
 
-    def umount(self):
+    def umount(self, directory_set = None):
         # Go through all the mount points that we recorded during the mount
         # function
-        directory_list = []
+        if directory_set == None:
+            directory_set = set()
         for mount_point in self.mounted:
             if os.path.exists(mount_point):
                 result = os.system("umount %s" % (mount_point))
                 if result:
-                    directory_list.append(mount_point)
-        result, directories = pdk_utils.umountAllInPath(self.path)
-        if directory_list:
-            directory_list.extend(directories)
-            return (False, directory_list)
-        return result, directories
+                    directory_set.add(mount_point)
+        return pdk_utils.umountAllInPath(self.path, directory_set)
 
 class Project(FileSystem):
     """
@@ -163,14 +160,14 @@ class Project(FileSystem):
         """
         return super(Project, self).installPackages(self.platform.buildroot_packages + self.platform.buildroot_extras)
 
-    def umount(self):
+    def umount(self, directory_set = None):
         """We want to umount all of our targets and then anything in our project that we have mounted"""
+        if directory_set == None:
+            directory_set = set()
         for target_name in self.targets:
             target = self.targets[target_name]
-            result, dirname = target.umount()
-            if not result:
-                return result, dirname
-        return FileSystem.umount(self)
+            target.umount(directory_set = directory_set)
+        return FileSystem.umount(self, directory_set = directory_set)
 
     def create_target(self, name, use_rootstrap = True):
         if not name:

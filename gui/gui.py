@@ -118,9 +118,9 @@ class App(object):
 
     def quit(self, value):
         # Unmount all of our projects
-        result, error_list = self.sdk.umount()
-        if not result:
-            self.show_umount_error_dialog(error_list)
+        directory_set = self.sdk.umount()
+        if directory_set:
+            self.show_umount_error_dialog(directory_set)
         gtk.main_quit()
 
     def on_help_activate(self, widget):

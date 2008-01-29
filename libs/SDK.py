@@ -361,12 +361,11 @@ class SDK(object):
 
     def umount(self):
         # Unmount all of our projects
+        directory_set = set()
         for key in sorted(self.projects.iterkeys()):
             project = self.projects[key]
-            result, error_list = project.umount()
-        if error_list:
-            return (False, error_list)
-        return (True, "")
+            project.umount(directory_set = directory_set)
+        return directory_set
 
     def __str__(self):
         return ("<SDK Object: path=%s, platform=%s>" %
