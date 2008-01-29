@@ -48,9 +48,14 @@ moblin-image-creator (0.39) UNRELEASED; urgency=low
   * Start of work to make sure that our umounts are successful
 
   [ Prajwal Mohan ]
-  * Adding error dialog when umount failed 
+  * Adding error dialog when umount failed
 
- -- Prajwal Mohan <prajwal@linux.intel.com>  Tue, 29 Jan 2008 11:19:19 -0800
+  [ Steve Magoun ]
+  * Add Hardy PPAs to default config
+  * Fix references to Gutsy in Hardy platform configs
+  * Add multiverse to PPA sources.list
+
+ -- Steve Magoun <steve.magoun@canonical.com>  Tue, 29 Jan 2008 11:57:23 -0800
 
 moblin-image-creator (0.38) gaston; urgency=low
 
