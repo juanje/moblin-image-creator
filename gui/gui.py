@@ -292,8 +292,15 @@ class App(object):
             self.progressbar = progress_tree.get_widget('progressbar')
             while gtk.events_pending():
                 gtk.main_iteration(False)
-            self.sdk.delete_project(project.name)
-            self.remove_current_project()
+            try:
+                self.sdk.delete_project(project.name)
+                self.remove_current_project()
+            except RuntimeError, e:
+                self.show_error_dialog(e.args[0])
+            except:
+                traceback.print_exc()
+                if debug: print_exc_plus()
+                self.show_error_dialog()
             progress_dialog.destroy()
 
     def on_new_target_add_clicked(self, widget):
@@ -474,8 +481,15 @@ class App(object):
             self.progressbar = progress_tree.get_widget('progressbar')
             while gtk.events_pending():
                 gtk.main_iteration(False)
-            self.sdk.projects[project.name].delete_target(target.name, callback = self.gui_throbber)
-            self.remove_current_target()
+            try:
+                self.sdk.projects[project.name].delete_target(target.name, callback = self.gui_throbber)
+                self.remove_current_target()
+            except RuntimeError, e:
+                self.show_error_dialog(e.args[0])
+            except:
+                traceback.print_exc()
+                if debug: print_exc_plus()
+                self.show_error_dialog()
             progress_dialog.destroy()
 
     def current_project(self):

@@ -223,8 +223,7 @@ class Project(FileSystem):
         target = self.targets[name]
         result, dirname = target.umount()
         if not result:
-            # FIXME: Prajwal to add error dialog
-            pass
+            raise RuntimeError, "Could not unmount dir: %s" % dirname
         seen_paths = []
         while True:
             try:
@@ -248,8 +247,7 @@ class Project(FileSystem):
         target = self.targets[target_name]
         result, dirname = target.umount()
         if not result:
-            # FIXME: Prajwal to add error dialog
-            pass
+            raise RuntimeError, "Could not unmount dir: %s" % dirname
         image = InstallImage.LiveIsoImage(self, self.targets[target_name], image_name, progress_callback = self.progress_callback)
         image.create_image()
         target.mount()
@@ -258,8 +256,7 @@ class Project(FileSystem):
         target = self.targets[target_name]
         result, dirname = target.umount()
         if not result:
-            # FIXME: Prajwal to add error dialog
-            pass
+            raise RuntimeError, "Could not unmount dir: %s" % dirname
         image = InstallImage.InstallIsoImage(self, self.targets[target_name], image_name, progress_callback = self.progress_callback)
         image.create_image()
         target.mount()
@@ -268,8 +265,7 @@ class Project(FileSystem):
         target = self.targets[target_name]
         result, dirname = target.umount()
         if not result:
-            # FIXME: Prajwal to add error dialog
-            pass
+            raise RuntimeError, "Could not unmount dir: %s" % dirname
         image = InstallImage.LiveUsbImage(self, self.targets[target_name], image_name, progress_callback = self.progress_callback)
         image.create_image(type)
         target.mount()
@@ -278,8 +274,7 @@ class Project(FileSystem):
         target = self.targets[target_name]
         result, dirname = target.umount()
         if not result:
-            # FIXME: Prajwal to add error dialog
-            pass
+            raise RuntimeError, "Could not unmount dir: %s" % dirname
         image = InstallImage.InstallUsbImage(self, self.targets[target_name], image_name, progress_callback = self.progress_callback)
         image.create_image()
         target.mount()
@@ -288,8 +283,7 @@ class Project(FileSystem):
         """tar up the project.  Need to pass in a tarfile object"""
         result, dirname = self.umount()
         if not result:
-            # FIXME: Prajwal to add error dialog
-            pass
+            raise RuntimeError, "Could not unmount dir: %s" % dirname
         tar_obj.add(self.path, arcname = "project/")
 
     def __str__(self):

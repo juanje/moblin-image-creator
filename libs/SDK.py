@@ -332,8 +332,7 @@ class SDK(object):
         # and then deal with the project
         result, dirname = proj.umount()
         if not result:
-            # Prajwal to fix this
-            pass
+            raise RuntimeError, "Could not unmount dir: %s" % dirname
         pdk_utils.rmtree(proj.path, callback = self.progress_callback)
         os.unlink(os.path.join(self.config_path, proj.name + '.proj'))
 
@@ -366,9 +365,7 @@ class SDK(object):
             project = self.projects[key]
             result, dirname = project.umount()
             if not result:
-                # Prajwal to fix this
-                pass
-
+                raise RuntimeError, "Operation Failed. Could not unmount dir: %s" % dirname
     def __str__(self):
         return ("<SDK Object: path=%s, platform=%s>" %
                 (self.path, self.platforms))
