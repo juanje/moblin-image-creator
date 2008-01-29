@@ -158,7 +158,8 @@ def umountAllInPath(dirname):
                 shutil.copytree(mpoint, tmp_path)
             result = os.system("umount %s" % (mpoint))
             if result:
-                directory_list.append(mpoint)
+                if mpoint not in directory_list:
+                    directory_list.append(mpoint)
                 if fs_type == 'tmpfs':
                     shutil.rmtree(tmp_path)
             elif fs_type == 'tmpfs':
