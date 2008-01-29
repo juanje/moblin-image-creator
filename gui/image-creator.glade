@@ -2465,7 +2465,8 @@
             <child>
               <widget class="GtkLabel" id="error_label">
                 <property name="visible">True</property>
-                <property name="label" translatable="yes">Warning: Some of the directories could not be unmounted.
+                <property name="label" translatable="yes">Warning:The directories listed below could not be unmounted. 
+You may have terminals open in the mounter directory path
 </property>
                 <property name="justify">GTK_JUSTIFY_CENTER</property>
                 <property name="wrap">True</property>
