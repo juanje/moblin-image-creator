@@ -31,7 +31,7 @@ import time
 import traceback
 
 import pdk_utils
-import SDK 
+import SDK
 import mic_cfg
 
 debug = False
@@ -123,7 +123,7 @@ class App(object):
         # Unmount all of our projects
         self.sdk.umount()
         gtk.main_quit()
-        
+
     def on_help_activate(self, widget):
         gnome.help_display('image-creator')
 
@@ -208,7 +208,7 @@ class App(object):
                 break
             name = dialog.name
             desc = dialog.desc
-            target_name = dialog.target_name            
+            target_name = dialog.target_name
             platform = dialog.platform
             path = os.path.realpath(os.path.abspath(os.path.expanduser(dialog.path)))
             if not dialog.name or not dialog.desc or not dialog.platform or not dialog.path:
@@ -235,7 +235,7 @@ class App(object):
                 self.progressbar = progress_tree.get_widget('progressbar')
                 self.statuslabel = progress_tree.get_widget('status_label')
                 while gtk.events_pending():
-                    gtk.main_iteration(False) 
+                    gtk.main_iteration(False)
                 platformName = dialog.platform.split()[0]
                 proj = self.sdk.create_project(dialog.path, dialog.name, dialog.desc, self.sdk.platforms[platformName])
                 proj.install()
@@ -256,7 +256,7 @@ class App(object):
                     # projects has been updated, then we expect failure here
                     pass
                 progress_dialog.destroy()
-            
+
 
     def on_about_activate(self, event):
         dialog = gtk.AboutDialog()
@@ -291,11 +291,11 @@ class App(object):
             progress_tree.get_widget('progress_label').set_text(_("Please wait while deleting %s") % project.name)
             self.progressbar = progress_tree.get_widget('progressbar')
             while gtk.events_pending():
-                gtk.main_iteration(False) 
+                gtk.main_iteration(False)
             self.sdk.delete_project(project.name)
             self.remove_current_project()
             progress_dialog.destroy()
-            
+
     def on_new_target_add_clicked(self, widget):
         target_name = ""
         # Open the "New Target" dialog
@@ -316,7 +316,7 @@ class App(object):
                 elif re.search(r'\W', target_name):
                     target_name = re.sub('\W', '', target_name)
                     self.show_error_dialog("Target names can only contain alpha/numeric characters")
-                else:                    
+                else:
                     self.create_new_target(self.current_project(), target_name)
                     break
             else:
@@ -329,7 +329,7 @@ class App(object):
         progress_tree.get_widget('progress_label').set_text(_("Please wait while creating %s") % target_name)
         self.progressbar = progress_tree.get_widget('progressbar')
         while gtk.events_pending():
-            gtk.main_iteration(False) 
+            gtk.main_iteration(False)
         project.create_target(target_name)
         self.redraw_target_view()
         progress_dialog.destroy()
@@ -344,31 +344,31 @@ class App(object):
             if fSetName == item[0]:
                 active = self.fsetTouple[i][1].get_active()
                 self.fsetTouple[i] = (self.fsetTouple[i][0], self.fsetTouple[i][1], True, self.fsetTouple[i][3])
-            i = i + 1  
+            i = i + 1
         if active == True:
             i = 0
             for item in self.fsetTouple:
                 if fSetName != item[0]:
-                    for dep in fset['deps']:                
+                    for dep in fset['deps']:
                         if dep == item[0]:
                             if self.fsetTouple[i][1].get_active() == False:
                                 self.fsetTouple[i][1].set_active(True)
-                            self.fsetTouple[i][1].set_sensitive(False)                   
-                            self.fsetTouple[i] = (self.fsetTouple[i][0], self.fsetTouple[i][1], False, self.fsetTouple[i][3] + 1) 
+                            self.fsetTouple[i][1].set_sensitive(False)
+                            self.fsetTouple[i] = (self.fsetTouple[i][0], self.fsetTouple[i][1], False, self.fsetTouple[i][3] + 1)
                 i = i + 1
         else:
             i = 0
             for item in self.fsetTouple:
                 if fSetName != item[0]:
-                    for dep in fset['deps']:                
+                    for dep in fset['deps']:
                         if dep == item[0]:
-                            self.fsetTouple[i] = (self.fsetTouple[i][0], self.fsetTouple[i][1], False, self.fsetTouple[i][3] - 1) 
+                            self.fsetTouple[i] = (self.fsetTouple[i][0], self.fsetTouple[i][1], False, self.fsetTouple[i][3] - 1)
                             if self.fsetTouple[i][3] == 0:
-                                if self.fsetTouple[i][1].get_active() == True:                                
+                                if self.fsetTouple[i][1].get_active() == True:
                                     self.fsetTouple[i][1].set_active(False)
-                                self.fsetTouple[i][1].set_sensitive(True)                    
-                else:    
-                    self.fsetTouple[i] = (self.fsetTouple[i][0], self.fsetTouple[i][1], False, self.fsetTouple[i][3]) 
+                                self.fsetTouple[i][1].set_sensitive(True)
+                else:
+                    self.fsetTouple[i] = (self.fsetTouple[i][0], self.fsetTouple[i][1], False, self.fsetTouple[i][3])
                 i = i + 1
 
     def on_install_fset(self, widget):
@@ -385,7 +385,7 @@ class App(object):
         iter = 0
         self.fsetTouple = [("", gtk.CheckButton(""), False, 0)]
         for fset_name in sorted(all_fsets.difference(installed_fsets)):
-            iter = list.append([fset_name])               
+            iter = list.append([fset_name])
             buttonName = fset_name + "  (" + platform.fset[fset_name].desc + ")"
             self.fsetTouple.append((fset_name, gtk.CheckButton(buttonName), False, 0))
         if not iter:
@@ -394,12 +394,12 @@ class App(object):
             return
         self.fsetTouple.pop(0)
         i = 0
-        for checkBox in self.fsetTouple:            
+        for checkBox in self.fsetTouple:
             checkBox[1].connect("clicked", self.checkBoxCallback, self.fsetTouple[i][0])
             vbox.pack_start(checkBox[1])
             i = i + 1
 
-        dialog.show_all()        
+        dialog.show_all()
         while True:
             if dialog.run() == gtk.RESPONSE_OK:
                 numFsetsToInstall = 0
@@ -408,9 +408,9 @@ class App(object):
                             numFsetsToInstall = numFsetsToInstall + 1
                 print "Number of fsets to install: %s" % numFsetsToInstall
 
-                if numFsetsToInstall != 0:        
-                    debug_pkgs = checkbox.get_active()            
-                    dialog.destroy()    
+                if numFsetsToInstall != 0:
+                    debug_pkgs = checkbox.get_active()
+                    dialog.destroy()
                     print "Debug packages = %s" % debug_pkgs
                     progress_tree = gtk.glade.XML(self.gladefile, 'ProgressDialog')
                     progress_dialog = progress_tree.get_widget('ProgressDialog')
@@ -418,7 +418,7 @@ class App(object):
                     self.progressbar = progress_tree.get_widget('progressbar')
                     for fsetName in self.fsetTouple:
                         if fsetName[2] == True:
-                            fset = platform.fset[fsetName[0]]            
+                            fset = platform.fset[fsetName[0]]
                             print "Installing fset %s.................\n" % fsetName[0]
                             progress_tree.get_widget('progress_label').set_text("Please wait while installing %s" % fset.name)
                             try:
@@ -441,7 +441,7 @@ class App(object):
 
     def ignore(self, *args):
         return True
-    
+
     def set_status_label(self, newLabel):
         print "Setting new status label: %s" % newLabel
         self.statuslabel.set_text("Current action: %s" % newLabel)
@@ -451,7 +451,7 @@ class App(object):
         while gtk.events_pending():
             gtk.main_iteration(False)
         time.sleep(0.01)
-            
+
     def fset_install_updated(self, box, label, platform, checkbox):
         fset = platform.fset[box.get_active_text()]
         checkbox.set_sensitive(True)
@@ -580,7 +580,7 @@ class App(object):
                 if debug: print_exc_plus()
                 self.show_error_dialog()
             progress_dialog.destroy()
-            
+
     def on_installUSB_clicked(self, widget):
         project = self.current_project()
         target = self.current_target()
@@ -702,7 +702,7 @@ class App(object):
         home_dir = os.getenv("HOME")
         return self.writeUsbImageHelper(home_dir)
 
-    def on_ClearRootstraps_activate(self, widget):        
+    def on_ClearRootstraps_activate(self, widget):
         print "In on_ClearRootstraps_activate"
         progress_tree = gtk.glade.XML(self.gladefile, 'ProgressDialog')
         progress_dialog = progress_tree.get_widget('ProgressDialog')
@@ -735,14 +735,14 @@ class App(object):
             result = dialog.run()
             if result == gtk.RESPONSE_CANCEL:
                 print "No Project Name"
-                break        
+                break
             if result == gtk.RESPONSE_OK:
                 projectName = projectNameEntry.get_text()
                 if projectName == "":
                     print "Project Name is blank"
                     dialog.set_size_request(300, 150)
-                    projectExistsLabel.set_markup("<b><span foreground=\"red\">Please provide a project name</span></b>")                        
-                else:                    
+                    projectExistsLabel.set_markup("<b><span foreground=\"red\">Please provide a project name</span></b>")
+                else:
                     print "Project name: %s" % projectName
                     projectNameExists = False
                     for key in sorted(self.sdk.projects.iterkeys()):
@@ -751,7 +751,7 @@ class App(object):
                             projectNameExists = True
                             print "Project %s already exists" % projectName
                             dialog.set_size_request(400, 150)
-                            projectExistsLabel.set_markup("<b><span foreground=\"red\">Project %s already exists.</span></b>" % projectName)    
+                            projectExistsLabel.set_markup("<b><span foreground=\"red\">Project %s already exists.</span></b>" % projectName)
                             break
                     if projectNameExists == False:
                         obtainedUniqueName = True
@@ -792,7 +792,7 @@ class App(object):
 
                     print "Loading Project %s" % projectName
                     self.sdk.load_project(projectName, targetFolder, fileToLoad, self.gui_throbber)
-                    print "Loading Project Complete"                    
+                    print "Loading Project Complete"
                     progress_dialog.destroy()
                     self.sdk.discover_projects()
                     self.projectList.clear()
@@ -810,7 +810,7 @@ class App(object):
         currentProjectList = gtk.ListStore(str, str)
         projectList = gtk.combo_box_new_text()
         for key in sorted(self.sdk.projects.iterkeys()):
-            p = self.sdk.projects[key]    
+            p = self.sdk.projects[key]
             projectList.append_text(p.name)
         projectList.set_active(0)
         dialog.vbox.pack_start(projectList)
@@ -822,7 +822,7 @@ class App(object):
         if result == gtk.RESPONSE_OK:
             projectNameToSave = projectList.get_active_text()
             print "Project name to Save: %s" % (projectNameToSave)
-            dialog.destroy()    
+            dialog.destroy()
             dialog = gtk.FileChooserDialog('Choose the destination File Name',None,gtk.FILE_CHOOSER_ACTION_SAVE,
                 (gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,gtk.STOCK_OK,gtk.RESPONSE_OK),None)
             result = dialog.run()
@@ -832,19 +832,19 @@ class App(object):
             if result == gtk.RESPONSE_OK:
                 targetFileName = dialog.get_filename()
                 print "Targer File Name: %s" % (targetFileName)
-                dialog.destroy()        
+                dialog.destroy()
 
                 progress_tree = gtk.glade.XML(self.gladefile, 'ProgressDialog')
                 progress_dialog = progress_tree.get_widget('ProgressDialog')
                 progress_dialog.connect('delete_event', self.ignore)
                 progress_tree.get_widget('progress_label').set_text("Please wait while saving Project: %s" % projectNameToSave)
                 self.progressbar = progress_tree.get_widget('progressbar')
-        
+
                 while gtk.events_pending():
-                    gtk.main_iteration(False) 
+                    gtk.main_iteration(False)
                 print "Saving Project %s" % projectNameToSave
-                self.sdk.save_project(projectNameToSave, targetFileName)                
-                print "Saving Complete"                    
+                self.sdk.save_project(projectNameToSave, targetFileName)
+                print "Saving Complete"
                 progress_dialog.destroy()
 
     def on_upgrade_project_clicked(self, widget):
@@ -858,7 +858,7 @@ class App(object):
         if result != 0:
              raise OSError("Internal error while attempting to run update/upgrade: %s" % result)
         progress_dialog.destroy()
-        
+
 
     def on_upgrade_target_clicked(self, widget):
         progress_tree = gtk.glade.XML(self.gladefile, 'ProgressDialog')
@@ -874,13 +874,13 @@ class App(object):
 
     def formatMirrorSection(self, sectionName, sectionSearch, sectionReplace):
         sectionTextFormatted = "\n%s = [\n" % sectionName
-        index = 0        
+        index = 0
         for line in sectionSearch:
                 sectionTextFormatted += "\t(r'%s','%s'),\n" % (sectionSearch[index], sectionReplace[index])
                 index += 1
         sectionTextFormatted += "]"
         return sectionTextFormatted
-        
+
     def saveMirrorConfigFile(self, saveType, sectionName, sectionText):
         comments = """#!/usr/bin/python
     # If you have a local mirror of the Ubuntu and/or Moblin.org APT repositories,
@@ -904,7 +904,7 @@ class App(object):
     #]"""
         configFile = os.path.join(os.path.expanduser("~/.image-creator"), "sources_cfg")
         #if saveType == "saveSection":
-        #if saveType == "add":    
+        #if saveType == "add":
         if saveType == "save":
             if os.path.isfile(configFile):
                 f = open(configFile, "w")
@@ -915,25 +915,25 @@ class App(object):
                 f.write(comments)
                 for mirrorListItem in self.global_dict:
                     sectionSearch = []
-                    sectionReplace = []         
+                    sectionReplace = []
                     if mirrorListItem != '__builtins__':
                         if mirrorListItem != 'use_mirror':
                             sectionData = ""
-                            sectionDataList = self.global_dict[mirrorListItem]            
+                            sectionDataList = self.global_dict[mirrorListItem]
                             for item in sectionDataList:
                                 sectionSearch.append(item[0])
                                 sectionReplace.append(item[1])
                             f.write(self.formatMirrorSection(mirrorListItem, sectionSearch, sectionReplace))
-                f.close()        
-    
+                f.close()
+
     def mirrorSettings_callback(self, widget, buttonName):
         if buttonName == "nomirror":
-            self.mirrorSelection.set_active(-1)              
+            self.mirrorSelection.set_active(-1)
             self.mirrorSelection.set_sensitive(False)
             self.mirrorDetailsList = gtk.TreeStore(gobject.TYPE_STRING, gobject.TYPE_STRING)
-            self.mirrorDetails.set_model(self.mirrorDetailsList)        
+            self.mirrorDetails.set_model(self.mirrorDetailsList)
             self.mirrorDetails.set_sensitive(False)
- 
+
         else:
             self.mirrorSelection.set_sensitive(True)
             self.mirrorDetails.set_sensitive(True)
@@ -947,13 +947,13 @@ class App(object):
         selection = self.mirrorSelection.get_active_text()
         if selection in self.global_dict:
             self.mirrorDetailsList = gtk.TreeStore(gobject.TYPE_STRING, gobject.TYPE_STRING)
-            src_regex = self.global_dict[selection]            
+            src_regex = self.global_dict[selection]
             for item in src_regex:
                 self.mirrorDetailsList.append(None, [item[0], item[1]])
-            self.mirrorDetails.set_model(self.mirrorDetailsList)        
-        if selection == 'Add a Section':        
+            self.mirrorDetails.set_model(self.mirrorDetailsList)
+        if selection == 'Add a Section':
             dialog_tree = gtk.glade.XML(self.gladefile, 'addNewMirror')
-            dialog = dialog_tree.get_widget('addNewMirror')                    
+            dialog = dialog_tree.get_widget('addNewMirror')
             sectionNameEntry = dialog_tree.get_widget('sectionName')
             mirrorListEntry = dialog_tree.get_widget('mirrorList')
             while True:
@@ -969,16 +969,16 @@ class App(object):
                         self.show_error_dialog("All fields are required")
                         continue
                     else:
-                        self.mirrorSelection_entry_box.append([sectionName])                
+                        self.mirrorSelection_entry_box.append([sectionName])
                         self.saveMirrorConfigFile("add", sectionName, mirrorList)
                         self.populateMirrorSections()
                         self.mirrorSelection.set_active(0)
                         break
                 else:
                     break
-            dialog.destroy()     
+            dialog.destroy()
 
-    def populateMirrorSections(self):         
+    def populateMirrorSections(self):
         configFile = os.path.join(os.path.expanduser("~/.image-creator"), "sources_cfg")
         self.mirrorSelection_entry_box = gtk.ListStore(gobject.TYPE_STRING)
         self.mirrorSelectionList = {}
@@ -999,7 +999,7 @@ class App(object):
         if os.path.isfile(configFile):
             f = open(configFile, "r")
             mirrorSelectionLine = f.readline()
-            f.close()       
+            f.close()
             if mirrorSelectionLine.find("=") != -1:
                 mirrorToUse = mirrorSelectionLine.split('=')[1]
                 mirrorToUse = mirrorToUse[1:-2]
@@ -1014,7 +1014,7 @@ class App(object):
 
     def on_MirrorSettings_activate(self, widget):
         dialog_tree = gtk.glade.XML(self.gladefile, 'mirror')
-        dialog = dialog_tree.get_widget('mirror')        
+        dialog = dialog_tree.get_widget('mirror')
         self.noMirror = dialog_tree.get_widget('noMirror')
         self.useMirror = dialog_tree.get_widget('useMirror')
         self.mirrorDetails = dialog_tree.get_widget('mirrorDetails')
@@ -1038,18 +1038,18 @@ class App(object):
         col0.set_resizable(True)
         col1.add_attribute(cellRenderC1, 'text', 1)
         col1.set_resizable(True)
-        
+
         self.mirrorDetails.set_headers_clickable(True)
         self.mirrorDetailsList = gtk.TreeStore(gobject.TYPE_STRING, gobject.TYPE_STRING)
         self.mirrorDetails.set_grid_lines(gtk.TREE_VIEW_GRID_LINES_BOTH)
-        self.mirrorDetails.set_model(self.mirrorDetailsList)        
+        self.mirrorDetails.set_model(self.mirrorDetailsList)
 
         currentMirror = self.getCurrentMirror()
         if currentMirror == "no_mirror":
             self.noMirror.set_active(True)
         else:
             self.useMirror.set_active(True)
-        
+
         result = dialog.run()
         if result == gtk.RESPONSE_OK:
             self.saveMirrorConfigFile("save", None, None)
@@ -1083,7 +1083,7 @@ class AddNewProject(object):
         platform_idx = 0
         idx = 0
         for pname in platforms:
-            pdesc = ""            
+            pdesc = ""
             added = False
             packageManagerDesc = ""
             if self.sdk.platforms[pname].config_info != None:
@@ -1105,7 +1105,7 @@ class AddNewProject(object):
         width, height = self.dialog.get_default_size()
         self.dialog.set_default_size(width + 500, height)
 
-    def addTarget_callback(self, widget):        
+    def addTarget_callback(self, widget):
         while True:
             gladefile = os.path.join(self.sdk.path, "image-creator.glade")
             widgets = gtk.glade.XML(gladefile, 'nt_dlg')
