@@ -122,7 +122,7 @@ class FileSystem(object):
                 result = os.system("umount %s" % (mount_point))
                 if result:
                     # If error, return failure along with directory name of failure
-                    return (False, mount_pount)
+                    return (False, mount_point)
         return pdk_utils.umountAllInPath(self.path)
 
 class Project(FileSystem):
