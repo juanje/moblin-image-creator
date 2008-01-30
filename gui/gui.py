@@ -239,13 +239,13 @@ class App(object):
                 proj = self.sdk.create_project(dialog.path, dialog.name, dialog.desc, self.sdk.platforms[platformName])
                 proj.install()
                 self.projectList.append((dialog.name, dialog.desc, dialog.path, platformName))
-                self.refreshProjectList()
-                self.makeActiveProject(dialog.name)
-
+                
                 progress_dialog.destroy()
                 if target_name != None:
                     self.create_new_target(proj, target_name)
 
+                self.refreshProjectList()
+                self.makeActiveProject(dialog.name)
             except:
                 traceback.print_exc()
                 if debug: print_exc_plus()
