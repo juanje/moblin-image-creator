@@ -65,9 +65,12 @@ moblin-image-creator (0.39) UNRELEASED; urgency=low
   [ Prajwal Mohan ]
   * Adding Error Dialog listing all dirs that could not be unmounted
   * Changing the error dialog
-  * Fixing Typo 
+  * Fixing Typo
 
- -- Prajwal Mohan <prajwal@linux.intel.com>  Tue, 29 Jan 2008 15:42:01 -0800
+  [ John L. Villalovos ]
+  * Remove moblin.org repository usage from *-ubuntu-* platforms
+
+ -- John L. Villalovos <john.l.villalovos@intel.com>  Wed, 30 Jan 2008 09:38:19 -0800
 
 moblin-image-creator (0.38) gaston; urgency=low
 
