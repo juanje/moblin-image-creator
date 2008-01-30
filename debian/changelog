@@ -6,6 +6,7 @@ moblin-image-creator (0.39) UNRELEASED; urgency=low
   * When selecting a project, we will automatically select the first target,
     if available.
   * Fixing issue with the project config file not being deleted correctly
+  * Remove moblin-chat and hildon-libs-l10n-engb from most of the FSETs
 
   [ Alek Du ]
   * Fixed wireless bug (make /lib/modules/*/volatile dir persistent)
@@ -84,7 +85,7 @@ moblin-image-creator (0.39) UNRELEASED; urgency=low
   [ Steve Magoun ]
   * Remove libdrm-dev, libdrm2-dbg from GNOME-Mobile fset
 
- -- John L. Villalovos <john.l.villalovos@intel.com>  Wed, 30 Jan 2008 14:26:32 -0800
+ -- John L. Villalovos <john.l.villalovos@intel.com>  Wed, 30 Jan 2008 15:34:37 -0800
 
 moblin-image-creator (0.38) gaston; urgency=low
 
