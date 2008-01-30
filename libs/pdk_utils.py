@@ -42,7 +42,7 @@ sources_regex_file = os.path.expanduser(os.path.join(CONFIG_DIR, "sources_cfg"))
 if os.path.isfile(sources_regex_file):
     f = open(sources_regex_file, "r")
     mirrorSelectionLine = f.readline()
-    f.close()       
+    f.close()
     global_dict = {}
     execfile(sources_regex_file, global_dict)
     if mirrorSelectionLine.find("=") != -1:
@@ -53,7 +53,7 @@ if os.path.isfile(sources_regex_file):
                 src_regex = global_dict[mirrorToUse]
             else:
                 if 'sources_regex' in global_dict:
-                    src_regex = global_dict['sources_regex']                
+                    src_regex = global_dict['sources_regex']
     else:
         if 'sources_regex' in global_dict:
             src_regex = global_dict['sources_regex']
@@ -157,8 +157,8 @@ def umountAllInPath(dirname, directory_set = None):
                 tmp_path = tempfile.mkdtemp('','pdk-', '/tmp')
                 os.rmdir(tmp_path)
                 shutil.copytree(mpoint, tmp_path)
-            result = os.system("umount %s" % (mpoint))
-            if result:
+            result = umount(mpoint)
+            if not result:
                 directory_set.add(os.path.abspath(mpoint))
                 if fs_type == 'tmpfs':
                     shutil.rmtree(tmp_path)
@@ -166,6 +166,19 @@ def umountAllInPath(dirname, directory_set = None):
                 os.rmdir(mpoint)
                 shutil.move(tmp_path, mpoint)
     return directory_set
+
+def umount(dirname):
+    """Helper function to un-mount a directory, returns back False if it failed
+    to unmount the directory"""
+    dirname = os.path.abspath(os.path.expanduser(dirname))
+    result = os.system("umount %s" % (dirname))
+    if result:
+        # umount failed, see if the directory is actually mounted, if it isn't
+        # then we think it is okay
+        mounts = getMountInfo()
+        if dirname in mounts:
+            return False
+    return True
 
 def umount_device(device_file):
     """umount a device if it is mounted"""
@@ -175,10 +188,7 @@ def umount_device(device_file):
         line = line.strip()
         if line.find(search_file) == 0:
             print "Umounting: %s" % device_file
-            result = os.system("umount %s" % device_file)
-            if result:
-                return False
-            return True
+            return umount(device_file)
     return True
 
 def getMountInfo():

@@ -121,8 +121,8 @@ class FileSystem(object):
             directory_set = set()
         for mount_point in self.mounted:
             if os.path.exists(mount_point):
-                result = os.system("umount %s" % (mount_point))
-                if result:
+                result = pdk_utils.umount(mount_point)
+                if not result:
                     directory_set.add(mount_point)
         return pdk_utils.umountAllInPath(self.path, directory_set)
 
@@ -238,7 +238,7 @@ class Project(FileSystem):
                         raise OSError, e
                     else:
                         seen_paths.append(e.filename)
-                        os.system("umount %s" % (e.filename))
+                        pdk_utils.umount(e.filename)
                 else:
                     raise OSError, e
         if do_pop:
