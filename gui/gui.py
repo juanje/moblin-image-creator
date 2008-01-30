@@ -178,6 +178,9 @@ class App(object):
         for key in sorted(self.current_project().targets):
             installed_fsets = ' '.join(self.current_project().targets[key].installed_fsets())
             self.targetList.append((key, installed_fsets))
+        if self.current_project().targets:
+            selection = self.targetView.get_selection()
+            selection.select_path(0)
 
     def set_plist(self, name, id):
         """Add project list column descriptions"""
@@ -837,11 +840,9 @@ class App(object):
         self.projectView.set_model(self.projectList)
 
     def makeActiveProject(self, project_name):
-        print project_name
         selection = self.projectView.get_selection()
         for count, row in enumerate(self.projectList):
             name = row[0]
-            print name
             if name == project_name:
                 selection.select_path(count)
                 self.redraw_target_view()

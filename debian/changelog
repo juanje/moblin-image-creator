@@ -3,6 +3,8 @@ moblin-image-creator (0.39) UNRELEASED; urgency=low
   [ John L. Villalovos ]
   * Starting 0.39 version
   * Trying to fix wireless not working bug.
+  * When selecting a project, we will automatically select the first target,
+    if available.
 
   [ Alek Du ]
   * Fixed wireless bug (make /lib/modules/*/volatile dir persistent)
@@ -75,9 +77,9 @@ moblin-image-creator (0.39) UNRELEASED; urgency=low
 
   [ Prajwal Mohan ]
   * when you create a target with project - the target list in not populated
-    correctly. Fixing the bug 
+    correctly. Fixing the bug
 
- -- Prajwal Mohan <prajwal@linux.intel.com>  Wed, 30 Jan 2008 11:09:24 -0800
+ -- John L. Villalovos <john.l.villalovos@intel.com>  Wed, 30 Jan 2008 11:42:05 -0800
 
 moblin-image-creator (0.38) gaston; urgency=low
 
