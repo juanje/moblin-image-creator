@@ -222,9 +222,7 @@ class Project(FileSystem):
 
     def delete_target(self, name, do_pop=True, callback = None):
         target = self.targets[name]
-        directory_set = target.umount()
-        if directory_set:
-            raise pdk_utils.ImageCreatorUmountError, directory_set
+        self.umountTarget(target)
         seen_paths = []
         while True:
             try:
@@ -243,47 +241,47 @@ class Project(FileSystem):
                     raise OSError, e
         if do_pop:
             self.targets.pop(name)
+
+    def umountTarget(self, target):
+        directory_set = target.umount()
+        if directory_set:
+            # Let's remount everything, so stuff will still work
+            target.mount()
+            raise pdk_utils.ImageCreatorUmountError, directory_set
         
     def create_live_iso(self, target_name, image_name):
         target = self.targets[target_name]
-        directory_set = target.umount()
-        if directory_set:
-            raise pdk_utils.ImageCreatorUmountError, directory_set
+        self.umountTarget(target)
         image = InstallImage.LiveIsoImage(self, self.targets[target_name], image_name, progress_callback = self.progress_callback)
         image.create_image()
         target.mount()
 
     def create_install_iso(self, target_name, image_name):
         target = self.targets[target_name]
-        directory_set = target.umount()
-        if directory_set:
-            raise pdk_utils.ImageCreatorUmountError, directory_set
+        self.umountTarget(target)
         image = InstallImage.InstallIsoImage(self, self.targets[target_name], image_name, progress_callback = self.progress_callback)
         image.create_image()
         target.mount()
 
     def create_live_usb(self, target_name, image_name, type="RAMFS"):
         target = self.targets[target_name]
-        directory_set = target.umount()
-        if directory_set:
-            raise pdk_utils.ImageCreatorUmountError, directory_set
+        self.umountTarget(target)
         image = InstallImage.LiveUsbImage(self, self.targets[target_name], image_name, progress_callback = self.progress_callback)
         image.create_image(type)
         target.mount()
 
     def create_install_usb(self, target_name, image_name):
         target = self.targets[target_name]
-        directory_set = target.umount()
-        if directory_set:
-            raise pdk_utils.ImageCreatorUmountError, directory_set
+        self.umountTarget(target)
         image = InstallImage.InstallUsbImage(self, self.targets[target_name], image_name, progress_callback = self.progress_callback)
         image.create_image()
         target.mount()
 
     def tar(self, tar_obj):
         """tar up the project.  Need to pass in a tarfile object"""
-        directory_set = target.umount()
+        directory_set = self.umount()
         if directory_set:
+            self.mount()
             raise pdk_utils.ImageCreatorUmountError, directory_set
         tar_obj.add(self.path, arcname = "project/")
 
