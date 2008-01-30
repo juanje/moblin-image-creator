@@ -454,11 +454,10 @@ class BaseUsbImage(InstallImage):
 
     def umount_container(self):
         if self.tmp_path:
-            cmd_line = "umount %s" % self.tmp_path
-            result = pdk_utils.execCommand(cmd_line, callback = self.progress_callback)
-            if result:
-                print >> sys.stderr, "Error running command: %s" % cmd_line
-                raise EnvironmentError, "Error running command: %s" % cmd_line
+            result = pdk_utils.umount(self.tmp_path)
+            if not result:
+                print >> sys.stderr, "Error unmounting: %s" % self.tmp_path
+                raise EnvironmentError, "Error unmounting: %s" % self.tmp_path
             os.rmdir(self.tmp_path)
             self.tmp_path = ''
 

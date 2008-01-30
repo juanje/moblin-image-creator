@@ -330,9 +330,9 @@ class SDK(object):
             proj.delete_target(target, False, callback = self.progress_callback)
         proj.targets.clear()
         # and then deal with the project
-        result, error_list = proj.umount()
-        if not result:
-            raise pdk_utils.ImageCreatorUmountError, error_list
+        directory_set = proj.umount()
+        if directory_set:
+            raise pdk_utils.ImageCreatorUmountError, directory_set
         pdk_utils.rmtree(proj.path, callback = self.progress_callback)
         os.unlink(os.path.join(self.config_path, proj.name + '.proj'))
 
