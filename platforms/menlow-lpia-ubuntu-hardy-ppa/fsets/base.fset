@@ -48,7 +48,7 @@ DEPS=core
 
 [GNOME-Mobile]
 DESC=Subset of GNOME components for building mobile Linux stacks
-PKGS=xorg xserver-xorg-input-evtouch libgl1-mesa-dri matchbox-window-manager libglib2.0-0 dbus libdbus-1-3 libdbus-glib-1-2 gconf2 libgnomevfs2-0 libgstreamer0.10-0 libbluetooth2 libtelepathy-glib0 libavahi-glib1 libgtk2.0-0 libpango1.0-0 libcairo2 libatk1.0-0 python python-dbus python-cairo python-gconf python-gst0.10 telepathy-core telepathy-mission-control gnome-icon-theme libdrm2 xf86-video-psb libdrm-dev libdrm2-dbg gnome-menus
+PKGS=xorg xserver-xorg-input-evtouch libgl1-mesa-dri matchbox-window-manager libglib2.0-0 dbus libdbus-1-3 libdbus-glib-1-2 gconf2 libgnomevfs2-0 libgstreamer0.10-0 libbluetooth2 libtelepathy-glib0 libavahi-glib1 libgtk2.0-0 libpango1.0-0 libcairo2 libatk1.0-0 python python-dbus python-cairo python-gconf python-gst0.10 telepathy-core telepathy-mission-control gnome-icon-theme libdrm2 xserver-xorg-video-psb libdrm-dev libdrm2-dbg gnome-menus
 DEBUG_PKGS=xrestop
 DEPS=crownbeach-config
 
