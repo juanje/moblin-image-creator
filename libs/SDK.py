@@ -185,7 +185,7 @@ class SDK(object):
             if not os.path.isfile(full_path):
                 continue
             config = PackageConfig(full_path)
-            self.projects[config.name] = Project.Project(config.path, config.name, config.desc, self.platforms[config.platform], self.progress_callback)
+            self.projects[config.name] = Project.Project(config, self.platforms[config.platform], self.progress_callback)
        
             
     def create_project(self, parent_path, name, desc, platform, use_rootstrap = True):
@@ -227,8 +227,9 @@ class SDK(object):
         config_file.close()
         # instantiate the project
         self.status_label_callback("Initiating the project")
+        config = PackageConfig(config_path)
         try:
-            self.projects[name] = Project.Project(install_path, name, desc, platform, self.progress_callback)
+            self.projects[name] = Project.Project(config, platform, self.progress_callback)
         except:
             pdk_utils.rmtree(install_path, callback = self.progress_callback)
             os.unlink(config_path)
@@ -334,7 +335,7 @@ class SDK(object):
         if directory_set:
             raise pdk_utils.ImageCreatorUmountError, directory_set
         pdk_utils.rmtree(proj.path, callback = self.progress_callback)
-        os.unlink(os.path.join(self.config_path, proj.name + '.proj'))
+        os.unlink(proj.config_info.filename)
 
     def getProjects(self):
         """Return back a list containing all the projects that the SDK knows about"""
@@ -390,6 +391,7 @@ class ConfigFile(object):
     """
     def __init__(self, filename, string_vals):
         self.__filename = filename
+        self.filename = filename
         config = open(self.__filename)
         self.val_dict = {}
         for line in config:

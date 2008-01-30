@@ -132,14 +132,13 @@ class Project(FileSystem):
     build system from the host Linux distribution.  It also knows how to create
     new 'target' filesystems.
     """
-    def __init__(self, path, name, desc, platform, progress_callback = None):
-        if not path or not name or not desc or not platform:
-            raise ValueError("Empty argument passed in")
-        self.path = os.path.realpath(os.path.abspath(os.path.expanduser(path)))
+    def __init__(self, config_info, platform, progress_callback = None):
+        self.path = os.path.realpath(os.path.abspath(os.path.expanduser(config_info.path)))
+        self.config_info = config_info
         self.chroot_path = self.path
-        self.name = name
+        self.name = config_info.name
         self.platform = platform
-        self.desc = desc
+        self.desc = config_info.desc
         self.progress_callback = progress_callback
         FileSystem.__init__(self, self.path, progress_callback = progress_callback)
 

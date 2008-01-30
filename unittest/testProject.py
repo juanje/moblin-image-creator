@@ -52,7 +52,6 @@ class TestFileSystem(unittest.TestCase):
         temp = filesystem.__repr__()
     def testEmptyValues(self):
         self.assertRaises(ValueError, Project.FileSystem, '', '')
-        self.assertRaises(ValueError, Project.Project, '', '', '', '', '')
         self.assertRaises(ValueError, Project.Target, '', '', '')
     def testProjectCreation(self):
         sdk = SDK.SDK(progress_callback = iteration, path = self.workdir, var_dir = self.var_dir)
