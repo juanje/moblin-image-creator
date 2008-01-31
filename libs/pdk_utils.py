@@ -21,6 +21,7 @@
 
 import exceptions
 import fcntl
+import gobject
 import os
 import re
 import select
@@ -29,6 +30,8 @@ import subprocess
 import sys
 import tempfile
 import shutil
+import time
+
 import mic_cfg
 
 # this is for the copySourcesListFile() function
@@ -370,6 +373,28 @@ def rmtree(path, ignore_errors=False, onerror=None, callback = None, count = 0):
         os.rmdir(path)
     except os.error:
         onerror(os.rmdir, path, sys.exc_info())
+
+def copy(src, dst, callback = None):
+    if callback:
+        timer = gobject.timeout_add(100, callback, None)
+        pid = os.fork()
+        if (pid == 0):
+            # child process
+            shutil.copy(src, dst)
+            os._exit(0)
+        while 1:
+            pid, exit_status = os.waitpid(pid, os.WNOHANG)
+            if pid == 0:
+                callback(None)
+                time.sleep(0.1)
+            else:
+                gobject.source_remove(timer)
+                break
+            if exit_status:
+                # Something failed, try again without the fork
+                shutil.copy(src, dst)
+    else:
+        shutil.copy(src, dst)
 
 def mountList(mount_list, chroot_dir):
     """Mount the items specified in the mount list.  Return back a list of what

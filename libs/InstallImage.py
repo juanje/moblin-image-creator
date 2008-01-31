@@ -487,7 +487,7 @@ class LiveUsbImage(BaseUsbImage):
         self.kernels.pop(0)
         # Flashing yellow on a blue background
         self.install_kernels("9e", image_type)
-        shutil.copy(self.rootfs_path, self.tmp_path)
+        pdk_utils.copy(self.rootfs_path, self.tmp_path, callback = self.progress_callback)
         if fs_type == 'EXT3FS':
             self.create_ext3fs_file(os.path.join(self.tmp_path, 'ext3fs.img'), ext3fs_fs_size)
         self.umount_container()
@@ -521,8 +521,8 @@ class InstallUsbImage(BaseUsbImage):
         self.kernels.pop(0)
         # Flashing yellow on a red background
         self.install_kernels("ce", image_type)
-        shutil.copy(self.rootfs_path, self.tmp_path)
-        shutil.copy(self.bootfs_path, self.tmp_path)
+        pdk_utils.copy(self.rootfs_path, self.tmp_path, callback = self.progress_callback)
+        pdk_utils.copy(self.bootfs_path, self.tmp_path, callback = self.progress_callback)
         self.create_install_script(self.tmp_path)
         self.umount_container()
         self.delete_rootfs()
