@@ -5,6 +5,8 @@ moblin-image-creator (0.39) UNRELEASED; urgency=low
   * Trying to fix wireless not working bug.
   * When selecting a project, we will automatically select the first target,
     if available.
+  * Fixing issue with the project config file not being deleted correctly
+  * Remove moblin-chat and hildon-libs-l10n-engb from most of the FSETs
 
   [ Alek Du ]
   * Fixed wireless bug (make /lib/modules/*/volatile dir persistent)
