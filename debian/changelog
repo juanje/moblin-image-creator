@@ -85,8 +85,9 @@ moblin-image-creator (0.39) UNRELEASED; urgency=low
   [ Steve Magoun ]
   * Remove libdrm-dev, libdrm2-dbg from GNOME-Mobile fset
   * Add deb-src to Ubuntu repositories
+  * Rename apt sources for Ubuntu src repositories
 
- -- Steve Magoun <steve.magoun@canonical.com>  Wed, 30 Jan 2008 15:40:37 -0800
+ -- Steve Magoun <steve.magoun@canonical.com>  Wed, 30 Jan 2008 16:15:31 -0800
 
 moblin-image-creator (0.38) gaston; urgency=low
 
