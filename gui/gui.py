@@ -217,6 +217,9 @@ class App(object):
             if not dialog.name or not dialog.desc or not dialog.platform or not dialog.path:
                 self.show_error_dialog("All values must be specified")
                 continue
+            if name in self.sdk.projects:
+                self.show_error_dialog("Project already exists with the name: %s" % name)
+                continue
             # If the path specified doesn't exist yet, then that is okay.
             if not os.path.exists(path):
                 break

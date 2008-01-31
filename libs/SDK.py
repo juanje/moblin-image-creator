@@ -212,7 +212,8 @@ class SDK(object):
         """
         if not parent_path or not name or not desc or not platform:
             raise ValueError("Empty argument passed in")
-        
+        if name in self.projects:
+            raise ValueError("Project: %s already exists" % name)
         install_path = os.path.realpath(os.path.abspath(os.path.expanduser(parent_path)))
         self.status_label_callback("Creating the project chroot environment")
         platform.createChroot(install_path, callback = self.progress_callback)

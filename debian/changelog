@@ -6,6 +6,7 @@ moblin-image-creator (0.40) UNRELEASED; urgency=low
   [ John L. Villalovos ]
   * Created a pdk_utils.copy() function that will keep the throbber moving.
     Using it when creating an install/live image
+  * Prevent project being created with same name as an existing project
 
   [ Steve Kowalik ]
   * Remove gstreamer0.10-x, galculator, moblin-chat, moblin-applets and
