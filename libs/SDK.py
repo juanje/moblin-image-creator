@@ -350,14 +350,13 @@ class SDK(object):
             path = self.platforms[key].path
             for prefix in [ "build", "target" ]:
                 root_strap_path = os.path.join(path, "%s-rootstrap.tar.bz2" % prefix)
-                print "Looking for: %s" % root_strap_path
                 if os.path.exists(root_strap_path):
                     print "Deleting: %s" % root_strap_path
                     os.unlink(root_strap_path)
         var_dir = mic_cfg.config.get('general', 'var_dir')
         rootstrap_dir = os.path.join(var_dir, "rootstraps")
         if os.path.exists(rootstrap_dir):
-            print "Deleting directory: %s" % rootstrap_dir
+            print "Deleting rootstrap directory: %s" % rootstrap_dir
             pdk_utils.rmtree(rootstrap_dir, callback = self.progress_callback)
 
     def umount(self):

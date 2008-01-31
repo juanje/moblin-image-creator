@@ -413,6 +413,8 @@ class BaseUsbImage(InstallImage):
         out_string = chr(0) * 1024
         # Write the string out to the file to create file of size * mibibyte in length
         for count in range(0, size * 1024):
+            if self.progress_callback and count % 1024 == 0:
+                self.progress_callback(None)
             out_file.write(out_string)
         out_file.close()
 
