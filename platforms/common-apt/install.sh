@@ -48,6 +48,8 @@ splash_write(){
     if [ "${SPLASHWRITE}" -eq 1 ]
     then
         usplash_write "$@"
+    else:
+	echo "ussplash_write: $@"
     fi
 }
 ####################### usplash functions end ###############################
