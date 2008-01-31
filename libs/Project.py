@@ -65,6 +65,25 @@ class FileSystem(object):
         self.mount()
         return self.platform.pkg_manager.updateChroot(self.chroot_path,
             callback = self.progress_callback)
+
+    def setHostname(self, hostname):
+        self.mount()
+        f = open("%s/etc/hostname" % self.path, 'w')
+        f.write("%s\n" % hostname)
+        f.close()
+        f = open("%s/etc/hosts" % self.path, 'w')
+        f.write("""127.0.0.1       localhost localhost.localdomain %s
+
+# The following lines are desirable for IPv6 capable hosts
+::1     ip6-localhost ip6-loopback
+fe00::0 ip6-localnet
+ff00::0 ip6-mcastprefix
+ff02::1 ip6-allnodes
+ff02::2 ip6-allrouters
+ff02::3 ip6-allhosts
+
+""" % hostname)
+        f.close()
         
     def installPackages(self, packages_list):
         self.mount()
@@ -178,6 +197,7 @@ class Project(FileSystem):
             self.targets[name] = Target(name, self, self.progress_callback)
             self.targets[name].mount()
             self.targets[name].updateAndUpgrade()
+            self.targets[name].setHostname('ume')
             # Install platform default kernel cmdline
             self.set_target_usb_kernel_cmdline(name, self.platform.usb_kernel_cmdline)
             self.set_target_hd_kernel_cmdline(name, self.platform.hd_kernel_cmdline)
