@@ -6,8 +6,9 @@ moblin-image-creator (0.40) UNRELEASED; urgency=low
   [ John L. Villalovos ]
   * Created a pdk_utils.copy() function that will keep the throbber moving.
     Using it when creating an install/live image
+  * Prevent project being created with same name as an existing project
 
- -- John L. Villalovos <john.l.villalovos@intel.com>  Thu, 31 Jan 2008 10:39:47 -0800
+ -- John L. Villalovos <john.l.villalovos@intel.com>  Thu, 31 Jan 2008 13:38:57 -0800
 
 moblin-image-creator (0.39) gaston; urgency=low
 
