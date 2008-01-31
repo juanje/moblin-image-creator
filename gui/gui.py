@@ -83,7 +83,8 @@ class App(object):
                 "on_Save_activate":self.on_Save_activate,
                 "on_upgrade_project_clicked":self.on_upgrade_project_clicked,
                 "on_upgrade_target_clicked":self.on_upgrade_target_clicked,
-                "on_MirrorSettings_activate":self.on_MirrorSettings_activate
+                "on_MirrorSettings_activate":self.on_MirrorSettings_activate,
+                "on_Add_Project_Wizard_activate":self.on_Add_Project_Wizard_activate
                 }
         self.widgets.signal_autoconnect(dic)
         # setup projectView widget
@@ -346,15 +347,15 @@ class App(object):
 
 
     def checkBoxCallback(self, widget, fSetName):
-        platform = self.current_project().platform
+        """Call back function when the check box is clicked. This function calculates all dependencies of fsets and checks the rest of the boxes"""
+        #platform = self.current_project().platform
+        platform = self.currentPlatformSelected
         fset = platform.fset[fSetName]
-        i = 0
         active = False
-        for item in self.fsetTouple:
+        for i, item in enumerate(self.fsetTouple):
             if fSetName == item[0]:
                 active = self.fsetTouple[i][1].get_active()
                 self.fsetTouple[i] = (self.fsetTouple[i][0], self.fsetTouple[i][1], True, self.fsetTouple[i][3])
-            i = i + 1
         if active == True:
             i = 0
             for item in self.fsetTouple:
@@ -363,6 +364,7 @@ class App(object):
                         if dep == item[0]:
                             if self.fsetTouple[i][1].get_active() == False:
                                 self.fsetTouple[i][1].set_active(True)
+                                #sex_active causes this function to be called recurssively
                             self.fsetTouple[i][1].set_sensitive(False)
                             self.fsetTouple[i] = (self.fsetTouple[i][0], self.fsetTouple[i][1], False, self.fsetTouple[i][3] + 1)
                 i = i + 1
@@ -381,18 +383,26 @@ class App(object):
                     self.fsetTouple[i] = (self.fsetTouple[i][0], self.fsetTouple[i][1], False, self.fsetTouple[i][3])
                 i = i + 1
 
-    def on_install_fset(self, widget):
+    def setup_fsets_dialog(self, widget, platformName, showFsets = ""):
         tree = gtk.glade.XML(self.gladefile, 'fsetsDialog')
         dialog = tree.get_widget('fsetsDialog')
         vbox = tree.get_widget('vbox')
         checkbox = tree.get_widget('debug-check-button')
-        self.fsetToInstall = ""
-
-        platform = self.current_project().platform
+        fsetToInstall = []
+        debug_pkgs = False
+  
+        platform = self.sdk.platforms[platformName]
+        self.currentPlatformSelected = platform
+        #platform = self.current_project().platform
         all_fsets = set(platform.fset)
-        installed_fsets = set(self.current_target().installed_fsets())
+        if showFsets == "all":
+            installed_fsets = set()
+        else:
+            installed_fsets = set(self.current_target().installed_fsets())
         list = gtk.ListStore(gobject.TYPE_STRING)
         iter = 0
+        #fsetTouple is a list of touples
+        #Each touple has 4 elements - fset name, gtk.CheckButton, bool (indicating if that fset needs to be installed) and int (number of fsets that depend on it)
         self.fsetTouple = [("", gtk.CheckButton(""), False, 0)]
         for fset_name in sorted(all_fsets.difference(installed_fsets)):
             iter = list.append([fset_name])
@@ -412,6 +422,7 @@ class App(object):
         dialog.show_all()
         while True:
             if dialog.run() == gtk.RESPONSE_OK:
+                debug_pkgs = checkbox.get_active()
                 numFsetsToInstall = 0
                 for fsetName in self.fsetTouple:
                         if fsetName[2] == True:
@@ -419,28 +430,10 @@ class App(object):
                 print "Number of fsets to install: %s" % numFsetsToInstall
 
                 if numFsetsToInstall != 0:
-                    debug_pkgs = checkbox.get_active()
                     dialog.destroy()
-                    print "Debug packages = %s" % debug_pkgs
-                    progress_tree = gtk.glade.XML(self.gladefile, 'ProgressDialog')
-                    progress_dialog = progress_tree.get_widget('ProgressDialog')
-                    progress_dialog.connect('delete_event', self.ignore)
-                    self.progressbar = progress_tree.get_widget('progressbar')
                     for fsetName in self.fsetTouple:
                         if fsetName[2] == True:
-                            fset = platform.fset[fsetName[0]]
-                            print "Installing fset %s.................\n" % fsetName[0]
-                            progress_tree.get_widget('progress_label').set_text("Please wait while installing %s" % fset.name)
-                            try:
-                                self.current_target().installFset(fset, fsets = platform.fset, debug_pkgs = debug_pkgs)
-                            except ValueError, e:
-                                self.show_error_dialog(e.args[0])
-                            except:
-                                traceback.print_exc()
-                                if debug: print_exc_plus()
-                                self.show_error_dialog("Unexpected error: %s" % (sys.exc_info()[1]))
-                    self.redraw_target_view()
-                    progress_dialog.destroy()
+                            fsetToInstall.append(fsetName[0])
                     break
                 else:
                     print "No fset selected"
@@ -448,6 +441,33 @@ class App(object):
             else:
                 break
         dialog.destroy()
+        return (fsetToInstall, debug_pkgs)
+
+    def on_install_fset(self, widget):
+        platformName = self.current_project().platform.name
+        fsetsToInstall, debug_pkgs = self.setup_fsets_dialog(widget, platformName)
+        if fsetsToInstall:
+            print "Debug packages = %s" % debug_pkgs
+            platform = self.current_project().platform
+            progress_tree = gtk.glade.XML(self.gladefile, 'ProgressDialog')
+            progress_dialog = progress_tree.get_widget('ProgressDialog')
+            progress_dialog.connect('delete_event', self.ignore)
+            self.progressbar = progress_tree.get_widget('progressbar')
+            for fsetName in fsetsToInstall:
+                #print "Installing: %s" % fset    
+                fset = platform.fset[fsetName]
+                print "Installing fset %s.................\n" % fsetName
+                progress_tree.get_widget('progress_label').set_text("Please wait while installing %s" % fset.name)
+                try:
+                    self.current_target().installFset(fset, fsets = platform.fset, debug_pkgs = debug_pkgs)
+                except ValueError, e:
+                    self.show_error_dialog(e.args[0])
+                except:
+                    traceback.print_exc()
+                    if debug: print_exc_plus()
+                    self.show_error_dialog("Unexpected error: %s" % (sys.exc_info()[1]))
+            self.redraw_target_view()
+            progress_dialog.destroy()
 
     def ignore(self, *args):
         return True
@@ -1101,18 +1121,67 @@ class App(object):
             self.saveMirrorConfigFile("save", None, None)
         dialog.destroy()
 
+    def on_Add_Project_Wizard_activate(self, widget):
+        return
+        RESULT_NEXT = 0
+        RESULT_LAST = 1
+        name = ""
+        desc = ""
+        platform = ""
+        target_name = ""
+        fsetsToInstall = []
+        debug_pkgs = False
+        path = os.getcwd() + os.sep
+        projectDialog = AddNewProject(sdk = self.sdk, name = name, gladefile = self.gladefile, desc = desc, platform = platform, path = path, dialogName = "newProjectWizard")
+        result = projectDialog.run()
+        if result == RESULT_NEXT:
+            #name = projectDdialog.name
+            #desc = projectDdialog.desc
+            #target_name = projectDdialog.target_name
+            #platform = projectDdialog.platform
+            #path = os.path.realpath(os.path.abspath(os.path.expanduser(dialog.path)))
+            if not projectDialog.name or not projectDialog.desc or not projectDialog.platform or not projectDialog.path:
+                self.show_error_dialog("All values must be specified")
+                return 
+            dialog_tree = gtk.glade.XML(self.gladefile, 'newTargetWizard')
+            targetDialog = dialog_tree.get_widget('newTargetWizard')
+            targetNameEntry = dialog_tree.get_widget('target_name')
+            result = targetDialog.run()
+            target_name = targetNameEntry.get_text()
+            target_name = target_name.strip()
+            targetDialog.destroy()
+            if result == RESULT_NEXT:
+                if target_name == "":
+                   self.show_error_dialog("Target name must be specified")
+                   return    
+                platformName = projectDialog.platform.split()[0]
+                fsetsToInstall, debug_pkgs = self.setup_fsets_dialog(widget, platformName, "all")
+            if result == RESULT_LAST:
+                print "Finishing new Target wizard"
+        if result == RESULT_LAST:
+            print "Finishing new Project wizard"
+            if not projectDialog.name or not projectDialog.desc or not projectDialog.platform or not projectDialog.path:
+                self.show_error_dialog("All values must be specified")
+                return 
+
 
 #Class: Adding a New Project
 class AddNewProject(object):
     """Class to bring up AddNewProject dialogue"""
-    def __init__(self, sdk, gladefile, name="", desc="", path="", platform=""):
+    def __init__(self, sdk, gladefile, name="", desc="", path="", platform="", dialogName=""):
         packageManager = ""
         if mic_cfg.config.has_option('general', 'package_manager'):
             packageManager = mic_cfg.config.get('general', 'package_manager')
         self.sdk = sdk
-        widgets = gtk.glade.XML (gladefile, 'newProject')
+        if dialogName:
+            widgets = gtk.glade.XML (gladefile, dialogName)
+        else:
+            widgets = gtk.glade.XML (gladefile, 'newProject')
         widgets.signal_autoconnect({"on_browse": self.on_browse})
-        self.dialog = widgets.get_widget('newProject')
+        if dialogName:
+            self.dialog = widgets.get_widget(dialogName)
+        else:
+            self.dialog = widgets.get_widget('newProject')
         self.np_name = widgets.get_widget("np_name")
         self.np_name.set_text(name)
         self.np_desc = widgets.get_widget("np_desc")
@@ -1120,10 +1189,11 @@ class AddNewProject(object):
         self.np_path = widgets.get_widget("np_path")
         self.np_path.set_text(path)
         self.np_platform = widgets.get_widget("np_platform")
-        self.np_addTarget = widgets.get_widget("np_addTarget")
-        self.np_targetName_label = widgets.get_widget("np_targetName_label")
-        self.np_addTarget.connect("clicked", self.addTarget_callback)
-        self.target_name = None
+        if not dialogName:
+            self.np_addTarget = widgets.get_widget("np_addTarget")
+            self.np_targetName_label = widgets.get_widget("np_targetName_label")
+            self.np_addTarget.connect("clicked", self.addTarget_callback)
+            self.target_name = None
         platform_entry_box = gtk.ListStore(gobject.TYPE_STRING)
         platforms = sorted(self.sdk.platforms.iterkeys())
         platform_idx = 0

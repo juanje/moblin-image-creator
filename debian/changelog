@@ -87,7 +87,10 @@ moblin-image-creator (0.39) UNRELEASED; urgency=low
   * Add deb-src to Ubuntu repositories
   * Rename apt sources for Ubuntu src repositories
 
- -- Steve Magoun <steve.magoun@canonical.com>  Wed, 30 Jan 2008 16:15:31 -0800
+  [ Prajwal Mohan ]
+  * Adding Project Wizard - partial checkin 
+
+ -- Prajwal Mohan <prajwal@linux.intel.com>  Wed, 30 Jan 2008 16:54:02 -0800
 
 moblin-image-creator (0.38) gaston; urgency=low
 
