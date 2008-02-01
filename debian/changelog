@@ -28,9 +28,10 @@ moblin-image-creator (0.40) UNRELEASED; urgency=low
     fsets.
 
   [ Prajwal Mohan ]
-  * Checking in Project Assistant. still needs gui changes 
+  * Checking in Project Assistant. still needs gui changes
+  * Adding a dialog to let users know about new Features 
 
- -- Prajwal Mohan <prajwal@linux.intel.com>  Fri, 01 Feb 2008 14:37:31 -0800
+ -- Prajwal Mohan <prajwal@linux.intel.com>  Fri, 01 Feb 2008 15:37:10 -0800
 
 moblin-image-creator (0.39) gaston; urgency=low
 

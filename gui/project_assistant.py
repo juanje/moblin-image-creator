@@ -67,7 +67,7 @@ class projectAssistant(object):
         
         #Setting up the Assistant Widget
         self.assistantDialog = gtk.Assistant()        
-        self.assistantDialog.set_size_request(800, 500)
+        self.assistantDialog.set_size_request(900, 500)
         self.assistantDialog.connect("close", self.quit)
         self.assistantDialog.connect("cancel", self.quit)
         self.assistantDialog.connect("apply", self.apply)

@@ -115,6 +115,7 @@ class App(object):
         self.projectView.get_selection().connect("changed", self.project_view_changed)
         self.targetView.get_selection().connect("changed", self.target_view_changed)
 
+        self.newFeatureDialog()
     def run(self):
         gtk.main()
 
@@ -127,6 +128,22 @@ class App(object):
 
     def on_help_activate(self, widget):
         gnome.help_display('image-creator')
+
+    def newFeatureDialog(self):
+        if os.path.isfile("/usr/share/pdk/newFeature"):
+            newFeatureTree = gtk.glade.XML(self.gladefile, 'newFeature')
+            newFeatureDialog = newFeatureTree.get_widget('newFeature')
+            newFeatureLabel = newFeatureTree.get_widget('newFeatureLabel')
+            newFeatureText = ""
+            f = open("/usr/share/pdk/newFeature")
+            for line in f:
+                newFeatureText += "\n"
+                newFeatureText += line
+            newFeatureLabel.set_text(newFeatureText)
+            newFeatureDialog.set_size_request(350, 150)
+            newFeatureDialog.run()
+            newFeatureDialog.destroy()
+            os.unlink("/usr/share/pdk/newFeature")
 
     def target_view_changed(self, selection):
         model, iter = self.targetView.get_selection().get_selected()
