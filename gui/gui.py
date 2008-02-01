@@ -33,6 +33,7 @@ import traceback
 import pdk_utils
 import SDK
 import mic_cfg
+import project_assistant
 
 debug = False
 if mic_cfg.config.has_option('general', 'debug'):
@@ -1126,47 +1127,9 @@ class App(object):
 
     def on_Add_Project_Wizard_activate(self, widget):
         return
-        RESULT_NEXT = 0
-        RESULT_LAST = 1
-        name = ""
-        desc = ""
-        platform = ""
-        target_name = ""
-        fsetsToInstall = []
-        debug_pkgs = False
-        path = os.getcwd() + os.sep
-        projectDialog = AddNewProject(sdk = self.sdk, name = name, gladefile = self.gladefile, desc = desc, platform = platform, path = path, dialogName = "newProjectWizard")
-        result = projectDialog.run()
-        if result == RESULT_NEXT:
-            #name = projectDdialog.name
-            #desc = projectDdialog.desc
-            #target_name = projectDdialog.target_name
-            #platform = projectDdialog.platform
-            #path = os.path.realpath(os.path.abspath(os.path.expanduser(dialog.path)))
-            if not projectDialog.name or not projectDialog.desc or not projectDialog.platform or not projectDialog.path:
-                self.show_error_dialog("All values must be specified")
-                return 
-            dialog_tree = gtk.glade.XML(self.gladefile, 'newTargetWizard')
-            targetDialog = dialog_tree.get_widget('newTargetWizard')
-            targetNameEntry = dialog_tree.get_widget('target_name')
-            result = targetDialog.run()
-            target_name = targetNameEntry.get_text()
-            target_name = target_name.strip()
-            targetDialog.destroy()
-            if result == RESULT_NEXT:
-                if target_name == "":
-                   self.show_error_dialog("Target name must be specified")
-                   return    
-                platformName = projectDialog.platform.split()[0]
-                fsetsToInstall, debug_pkgs = self.setup_fsets_dialog(widget, platformName, "all")
-            if result == RESULT_LAST:
-                print "Finishing new Target wizard"
-        if result == RESULT_LAST:
-            print "Finishing new Project wizard"
-            if not projectDialog.name or not projectDialog.desc or not projectDialog.platform or not projectDialog.path:
-                self.show_error_dialog("All values must be specified")
-                return 
-
+        projectAssistantWizard = project_assistant.projectAssistant(self.sdk)
+        newProjectConfiguration = projectAssistantWizard.run()
+        print "%s %s %s %s %s %s %s" % (newProjectConfiguration.projectName, newProjectConfiguration.projectDesc, newProjectConfiguration.projectPath, newProjectConfiguration.projectPlatform, newProjectConfiguration.targetName, newProjectConfiguration.fsetsToInstall, newProjectConfiguration.debugPkgs)
 
 #Class: Adding a New Project
 class AddNewProject(object):

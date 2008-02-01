@@ -33,11 +33,31 @@ import pdk_utils
 import SDK
 import mic_cfg
 
+class projectConfiguration(object):
+    def __init__(self, projectName, projectDesc, projectPath, projectPlatform, targetName, fsetsToInstall, debugPkgs):
+        self.projectName = projectName
+        self.projectDesc = projectDesc
+        self.projectPath = projectPath
+        self.projectPlatform = projectPlatform
+        self.targetName = targetName
+        self.fsetsToInstall = fsetsToInstall
+        self.debugPkgs = debugPkgs
+
 
 class projectAssistant(object):
     """Class to create the Project Creation Assistant"""
     def __init__(self, sdk):
         """Function will initiate the necessary GUI elements for Project Assistant"""
+
+        self.projectName = ""
+        self.projectDesc = ""
+        self.projectPath = ""
+        self.projectPlatform = ""        
+        self.targetName = ""
+        self.debugPackageSelected = False
+        self.fsetsToInstall = []
+        self.newProjectconfig = projectConfiguration("", "", "", "", "", [], "")
+
         self.quitting = False
         self.sdk = sdk
 
@@ -97,13 +117,13 @@ class projectAssistant(object):
 
     def quit(self, widget, event = None):
         """Kill the Assistant Dialog upon quit signal"""
-        print "Quitting Project Assistant"
         self.quitting = True
 
     def apply(self, widget, event = None):
         """This function will be called when the Apply button in the final page is clicked
         Note: The dialog should not be destroyed here"""
-        print "Applying Changes"
+        self.newProjectconfig = projectConfiguration(self.projectName, self.projectDesc, self.projectPath, self.projectPlatform, self.targetName, self.fsetsToInstall, self.debugPackageSelected)
+        
 
     def prepare(self, widget, page):
         if page == self.targetPage:
@@ -369,10 +389,12 @@ class projectAssistant(object):
     def run(self):
         """This function will simiulate the Assistant as a dialog to the caller. This is required since the gtk.Assistant is not derived from gtk.Dialog.
         Thus the run() function is not available in the Assistant"""
-        print "Project Assistant Run"
+
         while self.quitting == False:
             gtk.main_iteration(False)
         self.assistantDialog.destroy()
+
+        return self.newProjectconfig
 
 if __name__ == '__main__':
     sys.exit(main())
