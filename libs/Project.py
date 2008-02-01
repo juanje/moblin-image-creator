@@ -147,9 +147,9 @@ ff02::3 ip6-allhosts
                     directory_set.add(mount_point)
         pdk_utils.umountAllInPath(self.path, directory_set)
         if directory_set:
-            print "Failed to umount target: %s" % self.path
             for directory in directory_set:
-                os.system("lsof | grep %s" % directory)
+                print "Failed to umount FileSystem directory: %s" % directory
+                os.system("lsof %s" % directory)
         return directory_set
 
 class Project(FileSystem):
@@ -199,7 +199,8 @@ class Project(FileSystem):
         if directory_set:
             print "Failed to umount project: %s" % self.path
             for directory in directory_set:
-                os.system("lsof | grep %s" % directory)
+                print "Failed to umount Project directory: %s" % directory
+                os.system("lsof %s" % directory)
         return directory_set
 
     def create_target(self, name, use_rootstrap = True):
@@ -277,11 +278,20 @@ class Project(FileSystem):
             self.targets.pop(name)
 
     def umountTarget(self, target):
-        directory_set = target.umount()
+        for x in range(0, 8):
+            directory_set = target.umount()
+            if not directory_set:
+                return
+            # Failed to umount
+            print "Failed to umount target: %s" % target.path
+            os.system("lsof %s" % target.path)
+            print "Failed to umount target: %s" % target.path
+            print "Sleeping for 5 seconds, try %s of 8" % x
+            time.sleep(5)
         if directory_set:
             # Failed to umount
             print "Failed to umount target: %s" % target.path
-            os.system("lsof | grep %s" % target.path)
+            os.system("lsof %s" % target.path)
             # Let's remount everything, so stuff will still work
             target.mount()
             raise pdk_utils.ImageCreatorUmountError, directory_set

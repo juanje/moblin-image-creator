@@ -9,6 +9,9 @@ moblin-image-creator (0.40) UNRELEASED; urgency=low
   * Prevent project being created with same name as an existing project
   * Removing the *-ubuntu-gutsy-ppa platforms.
   * Fix issue with "make cleanall" deleting projects
+  * Put in a retry loop when doing the un-mounts.  There is a process which
+    hangs around for a little while after doing an install fset.  Sleeping for
+    a little while allows the process time to terminate.
 
   [ Steve Kowalik ]
   * Remove gstreamer0.10-x, galculator, moblin-chat, moblin-applets and
@@ -24,7 +27,7 @@ moblin-image-creator (0.40) UNRELEASED; urgency=low
   * Removed the moblin kernel fsets from the menlow-lpia-ubuntu-hardy platform
     fsets.
 
- -- John L. Villalovos <john.l.villalovos@intel.com>  Fri, 01 Feb 2008 13:32:35 -0800
+ -- John L. Villalovos <john.l.villalovos@intel.com>  Fri, 01 Feb 2008 13:40:41 -0800
 
 moblin-image-creator (0.39) gaston; urgency=low
 
