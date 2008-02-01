@@ -140,18 +140,27 @@ ff02::3 ip6-allhosts
         # function
         if directory_set == None:
             directory_set = set()
-        for mount_point in self.mounted:
-            if os.path.exists(mount_point):
-                result = pdk_utils.umount(mount_point)
-                if not result:
-                    directory_set.add(mount_point)
-        pdk_utils.umountAllInPath(self.path, directory_set)
-        if directory_set:
-            for directory in directory_set:
-                print "Failed to umount FileSystem directory: %s" % directory
-                # cmd_line = "lsof %s" % directory
-                # print cmd_line
-                # os.system(cmd_line)
+        loop_tries = 8
+        for x in range(0, loop_tries):
+            local_set = set()
+            for mount_point in self.mounted:
+                if os.path.exists(mount_point):
+                    result = pdk_utils.umount(mount_point)
+                    if not result:
+                        local_set.add(mount_point)
+            pdk_utils.umountAllInPath(self.path, local_set)
+            if not local_set:
+                # Success.  No directories could NOT be mounted
+                break
+            else:
+                for directory in local_set:
+                    print "Failed to umount FileSystem directory: %s" % directory
+                    cmd_line = "lsof | grep %s" % directory
+                    print "Execing: %s" % cmd_line
+                    os.system(cmd_line)
+                print "Sleeping for 5 seconds, try %s of %s" % (x+1, loop_tries)
+                time.sleep(5)
+        directory_set.update(local_set)
         return directory_set
 
 class Project(FileSystem):
@@ -202,9 +211,9 @@ class Project(FileSystem):
             print "Failed to umount project: %s" % self.path
             for directory in directory_set:
                 print "Failed to umount Project directory: %s" % directory
-                # cmd_line = "lsof %s" % directory
-                # print cmd_line
-                # os.system(cmd_line)
+                cmd_line = "lsof | grep %s" % directory
+                print "Execing: %s" % cmd_line
+                os.system(cmd_line)
         return directory_set
 
     def create_target(self, name, use_rootstrap = True):
@@ -282,23 +291,19 @@ class Project(FileSystem):
             self.targets.pop(name)
 
     def umountTarget(self, target):
-        for x in range(0, 8):
-            directory_set = target.umount()
-            if not directory_set:
-                return
-            # Failed to umount
-            print "Failed to umount target: %s" % target.path
-            os.system("lsof %s" % target.path)
-            print "Failed to umount target: %s" % target.path
-            print "Sleeping for 5 seconds, try %s of 8" % x
-            time.sleep(5)
-        if directory_set:
-            # Failed to umount
-            print "Failed to umount target: %s" % target.path
-            os.system("lsof %s" % target.path)
-            # Let's remount everything, so stuff will still work
-            target.mount()
-            raise pdk_utils.ImageCreatorUmountError, directory_set
+        directory_set = target.umount()
+        if not directory_set:
+            # Success, so return
+            return
+        # Failed to umount
+        print "Failed to umount target: %s" % target.path
+        cmd_line = "lsof | grep %s" % target.path
+        print "Execing: %s" % cmd_line
+        os.system(cmd_line)
+        print "Failed to umount target: %s" % target.path
+        # Let's remount everything, so stuff will still work
+        target.mount()
+        raise pdk_utils.ImageCreatorUmountError, directory_set
         
     def create_live_iso(self, target_name, image_name):
         target = self.targets[target_name]
