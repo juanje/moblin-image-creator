@@ -31,7 +31,9 @@ mountroot ()
       if [ "$found" = "yes" ]; then
 	break;
       fi
+      echo "Sleeping for 5 seconds"
       /bin/sleep 5
+      echo "Sleeping finished"
     done
     echo "will mount root from /dev/${device}"
 
