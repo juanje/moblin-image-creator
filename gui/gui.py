@@ -1126,11 +1126,63 @@ class App(object):
         dialog.destroy()
 
     def on_Add_Project_Wizard_activate(self, widget):
-        return
         projectAssistantWizard = project_assistant.projectAssistant(self.sdk)
         newProjectConfiguration = projectAssistantWizard.run()
-        print "%s %s %s %s %s %s %s" % (newProjectConfiguration.projectName, newProjectConfiguration.projectDesc, newProjectConfiguration.projectPath, newProjectConfiguration.projectPlatform, newProjectConfiguration.targetName, newProjectConfiguration.fsetsToInstall, newProjectConfiguration.debugPkgs)
+        #print "%s %s %s %s %s %s %s" % (newProjectConfiguration.projectName, newProjectConfiguration.projectDesc, newProjectConfiguration.projectPath, newProjectConfiguration.projectPlatform, newProjectConfiguration.targetName, newProjectConfiguration.fsetsToInstall, newProjectConfiguration.debugPkgs)
+        if newProjectConfiguration.projectName and newProjectConfiguration.projectDesc and newProjectConfiguration.projectPath and newProjectConfiguration.projectPlatform and newProjectConfiguration.targetName:
+            print "Creating Project and Target"
+            try:
+                progress_tree = gtk.glade.XML(self.gladefile, 'ProgressDialog')
+                progress_dialog = progress_tree.get_widget('ProgressDialog')
+                progress_dialog.set_size_request(400, 200)
+                progress_dialog.connect('delete_event', self.ignore)
+                progress_tree.get_widget('progress_label').set_text(_("Please wait while installing %s") % newProjectConfiguration.projectName)
+                self.progressbar = progress_tree.get_widget('progressbar')
+                self.statuslabel = progress_tree.get_widget('status_label')
+                while gtk.events_pending():
+                    gtk.main_iteration(False)            
+                proj = self.sdk.create_project(newProjectConfiguration.projectPath, newProjectConfiguration.projectName, newProjectConfiguration.projectDesc, self.sdk.platforms[newProjectConfiguration.projectPlatform])
+                proj.install()
+                self.projectList.append((newProjectConfiguration.projectName, newProjectConfiguration.projectDesc, newProjectConfiguration.projectPath, newProjectConfiguration.projectPlatform))
+                
+                progress_dialog.destroy()
+                self.create_new_target(proj, newProjectConfiguration.targetName)
+                self.refreshProjectList()
+                self.makeActiveProject(newProjectConfiguration.projectName)
+            except:
+                traceback.print_exc()
+                if debug: print_exc_plus()
+                self.show_error_dialog("%s" % (sys.exc_info))
+                try:
+                    self.sdk.delete_project(newProjectConfiguration.projectName)
+                except:
+                    # if the project creation failed before the list of
+                    # projects has been updated, then we expect failure here
+                    pass
+            progress_dialog.destroy()
 
+            if newProjectConfiguration.fsetsToInstall:
+                print "Installing the following fsets: %s" % newProjectConfiguration.fsetsToInstall
+                platform = self.current_project().platform
+                progress_tree = gtk.glade.XML(self.gladefile, 'ProgressDialog')
+                progress_dialog = progress_tree.get_widget('ProgressDialog')
+                progress_dialog.connect('delete_event', self.ignore)
+                self.progressbar = progress_tree.get_widget('progressbar')
+                for fsetName in newProjectConfiguration.fsetsToInstall:
+                    fset = platform.fset[fsetName]
+                    print "Installing fset %s.................\n" % fsetName
+                    progress_tree.get_widget('progress_label').set_text("Please wait while installing %s" % fset.name)
+                    try:
+                        self.current_target().installFset(fset, fsets = platform.fset, debug_pkgs = newProjectConfiguration.debugPkgs)
+                    except ValueError, e:
+                        self.show_error_dialog(e.args[0])
+                    except:
+                        traceback.print_exc()
+                        if debug: print_exc_plus()
+                        self.show_error_dialog("Unexpected error: %s" % (sys.exc_info()[1]))
+                self.redraw_target_view()
+                progress_dialog.destroy()
+                    
 #Class: Adding a New Project
 class AddNewProject(object):
     """Class to bring up AddNewProject dialogue"""

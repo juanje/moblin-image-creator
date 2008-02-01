@@ -61,30 +61,40 @@ class projectAssistant(object):
         self.quitting = False
         self.sdk = sdk
 
+        self.checkBoxContainer = None
+        sideImage = gtk.gdk.pixbuf_new_from_file("/usr/share/pdk/mic-assistant.xpm")
+        headImage = gtk.gdk.pixbuf_new_from_file("/usr/share/pdk/image-creator-32x32.xpm")
+        
         #Setting up the Assistant Widget
         self.assistantDialog = gtk.Assistant()        
-        self.assistantDialog.set_size_request(750, 350)
+        self.assistantDialog.set_size_request(800, 500)
         self.assistantDialog.connect("close", self.quit)
         self.assistantDialog.connect("cancel", self.quit)
         self.assistantDialog.connect("apply", self.apply)
         self.assistantDialog.connect("prepare", self.prepare)
-        
+
+       
         #Setting up the Introduction Page of the Assistant
         introductionPage = gtk.HBox()
         self.assistantDialog.append_page(introductionPage)
         self.assistantDialog.set_page_title(introductionPage, "Introduction")
         self.assistantDialog.set_page_type(introductionPage, gtk.ASSISTANT_PAGE_INTRO)
         self.assistantDialog.set_page_complete(introductionPage, True)
+        self.assistantDialog.set_page_side_image(introductionPage, sideImage)
+        self.assistantDialog.set_page_header_image(introductionPage, headImage)
 
-        introductionLabel = gtk.Label("This assistant will help to create a project with targets and install fsets")        
+        introductionLabel = gtk.Label()
+        introductionLabel.set_markup("<big><big><b>This assistant will help you to create a project and a target.\nYou also will be able to select which functional sets (fsets) to install.</b></big></big>")        
         introductionPage.pack_end(introductionLabel)
 
         #Setting up the Project Creation Page of the Assistant
         self.projectPage = gtk.HBox()
         self.assistantDialog.append_page(self.projectPage)
         self.assistantDialog.set_page_title(self.projectPage, "Create Project")
-        self.assistantDialog.set_page_type(self.projectPage, gtk.ASSISTANT_PAGE_INTRO)
+        self.assistantDialog.set_page_type(self.projectPage, gtk.ASSISTANT_PAGE_CONTENT)
         self.assistantDialog.set_page_complete(self.projectPage, False)
+        self.assistantDialog.set_page_side_image(self.projectPage, sideImage)
+        self.assistantDialog.set_page_header_image(self.projectPage, headImage)
 
         projectPageVbox = self.create_project_page()
         self.projectPage.pack_end(projectPageVbox)
@@ -94,8 +104,10 @@ class projectAssistant(object):
         self.targetPage = gtk.HBox()
         self.assistantDialog.append_page(self.targetPage)
         self.assistantDialog.set_page_title(self.targetPage, "Create Target and add Fsets")
-        self.assistantDialog.set_page_type(self.targetPage, gtk.ASSISTANT_PAGE_INTRO)
+        self.assistantDialog.set_page_type(self.targetPage, gtk.ASSISTANT_PAGE_CONTENT)
         self.assistantDialog.set_page_complete(self.targetPage, False)
+        self.assistantDialog.set_page_side_image(self.targetPage, sideImage)
+        self.assistantDialog.set_page_header_image(self.targetPage, headImage)
 
         targetPageVbox = self.create_target_page()
         self.targetPage.pack_end(targetPageVbox)
@@ -107,11 +119,31 @@ class projectAssistant(object):
         self.assistantDialog.set_page_title(self.confirmPage, "Confirm")
         self.assistantDialog.set_page_type(self.confirmPage, gtk.ASSISTANT_PAGE_CONFIRM)
         self.assistantDialog.set_page_complete(self.confirmPage, True)
+        self.assistantDialog.set_page_side_image(self.confirmPage, sideImage)
+        self.assistantDialog.set_page_header_image(self.confirmPage, headImage)
+
 
         confirmLabel = gtk.Label("Please review the confirugration before proceeding.")
         self.confirmConfigurationVbox = gtk.VBox()
+
+        self.confirmPageNameLable = gtk.Label("")
+        self.confirmConfigurationVbox.pack_start(self.confirmPageNameLable)
+        self.confirmPageDescLabel = gtk.Label("")
+        self.confirmConfigurationVbox.pack_start(self.confirmPageDescLabel)
+        self.confirmPagePathLabel = gtk.Label("")
+        self.confirmConfigurationVbox.pack_start(self.confirmPagePathLabel)
+        self.confirmPagePlatformLabel = gtk.Label("")
+        self.confirmConfigurationVbox.pack_start(self.confirmPagePlatformLabel)
+        self.confirmPageTargetLabel = gtk.Label("")
+        self.confirmConfigurationVbox.pack_start(self.confirmPageTargetLabel)        
+        self.confirmPageFsetListLabel = gtk.Label("")
+        self.confirmConfigurationVbox.pack_start(self.confirmPageFsetListLabel)
+        self.confirmPageDebugLabel = gtk.Label("")
+        self.confirmConfigurationVbox.pack_start(self.confirmPageDebugLabel)
+
         self.confirmConfigurationVbox.pack_start(confirmLabel)
         self.confirmPage.pack_end(self.confirmConfigurationVbox)
+
 
         self.assistantDialog.show_all()
 
@@ -150,23 +182,15 @@ class projectAssistant(object):
         """Creates the necessary GUI elements for the project page of the Assistant"""
         projectNameLabel = gtk.Label("Project Name")
         self.projectNameEntry = gtk.Entry()
-        projectName = gtk.HBox()
-        projectName.pack_start(projectNameLabel)
-        projectName.pack_start(self.projectNameEntry)
 
         projectDescLabel = gtk.Label("Project Description")
         self.projectDescEntry = gtk.Entry()
-        projectDesc = gtk.HBox()
-        projectDesc.pack_start(projectDescLabel)
-        projectDesc.pack_start(self.projectDescEntry)
-
 
         projectPathLabel = gtk.Label("Project Path")
         self.projectPathEntry = gtk.Entry()
         projectPathBrowse = gtk.Button("Browse")
         projectPath = gtk.HBox()
-        projectPath.pack_start(projectPathLabel)
-        projectPath.pack_start(self.projectPathEntry)
+        projectPath.pack_start(self.projectPathEntry, True, True, 0)        
         projectPath.pack_start(projectPathBrowse)
       
         projectPathBrowse.connect("clicked", self.fill_project_path)
@@ -210,20 +234,30 @@ class projectAssistant(object):
 
         #projectPlatformCombo.set_model(platformComboList)
         self.projectPlatformCombo.set_active(platform_idx)
-
-        projectPlatform = gtk.HBox()
-        projectPlatform.pack_start(projectPlatformLabel)
-        projectPlatform.pack_start(self.projectPlatformCombo)
-
+       
         self.projectWarning = gtk.Label()
 
-        projectPageVbox = gtk.VBox()
-        projectPageVbox.pack_start(projectName)
-        projectPageVbox.pack_start(projectDesc)
-        projectPageVbox.pack_start(projectPath)
-        projectPageVbox.pack_start(projectPlatform)
-        projectPageVbox.pack_start(self.projectWarning)
+        #projectPageVbox = gtk.VBox()
+        #projectPageVbox.pack_start(projectName)
+        #projectPageVbox.pack_start(projectDesc)
+        #projectPageVbox.pack_start(projectPath)
+        #projectPageVbox.pack_start(projectPlatform)
+        #projectPageVbox.pack_start(self.projectWarning)
 
+        projectPageTable = gtk.Table(4, 3, True)
+        projectPageTable.set_homogeneous(False)
+        projectPageTable.attach(projectNameLabel, 0, 1, 0, 1, 0, 0)
+        projectPageTable.attach(self.projectNameEntry, 1, 2, 0, 1, gtk.EXPAND|gtk.FILL, 0, 10, 0)
+        projectPageTable.attach(projectDescLabel, 0, 1, 1, 2, 0, 0)
+        projectPageTable.attach(self.projectDescEntry, 1, 2, 1, 2, gtk.EXPAND|gtk.FILL, 0, 10, 0)
+        projectPageTable.attach(projectPathLabel, 0, 1, 2, 3, 0, 0)
+        projectPageTable.attach(projectPath, 1, 2, 2, 3, gtk.EXPAND|gtk.FILL, 0, 10, 0)
+        projectPageTable.attach(projectPlatformLabel, 0, 1, 3, 4, 0, 0)
+        projectPageTable.attach(self.projectPlatformCombo, 1, 2, 3, 4, 0, 0, 10, 0)
+
+        projectPageVbox = gtk.VBox()
+        projectPageVbox.pack_start(projectPageTable)
+        projectPageVbox.pack_start(self.projectWarning)
 
         return projectPageVbox
 
@@ -261,8 +295,8 @@ class projectAssistant(object):
         targetNameLabel = gtk.Label("Target Name")
         self.targetNameEntry = gtk.Entry()
         targetName = gtk.HBox()
-        targetName.pack_start(targetNameLabel)
-        targetName.pack_start(self.targetNameEntry)
+        targetName.pack_start(targetNameLabel, False, False, 10)
+        targetName.pack_start(self.targetNameEntry, True, True, 10)
 
         self.targetNameEntry.connect("changed", self.target_entry_callback)
 
@@ -284,8 +318,12 @@ class projectAssistant(object):
 
     def setup_fset_check_box(self, platformName):
         """Move setting up fset check boxes to a different function since it can be setup only after the platform is selected""" 
-        targetFsetLabel = gtk.Label("Available Fsets for the choosen platform")
-        self.targetFsetVbox.pack_start(targetFsetLabel)        
+        if self.checkBoxContainer != None:
+            self.targetFsetVbox.remove(self.checkBoxContainer)
+        self.checkBoxContainer = gtk.VBox()
+        targetFsetLabel = gtk.Label()
+        targetFsetLabel.set_markup("<b>Available Fsets for the choosen platform</b>")
+        self.checkBoxContainer.pack_start(targetFsetLabel)        
         
         platform = self.sdk.platforms[platformName]
         self.currentPlatformSelected = platform
@@ -305,8 +343,9 @@ class projectAssistant(object):
         i = 0
         for checkBox in self.fsetTouple:
             checkBox[1].connect("clicked", self.checkBoxCallback, checkBox[0])
-            self.targetFsetVbox.pack_start(checkBox[1])
+            self.checkBoxContainer.pack_start(checkBox[1])
 
+        self.targetFsetVbox.pack_start(self.checkBoxContainer)
         self.assistantDialog.show_all()
 
     def checkBoxCallback(self, widget, fSetName):
@@ -358,32 +397,14 @@ class projectAssistant(object):
             
 
     def display_configuration(self):
-            nameLabel = gtk.Label("Project Name: %s" % self.projectName)
-            self.confirmConfigurationVbox.pack_start(nameLabel)
-
-            descLabel = gtk.Label("Project Description: %s" % self.projectDesc)
-            self.confirmConfigurationVbox.pack_start(descLabel)
-
-            pathLabel = gtk.Label("Project Path: %s" % self.projectPath)
-            self.confirmConfigurationVbox.pack_start(pathLabel)
-
-            platformLabel = gtk.Label("Project Platform: %s" % self.projectPlatform)
-            self.confirmConfigurationVbox.pack_start(platformLabel)
-
-            targetLabel = gtk.Label("Target Name: %s" % self.targetName)
-            self.confirmConfigurationVbox.pack_start(targetLabel)
-        
-            fsetListLabel = gtk.Label("Fset List: %s" % self.fsetsToInstall)
-            self.confirmConfigurationVbox.pack_start(fsetListLabel)
-
-
-            debugLabel = gtk.Label("Install Debug Packages: %s" % self.debugPackageSelected)
-            self.confirmConfigurationVbox.pack_start(debugLabel)
-           
-            self.assistantDialog.show_all()
-
-
-
+            self.confirmPageNameLable.set_text("Project Name: %s" % self.projectName)
+            self.confirmPageDescLabel.set_text("Project Description: %s" % self.projectDesc)
+            self.confirmPagePathLabel.set_text("Project Path: %s" % self.projectPath)
+            self.confirmPagePlatformLabel.set_text("Project Platform: %s" % self.projectPlatform)
+            self.confirmPageTargetLabel.set_text("Target Name: %s" % self.targetName)
+            self.confirmPageFsetListLabel.set_text("Fset List: %s" % self.fsetsToInstall)
+            self.confirmPageDebugLabel.set_text("Install Debug Packages: %s" % self.debugPackageSelected)         
+            #self.assistantDialog.show_all()
 
 
     def run(self):

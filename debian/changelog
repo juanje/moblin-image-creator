@@ -27,7 +27,10 @@ moblin-image-creator (0.40) UNRELEASED; urgency=low
   * Removed the moblin kernel fsets from the menlow-lpia-ubuntu-hardy platform
     fsets.
 
- -- John L. Villalovos <john.l.villalovos@intel.com>  Fri, 01 Feb 2008 13:40:41 -0800
+  [ Prajwal Mohan ]
+  * Checking in Project Assistant. still needs gui changes 
+
+ -- Prajwal Mohan <prajwal@linux.intel.com>  Fri, 01 Feb 2008 14:37:31 -0800
 
 moblin-image-creator (0.39) gaston; urgency=low
 
