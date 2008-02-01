@@ -150,7 +150,7 @@ ff02::3 ip6-allhosts
                         local_set.add(mount_point)
             pdk_utils.umountAllInPath(self.path, local_set)
             if not local_set:
-                # Success.  No directories could NOT be mounted
+                # Success.  All directories could be un-mounted
                 break
             else:
                 for directory in local_set:
