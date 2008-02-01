@@ -7,6 +7,7 @@ moblin-image-creator (0.40) UNRELEASED; urgency=low
   * Created a pdk_utils.copy() function that will keep the throbber moving.
     Using it when creating an install/live image
   * Prevent project being created with same name as an existing project
+  * Removing the *-ubuntu-gutsy-ppa platforms.
 
   [ Steve Kowalik ]
   * Remove gstreamer0.10-x, galculator, moblin-chat, moblin-applets and
@@ -16,9 +17,9 @@ moblin-image-creator (0.40) UNRELEASED; urgency=low
     /etc/hosts and /etc/hostname. gethostbyname() good thing.
 
   [ Prajwal Mohan ]
-  * More partial changed to Add Project Wizard 
+  * More partial changed to Add Project Wizard
 
- -- Prajwal Mohan <prajwal@linux.intel.com>  Thu, 31 Jan 2008 16:40:39 -0800
+ -- John L. Villalovos <john.l.villalovos@intel.com>  Fri, 01 Feb 2008 11:11:17 -0800
 
 moblin-image-creator (0.39) gaston; urgency=low
 
