@@ -19,7 +19,11 @@ moblin-image-creator (0.40) UNRELEASED; urgency=low
   [ Prajwal Mohan ]
   * More partial changed to Add Project Wizard
 
- -- John L. Villalovos <john.l.villalovos@intel.com>  Fri, 01 Feb 2008 11:11:17 -0800
+  [ Rob Rhoads ]
+  * Removed the moblin kernel fsets from the menlow-lpia-ubuntu-hardy platform
+    fsets.
+
+ -- Rob Rhoads <rob.rhoads@intel.com>  Fri, 01 Feb 2008 11:37:22 -0800
 
 moblin-image-creator (0.39) gaston; urgency=low
 

@@ -10,24 +10,6 @@ PKGS=
 DEBUG_PKGS=
 DEPS=ubuntu-kernel core crownbeach-config ubuntu-mobile
 
-[Moblin-CrownBeach-Full-Mobile-Stack-with-Proprietary]
-DESC=The full Crown Beach stack, including proprietary (non-redistributable bits)
-PKGS=flashplugin-nonfree
-DEBUG_PKGS=
-DEPS=moblin-crownbeach-full-mobile-stack
-
-[Moblin-CrownBeach-Full-Mobile-Stack]
-DESC=Virtual Fset that installs the standard mobile stack
-PKGS=
-DEBUG_PKGS=
-DEPS=moblin-kernel core crownbeach-config ubuntu-mobile
-
-[Moblin-Kernel]
-DESC=Moblin Kernel Fset
-PKGS=grub linux-menlow-default-2.6.24 psb-kmd-default-2.6.24 
-DEBUG_PKGS=linux-menlow-developer-2.6.24 psb-kmd-developer-2.6.24
-DEPS=
-
 [Ubuntu-Kernel]
 DESC=Ubuntu Kernel Fset
 PKGS=grub linux-lpia
@@ -38,7 +20,7 @@ DEPS=
 DESC=Fundamental fset that provides a root filesystem that uses the Ubuntu kernel
 PKGS=busybox-initramfs initramfs-tools pm-utils vbetool usplash-theme-ubuntu dosfstools psmisc
 DEBUG_PKGS=man-db manpages openssh-client openssh-server
-DEPS=ubuntu-kernel|moblin-kernel
+DEPS=ubuntu-kernel
 
 [CrownBeach-Config]
 DESC=Packages needed for the Crown Beach validation vehicle 
