@@ -144,7 +144,9 @@ def getUsbDirTree(dirname):
     return file_set
 
 def umountAllInPath(dirname, directory_set = None):
-    """Unmount all mounts that are found underneath the dirname specified"""
+    """Unmount all mounts that are found underneath the dirname specified.  On
+    error returns a set containing the list of directories that failed to
+    unmount"""
     # Have to add a '/' on the end to prevent /foo/egg and /foo/egg2 being
     # treated as if both were under /foo/egg
     if directory_set == None:

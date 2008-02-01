@@ -134,6 +134,8 @@ ff02::3 ip6-allhosts
             buildstamp.close()
 
     def umount(self, directory_set = None):
+        """Unmounts the mount points in our target.  On error returns a set
+        containing the directories that could not be unmounted"""
         # Go through all the mount points that we recorded during the mount
         # function
         if directory_set == None:
@@ -143,7 +145,12 @@ ff02::3 ip6-allhosts
                 result = pdk_utils.umount(mount_point)
                 if not result:
                     directory_set.add(mount_point)
-        return pdk_utils.umountAllInPath(self.path, directory_set)
+        pdk_utils.umountAllInPath(self.path, directory_set)
+        if directory_set:
+            print "Failed to umount target: %s" % self.path
+            for directory in directory_set:
+                os.system("lsof | grep %s" % directory)
+        return directory_set
 
 class Project(FileSystem):
     """
@@ -179,13 +186,21 @@ class Project(FileSystem):
         return super(Project, self).installPackages(self.platform.buildroot_packages + self.platform.buildroot_extras)
 
     def umount(self, directory_set = None):
-        """We want to umount all of our targets and then anything in our project that we have mounted"""
+        """Unmount all the directories in our project and any targets in our
+        project.  On failure will return a set containing directories that
+        could not be unmounted"""
+        # We want to umount all of our targets and then anything in our project that we have mounted
         if directory_set == None:
             directory_set = set()
         for target_name in self.targets:
             target = self.targets[target_name]
             target.umount(directory_set = directory_set)
-        return FileSystem.umount(self, directory_set = directory_set)
+        FileSystem.umount(self, directory_set = directory_set)
+        if directory_set:
+            print "Failed to umount project: %s" % self.path
+            for directory in directory_set:
+                os.system("lsof | grep %s" % directory)
+        return directory_set
 
     def create_target(self, name, use_rootstrap = True):
         if not name:
@@ -264,6 +279,9 @@ class Project(FileSystem):
     def umountTarget(self, target):
         directory_set = target.umount()
         if directory_set:
+            # Failed to umount
+            print "Failed to umount target: %s" % target.path
+            os.system("lsof | grep %s" % target.path)
             # Let's remount everything, so stuff will still work
             target.mount()
             raise pdk_utils.ImageCreatorUmountError, directory_set
