@@ -8,6 +8,7 @@ moblin-image-creator (0.40) UNRELEASED; urgency=low
     Using it when creating an install/live image
   * Prevent project being created with same name as an existing project
   * Removing the *-ubuntu-gutsy-ppa platforms.
+  * Fix issue with "make cleanall" deleting projects
 
   [ Steve Kowalik ]
   * Remove gstreamer0.10-x, galculator, moblin-chat, moblin-applets and
@@ -23,7 +24,7 @@ moblin-image-creator (0.40) UNRELEASED; urgency=low
   * Removed the moblin kernel fsets from the menlow-lpia-ubuntu-hardy platform
     fsets.
 
- -- Rob Rhoads <rob.rhoads@intel.com>  Fri, 01 Feb 2008 11:37:22 -0800
+ -- John L. Villalovos <john.l.villalovos@intel.com>  Fri, 01 Feb 2008 13:32:35 -0800
 
 moblin-image-creator (0.39) gaston; urgency=low
 
