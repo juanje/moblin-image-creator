@@ -149,7 +149,9 @@ ff02::3 ip6-allhosts
         if directory_set:
             for directory in directory_set:
                 print "Failed to umount FileSystem directory: %s" % directory
-                os.system("lsof %s" % directory)
+                # cmd_line = "lsof %s" % directory
+                # print cmd_line
+                # os.system(cmd_line)
         return directory_set
 
 class Project(FileSystem):
@@ -200,7 +202,9 @@ class Project(FileSystem):
             print "Failed to umount project: %s" % self.path
             for directory in directory_set:
                 print "Failed to umount Project directory: %s" % directory
-                os.system("lsof %s" % directory)
+                # cmd_line = "lsof %s" % directory
+                # print cmd_line
+                # os.system(cmd_line)
         return directory_set
 
     def create_target(self, name, use_rootstrap = True):
