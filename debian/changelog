@@ -1,4 +1,4 @@
-moblin-image-creator (0.40) UNRELEASED; urgency=low
+moblin-image-creator (0.40) gaston; urgency=low
 
   [ Steve Magoun ]
   * Start new version
@@ -29,9 +29,9 @@ moblin-image-creator (0.40) UNRELEASED; urgency=low
 
   [ Prajwal Mohan ]
   * Checking in Project Assistant. still needs gui changes
-  * Adding a dialog to let users know about new Features 
+  * Adding a dialog to let users know about new Features
 
- -- Prajwal Mohan <prajwal@linux.intel.com>  Fri, 01 Feb 2008 15:37:10 -0800
+ -- Steve Magoun <steve.magoun@canonical.com>  Mon, 04 Feb 2008 12:44:17 -0500
 
 moblin-image-creator (0.39) gaston; urgency=low
 
