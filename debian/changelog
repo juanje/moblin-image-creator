@@ -1,3 +1,9 @@
+moblin-image-creator (0.41) UNRELEASED; urgency=low
+
+  * Start new version
+
+ -- Steve Magoun <steve.magoun@canonical.com>  Mon, 04 Feb 2008 12:46:29 -0500
+
 moblin-image-creator (0.40) gaston; urgency=low
 
   [ Steve Magoun ]
