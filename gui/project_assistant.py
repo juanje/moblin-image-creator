@@ -202,6 +202,7 @@ class projectAssistant(object):
         #projectPlatformCombo = gtk.ComboBox()
         #Easier way to build a combo box with text only
         self.projectPlatformCombo = gtk.combo_box_new_text()
+        self.projectPlatformCombo.set_size_request(570, 30)
 
         #populate the combo box with available platforms
         platformList = sorted(self.sdk.platforms.iterkeys())
