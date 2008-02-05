@@ -84,7 +84,7 @@ class projectAssistant(object):
         self.assistantDialog.set_page_header_image(introductionPage, headImage)
 
         introductionLabel = gtk.Label()
-        introductionLabel.set_markup("<big><big><b>This assistant will help you to create a project and a target.\nYou also will be able to select which functional sets (fsets) to install.</b></big></big>")        
+        introductionLabel.set_markup("<big><b>This assistant will help you to create a project and a target.\nYou also will be able to select which functional sets (fsets) to install.</b></big>")        
         introductionPage.pack_end(introductionLabel)
 
         #Setting up the Project Creation Page of the Assistant
@@ -188,6 +188,8 @@ class projectAssistant(object):
 
         projectPathLabel = gtk.Label("Project Path")
         self.projectPathEntry = gtk.Entry()
+        path = os.getcwd() + os.sep
+        self.projectPathEntry.set_text(path)
         projectPathBrowse = gtk.Button("Browse")
         projectPath = gtk.HBox()
         projectPath.pack_start(self.projectPathEntry, True, True, 0)        

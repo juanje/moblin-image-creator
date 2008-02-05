@@ -4,9 +4,10 @@ moblin-image-creator (0.41) UNRELEASED; urgency=low
   * Start new version
 
   [ Prajwal Mohan ]
-  * Fixing GUI with Project Assistant 
+  * Fixing GUI with Project Assistant
+  * Adding default path to project path. Changing Icon 
 
- -- Prajwal Mohan <prajwal@linux.intel.com>  Tue, 05 Feb 2008 11:20:54 -0800
+ -- Prajwal Mohan <prajwal@linux.intel.com>  Tue, 05 Feb 2008 13:54:25 -0800
 
 moblin-image-creator (0.40) gaston; urgency=low
 
