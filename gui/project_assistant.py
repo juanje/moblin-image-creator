@@ -123,7 +123,7 @@ class projectAssistant(object):
         self.assistantDialog.set_page_header_image(self.confirmPage, headImage)
 
 
-        confirmLabel = gtk.Label("Please review the confirugration before proceeding.")
+        confirmLabel = gtk.Label("Please review the configuration before proceeding.")
         self.confirmConfigurationVbox = gtk.VBox()
 
         self.confirmPageNameLable = gtk.Label("")

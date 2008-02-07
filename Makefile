@@ -90,3 +90,12 @@ runalltests: runtests
 	unittest/testInstallImage.py
 
 uninstall: cleanall
+	@echo "Uninstalling moblin-image-creator..."
+	@rm -f ${DESTDIR}/${SHAREDIR}/*.png
+	@rm -f ${DESTDIR}/${SHAREDIR}/*.xcf
+	@rm -f ${DESTDIR}/${SHAREDIR}/*.xpm
+	@rm -f ${DESTDIR}/${SHAREDIR}/README
+	@rm -f ${DESTDIR}/${SHAREDIR}/COPYING
+	@rm -f ${DESTDIR}/${SHAREDIR}/version
+	@find ${DESTDIR}/${SHAREDIR}/projects -type f -exec echo Project found: {} \;
+	@echo "Done"
