@@ -122,6 +122,11 @@ class Platform(object):
                 pdk_utils.rmtree(chroot_dir, callback = callback)
                 # FIXME: Better exception here
                 raise ValueError(" ".join(output))
+        # Setup copies of some useful files from the host into the chroot
+        for filename in [ 'hosts', 'resolv.conf' ]:
+            source_file = os.path.join("/etc", filename)
+            target_file = os.path.join(chroot_dir, 'etc', filename)
+            pdk_utils.safeTextFileCopy(source_file, target_file, force = True)
 
     def __aptCreateRootstrap(self, chroot_dir, rootstrap_file, callback = None):
         codename = self.buildroot_codename
@@ -248,9 +253,7 @@ class Platform(object):
         for filename in [ 'hosts', 'resolv.conf' ]:
             source_file = os.path.join("/etc", filename)
             target_file = os.path.join(target_etc, filename)
-            # Only copy if it doesn't already exist
-            if os.path.isfile(source_file) and not os.path.isfile(target_file):
-                shutil.copy(source_file, target_file)
+            pdk_utils.safeTextFileCopy(source_file, target_file, force = True)
         yumconf = open(os.path.join(target_etc, 'yum.conf'), 'w')
         print >> yumconf, """\
 [main]

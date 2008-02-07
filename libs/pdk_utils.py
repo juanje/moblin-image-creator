@@ -398,6 +398,33 @@ def copy(src, dst, callback = None):
     else:
         shutil.copy(src, dst)
 
+def safeTextFileCopy(source_file, destination_file, force = False):
+    """Routine which attempts to safely copy a text file.  This means that if
+    we have the destination file and it has our signature text in it, then we
+    will overwrite it.  But if the signature text is not in the destination
+    file then we will not overwrite it"""
+    id_string = "# ##-Created by Moblin Image Creator: if this line exists we will overwrite this file -##"
+    copyfile = False
+    if os.path.isfile(source_file):
+        if not os.path.isfile(destination_file) or force:
+            copyfile = True
+        else:
+            in_file = open(destination_file, 'r')
+            for line in in_file:
+                line = line.strip()
+                if re.search(r'^' + id_string, line):
+                    copyfile = True
+                    break
+            in_file.close()
+    if copyfile:
+        in_file = open(source_file, 'r')
+        out_file = open(destination_file, 'w')
+        print >> out_file, id_string
+        for line in in_file:
+            out_file.write(line)
+        in_file.close()
+        out_file.close()
+
 def mountList(mount_list, chroot_dir):
     """Mount the items specified in the mount list.  Return back a list of what
     got mounted"""
