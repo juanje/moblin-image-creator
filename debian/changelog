@@ -12,11 +12,12 @@ moblin-image-creator (0.41) UNRELEASED; urgency=low
     edit resolv.conf now and delete the signature line then we won't overwrite
     your resolv.conf in the project/target.  Otherwise we will overwrite the
     file.
+  * Use bs=1024 during dd command for writing the USB flash image
 
   [ Prajwal Mohan ]
-  * Cleaning files during uninstall 
+  * Cleaning files during uninstall
 
- -- Prajwal Mohan <prajwal@linux.intel.com>  Thu, 07 Feb 2008 15:15:24 -0800
+ -- John L. Villalovos <john.l.villalovos@intel.com>  Mon, 11 Feb 2008 00:43:17 -0800
 
 moblin-image-creator (0.40) gaston; urgency=low
 
