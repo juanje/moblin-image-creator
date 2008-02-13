@@ -17,7 +17,10 @@ moblin-image-creator (0.41) UNRELEASED; urgency=low
   [ Prajwal Mohan ]
   * Cleaning files during uninstall
 
- -- John L. Villalovos <john.l.villalovos@intel.com>  Mon, 11 Feb 2008 00:43:17 -0800
+  [ John Villalovos ]
+  * Fix issue with the "cleanall" target not deleting the rootstraps
+
+ -- John L. Villalovos <john.l.villalovos@intel.com>  Tue, 12 Feb 2008 18:16:03 -0800
 
 moblin-image-creator (0.40) gaston; urgency=low
 

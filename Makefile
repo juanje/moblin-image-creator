@@ -62,7 +62,7 @@ clean:
 # Cleans out the installation target
 cleanall: clean
 	@echo -n "Removing previously installed files..."
-	@rm -rf ${DESTDIR}/${VARDIR}/{rootstraps}
+	@rm -rfv ${DESTDIR}/${VARDIR}/rootstraps
 	@rm -rf ${DESTDIR}/${SHAREDIR}/gnome
 	@rm -rf ${DESTDIR}/${SHAREDIR}/lib
 	@rm -rf ${DESTDIR}/${SHAREDIR}/locale
