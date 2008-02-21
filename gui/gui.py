@@ -141,7 +141,7 @@ class App(object):
                 newFeatureText += "\n"
                 newFeatureText += line
             newFeatureLabel.set_text(newFeatureText)
-            newFeatureDialog.set_size_request(350, 150)
+            newFeatureDialog.set_size_request(400, 250)
             newFeatureDialog.run()
             newFeatureDialog.destroy()
             os.unlink("/usr/share/pdk/newFeature")
@@ -431,7 +431,7 @@ class App(object):
             iter = list.append([fset_name])
             buttonName = fset_name + "  (" + platform.fset[fset_name].desc + ")"
             self.fsetTouple.append((fset_name, gtk.CheckButton(buttonName), False, 0))
-            toolTipText = "<b>Depends on:</b> "
+            toolTipText = "<b>Depends on FSet(s):</b> "
             for depends in sorted(platform.fset[fset_name].deps):
                 toolTipText += " %s " % depends
             toolTipText += "\n<b>Debug Packages:</b> "

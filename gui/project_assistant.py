@@ -342,7 +342,7 @@ class projectAssistant(object):
             iter = list.append([fset_name])
             buttonName = fset_name + "  (" + platform.fset[fset_name].desc + ")"
             self.fsetTouple.append((fset_name, gtk.CheckButton(buttonName), False, 0))       
-            toolTipText = "<b>Depends on:</b> "
+            toolTipText = "<b>Depends on FSet(s):</b> "
             for depends in sorted(platform.fset[fset_name].deps):
                 toolTipText += " %s " % depends
             toolTipText += "\n<b>Debug Packages:</b> "
