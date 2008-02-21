@@ -85,7 +85,8 @@ class App(object):
                 "on_upgrade_project_clicked":self.on_upgrade_project_clicked,
                 "on_upgrade_target_clicked":self.on_upgrade_target_clicked,
                 "on_MirrorSettings_activate":self.on_MirrorSettings_activate,
-                "on_Add_Project_Wizard_activate":self.on_Add_Project_Wizard_activate
+                "on_Add_Project_Wizard_activate":self.on_Add_Project_Wizard_activate,
+                "on_fsetsInfo_activate":self.on_fsetsInfo_activate
                 }
         self.widgets.signal_autoconnect(dic)
         # setup projectView widget
@@ -1199,7 +1200,87 @@ class App(object):
                         self.show_error_dialog("Unexpected error: %s" % (sys.exc_info()[1]))
                 self.redraw_target_view()
                 progress_dialog.destroy()
-                    
+
+    def on_fsetsInfo_activate(self, widget):
+        fsetInfoDialog = DisplayFsetInfo(self.sdk)
+        fsetInfoDialog.run()
+
+#Class: Display Fset Info
+class DisplayFsetInfo(object):
+    def __init__(self, sdk):
+        self.sdk = sdk
+        self.gladefile = os.path.join(self.sdk.path, "image-creator.glade")
+        dialog_tree = gtk.glade.XML(self.gladefile, 'fsetsInfo')
+        self.dialog = dialog_tree.get_widget('fsetsInfo')
+
+        infoText = dialog_tree.get_widget('info')
+        self.textBuffer = gtk.TextBuffer()
+        self.textBuffer.set_text("Please Select a Platform")        
+        infoText.set_buffer(self.textBuffer)
+        infoText.set_editable(False)
+
+        self.platformComboBox = dialog_tree.get_widget('platform')
+        cell = gtk.CellRendererText()
+        self.platformComboBox.pack_start(cell, True)
+        self.platformComboBox.add_attribute(cell, 'text', 0)
+        self.platformComboBox.connect('changed', self.platformChanged)
+
+        self.fsetComboBox = dialog_tree.get_widget('fset')
+        cell2 = gtk.CellRendererText()
+        self.fsetComboBox.pack_start(cell2, True)
+        self.fsetComboBox.add_attribute(cell2, 'text', 0)
+        self.fsetComboBox.connect('changed', self.fsetChanged)
+
+        self.fsetEntryList = gtk.ListStore(gobject.TYPE_STRING)
+        self.fsetComboBox.set_model(self.fsetEntryList)
+
+
+        platformList = sorted(self.sdk.platforms.iterkeys())
+        platformEntryList = gtk.ListStore(gobject.TYPE_STRING)
+        for pname in platformList:
+            platformEntryList.append([pname])
+        self.platformComboBox.set_model(platformEntryList)
+
+        width, height = self.dialog.get_default_size()
+        self.dialog.set_default_size(width + 500, height + 250)
+
+    def fsetChanged(self, widget):
+        platformName = self.platformComboBox.get_active_text()
+        platform = self.sdk.platforms[platformName]
+        fsetName = self.fsetComboBox.get_active_text()        
+        self.textBuffer.set_text("Fset Description: %s" % platform.fset[fsetName].desc)
+        #self.textBuffer.insert_at_cursor("\nFset Dedendency: %s" % platform.fset[fsetName].deps)
+        self.textBuffer.insert_at_cursor("\n\nFset Dedendency: ")
+        for depends in platform.fset[fsetName].deps:
+            self.textBuffer.insert_at_cursor(" %s " % depends)
+        self.textBuffer.insert_at_cursor("\n\nPackages in the Fset: ")
+        i = 0
+        for packages in platform.fset[fsetName].pkgs:
+            self.textBuffer.insert_at_cursor(" %s " % packages)
+            i += 1
+            if i > 5:
+                i = 0
+                self.textBuffer.insert_at_cursor("\n                       ")
+        self.textBuffer.insert_at_cursor("\n\nDebug Packages in the Fset: ")
+        for packages in platform.fset[fsetName].debug_pkgs:
+            self.textBuffer.insert_at_cursor(" %s " % packages)        
+        
+
+    def platformChanged(self, widget):
+        self.textBuffer.set_text("Please Select an Fset")        
+        self.fsetEntryList.clear()
+        platformName = self.platformComboBox.get_active_text()
+        platform = self.sdk.platforms[platformName]
+        all_fsets = set(platform.fset)
+        for fset_name in sorted(all_fsets):
+            self.fsetEntryList.append([fset_name])
+
+
+    def run(self):
+        self.dialog.run()
+        self.dialog.destroy()
+
+
 #Class: Adding a New Project
 class AddNewProject(object):
     """Class to bring up AddNewProject dialogue"""

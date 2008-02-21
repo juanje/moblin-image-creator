@@ -20,7 +20,10 @@ moblin-image-creator (0.41) UNRELEASED; urgency=low
   [ John Villalovos ]
   * Fix issue with the "cleanall" target not deleting the rootstraps
 
- -- John L. Villalovos <john.l.villalovos@intel.com>  Tue, 12 Feb 2008 18:16:03 -0800
+  [ Prajwal Mohan ]
+  * Adding GUI to see details of Fsets 
+
+ -- Prajwal Mohan <prajwal@linux.intel.com>  Wed, 20 Feb 2008 18:11:11 -0800
 
 moblin-image-creator (0.40) gaston; urgency=low
 
