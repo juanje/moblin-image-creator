@@ -426,10 +426,22 @@ class App(object):
         #fsetTouple is a list of touples
         #Each touple has 4 elements - fset name, gtk.CheckButton, bool (indicating if that fset needs to be installed) and int (number of fsets that depend on it)
         self.fsetTouple = [("", gtk.CheckButton(""), False, 0)]
+        i = 1
         for fset_name in sorted(all_fsets.difference(installed_fsets)):
             iter = list.append([fset_name])
             buttonName = fset_name + "  (" + platform.fset[fset_name].desc + ")"
             self.fsetTouple.append((fset_name, gtk.CheckButton(buttonName), False, 0))
+            toolTipText = "<b>Depends on:</b> "
+            for depends in sorted(platform.fset[fset_name].deps):
+                toolTipText += " %s " % depends
+            toolTipText += "\n<b>Debug Packages:</b> "
+            for debug_pkgs in sorted(platform.fset[fset_name].debug_pkgs):
+                toolTipText += " %s " % debug_pkgs
+            toolTipText += "\n<b>Packages:</b> "
+            for pkgs in sorted(platform.fset[fset_name].pkgs):
+                toolTipText += " %s " % pkgs
+            self.fsetTouple[i][1].set_tooltip_markup(toolTipText)
+            i += 1
         if not iter:
             self.show_error_dialog("Nothing available to install!")
             dialog.destroy()
@@ -1251,18 +1263,18 @@ class DisplayFsetInfo(object):
         self.textBuffer.set_text("Fset Description: %s" % platform.fset[fsetName].desc)
         #self.textBuffer.insert_at_cursor("\nFset Dedendency: %s" % platform.fset[fsetName].deps)
         self.textBuffer.insert_at_cursor("\n\nFset Dedendency: ")
-        for depends in platform.fset[fsetName].deps:
+        for depends in sorted(platform.fset[fsetName].deps):
             self.textBuffer.insert_at_cursor(" %s " % depends)
         self.textBuffer.insert_at_cursor("\n\nPackages in the Fset: ")
         i = 0
-        for packages in platform.fset[fsetName].pkgs:
+        for packages in sorted(platform.fset[fsetName].pkgs):
             self.textBuffer.insert_at_cursor(" %s " % packages)
             i += 1
             if i > 5:
                 i = 0
                 self.textBuffer.insert_at_cursor("\n                       ")
         self.textBuffer.insert_at_cursor("\n\nDebug Packages in the Fset: ")
-        for packages in platform.fset[fsetName].debug_pkgs:
+        for packages in sorted(platform.fset[fsetName].debug_pkgs):
             self.textBuffer.insert_at_cursor(" %s " % packages)        
         
 

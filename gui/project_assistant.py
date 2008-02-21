@@ -337,10 +337,22 @@ class projectAssistant(object):
         #fsetTouple is a list of touples
         #Each touple has 4 elements - fset name, gtk.CheckButton, bool (indicating if that fset needs to be installed) and int (number of fsets that depend on it)
         self.fsetTouple = [("", gtk.CheckButton(""), False, 0)]
+        i = 1
         for fset_name in sorted(all_fsets.difference(installed_fsets)):
             iter = list.append([fset_name])
             buttonName = fset_name + "  (" + platform.fset[fset_name].desc + ")"
             self.fsetTouple.append((fset_name, gtk.CheckButton(buttonName), False, 0))       
+            toolTipText = "<b>Depends on:</b> "
+            for depends in sorted(platform.fset[fset_name].deps):
+                toolTipText += " %s " % depends
+            toolTipText += "\n<b>Debug Packages:</b> "
+            for debug_pkgs in sorted(platform.fset[fset_name].debug_pkgs):
+                toolTipText += " %s " % debug_pkgs
+            toolTipText += "\n<b>Packages:</b> "
+            for pkgs in sorted(platform.fset[fset_name].pkgs):
+                toolTipText += " %s " % pkgs
+            self.fsetTouple[i][1].set_tooltip_markup(toolTipText)
+            i += 1
         self.fsetTouple.pop(0)
 
         i = 0
