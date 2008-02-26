@@ -14,6 +14,7 @@ install:
 	@cp ../common-apt/exclude ${PLATFORM_DIR}/
 	@cp ../common-apt/install.sh ${PLATFORM_DIR}/
 # Platform specific code.
+	@cp -a sources ${PLATFORM_DIR}/
 	@cp -a initramfs ${PLATFORM_DIR}/
 	@cp fsets/*.fset ${PLATFORM_DIR}/fsets/
 clean:

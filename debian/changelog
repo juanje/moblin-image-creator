@@ -13,6 +13,8 @@ moblin-image-creator (0.41) UNRELEASED; urgency=low
     your resolv.conf in the project/target.  Otherwise we will overwrite the
     file.
   * Use bs=1024 during dd command for writing the USB flash image
+  * Fix issue with mccaslin-lpia-ubuntu-hardy and menlow-lpia-ubuntu-hardy
+    breaking when trying to copy the sources/ files
 
   [ Prajwal Mohan ]
   * Cleaning files during uninstall
@@ -34,9 +36,9 @@ moblin-image-creator (0.41) UNRELEASED; urgency=low
 
   [ Prajwal Mohan ]
   * Checking for pygtk version before setting tooltip. Tooltip is supported in
-    PyGTK 2.12 and above 
+    PyGTK 2.12 and above
 
- -- Prajwal Mohan <prajwal@linux.intel.com>  Tue, 26 Feb 2008 11:10:14 -0800
+ -- John L. Villalovos <john.l.villalovos@intel.com>  Tue, 26 Feb 2008 14:57:03 -0800
 
 moblin-image-creator (0.40) gaston; urgency=low
 
