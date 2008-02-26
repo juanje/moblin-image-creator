@@ -48,12 +48,10 @@ class projectAssistant(object):
     def __init__(self, sdk):
         """Function will initiate the necessary GUI elements for Project Assistant"""
 
-        pygtk_version = gtk.pygtk_version
-        self.pygtkOldVersion = False
-        if pygtk_version[0] == 2:
-            if pygtk_version[1] < 12:
-                self.pygtkOldVersion = True
-        if pygtk_version[0] < 2:
+        # Need PyGTK >= 2.12.0 for our tooltips
+        if gtk.pygtk_version >= (2,12,0):
+            self.pygtkOldVersion = False
+        else:
             self.pygtkOldVersion = True
 
         self.projectName = ""

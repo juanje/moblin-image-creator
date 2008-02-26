@@ -34,9 +34,10 @@ moblin-image-creator (0.41) UNRELEASED; urgency=low
 
   [ Prajwal Mohan ]
   * Checking for pygtk version before setting tooltip. Tooltip is supported in
-    PyGTK 2.12 and above 
+    PyGTK 2.12 and above
+  * Simpler check for version in project assistant 
 
- -- Prajwal Mohan <prajwal@linux.intel.com>  Tue, 26 Feb 2008 11:10:14 -0800
+ -- Prajwal Mohan <prajwal@linux.intel.com>  Tue, 26 Feb 2008 14:48:47 -0800
 
 moblin-image-creator (0.40) gaston; urgency=low
 
