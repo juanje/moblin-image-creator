@@ -43,11 +43,18 @@ class projectConfiguration(object):
         self.fsetsToInstall = fsetsToInstall
         self.debugPkgs = debugPkgs
 
-
 class projectAssistant(object):
     """Class to create the Project Creation Assistant"""
     def __init__(self, sdk):
         """Function will initiate the necessary GUI elements for Project Assistant"""
+
+        pygtk_version = gtk.pygtk_version
+        self.pygtkOldVersion = False
+        if pygtk_version[0] == 2:
+            if pygtk_version[1] < 12:
+                self.pygtkOldVersion = True
+        if pygtk_version[0] < 2:
+            self.pygtkOldVersion = True
 
         self.projectName = ""
         self.projectDesc = ""
@@ -351,7 +358,8 @@ class projectAssistant(object):
             toolTipText += "\n<b>Packages:</b> "
             for pkgs in sorted(platform.fset[fset_name].pkgs):
                 toolTipText += " %s " % pkgs
-            self.fsetTouple[i][1].set_tooltip_markup(toolTipText)
+            if self.pygtkOldVersion == False:
+                self.fsetTouple[i][1].set_tooltip_markup(toolTipText)
             i += 1
         self.fsetTouple.pop(0)
 

@@ -55,6 +55,14 @@ _ = gettext.lgettext
 class App(object):
     """This is our main"""
     def __init__(self):
+	
+        pygtk_version = gtk.pygtk_version
+        self.pygtkOldVersion = False
+        if pygtk_version[0] == 2:
+            if pygtk_version[1] < 12:
+                self.pygtkOldVersion = True
+        if pygtk_version[0] < 2:
+            self.pygtkOldVersion = True
 
         self.sdk = SDK.SDK(progress_callback = self.gui_throbber, status_label_callback = self.set_status_label)
         self.gladefile = os.path.join(self.sdk.path, "image-creator.glade")
@@ -131,6 +139,9 @@ class App(object):
         gnome.help_display('image-creator')
 
     def newFeatureDialog(self):
+        if self.pygtkOldVersion == True:
+            self.show_error_dialog("You are using an old version of PyGTK. Image Creator required atleast PyGTK 2.12. Some features will be disabled")
+            return
         if os.path.isfile("/usr/share/pdk/newFeature"):
             newFeatureTree = gtk.glade.XML(self.gladefile, 'newFeature')
             newFeatureDialog = newFeatureTree.get_widget('newFeature')
@@ -440,7 +451,8 @@ class App(object):
             toolTipText += "\n<b>Packages:</b> "
             for pkgs in sorted(platform.fset[fset_name].pkgs):
                 toolTipText += " %s " % pkgs
-            self.fsetTouple[i][1].set_tooltip_markup(toolTipText)
+            if self.pygtkOldVersion == False:
+                self.fsetTouple[i][1].set_tooltip_markup(toolTipText)
             i += 1
         if not iter:
             self.show_error_dialog("Nothing available to install!")
