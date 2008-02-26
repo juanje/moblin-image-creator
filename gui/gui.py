@@ -55,13 +55,10 @@ _ = gettext.lgettext
 class App(object):
     """This is our main"""
     def __init__(self):
-	
-        pygtk_version = gtk.pygtk_version
-        self.pygtkOldVersion = False
-        if pygtk_version[0] == 2:
-            if pygtk_version[1] < 12:
-                self.pygtkOldVersion = True
-        if pygtk_version[0] < 2:
+        # Need PyGTK >= 2.12.0 for our tooltips
+        if gtk.pygtk_version >= (2,12,0):
+            self.pygtkOldVersion = False
+        else:
             self.pygtkOldVersion = True
 
         self.sdk = SDK.SDK(progress_callback = self.gui_throbber, status_label_callback = self.set_status_label)
