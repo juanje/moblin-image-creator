@@ -21,6 +21,7 @@ import os
 import platform
 import string
 import sys
+import re
 import traceback
 
 from optparse import OptionParser
@@ -468,6 +469,9 @@ def update_project(options):
 def create_target(options):
     if not options.project_name in sdk.projects:
         print >> sys.stderr, "Project %s does not exist" % (options.project_name)
+        sys.exit(1)
+    if re.search(r'\W', options.target_name):
+        print >> sys.stderr, "Target names can only contain alpha/numeric characters"
         sys.exit(1)
     target = sdk.projects[options.project_name].create_target(options.target_name, options.use_rootstrap)
 

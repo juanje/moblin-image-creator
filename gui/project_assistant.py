@@ -302,9 +302,17 @@ class projectAssistant(object):
         """Creates the GUI elements for target page of the assistant"""
         targetNameLabel = gtk.Label("Target Name")
         self.targetNameEntry = gtk.Entry()
-        targetName = gtk.HBox()
-        targetName.pack_start(targetNameLabel, False, False, 10)
-        targetName.pack_start(self.targetNameEntry, True, True, 10)
+        targetNameHbox = gtk.HBox()
+        targetNameHbox.pack_start(targetNameLabel, False, False, 10)
+        targetNameHbox.pack_start(self.targetNameEntry, True, True, 10)
+
+        self.targetWarning = gtk.Label()
+
+        targetName = gtk.VBox()
+        targetName.pack_start(targetNameHbox, False, False, 10)
+        targetName.pack_start(self.targetWarning, False, False, 10)
+
+
 
         self.targetNameEntry.connect("changed", self.target_entry_callback)
 
@@ -414,7 +422,12 @@ class projectAssistant(object):
         if not self.targetNameEntry.get_text():
             self.assistantDialog.set_page_complete(self.targetPage, False)
         else:
-            self.assistantDialog.set_page_complete(self.targetPage, True)
+            if re.search(r'\W', self.targetNameEntry.get_text()):
+                self.targetWarning.set_text("Target names can only contain alpha/numeric characters")
+                self.assistantDialog.set_page_complete(self.targetPage, False)
+            else:
+                self.targetWarning.set_text("")
+                self.assistantDialog.set_page_complete(self.targetPage, True)
             
 
     def display_configuration(self):
