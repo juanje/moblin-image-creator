@@ -1,0 +1,72 @@
+#!/bin/bash
+# Live CD filesystem mounting			-*- shell-script -*-
+
+mountroot ()
+{
+    CFG_FILE=/etc/moblin-initramfs.cfg
+    if [ -f ${CFG_FILE} ]
+    then
+	. ${CFG_FILE}
+    else
+	echo "Did not find config file: ${CFG_FILE}"
+	sleep 5
+    fi
+    mkdir -p /container
+    mkdir -p /squashmnt1
+    mkdir -p /squashmnt2
+    mkdir -p /volatilemnt
+
+    # Find the CD drive
+    while true
+    do
+      for device in 'scd0' 'scd1' 'scd2' 'scd3'; do
+        echo "checking device /dev/${device} for installation source..."
+
+	# TODO: identify boot CD drive
+
+        echo "Found CD drive at /dev/${device}"
+	found="yes"
+        break
+      done
+      if [ "$found" = "yes" ]; then
+	break;
+      fi
+      /bin/sleep 5
+    done
+    echo "will mount root from /dev/${device}"
+
+    mount -o ro -t iso9660 /dev/${device} /container 2> /dev/null
+
+    while [ ! -e "/container/rootfs.img" ]; do
+	/bin/sleep 0.5
+	echo "Trying again /dev/${device} ...."
+
+        mount -o ro -t iso9660 /dev/${device} /container 2> /dev/null
+    done
+
+
+    mount -o ro,loop -t squashfs /container/rootfs.img /squashmnt1
+
+    if [ -f /container/xbmc.img ]; then
+        mount -o rw,loop,noatime,nodiratime /container/xbmc.img /squashmnt2
+    fi
+
+    mount -t tmpfs -o noatime,nodiratime none /volatilemnt
+
+    mount -t unionfs -o dirs=/volatilemnt=rw:/squashmnt1=ro:/squashmnt2=ro none ${rootmnt}
+
+    if [ -f /container/install.sh ]; then
+	 log_begin_msg "Install Process will begin shortly..."
+	 maybe_break preinstall
+
+	 mkdir -p ${rootmnt}/tmp/install
+	 mount --bind /dev ${rootmnt}/dev
+	 mount --bind /sys ${rootmnt}/sys
+	 mount --bind /container ${rootmnt}/tmp/install
+	 cp /container/install.sh ${rootmnt}
+	 cp /container/install.cfg ${rootmnt}
+
+	 maybe_break install
+	 chroot ${rootmnt} /install.sh
+    fi
+}

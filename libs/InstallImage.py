@@ -179,19 +179,25 @@ class InstallImage(object):
         self.default_kernel_mod_path = os.path.join(self.target.fs_path, 'lib', 'modules', self.default_kernel.split('vmlinuz-').pop().strip())
         self.exclude_file = os.path.join(self.project.platform.path, 'exclude')
 
-    def install_kernels(self, cfg_filename, message_color, message):
+    def install_kernels(self, cfg_filename, message_color, message, imageType='USBImage'):
         if not self.tmp_path:
             raise ValueError, "tmp_path doesn't exist"
 
         s = SyslinuxCfg(self.project, self.tmp_path, cfg_filename, message_color, message)
         # Copy the default kernel
-        kernel_name = s.add_default(self.default_kernel, self.project.get_target_usb_kernel_cmdline(self.target.name))
+        if imageType == 'CDImage':
+            kernel_name = s.add_default(self.default_kernel, self.project.get_target_cd_kernel_cmdline(self.target.name))
+        else:
+            kernel_name = s.add_default(self.default_kernel, self.project.get_target_usb_kernel_cmdline(self.target.name))
         src_path = os.path.join(self.target.fs_path, 'boot', self.default_kernel)
         dst_path = os.path.join(self.tmp_path, kernel_name)
         shutil.copyfile(src_path, dst_path)
         # Copy the remaining kernels
         for kernel in self.kernels:
-            kernel_name = s.add_target(kernel, self.project.get_target_usb_kernel_cmdline(self.target.name))
+            if imageType == 'CDImage':
+                kernel_name = s.add_target(kernel, self.project.get_target_cd_kernel_cmdline(self.target.name))
+            else:
+                kernel_name = s.add_target(kernel, self.project.get_target_usb_kernel_cmdline(self.target.name))
             src_path = os.path.join(self.target.fs_path, 'boot', kernel)
             dst_path = os.path.join(self.tmp_path, kernel_name)
             shutil.copyfile(src_path, dst_path)
@@ -385,8 +391,41 @@ class InstallImage(object):
 
 
 class LiveIsoImage(InstallImage):
-    def create_image(self):
-        raise ValueError("LiveIsoImage: Create ISO Image not implemented!")
+    def install_kernels(self, message_color, message):
+        InstallImage.install_kernels(self, 'isolinux.cfg', message_color, message, 'CDImage')
+
+    def create_image(self, fs_type='RAMFS'):
+        print "LiveCDImage: Creating Live CD Image(%s) Now..." % fs_type
+        image_type = "Live CD Image (no persistent R/W)"
+        self.create_all_initramfs()
+        self.create_rootfs()
+        initrd_stat_result = os.stat('/tmp/.tmp.initrd0')
+        rootfs_stat_result = os.stat(self.rootfs_path)
+
+        self.tmp_path = tempfile.mkdtemp('','pdk-', '/tmp')
+
+        self.kernels.insert(0,self.default_kernel)
+        for count, kernel in enumerate(self.kernels):
+            initrd_path = os.path.join(self.tmp_path, "initrd%d.img" % count)
+            shutil.move("/tmp/.tmp.initrd%d" % count, initrd_path)
+        self.kernels.pop(0)
+        # Flashing yellow on a blue background
+        self.install_kernels("9e", image_type)
+        pdk_utils.copy(self.rootfs_path, self.tmp_path, callback = self.progress_callback)
+        pdk_utils.copy("/usr/lib/syslinux/isolinux.bin", self.tmp_path, callback = self.progress_callback)
+
+        print "Creating CD image file at: %s" % self.path
+        cmd_line = "genisoimage -quiet -o %s -b isolinux.bin -c boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table -l -R -r %s" % (self.path, self.tmp_path)
+        result = pdk_utils.execCommand(cmd_line, callback = self.progress_callback)
+        if result:
+            print >> sys.stderr, "Error running command: %s" % cmd_line
+            raise EnvironmentError, "Error running command: %s" % cmd_line
+
+        shutil.rmtree(self.tmp_path)
+        self.tmp_path = ''
+
+        self.delete_rootfs()
+        print "LiveIsoImage: Finished!"
         
     def __str__(self):
         return ("<LiveIsoImage: project=%s, target=%s, name=%s>"

@@ -39,9 +39,10 @@ moblin-image-creator (0.41) UNRELEASED; urgency=low
     PyGTK 2.12 and above
   * Simpler check for version in project assistant
   * Fixing bug 182161. Target name was not being checked for non alpha numeric
-    chars in project assistant and cmd line 
+    chars in project assistant and cmd line
+  * Adding LiveCD feature. Thanks to Luigi Capriotti 
 
- -- Prajwal Mohan <prajwal@linux.intel.com>  Thu, 28 Feb 2008 10:39:53 -0800
+ -- Prajwal Mohan <prajwal@linux.intel.com>  Thu, 28 Feb 2008 14:07:57 -0800
 
 moblin-image-creator (0.40) gaston; urgency=low
 

@@ -83,6 +83,7 @@ class Platform(object):
         # determine default kernel cmdline options
         self.usb_kernel_cmdline = mic_cfg.config.get(section, "usb_kernel_cmdline")
         self.hd_kernel_cmdline = mic_cfg.config.get(section, "hd_kernel_cmdline")
+        self.cd_kernel_cmdline = mic_cfg.config.get(section, "cd_kernel_cmdline")
         # Architecture
         self.architecture = mic_cfg.config.get(section, "architecture") or "i386"
         # Package Manager

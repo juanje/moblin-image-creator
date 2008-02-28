@@ -228,6 +228,7 @@ class Project(FileSystem):
             # Install platform default kernel cmdline
             self.set_target_usb_kernel_cmdline(name, self.platform.usb_kernel_cmdline)
             self.set_target_hd_kernel_cmdline(name, self.platform.hd_kernel_cmdline)
+            self.set_target_cd_kernel_cmdline(name, self.platform.cd_kernel_cmdline)
         return self.targets[name]
     
     def get_target_usb_kernel_cmdline(self, name):
@@ -252,6 +253,17 @@ class Project(FileSystem):
         cmdline.close()
         return hd_kernel_cmdline.strip()
 
+    def get_target_cd_kernel_cmdline(self, name):
+        if not name:
+           raise ValueError("Target name was not specified")
+        cmdline = open(os.path.join(self.targets[name].config_path, 'cd_kernel_cmdline'), 'r')
+        cd_kernel_cmdline = ''
+        for line in cmdline:
+            if not re.search(r'^\s*#',line): 
+                cd_kernel_cmdline += line + ' '
+        cmdline.close()
+        return cd_kernel_cmdline.strip()
+
     def set_target_usb_kernel_cmdline(self, name, str):
         if not name:
            raise ValueError("Target name was not specified")
@@ -263,6 +275,13 @@ class Project(FileSystem):
         if not name:
            raise ValueError("Target name was not specified")
         cmdline = open(os.path.join(self.targets[name].config_path, 'hd_kernel_cmdline'), 'w')
+        print >> cmdline, str
+        cmdline.close()
+
+    def set_target_cd_kernel_cmdline(self, name, str):
+        if not name:
+           raise ValueError("Target name was not specified")
+        cmdline = open(os.path.join(self.targets[name].config_path, 'cd_kernel_cmdline'), 'w')
         print >> cmdline, str
         cmdline.close()
 

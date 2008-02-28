@@ -78,6 +78,7 @@ class App(object):
                 "on_create_liveUSB_clicked": self.on_liveUSB_clicked,
                 "on_create_liveRWUSB_clicked": self.on_liveRWUSB_clicked,
                 "on_create_installUSB_clicked": self.on_installUSB_clicked,
+                "on_create_liveCD_clicked": self.on_liveCD_clicked,
                 "on_about_activate": self.on_about_activate,
                 "on_term_launch_clicked": self.on_term_launch_clicked,
                 "on_target_term_launch_clicked": self.on_target_term_launch_clicked,
@@ -176,6 +177,7 @@ class App(object):
         self.buttons.create_liverwusb.set_sensitive(fset_state)
         self.buttons.create_installusb.set_sensitive(fset_state)
         self.buttons.target_kernel_cmdline.set_sensitive(fset_state)
+        self.buttons.create_liveCD.set_sensitive(fset_state)
         self.buttons.Write_USB.set_sensitive(fset_state)
 
     def project_view_changed(self, selection):
@@ -631,12 +633,15 @@ class App(object):
         dialog = widgets.get_widget('kernel_cmdline_dlg')
         usb_kernel_cmdline = widgets.get_widget('usb_kernel_cmdline')
         hd_kernel_cmdline = widgets.get_widget('hd_kernel_cmdline')
+        cd_kernel_cmdline = widgets.get_widget('cd_kernel_cmdline')
         usb_kernel_cmdline.set_text(self.current_project().get_target_usb_kernel_cmdline(target.name))
         hd_kernel_cmdline.set_text(self.current_project().get_target_hd_kernel_cmdline(target.name))
+        cd_kernel_cmdline.set_text(self.current_project().get_target_cd_kernel_cmdline(target.name))
         result = dialog.run()
         if result == gtk.RESPONSE_OK:
             self.current_project().set_target_usb_kernel_cmdline(target.name, usb_kernel_cmdline.get_text())
             self.current_project().set_target_hd_kernel_cmdline(target.name, hd_kernel_cmdline.get_text())
+            self.current_project().set_target_cd_kernel_cmdline(target.name, cd_kernel_cmdline.get_text())
         dialog.destroy()
 
     def on_liveUSB_clicked(self, widget):
@@ -700,6 +705,27 @@ class App(object):
                 if debug: print_exc_plus()
                 self.show_error_dialog()
             progress_dialog.destroy()
+
+    def on_liveCD_clicked(self, widget):
+        project = self.current_project()
+        target = self.current_target()
+        result, img_name = self.getImageName()
+        if result == gtk.RESPONSE_OK:
+            progress_tree = gtk.glade.XML(self.gladefile, 'ProgressDialog')
+            progress_dialog = progress_tree.get_widget('ProgressDialog')
+            progress_dialog.connect('delete_event', self.ignore)
+            progress_tree.get_widget('progress_label').set_text("Please wait while creating %s" % img_name)
+            self.progressbar = progress_tree.get_widget('progressbar')
+            try:
+                self.current_project().create_live_iso(target.name, img_name)
+            except ValueError, e:
+                self.show_error_dialog(e.args[0])
+            except:
+                traceback.print_exc()
+                if debug: print_exc_plus()
+                self.show_error_dialog()
+            progress_dialog.destroy()
+
 
     def getImageName(self):
         """Function to query the user for the name of the image file they want
@@ -1415,6 +1441,7 @@ class MainWindowButtons(object):
         self.create_liveusb = widgets.get_widget('create_liveUSB_btn')
         self.create_liverwusb = widgets.get_widget('create_liveRWUSB_btn')
         self.create_installusb = widgets.get_widget('create_installUSB_btn')
+        self.create_liveCD = widgets.get_widget('create_liveCD_btn')
         # Terminal button
         self.term_launch = widgets.get_widget('term_launch')
         self.target_term_launch = widgets.get_widget('target_term_launch')
