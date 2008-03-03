@@ -40,9 +40,10 @@ moblin-image-creator (0.41) UNRELEASED; urgency=low
   * Simpler check for version in project assistant
   * Fixing bug 182161. Target name was not being checked for non alpha numeric
     chars in project assistant and cmd line
-  * Adding LiveCD feature. Thanks to Luigi Capriotti 
+  * Adding LiveCD feature. Thanks to Luigi Capriotti
+  * COPYING file is needed for About dialog. Should not be removed 
 
- -- Prajwal Mohan <prajwal@linux.intel.com>  Thu, 28 Feb 2008 14:07:57 -0800
+ -- Prajwal Mohan <prajwal@linux.intel.com>  Mon, 03 Mar 2008 10:57:46 -0800
 
 moblin-image-creator (0.40) gaston; urgency=low
 
