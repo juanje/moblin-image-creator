@@ -1,4 +1,4 @@
-moblin-image-creator (0.41) UNRELEASED; urgency=low
+moblin-image-creator (0.41) gaston; urgency=low
 
   [ Steve Magoun ]
   * Start new version
@@ -15,6 +15,10 @@ moblin-image-creator (0.41) UNRELEASED; urgency=low
   * Use bs=1024 during dd command for writing the USB flash image
   * Fix issue with mccaslin-lpia-ubuntu-hardy and menlow-lpia-ubuntu-hardy
     breaking when trying to copy the sources/ files
+  * Change the *-lpia-ubuntu-hardy-ppa platforms to use
+    http://snapshot.ubuntu.com/lpia/snapshot/2008-02-27/ports as the
+    buildroot_mirror
+  * Releasing version 0.41
 
   [ Prajwal Mohan ]
   * Cleaning files during uninstall
@@ -41,9 +45,9 @@ moblin-image-creator (0.41) UNRELEASED; urgency=low
   * Fixing bug 182161. Target name was not being checked for non alpha numeric
     chars in project assistant and cmd line
   * Adding LiveCD feature. Thanks to Luigi Capriotti
-  * COPYING file is needed for About dialog. Should not be removed 
+  * COPYING file is needed for About dialog. Should not be removed
 
- -- Prajwal Mohan <prajwal@linux.intel.com>  Mon, 03 Mar 2008 10:57:46 -0800
+ -- John L. Villalovos <john.l.villalovos@intel.com>  Tue, 04 Mar 2008 13:23:37 -0800
 
 moblin-image-creator (0.40) gaston; urgency=low
 
