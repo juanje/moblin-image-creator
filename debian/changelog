@@ -1,8 +1,11 @@
-moblin-image-creator (0.42) UNRELEASED; urgency=low
+moblin-image-creator (0.42) gaston; urgency=low
 
-  * Start working on new release
+  * Disable using hardy-update and hardy-security in
+    the *-lpia-ubuntu-hardy-ppa platforms, since we are currently using the
+    snapshot.
+  * Releasing version 0.42
 
- -- John L. Villalovos <john.l.villalovos@intel.com>  Tue, 04 Mar 2008 13:29:27 -0800
+ -- John L. Villalovos <john.l.villalovos@intel.com>  Tue, 04 Mar 2008 15:55:12 -0800
 
 moblin-image-creator (0.41) gaston; urgency=low
 

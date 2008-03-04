@@ -1,0 +1,8 @@
+# Since we are using the snapshot for Hardy, we don't want these right now.
+# When we do switch over to using Hardy, then these should be re-enabled.
+#
+# deb http://ports.ubuntu.com/ubuntu-ports hardy-updates main restricted universe multiverse
+# deb-src http://archive.ubuntu.com/ubuntu hardy-updates main restricted universe multiverse
+# 
+# deb http://ports.ubuntu.com/ubuntu-ports hardy-security main restricted universe multiverse
+# deb-src http://archive.ubuntu.com/ubuntu hardy-security main restricted universe multiverse
