@@ -4,9 +4,10 @@ moblin-image-creator (0.43) UNRELEASED; urgency=low
   * Starting a new version
 
   [ Prajwal Mohan ]
-  * Adding Multiple Select for projects. tooltip correction for LiveCD 
+  * Adding Multiple Select for projects. tooltip correction for LiveCD
+  * Adding Multiple Select for target delete 
 
- -- Prajwal Mohan <prajwal@linux.intel.com>  Tue, 04 Mar 2008 17:15:35 -0800
+ -- Prajwal Mohan <prajwal@linux.intel.com>  Wed, 05 Mar 2008 10:51:30 -0800
 
 moblin-image-creator (0.42) gaston; urgency=low
 

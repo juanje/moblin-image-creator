@@ -120,9 +120,9 @@ class App(object):
         # Connect project selection signal to list targets in the targetList
         # widget: targetView
         self.projectView.get_selection().set_mode(gtk.SELECTION_MULTIPLE)
-        #self.targetView.get_selection().set_mode(gtk.SELECTION_MULTIPLE)
-        self.projectView.get_selection().connect("changed", self.project_view_changed)
-        self.targetView.get_selection().connect("changed", self.target_view_changed)
+        self.targetView.get_selection().set_mode(gtk.SELECTION_MULTIPLE)
+        self.projectView_handler = self.projectView.get_selection().connect("changed", self.project_view_changed)
+        self.targetView_handler = self.targetView.get_selection().connect("changed", self.target_view_changed)
 
         self.newFeatureDialog()
     def run(self):
@@ -158,19 +158,25 @@ class App(object):
             os.unlink("/usr/share/pdk/newFeature")
 
     def target_view_changed(self, selection):
-        model, iter = self.targetView.get_selection().get_selected()
+        num_rows_selected = self.targetView.get_selection().count_selected_rows()
         target_selected_state = False
+        delete_target_state = False
         fset_state = False
-        if iter:
+        if num_rows_selected == 0:
+            pass
+        elif num_rows_selected == 1:
             # A target is selected
             target_selected_state = True
+            delete_target_state = True
             target = self.current_target()
             fsets = target.installed_fsets()
             if fsets:
                 # We have fsets installed in the target
                 fset_state = True
+        else:
+            delete_target_state = True
         # Items which should be enabled if we have a target selected
-        self.buttons.delete_target.set_sensitive(target_selected_state)
+        self.buttons.delete_target.set_sensitive(delete_target_state)
         self.buttons.install_fset.set_sensitive(target_selected_state)
         self.buttons.target_term_launch.set_sensitive(target_selected_state)
         self.buttons.upgrade_target.set_sensitive(target_selected_state)
@@ -551,24 +557,29 @@ class App(object):
         label.set_text(fset.desc)
 
     def on_delete_target_clicked(self, widget):
-        project = self.current_project()
-        target = self.current_target()
+        model, treePathList = self.targetView.get_selection().get_selected_rows()
+        deleteConfirmationText = "Delete Target(s)?\n"
+        for item in treePathList:
+            deleteConfirmationText += " %s " % model[item][0]
         tree = gtk.glade.XML(self.gladefile, 'qDialog')
-        tree.get_widget('queryLabel').set_text("Delete target %s from project %s?" % (target.name, project.name))
+        tree.get_widget('queryLabel').set_text(deleteConfirmationText)
         dialog = tree.get_widget('qDialog')
         dialog.set_title("Delete Target")
         result = dialog.run()
-        dialog.destroy()
-        if result == gtk.RESPONSE_OK:
+        dialog.destroy()       
+        if result == gtk.RESPONSE_OK:    
             progress_tree = gtk.glade.XML(self.gladefile, 'ProgressDialog')
             progress_dialog = progress_tree.get_widget('ProgressDialog')
             progress_dialog.connect('delete_event', self.ignore)
-            progress_tree.get_widget('progress_label').set_text(_("Please wait while deleting %s") % project.name)
             self.progressbar = progress_tree.get_widget('progressbar')
             while gtk.events_pending():
                 gtk.main_iteration(False)
             try:
-                self.sdk.projects[project.name].delete_target(target.name, callback = self.gui_throbber)
+                project = self.current_project()
+                for item in treePathList:
+                    target = self.current_project().targets[model[item][0]]
+                    progress_tree.get_widget('progress_label').set_text(_("Please wait while deleting %s") % target.name)
+                    self.sdk.projects[project.name].delete_target(target.name, callback = self.gui_throbber)
                 self.remove_current_target()
             except pdk_utils.ImageCreatorUmountError, e:
                 self.show_umount_error_dialog(e.directory_set)
@@ -588,23 +599,37 @@ class App(object):
             return None
 
     def current_target(self):
-        model, iter = self.targetView.get_selection().get_selected()
-        return self.current_project().targets[model[iter][0]]
+        num_rows_selected = self.targetView.get_selection().count_selected_rows()
+        if num_rows_selected == 1:
+            model, treePathList = self.targetView.get_selection().get_selected_rows()
+            return self.current_project().targets[model[treePathList[0]][0]]
+        else:
+            #Return None if more than one project is selected
+            return None
 
     def remove_current_project(self):
         model, treePathList = self.projectView.get_selection().get_selected_rows()
         treePathList.reverse()
+        #Do not want project_view_changed handler to execute while deleting projects
+        self.projectView.get_selection().handler_block(self.projectView_handler)
         for item in treePathList:
             self.projectView.get_selection().unselect_path(item)
             self.projectList.remove(self.projectList.get_iter(item))
+        self.projectView.get_selection().handler_unblock(self.projectView_handler)
         #We dont really need to remove the items since refreshProjectList clears the list 
         #and repopulates it
         #FIXME
         self.refreshProjectList()
 
     def remove_current_target(self):
-        model, iter = self.targetView.get_selection().get_selected()
-        self.targetList.remove(iter)
+        model, treePathList = self.targetView.get_selection().get_selected_rows()
+        treePathList.reverse()
+        #Do not want target_view_changed handler to execute while deleting targets
+        self.targetView.get_selection().handler_block(self.targetView_handler)
+        for item in treePathList:
+            self.targetView.get_selection().unselect_path(item)
+            self.targetList.remove(self.targetList.get_iter(item))
+        self.targetView.get_selection().handler_unblock(self.targetView_handler)
 
     def show_error_dialog(self, message="An unknown error has occurred!"):
         widgets = gtk.glade.XML(self.gladefile, 'error_dialog')
