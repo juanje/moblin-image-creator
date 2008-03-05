@@ -1,8 +1,12 @@
 moblin-image-creator (0.43) UNRELEASED; urgency=low
 
+  [ John L. Villalovos ]
   * Starting a new version
 
- -- John L. Villalovos <john.l.villalovos@intel.com>  Tue, 04 Mar 2008 15:58:07 -0800
+  [ Prajwal Mohan ]
+  * Adding Multiple Select for projects. tooltip correction for LiveCD 
+
+ -- Prajwal Mohan <prajwal@linux.intel.com>  Tue, 04 Mar 2008 17:15:35 -0800
 
 moblin-image-creator (0.42) gaston; urgency=low
 

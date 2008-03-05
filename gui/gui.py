@@ -119,6 +119,8 @@ class App(object):
         self.refreshProjectList()
         # Connect project selection signal to list targets in the targetList
         # widget: targetView
+        self.projectView.get_selection().set_mode(gtk.SELECTION_MULTIPLE)
+        #self.targetView.get_selection().set_mode(gtk.SELECTION_MULTIPLE)
         self.projectView.get_selection().connect("changed", self.project_view_changed)
         self.targetView.get_selection().connect("changed", self.target_view_changed)
 
@@ -181,18 +183,29 @@ class App(object):
         self.buttons.Write_USB.set_sensitive(fset_state)
 
     def project_view_changed(self, selection):
-        try:
-            self.current_project().mount()
-        except:
-            pass
+        num_rows_selected = self.projectView.get_selection().count_selected_rows()
+        if num_rows_selected == 1:
+            try:
+                self.current_project().mount()
+            except:
+                pass
         self.redraw_target_view()
 
     def redraw_target_view(self):
         self.targetList.clear()
-        model, iter = self.projectView.get_selection().get_selected()
-        if not iter:
-            # No projects are selected
+        num_rows_selected = self.projectView.get_selection().count_selected_rows()
+        if num_rows_selected == 0:
+            # No projects are selected. Disable all buttons
             self.buttons.delete_project.set_sensitive(False)
+            self.buttons.upgrade_project.set_sensitive(False)
+            self.buttons.add_target.set_sensitive(False)
+            self.buttons.install_fset.set_sensitive(False)
+            self.buttons.delete_target.set_sensitive(False)
+            self.buttons.term_launch.set_sensitive(False)
+            return
+        if num_rows_selected > 1:
+            #Multiple projects are selected. Only the 'delete project' button should be active
+            self.buttons.delete_project.set_sensitive(True)
             self.buttons.upgrade_project.set_sensitive(False)
             self.buttons.add_target.set_sensitive(False)
             self.buttons.install_fset.set_sensitive(False)
@@ -314,22 +327,27 @@ class App(object):
 
     def on_projectDelete_clicked(self, event):
         """Delete a Project"""
-        project = self.current_project()
+        model, treePathList = self.projectView.get_selection().get_selected_rows()
+        deleteConfirmationText = "Delete Project(s)?\n"
+        for item in treePathList:
+            deleteConfirmationText += " %s " % model[item][0]
         tree = gtk.glade.XML(self.gladefile, 'qDialog')
-        tree.get_widget('queryLabel').set_text("Delete the %s project?" % (project.name))
+        tree.get_widget('queryLabel').set_text(deleteConfirmationText)
         dialog = tree.get_widget('qDialog')
         result = dialog.run()
-        dialog.destroy()
+        dialog.destroy()       
         if result == gtk.RESPONSE_OK:
             progress_tree = gtk.glade.XML(self.gladefile, 'ProgressDialog')
             progress_dialog = progress_tree.get_widget('ProgressDialog')
             progress_dialog.connect('delete_event', self.ignore)
-            progress_tree.get_widget('progress_label').set_text(_("Please wait while deleting %s") % project.name)
             self.progressbar = progress_tree.get_widget('progressbar')
             while gtk.events_pending():
                 gtk.main_iteration(False)
             try:
-                self.sdk.delete_project(project.name)
+                for item in treePathList:
+                    project = self.sdk.projects[model[item][0]]
+                    progress_tree.get_widget('progress_label').set_text(_("Please wait while deleting %s") % project.name)
+                    self.sdk.delete_project(project.name)
                 self.remove_current_project()
             except pdk_utils.ImageCreatorUmountError, e:
                 self.show_umount_error_dialog(e.directory_set)
@@ -561,16 +579,27 @@ class App(object):
             progress_dialog.destroy()
 
     def current_project(self):
-        model, iter = self.projectView.get_selection().get_selected()
-        return self.sdk.projects[model[iter][0]]
+        num_rows_selected = self.projectView.get_selection().count_selected_rows()
+        if num_rows_selected == 1:
+            model, treePathList = self.projectView.get_selection().get_selected_rows()
+            return self.sdk.projects[model[treePathList[0]][0]]
+        else:
+            #Return None if more than one project is selected
+            return None
 
     def current_target(self):
         model, iter = self.targetView.get_selection().get_selected()
         return self.current_project().targets[model[iter][0]]
 
     def remove_current_project(self):
-        model, iter = self.projectView.get_selection().get_selected()
-        self.projectList.remove(iter)
+        model, treePathList = self.projectView.get_selection().get_selected_rows()
+        treePathList.reverse()
+        for item in treePathList:
+            self.projectView.get_selection().unselect_path(item)
+            self.projectList.remove(self.projectList.get_iter(item))
+        #We dont really need to remove the items since refreshProjectList clears the list 
+        #and repopulates it
+        #FIXME
         self.refreshProjectList()
 
     def remove_current_target(self):
@@ -709,7 +738,7 @@ class App(object):
     def on_liveCD_clicked(self, widget):
         project = self.current_project()
         target = self.current_target()
-        result, img_name = self.getImageName()
+        result, img_name = self.getImageName(default_name=".iso")
         if result == gtk.RESPONSE_OK:
             progress_tree = gtk.glade.XML(self.gladefile, 'ProgressDialog')
             progress_dialog = progress_tree.get_widget('ProgressDialog')
@@ -727,10 +756,10 @@ class App(object):
             progress_dialog.destroy()
 
 
-    def getImageName(self):
+    def getImageName(self, default_name = ".img"):
         """Function to query the user for the name of the image file they want
         to create"""
-        default_name = ".img"
+        #default_name = ".img"
         while True:
             widgets = gtk.glade.XML(self.gladefile, 'new_img_dlg')
             dialog = widgets.get_widget('new_img_dlg')
