@@ -72,7 +72,7 @@ class projectAssistant(object):
         
         #Setting up the Assistant Widget
         self.assistantDialog = gtk.Assistant()        
-        self.assistantDialog.set_size_request(900, 500)
+        self.assistantDialog.set_size_request(800, 500)
         self.assistantDialog.connect("close", self.quit)
         self.assistantDialog.connect("cancel", self.quit)
         self.assistantDialog.connect("apply", self.apply)
@@ -89,7 +89,7 @@ class projectAssistant(object):
         self.assistantDialog.set_page_header_image(introductionPage, headImage)
 
         introductionLabel = gtk.Label()
-        introductionLabel.set_markup("<big><b>This assistant will help you to create a project and a target.\nYou also will be able to select which functional sets (fsets) to install.</b></big>")        
+        introductionLabel.set_markup("<b>This assistant will help you to create a project and a target.\nYou also will be able to select which functional sets (fsets) to install.</b>")      
         introductionPage.pack_end(introductionLabel)
 
         #Setting up the Project Creation Page of the Assistant
@@ -198,7 +198,7 @@ class projectAssistant(object):
         projectPathBrowse = gtk.Button("Browse")
         projectPath = gtk.HBox()
         projectPath.pack_start(self.projectPathEntry, True, True, 0)        
-        projectPath.pack_start(projectPathBrowse)
+        projectPath.pack_start(projectPathBrowse, False, False, 0)
       
         projectPathBrowse.connect("clicked", self.fill_project_path)
         self.projectNameEntry.connect("changed", self.project_entry_callback)
@@ -206,10 +206,16 @@ class projectAssistant(object):
         self.projectPathEntry.connect("changed", self.project_entry_callback)
 
         projectPlatformLabel = gtk.Label("Project Platform")
+        projectPlatformDescLabel = gtk.Label("Platform Description")
+        self.projectPlatformDesc = gtk.TextBuffer()
+        projectPlatformDescText = gtk.TextView(self.projectPlatformDesc)
+        projectPlatformDescText.set_wrap_mode(gtk.WRAP_WORD)
+        projectPlatformDescText.set_editable(False)
+        
+        
         #projectPlatformCombo = gtk.ComboBox()
         #Easier way to build a combo box with text only
         self.projectPlatformCombo = gtk.combo_box_new_text()
-        self.projectPlatformCombo.set_size_request(570, 30)
 
         #populate the combo box with available platforms
         platformList = sorted(self.sdk.platforms.iterkeys())
@@ -229,10 +235,10 @@ class projectAssistant(object):
                 pdesc = " - (%s)" % self.sdk.platforms[pname].config_info['description']
                 packageManagerDesc = self.sdk.platforms[pname].config_info['package_manager']
             if packageManager == packageManagerDesc:
-                self.projectPlatformCombo.append_text(pname + pdesc)
+                self.projectPlatformCombo.append_text(pname)
                 added = True
             elif packageManagerDesc == "":
-                self.projectPlatformCombo.append_text(pname + pdesc)
+                self.projectPlatformCombo.append_text(pname)
                 added = True
             # If previously selected an entry, select it again
             if added:
@@ -241,7 +247,9 @@ class projectAssistant(object):
                 idx += 1
 
         #projectPlatformCombo.set_model(platformComboList)
+        self.projectPlatformCombo.connect("changed", self.project_platform_callback)
         self.projectPlatformCombo.set_active(platform_idx)
+
        
         self.projectWarning = gtk.Label()
 
@@ -252,7 +260,7 @@ class projectAssistant(object):
         #projectPageVbox.pack_start(projectPlatform)
         #projectPageVbox.pack_start(self.projectWarning)
 
-        projectPageTable = gtk.Table(4, 3, True)
+        projectPageTable = gtk.Table(5, 3, True)
         projectPageTable.set_homogeneous(False)
         projectPageTable.attach(projectNameLabel, 0, 1, 0, 1, 0, 0)
         projectPageTable.attach(self.projectNameEntry, 1, 2, 0, 1, gtk.EXPAND|gtk.FILL, 0, 10, 0)
@@ -261,7 +269,9 @@ class projectAssistant(object):
         projectPageTable.attach(projectPathLabel, 0, 1, 2, 3, 0, 0)
         projectPageTable.attach(projectPath, 1, 2, 2, 3, gtk.EXPAND|gtk.FILL, 0, 10, 0)
         projectPageTable.attach(projectPlatformLabel, 0, 1, 3, 4, 0, 0)
-        projectPageTable.attach(self.projectPlatformCombo, 1, 2, 3, 4, 0, 0, 10, 0)
+        projectPageTable.attach(self.projectPlatformCombo, 1, 2, 3, 4, gtk.EXPAND|gtk.FILL, 0, 10, 0)
+        projectPageTable.attach(projectPlatformDescLabel, 0, 1, 4, 5, 0, 0)
+        projectPageTable.attach(projectPlatformDescText, 1, 2, 4, 5, gtk.EXPAND|gtk.FILL, 0, 10, 0)
 
         projectPageVbox = gtk.VBox()
         projectPageVbox.pack_start(projectPageTable)
@@ -278,6 +288,10 @@ class projectAssistant(object):
             self.projectPathEntry.set_text(dialog.get_current_folder())
         dialog.destroy()
 
+    def project_platform_callback(self, widget):
+        pname = self.projectPlatformCombo.get_active_text()        
+        self.projectPlatformDesc.set_text(self.sdk.platforms[pname].config_info['description'])
+        
 
     def project_entry_callback(self, widget):
         """When the text entries in the Project page change, we need to validate the input before proceeding to the next page.
