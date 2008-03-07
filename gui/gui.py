@@ -1406,6 +1406,10 @@ class AddNewProject(object):
         self.np_path = widgets.get_widget("np_path")
         self.np_path.set_text(path)
         self.np_platform = widgets.get_widget("np_platform")
+        self.np_platform.connect("changed", self.platform_callback)
+        self.np_platform_desc_text = gtk.TextBuffer()
+        self.np_platform_desc = widgets.get_widget("np_platform_desc")
+        self.np_platform_desc.set_buffer(self.np_platform_desc_text)
         if not dialogName:
             self.np_addTarget = widgets.get_widget("np_addTarget")
             self.np_targetName_label = widgets.get_widget("np_targetName_label")
@@ -1423,10 +1427,12 @@ class AddNewProject(object):
                 pdesc = " - (%s)" % self.sdk.platforms[pname].config_info['description']
                 packageManagerDesc = self.sdk.platforms[pname].config_info['package_manager']
             if packageManager == packageManagerDesc:
-                platform_entry_box.append([pname + pdesc])
+                #platform_entry_box.append([pname + pdesc])
+                platform_entry_box.append([pname])
                 added = True
             elif packageManagerDesc == "":
-                platform_entry_box.append([pname + pdesc])
+                #platform_entry_box.append([pname + pdesc])
+                platform_entry_box.append([pname])
                 added = True
             # If previously selected an entry, select it again
             if added:
@@ -1437,6 +1443,10 @@ class AddNewProject(object):
         self.np_platform.set_active(platform_idx)
         width, height = self.dialog.get_default_size()
         self.dialog.set_default_size(width + 500, height)
+
+    def platform_callback(self, widget):
+        pname = self.np_platform.get_active_text().split()[0]
+        self.np_platform_desc_text.set_text(self.sdk.platforms[pname].config_info['description'])
 
     def addTarget_callback(self, widget):
         while True:

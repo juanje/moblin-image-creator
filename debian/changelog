@@ -7,9 +7,10 @@ moblin-image-creator (0.43) UNRELEASED; urgency=low
   * Adding Multiple Select for projects. tooltip correction for LiveCD
   * Adding Multiple Select for target delete
   * Fixing the problem with missing cd script in liveCD creation
-  * Moving Project description to a TextView in Project Assistant 
+  * Moving Project description to a TextView in Project Assistant
+  * Add project dialog too wide. Fixing it 
 
- -- Prajwal Mohan <prajwal@linux.intel.com>  Thu, 06 Mar 2008 15:53:38 -0800
+ -- Prajwal Mohan <prajwal@linux.intel.com>  Thu, 06 Mar 2008 16:11:09 -0800
 
 moblin-image-creator (0.42) gaston; urgency=low
 
