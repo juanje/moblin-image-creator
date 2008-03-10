@@ -132,8 +132,15 @@ def addUserInfo():
             username = os.environ['USER']
         else:
             username = pwd.getpwuid(os.getuid()).pw_name
-    userid = pwd.getpwnam(username).pw_uid
-    groupid = pwd.getpwnam(username).pw_gid
+    #Try to get uid and gid from the user name
+    try:
+        userid = pwd.getpwnam(username).pw_uid
+        groupid = pwd.getpwnam(username).pw_gid
+    #The user may not exist in chroot env. Set the user name to root
+    except:
+        username = "root"
+        userid = pwd.getpwnam(username).pw_uid
+        groupid = pwd.getpwnam(username).pw_gid
     config.add_section('userinfo')
     config.set('userinfo', 'groupid', "%s" % groupid)
     config.set('userinfo', 'user', username)
