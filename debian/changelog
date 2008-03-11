@@ -9,9 +9,10 @@ moblin-image-creator (0.43) UNRELEASED; urgency=low
   * Fixing the problem with missing cd script in liveCD creation
   * Moving Project description to a TextView in Project Assistant
   * Add project dialog too wide. Fixing it
-  * fixing bug https://bugs.launchpad.net/moblin-image-creator/+bug/193110 
+  * fixing bug https://bugs.launchpad.net/moblin-image-creator/+bug/193110
+  * Changing install image welcome message 
 
- -- Prajwal Mohan <prajwal@linux.intel.com>  Mon, 10 Mar 2008 14:27:56 -0700
+ -- Prajwal Mohan <prajwal@linux.intel.com>  Tue, 11 Mar 2008 13:29:14 -0700
 
 moblin-image-creator (0.42) gaston; urgency=low
 
