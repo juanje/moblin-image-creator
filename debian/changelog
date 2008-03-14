@@ -1,4 +1,4 @@
-moblin-image-creator (0.43) UNRELEASED; urgency=low
+moblin-image-creator (0.43) gaston; urgency=low
 
   [ John L. Villalovos ]
   * Starting a new version
@@ -14,9 +14,10 @@ moblin-image-creator (0.43) UNRELEASED; urgency=low
   * Fixing spacing in Project Assistant
   * Adding padding between widgets in Project Assistant
   * Adding  desktop-file-utils to ubuntu-mobile fset
-  * Adding new platform *-lpia-ubuntu-hardy-ppa-snapshot 
+  * Adding new platform *-lpia-ubuntu-hardy-ppa-snapshot
+  * Releasing version 0.43
 
- -- Prajwal Mohan <prajwal@linux.intel.com>  Fri, 14 Mar 2008 14:08:14 -0700
+ -- Prajwal Mohan <prajwal@linux.intel.com>  Fri, 14 Mar 2008 16:09:34 -0700
 
 moblin-image-creator (0.42) gaston; urgency=low
 
