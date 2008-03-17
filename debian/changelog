@@ -16,9 +16,10 @@ moblin-image-creator (0.44) UNRELEASED; urgency=low
   * Adding  desktop-file-utils to ubuntu-mobile fset
   * Adding new platform *-lpia-ubuntu-hardy-ppa-snapshot
   * Releasing version 0.43
-  * Starting a new version 
+  * Starting a new version
+  * Fixing copying over /etc/hosts 
 
- -- Prajwal Mohan <prajwal@linux.intel.com>  Fri, 14 Mar 2008 16:29:38 -0700
+ -- Prajwal Mohan <prajwal@linux.intel.com>  Mon, 17 Mar 2008 10:14:44 -0700
 
 moblin-image-creator (0.42) gaston; urgency=low
 

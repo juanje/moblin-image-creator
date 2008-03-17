@@ -68,6 +68,11 @@ class FileSystem(object):
 
     def setHostname(self, hostname):
         self.mount()
+        # Setup copies of some useful files from the host into the chroot
+        for filename in ('etc/resolv.conf'),:
+            source_file = os.path.join(os.sep, filename)
+            target_file = os.path.join(self.chroot_path, filename)
+            pdk_utils.safeTextFileCopy(source_file, target_file)
         f = open("%s/etc/hostname" % self.path, 'w')
         f.write("%s\n" % hostname)
         f.close()
@@ -120,11 +125,6 @@ ff02::3 ip6-allhosts
         # in the umount portion
         self.mounted = pdk_utils.mountList(FileSystem.mount_list, self.chroot_path)
         self.mounted.extend(self.platform.pkg_manager.mount(self.chroot_path))
-        # Setup copies of some useful files from the host into the chroot
-        for filename in ['etc/resolv.conf', 'etc/hosts']:
-            source_file = os.path.join(os.sep, filename)
-            target_file = os.path.join(self.chroot_path, filename)
-            pdk_utils.safeTextFileCopy(source_file, target_file)
         # first time mount
         buildstamp_path = os.path.join(self.path, 'etc', 'buildstamp')
         if not os.path.isfile(buildstamp_path):
