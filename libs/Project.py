@@ -220,7 +220,7 @@ class Project(FileSystem):
             raise ValueError("Target name was not specified")
         if not name in self.targets:
             install_path = os.path.join(self.path, 'targets', name, 'fs')
-            self.platform.createChroot(install_path, callback = self.progress_callback)
+            self.platform.createChroot(install_path, use_rootstrap, callback = self.progress_callback)
             self.targets[name] = Target(name, self, self.progress_callback)
             self.targets[name].mount()
             self.targets[name].updateAndUpgrade()

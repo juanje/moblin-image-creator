@@ -216,7 +216,7 @@ class SDK(object):
             raise ValueError("Project: %s already exists" % name)
         install_path = os.path.realpath(os.path.abspath(os.path.expanduser(parent_path)))
         self.status_label_callback("Creating the project chroot environment")
-        platform.createChroot(install_path, callback = self.progress_callback)
+        platform.createChroot(install_path, use_rootstrap, callback = self.progress_callback)
         # create the config file
         self.status_label_callback("Creating Config file")
         config_path = os.path.join(self.config_path, "%s.proj" % name)

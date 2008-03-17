@@ -17,9 +17,10 @@ moblin-image-creator (0.44) UNRELEASED; urgency=low
   * Adding new platform *-lpia-ubuntu-hardy-ppa-snapshot
   * Releasing version 0.43
   * Starting a new version
-  * Fixing copying over /etc/hosts 
+  * Fixing copying over /etc/hosts
+  * Fixing bug https://bugs.launchpad.net/moblin-image-creator/+bug/183062 
 
- -- Prajwal Mohan <prajwal@linux.intel.com>  Mon, 17 Mar 2008 10:14:44 -0700
+ -- Prajwal Mohan <prajwal@linux.intel.com>  Mon, 17 Mar 2008 10:29:34 -0700
 
 moblin-image-creator (0.42) gaston; urgency=low
 

@@ -105,7 +105,17 @@ class Platform(object):
     def __repr__(self):
         return "Platform( %s, '%s')" % (self.path, self.name)
 
-    def aptCreateChroot(self, chroot_dir, callback = None):
+    def __createRootstrap(self, chroot_dir, rootstrap_file, callback = None):
+        cmd = "tar -jcpvf %s -C %s ." % (rootstrap_file, chroot_dir)
+        output = []
+        result = pdk_utils.execCommand(cmd, output = output, callback = callback)
+        if result != 0:
+            print >> sys.stderr, "ERROR: Unable to archive rootstrap!"
+            pdk_utils.rmtree(chroot_dir, callback = callback)
+            # FIXME: Better exception here
+            raise ValueError(" ".join(output))
+
+    def aptCreateChroot(self, chroot_dir, use_rootstrap, callback = None):
         """Create chroot in chroot_dir for using APT tools"""
         if not os.path.exists(chroot_dir):
             os.makedirs(chroot_dir)
@@ -113,7 +123,7 @@ class Platform(object):
         var_dir = mic_cfg.config.get('general', 'var_dir')
         rootstrap_file = os.path.join(var_dir, "rootstraps", "apt", target_os, self.name, "rootstrap.tgz")
         if not os.path.exists(rootstrap_file):
-            self.__aptCreateRootstrap(chroot_dir, rootstrap_file, callback = callback)
+            self.__aptCreateRootstrap(chroot_dir, rootstrap_file, use_rootstrap, callback = callback)
         else:
             cmd = "tar -jxvf %s -C %s" % (rootstrap_file, chroot_dir)
             output = []
@@ -129,7 +139,7 @@ class Platform(object):
             target_file = os.path.join(chroot_dir, 'etc', filename)
             pdk_utils.safeTextFileCopy(source_file, target_file, force = True)
 
-    def __aptCreateRootstrap(self, chroot_dir, rootstrap_file, callback = None):
+    def __aptCreateRootstrap(self, chroot_dir, rootstrap_file, use_rootstrap, callback = None):
         codename = self.buildroot_codename
         components = ",".join(self.buildroot_components)
         mirror = self.buildroot_mirror
@@ -170,23 +180,17 @@ class Platform(object):
         source_path = os.path.join(self.path, 'preferences')
         if os.path.exists(source_path):
             shutil.copy(source_path, os.path.join(chroot_dir, 'etc', 'apt'))
-        cmd = "tar -jcpvf %s -C %s ." % (rootstrap_file, chroot_dir)
-        output = []
-        result = pdk_utils.execCommand(cmd, output = output, callback = callback)
-        if result != 0:
-            print >> sys.stderr, "ERROR: Unable to archive rootstrap!"
-            pdk_utils.rmtree(chroot_dir, callback = callback)
-            # FIXME: Better exception here
-            raise ValueError(" ".join(output))
+        if use_rootstrap == True:
+            self.__createRootstrap(chroot_dir, rootstrap_file, callback = None)
 
-    def yumCreateChroot(self, chroot_dir, callback = None):
+    def yumCreateChroot(self, chroot_dir, use_rootstrap, callback = None):
         if not os.path.exists(chroot_dir):
             os.makedirs(chroot_dir)
         target_os = self.target_os
         var_dir = mic_cfg.config.get('general', 'var_dir')
         rootstrap_file = os.path.join(var_dir, "rootstraps", "yum", target_os, "rootstrap.tgz")
         if not os.path.exists(rootstrap_file):
-            self.__yumCreateRootstrap(chroot_dir, rootstrap_file, callback = callback)
+            self.__yumCreateRootstrap(chroot_dir, rootstrap_file, use_rootstrap, callback = callback)
         else:
             cmd = "tar -jxvf %s -C %s" % (rootstrap_file, chroot_dir)
             output = []
@@ -197,7 +201,7 @@ class Platform(object):
                 # FIXME: Better exception here
                 raise ValueError(" ".join(output))
 
-    def __yumCreateRootstrap(self, chroot_dir, rootstrap_file, callback = None):
+    def __yumCreateRootstrap(self, chroot_dir, rootstrap_file, use_rootstrap, callback = None):
         basedir = os.path.dirname(rootstrap_file)
         if not os.path.exists(basedir):
             os.makedirs(basedir)
@@ -218,14 +222,8 @@ class Platform(object):
         shutil.rmtree(os.path.join(chroot_dir, 'var', 'cache', 'yum'))
         self.__yumDoUmounts(chroot_dir)
         # Create the rootstrap archive file
-        cmd = "tar -jcpvf %s -C %s ." % (rootstrap_file, chroot_dir)
-        output = []
-        result = pdk_utils.execCommand(cmd, output = output, callback = callback)
-        if result != 0:
-            print >> sys.stderr, "ERROR: Unable to archive rootstrap!"
-            pdk_utils.rmtree(chroot_dir, callback = callback)
-            # FIXME: Better exception here
-            raise ValueError(" ".join(output))
+        if use_rootstrap == True:
+            self.__createRootstrap(chroot_dir, rootstrap_file, callback = callback)
 
     def __yumDoMounts(self, chroot_dir):
         for cmd in ['mount -n -t proc mic_chroot_proc   %s/proc' % chroot_dir,
