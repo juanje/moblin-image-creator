@@ -1,8 +1,12 @@
 moblin-image-creator (0.45) UNRELEASED; urgency=low
 
+  [ John L. Villalovos ]
   * Starting new version
 
- -- John L. Villalovos <john.l.villalovos@intel.com>  Mon, 17 Mar 2008 12:51:49 -0700
+  [ Prajwal Mohan ]
+  * https://bugs.launchpad.net/moblin-image-creator/+bug/203561 
+
+ -- Prajwal Mohan <prajwal@linux.intel.com>  Tue, 18 Mar 2008 16:39:45 -0700
 
 moblin-image-creator (0.44) gaston; urgency=low
 

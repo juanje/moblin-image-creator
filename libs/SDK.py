@@ -296,7 +296,7 @@ class SDK(object):
             tar_options = "xfjv"
         else:
             tar_options = "xfj"
-        pdk_utils.execCommand("tar %s %s" % (tar_options, filename), callback = progressCallback)
+        pdk_utils.execCommand("tar %s %s --numeric-owner" % (tar_options, filename), callback = progressCallback)
         os.chdir(cwd)
         source_config_file = os.path.join(tempdir, "config", "save.proj")
         if not os.path.isfile(source_config_file):
