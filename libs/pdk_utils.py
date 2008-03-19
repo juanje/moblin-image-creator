@@ -491,5 +491,60 @@ class ImageCreatorUmountError(ImageCreatorError):
     def __init__(self, directory_set = set()):
         self.directory_set = directory_set
 
+def getAllProcesses():
+    """Return back a dictionary of all the currently running processes on the
+    system"""
+    processes = {}
+    dirname = "/proc"
+    for filename in sorted(os.listdir(dirname)):
+        full_path = os.path.join(dirname, filename)
+        if os.path.isdir(full_path) and re.search(r'^[0-9]+$', filename):
+            pid = int(filename)
+            in_file = open(os.path.join(full_path, "status"))
+            for line in in_file:
+                line = line.strip()
+                result = re.search(r'^ppid:\t(?P<ppid>.*)', line, re.I)
+                if result:
+                    ppid = int(result.group('ppid'))
+                    processes.setdefault(ppid, []).append(pid)
+                    break
+            in_file.close()
+    return processes
+
+def findChildren(pid, process_dict = None):
+    """Find all the children of PID (Process ID).  Does not return back PID"""
+    output = []
+    if not process_dict:
+        process_dict = getAllProcesses()
+    if pid in process_dict:
+        for child_pid in process_dict[pid]:
+            output.append(child_pid)
+            output.extend(findChildren(child_pid, process_dict))
+    output.sort()
+    return output
+
+def signalChildren(pid, send_signal, process_dict = None, parent_first = True):
+    """Send the signal 'send_signal' to the parent and all of its children
+        parent_first = Send the signal to the parent before signaling the
+        children"""
+    if not process_dict:
+        process_dict = getAllProcesses()
+    if pid in process_dict:
+        if parent_first:
+            print "Sending signal: %s to PID: %s" % (send_signal, pid)
+            try:
+                os.kill(pid, send_signal)
+            except:
+                pass
+        for child_pid in process_dict[pid]:
+            signalChildren(child_pid, send_signal = send_signal,
+                process_dict = process_dict, parent_first = parent_first)
+        if not parent_first:
+            print "Sending signal: %s to PID: %s" % (send_signal, pid)
+            try:
+                os.kill(pid, send_signal)
+            except:
+                pass
+
 if '__main__' == __name__:
     sys.exit(main())
