@@ -4,9 +4,12 @@ moblin-image-creator (0.45) UNRELEASED; urgency=low
   * Starting new version
 
   [ Prajwal Mohan ]
-  * https://bugs.launchpad.net/moblin-image-creator/+bug/203561 
+  * https://bugs.launchpad.net/moblin-image-creator/+bug/203561
 
- -- Prajwal Mohan <prajwal@linux.intel.com>  Tue, 18 Mar 2008 16:39:45 -0700
+  [ Alek Du ]
+  * Set a bigger bs paramter to dd command to speed up writing image
+
+ -- Alek Du <alek.du@intel.com>  Wed, 19 Mar 2008 10:07:34 +0800
 
 moblin-image-creator (0.44) gaston; urgency=low
 

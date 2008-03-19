@@ -856,7 +856,7 @@ class App(object):
                         progress_tree.get_widget('progress_label').set_text("Please wait while writing image to USB disk")
                         self.progressbar = progress_tree.get_widget('progressbar')
                         print "Writing image to USB disk %s" % usb_disk
-                        cmd = "dd bs=1024 if=%s of=%s" % (image_filename, usb_disk)
+                        cmd = "dd bs=4096 if=%s of=%s" % (image_filename, usb_disk)
                         result = pdk_utils.execCommand(cmd, False, None, self.gui_throbber)
                         progress_dialog.destroy()
                         if result != 0:
