@@ -36,7 +36,7 @@ DEPS=crownbeach-config
 
 [Ubuntu-Mobile]
 DESC=Ubuntu Mobile using Hildon, and any base applications for same
-PKGS=ubuntu-mobile gstreamer-dbus-media-service gstreamer0.10-ffmpeg gstreamer0.10-plugins-ugly gstreamer0.10-plugins-bad moblin-keyboard-manager mousepad gnome-nettool evince desktop-file-utils
+PKGS=ubuntu-mobile gstreamer-dbus-media-service gstreamer0.10-ffmpeg gstreamer0.10-plugins-ugly gstreamer0.10-plugins-bad moblin-keyboard-manager mousepad gnome-nettool evince
 DEBUG_PKGS=powertop
 DEPS=gnome-mobile
 

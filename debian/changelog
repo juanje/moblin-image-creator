@@ -12,7 +12,10 @@ moblin-image-creator (0.45) UNRELEASED; urgency=low
   [ Bob Spencer ]
   * Added libosso-dev to the developer tools fset
 
- -- Bob Spencer <bob.spencer@intel.com>  Thu, 20 Mar 2008 22:17:09 -0700
+  [ Prajwal Mohan ]
+  * Removing desktop-file-utils from Ubuntu-Mobile fset of all platforms 
+
+ -- Prajwal Mohan <prajwal@linux.intel.com>  Fri, 21 Mar 2008 14:12:03 -0700
 
 moblin-image-creator (0.44) gaston; urgency=low
 
