@@ -9,7 +9,10 @@ moblin-image-creator (0.45) UNRELEASED; urgency=low
   [ Alek Du ]
   * Set a bigger bs paramter to dd command to speed up writing image
 
- -- Alek Du <alek.du@intel.com>  Wed, 19 Mar 2008 10:07:34 +0800
+  [ Bob Spencer ]
+  * Added libosso-dev to the developer tools fset
+
+ -- Bob Spencer <bob.spencer@intel.com>  Thu, 20 Mar 2008 22:17:09 -0700
 
 moblin-image-creator (0.44) gaston; urgency=low
 

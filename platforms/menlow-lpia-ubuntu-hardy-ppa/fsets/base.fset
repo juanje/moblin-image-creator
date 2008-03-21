@@ -42,7 +42,7 @@ DEPS=gnome-mobile
 
 [Developer-Tools]
 DESC=Tools for building source in the target (gcc, make, etc.)
-PKGS=ubuntu-mobile-dev libtool autoconf automake hildon-desktop-dev man manpages curl python-dev dh-make
+PKGS=ubuntu-mobile-dev libtool autoconf automake hildon-desktop-dev man manpages curl python-dev dh-make libosso-dev
 DEBUG_PKGS=
 DEPS=core
 
