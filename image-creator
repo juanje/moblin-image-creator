@@ -170,7 +170,7 @@ def parseCommandLine():
 
     parser = OptionParser(add_help_option=False)
 
-    parser.add_option("-v", "--version", help="Display version",
+    parser.add_option("--version", help="Display version",
         dest = "version", action="store_true", default=False)
     parser.add_option("-c", "--command", dest="cmd",
         help="Where CMD is one of: %s" % valid_command_string, metavar="CMD")
