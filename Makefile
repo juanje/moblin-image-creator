@@ -42,7 +42,7 @@ basicinstall: all
 	@cp -a help/* ${DESTDIR}/${SHAREDIR}/gnome/help/image-creator/
 	@cp utils/*.py  ${DESTDIR}/${SHAREDIR}/utils/
 	@mkdir -p ${DESTDIR}/usr/share/applications/
-	sed '{s/%%EXEC_CMD%%/gksu \/usr\/sbin\/image-creator/}' image-creator.desktop.template > ${DESTDIR}/usr/share/applications/image-creator.desktop
+	sed '{s/%%EXEC_CMD%%/gksu \/usr\/bin\/image-creator/}' image-creator.desktop.template > ${DESTDIR}/usr/share/applications/image-creator.desktop
 	@echo "Done"
 
 rpm:
