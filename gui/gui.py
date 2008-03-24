@@ -283,7 +283,7 @@ class App(object):
             try:
                 progress_tree = gtk.glade.XML(self.gladefile, 'ProgressDialog')
                 progress_dialog = progress_tree.get_widget('ProgressDialog')
-                progress_dialog.set_size_request(400, 200)
+                progress_dialog.set_size_request(450, 250)
                 progress_dialog.connect('delete_event', self.ignore)
                 progress_tree.get_widget('progress_label').set_text(_("Please wait while installing %s") % dialog.name)
                 self.progressbar = progress_tree.get_widget('progressbar')
@@ -1253,7 +1253,7 @@ class App(object):
             try:
                 progress_tree = gtk.glade.XML(self.gladefile, 'ProgressDialog')
                 progress_dialog = progress_tree.get_widget('ProgressDialog')
-                progress_dialog.set_size_request(400, 200)
+                progress_dialog.set_size_request(450, 250)
                 progress_dialog.connect('delete_event', self.ignore)
                 progress_tree.get_widget('progress_label').set_text(_("Please wait while installing %s") % newProjectConfiguration.projectName)
                 self.progressbar = progress_tree.get_widget('progressbar')
