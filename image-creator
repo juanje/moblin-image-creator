@@ -81,7 +81,9 @@ def main():
             return 1
 
     options, args = parseCommandLine()
-    if options.cmd == "list-platforms":
+    if options.cmd == "version":
+        display_version()
+    elif options.cmd == "list-platforms":
         list_platforms()
     elif options.cmd == "clear-rootstraps":
         clear_rootstraps()
@@ -156,6 +158,7 @@ def parseCommandLine():
         "umount-target" :       1,
         "update-project" :      1,
         "update-target" :       1,
+        "version" :             0,
     }
     valid_command_string = ""
     commands = valid_commands.keys()
@@ -167,6 +170,8 @@ def parseCommandLine():
 
     parser = OptionParser(add_help_option=False)
 
+    parser.add_option("-v", "--version", help="Display version",
+        dest = "version", action="store_true", default=False)
     parser.add_option("-c", "--command", dest="cmd",
         help="Where CMD is one of: %s" % valid_command_string, metavar="CMD")
     parser.add_option("--platform-name", dest="platform_name",
@@ -294,6 +299,9 @@ Examples:
         print
         print examples
         sys.exit(0)
+    if options.version:
+        display_version()
+        sys.exit(0)
     # now lets validate stuff
     if not options.cmd:
         parser.error("Must specify a -c/--command argument")
@@ -389,6 +397,9 @@ Examples:
 def clear_rootstraps():
     sdk.clear_rootstraps()
     
+def display_version():
+    print "Moblin Image Creator %s" % sdk.version
+
 def list_platforms():
     for key in sorted(sdk.platforms.iterkeys()):
         print "%s" % (sdk.platforms[key].name)

@@ -14,9 +14,10 @@ moblin-image-creator (0.45) UNRELEASED; urgency=low
 
   [ Prajwal Mohan ]
   * Removing desktop-file-utils from Ubuntu-Mobile fset of all platforms
-  * Fixing image-creator path for image-creator.desktop in Makefile 
+  * Fixing image-creator path for image-creator.desktop in Makefile
+  * Adding cmd line option to display version 
 
- -- Prajwal Mohan <prajwal@linux.intel.com>  Mon, 24 Mar 2008 11:00:02 -0700
+ -- Prajwal Mohan <prajwal@linux.intel.com>  Mon, 24 Mar 2008 14:27:52 -0700
 
 moblin-image-creator (0.44) gaston; urgency=low
 
