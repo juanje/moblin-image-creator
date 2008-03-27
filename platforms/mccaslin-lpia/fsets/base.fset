@@ -59,9 +59,15 @@ PKGS=ubuntu-mobile-dev libtool autoconf automake hildon-desktop-dev man manpages
 DEBUG_PKGS=
 DEPS=core
 
-[Asian-i18n-support]
+[Asian-Fonts]
 DESC=Fonts for viewing websites in Chinese, Japanese, and Korean (adds 34MB)
-PKGS=ttf-arphic-uming ttf-unfonts-core language-pack-zh language-support-zh language-pack-gnome-zh
+PKGS=ttf-arphic-uming ttf-unfonts-core
 DEBUG_PKGS=
 DEPS=core
+
+[Asian-i18n-support]
+DESC=Internationalization support for Asian Languages
+PKGS=language-pack-zh language-support-zh language-pack-gnome-zh
+DEBUG_PKGS=
+DEPS=core asian-fonts
 
