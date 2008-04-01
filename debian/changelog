@@ -20,9 +20,10 @@ moblin-image-creator (0.45) UNRELEASED; urgency=low
   * adding cancel button to progress dialog - not sensitive
   * Adding packages to Asian-Fonts on gutsy. Chaning fset name to
     Asian-i18n-support
-  * Modifying Asian-i18n-support fset 
+  * Modifying Asian-i18n-support fset
+  * Removing libgl1-mesa-dri from Gnome-Mobile fset of menlow-lpia 
 
- -- Prajwal Mohan <prajwal@linux.intel.com>  Thu, 27 Mar 2008 15:56:54 -0700
+ -- Prajwal Mohan <prajwal@linux.intel.com>  Tue, 01 Apr 2008 16:41:45 -0700
 
 moblin-image-creator (0.44) gaston; urgency=low
 
