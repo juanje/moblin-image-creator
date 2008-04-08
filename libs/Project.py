@@ -427,7 +427,7 @@ class Target(FileSystem):
             raise RuntimeError, "Circular fset dependency encountered for: %s" % fset.name
         seen_fsets.add(fset.name)
 
-        package_set = set()
+        package_list = []
         for dep in fset['deps']:
             # An fset "DEP" value can contain a dependency list of the form:
             #   DEP=A B|C
@@ -442,21 +442,25 @@ class Target(FileSystem):
             if not self.__any_fset_installed(dep_list):
                 if fsets:
                     # Determine which fsets are needed to install the required fset
-                    package_set.update(self.installFset(fsets[dep_list[0]],
-                        fsets = fsets, debug_pkgs = debug_pkgs, seen_fsets = seen_fsets))
+                    dependency_list = self.installFset(fsets[dep_list[0]], 
+                     fsets = fsets, debug_pkgs = debug_pkgs, seen_fsets = seen_fsets)
+                    package_list = package_list + dependency_list
                 else:
                     raise ValueError("fset %s must be installed first!" % (dep_list[0]))
-
-        package_set.update(fset['pkgs'])
+        for pkg in fset['pkgs']:
+            if not pkg in package_list:
+                package_list.append(pkg)        
         if debug_pkgs == 1:
-            package_set.update(fset['debug_pkgs'])
+            for pkg in fset['debug_pkgs']:
+                if not pkg in package_list:
+                    package_list.append(pkg)        
         if not root_fset:
-            return package_set
+            return package_list
         else:
             req_fsets = seen_fsets - set( [fset.name] )
             if req_fsets:
                 print "Installing required Function Set: %s" % ' '.join(req_fsets)
-            self.installPackages(package_set)
+            self.installPackages(package_list)
             # and now create a simple empty file that indicates that the fsets has
             # been installed.
             for fset_name in seen_fsets:
