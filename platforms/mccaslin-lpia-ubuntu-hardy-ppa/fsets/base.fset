@@ -53,6 +53,6 @@ DEPS=core
 
 [Asian-Fonts]
 DESC=Fonts for viewing websites in Chinese, Japanese, and Korean (adds 34MB)
-PKGS=ttf-arphic-uming ttf-unfonts-core
+PKGS=ttf-arphic-uming ttf-unfonts-core ttf-kochi-gothic ttf-kochi-mincho
 DEBUG_PKGS=
 DEPS=core
