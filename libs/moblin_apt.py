@@ -54,6 +54,9 @@ class AptPackageManager(moblin_pkgbase.PackageManager):
             if result == 0:
                 print "Completed 'apt-get install' successfully"
                 break
+            if result < 0:
+                print "Process Aborted"
+                return False
             print
             print "Error running 'apt-get install' command: %s" % command
             print "Will try 'apt-get update' in 15 seconds"
@@ -87,6 +90,7 @@ class AptPackageManager(moblin_pkgbase.PackageManager):
         else:
             raise OSError("Internal error while attempting to run: %s" % command)
         self.__aptgetPostRun()
+        return True
 
     def updateChroot(self, chroot_dir, output = None, callback = None):
         self.__aptgetPreRun(chroot_dir)

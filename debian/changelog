@@ -23,9 +23,10 @@ moblin-image-creator (0.45) UNRELEASED; urgency=low
   * Modifying Asian-i18n-support fset
   * Removing libgl1-mesa-dri from Gnome-Mobile fset of menlow-lpia
   * Adding ttf-kochi-gothic and ttf-kochi-mincho to asian-fonts fset
-  * Using list instead of set to list all fsets. https://bugs.launchpad.net/moblin-image-creator/+bug/211359 
+  * Using list instead of set to list all fsets. https://bugs.launchpad.net/moblin-image-creator/+bug/211359
+  * Adding cancel option to add project 
 
- -- Prajwal Mohan <prajwal@linux.intel.com>  Tue, 08 Apr 2008 16:19:16 -0700
+ -- Prajwal Mohan <prajwal@linux.intel.com>  Wed, 09 Apr 2008 13:22:30 -0700
 
 moblin-image-creator (0.44) gaston; urgency=low
 

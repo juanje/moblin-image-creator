@@ -29,6 +29,7 @@ import shutil
 import sys
 import time
 import traceback
+import signal
 
 import pdk_utils
 import SDK
@@ -245,6 +246,24 @@ class App(object):
         column.set_sort_column_id(id)
         self.targetView.append_column(column)
 
+    def stop_progress(self, widget, cancelData):        
+        #self.stopTest = True
+        tree = gtk.glade.XML(self.gladefile, 'qDialog')
+        tree.get_widget('queryLabel').set_text("Are you sure you want to cancel project creation?")
+        tree.get_widget('cancelbutton2').set_label("gtk-no")
+        tree.get_widget('okbutton2').set_label("gtk-yes")
+        dialog = tree.get_widget('qDialog')
+        result = dialog.run()
+        dialog.destroy()       
+        if result == gtk.RESPONSE_OK:
+            cur_pid = os.getpid()
+            child_list = pdk_utils.findChildren(cur_pid)
+            for child in child_list:
+                if child != cur_pid:
+                    os.kill(child, signal.SIGKILL)
+        print "Canceled Function was %s and cancel type was %s" % (cancelData[0], cancelData[1])
+
+
     def on_new_project_clicked(self, widget):
         """Instantiate a new dialogue"""
         name = ""
@@ -288,11 +307,31 @@ class App(object):
                 progress_tree.get_widget('progress_label').set_text(_("Please wait while installing %s") % dialog.name)
                 self.progressbar = progress_tree.get_widget('progressbar')
                 self.statuslabel = progress_tree.get_widget('status_label')
+                self.progressCancel = progress_tree.get_widget('progressCancel')
+                self.progressCancel.set_sensitive(True)
+                cancelData = ("AddProject", "Hard")
+                self.progressCancel.connect("clicked", self.stop_progress, cancelData)           
                 while gtk.events_pending():
                     gtk.main_iteration(False)
                 platformName = dialog.platform.split()[0]
-                proj = self.sdk.create_project(dialog.path, dialog.name, dialog.desc, self.sdk.platforms[platformName])
-                proj.install()
+                try:
+                    proj = self.sdk.create_project(dialog.path, dialog.name, dialog.desc, self.sdk.platforms[platformName])
+                except ValueError:
+                    print "Project Creation cancelled"
+                    progress_dialog.destroy()
+                    return
+                if proj.install() == False:
+                    print "Project Creation cancelled"
+                    progress_dialog.destroy()
+                    try:
+                        print "Trying to cleanup"
+                        self.sdk.delete_project(dialog.name)
+                    except:
+                        print "could not cleanup project"
+                        # if the project creation failed before the list of
+                        # projects has been updated, then we expect failure here
+                        pass
+                    return
                 self.projectList.append((dialog.name, dialog.desc, dialog.path, platformName))
                 
                 progress_dialog.destroy()
