@@ -3,9 +3,9 @@
 "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
   <!ENTITY legal SYSTEM "legal.xml">
   <!ENTITY app "Moblin Image Creator">  
-  <!ENTITY appversion "0.1">
-  <!ENTITY manrevision "0">
-  <!ENTITY date "April 2007">
+  <!ENTITY appversion "0.45">
+  <!ENTITY manrevision "1">
+  <!ENTITY date "April 2008">
 ]>
 <article id="index" lang="en"> 
   <articleinfo> 
@@ -16,7 +16,7 @@
        </para>
      </abstract>
      <copyright> 
-        <year>2007</year> 
+        <year>2007, 2008</year> 
         <holder>Intel Corp.</holder> 
      </copyright> 
      <publisher> 
@@ -45,6 +45,14 @@
           </revdescription> 
         </revision> 
 	<revision> 
+          <revnumber>Moblin Image Creator V0.45</revnumber> 
+          <date>April 2008</date> 
+          <revdescription> 
+             <para role="author">Moblin Image Creator Documentation Team</para>
+             <para role="publisher">Moblin Image Creator Documentation Project</para>
+          </revdescription> 
+        </revision>
+	<revision> 
           <revnumber>Moblin Image Creator V0.1</revnumber> 
           <date>April 2007</date> 
           <revdescription> 
@@ -68,7 +76,8 @@
   </indexterm> 
   <sect1 id="image-creator-introduction"> 
      <title>Introduction</title> 
-     <para>TODO: Add content</para>
+     <para>Moblin Image Creator is a tool you can use to create an image of a target environment. Developers can use the image to develop on a platform or architecture that is different than their current development system. The image can be copied to an actual device so that their applications can be tested and distributed. The tool is designed to be extremely flexible with platform-specific knowledge isolated to each platform definition. Currently, users can develop applications for a variety of architectures and Linux distributions. By selecting an architecture and a distribution, users can create a platform-specific build-environment, or "project". For any project, users can create a number of individual target file-systems, or "targets", and add to the targets, bundles of related packages that provide a certain high-level functionality, called "functional sets" (fsets). Users can create images of the targets which can be copied to their mobile device.
+     </para>
   </sect1> 
   <sect1 id="image-creator-get-started"> 
      <title>Getting Started</title> 
@@ -79,5 +88,164 @@
   <sect1 id="image-creator-usage"> 
      <title>Usage</title> 
      <para>TODO: Add content</para>
+  </sect1>
+  <sect1 id="command-line-options"> 
+     <title>Command Line Options</title> 
+     <para>List of Command Line Options
+     <orderedlist>
+         
+          <listitem>
+               <title>Adding a new project</title>
+	       <para>
+                    image-creator --command=create-project 
+                       --platform-name='donley' 
+                       --project-name='MyProject' 
+                       --project-desc='Example project' 
+                       --project-path=/usr/src/projects/myproject
+               </para>
+          </listitem>
+
+          <listitem>     
+               <title>Delete a project</title>
+	       <para>
+                    image-creator --command=delete-project 
+                       --project-name='MyOtherProject'
+               </para>
+          </listitem>
+
+          <listitem>
+               <title>Unmount a project - Normally this will not be needed as projects are
+                         automatically unmounted upon exit.</title>
+	       <para>
+                    image-creator --command=umount-project 
+                       --project-name='MyOtherProject'
+               </para>
+          </listitem>
+
+          <listitem>
+               <title>Unmount a target - Normally this will not be needed as targets are
+                         automatically unmounted upon exit</title>
+               <para>
+                    image-creator --command=umount-target 
+                       --project-name='MyOtherProject' 
+                       --target-name='MyTarget'
+               </para>
+          </listitem>
+
+          <listitem>
+               <title>Run a command inside a project</title>
+               <para>
+                    image-creator --command=run-project 
+                       --project-name='MyOtherProject' 
+                       --run-command='dpkg -l'
+               </para>
+          </listitem>
+
+          <listitem>
+               <title>Run a command inside a target</title>
+      	       <para>
+                    image-creator --command=run-target 
+                       --project-name='MyOtherProject' 
+                       --target-name='MyTarget' 
+                       --run-command='dpkg -l'
+               </para>
+          </listitem>
+
+          <listitem>
+               <title>Adding a new target to an existing project</title>
+	       <para>
+                    image-creator --command=create-target 
+                       --project-name='MyProject' 
+                       --target-name='MyTarget'
+               </para>
+          </listitem>
+
+          <listitem>
+               <title>Delete a target</title>
+	       <para>
+                   image-creator --command=delete-target 
+                       --project-name='MyProject' 
+                       --target-name='MyOtherTarget'
+               </para>
+          </listitem>
+
+          <listitem>
+               <title>Installing a Function Set (fset) into a given target</title>
+	       <para>
+                    image-creator --command=install-fset 
+                       --platform-name='donley' 
+                       --project-name='MyProject' 
+                       --target-name='MyTarget' 
+                       --fset='Core'      
+               </para>
+          </listitem>
+
+          <listitem>
+               <title>Change into a given project buildroot filesystem</title>
+	       <para>
+                    image-creator --command=chroot-project 
+                       --project-name='MyProject' 
+               </para>
+          </listitem>
+
+          <listitem>
+               <title>Change into a given projects target filesystem</title>
+	       <para>
+                    image-creator --command=chroot-target 
+                       --project-name='MyProject' 
+                       --target-name='MyTarget' 
+               </para>
+          </listitem>
+
+          <listitem>
+               <title>Updating a given target inside a project</title>
+	       <para>
+                    image-creator --command=update-target 
+                       --project-name='MyProject' 
+                       --target-name='MyTarget' 
+               </para>
+          </listitem>
+
+          <listitem>
+               <title>Updating a given project</title>
+	       <para>
+                    image-creator --command=update-project 
+                       --project-name='MyProject'
+               </para>
+          </listitem>
+
+          <listitem>
+               <title>Create a image</title>
+	       <para>
+                    image-creator --command=|create-live-usb 
+                            |create-live-usbrw 
+                            |create-install-usb]  
+                       --project-name='Myproject' 
+                       --target-name='MyTraget' 
+                       --image-name='MyImage'
+               </para>
+          </listitem>
+
+          <listitem>
+               <title>Save a project</title>
+	       <para>
+                    image-creator --command=save-project 
+                    --project-name='Myproject' 
+                    --file-name='file_name_to_save_project'
+               </para>
+          </listitem>
+
+          <listitem>     
+               <title>Load a saved project</title>     
+               <para>
+                    image-creator --command=load-project 
+                    --project-name='Myproject' 
+                    --file-name='file_name_of_saved_project'
+                    --project-path='path_to_restore_project_to'
+                       """
+               </para>
+          </listitem>
+     </orderedlist>
+     </para>
   </sect1>
 </article> 
