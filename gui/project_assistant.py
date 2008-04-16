@@ -436,8 +436,8 @@ class projectAssistant(object):
         if not self.targetNameEntry.get_text():
             self.assistantDialog.set_page_complete(self.targetPage, False)
         else:
-            if re.search(r'\W', self.targetNameEntry.get_text()):
-                self.targetWarning.set_text("Target names can only contain alpha/numeric characters")
+            if re.search(r'[^-_a-zA-Z0-9]', self.targetNameEntry.get_text()):
+                self.targetWarning.set_text("Target names can only contain alpha/numeric characters, hyphen and underscore")
                 self.assistantDialog.set_page_complete(self.targetPage, False)
             else:
                 self.targetWarning.set_text("")

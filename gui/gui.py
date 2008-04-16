@@ -419,9 +419,9 @@ class App(object):
                     self.show_error_dialog("Must specify a target name")
                 elif target_name in self.current_project().targets:
                     self.show_error_dialog("Target: %s already exists" % target_name)
-                elif re.search(r'\W', target_name):
-                    target_name = re.sub('\W', '', target_name)
-                    self.show_error_dialog("Target names can only contain alpha/numeric characters")
+                elif re.search(r'[^-_a-zA-Z0-9]', target_name):
+                    target_name = re.sub(r'[^-_a-zA-Z0-9]', '', target_name)
+                    self.show_error_dialog("Target names can only contain alpha/numeric characters, hyphen and underscore")
                 else:
                     self.create_new_target(self.current_project(), target_name)
                     break
