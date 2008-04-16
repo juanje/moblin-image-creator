@@ -26,9 +26,10 @@ moblin-image-creator (0.45) UNRELEASED; urgency=low
   * Using list instead of set to list all fsets. https://bugs.launchpad.net/moblin-image-creator/+bug/211359
   * Adding cancel option to add project
   * Adding help - command line options
-  * Adding cmd line option to create live iso image 
+  * Adding cmd line option to create live iso image
+  * Adding more help documentation 
 
- -- Prajwal Mohan <prajwal@linux.intel.com>  Wed, 16 Apr 2008 10:43:54 -0700
+ -- Prajwal Mohan <prajwal@linux.intel.com>  Wed, 16 Apr 2008 14:04:42 -0700
 
 moblin-image-creator (0.44) gaston; urgency=low
 

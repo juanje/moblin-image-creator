@@ -78,11 +78,40 @@
      <title>Introduction</title> 
      <para>Moblin Image Creator is a tool you can use to create an image of a target environment. Developers can use the image to develop on a platform or architecture that is different than their current development system. The image can be copied to an actual device so that their applications can be tested and distributed. The tool is designed to be extremely flexible with platform-specific knowledge isolated to each platform definition. Currently, users can develop applications for a variety of architectures and Linux distributions. By selecting an architecture and a distribution, users can create a platform-specific build-environment, or "project". For any project, users can create a number of individual target file-systems, or "targets", and add to the targets, bundles of related packages that provide a certain high-level functionality, called "functional sets" (fsets). Users can create images of the targets which can be copied to their mobile device.
      </para>
+     <para>
+          There are three fundamental features that Moblin Image Creator provides:
+          <orderedlist>
+              <listitem><para>creating a platform-specific build-environment, or "project"</para></listitem>
+              <listitem><para>creating a platform-specific target file-system</para></listitem>
+              <listitem><para>providing user selectable "feature sets" (or fsets) to install bundles of packages that provide some high-level functionality</para></listitem>
+          </orderedlist>
+     </para>
+     <para>
+          In addition, there are many other smaller features to simplify your work, such as:
+          <orderedlist>
+                <listitem><para>the choice of a fully functional graphical user interface (GUI) or a purely command line interface</para></listitem>
+                <listitem><para>wrappers for chrooting into a buildroot or target file-system (such as, bind mounting important system directories and copying over network configuration files)</para></listitem>
+                <listitem><para>wrappers for opening Xephyr windows for testing target file-systems</para></listitem>
+                <listitem><para>utilities for creating live USB images of target file-systems, for easy testing of multiple target file-systems</para></listitem>
+          </orderedlist>
+     </para>
   </sect1> 
   <sect1 id="image-creator-get-started"> 
      <title>Getting Started</title> 
      <para>
         The following sections describe how to start <application>&app;</application>. 
+     </para>
+     <para>
+          You must be root to run Moblin Image Creator. You can either start Moblin Image Creator through the desktop menu, in which case, Moblin Image Creator runs automatically as root (after asking for the root password), or you can run Moblin Image Creator from the command-line, using sudo.
+     </para>
+     <para>
+          Also, Moblin Image Creator can run as a GUI or using the command line. To run the GUI, start Moblin Image Creator with no command line arguments:
+          <para><code>$ sudo image-creator</code></para>
+          To see the available list of command-line arguments:
+          <para><code>$ sudo image-creator --help</code></para>
+     </para>
+     <para>
+           HINT: Moblin Image Creator installs a bash completion configuration file, so if you are using bash, you can press the Tab key. After typing a few letters of a given command line argument, bash will auto-complete (provide you a list of possible completions.) 
      </para>
   </sect1> 
   <sect1 id="image-creator-usage"> 
