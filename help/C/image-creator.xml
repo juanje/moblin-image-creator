@@ -217,9 +217,10 @@
           <listitem>
                <title>Create a image</title>
 	       <para>
-                    image-creator --command=|create-live-usb 
+                    image-creator --command=[create-live-usb 
                             |create-live-usbrw 
-                            |create-install-usb]  
+                            |create-install-usb
+                            |create-live-iso] 
                        --project-name='Myproject' 
                        --target-name='MyTraget' 
                        --image-name='MyImage'

@@ -115,7 +115,7 @@ def main():
         update_project(options)
     elif options.cmd == 'update-target':
         update_target(options)
-    elif options.cmd in ['create-live-usb', 'create-live-usbrw', 'create-install-usb']:
+    elif options.cmd in ['create-live-usb', 'create-live-usbrw', 'create-install-usb', 'create-live-iso']:
         create_image(options)
     elif options.cmd == 'chroot-project':
         chroot_project(options)
@@ -141,6 +141,7 @@ def parseCommandLine():
         "create-install-usb" :  1,
         "create-live-usb" :     1,
         "create-live-usbrw" :   1,
+        "create-live-iso" :     1,
         "create-project" :      1,
         "create-target" :       1,
         "delete-project" :      1,
@@ -274,6 +275,7 @@ Examples:
     image-creator --command=|create-live-usb \\
                             |create-live-usbrw \\
                             |create-install-usb]  \\
+                            |create-live-iso \\
                   --project-name='Myproject' \\
                   --target-name='MyTraget' \\
                   --image-name='MyImage'
@@ -362,7 +364,7 @@ Examples:
             parser.error("Must specify target-name when using %s command" % options.cmd)
         if not options.fset_name:
             parser.error("Must specify fset-name when using %s command" % options.cmd)
-    if options.cmd == "create-live-usb" or options.cmd == "create-live-usbrw" or options.cmd == "create-install-usb":
+    if options.cmd == "create-live-usb" or options.cmd == "create-live-usbrw" or options.cmd == "create-install-usb" or options.cmd == "create-live-iso":
         if not options.project_name:
             parser.error("Must specify project-name when using %s command" % options.cmd)
         if not options.target_name:
@@ -536,6 +538,8 @@ def create_image(options):
         proj.create_live_usb(options.target_name, options.image_name, 'EXT3FS')
     elif options.cmd == 'create-install-usb':
         proj.create_install_usb(options.target_name, options.image_name)
+    elif options.cmd == 'create-live-iso':
+        proj.create_live_iso(options.target_name, options.image_name)
 
 def chroot_project(options):
     proj = sdk.projects[options.project_name]
