@@ -123,7 +123,8 @@ class Platform(object):
         var_dir = mic_cfg.config.get('general', 'var_dir')
         rootstrap_file = os.path.join(var_dir, "rootstraps", "apt", target_os, self.name, "rootstrap.tgz")
         if not os.path.exists(rootstrap_file):
-            self.__aptCreateRootstrap(chroot_dir, rootstrap_file, use_rootstrap, callback = callback)
+            if self.__aptCreateRootstrap(chroot_dir, rootstrap_file, use_rootstrap, callback = callback) == False:
+                return False
         else:
             cmd = "tar -jxvf %s -C %s" % (rootstrap_file, chroot_dir)
             output = []
@@ -138,6 +139,7 @@ class Platform(object):
             source_file = os.path.join("/etc", filename)
             target_file = os.path.join(chroot_dir, 'etc', filename)
             pdk_utils.safeTextFileCopy(source_file, target_file, force = True)
+        return True
 
     def __aptCreateRootstrap(self, chroot_dir, rootstrap_file, use_rootstrap, callback = None):
         codename = self.buildroot_codename
@@ -164,6 +166,9 @@ class Platform(object):
             if result == 0:
                 print "--------%s rootstrap creation completed successfully----------" % chroot_type_string
                 break;
+            if result < 0:
+                print "Process Aborted"
+                return False
             print "--------%s rootstrap creation failed result: %s ----------" % (chroot_type_string, result)
             sleeptime = 30
             print "--------For try: %s.  Sleeping for %s seconds... -----------------" % (count, sleeptime)
