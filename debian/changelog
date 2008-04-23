@@ -29,8 +29,9 @@ moblin-image-creator (0.45) UNRELEASED; urgency=low
   * Adding cmd line option to create live iso image
   * Adding more help documentation
   * bug fix for https://bugs.launchpad.net/moblin-image-creator/+bug/188158
+  * Adding a dialog before terminating MIC 
 
- -- Prajwal Mohan <prajwal@linux.intel.com>  Wed, 16 Apr 2008 14:31:24 -0700
+ -- Prajwal Mohan <prajwal@linux.intel.com>  Wed, 23 Apr 2008 14:09:39 -0700
 
 moblin-image-creator (0.44) gaston; urgency=low
 

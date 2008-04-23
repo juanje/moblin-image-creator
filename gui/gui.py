@@ -30,6 +30,7 @@ import sys
 import time
 import traceback
 import signal
+from threading import Thread
 
 import pdk_utils
 import SDK
@@ -52,6 +53,23 @@ gettext.bindtextdomain('pdk', '/usr/share/pdk/locale')
 gettext.textdomain('pdk')
 gettext.install('pdk', '/usr/share/pdk/locale')
 _ = gettext.lgettext
+    
+mountedDirs = set()
+class term_mic(Thread):
+    def __init__(self, sdk, micApp):
+        Thread.__init__(self)
+        self.sdk = sdk
+        self.app = micApp
+    
+    def run(self):
+        print "Unmounting all mounted directories..."
+        global mountedDirs
+        directory_set = self.sdk.umount()
+        if directory_set:
+            print "Could not unmount these dirs: %s" % directory_set
+            mountedDirs = directory_set.copy()
+        print "Unmounting complete"
+
 
 class App(object):
     """This is our main"""
@@ -126,14 +144,32 @@ class App(object):
         self.targetView_handler = self.targetView.get_selection().connect("changed", self.target_view_changed)
 
         self.newFeatureDialog()
+
     def run(self):
         gtk.main()
 
     def quit(self, value):
         # Unmount all of our projects
-        directory_set = self.sdk.umount()
-        if directory_set:
-            self.show_umount_error_dialog(directory_set)
+        global mountedDirs
+        mountedDirs = set()
+        term_thread = term_mic(self.sdk, self)
+        term_thread.start()
+
+        widgets = gtk.glade.XML(self.gladefile, 'error_dialog')
+        widgets.get_widget('error_label').set_text("Please wait while MIC unmounts all projects and targets...")
+        dialog = widgets.get_widget('error_dialog')
+        dialog.connect('delete_event', self.ignore)
+        dialog.set_title("Closing Image-Creator")
+        ok_button = widgets.get_widget('okbutton4')
+        ok_button.set_sensitive(False)
+        dialog.show_all()   
+        while term_thread.isAlive():
+            while gtk.events_pending():
+                gtk.main_iteration(False)
+            time.sleep(0.01)
+        dialog.destroy()
+        if mountedDirs:
+            self.show_umount_error_dialog(mountedDirs)
         gtk.main_quit()
 
     def on_help_activate(self, widget):
