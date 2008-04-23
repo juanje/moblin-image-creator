@@ -31,9 +31,11 @@ moblin-image-creator (0.45) UNRELEASED; urgency=low
   * bug fix for https://bugs.launchpad.net/moblin-image-creator/+bug/188158
   * Adding a dialog before terminating MIC
   * If project creating is cancelled during creation of rootstrap, it fails.
-    Fixing it 
+    Fixing it
+  * usb mount script fails if another removable drive is found before USB
+    flash drive. Fixing it.
 
- -- Prajwal Mohan <prajwal@linux.intel.com>  Wed, 23 Apr 2008 14:55:13 -0700
+ -- Prajwal Mohan <prajwal@linux.intel.com>  Wed, 23 Apr 2008 15:31:03 -0700
 
 moblin-image-creator (0.44) gaston; urgency=low
 
