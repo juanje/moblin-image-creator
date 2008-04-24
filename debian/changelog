@@ -34,8 +34,9 @@ moblin-image-creator (0.45) UNRELEASED; urgency=low
     Fixing it
   * usb mount script fails if another removable drive is found before USB
     flash drive. Fixing it.
+  * Added an error dialog if unknown projects/platforms are found 
 
- -- Prajwal Mohan <prajwal@linux.intel.com>  Wed, 23 Apr 2008 15:31:03 -0700
+ -- Prajwal Mohan <prajwal@linux.intel.com>  Thu, 24 Apr 2008 10:28:19 -0700
 
 moblin-image-creator (0.44) gaston; urgency=low
 

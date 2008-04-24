@@ -174,6 +174,7 @@ class SDK(object):
 
     def discover_projects(self):
         self.projects = {}
+        self.obsolete_projects = set()
         directories = [ os.path.join(self.config_path, x) for x in os.listdir(self.config_path) ]
         # FIXME: This is here for backwards compatibility, I would think that
         # after Jun-2008, we can delete this list
@@ -185,8 +186,14 @@ class SDK(object):
             if not os.path.isfile(full_path):
                 continue
             config = PackageConfig(full_path)
-            self.projects[config.name] = Project.Project(config, self.platforms[config.platform], self.progress_callback)
-       
+            try:
+                self.projects[config.name] = Project.Project(config, self.platforms[config.platform], self.progress_callback)
+            except KeyError:
+                self.obsolete_projects.add(config.name)
+                print "Platform %s not found. Skipping the project %s" % (config.platform, config.name)       
+
+    def return_obsolete_projects(self):
+        return self.obsolete_projects
             
     def create_project(self, parent_path, name, desc, platform, use_rootstrap = True):
         """

@@ -143,7 +143,13 @@ class App(object):
         self.projectView_handler = self.projectView.get_selection().connect("changed", self.project_view_changed)
         self.targetView_handler = self.targetView.get_selection().connect("changed", self.target_view_changed)
 
-        self.newFeatureDialog()
+        self.newFeatureDialog()        
+        obsolete_projects = self.sdk.return_obsolete_projects()
+        if obsolete_projects:         
+            error_message = ""
+            for proj in obsolete_projects:
+                error_message = error_message + " " + proj
+            self.show_error_dialog("Found unsupported project(s): %s\nskipping them" % error_message)
 
     def run(self):
         gtk.main()
