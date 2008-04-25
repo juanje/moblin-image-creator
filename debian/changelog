@@ -36,9 +36,11 @@ moblin-image-creator (0.45) UNRELEASED; urgency=low
     flash drive. Fixing it.
   * Added an error dialog if unknown projects/platforms are found
   * Fixing bug in Fset info dialog
-  * Adding progress bar to term dialog 
+  * Adding progress bar to term dialog
+  * Removing telepathy-core and telepathy-mission-control from mccaslin hardy
+    ppa platforms 
 
- -- Prajwal Mohan <prajwal@linux.intel.com>  Fri, 25 Apr 2008 13:07:37 -0700
+ -- Prajwal Mohan <prajwal@linux.intel.com>  Fri, 25 Apr 2008 13:30:09 -0700
 
 moblin-image-creator (0.44) gaston; urgency=low
 
