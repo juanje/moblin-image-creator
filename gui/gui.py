@@ -162,8 +162,11 @@ class App(object):
         term_thread.start()
 
         widgets = gtk.glade.XML(self.gladefile, 'error_dialog')
-        widgets.get_widget('error_label').set_text("Please wait while MIC unmounts all projects and targets...")
+        widgets.get_widget('error_label').set_text("Please wait while MIC attempts to unmount all projects and targets...")
         dialog = widgets.get_widget('error_dialog')
+        vbox = widgets.get_widget('vbox18')
+        progressbar = gtk.ProgressBar()
+        vbox.pack_start(progressbar)
         dialog.connect('delete_event', self.ignore)
         dialog.set_title("Closing Image-Creator")
         ok_button = widgets.get_widget('okbutton4')
@@ -172,7 +175,8 @@ class App(object):
         while term_thread.isAlive():
             while gtk.events_pending():
                 gtk.main_iteration(False)
-            time.sleep(0.01)
+            time.sleep(0.20)
+            progressbar.pulse()
         dialog.destroy()
         if mountedDirs:
             self.show_umount_error_dialog(mountedDirs)
