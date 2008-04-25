@@ -1430,6 +1430,8 @@ class DisplayFsetInfo(object):
         platformName = self.platformComboBox.get_active_text()
         platform = self.sdk.platforms[platformName]
         fsetName = self.fsetComboBox.get_active_text()        
+        if fsetName == None:
+            return
         self.textBuffer.set_text("Fset Description: %s" % platform.fset[fsetName].desc)
         #self.textBuffer.insert_at_cursor("\nFset Dedendency: %s" % platform.fset[fsetName].deps)
         self.textBuffer.insert_at_cursor("\n\nFset Dedendency: ")
@@ -1456,7 +1458,6 @@ class DisplayFsetInfo(object):
         all_fsets = set(platform.fset)
         for fset_name in sorted(all_fsets):
             self.fsetEntryList.append([fset_name])
-
 
     def run(self):
         self.dialog.run()
