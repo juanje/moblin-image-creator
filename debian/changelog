@@ -43,8 +43,9 @@ moblin-image-creator (0.45) UNRELEASED; urgency=low
   * Removing telepathy-core and telepathy-mission-control from menlow hardy
     ppa platforms
   * Adding command line options to show packages for a given fset
+  * Adding command line options to show sources files 
 
- -- Prajwal Mohan <prajwal@linux.intel.com>  Tue, 27 May 2008 14:02:15 -0700
+ -- Prajwal Mohan <prajwal@linux.intel.com>  Tue, 27 May 2008 15:17:43 -0700
 
 moblin-image-creator (0.44) gaston; urgency=low
 

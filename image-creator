@@ -95,6 +95,8 @@ def main():
         list_fsets(options)
     elif options.cmd == 'list-pkgs':
         list_pkgs(options)
+    elif options.cmd == 'list-sources-files':
+        list_sources_files(options)
     elif options.cmd == 'create-project':
         create_project(options)
     elif options.cmd == 'delete-project':
@@ -151,6 +153,7 @@ def parseCommandLine():
         "install-fset" :        1,
         "list-fsets" :          0,
         "list-pkgs" :           0,
+        "list-sources-files" :  0,
         "list-platforms" :      0,
         "list-projects" :       0,
         "list-targets" :        0,
@@ -328,6 +331,9 @@ Examples:
             parser.error("Must specify platform-name when using %s command" % options.cmd)
         if not options.fset_names:
             parser.error("Must specify at least one fset when using %s command" % options.cmd)
+    if options.cmd == "list-sources-files":
+        if not options.platform_name:
+            parser.error("Must specify platform-name when using %s command" % options.cmd)
     if options.cmd == "create-project":
         if not options.platform_name:
             parser.error("Must specify platform-name when using %s command" % options.cmd)
@@ -450,6 +456,15 @@ def list_pkgs(options):
     for f in options.fset_names:
         pkgs += get_fset_pkgs(platform = sdk.platforms[options.platform_name], fset = f)
     print " ".join(pkgs)
+
+def list_sources_files(options):
+    if options.platform_name not in sdk.platforms:
+        print >> sys.stderr, "%s: is not a valid platform name" % options.platform_name
+        sys.exit(1)
+    path = os.path.join(sdk.platforms[options.platform_name].path, 'sources')
+    for p in os.listdir(path):
+        print os.path.join(path, p)
+
 
 def list_targets(options):
     for key in (sdk.projects[options.project_name].targets.iterkeys()):
