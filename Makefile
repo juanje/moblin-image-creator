@@ -19,10 +19,10 @@ basicinstall: all
 	@${MAKE} -C platforms install
 	@echo -n "Installing moblin-image-creator..."
 	@mkdir -p ${DESTDIR}/${VARDIR}
+	@mkdir -p ${DESTDIR}/${VARDIR}/projects
 	@mkdir -p ${DESTDIR}/${SHAREDIR}/default_config
 	@mkdir -p ${DESTDIR}/${SHAREDIR}/lib
 	@mkdir -p ${DESTDIR}/${SHAREDIR}/locale
-	@mkdir -p ${DESTDIR}/${SHAREDIR}/projects
 	@mkdir -p ${DESTDIR}/${SHAREDIR}/utils
 	@head -n 1 debian/changelog > ${DESTDIR}/${SHAREDIR}/version
 	@cp libs/*.py  ${DESTDIR}/${SHAREDIR}/lib

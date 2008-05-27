@@ -178,8 +178,9 @@ class SDK(object):
         directories = [ os.path.join(self.config_path, x) for x in os.listdir(self.config_path) ]
         # FIXME: This is here for backwards compatibility, I would think that
         # after Jun-2008, we can delete this list
-        old_directories = [ os.path.join(self.path, 'projects', x) for x in os.listdir(os.path.join(self.path, 'projects')) ]
-        directories.extend(old_directories)
+        if os.path.exists(os.path.join(self.path, 'projects')):
+            old_directories = [ os.path.join(self.path, 'projects', x) for x in os.listdir(os.path.join(self.path, 'projects')) ]
+            directories.extend(old_directories)
         for filename in directories:
             full_path = os.path.join(self.config_path, filename)
             full_path = filename

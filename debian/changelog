@@ -43,9 +43,10 @@ moblin-image-creator (0.45) UNRELEASED; urgency=low
   * Removing telepathy-core and telepathy-mission-control from menlow hardy
     ppa platforms
   * Adding command line options to show packages for a given fset
-  * Adding command line options to show sources files 
+  * Adding command line options to show sources files
+  * Make file creates projects dir in /usr/share/pdk. Moving it to /var/lib/moblin-image-creator 
 
- -- Prajwal Mohan <prajwal@linux.intel.com>  Tue, 27 May 2008 15:17:43 -0700
+ -- Prajwal Mohan <prajwal@linux.intel.com>  Tue, 27 May 2008 15:30:14 -0700
 
 moblin-image-creator (0.44) gaston; urgency=low
 
