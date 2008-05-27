@@ -41,9 +41,10 @@ moblin-image-creator (0.45) UNRELEASED; urgency=low
     ppa platforms
   * Adding gnome-system-tools to ubuntu-mobile fset*-hardy-ppa and *-hardy-ppa-snapshot platforms
   * Removing telepathy-core and telepathy-mission-control from menlow hardy
-    ppa platforms 
+    ppa platforms
+  * Adding command line options to show packages for a given fset
 
- -- Prajwal Mohan <prajwal@linux.intel.com>  Wed, 21 May 2008 13:48:32 -0700
+ -- Prajwal Mohan <prajwal@linux.intel.com>  Tue, 27 May 2008 14:02:15 -0700
 
 moblin-image-creator (0.44) gaston; urgency=low
 
