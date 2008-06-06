@@ -1,8 +1,13 @@
 #!/usr/bin/make -f
 # -*- makefile -*-
 
-build: build-stamp
+configure: configure-stamp
+configure-stamp:
+	dh_testdir
+	./autogen.sh
+	./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var
 
+build: configure-stamp build-stamp
 build-stamp:
 	dh_testdir
 	$(MAKE)
@@ -12,15 +17,15 @@ clean:
 	dh_testdir
 	dh_testroot
 	rm -f build-stamp
-	$(MAKE) clean
 	dh_clean
 
-install: build
+install: configure-stamp build-stamp install-stamp
+install-stamp:
 	dh_testdir
 	dh_testroot
 	dh_clean -k
 	dh_installdirs
-	$(MAKE) DESTDIR=$(CURDIR)/debian/moblin-image-creator basicinstall
+	$(MAKE) DESTDIR=$(CURDIR)/debian/moblin-image-creator install
 	rm -fR $(CURDIR)/debian/moblin-image-creator/usr/lib/
 
 binary-indep: build install

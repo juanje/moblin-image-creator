@@ -1,7 +1,7 @@
 [Desktop Entry]
 Name=Image-Creator
 Comment=Developer tool for creating mobile Linux device stacks
-Exec=%%EXEC_CMD%%
+Exec=gksu /usr/bin/image-creator
 Terminal=false
 Type=Application
 Categories=Development;

@@ -44,9 +44,12 @@ moblin-image-creator (0.45) UNRELEASED; urgency=low
     ppa platforms
   * Adding command line options to show packages for a given fset
   * Adding command line options to show sources files
-  * Make file creates projects dir in /usr/share/pdk. Moving it to /var/lib/moblin-image-creator 
+  * Make file creates projects dir in /usr/share/pdk. Moving it to /var/lib/moblin-image-creator
 
- -- Prajwal Mohan <prajwal@linux.intel.com>  Tue, 27 May 2008 15:30:14 -0700
+  [ Mitsutaka Amano ]
+  * Supported autotools for preparing the internationalization.
+
+ -- Prajwal Mohan <prajwal@linux.intel.com>  Wed, 28 May 2008 22:29:09 +0900
 
 moblin-image-creator (0.44) gaston; urgency=low
 
