@@ -17,10 +17,13 @@
 #    Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
 import ConfigParser
+import gettext
 import os
 import re
 import sys
 import unittest
+
+_ = gettext.lgettext
 
 class FSet(object):
     """
@@ -51,7 +54,7 @@ class FSet(object):
             orig_section = section
             section = section.lower()
             if section in self.__fsets:
-                raise ValueError, "Error: Already have a section called: %s" % section
+                raise ValueError, _("Error: Already have a section called: %s") % section
             work_dict = {}
             work_dict['filename'] = filename
             fset = FsetInstance(section)
@@ -82,7 +85,7 @@ class FsetInstance(object):
     def add(self, key, value):
         key = key.lower()
         if key not in FsetInstance.valid_values:
-            print "Found unsupported value, ignoring: %s = %s" % (key, value)
+            print _("Found unsupported value, ignoring: %s = %s") % (key, value)
             return
         work_type = type(FsetInstance.valid_values[key])
         if work_type == type([]):
@@ -90,8 +93,8 @@ class FsetInstance(object):
         elif work_type == type(''):
             pass
         else:
-            print "Error: Unsupported type specified in FsetInstance.valid_values"
-            print "Type was: %s" % work_type
+            print _("Error: Unsupported type specified in FsetInstance.valid_values")
+            print _("Type was: %s") % work_type
             raise ValueError
         self.data[key] = value
     def get(self, key):
@@ -113,7 +116,7 @@ class FsetInstance(object):
 
 if __name__ == '__main__':
     if len(sys.argv) == 1:
-        print >> sys.stderr, "USAGE: %s FSET_FILE ..." % (sys.argv[0])
+        print >> sys.stderr, _("USAGE: %s FSET_FILE ...") % (sys.argv[0])
     else:
         fset = FSet()
         for filename in sys.argv[1:]:

@@ -48,6 +48,7 @@ moblin-image-creator (0.45) UNRELEASED; urgency=low
 
   [ Mitsutaka Amano ]
   * Supported autotools for preparing the internationalization.
+  * Supported the internationalization.
 
  -- Prajwal Mohan <prajwal@linux.intel.com>  Wed, 28 May 2008 22:29:09 +0900
 

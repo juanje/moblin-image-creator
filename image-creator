@@ -17,6 +17,9 @@
 #    Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
 
+import gettext
+import gtk.glade
+import locale
 import os
 import platform
 import string
@@ -30,12 +33,6 @@ sys.path.insert(0, '/usr/share/pdk/lib')
 import SDK
 import mic_cfg
 import pdk_utils
-
-
-ENVIRONMENT_VARS = {
-    'LANG' : 'C',
-    'LC_ALL' : 'C',
-}
 
 debug = False
 if mic_cfg.config.has_option('general', 'debug'):
@@ -54,16 +51,25 @@ sdk = SDK.SDK()
 
 def main():
     if sys.hexversion < 0x2040000:
-        print >> sys.stderr, "Error: %s depends on a Python version of at least 2.4!" % (sys.argv[0])
+        print >> sys.stderr, _("Error: %s depends on a Python version of at least 2.4!") % (sys.argv[0])
         sys.exit(1)
     # Make sure the executables we need are on the system
     verifyExes()
-    # Set needed environment variables
-    setEnvironmentVariables()
+
+    # Initial stuff for Internationlization and Localization support.
+    # Locale stuff
+    # internationalization
+    locale.setlocale(locale.LC_ALL)
+
+    # More info: http://docs.python.org/lib/i18n.html
+    for module in gtk.glade, gettext:
+        module.bindtextdomain('moblin-image-creator')
+        module.textdomain('moblin-image-creator')
+
     if len(sys.argv) == 1:
         if not pdk_utils.areWeRoot():
-            print "Error: Must run image creator with sudo or run as root"
-            print "Example, run image creator:  sudo image-creator"
+            print _("Error: Must run image creator with sudo or run as root")
+            print _("Example, run image creator:  sudo image-creator")
             sys.exit(1)
         if os.getenv("DISPLAY"):
             try:
@@ -71,13 +77,13 @@ def main():
                 return 0
             except:
                 traceback.print_exc()
-                print "Error: Unable to run the GUI, maybe you are in a text console"
-                print "Do -h for help"
+                print _("Error: Unable to run the GUI, maybe you are in a text console")
+                print _("Do -h for help")
                 return 1
         else:
             print
-            print "Error: Your DISPLAY environment variable is NOT set"
-            print "The Moblin Image Creator GUI can NOT run"
+            print _("Error: Your DISPLAY environment variable is NOT set")
+            print _("The Moblin Image Creator GUI can NOT run")
             return 1
 
     options, args = parseCommandLine()
@@ -89,48 +95,48 @@ def main():
         clear_rootstraps()
     elif options.cmd == "list-projects":
         list_projects()
-    elif options.cmd == 'list-targets':
+    elif options.cmd == "list-targets":
         list_targets(options)
-    elif options.cmd == 'list-fsets':
+    elif options.cmd == "list-fsets":
         list_fsets(options)
-    elif options.cmd == 'list-pkgs':
+    elif options.cmd == "list-pkgs":
         list_pkgs(options)
-    elif options.cmd == 'list-sources-files':
+    elif options.cmd == "list-sources-files":
         list_sources_files(options)
-    elif options.cmd == 'create-project':
+    elif options.cmd == "create-project":
         create_project(options)
-    elif options.cmd == 'delete-project':
+    elif options.cmd == "delete-project":
         delete_project(options)
-    elif options.cmd == 'umount-project':
+    elif options.cmd == "umount-project":
         umount_project(options)
-    elif options.cmd == 'umount-target':
+    elif options.cmd == "umount-target":
         umount_target(options)
-    elif options.cmd == 'run-target':
+    elif options.cmd == "run-target":
         run_target(options)
-    elif options.cmd == 'run-project':
+    elif options.cmd == "run-project":
         run_project(options)
-    elif options.cmd == 'create-target':
+    elif options.cmd == "create-target":
         create_target(options)
-    elif options.cmd == 'delete-target':
+    elif options.cmd == "delete-target":
         delete_target(options)
-    elif options.cmd == 'install-fset':
+    elif options.cmd == "install-fset":
         install_fset(options)
-    elif options.cmd == 'update-project':
+    elif options.cmd == "update-project":
         update_project(options)
-    elif options.cmd == 'update-target':
+    elif options.cmd == "update-target":
         update_target(options)
-    elif options.cmd in ['create-live-usb', 'create-live-usbrw', 'create-install-usb', 'create-live-iso']:
+    elif options.cmd in ["create-live-usb", "create-live-usbrw", "create-install-usb", "create-live-iso"]:
         create_image(options)
-    elif options.cmd == 'chroot-project':
+    elif options.cmd == "chroot-project":
         chroot_project(options)
-    elif options.cmd == 'chroot-target':
+    elif options.cmd == "chroot-target":
         chroot_target(options)
     elif options.cmd == "save-project":
         save_project(options)
     elif options.cmd == "load-project":
         load_project(options)
     else:
-        print "Unknown command specified"
+        print _("Unknown command specified")
         return 1
     sdk.umount()
     return 0
@@ -177,35 +183,35 @@ def parseCommandLine():
 
     parser = OptionParser(add_help_option=False)
 
-    parser.add_option("--version", help="Display version",
+    parser.add_option("--version", help=_("Display version"),
         dest = "version", action="store_true", default=False)
     parser.add_option("-c", "--command", dest="cmd",
-        help="Where CMD is one of: %s" % valid_command_string, metavar="CMD")
+        help=_("Where CMD is one of: %s") % valid_command_string, metavar="CMD")
     parser.add_option("--platform-name", dest="platform_name",
-        help="Platform name")
+        help=_("Platform name"))
     parser.add_option("--project-name", dest="project_name",
-        help="Project name")
+        help=_("Project name"))
     parser.add_option("--project-description", dest="project_desc",
-        help="Project description")
+        help=_("Project description"))
     parser.add_option("--project-path", dest="project_path",
-        help="Project path")
+        help=_("Project path"))
     parser.add_option("-t", "--target-name", dest="target_name",
-        help="Target name")
+        help=_("Target name"))
     parser.add_option("--fset-name", dest="fset_names", action="append",
-        help="Feature set identifier")
+        help=_("Feature set identifier"))
     parser.add_option("--image-name", dest="image_name",
-        help="Name to use for target image file")
+        help=_("Name to use for target image file"))
     parser.add_option("--run-command", dest="run_command",
-        help="Command to execute inside a project or target chroot filesystem")
+        help=_("Command to execute inside a project or target chroot filesystem"))
     parser.add_option("--bypass-rootstrap",
         action="store_false", dest="use_rootstrap", default=True,
-        help="Disable creation or use of rootstrap files")
+        help=_("Disable creation or use of rootstrap files"))
     parser.add_option("-d", "--enable-debug",
         action="store_true", dest="debug", default=False,
-        help="Enable additional debug package while installing fsets")
+        help=_("Enable additional debug package while installing fsets"))
     parser.add_option("-f", "--file-name", dest="file_name",
-        help="Filename to use when saving or restoring a project, if .mic.tar.bz2 is not the extension during a save then .mic.tar.bz2 will be appended")
-    parser.add_option("-h", "--help", help="show this help message and exit",
+        help=_("Filename to use when saving or restoring a project, if .mic.tar.bz2 is not the extension during a save then .mic.tar.bz2 will be appended"))
+    parser.add_option("-h", "--help", help=_("show this help message and exit"),
         dest = "help", action="store_true", default=False)
     examples = """
 Examples:
@@ -312,97 +318,97 @@ Examples:
         sys.exit(0)
     # now lets validate stuff
     if not options.cmd:
-        parser.error("Must specify a -c/--command argument")
+        parser.error(_("Must specify a -c/--command argument"))
     if options.cmd not in valid_commands:
-        parser.error("Command specified for option -c/--command invalid.  Valid commands are: %s" % valid_command_string)
+        parser.error(_("Command specified for option -c/--command invalid.  Valid commands are: %s") % valid_command_string)
     need_root = valid_commands[options.cmd]
     if need_root and not pdk_utils.areWeRoot():
-        parser.error("Command specified requires you to run as root or using sudo.  Command is: %s" % options.cmd)
+        parser.error(_("Command specified requires you to run as root or using sudo.  Command is: %s") % options.cmd)
     # Our FSets are converted to lowecase, so do the same for the command line
     # argument
     if options.fset_names:
        options.fset_names = [f.lower() for f in options.fset_names]
-    if options.cmd == 'list-targets' and not options.project_name:
-        parser.error("Must specify a project-name when using %s command." % options.cmd)
+    if options.cmd == "list-targets" and not options.project_name:
+        parser.error(_("Must specify a project-name when using %s command.") % options.cmd)
     if options.cmd == "list-fsets" and not options.platform_name:
-        parser.error("Must specify platform-name when using %s command" % options.cmd)
+        parser.error(_("Must specify platform-name when using %s command") % options.cmd)
     if options.cmd == "list-pkgs":
         if not options.platform_name:
-            parser.error("Must specify platform-name when using %s command" % options.cmd)
+            parser.error(_("Must specify platform-name when using %s command") % options.cmd)
         if not options.fset_names:
-            parser.error("Must specify at least one fset when using %s command" % options.cmd)
+            parser.error(_("Must specify at least one fset when using %s command") % options.cmd)
     if options.cmd == "list-sources-files":
         if not options.platform_name:
-            parser.error("Must specify platform-name when using %s command" % options.cmd)
+            parser.error(_("Must specify platform-name when using %s command") % options.cmd)
     if options.cmd == "create-project":
         if not options.platform_name:
-            parser.error("Must specify platform-name when using %s command" % options.cmd)
+            parser.error(_("Must specify platform-name when using %s command") % options.cmd)
         if not options.project_name:
-            parser.error("Must specify project-name when using %s command" % options.cmd)
+            parser.error(_("Must specify project-name when using %s command") % options.cmd)
         if not options.project_desc:
-            parser.error("Must specify project-description when using %s command" % options.cmd)
+            parser.error(_("Must specify project-description when using %s command") % options.cmd)
         if not options.project_path:
-            parser.error("Must specify project-path when using %s command" % options.cmd)
+            parser.error(_("Must specify project-path when using %s command") % options.cmd)
     if options.cmd == "delete-project" and not options.project_name:
-        parser.error("Must specify project-name when using %s command" % options.cmd)
+        parser.error(_("Must specify project-name when using %s command") % options.cmd)
     if options.cmd == "umount-project" and not options.project_name:
-        parser.error("Must specify project-name when using %s command" % options.cmd)
+        parser.error(_("Must specify project-name when using %s command") % options.cmd)
     if options.cmd == "umount-target":
         if not options.project_name:
-            parser.error("Must specify project-name when using %s command" % options.cmd)
+            parser.error(_("Must specify project-name when using %s command") % options.cmd)
         if not options.target_name:
-            parser.error("Must specify target-name when using %s command" % options.cmd)
+            parser.error(_("Must specify target-name when using %s command") % options.cmd)
     if options.cmd == "run-project":
         if not options.project_name:
-            parser.error("Must specify project-name when using %s command" % options.cmd)
+            parser.error(_("Must specify project-name when using %s command") % options.cmd)
         if not options.run_command:
-            parser.error("Must specify run-command when using %s command" % options.cmd)
+            parser.error(_("Must specify run-command when using %s command") % options.cmd)
     if options.cmd == "run-target":
         if not options.project_name:
-            parser.error("Must specify project-name when using %s command" % options.cmd)
+            parser.error(_("Must specify project-name when using %s command") % options.cmd)
         if not options.target_name:
-            parser.error("Must specify target-name when using %s command" % options.cmd)
+            parser.error(_("Must specify target-name when using %s command") % options.cmd)
         if not options.run_command:
-            parser.error("Must specify run-command when using %s command" % options.cmd)
+            parser.error(_("Must specify run-command when using %s command") % options.cmd)
     if options.cmd == "update-project" and not options.project_name:
-        parser.error("Must specify project-name when using %s command" % options.cmd)
+        parser.error(_("Must specify project-name when using %s command") % options.cmd)
     if options.cmd == "create-target" or options.cmd == "delete-target" or options.cmd == "update-target":
         if not options.project_name:
-            parser.error("Must specify project-name when using %s command" % options.cmd)
+            parser.error(_("Must specify project-name when using %s command") % options.cmd)
         if not options.target_name:
-            parser.error("Must specify target-name when using %s command" % options.cmd)
+            parser.error(_("Must specify target-name when using %s command") % options.cmd)
     if options.cmd == "install-fset":
         if not options.project_name:
-            parser.error("Must specify project-name when using %s command" % options.cmd)
+            parser.error(_("Must specify project-name when using %s command") % options.cmd)
         if not options.target_name:
-            parser.error("Must specify target-name when using %s command" % options.cmd)
+            parser.error(_("Must specify target-name when using %s command") % options.cmd)
         if not options.fset_names:
-            parser.error("Must specify at least one fset-name when using %s command" % options.cmd)
+            parser.error(_("Must specify at least one fset-name when using %s command") % options.cmd)
     if options.cmd == "create-live-usb" or options.cmd == "create-live-usbrw" or options.cmd == "create-install-usb" or options.cmd == "create-live-iso":
         if not options.project_name:
-            parser.error("Must specify project-name when using %s command" % options.cmd)
+            parser.error(_("Must specify project-name when using %s command") % options.cmd)
         if not options.target_name:
-            parser.error("Must specify target-name when using %s command" % options.cmd)
+            parser.error(_("Must specify target-name when using %s command") % options.cmd)
         if not options.image_name:
-            parser.error("Must specify image-name when using %s command" % options.cmd)
+            parser.error(_("Must specify image-name when using %s command") % options.cmd)
     if options.cmd == "chroot-project":
         if not options.project_name:
-            parser.error("Must specify project-name when using %s command" % options.cmd)
+            parser.error(_("Must specify project-name when using %s command") % options.cmd)
     if options.cmd == "chroot-target":
         if not options.project_name:
-            parser.error("Must specify project-name when using %s command" % options.cmd)
+            parser.error(_("Must specify project-name when using %s command") % options.cmd)
         if not options.target_name:
-            parser.error("Must specify target-name when using %s command" % options.cmd)
+            parser.error(_("Must specify target-name when using %s command") % options.cmd)
     if options.cmd == "save-project" or options.cmd == "load-project":
         if not options.project_name:
-            parser.error("Must specify project-name when using %s command" % options.cmd)
+            parser.error(_("Must specify project-name when using %s command") % options.cmd)
         if not options.file_name:
-            parser.error("Must specify file-name when using %s command" % options.cmd)
+            parser.error(_("Must specify file-name when using %s command") % options.cmd)
     if options.cmd == "load-project":
         if not options.project_path:
-            parser.error("Must specify project-path when using %s command" % options.cmd)
-        if not options.file_name.endswith('.mic.tar.bz2'):
-            parser.error("Filename must have the extension: .mic.tar.bz2")
+            parser.error(_("Must specify project-path when using %s command") % options.cmd)
+        if not options.file_name.endswith(".mic.tar.bz2"):
+            parser.error(_("Filename must have the extension: .mic.tar.bz2"))
     if options.project_path:
         options.project_path = os.path.realpath(os.path.abspath(os.path.expanduser(options.project_path)))
     if options.file_name:
@@ -414,7 +420,7 @@ def clear_rootstraps():
     sdk.clear_rootstraps()
     
 def display_version():
-    print "Moblin Image Creator %s" % sdk.version
+    print _("Moblin Image Creator %s") % sdk.version
 
 def list_platforms():
     for key in sorted(sdk.platforms.iterkeys()):
@@ -426,14 +432,14 @@ def list_projects():
 
 def list_fsets(options):
     if options.platform_name not in sdk.platforms:
-        print >> sys.stderr, "%s: is not a valid platform name" % options.platform_name
+        print >> sys.stderr, _("%s: is not a valid platform name") % options.platform_name
         sys.exit(1)
     for key in sorted(sdk.platforms[options.platform_name].fset.iterkeys()):
         print "%s" % (sdk.platforms[options.platform_name].fset[key].name)
 
 def list_pkgs(options):
     if options.platform_name not in sdk.platforms:
-        print >> sys.stderr, "%s: is not a valid platform name" % options.platform_name
+        print >> sys.stderr, _("%s: is not a valid platform name") % options.platform_name
         sys.exit(1)
 
     def get_fset_pkgs(platform, fset, seen_fsets = []):
@@ -449,7 +455,7 @@ def list_pkgs(options):
             pkgs += sdk.platforms[options.platform_name].fset[fset]["pkgs"]
             return pkgs
         except KeyError:
-            print >> sys.stderr, "%s: is not a valid fset name in this platform" % f
+            print >> sys.stderr, _("%s: is not a valid fset name in this platform") % f
             sys.exit(1)
 
     pkgs = []
@@ -459,7 +465,7 @@ def list_pkgs(options):
 
 def list_sources_files(options):
     if options.platform_name not in sdk.platforms:
-        print >> sys.stderr, "%s: is not a valid platform name" % options.platform_name
+        print >> sys.stderr, _("%s: is not a valid platform name") % options.platform_name
         sys.exit(1)
     path = os.path.join(sdk.platforms[options.platform_name].path, 'sources')
     for p in os.listdir(path):
@@ -472,27 +478,27 @@ def list_targets(options):
 
 def create_project(options):
     if options.project_name in sdk.projects:
-        print >> sys.stderr, "Project %s already exist!" % (options.project_name)
+        print >> sys.stderr, _("Project %s already exist!") % (options.project_name)
         sys.exit(1)
     if options.platform_name not in sdk.platforms:
-        print >> sys.stderr, "%s: is not a valid platform name" % options.platform_name
+        print >> sys.stderr, _("%s: is not a valid platform name") % options.platform_name
         sys.exit(1)
     cwd = os.getcwd()
     if cwd.find(options.project_path) == 0:
-	    print >> sys.stderr, "The project path can not be part of the current working directory"
+	    print >> sys.stderr, _("The project path can not be part of the current working directory")
 	    sys.exit(1)
     proj = sdk.create_project(options.project_path, options.project_name, options.project_desc, sdk.platforms[options.platform_name], options.use_rootstrap)
     proj.install()
 
 def delete_project(options):
     if not options.project_name in sdk.projects:
-        print >> sys.stderr, "Project %s does not exist" % (options.project_name)
+        print >> sys.stderr, _("Project %s does not exist") % (options.project_name)
         sys.exit(1)
     sdk.delete_project(options.project_name)
 
 def umount_project(options):
     if not options.project_name in sdk.projects:
-        print >> sys.stderr, "Project %s does not exist" % (options.project_name)
+        print >> sys.stderr, _("Project %s does not exist") % (options.project_name)
         sys.exit(1)
     for target in sdk.projects[options.project_name].targets:
         sdk.projects[options.project_name].targets[target].umount()
@@ -500,80 +506,80 @@ def umount_project(options):
 
 def umount_target(options):
     if not options.project_name in sdk.projects:
-        print >> sys.stderr, "Project %s does not exist" % (options.project_name)
+        print >> sys.stderr, _("Project %s does not exist") % (options.project_name)
         sys.exit(1)
     if not options.target_name in sdk.projects[options.project_name].targets:
-        print >> sys.stderr, "Target %s does not exist" % (options.project_name)
+        print >> sys.stderr, _("Target %s does not exist") % (options.project_name)
         sys.exit(1)
     sdk.projects[options.project_name].targets[options.target_name].umount()
 
 def run_project(options):
     if not options.project_name in sdk.projects:
-        print >> sys.stderr, "Project %s does not exist" % (options.project_name)
+        print >> sys.stderr, _("Project %s does not exist") % (options.project_name)
         sys.exit(1)
     sys.exit(sdk.projects[options.project_name].chroot(options.run_command))
 
 def run_target(options):
     if not options.project_name in sdk.projects:
-        print >> sys.stderr, "Project %s does not exist" % (options.project_name)
+        print >> sys.stderr, _("Project %s does not exist") % (options.project_name)
         sys.exit(1)
     if not options.target_name in sdk.projects[options.project_name].targets:
-        print >> sys.stderr, "Target %s does not exist" % (options.project_name)
+        print >> sys.stderr, _("Target %s does not exist") % (options.project_name)
         sys.exit(1)
     sys.exit(sdk.projects[options.project_name].targets[options.target_name].chroot(options.run_command))
 
 def update_project(options):
     if not options.project_name in sdk.projects:
-        print >> sys.stderr, "Project %s does not exist" % (options.project_name)
+        print >> sys.stderr, _("Project %s does not exist") % (options.project_name)
         sys.exit(1)
     sdk.projects[options.project_name].update()
     
 def create_target(options):
     if not options.project_name in sdk.projects:
-        print >> sys.stderr, "Project %s does not exist" % (options.project_name)
+        print >> sys.stderr, _("Project %s does not exist") % (options.project_name)
         sys.exit(1)
     if re.search(r'\W', options.target_name):
-        print >> sys.stderr, "Target names can only contain alpha/numeric characters"
+        print >> sys.stderr, _("Target names can only contain alpha/numeric characters")
         sys.exit(1)
     target = sdk.projects[options.project_name].create_target(options.target_name, options.use_rootstrap)
 
 def delete_target(options):
     if not options.project_name in sdk.projects:
-        print >> sys.stderr, "Project %s does not exist" % (options.project_name)
+        print >> sys.stderr, _("Project %s does not exist") % (options.project_name)
         sys.exit(1)
     proj = sdk.projects[options.project_name]
     if not options.target_name in proj.targets:
-        print >> sys.stderr, "Target %s does not exist" % (options.target_name)
+        print >> sys.stderr, _("Target %s does not exist") % (options.target_name)
         sys.exit(1)
     proj.delete_target(options.target_name)
 
 def update_target(options):
     if not options.project_name in sdk.projects:
-        print >> sys.stderr, "Project %s does not exist" % (options.project_name)
+        print >> sys.stderr, _("Project %s does not exist") % (options.project_name)
         sys.exit(1)
     proj = sdk.projects[options.project_name]
     if not options.target_name in proj.targets:
-        print >> sys.stderr, "Target %s does not exist" % (options.target_name)
+        print >> sys.stderr, _("Target %s does not exist") % (options.target_name)
         sys.exit(1)
     proj.targets[options.target_name].update()
     
 def install_fset(options):
     if options.platform_name:
-        print "Ignoring Plaform name %s" % (options.platform_name)
-        print "Using %s" % (sdk.projects[options.project_name].platform.name)
+        print _("Ignoring Plaform name %s") % (options.platform_name)
+        print _("Using %s") % (sdk.projects[options.project_name].platform.name)
     if not options.project_name in sdk.projects:
-        print >> sys.stderr, "Project %s does not exist" % (options.project_name)
+        print >> sys.stderr, _("Project %s does not exist") % (options.project_name)
         sys.exit(1)
     platform_name = sdk.projects[options.project_name].platform.name
     if not options.target_name in sdk.projects[options.project_name].targets:
-        print >> sys.stderr, "Target %s does not exist" % (options.target_name)
+        print >> sys.stderr, _("Target %s does not exist") % (options.target_name)
         sys.exit(1)
     for f in options.fset_names:
         if not f in sdk.platforms[platform_name].fset:
-            print >> sys.stderr, "Feature set %s does not exist" % f
+            print >> sys.stderr, _("Feature set %s does not exist") % f
             sys.exit(1)
     if platform_name not in sdk.platforms:
-        print >> sys.stderr, "%s: is not a valid platform name" % platform_name
+        print >> sys.stderr, _("%s: is not a valid platform name") % platform_name
         sys.exit(1)
     target = sdk.projects[options.project_name].targets[options.target_name]
     fsets = sdk.platforms[platform_name].fset
@@ -583,13 +589,13 @@ def install_fset(options):
 
 def create_image(options):
     proj = sdk.projects[options.project_name]
-    if options.cmd == 'create-live-usb':
+    if options.cmd == "create-live-usb":
         proj.create_live_usb(options.target_name, options.image_name)
-    elif options.cmd == 'create-live-usbrw':
+    elif options.cmd == "create-live-usbrw":
         proj.create_live_usb(options.target_name, options.image_name, 'EXT3FS')
-    elif options.cmd == 'create-install-usb':
+    elif options.cmd == "create-install-usb":
         proj.create_install_usb(options.target_name, options.image_name)
-    elif options.cmd == 'create-live-iso':
+    elif options.cmd == "create-live-iso":
         proj.create_live_iso(options.target_name, options.image_name)
 
 def chroot_project(options):
@@ -624,10 +630,10 @@ def print_exc_plus(type, value, tb):
         f = f.f_back
     stack.reverse()
     traceback.print_exception(type, value, tb)
-    print "Locals by frame, innermost last"
+    print _("Locals by frame, innermost last")
     for frame in stack:
         print
-        print "Frame %s in %s at line %s" % (frame.f_code.co_name,
+        print _("Frame %s in %s at line %s") % (frame.f_code.co_name,
                                              frame.f_code.co_filename,
                                              frame.f_lineno)
         for key, value in frame.f_locals.items():
@@ -637,7 +643,7 @@ def print_exc_plus(type, value, tb):
             try:
                 print value
             except:
-                print "<ERROR WHILE PRINTING VALUE>"
+                print _("<ERROR WHILE PRINTING VALUE>")
     traceback.print_exception(type, value, tb)
 
 def findExe(exe_name, env=None):
@@ -646,7 +652,7 @@ def findExe(exe_name, env=None):
     if 'PATH' in env:
         env_list = env['PATH'].split(os.pathsep)
     else:
-        print "Error: No 'PATH' environment variable defined"
+        print _("Error: No 'PATH' environment variable defined")
         sys.exit(1)
     for dirname in env_list:
         file_name = os.path.join(dirname, exe_name)
@@ -659,22 +665,18 @@ def findExe(exe_name, env=None):
 def verifyExes():
     dist = "distribution.%s" %  mic_cfg.config.get('general', 'distribution')
     if not mic_cfg.config.has_section(dist):
-        print "Unsupported distribution: %s" % dist
+        print _("Unsupported distribution: %s") % dist
         sys.exit(1)
     required_exes = mic_cfg.config.get(dist, 'required_exes')
     exe_list = required_exes.split()
     exes_found = True
     for exe_name in exe_list:
         if not findExe(exe_name):
-            print "Error: Could not find the executable: '%s' in the PATH" % exe_name
+            print _("Error: Could not find the executable: '%s' in the PATH") % exe_name
             exes_found = False
     if not exes_found:
-        print "Without the executable(s) listed, image-creator will fail to operate properly."
+        print _("Without the executable(s) listed, image-creator will fail to operate properly.")
         sys.exit(1)
-
-def setEnvironmentVariables():
-    for key, value in ENVIRONMENT_VARS.iteritems():
-        os.environ[key] =  value
 
 if __name__ == '__main__':
     if debug: sys.excepthook = print_exc_plus

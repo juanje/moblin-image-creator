@@ -1,10 +1,15 @@
 #!/usr/bin/python -tt
 # vim: ai ts=4 sts=4 et sw=4
 
-import os, commands, sys
+import commands
+import gettext
+import os
+import sys
+
+_ = gettext.lgettext
 
 if len(sys.argv) >= 2 and sys.argv[1] != "--test" :
-    print "Usage: %s [--test]" % sys.argv[0]
+    print _("Usage: %s [--test]") % sys.argv[0]
     sys.exit(0)
 
 TEST_RUN = ""
@@ -31,10 +36,10 @@ for i in o_list :
             break
 
 if not len(n_list) :
-    print "no rpms to remove"
+    print _("no rpms to remove")
     sys.exit(0)
 
-print "removing the following rpms: "
+print _("removing the following rpms: ")
 remove_list = ""
 for i in n_list :
     print "\t %s " % i 

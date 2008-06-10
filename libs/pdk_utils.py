@@ -21,6 +21,7 @@
 
 import exceptions
 import fcntl
+import gettext
 import gobject
 import os
 import re
@@ -34,11 +35,13 @@ import time
 
 import mic_cfg
 
+_ = gettext.lgettext
+
 # this is for the copySourcesListFile() function
 src_regex = None
 CONFIG_DIR = os.path.expanduser("~/.image-creator")
 if not os.path.isdir(CONFIG_DIR):
-    print "~/.image-creator/ directory did not exist.  Creating"
+    print _("~/.image-creator/ directory did not exist.  Creating")
     os.makedirs(CONFIG_DIR)
 
 sources_regex_file = os.path.expanduser(os.path.join(CONFIG_DIR, "sources_cfg"))
@@ -61,7 +64,7 @@ if os.path.isfile(sources_regex_file):
         if 'sources_regex' in global_dict:
             src_regex = global_dict['sources_regex']
 else:
-    print "Creating sample %s file" % sources_regex_file
+    print _("Creating sample %s file") % sources_regex_file
     out_file = open(sources_regex_file, 'w')
     print  >> out_file, """#!/usr/bin/python
 
@@ -104,7 +107,7 @@ for filename in [ CONFIG_DIR, sources_regex_file ]:
 
 def main():
     # Add something to exercise this code
-    print "USB devices: %s" % get_current_udisks()
+    print _("USB devices: %s") % get_current_udisks()
 
 def areWeRoot():
     """Figure out if we are running as root"""
@@ -192,7 +195,7 @@ def umount_device(device_file):
     for line in mount_file:
         line = line.strip()
         if line.find(search_file) == 0:
-            print "Umounting: %s" % device_file
+            print _("Umounting: %s") % device_file
             return umount(device_file)
     return True
 
@@ -290,15 +293,15 @@ def execCommand(cmd_line, quiet = False, output = None, callback = None):
 
 def execChrootCommand(path, cmd, output = None, callback = None):
     if not os.path.isfile(os.path.join(path, 'bin/bash')):
-        print >> sys.stderr, "Incomplete jailroot at %s" % (path)
-        raise ValueError("Internal Error: Invalid buildroot at %s" % (path))
+        print >> sys.stderr, _("Incomplete jailroot at %s") % (path)
+        raise ValueError(_("Internal Error: Invalid buildroot at %s") % (path))
     if output == None:
         output = []
     cmd_line = "/usr/sbin/chroot %s %s" % (path, cmd)
     result = execCommand(cmd_line, output = output, callback = callback)
     if result != 0:
-        print "Error in chroot.  Result: %s" % result
-        print "Command was: %s" % cmd_line
+        print _("Error in chroot.  Result: %s") % result
+        print _("Command was: %s") % cmd_line
         sys.stdout.flush()
     return result
 
@@ -403,7 +406,7 @@ def safeTextFileCopy(source_file, destination_file, force = False):
     we have the destination file and it has our signature text in it, then we
     will overwrite it.  But if the signature text is not in the destination
     file then we will not overwrite it"""
-    id_string = "# ##-Created by Moblin Image Creator: if this line exists we will overwrite this file -##"
+    id_string = _("# ##-Created by Moblin Image Creator: if this line exists we will overwrite this file -##")
     copyfile = False
     if os.path.isfile(source_file):
         if not os.path.isfile(destination_file) or force:
@@ -446,7 +449,7 @@ def mountList(mount_list, chroot_dir):
             if not ismount(path) and os.path.isdir(host_dirname):
                 result = os.system('mount --bind %s %s' % (host_dirname, path))
                 if result != 0:
-                    raise OSError("Internal error while attempting to bind mount /%s!" % (host_dirname))
+                    raise OSError(_("Internal error while attempting to bind mount /%s!") % (host_dirname))
         # Mimic host mounts, if possible
         elif mnt_type == 'host':
             if host_dirname in mounts:
@@ -464,7 +467,7 @@ def mountList(mount_list, chroot_dir):
                 cmd = 'mount %s -t %s %s %s' % (options, fs_type, device, path)
                 result = execCommand(cmd)
                 if result != 0:
-                    raise OSError("Internal error while attempting to mount %s %s!" % (host_dirname, target_dirname))
+                    raise OSError(_("Internal error while attempting to mount %s %s!") % (host_dirname, target_dirname))
     return mounted_list
 
 class MountInfo(object):
@@ -531,7 +534,7 @@ def signalChildren(pid, send_signal, process_dict = None, parent_first = True):
         process_dict = getAllProcesses()
     if pid in process_dict:
         if parent_first:
-            print "Sending signal: %s to PID: %s" % (send_signal, pid)
+            print _("Sending signal: %s to PID: %s") % (send_signal, pid)
             try:
                 os.kill(pid, send_signal)
             except:
@@ -540,7 +543,7 @@ def signalChildren(pid, send_signal, process_dict = None, parent_first = True):
             signalChildren(child_pid, send_signal = send_signal,
                 process_dict = process_dict, parent_first = parent_first)
         if not parent_first:
-            print "Sending signal: %s to PID: %s" % (send_signal, pid)
+            print _("Sending signal: %s to PID: %s") % (send_signal, pid)
             try:
                 os.kill(pid, send_signal)
             except:

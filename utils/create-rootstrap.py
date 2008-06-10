@@ -1,6 +1,7 @@
 #!/usr/bin/python -tt
 # vim: ai ts=4 sts=4 et sw=4
 
+import gettext
 import os
 import shutil
 import socket
@@ -10,6 +11,8 @@ import sys
 import tarfile
 import tempfile
 import time
+
+_ = gettext.lgettext
 
 class Callback:
     def iteration(self, process):
@@ -60,7 +63,7 @@ metadata_expire=1800
     
 if __name__ == '__main__':
     if len(sys.argv) != 2:
-        print >> sys.stderr, "USAGE: %s PLATFORM_DIR" % (sys.argv[0])
+        print >> sys.stderr, _("USAGE: %s PLATFORM_DIR") % (sys.argv[0])
         sys.exit(1)
         
     platform_dir = sys.argv[1]
@@ -79,14 +82,14 @@ if __name__ == '__main__':
     print >> buildstamp, "%s %s" % (socket.gethostname(), time.strftime("%d-%m-%Y %H:%M:%S %Z"))
     buildstamp.close()
     # install yum inside the project using the host tools
-    print "Creating rootstrap directory with yum..."
+    print _("Creating rootstrap directory with yum...")
     cmd = 'yum -y --disablerepo=localbase --installroot=%s install yum yum-protectbase' % path
     proc = subprocess.Popen(cmd.split(), stdin = subprocess.PIPE, stdout = subprocess.PIPE, stderr = subprocess.STDOUT, close_fds = True)
     proc.stdin.close()
     for line in proc.stdout:
         print line.strip()
     if proc.wait() != 0:
-        print >> sys.stderr, "ERROR: Unable to create rootstrap!"
+        print >> sys.stderr, _("ERROR: Unable to create rootstrap!")
         for line in proc.stderr:
             print line.strip()
         sys.exit(1)
@@ -94,7 +97,7 @@ if __name__ == '__main__':
     shutil.rmtree(os.path.join(path, 'var', 'cache', 'yum'))
     # Create the rootstrap archive file
     tarball_name = "%s/rootstrap.tar.bz2" % (platform_dir)
-    print "Creating tarball: %s ..." % tarball_name
+    print _("Creating tarball: %s ...") % tarball_name
     tar_obj = tarfile.open(tarball_name, 'w:bz2')
     tar_obj.add(path, '.')
     tar_obj.close()

@@ -1,1 +1,15 @@
 # List of source files which contain translatable strings.
+gui/gui.py
+gui/image-creator.glade
+image-creator
+libs/InstallImage.py
+libs/Platform.py
+libs/Project.py
+libs/SDK.py
+libs/fsets.py
+libs/mic_cfg.py
+libs/moblin_apt.py
+libs/moblin_yum.py
+libs/pdk_utils.py
+utils/create-rootstrap.py
+utils/jailroot-reset.py

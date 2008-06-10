@@ -19,6 +19,7 @@
 # This file contains utility functions which do not need to be inside any of
 # our current classes
 
+import gettext
 import os
 import platform
 import pwd
@@ -26,6 +27,8 @@ import re
 import sys
 
 from ConfigParser import SafeConfigParser
+
+_ = gettext.lgettext
 
 config = None
 DEFAULT_CONFIG_DIR = os.path.expanduser("/usr/share/pdk/default_config/")
@@ -56,17 +59,17 @@ def configDir():
 
 def readConfig():
     if not os.path.isdir(CONFIG_DIR):
-        print "~/.image-creator/ directory did not exist.  Creating"
+        print _("~/.image-creator/ directory did not exist.  Creating")
         os.makedirs(CONFIG_DIR)
 
     user_config_file = os.path.join(CONFIG_DIR, "image-creator.cfg")
     # FIXME: This is temporary to help out people
     old_config = os.path.join(CONFIG_DIR, "platforms.cfg")
     if os.path.exists(old_config):
-        print "Error: The file: %s exists" % old_config
-        print "This file is no longer used.  Please convert it over to the new file and then delete it"
-        print "Please create a: %s file" % user_config_file
-        print "And set it up like the file: %s" % os.path.join(DEFAULT_CONFIG_DIR, "defaults.cfg")
+        print _("Error: The file: %s exists") % old_config
+        print _("This file is no longer used.  Please convert it over to the new file and then delete it")
+        print _("Please create a: %s file") % user_config_file
+        print _("And set it up like the file: %s" % os.path.join(DEFAULT_CONFIG_DIR, "defaults.cfg"))
         sys.exit(1)
 
     global config
@@ -90,13 +93,13 @@ def verifyConfig(filename):
         if result:
             section = result.group(1)
             if section not in BASE_SECTIONS:
-                print "Invalid section: %s" % section
-                print "Found in file: %s" % filename
+                print _("Invalid section: %s") % section
+                print _("Found in file: %s") % filename
                 sys.exit(1)
             continue
         if section not in VALID_SECTIONS:
-            print "Invalid section: %s" % section
-            print "Found in file: %s" % filename
+            print _("Invalid section: %s") % section
+            print _("Found in file: %s") % filename
             sys.exit(1)
 
 def fixupConfig():
@@ -159,7 +162,7 @@ def addDefaults():
     elif dist == "fedora":
         pkg_manager = "yum"
     else:
-        pkg_manager = "unsupported distribution"
+        pkg_manager = _("unsupported distribution")
     config.set('general', 'package_manager', pkg_manager)
 
 if '__main__' == __name__:

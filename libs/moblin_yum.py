@@ -20,6 +20,7 @@
 # functionality.  This way the image-creator will not care if you are using apt
 # or yum or whatever package management system you want to use.
 
+import gettext
 import os
 import sys
 import time
@@ -27,6 +28,8 @@ import time
 import mic_cfg
 import moblin_pkgbase
 import pdk_utils
+
+_ = gettext.lgettext
 
 class YumPackageManager(moblin_pkgbase.PackageManager):
     """Yum class for package management"""
@@ -36,7 +39,7 @@ class YumPackageManager(moblin_pkgbase.PackageManager):
 
     def installPackages(self, chroot_dir, package_list, callback = None):
         """Install the list of packages in the chroot environement"""
-        print "yum.installPackages: Not implemented yet!!!!"
+        print _("yum.installPackages: Not implemented yet!!!!")
         self.__yumPreRun(chroot_dir)
         if not package_list:
             # No packages, so nothing to do
@@ -48,45 +51,45 @@ class YumPackageManager(moblin_pkgbase.PackageManager):
             self.updateChroot(chroot_dir, callback = callback)
             # yum install
             command = "yum -y install %s" % (packages)
-            print "Running 'yum install' command: %s" % (command)
-            print "\t in the chroot: %s" % (chroot_dir)
+            print _("Running 'yum install' command: %s") % (command)
+            print _("\t in the chroot: %s") % (chroot_dir)
             result = pdk_utils.execChrootCommand(chroot_dir, command, callback = callback)
             if result == 0:
-                print "Completed 'yum install' successfully"
+                print _("Completed 'yum install' successfully")
                 break
             print
-            print "Error running 'yum install' command: %s" % command
-            print "Will try 'yum update' in 15 seconds"
+            print _("Error running 'yum install' command: %s") % command
+            print _("Will try 'yum update' in 15 seconds")
             time.sleep(15)
             retry_count += 1
             # yum update
             command = "yum -y update"
-            print "Running 'yum update' command: %s" % command
+            print _("Running 'yum update' command: %s") % command
             result = pdk_utils.execChrootCommand(chroot_dir, command, callback = callback)
             if result != 0:
                 print
-                print "Error running 'yum update' command: %s" % command
+                print _("Error running 'yum update' command: %s") % command
                 time.sleep(15)
             else:
-                print "Completed 'yum update' successfully"
-                print "Will try 'yum install -f' in 15 seconds"
+                print _("Completed 'yum update' successfully")
+                print _("Will try 'yum install -f' in 15 seconds")
                 time.sleep(15)
         else:
-            raise OSError("Internal error while attempting to run: %s" % command)
+            raise OSError(_("Internal error while attempting to run: %s") % command)
         self.__yumPostRun(chroot_dir)
 
     def updateChroot(self, chroot_dir, callback = None):
         """Update the chroot environment to have the latest packages"""
         command = "yum -y update"
-        print "Running 'yum update' command: %s" % (command)
-        print "\t in the chroot: %s" % (chroot_dir)
+        print _("Running 'yum update' command: %s") % (command)
+        print _("\t in the chroot: %s") % (chroot_dir)
         result = pdk_utils.execChrootCommand(chroot_dir, command, callback = callback)
 
     def cleanPackageCache(self, chroot_dir):
         """Clean out any cached package files"""
         command = "yum clean all"
-        print "Running 'yum clean' command: %s" % (command)
-        print "\t in the chroot: %s" % (chroot_dir)
+        print _("Running 'yum clean' command: %s") % (command)
+        print _("\t in the chroot: %s") % (chroot_dir)
         result = pdk_utils.execChrootCommand(chroot_dir, command, callback = callback)
 
     def mount(self, chroot_dir):

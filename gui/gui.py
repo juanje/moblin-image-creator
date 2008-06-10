@@ -20,8 +20,6 @@ import gettext
 import gnome
 import gobject
 import gtk
-import gtk.glade
-import locale
 import os
 import pygtk
 import re
@@ -41,17 +39,6 @@ debug = False
 if mic_cfg.config.has_option('general', 'debug'):
     debug = int(mic_cfg.config.get('general', 'debug'))
 
-# Initial stuff for Internationlization and Localization support.
-# Locale stuff
-# Set the locale to always be the 'C' locale, since we have are not yet using
-# internationalization
-locale.setlocale(locale.LC_ALL, 'C')
-USER_LOCALE = locale.getlocale(locale.LC_ALL)
-
-# More info: http://docs.python.org/lib/i18n.html
-gettext.bindtextdomain('pdk', '/usr/share/pdk/locale')
-gettext.textdomain('pdk')
-gettext.install('pdk', '/usr/share/pdk/locale')
 _ = gettext.lgettext
     
 mountedDirs = set()
@@ -62,13 +49,13 @@ class term_mic(Thread):
         self.app = micApp
     
     def run(self):
-        print "Unmounting all mounted directories..."
+        print _("Unmounting all mounted directories...")
         global mountedDirs
         directory_set = self.sdk.umount()
         if directory_set:
-            print "Could not unmount these dirs: %s" % directory_set
+            print _("Could not unmount these dirs: %s") % directory_set
             mountedDirs = directory_set.copy()
-        print "Unmounting complete"
+        print _("Unmounting complete")
 
 
 class App(object):
@@ -149,7 +136,7 @@ class App(object):
             error_message = ""
             for proj in obsolete_projects:
                 error_message = error_message + " " + proj
-            self.show_error_dialog("Found unsupported project(s): %s\nskipping them" % error_message)
+            self.show_error_dialog(_("Found unsupported project(s): %s\nskipping them") % error_message)
 
     def run(self):
         gtk.main()
@@ -162,13 +149,13 @@ class App(object):
         term_thread.start()
 
         widgets = gtk.glade.XML(self.gladefile, 'error_dialog')
-        widgets.get_widget('error_label').set_text("Please wait while MIC attempts to unmount all projects and targets...")
+        widgets.get_widget('error_label').set_text(_("Please wait while MIC attempts to unmount all projects and targets..."))
         dialog = widgets.get_widget('error_dialog')
         vbox = widgets.get_widget('vbox18')
         progressbar = gtk.ProgressBar()
         vbox.pack_start(progressbar)
         dialog.connect('delete_event', self.ignore)
-        dialog.set_title("Closing Image-Creator")
+        dialog.set_title(_("Closing Image-Creator"))
         ok_button = widgets.get_widget('okbutton4')
         ok_button.set_sensitive(False)
         dialog.show_all()   
@@ -187,7 +174,7 @@ class App(object):
 
     def newFeatureDialog(self):
         if self.pygtkOldVersion == True:
-            self.show_error_dialog("You are using an old version of PyGTK. Image Creator required atleast PyGTK 2.12. Some features will be disabled")
+            self.show_error_dialog(_("You are using an old version of PyGTK. Image Creator required atleast PyGTK 2.12. Some features will be disabled"))
             return
         if os.path.isfile("/usr/share/pdk/newFeature"):
             newFeatureTree = gtk.glade.XML(self.gladefile, 'newFeature')
@@ -295,7 +282,7 @@ class App(object):
     def stop_progress(self, widget, cancelData):        
         #self.stopTest = True
         tree = gtk.glade.XML(self.gladefile, 'qDialog')
-        tree.get_widget('queryLabel').set_text("Are you sure you want to cancel project creation?")
+        tree.get_widget('queryLabel').set_text(_("Are you sure you want to cancel project creation?"))
         tree.get_widget('cancelbutton2').set_label("gtk-no")
         tree.get_widget('okbutton2').set_label("gtk-yes")
         dialog = tree.get_widget('qDialog')
@@ -307,7 +294,7 @@ class App(object):
             for child in child_list:
                 if child != cur_pid:
                     os.kill(child, signal.SIGKILL)
-        print "Canceled Function was %s and cancel type was %s" % (cancelData[0], cancelData[1])
+        print _("Canceled Function was %s and cancel type was %s") % (cancelData[0], cancelData[1])
 
 
     def on_new_project_clicked(self, widget):
@@ -328,20 +315,20 @@ class App(object):
             platform = dialog.platform
             path = os.path.realpath(os.path.abspath(os.path.expanduser(dialog.path)))
             if not dialog.name or not dialog.desc or not dialog.platform or not dialog.path:
-                self.show_error_dialog("All values must be specified")
+                self.show_error_dialog(_("All values must be specified"))
                 continue
             if name in self.sdk.projects:
-                self.show_error_dialog("Project already exists with the name: %s" % name)
+                self.show_error_dialog(_("Project already exists with the name: %s") % name)
                 continue
             # If the path specified doesn't exist yet, then that is okay.
             if not os.path.exists(path):
                 break
             if not os.path.isdir(path):
-                self.show_error_dialog("Path: %s exists but is not a directory" % path)
+                self.show_error_dialog(_("Path: %s exists but is not a directory") % path)
                 continue
             # Make sure that the directory specified is empty
             if len(os.listdir(path)):
-                self.show_error_dialog("Path: %s is a directory which is NOT empty" % path)
+                self.show_error_dialog(_("Path: %s is a directory which is NOT empty") % path)
                 continue
             break
         if result == gtk.RESPONSE_OK:
@@ -363,17 +350,17 @@ class App(object):
                 try:
                     proj = self.sdk.create_project(dialog.path, dialog.name, dialog.desc, self.sdk.platforms[platformName])
                 except ValueError:
-                    print "Project Creation cancelled"
+                    print _("Project Creation cancelled")
                     progress_dialog.destroy()
                     return
                 if proj.install() == False:
-                    print "Project Creation cancelled"
+                    print _("Project Creation cancelled")
                     progress_dialog.destroy()
                     try:
-                        print "Trying to cleanup"
+                        print _("Trying to cleanup")
                         self.sdk.delete_project(dialog.name)
                     except:
-                        print "could not cleanup project"
+                        print _("could not cleanup project")
                         # if the project creation failed before the list of
                         # projects has been updated, then we expect failure here
                         pass
@@ -419,7 +406,7 @@ class App(object):
     def on_projectDelete_clicked(self, event):
         """Delete a Project"""
         model, treePathList = self.projectView.get_selection().get_selected_rows()
-        deleteConfirmationText = "Delete Project(s)?\n"
+        deleteConfirmationText = _("Delete Project(s)?\n")
         for item in treePathList:
             deleteConfirmationText += " %s " % model[item][0]
         tree = gtk.glade.XML(self.gladefile, 'qDialog')
@@ -462,12 +449,12 @@ class App(object):
             dialog.destroy()
             if result == gtk.RESPONSE_OK:
                 if not target_name:
-                    self.show_error_dialog("Must specify a target name")
+                    self.show_error_dialog(_("Must specify a target name"))
                 elif target_name in self.current_project().targets:
-                    self.show_error_dialog("Target: %s already exists" % target_name)
+                    self.show_error_dialog(_("Target: %s already exists") % target_name)
                 elif re.search(r'[^-_a-zA-Z0-9]', target_name):
                     target_name = re.sub(r'[^-_a-zA-Z0-9]', '', target_name)
-                    self.show_error_dialog("Target names can only contain alpha/numeric characters, hyphen and underscore")
+                    self.show_error_dialog(_("Target names can only contain alpha/numeric characters, hyphen and underscore"))
                 else:
                     self.create_new_target(self.current_project(), target_name)
                     break
@@ -550,20 +537,20 @@ class App(object):
             iter = list.append([fset_name])
             buttonName = fset_name + "  (" + platform.fset[fset_name].desc + ")"
             self.fsetTouple.append((fset_name, gtk.CheckButton(buttonName), False, 0))
-            toolTipText = "<b>Depends on FSet(s):</b> "
+            toolTipText = _("<b>Depends on FSet(s):</b> ")
             for depends in sorted(platform.fset[fset_name].deps):
                 toolTipText += " %s " % depends
-            toolTipText += "\n<b>Debug Packages:</b> "
+            toolTipText += _("\n<b>Debug Packages:</b> ")
             for debug_pkgs in sorted(platform.fset[fset_name].debug_pkgs):
                 toolTipText += " %s " % debug_pkgs
-            toolTipText += "\n<b>Packages:</b> "
+            toolTipText += _("\n<b>Packages:</b> ")
             for pkgs in sorted(platform.fset[fset_name].pkgs):
                 toolTipText += " %s " % pkgs
             if self.pygtkOldVersion == False:
                 self.fsetTouple[i][1].set_tooltip_markup(toolTipText)
             i += 1
         if not iter:
-            self.show_error_dialog("Nothing available to install!")
+            self.show_error_dialog(_("Nothing available to install!"))
             dialog.destroy()
             return
         self.fsetTouple.pop(0)
@@ -581,7 +568,7 @@ class App(object):
                 for fsetName in self.fsetTouple:
                         if fsetName[2] == True:
                             numFsetsToInstall = numFsetsToInstall + 1
-                print "Number of fsets to install: %s" % numFsetsToInstall
+                print _("Number of fsets to install: %s") % numFsetsToInstall
 
                 if numFsetsToInstall != 0:
                     dialog.destroy()
@@ -590,8 +577,8 @@ class App(object):
                             fsetToInstall.append(fsetName[0])
                     break
                 else:
-                    print "No fset selected"
-                    self.show_error_dialog("Please Choose an Fset")
+                    print _("No fset selected")
+                    self.show_error_dialog(_("Please Choose an Fset"))
             else:
                 break
         dialog.destroy()
@@ -601,17 +588,17 @@ class App(object):
         platformName = self.current_project().platform.name
         fsetsToInstall, debug_pkgs = self.setup_fsets_dialog(widget, platformName)
         if fsetsToInstall:
-            print "Debug packages = %s" % debug_pkgs
+            print _("Debug packages = %s") % debug_pkgs
             platform = self.current_project().platform
             progress_tree = gtk.glade.XML(self.gladefile, 'ProgressDialog')
             progress_dialog = progress_tree.get_widget('ProgressDialog')
             progress_dialog.connect('delete_event', self.ignore)
             self.progressbar = progress_tree.get_widget('progressbar')
             for fsetName in fsetsToInstall:
-                #print "Installing: %s" % fset    
+                #print _("Installing: %s") % fset    
                 fset = platform.fset[fsetName]
-                print "Installing fset %s.................\n" % fsetName
-                progress_tree.get_widget('progress_label').set_text("Please wait while installing %s" % fset.name)
+                print _("Installing fset %s.................\n") % fsetName
+                progress_tree.get_widget('progress_label').set_text(_("Please wait while installing %s") % fset.name)
                 try:
                     self.current_target().installFset(fset, fsets = platform.fset, debug_pkgs = debug_pkgs)
                 except ValueError, e:
@@ -619,7 +606,7 @@ class App(object):
                 except:
                     traceback.print_exc()
                     if debug: print_exc_plus()
-                    self.show_error_dialog("Unexpected error: %s" % (sys.exc_info()[1]))
+                    self.show_error_dialog(_("Unexpected error: %s") % (sys.exc_info()[1]))
             self.redraw_target_view()
             progress_dialog.destroy()
 
@@ -627,8 +614,8 @@ class App(object):
         return True
 
     def set_status_label(self, newLabel):
-        print "Setting new status label: %s" % newLabel
-        self.statuslabel.set_text("Current action: %s" % newLabel)
+        print _("Setting new status label: %s") % newLabel
+        self.statuslabel.set_text(_("Current action: %s") % newLabel)
 
     def gui_throbber(self, process):
         self.progressbar.pulse()
@@ -643,13 +630,13 @@ class App(object):
 
     def on_delete_target_clicked(self, widget):
         model, treePathList = self.targetView.get_selection().get_selected_rows()
-        deleteConfirmationText = "Delete Target(s)?\n"
+        deleteConfirmationText = _("Delete Target(s)?\n")
         for item in treePathList:
             deleteConfirmationText += " %s " % model[item][0]
         tree = gtk.glade.XML(self.gladefile, 'qDialog')
         tree.get_widget('queryLabel').set_text(deleteConfirmationText)
         dialog = tree.get_widget('qDialog')
-        dialog.set_title("Delete Target")
+        dialog.set_title(_("Delete Target"))
         result = dialog.run()
         dialog.destroy()       
         if result == gtk.RESPONSE_OK:    
@@ -716,7 +703,7 @@ class App(object):
             self.targetList.remove(self.targetList.get_iter(item))
         self.targetView.get_selection().handler_unblock(self.targetView_handler)
 
-    def show_error_dialog(self, message="An unknown error has occurred!"):
+    def show_error_dialog(self, message= _("An unknown error has occurred!")):
         widgets = gtk.glade.XML(self.gladefile, 'error_dialog')
         widgets.get_widget('error_label').set_text(message)
         dialog = widgets.get_widget('error_dialog')
@@ -725,12 +712,12 @@ class App(object):
 
     def show_umount_error_dialog(self, directory_list = []):
         widgets = gtk.glade.XML(self.gladefile, 'error_dialog_umount')
-        #widgets.get_widget('error_label').set_text("Could not unmount the following directories:")
+        #widgets.get_widget('error_label').set_text(_("Could not unmount the following directories:"))
         dirTree = widgets.get_widget('umount_dirs')
         dialog = widgets.get_widget('error_dialog_umount')
         dirList = gtk.ListStore(gobject.TYPE_STRING)
         cellRenderC0 = gtk.CellRendererText()
-        col0 = gtk.TreeViewColumn("Directory List", cellRenderC0)
+        col0 = gtk.TreeViewColumn(_("Directory List"), cellRenderC0)
         dirTree.append_column(col0)
         col0.add_attribute(cellRenderC0, 'text', 0)
         col0.set_resizable(True)
@@ -746,7 +733,7 @@ class App(object):
         prompt_file = open(os.path.join(project_path, "etc/debian_chroot"), 'w')
         print >> prompt_file, "P: %s" % project_name
         prompt_file.close()
-        print "Project path: %s" % project_path
+        print _("Project path: %s") % project_path
         cmd = '/usr/bin/gnome-terminal -x /usr/sbin/chroot %s env -u SHELL HOME=/root su -p - &' % (project_path)
         print cmd
         os.system(cmd)
@@ -759,7 +746,7 @@ class App(object):
         prompt_file = open(os.path.join(target_path, "etc/debian_chroot"), 'w')
         print >> prompt_file, "T: %s" % target.name
         prompt_file.close()
-        print "Target path: %s" % target_path
+        print _("Target path: %s") % target_path
         cmd = '/usr/bin/gnome-terminal -x /usr/sbin/chroot %s env -u SHELL HOME=/root su -p - &' % (target_path)
         print cmd
         os.system(cmd)
@@ -791,7 +778,7 @@ class App(object):
             progress_tree = gtk.glade.XML(self.gladefile, 'ProgressDialog')
             progress_dialog = progress_tree.get_widget('ProgressDialog')
             progress_dialog.connect('delete_event', self.ignore)
-            progress_tree.get_widget('progress_label').set_text("Please wait while while creating %s" % img_name)
+            progress_tree.get_widget('progress_label').set_text(_("Please wait while while creating %s") % img_name)
             self.progressbar = progress_tree.get_widget('progressbar')
             try:
                 self.current_project().create_live_usb(target.name, img_name)
@@ -811,7 +798,7 @@ class App(object):
             progress_tree = gtk.glade.XML(self.gladefile, 'ProgressDialog')
             progress_dialog = progress_tree.get_widget('ProgressDialog')
             progress_dialog.connect('delete_event', self.ignore)
-            progress_tree.get_widget('progress_label').set_text("Please wait while creating %s" % img_name)
+            progress_tree.get_widget('progress_label').set_text(_("Please wait while creating %s") % img_name)
             self.progressbar = progress_tree.get_widget('progressbar')
             try:
                 self.current_project().create_live_usb(target.name, img_name, 'EXT3FS')
@@ -831,7 +818,7 @@ class App(object):
             progress_tree = gtk.glade.XML(self.gladefile, 'ProgressDialog')
             progress_dialog = progress_tree.get_widget('ProgressDialog')
             progress_dialog.connect('delete_event', self.ignore)
-            progress_tree.get_widget('progress_label').set_text("Please wait while creating %s" % img_name)
+            progress_tree.get_widget('progress_label').set_text(_("Please wait while creating %s") % img_name)
             self.progressbar = progress_tree.get_widget('progressbar')
             try:
                 self.current_project().create_install_usb(target.name, img_name)
@@ -853,7 +840,7 @@ class App(object):
             progress_tree = gtk.glade.XML(self.gladefile, 'ProgressDialog')
             progress_dialog = progress_tree.get_widget('ProgressDialog')
             progress_dialog.connect('delete_event', self.ignore)
-            progress_tree.get_widget('progress_label').set_text("Please wait while creating %s" % img_name)
+            progress_tree.get_widget('progress_label').set_text(_("Please wait while creating %s") % img_name)
             self.progressbar = progress_tree.get_widget('progressbar')
             try:
                 self.current_project().create_live_iso(target.name, img_name)
@@ -895,12 +882,12 @@ class App(object):
         result = dialog.run()
         if result == gtk.RESPONSE_CANCEL:
             dialog.destroy()
-            print "No target image selected!"
+            print _("No target image selected!")
             return False
         elif result == gtk.RESPONSE_OK:
             image_filename = dialog.get_filename()
             dialog.destroy()
-            print "Selected file name: %s " % image_filename
+            print _("Selected file name: %s ") % image_filename
             widgets = gtk.glade.XML(self.gladefile, 'select_usb_disk_dialog')
             dialog2 = widgets.get_widget('select_usb_disk_dialog')
             usb_dev_list = gtk.ListStore(gobject.TYPE_STRING)
@@ -922,7 +909,7 @@ class App(object):
             return_code = False
             if result == gtk.RESPONSE_CANCEL:
                 dialog2.destroy()
-                print "No USB device selected!"
+                print _("No USB device selected!")
             elif result == gtk.RESPONSE_OK:
                 model, iter = usb_disks.get_selection().get_selected()
                 dialog2.destroy()
@@ -930,26 +917,26 @@ class App(object):
                     self.show_error_dialog('No USB disk selected!')
                 else:
                     usb_disk = model[iter][0]
-                    print "Selected USB disk %s" % usb_disk
+                    print _("Selected USB disk %s") % usb_disk
                     if not pdk_utils.umount_device(usb_disk):
-                        self.show_error_dialog("Can not umount %s. Please close any shells or opened files still under mount point and try again!" % usb_disk)
+                        self.show_error_dialog(_("Can not umount %s. Please close any shells or opened files still under mount point and try again!") % usb_disk)
                         return_code = False
                     else:
                         progress_tree = gtk.glade.XML(self.gladefile, 'ProgressDialog')
                         progress_dialog = progress_tree.get_widget('ProgressDialog')
                         progress_dialog.connect('delete_event', self.ignore)
-                        progress_tree.get_widget('progress_label').set_text("Please wait while writing image to USB disk")
+                        progress_tree.get_widget('progress_label').set_text(_("Please wait while writing image to USB disk"))
                         self.progressbar = progress_tree.get_widget('progressbar')
-                        print "Writing image to USB disk %s" % usb_disk
+                        print _("Writing image to USB disk %s") % usb_disk
                         cmd = "dd bs=4096 if=%s of=%s" % (image_filename, usb_disk)
                         result = pdk_utils.execCommand(cmd, False, None, self.gui_throbber)
                         progress_dialog.destroy()
                         if result != 0:
-                            self.show_error_dialog("Error writing to USB drive.  'dd' returned code: %s" % result)
+                            self.show_error_dialog(_("Error writing to USB drive.  'dd' returned code: %s") % result)
                             return_code = False
                         else:
                             return_code = True
-                        print "Writing Complete"
+                        print _("Writing Complete")
                         return_code = True
             return return_code
 
@@ -966,11 +953,11 @@ class App(object):
         return self.writeUsbImageHelper(home_dir)
 
     def on_ClearRootstraps_activate(self, widget):
-        print "In on_ClearRootstraps_activate"
+        print _("In on_ClearRootstraps_activate")
         progress_tree = gtk.glade.XML(self.gladefile, 'ProgressDialog')
         progress_dialog = progress_tree.get_widget('ProgressDialog')
         progress_dialog.connect('delete_event', self.ignore)
-        progress_tree.get_widget('progress_label').set_text("Please wait while clearing rootstraps")
+        progress_tree.get_widget('progress_label').set_text(_("Please wait while clearing rootstraps"))
         self.progressbar = progress_tree.get_widget('progressbar')
 
         self.sdk.clear_rootstraps()
@@ -978,15 +965,15 @@ class App(object):
         progress_dialog.destroy()
 
     def on_Load_activate(self, widget):
-        print "In on_Load_activate"
-        dialog = gtk.Dialog("Provide a Project Name", None, gtk.DIALOG_MODAL,
+        print _("In on_Load_activate")
+        dialog = gtk.Dialog(_("Provide a Project Name"), None, gtk.DIALOG_MODAL,
             (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL, gtk.STOCK_OK, gtk.RESPONSE_OK))
         dialog.set_default_response(gtk.RESPONSE_OK)
         dialog.set_size_request(300, 150)
         projectNameEntry = gtk.Entry(100)
         projectNameEntry.set_has_frame(True)
         projectNameEntry.set_activates_default(True)
-        #projectNameEntry.set_text("Enter Project Name Here")
+        #projectNameEntry.set_text(_("Enter Project Name Here"))
         dialog.vbox.pack_start(projectNameEntry)
         dialog.show_all()
         obtainedUniqueName = False
@@ -997,24 +984,24 @@ class App(object):
             dialog.show_all()
             result = dialog.run()
             if result == gtk.RESPONSE_CANCEL:
-                print "No Project Name"
+                print _("No Project Name")
                 break
             if result == gtk.RESPONSE_OK:
                 projectName = projectNameEntry.get_text()
                 if projectName == "":
-                    print "Project Name is blank"
+                    print _("Project Name is blank")
                     dialog.set_size_request(300, 150)
-                    projectExistsLabel.set_markup("<b><span foreground=\"red\">Please provide a project name</span></b>")
+                    projectExistsLabel.set_markup(_("<b><span foreground=\"red\">Please provide a project name</span></b>"))
                 else:
-                    print "Project name: %s" % projectName
+                    print _("Project name: %s") % projectName
                     projectNameExists = False
                     for key in sorted(self.sdk.projects.iterkeys()):
                         p = self.sdk.projects[key]
                         if p.name == projectName:
                             projectNameExists = True
-                            print "Project %s already exists" % projectName
+                            print _("Project %s already exists") % projectName
                             dialog.set_size_request(400, 150)
-                            projectExistsLabel.set_markup("<b><span foreground=\"red\">Project %s already exists.</span></b>" % projectName)
+                            projectExistsLabel.set_markup(_("<b><span foreground=\"red\">Project %s already exists.</span></b>") % projectName)
                             break
                     if projectNameExists == False:
                         obtainedUniqueName = True
@@ -1031,31 +1018,31 @@ class App(object):
             result = dialog.run()
             if result == gtk.RESPONSE_CANCEL:
                 dialog.destroy()
-                print "No target image selected!"
+                print _("No target image selected!")
             if result == gtk.RESPONSE_OK:
                 fileToLoad=dialog.get_filename()
-                print "Selected file name: %s " % fileToLoad
+                print _("Selected file name: %s ") % fileToLoad
                 dialog.destroy()
                 dialog = gtk.FileChooserDialog('Choose the destination Folder',None,gtk.FILE_CHOOSER_ACTION_CREATE_FOLDER,
                 (gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,gtk.STOCK_OK,gtk.RESPONSE_OK),None)
                 result = dialog.run()
                 if result == gtk.RESPONSE_CANCEL:
-                    print "No Destination Folder"
+                    print _("No Destination Folder")
                     dialog.destroy()
                 if result == gtk.RESPONSE_OK:
                     targetFolder = dialog.get_filename()
-                    print "Targer File Name: %s" % (targetFolder)
+                    print _("Targer File Name: %s") % (targetFolder)
                     dialog.destroy()
 
                     progress_tree = gtk.glade.XML(self.gladefile, 'ProgressDialog')
                     progress_dialog = progress_tree.get_widget('ProgressDialog')
                     progress_dialog.connect('delete_event', self.ignore)
-                    progress_tree.get_widget('progress_label').set_text("Please wait while loading Project: %s" % projectName)
+                    progress_tree.get_widget('progress_label').set_text(_("Please wait while loading Project: %s") % projectName)
                     self.progressbar = progress_tree.get_widget('progressbar')
 
-                    print "Loading Project %s" % projectName
+                    print _("Loading Project %s") % projectName
                     self.sdk.load_project(projectName, targetFolder, fileToLoad, self.gui_throbber)
-                    print "Loading Project Complete"
+                    print _("Loading Project Complete")
                     progress_dialog.destroy()
                     self.refreshProjectList()
 
@@ -1077,8 +1064,8 @@ class App(object):
                 break
 
     def on_Save_activate(self, widget):
-        print "In on_Save_activate"
-        dialog = gtk.Dialog("Choose Project to Save", None, gtk.DIALOG_MODAL,
+        print _("In on_Save_activate")
+        dialog = gtk.Dialog(_("Choose Project to Save"), None, gtk.DIALOG_MODAL,
             (gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL, gtk.STOCK_OK, gtk.RESPONSE_OK))
         dialog.set_size_request(300, 100)
         currentProjectList = gtk.ListStore(str, str)
@@ -1091,46 +1078,46 @@ class App(object):
         dialog.show_all()
         result = dialog.run()
         if result == gtk.RESPONSE_CANCEL:
-            print "No Project Name"
+            print _("No Project Name")
             dialog.destroy()
         if result == gtk.RESPONSE_OK:
             projectNameToSave = projectList.get_active_text()
-            print "Project name to Save: %s" % (projectNameToSave)
+            print _("Project name to Save: %s") % (projectNameToSave)
             dialog.destroy()
             dialog = gtk.FileChooserDialog('Choose the destination File Name',None,gtk.FILE_CHOOSER_ACTION_SAVE,
                 (gtk.STOCK_CANCEL,gtk.RESPONSE_CANCEL,gtk.STOCK_OK,gtk.RESPONSE_OK),None)
             result = dialog.run()
             if result == gtk.RESPONSE_CANCEL:
-                print "No Project Name"
+                print _("No Project Name")
                 dialog.destroy()
             if result == gtk.RESPONSE_OK:
                 targetFileName = dialog.get_filename()
-                print "Targer File Name: %s" % (targetFileName)
+                print _("Targer File Name: %s") % (targetFileName)
                 dialog.destroy()
 
                 progress_tree = gtk.glade.XML(self.gladefile, 'ProgressDialog')
                 progress_dialog = progress_tree.get_widget('ProgressDialog')
                 progress_dialog.connect('delete_event', self.ignore)
-                progress_tree.get_widget('progress_label').set_text("Please wait while saving Project: %s" % projectNameToSave)
+                progress_tree.get_widget('progress_label').set_text(_("Please wait while saving Project: %s") % projectNameToSave)
                 self.progressbar = progress_tree.get_widget('progressbar')
 
                 while gtk.events_pending():
                     gtk.main_iteration(False)
-                print "Saving Project %s" % projectNameToSave
+                print _("Saving Project %s") % projectNameToSave
                 self.sdk.save_project(projectNameToSave, targetFileName)
-                print "Saving Complete"
+                print _("Saving Complete")
                 progress_dialog.destroy()
 
     def on_upgrade_project_clicked(self, widget):
         progress_tree = gtk.glade.XML(self.gladefile, 'ProgressDialog')
         progress_dialog = progress_tree.get_widget('ProgressDialog')
         progress_dialog.connect('delete_event', self.ignore)
-        progress_tree.get_widget('progress_label').set_text("Please wait while upgrading Project")
+        progress_tree.get_widget('progress_label').set_text(_("Please wait while upgrading Project"))
         self.progressbar = progress_tree.get_widget('progressbar')
 
         result = self.current_project().updateAndUpgrade()
         if result != 0:
-             raise OSError("Internal error while attempting to run update/upgrade: %s" % result)
+             raise OSError(_("Internal error while attempting to run update/upgrade: %s") % result)
         progress_dialog.destroy()
 
 
@@ -1138,12 +1125,12 @@ class App(object):
         progress_tree = gtk.glade.XML(self.gladefile, 'ProgressDialog')
         progress_dialog = progress_tree.get_widget('ProgressDialog')
         progress_dialog.connect('delete_event', self.ignore)
-        progress_tree.get_widget('progress_label').set_text("Please wait while upgrading Target")
+        progress_tree.get_widget('progress_label').set_text(_("Please wait while upgrading Target"))
         self.progressbar = progress_tree.get_widget('progressbar')
 
         result = self.current_target().updateAndUpgrade()
         if result != 0:
-             raise OSError("Internal error while attempting to run update/upgrade: %s" % result)
+             raise OSError(_("Internal error while attempting to run update/upgrade: %s") % result)
         progress_dialog.destroy()
 
     def formatMirrorSection(self, sectionName, sectionSearch, sectionReplace):
@@ -1237,10 +1224,10 @@ class App(object):
                     mirrorListBuffer = mirrorListEntry.get_buffer()
                     mirrorList = mirrorListBuffer.get_text(mirrorListBuffer.get_start_iter(), mirrorListBuffer.get_end_iter())
                     if sectionName == "":
-                        self.show_error_dialog("All fields are required")
+                        self.show_error_dialog(_("All fields are required"))
                         continue
                     elif  mirrorList == "":
-                        self.show_error_dialog("All fields are required")
+                        self.show_error_dialog(_("All fields are required"))
                         continue
                     else:
                         self.mirrorSelection_entry_box.append([sectionName])
@@ -1302,8 +1289,8 @@ class App(object):
 
         cellRenderC0 = gtk.CellRendererText()
         cellRenderC1 = gtk.CellRendererText()
-        col0 = gtk.TreeViewColumn("Search Expression", cellRenderC0)
-        col1 = gtk.TreeViewColumn("Replace Expression", cellRenderC1)
+        col0 = gtk.TreeViewColumn(_("Search Expression"), cellRenderC0)
+        col1 = gtk.TreeViewColumn(_("Replace Expression"), cellRenderC1)
 
         self.mirrorDetails.append_column(col0)
         self.mirrorDetails.append_column(col1)
@@ -1334,7 +1321,7 @@ class App(object):
         newProjectConfiguration = projectAssistantWizard.run()
         #print "%s %s %s %s %s %s %s" % (newProjectConfiguration.projectName, newProjectConfiguration.projectDesc, newProjectConfiguration.projectPath, newProjectConfiguration.projectPlatform, newProjectConfiguration.targetName, newProjectConfiguration.fsetsToInstall, newProjectConfiguration.debugPkgs)
         if newProjectConfiguration.projectName and newProjectConfiguration.projectDesc and newProjectConfiguration.projectPath and newProjectConfiguration.projectPlatform and newProjectConfiguration.targetName:
-            print "Creating Project and Target"
+            print _("Creating Project and Target")
             try:
                 progress_tree = gtk.glade.XML(self.gladefile, 'ProgressDialog')
                 progress_dialog = progress_tree.get_widget('ProgressDialog')
@@ -1366,7 +1353,7 @@ class App(object):
             progress_dialog.destroy()
 
             if newProjectConfiguration.fsetsToInstall:
-                print "Installing the following fsets: %s" % newProjectConfiguration.fsetsToInstall
+                print _("Installing the following fsets: %s") % newProjectConfiguration.fsetsToInstall
                 platform = self.current_project().platform
                 progress_tree = gtk.glade.XML(self.gladefile, 'ProgressDialog')
                 progress_dialog = progress_tree.get_widget('ProgressDialog')
@@ -1374,8 +1361,8 @@ class App(object):
                 self.progressbar = progress_tree.get_widget('progressbar')
                 for fsetName in newProjectConfiguration.fsetsToInstall:
                     fset = platform.fset[fsetName]
-                    print "Installing fset %s.................\n" % fsetName
-                    progress_tree.get_widget('progress_label').set_text("Please wait while installing %s" % fset.name)
+                    print _("Installing fset %s.................\n") % fsetName
+                    progress_tree.get_widget('progress_label').set_text(_("Please wait while installing %s") % fset.name)
                     try:
                         self.current_target().installFset(fset, fsets = platform.fset, debug_pkgs = newProjectConfiguration.debugPkgs)
                     except ValueError, e:
@@ -1383,7 +1370,7 @@ class App(object):
                     except:
                         traceback.print_exc()
                         if debug: print_exc_plus()
-                        self.show_error_dialog("Unexpected error: %s" % (sys.exc_info()[1]))
+                        self.show_error_dialog(_("Unexpected error: %s") % (sys.exc_info()[1]))
                 self.redraw_target_view()
                 progress_dialog.destroy()
 
@@ -1401,7 +1388,7 @@ class DisplayFsetInfo(object):
 
         infoText = dialog_tree.get_widget('info')
         self.textBuffer = gtk.TextBuffer()
-        self.textBuffer.set_text("Please Select a Platform")        
+        self.textBuffer.set_text(_("Please Select a Platform"))
         infoText.set_buffer(self.textBuffer)
         infoText.set_editable(False)
 
@@ -1436,12 +1423,12 @@ class DisplayFsetInfo(object):
         fsetName = self.fsetComboBox.get_active_text()        
         if fsetName == None:
             return
-        self.textBuffer.set_text("Fset Description: %s" % platform.fset[fsetName].desc)
-        #self.textBuffer.insert_at_cursor("\nFset Dedendency: %s" % platform.fset[fsetName].deps)
-        self.textBuffer.insert_at_cursor("\n\nFset Dedendency: ")
+        self.textBuffer.set_text(_("Fset Description: %s") % platform.fset[fsetName].desc)
+        #self.textBuffer.insert_at_cursor(_("\nFset Dedendency: %s") % platform.fset[fsetName].deps)
+        self.textBuffer.insert_at_cursor(_("\n\nFset Dedendency: "))
         for depends in sorted(platform.fset[fsetName].deps):
             self.textBuffer.insert_at_cursor(" %s " % depends)
-        self.textBuffer.insert_at_cursor("\n\nPackages in the Fset: ")
+        self.textBuffer.insert_at_cursor(_("\n\nPackages in the Fset: "))
         i = 0
         for packages in sorted(platform.fset[fsetName].pkgs):
             self.textBuffer.insert_at_cursor(" %s " % packages)
@@ -1449,13 +1436,13 @@ class DisplayFsetInfo(object):
             if i > 5:
                 i = 0
                 self.textBuffer.insert_at_cursor("\n                       ")
-        self.textBuffer.insert_at_cursor("\n\nDebug Packages in the Fset: ")
+        self.textBuffer.insert_at_cursor(_("\n\nDebug Packages in the Fset: "))
         for packages in sorted(platform.fset[fsetName].debug_pkgs):
             self.textBuffer.insert_at_cursor(" %s " % packages)        
         
 
     def platformChanged(self, widget):
-        self.textBuffer.set_text("Please Select an Fset")        
+        self.textBuffer.set_text(_("Please Select an Fset"))
         self.fsetEntryList.clear()
         platformName = self.platformComboBox.get_active_text()
         platform = self.sdk.platforms[platformName]
@@ -1547,13 +1534,13 @@ class AddNewProject(object):
             if result == gtk.RESPONSE_OK:
                 if not target_name:
                     widgets = gtk.glade.XML(gladefile, 'error_dialog')
-                    widgets.get_widget('error_label').set_text("Must specify a target name")
+                    widgets.get_widget('error_label').set_text(_("Must specify a target name"))
                     dialog = widgets.get_widget('error_dialog')
                     dialog.run()
                     dialog.destroy()
                 else:
                     self.target_name = target_name
-                    self.np_targetName_label.set_text("Adding Target: %s" % self.target_name)
+                    self.np_targetName_label.set_text(_("Adding Target: %s") % self.target_name)
                     break
             else:
                 break
@@ -1569,7 +1556,7 @@ class AddNewProject(object):
         return result
 
     def on_browse(self, button):
-        dialog = gtk.FileChooserDialog(action=gtk.FILE_CHOOSER_ACTION_SELECT_FOLDER, title="Choose Project Directory")
+        dialog = gtk.FileChooserDialog(action=gtk.FILE_CHOOSER_ACTION_SELECT_FOLDER, title=_("Choose Project Directory"))
         dialog.add_button(gtk.STOCK_OK, gtk.RESPONSE_OK)
         dialog.add_button(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL)
         if dialog.run() == gtk.RESPONSE_OK:
@@ -1614,20 +1601,20 @@ def print_exc_plus():
         f = f.f_back
     stack.reverse()
     traceback.print_exc()
-    print "Locals by frame, innermost last"
+    print _("Locals by frame, innermost last")
     for frame in stack:
         print
-        print "Frame %s in %s at line %s" % (frame.f_code.co_name,
+        print _("Frame %s in %s at line %s") % (frame.f_code.co_name,
                                              frame.f_code.co_filename,
                                              frame.f_lineno)
         for key, value in frame.f_locals.items():
-            print "\t%20s = " % key,
+            print _("\t%20s = ") % key,
             # we must _absolutely_ avoid propagating exceptions, and str(value)
             # COULD cause any exception, so we MUST catch any...:
             try:
                 print value
             except:
-                print "<ERROR WHILE PRINTING VALUE>"
+                print _("<ERROR WHILE PRINTING VALUE>")
     traceback.print_exc()
 
 if __name__ == '__main__':

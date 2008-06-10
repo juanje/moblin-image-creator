@@ -110,6 +110,7 @@
 #  target.installFset(fset, debug_pkgs = 1)
 
 import ConfigParser
+import gettext
 import os
 import re
 import shutil
@@ -123,6 +124,8 @@ import Platform
 import Project
 import mic_cfg
 import pdk_utils
+
+_ = gettext.lgettext
 
 class SDK(object):
     def __init__(self, progress_callback = None, status_label_callback = None,
@@ -150,13 +153,13 @@ class SDK(object):
         dirname = os.path.join(self.path, 'platforms')
         platform_config_file = os.path.join(dirname, "platforms.cfg")
         if not os.path.isfile(platform_config_file):
-            raise ValueError("Platforms config file not found: %s" % platform_config_file)
+            raise ValueError(_("Platforms config file not found: %s") % platform_config_file)
         config = ConfigParser.SafeConfigParser()
         config.read(platform_config_file)
         for section in config.sections():
             t_dirname = os.path.join(dirname, section)
             if not os.path.dirname(t_dirname):
-                raise ValueError("Platform config file: %s has a section: %s but no corresponding directory: %s" % (platform_config_file, section, t_dirname))
+                raise ValueError(_("Platform config file: %s has a section: %s but no corresponding directory: %s") % (platform_config_file, section, t_dirname))
             self.platforms[section] = Platform.Platform(t_dirname, section, config.items(section))
             
         # discover all existing projects
@@ -191,7 +194,7 @@ class SDK(object):
                 self.projects[config.name] = Project.Project(config, self.platforms[config.platform], self.progress_callback)
             except KeyError:
                 self.obsolete_projects.add(config.name)
-                print "Platform %s not found. Skipping the project %s" % (config.platform, config.name)       
+                print _("Platform %s not found. Skipping the project %s") % (config.platform, config.name)       
 
     def return_obsolete_projects(self):
         return self.obsolete_projects
@@ -219,25 +222,25 @@ class SDK(object):
         proj.install()
         """
         if not parent_path or not name or not desc or not platform:
-            raise ValueError("Empty argument passed in")
+            raise ValueError(_("Empty argument passed in"))
         if name in self.projects:
-            raise ValueError("Project: %s already exists" % name)
+            raise ValueError(_("Project: %s already exists") % name)
         install_path = os.path.realpath(os.path.abspath(os.path.expanduser(parent_path)))
-        self.status_label_callback("Creating the project chroot environment")
+        self.status_label_callback(_("Creating the project chroot environment"))
         if platform.createChroot(install_path, use_rootstrap, callback = self.progress_callback) == False:
             pdk_utils.rmtree(install_path, callback = self.progress_callback)
-            raise ValueError("Rootstrap Creating cancelled")
+            raise ValueError(_("Rootstrap Creating cancelled"))
         # create the config file
-        self.status_label_callback("Creating Config file")
+        self.status_label_callback(_("Creating Config file"))
         config_path = os.path.join(self.config_path, "%s.proj" % name)
         config_file = open(config_path, 'w')
-        config_file.write("NAME=%s\n" % (name))
-        config_file.write("PATH=%s\n" % (install_path))
-        config_file.write("DESC=%s\n" % (desc))
-        config_file.write("PLATFORM=%s\n" % (platform.name))
+        config_file.write(_("NAME=%s\n") % (name))
+        config_file.write(_("PATH=%s\n") % (install_path))
+        config_file.write(_("DESC=%s\n") % (desc))
+        config_file.write(_("PLATFORM=%s\n") % (platform.name))
         config_file.close()
         # instantiate the project
-        self.status_label_callback("Initiating the project")
+        self.status_label_callback(_("Initiating the project"))
         config = PackageConfig(config_path)
         try:
             self.projects[name] = Project.Project(config, platform, self.progress_callback)
@@ -272,35 +275,35 @@ class SDK(object):
         tar_file = tarfile.open(tar_filename, "w:bz2")
         tar_file.debug = self.isVerboseProjectTar()
         tar_file.add(config_file, arcname = "config/save.proj")
-        print "Creating project tarfile.  This can take a long time..."
-        print "Filename: %s" % tar_filename
+        print _("Creating project tarfile.  This can take a long time...")
+        print _("Filename: %s") % tar_filename
         project.tar(tar_file)
         tar_file.close()
-        print "Project tarfile created at: %s" % tar_filename
+        print _("Project tarfile created at: %s") % tar_filename
     
     def load_project(self, project_name, project_path, filename, progressCallback = None):
         """Load the specified filename as project_name and store it in
         project_path"""
         tar_filename = filename
         if not filename.endswith(".mic.tar.bz2"):
-            raise ValueError("Specified project restore file: %s, does not end in .mic.tar.bz2")
+            raise ValueError(_("Specified project restore file: %s, does not end in .mic.tar.bz2"))
         config_file = os.path.join(self.config_path, "%s.proj" % project_name)
         if os.path.exists(config_file):
-            raise ValueError("A project already exists with that name: %s" % config_file)
+            raise ValueError(_("A project already exists with that name: %s") % config_file)
         if project_path.find(' ') != -1:
-            raise ValueError("Specified project path contains a space character, not allowed: %s" % project_path)
+            raise ValueError(_("Specified project path contains a space character, not allowed: %s") % project_path)
         if os.path.exists(project_path):
             if os.path.isdir(project_path):
                 if len(os.listdir(project_path)):
-                    raise ValueError("Specified project-path, is a directory, but it is NOT empty: %s" % project_path)
+                    raise ValueError(_("Specified project-path, is a directory, but it is NOT empty: %s") % project_path)
                 else:
                     os.rmdir(project_path)
             else:
-                raise ValueError("Specified project-path, exists, but it is not a directory")
+                raise ValueError(_("Specified project-path, exists, but it is not a directory"))
         tempdir = tempfile.mkdtemp()
         cwd = os.getcwd()
         os.chdir(tempdir)
-        print "Extracting: %s to temporary directory: %s/" % (filename, tempdir)
+        print _("Extracting: %s to temporary directory: %s/") % (filename, tempdir)
         time.sleep(2)
         if self.isVerboseProjectTar():
             tar_options = "xfjv"
@@ -310,22 +313,22 @@ class SDK(object):
         os.chdir(cwd)
         source_config_file = os.path.join(tempdir, "config", "save.proj")
         if not os.path.isfile(source_config_file):
-            raise ValueError("Project config file did not exist in project tarfile.  Could not find: %s" % source_config_file)
+            raise ValueError(_("Project config file did not exist in project tarfile.  Could not find: %s") % source_config_file)
         source_project = os.path.join(tempdir, "project")
         if not os.path.isdir(source_project):
-            raise ValueError("Project directory did not exist in project tarfile.  Could not find: %s" % source_project)
-        print "Writing new config file: %s" % config_file
+            raise ValueError(_("Project directory did not exist in project tarfile.  Could not find: %s") % source_project)
+        print _("Writing new config file: %s") % config_file
         self.copyProjectConfigFile(source_config_file, config_file, project_name, project_path)
-        print "Moving project directory into place at: %s" % project_path
+        print _("Moving project directory into place at: %s") % project_path
         cmd_line = "mv -v %s %s" % (source_project, project_path)
         print cmd_line
         result = pdk_utils.execCommand(cmd_line)
         if result:
-            print "Error doing 'mv' cmd"
+            print _("Error doing 'mv' cmd")
             sys.exit(1)
-        print "Removing temporary directory: %s" % tempdir
+        print _("Removing temporary directory: %s") % tempdir
         pdk_utils.rmtree(tempdir, callback = self.progress_callback)
-        print "Project: %s restored to: %s" % (project_name, project_path)
+        print _("Project: %s restored to: %s") % (project_name, project_path)
 
     def copyProjectConfigFile(self, source_config_file, dest_config_file, project_name, project_path):
         """Copy the config file over and update the fields that need to be updated"""
@@ -356,18 +359,18 @@ class SDK(object):
         return project_list
 
     def clear_rootstraps(self):
-        print "Deleting rootstraps..."
+        print _("Deleting rootstraps...")
         for key in self.platforms.iterkeys():
             path = self.platforms[key].path
             for prefix in [ "build", "target" ]:
                 root_strap_path = os.path.join(path, "%s-rootstrap.tar.bz2" % prefix)
                 if os.path.exists(root_strap_path):
-                    print "Deleting: %s" % root_strap_path
+                    print _("Deleting: %s") % root_strap_path
                     os.unlink(root_strap_path)
         var_dir = mic_cfg.config.get('general', 'var_dir')
         rootstrap_dir = os.path.join(var_dir, "rootstraps")
         if os.path.exists(rootstrap_dir):
-            print "Deleting rootstrap directory: %s" % rootstrap_dir
+            print _("Deleting rootstrap directory: %s") % rootstrap_dir
             pdk_utils.rmtree(rootstrap_dir, callback = self.progress_callback)
 
     def umount(self):
@@ -429,7 +432,7 @@ class ConfigFile(object):
                 object_name = self.object_name
             else:
                 object_name = "ConfigFile"
-            raise AttributeError("'%s' object has no attribute '%s'" % (object_name, key))
+            raise AttributeError(_("'%s' object has no attribute '%s'") % (object_name, key))
 
     def write(self, filename = None):
         if filename == None:

@@ -17,6 +17,7 @@
 #    Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
 import errno
+import gettext
 import glob
 import os
 import re
@@ -35,6 +36,8 @@ import SDK
 debug = False
 if mic_cfg.config.has_option('general', 'debug'):
     debug = int(mic_cfg.config.get('general', 'debug'))
+
+_ = gettext.lgettext
 
 # This is here for the testing of the new package manager code
 USE_NEW_PKG = False
@@ -56,7 +59,7 @@ class FileSystem(object):
     """
     def __init__(self, path, progress_callback = None):
         if not path:
-            raise ValueError("Empty argument passed in")
+            raise ValueError(_("Empty argument passed in"))
         self.progress_callback = progress_callback
         self.path = os.path.realpath(os.path.abspath(os.path.expanduser(path)))
         self.mounted = []
@@ -98,16 +101,16 @@ ff02::3 ip6-allhosts
 
     def chroot(self, cmd, output = None):
         if not os.path.isfile(os.path.join(self.chroot_path, 'bin/bash')):
-            print >> sys.stderr, "Incomplete jailroot at %s" % (self.chroot_path)
-            raise ValueError("Internal Error: Invalid buildroot at %s" % (self.chroot_path))
+            print >> sys.stderr, _("Incomplete jailroot at %s") % (self.chroot_path)
+            raise ValueError(_("Internal Error: Invalid buildroot at %s") % (self.chroot_path))
         self.mount()
         if output == None:
             output = []
         result = pdk_utils.execChrootCommand(self.chroot_path, cmd, output = output, callback = self.progress_callback)
         if result != 0:
-            print "Error in chroot command exec.  Result: %s" % result
-            print "Command was: %s" % cmd
-            print "chroot was: %s" % self.chroot_path
+            print _("Error in chroot command exec.  Result: %s") % result
+            print _("Command was: %s") % cmd
+            print _("chroot was: %s") % self.chroot_path
             sys.stdout.flush()
         return result
 
@@ -153,11 +156,11 @@ ff02::3 ip6-allhosts
                 break
             else:
                 for directory in local_set:
-                    print "Failed to umount FileSystem directory: %s" % directory
+                    print _("Failed to umount FileSystem directory: %s") % directory
                     cmd_line = "lsof | grep %s" % directory
-                    print "Execing: %s" % cmd_line
+                    print _("Execing: %s") % cmd_line
                     os.system(cmd_line)
-                print "Sleeping for 5 seconds, try %s of %s" % (x+1, loop_tries)
+                print _("Sleeping for 5 seconds, try %s of %s") % (x+1, loop_tries)
                 time.sleep(5)
         directory_set.update(local_set)
         return directory_set
@@ -207,17 +210,17 @@ class Project(FileSystem):
             target.umount(directory_set = directory_set)
         FileSystem.umount(self, directory_set = directory_set)
         if directory_set:
-            print "Failed to umount project: %s" % self.path
+            print _("Failed to umount project: %s") % self.path
             for directory in directory_set:
-                print "Failed to umount Project directory: %s" % directory
+                print _("Failed to umount Project directory: %s") % directory
                 cmd_line = "lsof | grep %s" % directory
-                print "Execing: %s" % cmd_line
+                print _("Execing: %s") % cmd_line
                 os.system(cmd_line)
         return directory_set
 
     def create_target(self, name, use_rootstrap = True):
         if not name:
-            raise ValueError("Target name was not specified")
+            raise ValueError(_("Target name was not specified"))
         if not name in self.targets:
             install_path = os.path.join(self.path, 'targets', name, 'fs')
             self.platform.createChroot(install_path, use_rootstrap, callback = self.progress_callback)
@@ -233,7 +236,7 @@ class Project(FileSystem):
     
     def get_target_usb_kernel_cmdline(self, name):
         if not name:
-           raise ValueError("Target name was not specified")
+           raise ValueError(_("Target name was not specified"))
         cmdline = open(os.path.join(self.targets[name].config_path, 'usb_kernel_cmdline'), 'r')
         usb_kernel_cmdline = ''
         for line in cmdline:
@@ -244,7 +247,7 @@ class Project(FileSystem):
 
     def get_target_hd_kernel_cmdline(self, name):
         if not name:
-           raise ValueError("Target name was not specified")
+           raise ValueError(_("Target name was not specified"))
         cmdline = open(os.path.join(self.targets[name].config_path, 'hd_kernel_cmdline'), 'r')
         hd_kernel_cmdline = ''
         for line in cmdline:
@@ -255,7 +258,7 @@ class Project(FileSystem):
 
     def get_target_cd_kernel_cmdline(self, name):
         if not name:
-           raise ValueError("Target name was not specified")
+           raise ValueError(_("Target name was not specified"))
         cmdline = open(os.path.join(self.targets[name].config_path, 'cd_kernel_cmdline'), 'r')
         cd_kernel_cmdline = ''
         for line in cmdline:
@@ -266,21 +269,21 @@ class Project(FileSystem):
 
     def set_target_usb_kernel_cmdline(self, name, str):
         if not name:
-           raise ValueError("Target name was not specified")
+           raise ValueError(_("Target name was not specified"))
         cmdline = open(os.path.join(self.targets[name].config_path, 'usb_kernel_cmdline'), 'w')
         print >> cmdline, str
         cmdline.close()
 
     def set_target_hd_kernel_cmdline(self, name, str):
         if not name:
-           raise ValueError("Target name was not specified")
+           raise ValueError(_("Target name was not specified"))
         cmdline = open(os.path.join(self.targets[name].config_path, 'hd_kernel_cmdline'), 'w')
         print >> cmdline, str
         cmdline.close()
 
     def set_target_cd_kernel_cmdline(self, name, str):
         if not name:
-           raise ValueError("Target name was not specified")
+           raise ValueError(_("Target name was not specified"))
         cmdline = open(os.path.join(self.targets[name].config_path, 'cd_kernel_cmdline'), 'w')
         print >> cmdline, str
         cmdline.close()
@@ -313,11 +316,11 @@ class Project(FileSystem):
             # Success, so return
             return
         # Failed to umount
-        print "Failed to umount target: %s" % target.path
+        print _("Failed to umount target: %s") % target.path
         cmd_line = "lsof | grep %s" % target.path
-        print "Execing: %s" % cmd_line
+        print _("Execing: %s") % cmd_line
         os.system(cmd_line)
-        print "Failed to umount target: %s" % target.path
+        print _("Failed to umount target: %s") % target.path
         # Let's remount everything, so stuff will still work
         target.mount()
         raise pdk_utils.ImageCreatorUmountError, directory_set
@@ -371,7 +374,7 @@ class Target(FileSystem):
     """
     def __init__(self, name, project, progress_callback = None):
         if not name or not project:
-            raise ValueError("Empty argument passed in")
+            raise ValueError(_("Empty argument passed in"))
         self.project = project
         self.name = name
         self.platform = project.platform
@@ -416,15 +419,15 @@ class Target(FileSystem):
         any missing deps that exist.
         """
         if os.path.isfile(os.path.join(self.top, fset.name)):
-            raise ValueError("fset %s is already installed!" % (fset.name))
+            raise ValueError(_("fset %s is already installed!") % (fset.name))
 
         root_fset = False
         if not seen_fsets:
-            print "Installing Function Set: %s (and any dependencies)" % fset.name
+            print _("Installing Function Set: %s (and any dependencies)") % fset.name
             root_fset = True
             seen_fsets = set()
         if fset.name in seen_fsets:
-            raise RuntimeError, "Circular fset dependency encountered for: %s" % fset.name
+            raise RuntimeError, _("Circular fset dependency encountered for: %s") % fset.name
         seen_fsets.add(fset.name)
 
         package_list = []
@@ -446,7 +449,7 @@ class Target(FileSystem):
                      fsets = fsets, debug_pkgs = debug_pkgs, seen_fsets = seen_fsets)
                     package_list = package_list + dependency_list
                 else:
-                    raise ValueError("fset %s must be installed first!" % (dep_list[0]))
+                    raise ValueError(_("fset %s must be installed first!") % (dep_list[0]))
         for pkg in fset['pkgs']:
             if not pkg in package_list:
                 package_list.append(pkg)        
@@ -459,7 +462,7 @@ class Target(FileSystem):
         else:
             req_fsets = seen_fsets - set( [fset.name] )
             if req_fsets:
-                print "Installing required Function Set: %s" % ' '.join(req_fsets)
+                print _("Installing required Function Set: %s") % ' '.join(req_fsets)
             self.installPackages(package_list)
             # and now create a simple empty file that indicates that the fsets has
             # been installed.
@@ -479,12 +482,12 @@ class Callback:
 
 if __name__ == '__main__':
     if len(sys.argv) != 6:
-        print >> sys.stderr, "USAGE: %s PROJECT_NAME PROJECT_PATH PROJECT_DESCRIPTION TARGET_NAME PLATFORM_NAME" % (sys.argv[0])
-        print >> sys.stderr, "\tPROJECT_NAME: name to call the project.  The config file /usr/share/pdk/projects/project_name.proj is used or created"
-        print >> sys.stderr, "\tPROJECT_PATH: directory to install the project"
-        print >> sys.stderr, "\tPROJECT_DESCRIPTION: Textual description of the project"
-        print >> sys.stderr, "\tTARGET_NAME: ???"
-        print >> sys.stderr, "\tPLATFORM_NAME: The platform.  e.g. donley"
+        print >> sys.stderr, _("USAGE: %s PROJECT_NAME PROJECT_PATH PROJECT_DESCRIPTION TARGET_NAME PLATFORM_NAME") % (sys.argv[0])
+        print >> sys.stderr, _("\tPROJECT_NAME: name to call the project.  The config file /usr/share/pdk/projects/project_name.proj is used or created")
+        print >> sys.stderr, _("\tPROJECT_PATH: directory to install the project")
+        print >> sys.stderr, _("\tPROJECT_DESCRIPTION: Textual description of the project")
+        print >> sys.stderr, _("\tTARGET_NAME: ???")
+        print >> sys.stderr, _("\tPLATFORM_NAME: The platform.  e.g. donley")
         sys.exit(1)
 
     name = sys.argv[1]
@@ -497,8 +500,8 @@ if __name__ == '__main__':
 
     # verify the platform exists
     if not platform_name in sdk.platforms:
-        print >> sys.stderr, "ERROR: %s is not a valid platform!" % (platform_name)
-        print >> sys.stderr, "Available platforms include:"
+        print >> sys.stderr, _("ERROR: %s is not a valid platform!") % (platform_name)
+        print >> sys.stderr, _("Available platforms include:")
         for key in sorted(sdk.platforms.iterkeys()):
             print "\t%s" % (key)
         sys.exit(1)
@@ -507,29 +510,29 @@ if __name__ == '__main__':
     # find an existing project, or create a new one
     existing_project = False
     if name in sdk.projects:
-        print "Opening existing project...Using info from config file..."
+        print _("Opening existing project...Using info from config file...")
         proj = sdk.projects[name]
         existing_project = True
     else:
-        print "Creating new project..."
+        print _("Creating new project...")
         proj = sdk.create_project(install_path, name, desc, platform)
         proj.install()
-    print "Install path: %s" % proj.path
-    print "Name: %s" % proj.name
-    print "Description: %s" % proj.desc
+    print _("Install path: %s") % proj.path
+    print _("Name: %s") % proj.name
+    print _("Description: %s") % proj.desc
     if existing_project:
-        print "Used info from config file: /usr/share/pdk/projects/%s.proj" % name
+        print _("Used info from config file: /usr/share/pdk/projects/%s.proj") % name
         time.sleep(2)
 
     # see if the target exist
     if target_name in proj.targets:
-        print "Target already exists: %s" % target_name
+        print _("Target already exists: %s") % target_name
         print proj.targets
     else:
-        print "Creating new project target filesystem..."
+        print _("Creating new project target filesystem...")
         proj.create_target(target_name)
 
-        print "Installing all available fsets inside target..."
+        print _("Installing all available fsets inside target...")
         for key in proj.platform.fset:
             proj.targets[target_name].installFset(proj.platform.fset[key])
 

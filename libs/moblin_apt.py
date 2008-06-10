@@ -20,6 +20,7 @@
 # functionality.  This way the image-creator will not care if you are using apt
 # or yum or whatever package management system you want to use.
 
+import gettext
 import os
 import sys
 import time
@@ -27,6 +28,8 @@ import time
 import mic_cfg
 import moblin_pkgbase
 import pdk_utils
+
+_ = gettext.lgettext
 
 class AptPackageManager(moblin_pkgbase.PackageManager):
     """Apt class for package management"""
@@ -48,53 +51,53 @@ class AptPackageManager(moblin_pkgbase.PackageManager):
             self.updateChroot(chroot_dir, callback = callback)
             # apt-get install
             command = "%s install %s" % (self.apt_cmd, packages)
-            print "Running 'apt-get install' command: %s" % (command)
-            print "\t in the chroot: %s" % (chroot_dir)
+            print _("Running 'apt-get install' command: %s") % (command)
+            print _("\t in the chroot: %s") % (chroot_dir)
             result = pdk_utils.execChrootCommand(chroot_dir, command, callback = callback)
             if result == 0:
-                print "Completed 'apt-get install' successfully"
+                print _("Completed 'apt-get install' successfully")
                 break
             if result < 0:
-                print "Process Aborted"
+                print _("Process Aborted")
                 return False
             print
-            print "Error running 'apt-get install' command: %s" % command
-            print "Will try 'apt-get update' in 15 seconds"
+            print _("Error running 'apt-get install' command: %s") % command
+            print _("Will try 'apt-get update' in 15 seconds")
             time.sleep(15)
             retry_count += 1
             # apt-get update
             command = "apt-get update"
-            print "Running 'apt-get update' command: %s" % command
+            print _("Running 'apt-get update' command: %s") % command
             result = pdk_utils.execChrootCommand(chroot_dir, command, callback = callback)
             if result != 0:
                 print
-                print "Error running 'apt-get update' command: %s" % command
-                print "Will try 'apt-get install -f' in 15 seconds"
+                print _("Error running 'apt-get update' command: %s") % command
+                print _("Will try 'apt-get install -f' in 15 seconds")
                 time.sleep(15)
             else:
-                print "Completed 'apt-get update' successfully"
-                print "Will try 'apt-get install -f' in 15 seconds"
+                print _("Completed 'apt-get update' successfully")
+                print _("Will try 'apt-get install -f' in 15 seconds")
                 time.sleep(15)
             # apt-get install -f
             command = "apt-get install -f"
             result = pdk_utils.execChrootCommand(chroot_dir, command, callback = callback)
             if result != 0:
                 print
-                print "Error running 'apt-get install -f' command: %s" % command
-                print "Will try 'apt-get install' in 15 seconds"
+                print _("Error running 'apt-get install -f' command: %s") % command
+                print _("Will try 'apt-get install' in 15 seconds")
                 time.sleep(15)
             else:
-                print "Completed 'apt-get install -f' successfully"
-                print "Will try 'apt-get install' in 15 seconds"
+                print _("Completed 'apt-get install -f' successfully")
+                print _("Will try 'apt-get install' in 15 seconds")
                 time.sleep(15)
         else:
-            raise OSError("Internal error while attempting to run: %s" % command)
+            raise OSError(_("Internal error while attempting to run: %s") % command)
         self.__aptgetPostRun()
         return True
 
     def updateChroot(self, chroot_dir, output = None, callback = None):
         self.__aptgetPreRun(chroot_dir)
-        print "Updating the chroot dir: %s" % chroot_dir
+        print _("Updating the chroot dir: %s") % chroot_dir
         cmd_line = "apt-get update"
         result = pdk_utils.execChrootCommand(chroot_dir, cmd_line, output = output, callback = callback)
         if result:
@@ -115,15 +118,15 @@ class AptPackageManager(moblin_pkgbase.PackageManager):
         required_dirs = [ "/var/cache/apt/archives/partial" ]
         for dirname in required_dirs:
             if not os.path.isdir(dirname):
-                print "The directory: %s is missing, will create it" % dirname
+                print _("The directory: %s is missing, will create it") % dirname
                 os.makedirs(dirname)
 
     def __aptgetPreRun(self, chroot_dir):
         """Stuff to do before we do any apt-get actions"""
         self.__aptgetPreCheck()
         if not os.path.isfile(os.path.join(chroot_dir, 'bin/bash')):
-            print >> sys.stderr, "Incomplete jailroot at %s" % (chroot_dir)
-            raise ValueError("Internal Error: Invalid buildroot at %s" % (chroot_dir))
+            print >> sys.stderr, _("Incomplete jailroot at %s") % (chroot_dir)
+            raise ValueError(_("Internal Error: Invalid buildroot at %s") % (chroot_dir))
         self.debian_frontend.append(os.environ.get("DEBIAN_FRONTEND"))
         os.environ['DEBIAN_FRONTEND'] = 'noninteractive'
         self.__disable_init_scripts(chroot_dir)
@@ -137,7 +140,7 @@ class AptPackageManager(moblin_pkgbase.PackageManager):
             else:
                 os.environ['DEBIAN_FRONTEND'] = debian_frontend
         else:
-            print "moblin_apt.__aptgetPostRun() called without corresponding aptgetPreRun()"
+            print _("moblin_apt.__aptgetPostRun() called without corresponding aptgetPreRun()")
 
     def __disable_init_scripts(self, chroot_dir):
         # In debian if we have the file /usr/sbin/policy-rc.d, which just

@@ -17,6 +17,7 @@
 #    Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 
 import ConfigParser
+import gettext
 import os
 import re
 import shutil
@@ -28,6 +29,8 @@ import fsets
 import mic_cfg
 import moblin_pkg
 import pdk_utils
+
+_ = gettext.lgettext
 
 class Platform(object):
     """
@@ -46,7 +49,7 @@ class Platform(object):
             for key, value in sorted(config_info):
                 self.config_info[key] = value
         else:
-            raise ValueError("Platform called but config_info value not passed in")
+            raise ValueError(_("Platform called but config_info value not passed in"))
         # instantiate all fsets
         self.fset = fsets.FSet()
         fset_path = os.path.join(self.path, 'fsets')
@@ -62,7 +65,7 @@ class Platform(object):
                 # section is now set to the appropriate section
                 break
         else:
-            print "Error: No buildroot config file information found!"
+            print _("Error: No buildroot config file information found!")
             raise ValueError
 
         # determine what packages additional packages need to be installed
@@ -94,7 +97,7 @@ class Platform(object):
             self.pkg_manager = moblin_pkg.YumPackageManager()
             self.createChroot = self.yumCreateChroot
         else:
-            raise ValueError("package manager value of: '%s' is invalid" % self.config_info['package_manager'])
+            raise ValueError(_("package manager value of: '%s' is invalid") % self.config_info['package_manager'])
         # Target OS
         self.target_os = self.config_info['target_os']
 
@@ -110,7 +113,7 @@ class Platform(object):
         output = []
         result = pdk_utils.execCommand(cmd, output = output, callback = callback)
         if result != 0:
-            print >> sys.stderr, "ERROR: Unable to archive rootstrap!"
+            print >> sys.stderr, _("ERROR: Unable to archive rootstrap!")
             pdk_utils.rmtree(chroot_dir, callback = callback)
             # FIXME: Better exception here
             raise ValueError(" ".join(output))
@@ -130,7 +133,7 @@ class Platform(object):
             output = []
             result = pdk_utils.execCommand(cmd, output = output, callback = callback)
             if result != 0:
-                print >> sys.stderr, "ERROR: Unable to rootstrap %s from %s!" % (rootstrap_file, self.name)
+                print >> sys.stderr, _("ERROR: Unable to rootstrap %s from %s!") % (rootstrap_file, self.name)
                 pdk_utils.rmtree(chroot_dir, callback = callback)
                 # FIXME: Better exception here
                 raise ValueError(" ".join(output))
@@ -160,21 +163,21 @@ class Platform(object):
         count = 0
         while count < 10:
             count += 1
-            print "--------%s rootstrap creation try: %s ----------" % (chroot_type_string, count)
-            print "Execing command: %s" % cmd
+            print _("--------%s rootstrap creation try: %s ----------") % (chroot_type_string, count)
+            print _("Execing command: %s") % cmd
             result = pdk_utils.execCommand(cmd, output = output, callback = callback)
             if result == 0:
-                print "--------%s rootstrap creation completed successfully----------" % chroot_type_string
+                print _("--------%s rootstrap creation completed successfully----------") % chroot_type_string
                 break;
             if result < 0:
-                print "Process Aborted"
+                print _("Process Aborted")
                 return False
-            print "--------%s rootstrap creation failed result: %s ----------" % (chroot_type_string, result)
+            print _("--------%s rootstrap creation failed result: %s ----------") % (chroot_type_string, result)
             sleeptime = 30
-            print "--------For try: %s.  Sleeping for %s seconds... -----------------" % (count, sleeptime)
+            print _("--------For try: %s.  Sleeping for %s seconds... -----------------") % (count, sleeptime)
             time.sleep(sleeptime)
         if result != 0:
-            print >> sys.stderr, "ERROR: Unable to generate %s rootstrap!" % chroot_type_string
+            print >> sys.stderr, _("ERROR: Unable to generate %s rootstrap!") % chroot_type_string
             raise ValueError(" ".join(output))
         self.pkg_manager.cleanPackageCache(chroot_dir)
         source_dir = os.path.join(self.path, 'sources')
@@ -201,7 +204,7 @@ class Platform(object):
             output = []
             result = pdk_utils.execCommand(cmd, output = output, callback = callback)
             if result != 0:
-                print >> sys.stderr, "ERROR: Unable to rootstrap %s from %s!" % (rootstrap_file, name)
+                print >> sys.stderr, _("ERROR: Unable to rootstrap %s from %s!") % (rootstrap_file, name)
                 pdk_utils.rmtree(chroot_dir, callback = callback)
                 # FIXME: Better exception here
                 raise ValueError(" ".join(output))
@@ -214,15 +217,15 @@ class Platform(object):
         self.__yumCreateDevices(chroot_dir)
         self.__yumDoMounts(chroot_dir)
         # install yum inside the project using the host tools
-        print "Creating rootstrap directory with yum..."
+        print _("Creating rootstrap directory with yum...")
         output = []
         cmd = 'yum -y --disablerepo=localbase --installroot=%s install yum yum-protectbase' % chroot_dir
         cmd = 'yum -y --installroot=%s install yum yum-protectbase' % chroot_dir
         #cmd = 'yum -y --installroot=%s groupinstall buildsys-build' % chroot_dir
-        print "Exec command: %s" % cmd
+        print _("Exec command: %s") % cmd
         result = pdk_utils.execCommand(cmd, output = output, callback = callback)
         if result != 0:
-            raise RuntimeError("Failed to create Yum based rootstrap")
+            raise RuntimeError(_("Failed to create Yum based rootstrap"))
         # nuke all the yum cache to ensure that we get the latest greatest at project creation
         shutil.rmtree(os.path.join(chroot_dir, 'var', 'cache', 'yum'))
         self.__yumDoUmounts(chroot_dir)
@@ -303,7 +306,7 @@ releasever=8
         command = '-y --installroot=%s update' % (path)
         ret = self.chroot("/usr/bin/yum", command) 
         if ret != 0:
-            raise OSError("Internal error while attempting to run: %s" % command)
+            raise OSError(_("Internal error while attempting to run: %s") % command)
 
 
     def install(self, path, packages):
@@ -319,7 +322,7 @@ releasever=8
             command += ' %s' % p
         ret = self.chroot("/usr/bin/yum", command) 
         if ret != 0:
-            raise OSError("Internal error while attempting to run: %s" % command)
+            raise OSError(_("Internal error while attempting to run: %s") % command)
 
 
 if __name__ == '__main__':
