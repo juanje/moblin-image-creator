@@ -50,7 +50,10 @@ moblin-image-creator (0.45) UNRELEASED; urgency=low
   * Supported autotools for preparing the internationalization.
   * Supported the internationalization.
 
- -- Prajwal Mohan <prajwal@linux.intel.com>  Wed, 28 May 2008 22:29:09 +0900
+  [ Prajwal Mohan ]
+  * Global name '_' is not defined in image-creator. Fixing it. 
+
+ -- Prajwal Mohan <prajwal@linux.intel.com>  Wed, 11 Jun 2008 09:57:33 -0700
 
 moblin-image-creator (0.44) gaston; urgency=low
 

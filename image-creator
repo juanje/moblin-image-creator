@@ -34,6 +34,8 @@ import SDK
 import mic_cfg
 import pdk_utils
 
+_ = gettext.lgettext
+
 debug = False
 if mic_cfg.config.has_option('general', 'debug'):
     debug = int(mic_cfg.config.get('general', 'debug'))
