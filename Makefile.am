@@ -5,7 +5,7 @@ ACLOCAL_AMFLAGS = -I m4
 #EXTRA_DIST = config.rpath m4/ChangeLog  config.rpath m4/ChangeLog
 
 executedir = ${bindir}
-execute_DATA = \
+execute_SCRIPTS = \
 	image-creator
 
 extradir = ${pkgdatadir}
