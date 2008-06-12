@@ -30,7 +30,6 @@ for the developer, like:
 Installation
 ------------
 
-sudo make install
 It needs below packages that install Image-Creator.
 autoconf, automake, intltool
 
