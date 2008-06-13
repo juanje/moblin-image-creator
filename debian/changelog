@@ -53,7 +53,12 @@ moblin-image-creator (0.45) UNRELEASED; urgency=low
   [ Prajwal Mohan ]
   * Global name '_' is not defined in image-creator. Fixing it. 
 
- -- Prajwal Mohan <prajwal@linux.intel.com>  Wed, 11 Jun 2008 09:57:33 -0700
+  [ Mitsutaka Amano ]
+  * Fixed permission of image-creator. 
+  * Updated README to modified installation process.
+  * Fixed typo in README.
+
+ -- Mitsutaka Amano <mamano@miraclelinux.com>  Fri, 13 Jun 2008 15:28:48 +0900
 
 moblin-image-creator (0.44) gaston; urgency=low
 
