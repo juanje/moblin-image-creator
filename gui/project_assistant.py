@@ -33,6 +33,8 @@ import pdk_utils
 import SDK
 import mic_cfg
 
+_ = gettext.lgettext
+
 class projectConfiguration(object):
     def __init__(self, projectName, projectDesc, projectPath, projectPlatform, targetName, fsetsToInstall, debugPkgs):
         self.projectName = projectName
@@ -82,20 +84,20 @@ class projectAssistant(object):
         #Setting up the Introduction Page of the Assistant
         introductionPage = gtk.HBox()
         self.assistantDialog.append_page(introductionPage)
-        self.assistantDialog.set_page_title(introductionPage, "Introduction")
+        self.assistantDialog.set_page_title(introductionPage, _("Introduction"))
         self.assistantDialog.set_page_type(introductionPage, gtk.ASSISTANT_PAGE_INTRO)
         self.assistantDialog.set_page_complete(introductionPage, True)
         self.assistantDialog.set_page_side_image(introductionPage, sideImage)
         self.assistantDialog.set_page_header_image(introductionPage, headImage)
 
         introductionLabel = gtk.Label()
-        introductionLabel.set_markup("<b>This assistant will help you to create a project and a target.\nYou also will be able to select which functional sets (fsets) to install.</b>")      
+        introductionLabel.set_markup(_("<b>This assistant will help you to create a project and a target.\nYou also will be able to select which functional sets (fsets) to install.</b>")) 
         introductionPage.pack_end(introductionLabel)
 
         #Setting up the Project Creation Page of the Assistant
         self.projectPage = gtk.HBox()
         self.assistantDialog.append_page(self.projectPage)
-        self.assistantDialog.set_page_title(self.projectPage, "Create Project")
+        self.assistantDialog.set_page_title(self.projectPage, _("Create Project"))
         self.assistantDialog.set_page_type(self.projectPage, gtk.ASSISTANT_PAGE_CONTENT)
         self.assistantDialog.set_page_complete(self.projectPage, False)
         self.assistantDialog.set_page_side_image(self.projectPage, sideImage)
@@ -108,7 +110,7 @@ class projectAssistant(object):
         #Setting up the Target and FSets Page of the Assistant
         self.targetPage = gtk.HBox()
         self.assistantDialog.append_page(self.targetPage)
-        self.assistantDialog.set_page_title(self.targetPage, "Create Target and add Fsets")
+        self.assistantDialog.set_page_title(self.targetPage, _("Create Target and add Fsets"))
         self.assistantDialog.set_page_type(self.targetPage, gtk.ASSISTANT_PAGE_CONTENT)
         self.assistantDialog.set_page_complete(self.targetPage, False)
         self.assistantDialog.set_page_side_image(self.targetPage, sideImage)
@@ -121,14 +123,14 @@ class projectAssistant(object):
         #Setting up the Confirmation Page of the Assistant
         self.confirmPage = gtk.HBox()
         self.assistantDialog.append_page(self.confirmPage)
-        self.assistantDialog.set_page_title(self.confirmPage, "Confirm")
+        self.assistantDialog.set_page_title(self.confirmPage, _("Confirm"))
         self.assistantDialog.set_page_type(self.confirmPage, gtk.ASSISTANT_PAGE_CONFIRM)
         self.assistantDialog.set_page_complete(self.confirmPage, True)
         self.assistantDialog.set_page_side_image(self.confirmPage, sideImage)
         self.assistantDialog.set_page_header_image(self.confirmPage, headImage)
 
 
-        confirmLabel = gtk.Label("Please review the configuration before proceeding.")
+        confirmLabel = gtk.Label(_("Please review the configuration before proceeding."))
         self.confirmConfigurationVbox = gtk.VBox()
 
         self.confirmPageNameLable = gtk.Label("")
@@ -185,17 +187,17 @@ class projectAssistant(object):
 
     def create_project_page(self):
         """Creates the necessary GUI elements for the project page of the Assistant"""
-        projectNameLabel = gtk.Label("Project Name")
+        projectNameLabel = gtk.Label(_("Project Name"))
         self.projectNameEntry = gtk.Entry()
 
-        projectDescLabel = gtk.Label("Project Description")
+        projectDescLabel = gtk.Label(_("Project Description"))
         self.projectDescEntry = gtk.Entry()
 
-        projectPathLabel = gtk.Label("Project Path")
+        projectPathLabel = gtk.Label(_("Project Path"))
         self.projectPathEntry = gtk.Entry()
         path = os.getcwd() + os.sep
         self.projectPathEntry.set_text(path)
-        projectPathBrowse = gtk.Button("Browse")
+        projectPathBrowse = gtk.Button(_("Browse"))
         projectPath = gtk.HBox()
         projectPath.pack_start(self.projectPathEntry, True, True, 0)        
         projectPath.pack_start(projectPathBrowse, False, False, 0)
@@ -205,8 +207,8 @@ class projectAssistant(object):
         self.projectDescEntry.connect("changed", self.project_entry_callback)
         self.projectPathEntry.connect("changed", self.project_entry_callback)
 
-        projectPlatformLabel = gtk.Label("Project Platform")
-        projectPlatformDescLabel = gtk.Label("Platform Description")
+        projectPlatformLabel = gtk.Label(_("Project Platform"))
+        projectPlatformDescLabel = gtk.Label(_("Platform Description"))
         self.projectPlatformDesc = gtk.TextBuffer()
         projectPlatformDescText = gtk.TextView(self.projectPlatformDesc)
         projectPlatformDescText.set_wrap_mode(gtk.WRAP_WORD)
@@ -281,7 +283,7 @@ class projectAssistant(object):
 
     def fill_project_path(self, widget):
         """This function open a File Chooser Dialog which automatically fills in the Path Text Entry field in the Project Page"""
-        dialog = gtk.FileChooserDialog(action=gtk.FILE_CHOOSER_ACTION_SELECT_FOLDER, title="Choose Project Directory")
+        dialog = gtk.FileChooserDialog(action=gtk.FILE_CHOOSER_ACTION_SELECT_FOLDER, title=_("Choose Project Directory"))
         dialog.add_button(gtk.STOCK_OK, gtk.RESPONSE_OK)
         dialog.add_button(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL)
         if dialog.run() == gtk.RESPONSE_OK:
@@ -304,17 +306,17 @@ class projectAssistant(object):
                 self.projectWarning.set_text("")
             else:
                 if not os.path.isdir(self.projectPathEntry.get_text()):
-                    self.projectWarning.set_text("Path exists but is not a directory")                
+                    self.projectWarning.set_text(_("Path exists but is not a directory")) 
                     self.assistantDialog.set_page_complete(self.projectPage, False)
                 else:
                     # Make sure that the directory specified is empty    
                     if len(os.listdir(self.projectPathEntry.get_text())):
-                        self.projectWarning.set_text("Path is a directory which is NOT empty")
+                        self.projectWarning.set_text(_("Path is a directory which is NOT empty"))
                         self.assistantDialog.set_page_complete(self.projectPage, False)
             
     def create_target_page(self):
         """Creates the GUI elements for target page of the assistant"""
-        targetNameLabel = gtk.Label("Target Name")
+        targetNameLabel = gtk.Label(_("Target Name"))
         self.targetNameEntry = gtk.Entry()
         targetNameHbox = gtk.HBox()
         targetNameHbox.pack_start(targetNameLabel, False, False, 10)
@@ -332,7 +334,7 @@ class projectAssistant(object):
 
         self.targetFsetVbox = gtk.VBox()
             
-        self.targetDebugPkgs = gtk.CheckButton("Include Debug packages (if any)")        
+        self.targetDebugPkgs = gtk.CheckButton(_("Include Debug packages (if any)")) 
         targetPageSeparator1 = gtk.HSeparator()
         targetPageSeparator2 = gtk.HSeparator()
         
@@ -352,7 +354,7 @@ class projectAssistant(object):
             self.targetFsetVbox.remove(self.checkBoxContainer)
         self.checkBoxContainer = gtk.VBox()
         targetFsetLabel = gtk.Label()
-        targetFsetLabel.set_markup("<b>Available Fsets for the choosen platform</b>")
+        targetFsetLabel.set_markup(_("<b>Available Fsets for the choosen platform</b>"))
         self.checkBoxContainer.pack_start(targetFsetLabel)        
         
         platform = self.sdk.platforms[platformName]
@@ -369,13 +371,13 @@ class projectAssistant(object):
             iter = list.append([fset_name])
             buttonName = fset_name + "  (" + platform.fset[fset_name].desc + ")"
             self.fsetTouple.append((fset_name, gtk.CheckButton(buttonName), False, 0))       
-            toolTipText = "<b>Depends on FSet(s):</b> "
+            toolTipText = _("<b>Depends on FSet(s):</b> ")
             for depends in sorted(platform.fset[fset_name].deps):
                 toolTipText += " %s " % depends
-            toolTipText += "\n<b>Debug Packages:</b> "
+            toolTipText += _("\n<b>Debug Packages:</b> ")
             for debug_pkgs in sorted(platform.fset[fset_name].debug_pkgs):
                 toolTipText += " %s " % debug_pkgs
-            toolTipText += "\n<b>Packages:</b> "
+            toolTipText += _("\n<b>Packages:</b> ")
             for pkgs in sorted(platform.fset[fset_name].pkgs):
                 toolTipText += " %s " % pkgs
             if self.pygtkOldVersion == False:
@@ -437,7 +439,7 @@ class projectAssistant(object):
             self.assistantDialog.set_page_complete(self.targetPage, False)
         else:
             if re.search(r'[^-_a-zA-Z0-9]', self.targetNameEntry.get_text()):
-                self.targetWarning.set_text("Target names can only contain alpha/numeric characters, hyphen and underscore")
+                self.targetWarning.set_text(_("Target names can only contain alpha/numeric characters, hyphen and underscore"))
                 self.assistantDialog.set_page_complete(self.targetPage, False)
             else:
                 self.targetWarning.set_text("")
@@ -445,13 +447,13 @@ class projectAssistant(object):
             
 
     def display_configuration(self):
-            self.confirmPageNameLable.set_text("Project Name: %s" % self.projectName)
-            self.confirmPageDescLabel.set_text("Project Description: %s" % self.projectDesc)
-            self.confirmPagePathLabel.set_text("Project Path: %s" % self.projectPath)
-            self.confirmPagePlatformLabel.set_text("Project Platform: %s" % self.projectPlatform)
-            self.confirmPageTargetLabel.set_text("Target Name: %s" % self.targetName)
-            self.confirmPageFsetListLabel.set_text("Fset List: %s" % self.fsetsToInstall)
-            self.confirmPageDebugLabel.set_text("Install Debug Packages: %s" % self.debugPackageSelected)         
+            self.confirmPageNameLable.set_text(_("Project Name: %s") % self.projectName)
+            self.confirmPageDescLabel.set_text(_("Project Description: %s") % self.projectDesc)
+            self.confirmPagePathLabel.set_text(_("Project Path: %s") % self.projectPath)
+            self.confirmPagePlatformLabel.set_text(_("Project Platform: %s") % self.projectPlatform)
+            self.confirmPageTargetLabel.set_text(_("Target Name: %s") % self.targetName)
+            self.confirmPageFsetListLabel.set_text(_("Fset List: %s") % self.fsetsToInstall)
+            self.confirmPageDebugLabel.set_text(_("Install Debug Packages: %s") % self.debugPackageSelected)         
             #self.assistantDialog.show_all()
 
 
