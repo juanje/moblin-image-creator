@@ -1,6 +1,7 @@
 # List of source files which contain translatable strings.
 gui/gui.py
 gui/image-creator.glade
+gui/project_assistant.py
 image-creator
 libs/InstallImage.py
 libs/Platform.py

@@ -57,9 +57,10 @@ moblin-image-creator (0.45) UNRELEASED; urgency=low
   * Fixed permission of image-creator. 
   * Updated README to modified installation process.
   * Fixed typo in README.
-  * Supported the internationalization on project_assistant.py
+  * Supported the internationalization on project_assistant.py.
+  * Added Japanese localization(ja.po).
 
- -- Mitsutaka Amano <mamano@miraclelinux.com>  Sat, 21 Jun 2008 20:19:21 +0900
+ -- Mitsutaka Amano <mamano@miraclelinux.com>  Sat, 21 Jun 2008 23:21:23 +0900
 
 moblin-image-creator (0.44) gaston; urgency=low
 
