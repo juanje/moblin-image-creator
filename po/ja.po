@@ -651,8 +651,9 @@ msgid "LiveCDImage: Creating Live CD Image(%s) Now..."
 msgstr "LiveCDイメージ: Live CD イメージ(%s)を作成しています..."
 
 #: ../libs/InstallImage.py:402
+#: This message is printed on Boot session. Can't show multi byte.
 msgid "Live CD Image (no persistent R/W)"
-msgstr "Live CD イメージ (読み込み専用)"
+msgstr ""
 
 #: ../libs/InstallImage.py:420
 #, python-format
@@ -691,8 +692,9 @@ msgid "LiveUsbImage: Creating Live R/W USB Image(%s) Now..."
 msgstr "LiveUSBイメージ: Live R/W USB イメージ(%s)を作成しています..."
 
 #: ../libs/InstallImage.py:512
+#: This message is printed on Boot session. Can't show multi byte.
 msgid "Live R/W USB Image"
-msgstr "Live USB イメージ(書き込み/読み込み)"
+msgstr ""
 
 #: ../libs/InstallImage.py:514
 #, python-format
@@ -700,8 +702,9 @@ msgid "LiveUsbImage: Creating Live USB Image(%s) Now..."
 msgstr "LiveUSBイメージ: Live USB イメージ(%s)を作成しています..."
 
 #: ../libs/InstallImage.py:515
+#: This message is printed on Boot session. Can't show multi byte.
 msgid "Live USB Image (no persistent R/W)"
-msgstr "Live USB イメージ (読み込み専用)"
+msgstr ""
 
 #: ../libs/InstallImage.py:539
 msgid "LiveUsbImage: Finished!"
@@ -712,8 +715,9 @@ msgid "InstallUsbImage: Creating InstallUSB Image..."
 msgstr "インストールUSBイメージ: インストールUSBイメージを作成しています..."
 
 #: ../libs/InstallImage.py:549
+#: This message is printed on Boot session. Can't show multi byte.
 msgid "Install USB Image.  This will DESTROY all content on your hard drive!!"
-msgstr "インストールUSBイメージ。これはハードディスク上の内容を消去します!!"
+msgstr ""
 
 #: ../libs/InstallImage.py:574 ../libs/InstallImage.py:578
 msgid "InstallUsbImage: Finished!"

@@ -59,8 +59,9 @@ moblin-image-creator (0.45) UNRELEASED; urgency=low
   * Fixed typo in README.
   * Supported the internationalization on project_assistant.py.
   * Added Japanese localization(ja.po).
+  * Removed local language some message that can't be printed multi-byte character.
 
- -- Mitsutaka Amano <mamano@miraclelinux.com>  Sat, 21 Jun 2008 23:21:23 +0900
+ -- Mitsutaka Amano <mamano@miraclelinux.com>  Wed, 25 Jun 2008 18:36:16 +0900
 
 moblin-image-creator (0.44) gaston; urgency=low
 
