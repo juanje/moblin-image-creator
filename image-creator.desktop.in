@@ -1,6 +1,7 @@
 [Desktop Entry]
-Name=Image-Creator
-Comment=Developer tool for creating mobile Linux device stacks
+Encoding=UTF-8
+_Name=Moblin Image Creator
+_Comment=Developer tool for creating mobile Linux device stacks
 Exec=gksu /usr/bin/image-creator
 Terminal=false
 Type=Application

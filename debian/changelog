@@ -60,8 +60,10 @@ moblin-image-creator (0.45) UNRELEASED; urgency=low
   * Supported the internationalization on project_assistant.py.
   * Added Japanese localization(ja.po).
   * Removed local language some message that can't be printed multi-byte character.
+  * Renamed desktop file to image-creator.desktop.in from image-creator.desktop.
+  * Supported the internationalization on image-creator.desktop.in
 
- -- Mitsutaka Amano <mamano@miraclelinux.com>  Wed, 25 Jun 2008 18:36:16 +0900
+ -- Mitsutaka Amano <mamano@miraclelinux.com>  Fri, 04 Jul 2008 00:05:10 +0900
 
 moblin-image-creator (0.44) gaston; urgency=low
 

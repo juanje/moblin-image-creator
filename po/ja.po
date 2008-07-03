@@ -1439,6 +1439,7 @@ msgid "removing the following rpms: "
 msgstr "次のRPMパッケージを取り除いています:"
 
 #: ../gui/image-creator.glade:7
+#: ../image-creator.desktop.in:3
 msgid "Moblin Image Creator"
 msgstr "Moblin Image Creator"
 
@@ -1868,3 +1869,7 @@ msgstr "OK"
 #: ../gui/image-creator.glade:2721
 msgid "Fsets Info"
 msgstr "機能セット情報"
+
+#: ../image-creator.desktop.in:4
+msgid "Developer tool for creating mobile Linux device stacks"
+msgstr "携帯端末用Linuxを構築するための開発ツール"

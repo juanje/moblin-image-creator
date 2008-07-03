@@ -17,6 +17,6 @@ var_DATA = \
 	.empty
 
 desktopdir = ${datadir}/applications
-desktop_in_files = image-creator.desktop.in
-desktop_DATA = $(slice_in_files:.desktop.in=.desktop)
+Desktop_Files = image-creator.desktop.in
+desktop_DATA = $(Desktop_Files:.desktop.in=.desktop)
 @INTLTOOL_DESKTOP_RULE@
