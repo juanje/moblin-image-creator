@@ -63,6 +63,8 @@ mountroot ()
 	mount -o ro,loop -t squashfs /container/rootfs.img /squashmnt
 	mount -t ext3 -o rw,noatime,nodiratime /dev/${device}2 /persistmnt
 	mount -t unionfs -o dirs=/persistmnt=rw:/squashmnt=ro none ${rootmnt}
+	mount -o move /container ${rootmnt}/boot
+	mount -o remount,rw,noatime,nodiratime ${rootmnt}/boot
     else
 	# We are NOT using squashfs
 	echo "mounting root partition, NOT using squashfs"   
