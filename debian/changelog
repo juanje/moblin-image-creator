@@ -51,10 +51,10 @@ moblin-image-creator (0.45) UNRELEASED; urgency=low
   * Supported the internationalization.
 
   [ Prajwal Mohan ]
-  * Global name '_' is not defined in image-creator. Fixing it. 
+  * Global name '_' is not defined in image-creator. Fixing it.
 
   [ Mitsutaka Amano ]
-  * Fixed permission of image-creator. 
+  * Fixed permission of image-creator.
   * Updated README to modified installation process.
   * Fixed typo in README.
   * Supported the internationalization on project_assistant.py.
@@ -63,7 +63,10 @@ moblin-image-creator (0.45) UNRELEASED; urgency=low
   * Renamed desktop file to image-creator.desktop.in from image-creator.desktop.
   * Supported the internationalization on image-creator.desktop.in
 
- -- Mitsutaka Amano <mamano@miraclelinux.com>  Fri, 04 Jul 2008 00:05:10 +0900
+  [ Prajwal Mohan ]
+  * Checking in bug fix for 230331 
+
+ -- Prajwal Mohan <prajwal@linux.intel.com>  Mon, 14 Jul 2008 10:29:31 -0700
 
 moblin-image-creator (0.44) gaston; urgency=low
 
