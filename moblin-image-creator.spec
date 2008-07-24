@@ -1,15 +1,16 @@
 Summary: Mobline Image Creator -- Mobile & Internet Linux Development Kit
 Name: moblin-image-creator
-Version: 0.1
-Release: 1 
+Version: 0.45
+Release: 1
 License: GPL
 Group: Development
-Source: %{name}-%{version}.tgz
+Source: %{name}-%{version}.tar.gz
 Buildroot: %{_tmppath}/%{name}-root
 Requires: python >= 2.4
 Requires: pam
 Requires: usermode
 Requires: bash-completion
+BuildRequires: make, automake, autoconf, intltool, gettext-devel
 
 %description
 Development Kit for creating Linux stacks for mobile or single purposed
@@ -19,18 +20,10 @@ devices.
 %setup -q
 
 %build
-make
+./autogen.sh
 
 %install
-rm -rf $RPM_BUILD_ROOT/*
-make DESTDIR=$RPM_BUILD_ROOT basicinstall
-sed '{s/%%EXEC_CMD%%/\/usr\/bin\/image-creator/}' image-creator.desktop.template > $RPM_BUILD_ROOT/usr/share/applications/image-creator.desktop
-mkdir -p $RPM_BUILD_ROOT/usr/bin
-ln -f -s /usr/bin/consolehelper $RPM_BUILD_ROOT/usr/bin/image-creator
-mkdir -p $RPM_BUILD_ROOT/etc/pam.d
-mkdir -p $RPM_BUILD_ROOT/etc/security/console.apps
-cp image-creator.pam.d $RPM_BUILD_ROOT/etc/pam.d/image-creator
-cp image-creator.helperconsole $RPM_BUILD_ROOT/etc/security/console.apps/image-creator
+make DESTDIR=$RPM_BUILD_ROOT install
 cp %_builddir/%{name}-%{version}/suse/image-creator* $RPM_BUILD_ROOT/usr/sbin/
 
 %clean
