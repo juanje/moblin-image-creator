@@ -85,11 +85,13 @@ class App(object):
                 "on_create_liveRWUSB_clicked": self.on_liveRWUSB_clicked,
                 "on_create_installUSB_clicked": self.on_installUSB_clicked,
                 "on_create_liveCD_clicked": self.on_liveCD_clicked,
+                "on_create_NAND_btn_clicked": self.on_NAND_clicked,
                 "on_about_activate": self.on_about_activate,
                 "on_term_launch_clicked": self.on_term_launch_clicked,
                 "on_target_term_launch_clicked": self.on_target_term_launch_clicked,
                 "on_target_kernel_cmdline_clicked": self.on_target_kernel_cmdline_clicked,
                 "on_Write_USB_clicked": self.writeUsbImage,
+                "on_launch_vm_btn_clicked": self.on_launch_vm_clicked, 
                 "on_WriteUsbImage_activate":self.on_WriteUsbImage_activate,
                 "on_ClearRootstraps_activate":self.on_ClearRootstraps_activate,
                 "on_Load_activate":self.on_Load_activate,
@@ -220,7 +222,9 @@ class App(object):
         self.buttons.create_installusb.set_sensitive(fset_state)
         self.buttons.target_kernel_cmdline.set_sensitive(fset_state)
         self.buttons.create_liveCD.set_sensitive(fset_state)
+        self.buttons.create_NAND.set_sensitive(fset_state)
         self.buttons.Write_USB.set_sensitive(fset_state)
+        self.buttons.create_launchvm.set_sensitive(fset_state)
 
     def project_view_changed(self, selection):
         num_rows_selected = self.projectView.get_selection().count_selected_rows()
@@ -433,6 +437,7 @@ class App(object):
                 traceback.print_exc()
                 if debug: print_exc_plus()
                 self.show_error_dialog()
+            self.redraw_target_view()
             progress_dialog.destroy()
 
     def on_new_target_add_clicked(self, widget):
@@ -659,6 +664,7 @@ class App(object):
                 traceback.print_exc()
                 if debug: print_exc_plus()
                 self.show_error_dialog()
+            self.redraw_target_view() 
             progress_dialog.destroy()
 
     def current_project(self):
@@ -760,14 +766,17 @@ class App(object):
         usb_kernel_cmdline = widgets.get_widget('usb_kernel_cmdline')
         hd_kernel_cmdline = widgets.get_widget('hd_kernel_cmdline')
         cd_kernel_cmdline = widgets.get_widget('cd_kernel_cmdline')
+        nand_kernel_cmdline = widgets.get_widget('nand_kernel_cmdline')
         usb_kernel_cmdline.set_text(self.current_project().get_target_usb_kernel_cmdline(target.name))
         hd_kernel_cmdline.set_text(self.current_project().get_target_hd_kernel_cmdline(target.name))
         cd_kernel_cmdline.set_text(self.current_project().get_target_cd_kernel_cmdline(target.name))
+        nand_kernel_cmdline.set_text(self.current_project().get_target_nand_kernel_cmdline(target.name))
         result = dialog.run()
         if result == gtk.RESPONSE_OK:
             self.current_project().set_target_usb_kernel_cmdline(target.name, usb_kernel_cmdline.get_text())
             self.current_project().set_target_hd_kernel_cmdline(target.name, hd_kernel_cmdline.get_text())
             self.current_project().set_target_cd_kernel_cmdline(target.name, cd_kernel_cmdline.get_text())
+            self.current_project().set_target_nand_kernel_cmdline(target.name, nand_kernel_cmdline.get_text())
         dialog.destroy()
 
     def on_liveUSB_clicked(self, widget):
@@ -851,6 +860,67 @@ class App(object):
                 if debug: print_exc_plus()
                 self.show_error_dialog()
             progress_dialog.destroy()
+
+    def on_NAND_clicked(self, widget):
+        project = self.current_project()
+        target = self.current_target()
+        result, img_name = self.getImageName(default_name=".bin")
+        if result == gtk.RESPONSE_OK:
+            progress_tree = gtk.glade.XML(self.gladefile, 'ProgressDialog')
+            progress_dialog = progress_tree.get_widget('ProgressDialog')
+            progress_dialog.connect('delete_event', self.ignore)
+            progress_tree.get_widget('progress_label').set_text("Please wait while creating %s" % img_name)
+            self.progressbar = progress_tree.get_widget('progressbar')
+            try:
+                self.current_project().create_NAND_image(target.name, img_name)
+            except ValueError, e:
+                self.show_error_dialog(e.args[0])
+            except:
+                traceback.print_exc()
+                if debug: print_exc_plus()
+                self.show_error_dialog()
+            progress_dialog.destroy()
+
+
+    def on_launch_vm_clicked(self, widget):
+        # check whether the shared image exists
+        # the path of folder containing this image is fixed and hardcoded
+        if os.path.exists ("/var/lib/moblin-image-creator/kvm") == False:
+            print ("Creating folder /var/lib/moblin-image-creator/kvm ... ")
+            os.popen("mkdir /var/lib/moblin-image-creator/kvm")
+        if os.path.isfile("/var/lib/moblin-image-creator/kvm/mic_vm_share.img") == False:
+            print ("Creating image /var/lib/moblin-image-creator/kvm/mic_vm_share.img ... ")
+            progress_tree = gtk.glade.XML(self.gladefile, 'ProgressDialog')
+            progress_dialog = progress_tree.get_widget('ProgressDialog')
+            progress_dialog.connect('delete_event', self.ignore)
+            progress_tree.get_widget('progress_label').set_text(_("Please wait while creating shared image..."))
+            self.progressbar = progress_tree.get_widget('progressbar')
+            cmd = "qemu-img create /var/lib/moblin-image-creator/kvm/mic_vm_share.img -f qcow2 4G"
+            pdk_utils.execCommand(cmd, False, None, self.gui_throbber)
+            progress_dialog.destroy()
+        # select a live usb image        
+        target = self.current_target()
+        dialog = gtk.FileChooserDialog(action=gtk.FILE_CHOOSER_ACTION_OPEN, title="Choose a Live USB image")
+        dialog.set_current_folder(target.top + "/image/")
+        dialog.add_button(gtk.STOCK_OK, gtk.RESPONSE_OK)
+        dialog.add_button(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL)
+        filter_image = gtk.FileFilter()
+        filter_image.set_name("Image files");
+        filter_image.add_pattern("*.img");
+        dialog.add_filter(filter_image);
+        filter_any = gtk.FileFilter();
+        filter_any.set_name("Any files");
+        filter_any.add_pattern("*");
+        dialog.add_filter(filter_any);
+        if dialog.run() == gtk.RESPONSE_OK:
+            live_img = dialog.get_filename()
+            dialog.destroy()
+        else:
+            dialog.destroy()
+            return
+        # boot the live usb image in KVM in background
+        os.popen("sudo kvm -no-acpi -m 384 -hda " + live_img + " -hdb /var/lib/moblin-image-creator/kvm/mic_vm_share.img -boot c &")
+
 
 
     def getImageName(self, default_name = ".img"):
@@ -1579,11 +1649,13 @@ class MainWindowButtons(object):
         self.create_liverwusb = widgets.get_widget('create_liveRWUSB_btn')
         self.create_installusb = widgets.get_widget('create_installUSB_btn')
         self.create_liveCD = widgets.get_widget('create_liveCD_btn')
+        self.create_NAND = widgets.get_widget('create_NAND_btn')
         # Terminal button
         self.term_launch = widgets.get_widget('term_launch')
         self.target_term_launch = widgets.get_widget('target_term_launch')
         self.target_kernel_cmdline = widgets.get_widget('target_kernel_cmdline')
         self.Write_USB = widgets.get_widget('Write_USB')
+        self.create_launchvm = widgets.get_widget('launch_vm_btn')
 
 def print_exc_plus():
     # From Python Cookbook 2nd Edition.  FIXME: Will need to remove this at

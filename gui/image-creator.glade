@@ -1048,6 +1048,53 @@
                                       </packing>
                                     </child>
                                     <child>
+                                      <widget class="GtkButton" id="create_NAND_btn">
+                                        <property name="visible">True</property>
+                                        <property name="sensitive">False</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="tooltip" translatable="yes">Create an installation image that can be burned to a USB flash drive.  When you boot off the USB flash drive it will erase the target harddrive, then repartition and install the target image.</property>
+                                        <property name="response_id">0</property>
+                                        <signal name="clicked" handler="on_create_NAND_btn_clicked"/>
+                                        <child>
+                                          <widget class="GtkVBox" id="vbox31">
+                                            <property name="visible">True</property>
+                                            <child>
+                                              <widget class="GtkImage" id="image21">
+                                                <property name="visible">True</property>
+                                                <property name="stock">gtk-goto-bottom</property>
+                                              </widget>
+                                            </child>
+                                            <child>
+                                              <widget class="GtkLabel" id="nand_btn_label">
+                                                <property name="visible">True</property>
+                                                <property name="label" translatable="yes">NAND Image</property>
+                                              </widget>
+                                              <packing>
+                                                <property name="expand">False</property>
+                                                <property name="fill">False</property>
+                                                <property name="position">1</property>
+                                              </packing>
+                                            </child>
+                                          </widget>
+                                        </child>
+                                      </widget>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="fill">False</property>
+                                        <property name="position">6</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <widget class="GtkVSeparator" id="target-images-separator5">
+                                        <property name="width_request">20</property>
+                                        <property name="visible">True</property>
+                                      </widget>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="position">7</property>
+                                      </packing>
+                                    </child>
+                                    <child>
                                       <widget class="GtkButton" id="Write_USB">
                                         <property name="visible">True</property>
                                         <property name="sensitive">False</property>
@@ -1081,7 +1128,54 @@
                                       <packing>
                                         <property name="expand">False</property>
                                         <property name="fill">False</property>
-                                        <property name="position">6</property>
+                                        <property name="position">8</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <widget class="GtkVSeparator" id="target-images-separator3">
+                                        <property name="width_request">20</property>
+                                        <property name="visible">True</property>
+                                      </widget>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="position">9</property>
+                                      </packing>
+                                    </child>
+                                    <child>
+                                      <widget class="GtkButton" id="launch_vm_btn">
+                                        <property name="visible">True</property>
+                                        <property name="sensitive">False</property>
+                                        <property name="can_focus">True</property>
+                                        <property name="tooltip" translatable="yes">Boot a live USB image in KVM</property>
+                                        <property name="response_id">0</property>
+                                        <signal name="clicked" handler="on_launch_vm_btn_clicked"/>
+                                        <child>
+                                          <widget class="GtkVBox" id="vbox29">
+                                            <property name="visible">True</property>
+                                            <child>
+                                              <widget class="GtkImage" id="image19">
+                                                <property name="visible">True</property>
+                                                <property name="stock">gtk-execute</property>
+                                              </widget>
+                                            </child>
+                                            <child>
+                                              <widget class="GtkLabel" id="launch_vm_label">
+                                                <property name="visible">True</property>
+                                                <property name="label" translatable="yes">Launch VM</property>
+                                              </widget>
+                                              <packing>
+                                                <property name="expand">False</property>
+                                                <property name="fill">False</property>
+                                                <property name="position">1</property>
+                                              </packing>
+                                            </child>
+                                          </widget>
+                                        </child>
+                                      </widget>
+                                      <packing>
+                                        <property name="expand">False</property>
+                                        <property name="fill">False</property>
+                                        <property name="position">10</property>
                                       </packing>
                                     </child>
                                   </widget>
@@ -2073,8 +2167,14 @@
             <child>
               <widget class="GtkTable" id="table3">
                 <property name="visible">True</property>
-                <property name="n_rows">5</property>
+                <property name="n_rows">7</property>
                 <property name="n_columns">2</property>
+                <child>
+                  <placeholder/>
+                </child>
+                <child>
+                  <placeholder/>
+                </child>
                 <child>
                   <placeholder/>
                 </child>
@@ -2158,6 +2258,32 @@
                     <property name="right_attach">2</property>
                     <property name="top_attach">4</property>
                     <property name="bottom_attach">5</property>
+                    <property name="y_options"></property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkLabel" id="label48">
+                    <property name="visible">True</property>
+                    <property name="xalign">0</property>
+                    <property name="label" translatable="yes">NAND Booting kernel cmdline:</property>
+                  </widget>
+                  <packing>
+                    <property name="top_attach">6</property>
+                    <property name="bottom_attach">7</property>
+                    <property name="x_options">GTK_FILL</property>
+                    <property name="y_options"></property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkEntry" id="nand_kernel_cmdline">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                  </widget>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="right_attach">2</property>
+                    <property name="top_attach">6</property>
+                    <property name="bottom_attach">7</property>
                     <property name="y_options"></property>
                   </packing>
                 </child>
