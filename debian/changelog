@@ -69,9 +69,9 @@ moblin-image-creator (0.45) UNRELEASED; urgency=low
     initramfs script
   * Releasing 0.45 version
   * Starting new version
-  
+  * Adding Nand kernel cmd line 
 
- -- Prajwal Mohan <prajwal@linux.intel.com>  Thu, 17 Jul 2008 09:39:45 -0700
+ -- Prajwal Mohan <prajwal@linux.intel.com>  Mon, 28 Jul 2008 13:16:26 -0700
 
 moblin-image-creator (0.44) gaston; urgency=low
 

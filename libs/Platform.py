@@ -87,6 +87,7 @@ class Platform(object):
         self.usb_kernel_cmdline = mic_cfg.config.get(section, "usb_kernel_cmdline")
         self.hd_kernel_cmdline = mic_cfg.config.get(section, "hd_kernel_cmdline")
         self.cd_kernel_cmdline = mic_cfg.config.get(section, "cd_kernel_cmdline")
+        self.nand_kernel_cmdline = mic_cfg.config.get(section, "nand_kernel_cmdline")
         # Architecture
         self.architecture = mic_cfg.config.get(section, "architecture") or "i386"
         # Package Manager
@@ -293,6 +294,7 @@ releasever=8
             ('random',  1, 8, (0666 | stat.S_IFCHR)),
             ('urandom', 1, 9, (0444 | stat.S_IFCHR)),
             ('zero',    1, 5, (0666 | stat.S_IFCHR)),
+            ('ptmx',    5, 2, (0666 | stat.S_IFCHR)),
         ]
         for device_name, major, minor, mode in devices:
             device_path = os.path.join(chroot_dir, 'dev', device_name)
