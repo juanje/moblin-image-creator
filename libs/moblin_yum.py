@@ -39,7 +39,6 @@ class YumPackageManager(moblin_pkgbase.PackageManager):
 
     def installPackages(self, chroot_dir, package_list, callback = None):
         """Install the list of packages in the chroot environement"""
-        print _("yum.installPackages: Not implemented yet!!!!")
         self.__yumPreRun(chroot_dir)
         if not package_list:
             # No packages, so nothing to do
@@ -80,10 +79,16 @@ class YumPackageManager(moblin_pkgbase.PackageManager):
 
     def updateChroot(self, chroot_dir, callback = None):
         """Update the chroot environment to have the latest packages"""
+        command = "yum clean metadata"
+        print _("Running 'yum update' command: %s") % (command)
+        print _("\t in the chroot: %s") % (chroot_dir)
+        pdk_utils.execChrootCommand(chroot_dir, command, callback = callback)
+
         command = "yum -y update"
         print _("Running 'yum update' command: %s") % (command)
         print _("\t in the chroot: %s") % (chroot_dir)
         result = pdk_utils.execChrootCommand(chroot_dir, command, callback = callback)
+        return result
 
     def cleanPackageCache(self, chroot_dir):
         """Clean out any cached package files"""
@@ -91,6 +96,23 @@ class YumPackageManager(moblin_pkgbase.PackageManager):
         print _("Running 'yum clean' command: %s") % (command)
         print _("\t in the chroot: %s") % (chroot_dir)
         result = pdk_utils.execChrootCommand(chroot_dir, command, callback = callback)
+        return result
+
+    def resetPackageDB(self, chroot_dir, callback):
+        """reset rpm database to deal with case of running in IA64"""
+
+        """ due to unknown reason execChrootCommand doesn't work on wide-match symbol"""
+        #FIXME
+        command = "/usr/sbin/chroot %s rm -fr /var/lib/rpm/*db*" % (chroot_dir)
+        print _("Running command: %s") % (command)
+        os.system(command)
+        command = "rpm --rebuilddb"
+        print _("Running rpm db reset command: %s") % (command)
+        print _("\t in the chroot: %s") % (chroot_dir)
+        result = pdk_utils.execChrootCommand(chroot_dir, command, callback = callback)
+        if result != 0 :
+            print _("Error running command %s") %(command)
+        return result
 
     def mount(self, chroot_dir):
         return []
