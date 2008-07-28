@@ -232,6 +232,7 @@ class Project(FileSystem):
             self.set_target_usb_kernel_cmdline(name, self.platform.usb_kernel_cmdline)
             self.set_target_hd_kernel_cmdline(name, self.platform.hd_kernel_cmdline)
             self.set_target_cd_kernel_cmdline(name, self.platform.cd_kernel_cmdline)
+            self.set_target_nand_kernel_cmdline(name, self.platform.nand_kernel_cmdline)
         return self.targets[name]
     
     def get_target_usb_kernel_cmdline(self, name):
@@ -267,6 +268,17 @@ class Project(FileSystem):
         cmdline.close()
         return cd_kernel_cmdline.strip()
 
+    def get_target_nand_kernel_cmdline(self, name):
+        if not name:
+           raise ValueError(_("Target name was not specified"))
+        cmdline = open(os.path.join(self.targets[name].config_path, 'nand_kernel_cmdline'), 'r')
+        nand_kernel_cmdline = ''
+        for line in cmdline:
+            if not re.search(r'^\s*#',line): 
+                nand_kernel_cmdline += line + ' '
+        cmdline.close()
+        return nand_kernel_cmdline.strip()
+
     def set_target_usb_kernel_cmdline(self, name, str):
         if not name:
            raise ValueError(_("Target name was not specified"))
@@ -285,6 +297,13 @@ class Project(FileSystem):
         if not name:
            raise ValueError(_("Target name was not specified"))
         cmdline = open(os.path.join(self.targets[name].config_path, 'cd_kernel_cmdline'), 'w')
+        print >> cmdline, str
+        cmdline.close()
+
+    def set_target_nand_kernel_cmdline(self, name, str):
+        if not name:
+           raise ValueError(_("Target name was not specified"))
+        cmdline = open(os.path.join(self.targets[name].config_path, 'nand_kernel_cmdline'), 'w')
         print >> cmdline, str
         cmdline.close()
 
