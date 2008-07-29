@@ -1,7 +1,7 @@
 Summary: Mobline Image Creator -- Mobile & Internet Linux Development Kit
 Name: moblin-image-creator
 Version: 0.45
-Release: 1
+Release: 1%{?dist}
 License: GPL
 Group: Development
 Packager: Mitsutaka Amano <mamano@miraclelinux.com>
@@ -58,6 +58,9 @@ rm -rf %{buildroot}
 /var/lib/moblin-image-creator/.empty
 
 %changelog
+* Thu Jul 29 2008 Mitsutaka Amano <mamano@miraclelinux.com>
+- Added dist parametor on rpm spec file.
+
 * Thu Jul 24 2008 Mitsutaka Amano <mamano@miraclelinux.com>
 - Rebuild for 0.45
 
