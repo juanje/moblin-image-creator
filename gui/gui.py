@@ -1569,14 +1569,14 @@ class AddNewProject(object):
             if self.sdk.platforms[pname].config_info != None:
                 pdesc = " - (%s)" % self.sdk.platforms[pname].config_info['description']
                 packageManagerDesc = self.sdk.platforms[pname].config_info['package_manager']
-            if packageManager == packageManagerDesc:
+            #if packageManager == packageManagerDesc:
                 #platform_entry_box.append([pname + pdesc])
-                platform_entry_box.append([pname])
-                added = True
-            elif packageManagerDesc == "":
+            platform_entry_box.append([pname])
+            added = True
+            #elif packageManagerDesc == "":
                 #platform_entry_box.append([pname + pdesc])
-                platform_entry_box.append([pname])
-                added = True
+            #    platform_entry_box.append([pname])
+            #    added = True
             # If previously selected an entry, select it again
             if added:
                 if  (pname + pdesc) == platform:

@@ -28,6 +28,7 @@ import Project
 import SDK
 import mic_cfg
 import pdk_utils
+import Mkinitrd
 
 debug = False
 if mic_cfg.config.has_option('general', 'debug'):
@@ -242,7 +243,8 @@ class InstallImage(object):
         else:
             swap = False
         self.create_fstab(swap)
-        self.create_modules_dep()
+        if self.project.platform.config_info['package_manager'] == 'apt':
+            self.create_modules_dep()
         self.rootfs = 'rootfs.img'
         self.rootfs_path = os.path.join(self.target.image_path, self.rootfs)
         if os.path.isfile(self.rootfs_path):
@@ -251,7 +253,10 @@ class InstallImage(object):
         fs_path      = self.target.fs_path[len(self.project.path):]
         image_path   = self.target.image_path[len(self.project.path):]
         image_path   = os.path.join(image_path,'rootfs.img')
-        cmd          = "mksquashfs %s %s -no-progress -ef %s" % (fs_path, image_path, self.exclude_file)
+        if self.project.platform.config_info['package_manager'] == 'apt':
+            cmd          = "mksquashfs %s %s -no-progress -ef %s" % (fs_path, image_path, self.exclude_file)
+        if self.project.platform.config_info['package_manager'] == 'yum':
+           cmd          = "/sbin/mksquashfs %s %s -info -ef %s" % (fs_path, image_path, self.exclude_file)
         self.write_manifest(self.path)
         self.target.umount()
         print _("Executing the mksquashfs program: %s") % cmd
@@ -285,7 +290,10 @@ class InstallImage(object):
         fs_path    = os.path.join(fs_path, 'boot')
         image_path = self.target.image_path[len(self.project.path):]
         image_path = os.path.join(image_path,'bootfs.img')
-        cmd        = "mksquashfs %s %s -no-progress" % (fs_path, image_path)
+        if self.project.platform.config_info['package_manager'] == 'apt':
+            cmd        = "mksquashfs %s %s -no-progress" % (fs_path, image_path)
+        if self.project.platform.config_info['package_manager'] == 'yum':
+            cmd        = "/sbin/mksquashfs %s %s -no-progress" % (fs_path, image_path)
         self.project.chroot(cmd)
 
     def delete_bootfs(self):
@@ -339,6 +347,12 @@ class InstallImage(object):
             self.create_initramfs("/tmp/.tmp.initrd%d" % count, kernel_version)
         self.kernels.pop(0)
 
+    def create_all_initrd(self):
+        cfg_filename = os.path.join(self.project.path, "etc/moblin-initramfs.cfg")
+        self.writeShellConfigFile(cfg_filename)
+        initrd_path = "/tmp/.tmp.initrd0"
+        Mkinitrd.create(self.project, initrd_path)
+
     def create_initramfs(self, initrd_file, kernel_version):
         print _("Creating initramfs for kernel version: %s") % kernel_version
         # copy the platform initramfs stuff into /etc/initramfs-tools/ in the target
@@ -387,7 +401,10 @@ class InstallImage(object):
 
     def write_manifest(self, image_path):
         all_packages = []
-        self.target.chroot("dpkg-query --show", output = all_packages)
+        if self.project.platform.config_info['package_manager'] == 'apt':
+            self.target.chroot("dpkg-query --show", output = all_packages)
+        if self.project.platform.config_info['package_manager'] == 'yum':
+            self.target.chroot("rpm  -qa", output = all_packages)
         manifest = open(image_path.rstrip('.img') + '.manifest', 'w')
         print >>manifest, "\n".join(all_packages)
         manifest.close()
@@ -460,7 +477,11 @@ class BaseUsbImage(InstallImage):
             out_file.write(out_string)
         out_file.close()
 
-        cmd_line = "mkfs.vfat %s" % self.path
+        if self.project.platform.config_info['package_manager'] == 'apt':
+            cmd_line = "mkfs.vfat %s" % self.path
+        if self.project.platform.config_info['package_manager'] == 'yum':
+            cmd_line = "/sbin/mkfs.vfat %s" % self.path
+
         result = pdk_utils.execCommand(cmd_line, callback = self.progress_callback)
         if result:
             print >> sys.stderr, _("Error running command: %s") % cmd_line
@@ -481,7 +502,11 @@ class BaseUsbImage(InstallImage):
             out_file.write(out_string)
         out_file.close()
 
-        cmd_line = "mkfs.ext3 %s -F" % path
+        if self.project.platform.config_info['package_manager'] == 'apt':
+            cmd_line = "mkfs.ext3 %s -F" % path
+        if self.project.platform.config_info['package_manager'] == 'yum':
+            cmd_line = "/sbin/mkfs.ext3 %s -F" % path
+
         result = pdk_utils.execCommand(cmd_line, callback = self.progress_callback)
         if result:
             print >> sys.stderr, _("Error running command: %s") % cmd_line
@@ -515,7 +540,12 @@ class LiveUsbImage(BaseUsbImage):
             image_type = _("Live USB Image (no persistent R/W)")
         # How big to make the ext3 File System on the Live RW USB image, in megabytes
         ext3fs_fs_size = int(mic_cfg.config.get(self.section, "ext3fs_size"))
-        self.create_all_initramfs()
+
+        if self.project.platform.config_info['package_manager'] == 'apt':
+            self.create_all_initramfs()
+        if self.project.platform.config_info['package_manager'] == 'yum':
+            self.create_all_initrd()
+
         self.create_rootfs()
         initrd_stat_result = os.stat('/tmp/.tmp.initrd0')
         rootfs_stat_result = os.stat(self.rootfs_path)
@@ -547,9 +577,14 @@ class InstallUsbImage(BaseUsbImage):
     def create_image(self):
         print _("InstallUsbImage: Creating InstallUSB Image...")
         image_type = _("Install USB Image.  This will DESTROY all content on your hard drive!!")
-        self.create_all_initramfs()
-        self.create_grub_menu()
-        self.apply_hd_kernel_cmdline()
+        if self.project.platform.config_info['package_manager'] == 'apt':
+            self.create_all_initramfs()
+            self.create_grub_menu()
+            self.apply_hd_kernel_cmdline()
+        if self.project.platform.config_info['package_manager'] == 'yum':
+            self.create_all_initrd()
+            self.create_grub_menu_temp()
+
         self.create_bootfs()
         self.create_rootfs()
         initrd_stat_result = os.stat('/tmp/.tmp.initrd0')
@@ -602,6 +637,35 @@ class HddImage(InstallImage):
     def __str__(self):
         return ("<HddImage: project=%s, target=%s, name=%s>"
                 % (self.project, self.target, self.name))
+
+
+class NANDImage(InstallImage):
+    def create_image(self):
+        print os.path.join(self.project.platform.path, "nand.sh")
+        if not os.path.isfile(os.path.join(self.project.platform.path, "nand.sh")):
+               raise ValueError("NANDImage: This platform could not support NAND image!")
+        print _("NANDImage: Creating NAND Image...")
+
+        if self.project.platform.config_info['package_manager'] == 'apt':
+            self.create_all_initramfs()
+        if self.project.platform.config_info['package_manager'] == 'yum':
+            self.create_all_initrd()
+
+        self.target.umount()
+        os.system(os.path.join(self.project.platform.path, "nand.sh %s %s %s %s %s %s %s %s" 
+              % (os.path.join(self.target.config_path, 'nand_kernel_cmdline'),
+                 os.path.join(self.target.fs_path, 'boot/bootstub'),
+                 os.path.join(self.target.fs_path, 'boot',self.default_kernel),
+                 initrd_path,
+                 self.target.fs_path,
+                 int(mic_cfg.config.get(self.section, "nand_image_size")),
+                 self.path+'.boot',
+                 self.path)))
+
+    def __str__(self):
+        return ("<NANDImage: project=$s, target=%s, name=%s>"
+                % (self.project, self.target, self.name))
+
 
 def print_exc_plus():
     # From Python Cookbook 2nd Edition.  FIXME: Will need to remove this at
