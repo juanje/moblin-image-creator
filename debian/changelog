@@ -72,9 +72,10 @@ moblin-image-creator (0.45) UNRELEASED; urgency=low
   * Adding Nand kernel cmd line
   * Adding KVM and NAND buttons to GUI
   * Making changes to Yum package manager
-  * Adding functions to get/set NAND kernel cmd line 
+  * Adding functions to get/set NAND kernel cmd line
+  * Adding yum specific package handling 
 
- -- Prajwal Mohan <prajwal@linux.intel.com>  Mon, 28 Jul 2008 16:28:42 -0700
+ -- Prajwal Mohan <prajwal@linux.intel.com>  Mon, 28 Jul 2008 17:12:17 -0700
 
 moblin-image-creator (0.44) gaston; urgency=low
 

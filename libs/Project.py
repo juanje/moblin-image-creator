@@ -196,6 +196,9 @@ class Project(FileSystem):
         """
         Install all the packages defined by Platform.buildroot_packages
         """
+        if self.platform.config_info['package_manager'] == 'yum':
+            self.mount()
+            self.platform.pkg_manager.resetPackageDB(self.chroot_path, None)
         return super(Project, self).installPackages(self.platform.buildroot_packages + self.platform.buildroot_extras)
 
     def umount(self, directory_set = None):
@@ -226,6 +229,8 @@ class Project(FileSystem):
             self.platform.createChroot(install_path, use_rootstrap, callback = self.progress_callback)
             self.targets[name] = Target(name, self, self.progress_callback)
             self.targets[name].mount()
+            if self.platform.config_info['package_manager'] == 'yum':
+                self.platform.pkg_manager.resetPackageDB(install_path, None)
             self.targets[name].updateAndUpgrade()
             self.targets[name].setHostname('ume')
             # Install platform default kernel cmdline
@@ -369,6 +374,13 @@ class Project(FileSystem):
         target = self.targets[target_name]
         self.umountTarget(target)
         image = InstallImage.InstallUsbImage(self, self.targets[target_name], image_name, progress_callback = self.progress_callback)
+        image.create_image()
+        target.mount()
+
+    def create_NAND_image(self, target_name, image_name):
+        target = self.targets[target_name]
+        self.umountTarget(target)
+        image = InstallImage.NANDImage(self, self.targets[target_name], image_name)
         image.create_image()
         target.mount()
 
