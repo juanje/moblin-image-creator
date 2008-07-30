@@ -153,7 +153,10 @@ class Platform(object):
         basedir = os.path.dirname(rootstrap_file)
         if not os.path.exists(basedir):
             os.makedirs(basedir)
-        cmd = "debootstrap --arch %s --include=apt --components=%s %s %s %s" % (self.architecture, components, codename, chroot_dir, mirror)
+        if mic_cfg.config.get('general', 'package_manager') == 'apt':
+            cmd = "debootstrap --arch %s --include=apt --components=%s %s %s %s" % (self.architecture, components, codename, chroot_dir, mirror)
+        elif mic_cfg.config.get('general', 'package_manager') == 'yum':
+            cmd = "/usr/sbin/debootstrap --arch %s --include=apt --components=%s %s %s %s" % (self.architecture, components, codename, chroot_dir, mirror)
         output = []
         # XXX Evil hack
         if not os.path.isfile("/usr/lib/debootstrap/scripts/%s" % codename) and not os.path.isfile("/usr/share/debootstrap/scripts/%s" % codename):

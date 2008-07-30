@@ -8,6 +8,7 @@ import sys
 import tempfile
 
 import SDK
+import mic_cfg
 
 class Busybox(object):
     def __init__(self, cmd_path, bin_path):
@@ -51,7 +52,7 @@ class Busybox(object):
             shutil.copy(self.cmd_path, 'busybox')
 
         for cmd in self.cmds:
-            if not os.path.exists(cmd):
+            if not os.path.exists(cmd):    
                 os.symlink("busybox", cmd)
         os.chdir(save_cwd)
 
@@ -85,10 +86,13 @@ def create(project, initrd_file, fs_type='RAMFS'):
     names = os.listdir(os.path.join(project.platform.path, 'initramfs'))
     for name in names:
         shutil.copy(os.path.join(project.platform.path, 'initramfs', name), scratch_path)
-
     # Create the initrd image file
     os.chdir(scratch_path)
-    cmd_string = "find -print | cpio --quiet -c -o | gzip -9 -c > " + initrd_file
+
+    if mic_cfg.config.get('general', 'package_manager') == 'apt':
+        cmd_string = "find -print | cpio --quiet -H newc -o | gzip -9 -c > " + initrd_file
+    if mic_cfg.config.get('general', 'package_manager') == 'yum':
+        cmd_string = "find -print | cpio --quiet -c -o | gzip -9 -c > " + initrd_file
     os.system(cmd_string)
     os.chdir(save_cwd)
 

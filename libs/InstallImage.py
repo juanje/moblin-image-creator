@@ -397,29 +397,23 @@ class InstallImage(object):
 
     def create_grub_menu_yum(self):
         #FIXME: We need to generate grub menu
-        print "Creating temporary grub menu.list....................."
+        print _("Creating the grub menu")
+        # remove previous menu.lst, since we are about to create one
         menu_dir = os.path.join(self.target.path, "boot/grub")
         menu_file = os.path.join(menu_dir, "menu.lst")
-
+        grub_conf = os.path.join(menu_dir, "grub.conf")
         if os.path.exists(menu_file):
-           os.unlink(menu_file)
+            os.unlink(menu_file)
+        if os.path.exists(grub_conf):
+            os.unlink(grub_conf)
         if not os.path.exists(menu_dir):
-           os.makedirs(menu_dir)
-
-        out_file = open(menu_file, 'w')
-        print  >> out_file, """#Temp Grub menu.list
-
-            default        0
-            timeout        10
-
-            title          Moblin2 (2.6.25)
-            root           (hd0,0)
-            kernel         /vmlinuz-2.6.25-default boot=disk
-            initrd         /initrd.img-2.6.25-default    
-        """
-        out_file.close()
-        print "Done."
-
+            os.makedirs(menu_dir)
+        hd_kernel_cmdline = self.project.get_target_hd_kernel_cmdline(self.target.name)
+        #execCommand does not seem to work. This command needs the hd_kernel_cmdline to be within double quotes
+        #execComamnd uses split. This causes only the first part of hd_kernel_cmdline to get picked up
+        #self.target.chroot("update-grub %s" % hd_kernel_cmdline)
+        cmd_line = "/sbin/update-grub \"%s\"" % hd_kernel_cmdline
+        os.popen("/usr/sbin/chroot %s %s" % (self.target.path, cmd_line))
 
     def __str__(self):
         return ("<InstallImage: project=%s, target=%s, name=%s>"
