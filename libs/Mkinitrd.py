@@ -6,7 +6,6 @@ import re
 import shutil
 import sys
 import tempfile
-import time
 
 import SDK
 
@@ -52,10 +51,8 @@ class Busybox(object):
             shutil.copy(self.cmd_path, 'busybox')
 
         for cmd in self.cmds:
-            print cmd
             if not os.path.exists(cmd):
                 os.symlink("busybox", cmd)
-        time.sleep(20)
         os.chdir(save_cwd)
 
 def create(project, initrd_file, fs_type='RAMFS'):

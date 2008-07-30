@@ -81,9 +81,10 @@ moblin-image-creator (0.45) UNRELEASED; urgency=low
 
   [ Prajwal Mohan ]
   * Making changes to Install Image to handle yum based platforms
-  * Making changes to Makefile 
+  * Making changes to Makefile
+  * Adding creating grub menu  
 
- -- Prajwal Mohan <prajwal@linux.intel.com>  Tue, 29 Jul 2008 16:21:26 -0700
+ -- Prajwal Mohan <prajwal@linux.intel.com>  Tue, 29 Jul 2008 17:09:01 -0700
 
 moblin-image-creator (0.44) gaston; urgency=low
 

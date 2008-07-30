@@ -395,6 +395,32 @@ class InstallImage(object):
                     break;
         menu.close()
 
+    def create_grub_menu_yum(self):
+        #FIXME: We need to generate grub menu
+        print "Creating temporary grub menu.list....................."
+        menu_dir = os.path.join(self.target.path, "boot/grub")
+        menu_file = os.path.join(menu_dir, "menu.lst")
+
+        if os.path.exists(menu_file):
+           os.unlink(menu_file)
+        if not os.path.exists(menu_dir):
+           os.makedirs(menu_dir)
+
+        out_file = open(menu_file, 'w')
+        print  >> out_file, """#Temp Grub menu.list
+
+            default        0
+            timeout        10
+
+            title          Moblin2 (2.6.25)
+            root           (hd0,0)
+            kernel         /vmlinuz-2.6.25-default boot=disk
+            initrd         /initrd.img-2.6.25-default    
+        """
+        out_file.close()
+        print "Done."
+
+
     def __str__(self):
         return ("<InstallImage: project=%s, target=%s, name=%s>"
                 % (self.project, self.target, self.name))
@@ -583,7 +609,7 @@ class InstallUsbImage(BaseUsbImage):
             self.apply_hd_kernel_cmdline()
         if self.project.platform.config_info['package_manager'] == 'yum':
             self.create_all_initrd()
-            self.create_grub_menu_temp()
+            self.create_grub_menu_yum()
 
         self.create_bootfs()
         self.create_rootfs()
