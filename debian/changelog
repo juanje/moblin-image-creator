@@ -84,9 +84,12 @@ moblin-image-creator (0.45) UNRELEASED; urgency=low
   * Making changes to Makefile
   * Adding creating grub menu
   * Fixing problems with creating images for yum platforms on apt host
-  * kvm has different binaries on yum and apt platforms 
+  * kvm has different binaries on yum and apt platforms
 
- -- Prajwal Mohan <prajwal@linux.intel.com>  Wed, 30 Jul 2008 17:15:49 -0700
+  [ Mitsutaka Amano ]
+  * Added package reaquire.
+
+ -- Mitsutaka Amano <mamano@miraclelinux.com>  Thu, 31 Jul 2008 11:32:21 +0900
 
 moblin-image-creator (0.44) gaston; urgency=low
 

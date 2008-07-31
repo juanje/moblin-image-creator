@@ -10,10 +10,7 @@ URL: http://moblin.org
 Source: %{name}-%{version}.tgz
 Buildroot: %{_tmppath}/%{name}-root
 BuildArch: noarch
-Requires: python >= 2.4
-Requires: pam
-Requires: usermode
-Requires: bash-completion
+Requires: python >= 2.4, pam, usermode, bash-completion, qemu-img, kvm
 BuildRequires: make, automake, autoconf, intltool, gettext-devel
 
 %description
@@ -58,6 +55,9 @@ rm -rf %{buildroot}
 /var/lib/moblin-image-creator/.empty
 
 %changelog
+* Thu Jul 31 2008 Mitsutaka Amano <mamano@miraclelinux.com>
+- Added Requires:.
+
 * Thu Jul 29 2008 Mitsutaka Amano <mamano@miraclelinux.com>
 - Added dist parametor on rpm spec file.
 
