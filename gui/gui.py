@@ -919,8 +919,10 @@ class App(object):
             dialog.destroy()
             return
         # boot the live usb image in KVM in background
-        os.popen("sudo kvm -no-acpi -m 384 -hda " + live_img + " -hdb /var/lib/moblin-image-creator/kvm/mic_vm_share.img -boot c &")
-
+        if mic_cfg.config.get('general', 'package_manager') == 'apt':
+            os.popen("kvm -no-acpi -m 384 -hda " + live_img + " -hdb /var/lib/moblin-image-creator/kvm/mic_vm_share.img -boot c &")
+        elif mic_cfg.config.get('general', 'package_manager') == 'yum':
+            os.popen("qemu-kvm -no-acpi -m 384 -hda " + live_img + " -hdb /var/lib/moblin-image-creator/kvm/mic_vm_share.img -boot c &")
 
 
     def getImageName(self, default_name = ".img"):
