@@ -412,7 +412,7 @@ class InstallImage(object):
         #execCommand does not seem to work. This command needs the hd_kernel_cmdline to be within double quotes
         #execComamnd uses split. This causes only the first part of hd_kernel_cmdline to get picked up
         #self.target.chroot("update-grub %s" % hd_kernel_cmdline)
-        self.target.chroot("update-grub boot=disk")
+        self.target.chroot("/sbin/update-grub boot=disk")
         hd_kernel_cmdline = hd_kernel_cmdline.replace('/', '\/')
         cmd="sed \'s/boot=disk/%s/\' -i /boot/grub/grub.conf" % hd_kernel_cmdline
         os.popen("/usr/sbin/chroot %s %s" % (self.target.path, cmd))
