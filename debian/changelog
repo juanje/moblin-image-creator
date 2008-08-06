@@ -92,9 +92,12 @@ moblin-image-creator (0.45) UNRELEASED; urgency=low
   [ Prajwal Mohan ]
   * Fixing bug in applying hd_kernel_cmd_line
   * Fixing update-grub path
-  * Checking in scripts for initrd 
+  * Checking in scripts for initrd
 
- -- Prajwal Mohan <prajwal@linux.intel.com>  Tue, 05 Aug 2008 17:00:54 -0700
+  [ Mitsutaka Amano ]
+  * Added entry Makefile.am on mccaslin-lpia-fedora.
+
+ -- Mitsutaka Amano <mamano@miraclelinux.com>  Wed, 06 Aug 2008 09:24:19 +0900
 
 moblin-image-creator (0.44) gaston; urgency=low
 
