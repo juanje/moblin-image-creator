@@ -1,0 +1,125 @@
+#!/bin/sh
+
+RUNLEVEL=3
+PATH=/bin:/sbin:/usr/bin:/usr/sbin
+ln -s /bin/busybox /bin/umount
+export PATH
+
+echo Mounting proc filesystem
+mount -t proc /proc /proc
+
+echo Mounting sysfs filesystem
+mount -t sysfs /sys /sys
+
+echo Creating /tmp
+mount -t tmpfs /tmp /tmp
+
+echo Creating /dev
+mount -o mode=0755 -t tmpfs /dev /dev
+mkdir /dev/pts
+mount -t devpts -o gid=5,mode=620 /dev/pts /dev/pts
+mkdir /dev/shm
+mkdir /dev/mapper
+
+echo Creating initial device nodes
+mdev -s
+
+export rootmnt=/root
+
+for x in $(cat /proc/cmdline); do
+	case $x in
+	init=*)
+		init=${x#init=}
+		;;
+	root=*)
+		ROOT=${x#root=}
+		case $ROOT in
+		LABEL=*)
+			ROOT="/dev/disk/by-label/${ROOT#LABEL=}"
+			;;
+		UUID=*)
+			ROOT="/dev/disk/by-uuid/${ROOT#UUID=}"
+			;;
+		/dev/nfs)
+			BOOT=nfs
+			;;
+		esac
+		;;
+	rootflags=*)
+		ROOTFLAGS="-o ${x#rootflags=}"
+		;;
+	rootfstype=*)
+		ROOTFSTYPE="${x#rootfstype=}"
+		;;
+	rootdelay=*)
+		ROOTDELAY="${x#rootdelay=}"
+		;;
+	loop=*)
+		LOOP="${x#loop=}"
+		;;
+	loopflags=*)
+		LOOPFLAGS="-o ${x#loopflags=}"
+		;;
+	loopfstype=*)
+		LOOPFSTYPE="${x#loopfstype=}"
+		;;
+	cryptopts=*)
+		cryptopts="${x#cryptopts=}"
+		;;
+	nfsroot=*)
+		NFSROOT="${x#nfsroot=}"
+		;;
+	netboot=*)
+		NETBOOT="${x#netboot=}"
+		;;
+	ip=*)
+		IPOPTS="${x#ip=}"
+		;;
+	boot=*)
+		BOOT=${x#boot=}
+		;;
+	resume=*)
+		RESUME="${x#resume=}"
+		;;
+	noresume)
+		NORESUME=y
+		;;
+	panic=*)
+		panic="${x#panic=}"
+		;;
+	quiet)
+		quiet=y
+		;;
+	ro)
+		readonly=y
+		;;
+	rw)
+		readonly=n
+		;;
+	debug)
+		debug=y
+		exec >/tmp/initramfs.debug 2>&1
+		set -x
+		;;
+	debug=*)
+		debug=y
+		set -x
+		;;
+	break=*)
+		break=${x#break=}
+		;;
+	break)
+		break=premount
+		;;
+	esac
+done
+echo 'Mounting Root Filesystem ...'
+. /${BOOT}
+mountroot
+cd ${rootmnt}
+exec chroot . /bin/sh <<EOF
+    mount -t proc /proc /proc
+    mount -t sysfs /sys /sys
+    exec /sbin/init $RUNLEVEL
+EOF
+

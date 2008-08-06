@@ -1,0 +1,76 @@
+#!/bin/bash
+#liveusb filesystem mounting
+
+mountroot()
+{	
+	CFG_FILE=/etc/moblin-initramfs.cfg
+	if [ -f ${CFG_FILE} ]
+	then
+		. ${CFG_FILE}
+	else
+		echo "Did not find config file: ${CFG_FILE}"
+		sleep 5
+	fi
+
+	mkdir -p /container
+	mkdir -p /squashmnt
+	mkdir -p /persistmnt
+
+	# Find the USB flash drive
+	while : ; do   
+		for device in 'sda' 'sdb' 'sdc' 'sdd'; do
+			echo "checking device /dev/${device} for installation source..."
+			mdev -s
+			if mount /dev/${device} /mnt
+			then 
+				if [ -f /mnt/rootfs.img ] ; then
+					echo "Found Boot drive at /dev/${device}"
+					found="yes"
+				fi
+				umount /dev/${device}
+			fi
+			if [ "$found" = "yes" ]; then
+				break;
+			fi
+			echo "/dev/${device} does not contain a rootfs"
+		done
+
+		if [ "$found" = "yes" ]; then
+			break;
+		fi
+		echo "Sleeping for 5 seconds"
+	 	/bin/sleep 5
+		echo "Sleeping finished"
+	done
+
+	mdev -s
+
+	echo "will mount root from /dev/${device}"
+	mount -o rw /dev/${device} /container 2> /dev/null
+
+	while [ ! -e "/container/rootfs.img" ]; do
+		echo 'wait mounting usb...' 
+		/bin/sleep 1
+		mount -o rw /dev/${device} /container 2> /dev/null
+	done
+
+	mount -o ro,loop -t squashfs /container/rootfs.img /squashmnt
+
+	if [ -f /container/ext3fs.img ]; then
+		mount -o rw,loop,noatime,nodiratime /container/ext3fs.img /persistmnt
+	else
+		mount -t tmpfs -o noatime,nodiratime none /persistmnt
+	fi
+	echo ${rootmnt}
+	mount -t unionfs -o dirs=/persistmnt=rw:/squashmnt=ro none ${rootmnt}
+	if [ -f /container/install.sh ]; then
+		mkdir -p ${rootmnt}/tmp/install
+		mount --bind /dev ${rootmnt}/dev
+		mount --bind /sys ${rootmnt}/sys
+		mount --bind /container ${rootmnt}/tmp/install
+		cp /container/install.sh ${rootmnt}
+		cp /container/install.cfg ${rootmnt}
+		chroot ${rootmnt} /install.sh
+	fi
+}
+
