@@ -1052,7 +1052,7 @@
                                         <property name="visible">True</property>
                                         <property name="sensitive">False</property>
                                         <property name="can_focus">True</property>
-                                        <property name="tooltip" translatable="yes">Create an installation image that can be burned to a USB flash drive.  When you boot off the USB flash drive it will erase the target harddrive, then repartition and install the target image.</property>
+                                        <property name="tooltip" translatable="yes">Create a NAND image that can be burned to a Compact flash drive for Moorestown.</property>
                                         <property name="response_id">0</property>
                                         <signal name="clicked" handler="on_create_NAND_btn_clicked"/>
                                         <child>

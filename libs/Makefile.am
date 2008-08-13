@@ -1,7 +1,7 @@
 python_scriptdir = ${pkgdatadir}/lib
 python_script_SCRIPTS = \
 	InstallImage.py \
-	Mkinitrd.py \	
+	Mkinitrd.py \
 	Platform.py \
 	Project.py \
 	SDK.py \

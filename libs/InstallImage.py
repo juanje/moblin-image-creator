@@ -420,7 +420,7 @@ class InstallImage(object):
         if self.project.platform.config_info['package_manager'] == 'apt':
             self.target.chroot("dpkg-query --show", output = all_packages)
         if self.project.platform.config_info['package_manager'] == 'yum':
-            self.target.chroot("rpm  -qa", output = all_packages)
+            self.target.chroot("rpm -qa", output = all_packages)
         manifest = open(image_path.rstrip('.img') + '.manifest', 'w')
         print >>manifest, "\n".join(all_packages)
         manifest.close()
@@ -493,10 +493,7 @@ class BaseUsbImage(InstallImage):
             out_file.write(out_string)
         out_file.close()
 
-        if self.project.platform.config_info['package_manager'] == 'apt':
-            cmd_line = "mkfs.vfat %s" % self.path
-        if self.project.platform.config_info['package_manager'] == 'yum':
-            cmd_line = "/sbin/mkfs.vfat %s" % self.path
+        cmd_line = "mkfs.vfat %s" % self.path
 
         result = pdk_utils.execCommand(cmd_line, callback = self.progress_callback)
         if result:
@@ -518,10 +515,7 @@ class BaseUsbImage(InstallImage):
             out_file.write(out_string)
         out_file.close()
 
-        if self.project.platform.config_info['package_manager'] == 'apt':
-            cmd_line = "mkfs.ext3 %s -F" % path
-        if self.project.platform.config_info['package_manager'] == 'yum':
-            cmd_line = "/sbin/mkfs.ext3 %s -F" % path
+        cmd_line = "mkfs.ext3 %s -F" % path
 
         result = pdk_utils.execCommand(cmd_line, callback = self.progress_callback)
         if result:
@@ -659,7 +653,7 @@ class NANDImage(InstallImage):
     def create_image(self):
         print os.path.join(self.project.platform.path, "nand.sh")
         if not os.path.isfile(os.path.join(self.project.platform.path, "nand.sh")):
-               raise ValueError("NANDImage: This platform could not support NAND image!")
+               raise ValueError(_("NANDImage: This platform could not support NAND image!"))
         print _("NANDImage: Creating NAND Image...")
 
         if self.project.platform.config_info['package_manager'] == 'apt':

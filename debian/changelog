@@ -98,8 +98,9 @@ moblin-image-creator (0.45) UNRELEASED; urgency=low
   * Added entry Makefile.am on mccaslin-lpia-fedora.
   * Added entry busybox in defaults.cfg.
   * Cleaned to dirty codes.
+  * Added some localization and cleaned to dirty codes.
 
- -- Mitsutaka Amano <mamano@miraclelinux.com>  Wed, 13 Aug 2008 20:53:52 +0900
+ -- Mitsutaka Amano <mamano@miraclelinux.com>  Wed, 13 Aug 2008 22:17:33 +0900
 
 moblin-image-creator (0.44) gaston; urgency=low
 

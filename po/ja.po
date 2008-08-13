@@ -151,7 +151,8 @@ msgid ""
 msgstr ""
 "ターゲット名は英数字、ハイフンおよびアンダースコアのみ含むことができます"
 
-#: ../gui/gui.py:468 ../gui/gui.py:801 ../gui/gui.py:821 ../gui/gui.py:843
+#: ../gui/gui.py:473 ../gui/gui.py:810 ../gui/gui.py:830 ../gui/gui.py:852
+#: ../gui/gui.py:872
 #, python-format
 msgid "Please wait while creating %s"
 msgstr "「%s」を作成しています。しばらくお待ちください"
@@ -248,6 +249,24 @@ msgstr "ターゲットパス: %s"
 #, python-format
 msgid "Please wait while while creating %s"
 msgstr "「%s」を作成しています。しばらくお待ちください"
+
+#: ../gui/gui.py:891
+#, python-format
+msgid "Creating directory %s ... "
+msgstr "ディレクトリ「%s」を作成しています..."
+
+#: ../gui/gui.py:894
+#, python-format
+msgid "Creating image %s ... "
+msgstr "イメージ「%s」を作成しています..."
+
+#: ../gui/gui.py:898
+msgid "Please wait while creating shared image..."
+msgstr "共有イメージ「%s」を作成しています。しばらくお待ちください"
+
+#: ../gui/gui.py:905
+msgid "Choose a Live USB image"
+msgstr "Live USBイメージを選択してください"
 
 #: ../gui/gui.py:885 ../gui/gui.py:1021
 msgid "No target image selected!"
@@ -754,6 +773,14 @@ msgstr "grub.conf kernelコマンドラインが変更されました"
 #: ../libs/InstallImage.py:593
 msgid "HddImage: Create Hard Disk Image not implemented!"
 msgstr "HDDイメージ: ハードディスクイメージの作成は実装されていません!"
+
+#: ../libs/InstallImage.py:656
+msgid "NANDImage: This platform could not support NAND image!"
+msgstr "NAND型イメージ: このプラットフォームはNAND型イメージをサポートしていません!"
+
+#: ../libs/InstallImage.py:657
+msgid "NANDImage: Creating NAND Image..."
+msgstr "NAND型イメージ: NAND型イメージを作成しています..."
 
 #: ../libs/InstallImage.py:638
 #, python-format
@@ -1323,14 +1350,10 @@ msgid ""
 "moblin_apt.__aptgetPostRun() called without corresponding aptgetPreRun()"
 msgstr ""
 
-#: ../libs/moblin_yum.py:42
-msgid "yum.installPackages: Not implemented yet!!!!"
-msgstr "yum.installPackages: まだ実装されてません!!!!"
-
 #: ../libs/moblin_yum.py:54
 #, python-format
 msgid "Running 'yum install' command: %s"
-msgstr ""
+msgstr "'yum install' コマンドを実行しています: %s"
 
 #: ../libs/moblin_yum.py:58
 msgid "Completed 'yum install' successfully"
@@ -1652,7 +1675,7 @@ msgstr ""
 
 #: ../gui/image-creator.glade:903
 msgid "Live USB"
-msgstr "Live USB イメージ(読み込み専用)"
+msgstr "Live USB イメージ\n(読込専用)"
 
 #: ../gui/image-creator.glade:924
 msgid ""
@@ -1670,7 +1693,7 @@ msgstr ""
 
 #: ../gui/image-creator.glade:939
 msgid "Live RW USB"
-msgstr "Live USB イメージ(読み込み/書き込み可能)"
+msgstr "Live USB イメージ\n(読込/書込可能)"
 
 #: ../gui/image-creator.glade:961
 msgid ""
@@ -1699,7 +1722,19 @@ msgstr ""
 
 #: ../gui/image-creator.glade:1023
 msgid "Live CD"
-msgstr "Live CD イメージ(読み込み専用)"
+msgstr "Live CD イメージ\n(読込専用)"
+
+#: ../gui/image-creator.glade:1055
+msgid ""
+"Create a NAND image that can be burned to a Compact flash drive for "
+"Moorestown."
+msgstr ""
+"コンパクトフラッシュに書き込む事が可能な、NAND型イメージを作成します(Moorestown用)。"
+""
+
+#: ../gui/image-creator.glade:1070
+msgid "NAND Image"
+msgstr "NAND型イメージ"
 
 #: ../gui/image-creator.glade:1055
 msgid ""
@@ -1712,6 +1747,14 @@ msgstr ""
 #: ../gui/image-creator.glade:1070
 msgid "Write USB Image"
 msgstr "USBイメージの書き込み"
+
+#: ../gui/image-creator.glade:1149
+msgid "Boot a live USB image in KVM"
+msgstr "KVM上でLive USBイメージを起動します"
+
+#: ../gui/image-creator.glade:1164
+msgid "Launch VM"
+msgstr "KVMの起動"
 
 #: ../gui/image-creator.glade:1125
 msgid "<b>Target Images</b>"

@@ -869,7 +869,7 @@ class App(object):
             progress_tree = gtk.glade.XML(self.gladefile, 'ProgressDialog')
             progress_dialog = progress_tree.get_widget('ProgressDialog')
             progress_dialog.connect('delete_event', self.ignore)
-            progress_tree.get_widget('progress_label').set_text("Please wait while creating %s" % img_name)
+            progress_tree.get_widget('progress_label').set_text(_("Please wait while creating %s") % img_name)
             self.progressbar = progress_tree.get_widget('progressbar')
             try:
                 self.current_project().create_NAND_image(target.name, img_name)
@@ -885,22 +885,24 @@ class App(object):
     def on_launch_vm_clicked(self, widget):
         # check whether the shared image exists
         # the path of folder containing this image is fixed and hardcoded
-        if os.path.exists ("/var/lib/moblin-image-creator/kvm") == False:
-            print ("Creating folder /var/lib/moblin-image-creator/kvm ... ")
-            os.popen("mkdir /var/lib/moblin-image-creator/kvm")
-        if os.path.isfile("/var/lib/moblin-image-creator/kvm/mic_vm_share.img") == False:
-            print ("Creating image /var/lib/moblin-image-creator/kvm/mic_vm_share.img ... ")
+        kvm_dir = '/var/lib/moblin-image-creator/kvm'
+        kvmimg_file = os.path.join(kvm_dir, 'mic_vm_share.img')
+        if os.path.exists (kvm_dir) == False:
+            print _("Creating directory %s ... ") % kvm_dir
+            os.popen("mkdir %s") % kvm_dir
+        if os.path.isfile(kvmimg_file) == False:
+            print _("Creating image %s ... ") % kvmimg_file
             progress_tree = gtk.glade.XML(self.gladefile, 'ProgressDialog')
             progress_dialog = progress_tree.get_widget('ProgressDialog')
             progress_dialog.connect('delete_event', self.ignore)
             progress_tree.get_widget('progress_label').set_text(_("Please wait while creating shared image..."))
             self.progressbar = progress_tree.get_widget('progressbar')
-            cmd = "qemu-img create /var/lib/moblin-image-creator/kvm/mic_vm_share.img -f qcow2 4G"
+            cmd = "qemu-img create %s -f qcow2 4G" % kvmimg_file
             pdk_utils.execCommand(cmd, False, None, self.gui_throbber)
             progress_dialog.destroy()
         # select a live usb image        
         target = self.current_target()
-        dialog = gtk.FileChooserDialog(action=gtk.FILE_CHOOSER_ACTION_OPEN, title="Choose a Live USB image")
+        dialog = gtk.FileChooserDialog(action=gtk.FILE_CHOOSER_ACTION_OPEN, title=_("Choose a Live USB image"))
         dialog.set_current_folder(target.top + "/image/")
         dialog.add_button(gtk.STOCK_OK, gtk.RESPONSE_OK)
         dialog.add_button(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL)
@@ -923,7 +925,6 @@ class App(object):
             os.popen("kvm -no-acpi -m 384 -hda " + live_img + " -hdb /var/lib/moblin-image-creator/kvm/mic_vm_share.img -boot c &")
         elif mic_cfg.config.get('general', 'package_manager') == 'yum':
             os.popen("qemu-kvm -no-acpi -m 384 -hda " + live_img + " -hdb /var/lib/moblin-image-creator/kvm/mic_vm_share.img -boot c &")
-
 
     def getImageName(self, default_name = ".img"):
         """Function to query the user for the name of the image file they want
