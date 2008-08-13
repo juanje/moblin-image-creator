@@ -1391,6 +1391,21 @@ msgstr "'yum install -f'を15秒後に再試行します"
 msgid "Running 'yum clean' command: %s"
 msgstr "'yum clean'コマンドを実行しています: %s"
 
+#: ../libs/moblin_yum.py:107
+#, python-format
+msgid "Running command: %s"
+msgstr "実行中のコマンド: %s"
+
+#: ../libs/moblin_yum.py:110
+#, python-format
+msgid "Running rpm db reset command: %s"
+msgstr "実行中のRPMデータベース初期化コマンド: %s"
+
+#: ../libs/moblin_yum.py:114
+#, python-format
+msgid "Error running command %s"
+msgstr "実行コマンドエラー: %s"
+
 #: ../libs/pdk_utils.py:67
 #, python-format
 msgid "Creating sample %s file"
