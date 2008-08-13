@@ -253,10 +253,7 @@ class InstallImage(object):
         fs_path      = self.target.fs_path[len(self.project.path):]
         image_path   = self.target.image_path[len(self.project.path):]
         image_path   = os.path.join(image_path,'rootfs.img')
-        if self.project.platform.config_info['package_manager'] == 'apt':
-            cmd          = "mksquashfs %s %s -no-progress -ef %s" % (fs_path, image_path, self.exclude_file)
-        if self.project.platform.config_info['package_manager'] == 'yum':
-           cmd          = "/sbin/mksquashfs %s %s -info -ef %s" % (fs_path, image_path, self.exclude_file)
+        cmd          = "mksquashfs %s %s -no-progress -ef %s" % (fs_path, image_path, self.exclude_file)
         self.write_manifest(self.path)
         self.target.umount()
         print _("Executing the mksquashfs program: %s") % cmd
@@ -290,10 +287,7 @@ class InstallImage(object):
         fs_path    = os.path.join(fs_path, 'boot')
         image_path = self.target.image_path[len(self.project.path):]
         image_path = os.path.join(image_path,'bootfs.img')
-        if self.project.platform.config_info['package_manager'] == 'apt':
-            cmd        = "mksquashfs %s %s -no-progress" % (fs_path, image_path)
-        if self.project.platform.config_info['package_manager'] == 'yum':
-            cmd        = "/sbin/mksquashfs %s %s -no-progress" % (fs_path, image_path)
+        cmd        = "mksquashfs %s %s -no-progress" % (fs_path, image_path)
         self.project.chroot(cmd)
 
     def delete_bootfs(self):

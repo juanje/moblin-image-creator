@@ -36,6 +36,10 @@ import pdk_utils
 
 _ = gettext.lgettext
 
+ENVIRONMENT_VARS = {
+    'PATH' : '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
+}
+
 debug = False
 if mic_cfg.config.has_option('general', 'debug'):
     debug = int(mic_cfg.config.get('general', 'debug'))
@@ -57,7 +61,8 @@ def main():
         sys.exit(1)
     # Make sure the executables we need are on the system
     verifyExes()
-
+    # Set needed environment variables
+    setEnvironmentVariables()
     # Initial stuff for Internationlization and Localization support.
     # Locale stuff
     # internationalization
@@ -142,7 +147,6 @@ def main():
         return 1
     sdk.umount()
     return 0
-        
 
 def parseCommandLine():
     valid_commands = {
@@ -679,6 +683,10 @@ def verifyExes():
     if not exes_found:
         print _("Without the executable(s) listed, image-creator will fail to operate properly.")
         sys.exit(1)
+
+def setEnvironmentVariables():
+    for key, value in ENVIRONMENT_VARS.iteritems():
+        os.environ[key] =  value
 
 if __name__ == '__main__':
     if debug: sys.excepthook = print_exc_plus
