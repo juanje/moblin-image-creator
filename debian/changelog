@@ -105,9 +105,10 @@ moblin-image-creator (0.45) UNRELEASED; urgency=low
   * Adding nand to command line
   * Adding repo editor and changes to gui
   * Adding conflicts to fsets
-  * Minor changes to pdk_utils and mic_cfg 
+  * Minor changes to pdk_utils and mic_cfg
+  * Bug fixes in InstallImage.py 
 
- -- Prajwal Mohan <prajwal@linux.intel.com>  Sun, 17 Aug 2008 11:05:50 -0700
+ -- Prajwal Mohan <prajwal@linux.intel.com>  Sun, 17 Aug 2008 11:08:43 -0700
 
 moblin-image-creator (0.44) gaston; urgency=low
 

@@ -207,12 +207,26 @@ class InstallImage(object):
             shutil.copyfile(src_path, dst_path)
 
     def create_fstab(self, swap = True):
-        fstab_file = open(os.path.join(self.target.fs_path, 'etc/fstab'), 'w')
-        print >> fstab_file, "unionfs	    /	            unionfs defaults	0 0"
-        print >> fstab_file, "proc			/proc			proc	defaults	0 0"
-        if swap:
-            print >> fstab_file, "/dev/sda3		none			swap	sw		0 0"
-        fstab_file.close()
+        #FIXME
+        #Check to see if fstab exists as a part of platform definition
+        #If it exists copy that
+        if os.path.isfile(os.path.join(self.project.platform.path, 'fstab')):
+            try:
+                pdk_utils.copy(os.path.join(self.project.platform.path, 'fstab'), os.path.join(self.target.fs_path, 'etc/fstab'))
+            except:
+                self.create_new_fstab(swap)
+        #if it does not exists, create one
+        else:
+            self.create_new_fstab(swap)
+
+    def create_new_fstab(self, swap = True):
+       fstab_file = open(os.path.join(self.target.fs_path, 'etc/fstab'), 'w')
+       print >> fstab_file, "unionfs	    /	            unionfs defaults	0 0"
+       print >> fstab_file, "proc			/proc			proc	defaults	0 0"
+       if swap:
+          print >> fstab_file, "/dev/sda3		none			swap	sw		0 0"
+       fstab_file.close()
+        
 
     def create_modules_dep(self):
         base_dir = self.target.fs_path[len(self.project.path):]
@@ -281,7 +295,10 @@ class InstallImage(object):
         for count, kernel in enumerate(self.kernels):
             version_str = kernel.split('vmlinuz-').pop().strip()
             initrd_name = "initrd.img-" + version_str
-            shutil.copy("/tmp/.tmp.initrd%d" % count, os.path.join(self.target.fs_path, 'boot', initrd_name))
+            try:
+                shutil.copy("/tmp/.tmp.initrd%d" % count, os.path.join(self.target.fs_path, 'boot', initrd_name))
+            except OSError:
+                print _("shutil.copy failed. Ignored error")
         self.kernels.pop(0)
         fs_path    = self.target.fs_path[len(self.project.path):]
         fs_path    = os.path.join(fs_path, 'boot')
@@ -297,7 +314,11 @@ class InstallImage(object):
             self.bootfs_path = ''
 
     def create_install_script(self, output_dir):
-        shutil.copy(os.path.join(self.project.platform.path, 'install.sh'), output_dir)
+        try:
+            shutil.copy(os.path.join(self.project.platform.path, 'install.sh'), output_dir)
+        except OSError:
+            print _("shutil.copy failed. Ignored error")
+
         self.create_install_cfg(output_dir)
 
     def create_install_cfg(self, output_dir):
@@ -443,7 +464,10 @@ class LiveIsoImage(InstallImage):
         self.kernels.insert(0,self.default_kernel)
         for count, kernel in enumerate(self.kernels):
             initrd_path = os.path.join(self.tmp_path, "initrd%d.img" % count)
-            shutil.move("/tmp/.tmp.initrd%d" % count, initrd_path)
+            try:
+                shutil.move("/tmp/.tmp.initrd%d" % count, initrd_path)
+            except:
+                print _("shutil.move failed. Ignored error")
         self.kernels.pop(0)
         # Flashing yellow on a blue background
         self.install_kernels("9e", image_type)
@@ -567,11 +591,18 @@ class LiveUsbImage(BaseUsbImage):
         self.kernels.insert(0,self.default_kernel)
         for count, kernel in enumerate(self.kernels):
             initrd_path = os.path.join(self.tmp_path, "initrd%d.img" % count)
-            shutil.move("/tmp/.tmp.initrd%d" % count, initrd_path)
+            try:
+                shutil.move("/tmp/.tmp.initrd%d" % count, initrd_path)
+            except:
+                print _("shutil.move failed. Ignored error")
         self.kernels.pop(0)
         # Flashing yellow on a blue background
         self.install_kernels("9e", image_type)
-        pdk_utils.copy(self.rootfs_path, self.tmp_path, callback = self.progress_callback)
+        try:
+            pdk_utils.copy(self.rootfs_path, self.tmp_path, callback = self.progress_callback)
+        except OSError:
+            print _("Could not copy rootfs_path. Ignored error")
+
         if fs_type == 'EXT3FS':
             self.create_ext3fs_file(os.path.join(self.tmp_path, 'ext3fs.img'), ext3fs_fs_size)
         self.umount_container()
@@ -606,13 +637,26 @@ class InstallUsbImage(BaseUsbImage):
         self.kernels.insert(0,self.default_kernel)
         for count, kernel in enumerate(self.kernels):
             initrd_path = os.path.join(self.tmp_path, "initrd%d.img" % count)
-            shutil.move("/tmp/.tmp.initrd%d" % count, initrd_path)
+            try:
+                shutil.move("/tmp/.tmp.initrd%d" % count, initrd_path)
+            except:
+                print _("shutil.move failed. Ignored error")
         self.kernels.pop(0)
         # Flashing yellow on a red background
         self.install_kernels("ce", image_type)
-        pdk_utils.copy(self.rootfs_path, self.tmp_path, callback = self.progress_callback)
-        pdk_utils.copy(self.bootfs_path, self.tmp_path, callback = self.progress_callback)
-        self.create_install_script(self.tmp_path)
+        try:
+            pdk_utils.copy(self.rootfs_path, self.tmp_path, callback = self.progress_callback)
+        except OSError:
+            print _("Could not copy rootfs_path. Ignored error")
+        try:
+            pdk_utils.copy(self.bootfs_path, self.tmp_path, callback = self.progress_callback)
+        except OSError:
+            print _("Could not copy bootfs_path. Ignored error")
+        try:
+            self.create_install_script(self.tmp_path)
+        except OSError:
+            print _("Could create install script. Ignored error")
+
         self.umount_container()
         self.delete_rootfs()
         self.delete_bootfs()
