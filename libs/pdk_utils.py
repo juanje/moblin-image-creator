@@ -123,8 +123,17 @@ def get_current_udisks():
     work_list = getUsbDirTree(dirname)
     usb_list = [ x for x in work_list if re.search(r'usb', x) ]
     for filename in usb_list:
+        print _("usb_list file is %s") % filename
         device_dir = os.path.join('/sys/devices', filename)
-        if os.path.isdir(device_dir):
+        block_dir = os.path.join(device_dir, 'block')
+        if (os.path.isdir(block_dir)) :
+            for result in os.listdir(block_dir):
+                print result
+                usb_dev = os.path.join('/dev',result)
+                if os.path.exists(usb_dev):
+                    usb_devices.append(usb_dev)
+                break
+        elif os.path.isdir(device_dir):
             for device_file in os.listdir(device_dir):
                 full_path = os.path.join(device_dir, device_file)
                 result = re.search(r'^block:(?P<dev>.*)', device_file)
@@ -132,6 +141,7 @@ def get_current_udisks():
                     usb_dev = os.path.join('/dev', result.group('dev'))
                     if os.path.exists(usb_dev):
                         usb_devices.append(usb_dev)
+                    break
     return usb_devices
 
 def getUsbDirTree(dirname):
