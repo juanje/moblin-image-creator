@@ -132,7 +132,7 @@ def main():
         update_project(options)
     elif options.cmd == "update-target":
         update_target(options)
-    elif options.cmd in ["create-live-usb", "create-live-usbrw", "create-install-usb", "create-live-iso"]:
+    elif options.cmd in ["create-live-usb", "create-live-usbrw", "create-install-usb", "create-live-iso", "create-nand"]:
         create_image(options)
     elif options.cmd == "chroot-project":
         chroot_project(options)
@@ -158,6 +158,7 @@ def parseCommandLine():
         "create-live-usb" :     1,
         "create-live-usbrw" :   1,
         "create-live-iso" :     1,
+        "create-nand" :         1,
         "create-project" :      1,
         "create-target" :       1,
         "delete-project" :      1,
@@ -294,6 +295,7 @@ Examples:
                             |create-live-usbrw \\
                             |create-install-usb]  \\
                             |create-live-iso \\
+                            |create-nand \\
                   --project-name='Myproject' \\
                   --target-name='MyTraget' \\
                   --image-name='MyImage'
@@ -603,6 +605,8 @@ def create_image(options):
         proj.create_install_usb(options.target_name, options.image_name)
     elif options.cmd == "create-live-iso":
         proj.create_live_iso(options.target_name, options.image_name)
+    elif options.cmd == "create-nand":
+        proj.create_NAND_image(options.target_name, options.image_name)
 
 def chroot_project(options):
     proj = sdk.projects[options.project_name]
