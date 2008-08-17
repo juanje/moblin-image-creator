@@ -236,12 +236,12 @@ class projectAssistant(object):
             if self.sdk.platforms[pname].config_info != None:
                 pdesc = " - (%s)" % self.sdk.platforms[pname].config_info['description']
                 packageManagerDesc = self.sdk.platforms[pname].config_info['package_manager']
-            if packageManager == packageManagerDesc:
-                self.projectPlatformCombo.append_text(pname)
-                added = True
-            elif packageManagerDesc == "":
-                self.projectPlatformCombo.append_text(pname)
-                added = True
+            #if packageManager == packageManagerDesc:
+            self.projectPlatformCombo.append_text(pname)
+            added = True
+            #elif packageManagerDesc == "":
+            #    self.projectPlatformCombo.append_text(pname)
+            #    added = True
             # If previously selected an entry, select it again
             if added:
                 if  (pname + pdesc) == platform:
@@ -405,13 +405,24 @@ class projectAssistant(object):
                 self.fsetTouple[i] = (self.fsetTouple[i][0], self.fsetTouple[i][1], True, self.fsetTouple[i][3])
         if active == True:
             i = 0
+            for item in self.fsetTouple:                
+                if fSetName != item[0]:
+                    for conflict in fset['conflicts']:
+                        if conflict == item[0]:
+                            self.fsetTouple[i][1].set_active(False)
+                            self.fsetTouple[i][1].set_sensitive(False)                    
+                            self.fsetTouple[i] = (self.fsetTouple[i][0], self.fsetTouple[i][1], False, self.fsetTouple[i][3])
+                            if self.fsetTouple[i][1].get_label().find("Conflicts: ") != 0:
+                                self.fsetTouple[i][1].set_label("Conflicts: " + self.fsetTouple[i][1].get_label())
+                i = i + 1
+            i = 0
             for item in self.fsetTouple:
                 if fSetName != item[0]:
                     for dep in fset['deps']:
                         if dep == item[0]:
                             if self.fsetTouple[i][1].get_active() == False:
                                 self.fsetTouple[i][1].set_active(True)
-                                #sex_active causes this function to be called recurssively
+                                #set_active causes this function to be called recurssively
                             self.fsetTouple[i][1].set_sensitive(False)
                             self.fsetTouple[i] = (self.fsetTouple[i][0], self.fsetTouple[i][1], False, self.fsetTouple[i][3] + 1)
                 i = i + 1
@@ -428,6 +439,17 @@ class projectAssistant(object):
                                 self.fsetTouple[i][1].set_sensitive(True)
                 else:
                     self.fsetTouple[i] = (self.fsetTouple[i][0], self.fsetTouple[i][1], False, self.fsetTouple[i][3])
+                i = i + 1
+
+            i = 0
+            for item in self.fsetTouple:                
+                if fSetName != item[0]:
+                    for conflict in fset['conflicts']:
+                        if conflict == item[0]:
+                            self.fsetTouple[i][1].set_sensitive(True)                    
+                            self.fsetTouple[i] = (self.fsetTouple[i][0], self.fsetTouple[i][1], False, self.fsetTouple[i][3])
+                            if self.fsetTouple[i][1].get_label().find("Conflicts: ") == 0:
+                                self.fsetTouple[i][1].set_label(self.fsetTouple[i][1].get_label().split("Conflicts: ")[1])
                 i = i + 1
 
 

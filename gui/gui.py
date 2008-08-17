@@ -34,6 +34,7 @@ import pdk_utils
 import SDK
 import mic_cfg
 import project_assistant
+import repo_editor
 
 debug = False
 if mic_cfg.config.has_option('general', 'debug'):
@@ -98,9 +99,12 @@ class App(object):
                 "on_Save_activate":self.on_Save_activate,
                 "on_upgrade_project_clicked":self.on_upgrade_project_clicked,
                 "on_upgrade_target_clicked":self.on_upgrade_target_clicked,
+                "on_editRepo_clicked":self.on_editRepo_clicked,
                 "on_MirrorSettings_activate":self.on_MirrorSettings_activate,
                 "on_Add_Project_Wizard_activate":self.on_Add_Project_Wizard_activate,
-                "on_fsetsInfo_activate":self.on_fsetsInfo_activate
+                "on_fsetsInfo_activate":self.on_fsetsInfo_activate,
+                "on_editRepo_activate": self.on_editRepo_activate,
+                "on_cmd_history_clicked": self.on_cmd_history_clicked
                 }
         self.widgets.signal_autoconnect(dic)
         # setup projectView widget
@@ -132,13 +136,20 @@ class App(object):
         self.projectView_handler = self.projectView.get_selection().connect("changed", self.project_view_changed)
         self.targetView_handler = self.targetView.get_selection().connect("changed", self.target_view_changed)
 
+        main_window = self.widgets.get_widget("main")
+        main_window.set_resizable(True)
+        #main_window.set_size_request(900, 600)
+
         self.newFeatureDialog()        
+
         obsolete_projects = self.sdk.return_obsolete_projects()
         if obsolete_projects:         
             error_message = ""
             for proj in obsolete_projects:
                 error_message = error_message + " " + proj
             self.show_error_dialog(_("Found unsupported project(s): %s\nskipping them") % error_message)
+
+        self.cmd_history=[]
 
     def run(self):
         gtk.main()
@@ -216,6 +227,7 @@ class App(object):
         self.buttons.install_fset.set_sensitive(target_selected_state)
         self.buttons.target_term_launch.set_sensitive(target_selected_state)
         self.buttons.upgrade_target.set_sensitive(target_selected_state)
+        self.buttons.edit_repo.set_sensitive(target_selected_state)
         # Items which should be enabled if our selected target has an fset
         self.buttons.create_liveusb.set_sensitive(fset_state)
         self.buttons.create_liverwusb.set_sensitive(fset_state)
@@ -352,7 +364,10 @@ class App(object):
                     gtk.main_iteration(False)
                 platformName = dialog.platform.split()[0]
                 try:
-                    proj = self.sdk.create_project(dialog.path, dialog.name, dialog.desc, self.sdk.platforms[platformName])
+                    if mic_cfg.config.get('general', 'use_rootstraps') == '1':
+                        proj = self.sdk.create_project(dialog.path, dialog.name, dialog.desc, self.sdk.platforms[platformName])
+                    else:
+                        proj = self.sdk.create_project(dialog.path, dialog.name, dialog.desc, self.sdk.platforms[platformName], False)
                 except ValueError:
                     print _("Project Creation cancelled")
                     progress_dialog.destroy()
@@ -373,6 +388,8 @@ class App(object):
                 
                 progress_dialog.destroy()
                 if target_name != None:
+                    mic_cmd = 'image-creator --command=create-target --project-name=\'' + dialog.name + '\' --target-name=\'' + target_name + '\''
+                    self.cmd_history.append(mic_cmd)
                     self.create_new_target(proj, target_name)
 
                 self.refreshProjectList()
@@ -429,6 +446,8 @@ class App(object):
                 for item in treePathList:
                     project = self.sdk.projects[model[item][0]]
                     progress_tree.get_widget('progress_label').set_text(_("Please wait while deleting %s") % project.name)
+                    mic_cmd = 'image-creator --command=delete-project --project-name=\'' + project.name + '\''
+                    self.append_cmd_list(mic_cmd)
                     self.sdk.delete_project(project.name)
                 self.remove_current_project()
             except pdk_utils.ImageCreatorUmountError, e:
@@ -474,7 +493,10 @@ class App(object):
         self.progressbar = progress_tree.get_widget('progressbar')
         while gtk.events_pending():
             gtk.main_iteration(False)
-        project.create_target(target_name)
+        if mic_cfg.config.get('general', 'use_rootstraps') == '1':
+            project.create_target(target_name)
+        else:
+            project.create_target(target_name, False)
         self.redraw_target_view()
         progress_dialog.destroy()
 
@@ -491,13 +513,24 @@ class App(object):
                 self.fsetTouple[i] = (self.fsetTouple[i][0], self.fsetTouple[i][1], True, self.fsetTouple[i][3])
         if active == True:
             i = 0
+            for item in self.fsetTouple:                
+                if fSetName != item[0]:
+                    for conflict in fset['conflicts']:
+                        if conflict == item[0]:
+                            self.fsetTouple[i][1].set_active(False)
+                            self.fsetTouple[i][1].set_sensitive(False)                    
+                            self.fsetTouple[i] = (self.fsetTouple[i][0], self.fsetTouple[i][1], False, self.fsetTouple[i][3])
+                            if self.fsetTouple[i][1].get_label().find("Conflicts: ") != 0:
+                                self.fsetTouple[i][1].set_label("Conflicts: " + self.fsetTouple[i][1].get_label())
+                i = i + 1
+            i = 0
             for item in self.fsetTouple:
                 if fSetName != item[0]:
                     for dep in fset['deps']:
                         if dep == item[0]:
                             if self.fsetTouple[i][1].get_active() == False:
                                 self.fsetTouple[i][1].set_active(True)
-                                #sex_active causes this function to be called recurssively
+                                #set_active causes this function to be called recurssively
                             self.fsetTouple[i][1].set_sensitive(False)
                             self.fsetTouple[i] = (self.fsetTouple[i][0], self.fsetTouple[i][1], False, self.fsetTouple[i][3] + 1)
                 i = i + 1
@@ -515,6 +548,18 @@ class App(object):
                 else:
                     self.fsetTouple[i] = (self.fsetTouple[i][0], self.fsetTouple[i][1], False, self.fsetTouple[i][3])
                 i = i + 1
+
+            i = 0
+            for item in self.fsetTouple:                
+                if fSetName != item[0]:
+                    for conflict in fset['conflicts']:
+                        if conflict == item[0]:
+                            self.fsetTouple[i][1].set_sensitive(True)                    
+                            self.fsetTouple[i] = (self.fsetTouple[i][0], self.fsetTouple[i][1], False, self.fsetTouple[i][3])
+                            if self.fsetTouple[i][1].get_label().find("Conflicts: ") == 0:
+                                self.fsetTouple[i][1].set_label(self.fsetTouple[i][1].get_label().split("Conflicts: ")[1])
+                i = i + 1
+
 
     def setup_fsets_dialog(self, widget, platformName, showFsets = ""):
         tree = gtk.glade.XML(self.gladefile, 'fsetsDialog')
@@ -553,6 +598,11 @@ class App(object):
                 toolTipText += " %s " % pkgs
             if self.pygtkOldVersion == False:
                 self.fsetTouple[i][1].set_tooltip_markup(toolTipText)
+            for installedFset in installed_fsets:
+                for conflict in platform.fset[installedFset]['conflicts']:
+                    if conflict == fset_name:
+                        self.fsetTouple[i][1].set_sensitive(False)
+                        self.fsetTouple[i][1].set_label("Conflicts: " + self.fsetTouple[i][1].get_label())
             i += 1
         if not iter:
             self.show_error_dialog(_("Nothing available to install!"))
@@ -605,6 +655,11 @@ class App(object):
                 print _("Installing fset %s.................\n") % fsetName
                 progress_tree.get_widget('progress_label').set_text(_("Please wait while installing %s") % fset.name)
                 try:
+                    mic_cmd = 'image-creator --command=install-fset --platform-name=\'' + platformName + '\' --project-name=\'' + self.current_project().name + '\' --target-name=\'' + self.current_target().name + '\' --fset=\'' + fsetName + '\''
+                    if debug_pkgs:
+                        mic_cmd = mic_cmd + ' --enable-debug'
+                    self.append_cmd_list(mic_cmd)
+
                     self.current_target().installFset(fset, fsets = platform.fset, debug_pkgs = debug_pkgs)
                 except ValueError, e:
                     self.show_error_dialog(e.args[0])
@@ -656,6 +711,8 @@ class App(object):
                 for item in treePathList:
                     target = self.current_project().targets[model[item][0]]
                     progress_tree.get_widget('progress_label').set_text(_("Please wait while deleting %s") % target.name)
+                    mic_cmd = 'image-creator --command=delete-target --project-name=\'' + self.current_project().name + '\' --target-name=\'' + target.name +'\''
+                    self.append_cmd_list(mic_cmd)
                     self.sdk.projects[project.name].delete_target(target.name, callback = self.gui_throbber)
                 self.remove_current_target()
             except pdk_utils.ImageCreatorUmountError, e:
@@ -742,7 +799,11 @@ class App(object):
         print _("Project path: %s") % project_path
         cmd = '/usr/bin/gnome-terminal -x /usr/sbin/chroot %s env -u SHELL HOME=/root su -p - &' % (project_path)
         print cmd
-        os.system(cmd)
+        if os.system(cmd) != 0:
+            print _("gnome-terminal may not be present. Trying xterm")    
+            cmd = '/usr/bin/xterm -e /usr/sbin/chroot %s env -u SHELL HOME=/root sh &' % (project_path)
+            os.system(cmd)
+
 
     def on_target_term_launch_clicked(self, widget):
         project_path = self.current_project().path
@@ -755,7 +816,10 @@ class App(object):
         print _("Target path: %s") % target_path
         cmd = '/usr/bin/gnome-terminal -x /usr/sbin/chroot %s env -u SHELL HOME=/root su -p - &' % (target_path)
         print cmd
-        os.system(cmd)
+        if os.system(cmd) != 0:
+            print _("gnome-terminal may not be present. Trying xterm")    
+            cmd = '/usr/bin/xterm -e /usr/sbin/chroot %s env -u SHELL HOME=/root sh &' % (project_path)
+            os.system(cmd)
 
     def on_target_kernel_cmdline_clicked(self, widget):
         project_path = self.current_project().path
@@ -790,6 +854,8 @@ class App(object):
             progress_tree.get_widget('progress_label').set_text(_("Please wait while while creating %s") % img_name)
             self.progressbar = progress_tree.get_widget('progressbar')
             try:
+                mic_cmd = 'image-creator --command=create-live-usb --project-name=\'' + project.name + '\' --target-name=\'' + target.name + '\' --image-name=\'' + img_name + '\''
+                self.append_cmd_list(mic_cmd)
                 self.current_project().create_live_usb(target.name, img_name)
             except ValueError, e:
                 self.show_error_dialog(e.args[0])
@@ -810,6 +876,8 @@ class App(object):
             progress_tree.get_widget('progress_label').set_text(_("Please wait while creating %s") % img_name)
             self.progressbar = progress_tree.get_widget('progressbar')
             try:
+                mic_cmd = 'image-creator --command=create-live-usbrw --project-name=\'' + project.name + '\' --target-name=\'' + target.name + '\' --image-name=\'' + img_name + '\''
+                self.append_cmd_list(mic_cmd)
                 self.current_project().create_live_usb(target.name, img_name, 'EXT3FS')
             except ValueError, e:
                 self.show_error_dialog(e.args[0])
@@ -830,6 +898,8 @@ class App(object):
             progress_tree.get_widget('progress_label').set_text(_("Please wait while creating %s") % img_name)
             self.progressbar = progress_tree.get_widget('progressbar')
             try:
+                mic_cmd = 'image-creator --command=create-install-usb --project-name=\'' + project.name + '\' --target-name=\'' + target.name + '\' --image-name=\'' + img_name + '\''
+                self.append_cmd_list(mic_cmd)
                 self.current_project().create_install_usb(target.name, img_name)
             except ValueError, e:
                 traceback.print_exc()
@@ -852,6 +922,8 @@ class App(object):
             progress_tree.get_widget('progress_label').set_text(_("Please wait while creating %s") % img_name)
             self.progressbar = progress_tree.get_widget('progressbar')
             try:
+                mic_cmd = 'image-creator --command=create-live-iso --project-name=\'' + project.name + '\' --target-name=\'' + target.name + '\' --image-name=\'' + img_name + '\''
+                self.append_cmd_list(mic_cmd)
                 self.current_project().create_live_iso(target.name, img_name)
             except ValueError, e:
                 self.show_error_dialog(e.args[0])
@@ -872,6 +944,8 @@ class App(object):
             progress_tree.get_widget('progress_label').set_text(_("Please wait while creating %s") % img_name)
             self.progressbar = progress_tree.get_widget('progressbar')
             try:
+                mic_cmd = 'image-creator --command=create-nand --project-name=\'' + project.name + '\' --target-name=\'' + target.name + '\' --image-name=\'' + img_name + '\''
+                self.append_cmd_list(mic_cmd)
                 self.current_project().create_NAND_image(target.name, img_name)
             except ValueError, e:
                 self.show_error_dialog(e.args[0])
@@ -1187,7 +1261,8 @@ class App(object):
         progress_dialog.connect('delete_event', self.ignore)
         progress_tree.get_widget('progress_label').set_text(_("Please wait while upgrading Project"))
         self.progressbar = progress_tree.get_widget('progressbar')
-
+        mic_cmd='image-creator --command=update-project --project-name=\'' + self.current_project().name + '\''
+        self.append_cmd_list(mic_cmd)
         result = self.current_project().updateAndUpgrade()
         if result != 0:
              raise OSError(_("Internal error while attempting to run update/upgrade: %s") % result)
@@ -1200,11 +1275,17 @@ class App(object):
         progress_dialog.connect('delete_event', self.ignore)
         progress_tree.get_widget('progress_label').set_text(_("Please wait while upgrading Target"))
         self.progressbar = progress_tree.get_widget('progressbar')
-
+        mic_cmd='image-creator --command=update-target --project-name=\'' + self.current_project().name + '\' --target-name=\'' + self.current_target().name + '\''
+        self.append_cmd_list(mic_cmd)
         result = self.current_target().updateAndUpgrade()
         if result != 0:
              raise OSError(_("Internal error while attempting to run update/upgrade: %s") % result)
         progress_dialog.destroy()
+
+    def on_editRepo_clicked(self, widget):
+        editRepo = repo_editor.repoEditor(self.sdk, os.path.join(self.current_target().path, "etc/yum.repos.d"))
+        editRepo.run()
+        
 
     def formatMirrorSection(self, sectionName, sectionSearch, sectionReplace):
         sectionTextFormatted = "\n%s = [\n" % sectionName
@@ -1404,8 +1485,11 @@ class App(object):
                 self.progressbar = progress_tree.get_widget('progressbar')
                 self.statuslabel = progress_tree.get_widget('status_label')
                 while gtk.events_pending():
-                    gtk.main_iteration(False)            
-                proj = self.sdk.create_project(newProjectConfiguration.projectPath, newProjectConfiguration.projectName, newProjectConfiguration.projectDesc, self.sdk.platforms[newProjectConfiguration.projectPlatform])
+                    gtk.main_iteration(False)      
+                if mic_cfg.config.get('general', 'use_rootstraps') == '1':
+                    proj = self.sdk.create_project(newProjectConfiguration.projectPath, newProjectConfiguration.projectName, newProjectConfiguration.projectDesc, self.sdk.platforms[newProjectConfiguration.projectPlatform])
+                else:
+                    proj = self.sdk.create_project(newProjectConfiguration.projectPath, newProjectConfiguration.projectName, newProjectConfiguration.projectDesc, self.sdk.platforms[newProjectConfiguration.projectPlatform], False)
                 proj.install()
                 self.projectList.append((newProjectConfiguration.projectName, newProjectConfiguration.projectDesc, newProjectConfiguration.projectPath, newProjectConfiguration.projectPlatform))
                 
@@ -1450,6 +1534,127 @@ class App(object):
     def on_fsetsInfo_activate(self, widget):
         fsetInfoDialog = DisplayFsetInfo(self.sdk)
         fsetInfoDialog.run()
+
+    def on_editRepo_activate(self, widget):
+        dialog_tree = gtk.glade.XML(self.gladefile, 'fsetsInfo')
+        dialog = dialog_tree.get_widget('fsetsInfo')
+        dialog.set_title("Choose a Platform")
+
+        platformComboBox = dialog_tree.get_widget('platform')
+        cell = gtk.CellRendererText()
+        platformComboBox.pack_start(cell, True)
+        platformComboBox.add_attribute(cell, 'text', 0)
+
+        platformList = sorted(self.sdk.platforms.iterkeys())
+        platformEntryList = gtk.ListStore(gobject.TYPE_STRING)
+        for pname in platformList:
+            platformEntryList.append([pname])
+        platformComboBox.set_model(platformEntryList)
+
+        infoText = dialog_tree.get_widget('info')
+        infoText.hide()
+        fsetComboBox = dialog_tree.get_widget('fset')
+        fsetComboBox.hide()
+
+        dialog.run()
+        dialog.destroy()
+
+        platformName = platformComboBox.get_active_text()
+        if platformName:            
+            if self.sdk.platforms[platformName].config_info['package_manager'] == 'yum':
+                editRepo = repo_editor.repoEditor(self.sdk, os.path.join(self.sdk.platforms[platformName].path, "yum.repos.d"))
+                editRepo.run()
+            else:
+                self.show_error_dialog(_("This feature is currently available for Yum based platforms only"))
+
+    def on_cmd_history_clicked(self, widget):
+        cmd_dlg = CommandHistoryDlg(self.sdk, self.cmd_history)
+        is_clean = cmd_dlg.run()
+        if is_clean == True:
+            self.clean_cmd_list()
+
+    def append_cmd_list(self, cmd):
+        if len (self.cmd_history) == 0:
+            self.buttons.extract_cmds.set_sensitive(True)
+        self.cmd_history.append(cmd)
+
+    def clean_cmd_list(self):
+        self.cmd_history[:]=[]
+        self.buttons.extract_cmds.set_sensitive(False)
+
+class CommandHistoryDlg(object):
+    """Class to bring up command history dialogue"""
+    def __init__(self, sdk, cmd_history):
+        self.cmd_history = cmd_history
+        self.cmd_txt=""
+        for item in self.cmd_history:
+            self.cmd_txt = self.cmd_txt + item + '\n'
+        self.sdk = sdk
+        self.gladefile = os.path.join(self.sdk.path, "image-creator.glade")
+        self.widgets = gtk.glade.XML (self.gladefile, 'cmd_history_dlg')
+        dic = { "on_clean_btn_clicked" : self.on_clean_btn_clicked,
+                "on_copy_btn_clicked" : self.on_copy_btn_clicked,
+                "on_save_btn_clicked" : self.on_save_btn_clicked                }
+        self.widgets.signal_autoconnect(dic)
+        self.dialog = self.widgets.get_widget('cmd_history_dlg')
+        self.is_clean = False
+
+    def run(self):
+        cmd_txtview = self.widgets.get_widget('cmd_text')
+        cmd_txtbuff = cmd_txtview.get_buffer()
+        cmd_txtbuff.set_text(self.cmd_txt)
+        while True:
+          if self.dialog.run() == gtk.RESPONSE_CLOSE:
+            break
+        self.dialog.destroy()
+        return self.is_clean
+
+    def on_clean_btn_clicked(self, widget):
+        cmd_txtview = self.widgets.get_widget('cmd_text')
+        cmd_txtbuff = cmd_txtview.get_buffer()
+        cmd_txtbuff.set_text('')
+        self.cmd_history[:] = []
+        self.cmd_txt=''
+        self.is_clean = True
+        
+    def on_copy_btn_clicked(self, widget):
+        clipboard = gtk.clipboard_get()
+        clipboard.set_text(self.cmd_txt)
+        clipboard.store()
+
+    def on_save_btn_clicked(self, widget):
+        cmds_path = '/var/lib/moblin-image-creator/cmds'
+        while True:
+            widgets = gtk.glade.XML(self.gladefile, 'save_dlg')
+            dialog = widgets.get_widget('save_dlg')
+            dialog.set_default_response(gtk.RESPONSE_OK)
+            widgets.get_widget('file_name').set_text('.mic')
+            result = dialog.run()
+            file_name = widgets.get_widget('file_name').get_text()
+            dialog.destroy()
+            if result != gtk.RESPONSE_OK:
+                break
+            if file_name and file_name != ".mic":
+                if os.path.exists(cmds_path + '/' + file_name) == True:
+                    widgets_exist = gtk.glade.XML(self.gladefile, 'file_exist')
+                    dlg_exist = widgets_exist.get_widget('file_exist')
+                    dlg_exist.set_default_response(gtk.RESPONSE_CANCEL)
+                    result_exist = dlg_exist.run()
+                    dlg_exist.destroy()
+                    if result_exist == gtk.RESPONSE_OK:
+                        break
+                else:
+                    break
+
+        if os.path.exists (cmds_path) == False:
+            print _("Creating folder /var/lib/moblin-image-creator/cmds ... ")
+            os.popen("mkdir /var/lib/moblin-image-creator/cmds")
+        
+        mic_file = open(cmds_path + '/' + file_name, 'w')
+        print >> mic_file, "%s" % self.cmd_txt
+        mic_file.close()
+     
+        return
 
 #Class: Display Fset Info
 class DisplayFsetInfo(object):
@@ -1642,11 +1847,13 @@ class MainWindowButtons(object):
         self.add_project = widgets.get_widget('new_project_add')
         self.delete_project = widgets.get_widget('project_delete')
         self.upgrade_project = widgets.get_widget('upgrade_project')
+        self.extract_cmds = widgets.get_widget('cmd_history')
         # Target button bar
         self.add_target = widgets.get_widget('new_target_add')
         self.delete_target = widgets.get_widget('target_delete')
         self.install_fset = widgets.get_widget('target_install_fset')
         self.upgrade_target = widgets.get_widget('upgrade_target')
+        self.edit_repo = widgets.get_widget('edit_repo')
         # Action buttons
         self.create_liveusb = widgets.get_widget('create_liveUSB_btn')
         self.create_liverwusb = widgets.get_widget('create_liveRWUSB_btn')
