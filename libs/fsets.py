@@ -45,7 +45,7 @@ class FSet(object):
 
     def __parseFile(self, filename):
         valid_values = { 'desc' : '', 'pkgs' : [], 'debug_pkgs' : [],
-            'deps' : [] }
+            'deps' : [],  'conflicts' : [] }
         if not os.path.isfile(filename):
             return False
         p = ConfigParser.ConfigParser()
@@ -78,7 +78,7 @@ class FSet(object):
         return "FSet()"
 
 class FsetInstance(object):
-    valid_values = { 'desc' : '', 'pkgs' : [], 'debug_pkgs' : [], 'deps' : [] }
+    valid_values = { 'desc' : '', 'pkgs' : [], 'debug_pkgs' : [], 'deps' : [], 'conflicts' : [] }
     def __init__(self, name):
         self.name = name.lower()
         self.data = {}
