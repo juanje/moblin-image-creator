@@ -963,7 +963,8 @@ class App(object):
         kvmimg_file = os.path.join(kvm_dir, 'mic_vm_share.img')
         if os.path.exists (kvm_dir) == False:
             print _("Creating directory %s ... ") % kvm_dir
-            os.popen("mkdir %s") % kvm_dir
+            cmd = 'mkdir ' + kvm_dir
+            os.popen(cmd)
         if os.path.isfile(kvmimg_file) == False:
             print _("Creating image %s ... ") % kvmimg_file
             progress_tree = gtk.glade.XML(self.gladefile, 'ProgressDialog')
