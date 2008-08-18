@@ -43,6 +43,7 @@ AC_CONFIG_FILES([Makefile po/Makefile.in
                  platforms/mccaslin-lpia-ubuntu-hardy-ppa/Makefile
                  platforms/mccaslin-lpia-ubuntu-hardy/Makefile
                  platforms/mccaslin-lpia/Makefile
+                 platforms/menlow-lpia-ubuntu-hardy-jax10-snapshot1/Makefile
                  platforms/menlow-lpia-ubuntu-hardy-ppa-snapshot/Makefile
                  platforms/menlow-lpia-ubuntu-hardy-ppa/Makefile
                  platforms/menlow-lpia-ubuntu-hardy/Makefile

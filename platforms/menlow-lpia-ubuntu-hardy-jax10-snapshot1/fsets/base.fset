@@ -1,0 +1,53 @@
+[CrownBeach-Full-Mobile-Stack-with-Proprietary]
+DESC=The full Crown Beach stack, including proprietary (non-redistributable bits)
+PKGS=flashplugin-nonfree
+DEBUG_PKGS=
+DEPS=crownbeach-full-mobile-stack
+
+[CrownBeach-Full-Mobile-Stack]
+DESC=Virtual Fset that installs the standard mobile stack
+PKGS=
+DEBUG_PKGS=
+DEPS=ubuntu-kernel core compal-jax10-config ubuntu-mobile
+
+[Ubuntu-Kernel]
+DESC=Ubuntu Kernel Fset
+PKGS=grub linux-lpia
+DEBUG_PKGS=
+DEPS=
+
+[Core]
+DESC=Fundamental fset that provides a root filesystem that uses the Ubuntu kernel
+PKGS=busybox-initramfs initramfs-tools pm-utils vbetool usplash-theme-ubuntu dosfstools psmisc
+DEBUG_PKGS=man-db manpages openssh-client openssh-server
+DEPS=ubuntu-kernel
+
+[Compal-Jax10-Config]
+DESC=Packages needed for the Compal Jax10 validation vehicle 
+PKGS=ume-config-compal-jax10
+DEBUG_PKGS=
+DEPS=core
+
+[GNOME-Mobile]
+DESC=Subset of GNOME components for building mobile Linux stacks
+PKGS=xorg xserver-xorg-input-evtouch libgl1-mesa-dri matchbox-window-manager libglib2.0-0 dbus libdbus-1-3 libdbus-glib-1-2 gconf2 libgnomevfs2-0 libgstreamer0.10-0 libbluetooth2 libtelepathy-glib0 libavahi-glib1 libgtk2.0-0 libpango1.0-0 libcairo2 libatk1.0-0 python python-dbus python-cairo python-gconf python-gst0.10 gnome-icon-theme libdrm2 xserver-xorg-video-psb gnome-menus
+DEBUG_PKGS=xrestop
+DEPS=compal-jax10-config
+
+[Ubuntu-Mobile]
+DESC=Ubuntu Mobile using Hildon, and any base applications for same
+PKGS=ubuntu-mobile gstreamer-dbus-media-service gstreamer0.10-ffmpeg gstreamer0.10-plugins-ugly gstreamer0.10-plugins-bad moblin-keyboard-manager mousepad gnome-nettool evince gnome-system-tools
+DEBUG_PKGS=powertop
+DEPS=gnome-mobile
+
+[Developer-Tools]
+DESC=Tools for building source in the target (gcc, make, etc.)
+PKGS=ubuntu-mobile-dev libtool autoconf automake hildon-desktop-dev man manpages curl python-dev dh-make libosso-dev
+DEBUG_PKGS=
+DEPS=core
+
+[Asian-Fonts]
+DESC=Fonts for viewing websites in Chinese, Japanese, and Korean (adds 34MB)
+PKGS=ttf-arphic-uming ttf-unfonts-core ttf-kochi-gothic ttf-kochi-mincho
+DEBUG_PKGS=
+DEPS=core
