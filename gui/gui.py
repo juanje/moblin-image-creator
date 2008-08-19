@@ -997,9 +997,9 @@ class App(object):
             return
         # boot the live usb image in KVM in background
         if mic_cfg.config.get('general', 'package_manager') == 'apt':
-            os.popen("kvm -no-acpi -m 384 -hda " + live_img + " -hdb /var/lib/moblin-image-creator/kvm/mic_vm_share.img -boot c &")
+            os.popen("kvm -no-acpi -m 512 -hda " + live_img + " -hdb /var/lib/moblin-image-creator/kvm/mic_vm_share.img -boot c &")
         elif mic_cfg.config.get('general', 'package_manager') == 'yum':
-            os.popen("qemu-kvm -no-acpi -m 384 -hda " + live_img + " -hdb /var/lib/moblin-image-creator/kvm/mic_vm_share.img -boot c &")
+            os.popen("qemu-kvm -no-acpi -m 512 -hda " + live_img + " -hdb /var/lib/moblin-image-creator/kvm/mic_vm_share.img -boot c &")
 
     def getImageName(self, default_name = ".img"):
         """Function to query the user for the name of the image file they want

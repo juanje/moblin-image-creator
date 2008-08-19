@@ -1,0 +1,38 @@
+[Core]
+DESC=Fundamental fset that provide a basic console based system
+PKGS=grub passwd kernel-crown-beach coreutils upstart bash moblin-system-config eeepc-system-config moblin-release yum which dhclient openssh-clients wireless-tools rt73usb-firmware
+DEBUG_PKGS=gdb yum vim-enhanced tickless-utils oprofile
+
+[X]
+DESC=Fundmental fset that provides a X system
+PKGS=xorg-x11-server-Xorg libdrm mesa-libGL xorg-x11-fonts-misc xterm xorg-x11-xinit xorg-x11-apps
+DEBUG_PKGS=
+DEPS= core
+
+[XFCE]
+DESC=xfce
+PKGS= user-desktop
+DEBUG_PKGS=
+DEPS= x
+
+[Applications]
+DESC=Useful applications
+PKGS=firefox xterm
+DEBUG_PKGS=
+DEPS=x
+
+[Core-Dev]
+DESC=Fset that provides a basic build env
+PKGS=gcc gcc-c++ make pkgconfig rpm-build libtool autoconf automake intltool gettext m4 ncurses-devel slang-devel zlib-devel bzip2-devel dbus-devel glibc-devel libuser-devel openssl-devel rpm-devel tar vim-enhanced
+DEBUG_PKGS=
+
+[X-Dev]
+DESC=Fset that provides a basic build env allowing X drivers and applications development
+PKGS=xorg-x11-server-sdk xorg-x11-proto-devel libX11-devel libXrender-devel libXext-devel pixman-devel freeglut-devel mesa-libGL-devel libXdamage-devel libdrm-devel
+DEBUG_PKGS=
+DEPS=core-dev
+
+[Build]
+DESC=Fset that provides build system specific pkgs
+PKGS=build-root-config
+DEBUG_PKGS=

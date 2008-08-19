@@ -1,0 +1,6 @@
+[Moblin]
+name=Moblin
+failovermethod=priority
+baseurl=http://repo.moblin.org/Stable/
+enabled=1
+

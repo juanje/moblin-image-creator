@@ -1,0 +1,4 @@
+/dev/sda2               /                       ext3    defaults        0 0
+proc			/proc			proc	defaults	0 0
+/dev/sda3		none			swap	sw		0 0
+devpts			/dev/pts  		devpts  defaults	0 0

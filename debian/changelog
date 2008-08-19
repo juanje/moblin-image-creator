@@ -115,9 +115,10 @@ moblin-image-creator (0.45) UNRELEASED; urgency=low
 
   [ Prajwal Mohan ]
   * Adding ubuntu jax10 platform
-  * Adding platform definition for netbook-lpia-moblin and menlow-lpia-moblin 
+  * Adding platform definition for netbook-lpia-moblin and menlow-lpia-moblin
+  * Adjusting kvm parameters 
 
- -- Prajwal Mohan <prajwal@linux.intel.com>  Mon, 18 Aug 2008 23:45:05 -0700
+ -- Prajwal Mohan <prajwal@linux.intel.com>  Mon, 18 Aug 2008 23:53:19 -0700
 
 moblin-image-creator (0.44) gaston; urgency=low
 
