@@ -8,7 +8,9 @@ SUBDIRS = \
 	menlow-lpia-ubuntu-hardy \
 	menlow-lpia-ubuntu-hardy-ppa \
 	menlow-lpia-ubuntu-hardy-ppa-snapshot \
-	menlow-lpia-ubuntu-hardy-jax10-snapshot1
+	menlow-lpia-ubuntu-hardy-jax10-snapshot1 \
+	menlow-lpia-moblin2 \
+	netbook-lpia-moblin2
 
 debootstrap_scriptdir = ${pkgdatadir}/debootstrap-scripts
 debootstrap_script_DATA = \
