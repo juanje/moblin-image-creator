@@ -238,6 +238,18 @@ class Project(FileSystem):
             self.set_target_hd_kernel_cmdline(name, self.platform.hd_kernel_cmdline)
             self.set_target_cd_kernel_cmdline(name, self.platform.cd_kernel_cmdline)
             self.set_target_nand_kernel_cmdline(name, self.platform.nand_kernel_cmdline)
+            #Copy post install scripts
+            if os.path.isdir(os.path.join(self.platform.path, "post-install-scripts")):
+                print _("Installing post install scripts")
+                try:
+                    if not os.path.isdir(os.path.join(install_path, "post-install-scripts")):
+                        os.makedirs(os.path.join(install_path, "post-install-scripts"))
+                    src_folder = os.path.join(self.platform.path, "post-install-scripts")
+                    dst_path = os.path.join(install_path, "post-install-scripts")
+                    for filename in os.listdir(src_folder):
+                        shutil.copy(os.path.join(src_folder, filename), dst_path)
+                except:
+                    pass
         return self.targets[name]
     
     def get_target_usb_kernel_cmdline(self, name):
@@ -442,6 +454,21 @@ class Target(FileSystem):
             if os.path.isfile(os.path.join(self.top, fset_name)):
                 return True
         return False
+    
+    def execute_post_install_scripts(self):
+        print _("Executing post install scripts")
+        script_path = os.path.join(self.path, "post-install-scripts")
+        if os.path.isdir(script_path):
+            for filename in os.listdir(script_path):
+                    print _("Executing scritp: %s") % filename
+                    cmd = "/post-install-scripts/%s" % filename
+                    #Ignore error and continue
+                    try:
+                        self.chroot(cmd)
+                    except:
+                        pass
+        else:
+            print _("No post-install-scripts found")
 
     def installFset(self, fset, debug_pkgs = 0, fsets = None, seen_fsets = None):
         """

@@ -121,7 +121,10 @@ moblin-image-creator (0.45) UNRELEASED; urgency=low
   [ Mitsutaka Amano ]
   * Deleted unnecessary temporary Makefile.
 
- -- Mitsutaka Amano <mamano@miraclelinux.com>  Thu, 21 Aug 2008 00:06:51 +0900
+  [ Prajwal Mohan ]
+  * Adding ability to execute post install scripts 
+
+ -- Prajwal Mohan <prajwal@linux.intel.com>  Thu, 21 Aug 2008 14:40:28 -0700
 
 moblin-image-creator (0.44) gaston; urgency=low
 

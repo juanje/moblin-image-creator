@@ -249,6 +249,8 @@ class InstallImage(object):
         use squashfs on the device then the content will be copied out of the
         squashfs image during the install"""
         print _("Creating root file system...")
+        self.target.execute_post_install_scripts()
+
         # re-create fstab every time, since user could change fstab options on
         # the fly (by editing image-creator.cfg)
         fstab_path = os.path.join(self.target.fs_path, 'etc/fstab')
