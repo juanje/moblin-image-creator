@@ -124,9 +124,10 @@ moblin-image-creator (0.45) UNRELEASED; urgency=low
   [ Prajwal Mohan ]
   * Adding ability to execute post install scripts
   * Fixing Jax10 platform
-  * Using squashfs for Jax10 platform 
+  * Using squashfs for Jax10 platform
+  * Reducing boot partition size for netbook 
 
- -- Prajwal Mohan <prajwal@linux.intel.com>  Thu, 21 Aug 2008 16:35:18 -0700
+ -- Prajwal Mohan <prajwal@linux.intel.com>  Thu, 21 Aug 2008 17:27:45 -0700
 
 moblin-image-creator (0.44) gaston; urgency=low
 
