@@ -7,12 +7,14 @@ fsets_DATA = \
 platformdir = ${pkgdatadir}/platforms/${PNAME}
 platform_DATA = \
 	../common-apt/exclude \
-	../common-apt/install.sh
+	../common-apt/install.sh \
+	../common-apt/nand.sh
 
 initramfsdir = ${pkgdatadir}/platforms/${PNAME}/initramfs
 initramfs_SCRIPTS = \
 	../common-apt/initramfs/cd \
 	../common-apt/initramfs/disk \
+	../common-apt/initramfs/nand \
 	../common-apt/initramfs/usb
 
 initramfs_DATA = \

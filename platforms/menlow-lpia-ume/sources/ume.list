@@ -1,0 +1,8 @@
+deb     http://archive.mobile.ubuntu.com/ubuntu um-ppa-hardy main restricted universe multiverse
+#deb-src http://archive.mobile.ubuntu.com/ubuntu um-ppa-hardy main restricted universe multiverse
+
+deb     http://archive.mobile.ubuntu.com/ubuntu um-hardy-updates main restricted universe multiverse
+#deb-src http://archive.mobile.ubuntu.com/ubuntu um-hardy-updates main restricted universe multiverse
+
+deb     http://archive.mobile.ubuntu.com/ubuntu um-hardy-security main restricted universe multiverse
+#deb-src http://archive.mobile.ubuntu.com/ubuntu um-hardy-security main restricted universe multiverse

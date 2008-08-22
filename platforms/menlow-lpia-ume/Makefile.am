@@ -1,4 +1,4 @@
-PNAME = menlow-lpia-ubuntu-hardy
+PNAME = menlow-lpia-ume
 
 fsetsdir = ${pkgdatadir}/platforms/${PNAME}/fsets
 fsets_DATA = \
@@ -32,4 +32,5 @@ initramfs_scripts_DATA = \
 
 sourcesdir = ${pkgdatadir}/platforms/${PNAME}/sources
 sources_DATA = \
-	sources/ubuntu-hardy-src.list
+	sources/hardy.list \
+	sources/ume.list

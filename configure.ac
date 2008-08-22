@@ -38,16 +38,18 @@ AC_CONFIG_FILES([Makefile po/Makefile.in
                  libs/Makefile
                  utils/Makefile
                  platforms/Makefile
+                 platforms/mccaslin-lpia/Makefile
                  platforms/mccaslin-lpia-fedora/Makefile
                  platforms/mccaslin-lpia-ubuntu-hardy-ppa-snapshot/Makefile
                  platforms/mccaslin-lpia-ubuntu-hardy-ppa/Makefile
                  platforms/mccaslin-lpia-ubuntu-hardy/Makefile
-                 platforms/mccaslin-lpia/Makefile
+                 platforms/mccaslin-lpia-ume/Makefile
+                 platforms/menlow-lpia/Makefile
+                 platforms/menlow-lpia-moblin2/Makefile
                  platforms/menlow-lpia-ubuntu-hardy-jax10-snapshot1/Makefile
                  platforms/menlow-lpia-ubuntu-hardy-ppa-snapshot/Makefile
                  platforms/menlow-lpia-ubuntu-hardy-ppa/Makefile
                  platforms/menlow-lpia-ubuntu-hardy/Makefile
-                 platforms/menlow-lpia/Makefile
-		 platforms/menlow-lpia-moblin2/Makefile
-		 platforms/netbook-lpia-moblin2/Makefile])
+                 platforms/menlow-lpia-ume/Makefile
+                 platforms/netbook-lpia-moblin2/Makefile])
 AC_OUTPUT
