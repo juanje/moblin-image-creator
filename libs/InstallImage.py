@@ -398,8 +398,6 @@ class InstallImage(object):
         if not os.path.exists(menu_dir):
             os.makedirs(menu_dir)
         self.target.chroot("update-grub -y")
-        # FIXME: JLV: I really don't like all this sed usage, need to clean this up
-        #self.target.chroot("/bin/sed s+/boot/+/+g -i /boot/grub/menu.lst")
         menu=open(os.path.join(self.target.fs_path,"boot","grub","menu.lst"),'r')
         for count, line in enumerate(menu):
             if line.find('title') == 0:
@@ -413,7 +411,7 @@ class InstallImage(object):
         menu.close()
 
     def create_grub_menu_yum(self):
-        #FIXME: We need to generate grub menu
+        # FIXME: We need to generate grub menu
         print _("Creating the grub menu")
         # remove previous menu.lst, since we are about to create one
         menu_dir = os.path.join(self.target.path, "boot/grub")
@@ -669,9 +667,9 @@ class InstallUsbImage(BaseUsbImage):
         print _("InstallUsbImage: Finished!")
         
     def apply_hd_kernel_cmdline(self):
+        # set kopt= (in AUTOMAGIC KERNELS LIST)
         hd_kernel_cmdline = self.project.get_target_hd_kernel_cmdline(self.target.name)
         cmd = "sed -e 's:^\\s*#\\s*kopt\\s*=\\s*.*:# kopt=%s:' -i %s" % (hd_kernel_cmdline, os.path.join(self.target.fs_path, 'boot', 'grub', 'menu.lst'))
-        #cmd = "sed -e 's:^\\s*kernel\\s*\\([/a-zA-Z0-9._-]*\\).*:kernel \\t\\t\\1 %s:g' -i %s" % (self.project.get_target_hd_kernel_cmdline(self.target.name), os.path.join(self.target.fs_path, 'boot', 'grub', 'menu.lst'))
         print cmd
         print os.popen(cmd).readlines()
         print _("grub.conf kernel cmdline changed")
