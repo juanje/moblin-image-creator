@@ -145,8 +145,6 @@ class SDK(object):
         self.progress_callback_func = progress_callback
         self.status_label_callback_func = status_label_callback
         self.config_path = os.path.join(self.var_dir, 'projects')
-        if not os.path.isdir(self.config_path):
-            os.mkdir(self.config_path)
 
         # instantiate all platforms
         self.platforms = {}

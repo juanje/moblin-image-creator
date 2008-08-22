@@ -12,7 +12,7 @@ extradir = ${pkgdatadir}
 extra_DATA = \
 	COPYING
 
-vardir = ${localstatedir}/lib/moblin-image-creator
+vardir = ${localstatedir}/lib/moblin-image-creator/projects
 var_DATA = \
 	.empty
 
