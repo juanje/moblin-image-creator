@@ -472,8 +472,8 @@ class LiveIsoImage(InstallImage):
         self.kernels.pop(0)
         # Flashing yellow on a blue background
         self.install_kernels("9e", image_type)
-        pdk_utils.copy(self.rootfs_path, self.tmp_path, callback = self.progress_callback)
-        pdk_utils.copy("/usr/lib/syslinux/isolinux.bin", self.tmp_path, callback = self.progress_callback)
+        pdk_utils.copy(self.rootfs_path, self.tmp_path)
+        pdk_utils.copy("/usr/lib/syslinux/isolinux.bin", self.tmp_path)
 
         print _("Creating CD image file at: %s") % self.path
         cmd_line = "genisoimage -quiet -o %s -b isolinux.bin -c boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table -l -R -r %s" % (self.path, self.tmp_path)
@@ -600,7 +600,7 @@ class LiveUsbImage(BaseUsbImage):
         # Flashing yellow on a blue background
         self.install_kernels("9e", image_type)
         try:
-            pdk_utils.copy(self.rootfs_path, self.tmp_path, callback = self.progress_callback)
+            pdk_utils.copy(self.rootfs_path, self.tmp_path)
         except OSError:
             print _("Could not copy rootfs_path. Ignored error")
 
@@ -646,11 +646,11 @@ class InstallUsbImage(BaseUsbImage):
         # Flashing yellow on a red background
         self.install_kernels("ce", image_type)
         try:
-            pdk_utils.copy(self.rootfs_path, self.tmp_path, callback = self.progress_callback)
+            pdk_utils.copy(self.rootfs_path, self.tmp_path)
         except OSError:
             print _("Could not copy rootfs_path. Ignored error")
         try:
-            pdk_utils.copy(self.bootfs_path, self.tmp_path, callback = self.progress_callback)
+            pdk_utils.copy(self.bootfs_path, self.tmp_path)
         except OSError:
             print _("Could not copy bootfs_path. Ignored error")
         try:
