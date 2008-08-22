@@ -27,8 +27,7 @@ initramfs_hooks_SCRIPTS = \
 	../common-apt/initramfs/hooks/mobile
 
 initramfs_scriptsdir = ${pkgdatadir}/platforms/${PNAME}/initramfs/scripts
-initramfs_scripts_DATA = \
-	../common-apt/initramfs/scripts/.empty
+initramfs_scripts_DATA = 
 
 sourcesdir = ${pkgdatadir}/platforms/${PNAME}/sources
 sources_DATA = \

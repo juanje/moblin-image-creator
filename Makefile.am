@@ -13,8 +13,7 @@ extra_DATA = \
 	COPYING
 
 vardir = ${localstatedir}/lib/moblin-image-creator/projects
-var_DATA = \
-	.empty
+var_DATA = 
 
 desktopdir = ${datadir}/applications
 Desktop_Files = image-creator.desktop.in
