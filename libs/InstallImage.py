@@ -398,17 +398,6 @@ class InstallImage(object):
         if not os.path.exists(menu_dir):
             os.makedirs(menu_dir)
         self.target.chroot("update-grub -y")
-        menu=open(os.path.join(self.target.fs_path,"boot","grub","menu.lst"),'r')
-        for count, line in enumerate(menu):
-            if line.find('title') == 0:
-                print line
-                if line.find(self.default_kernel.split('vmlinuz-').pop().strip()) > 0:
-                    # FIXME: JLV: I really don't like all this sed usage, need to clean this up
-                    cmd="sed s/^default.*/default\\t\\t%d/g -i /boot/grub/menu.lst" % count
-                    print cmd
-                    self.target.chroot(cmd)
-                    break;
-        menu.close()
 
     def create_grub_menu_yum(self):
         # FIXME: We need to generate grub menu
