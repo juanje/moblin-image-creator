@@ -139,8 +139,9 @@ moblin-image-creator (0.45) UNRELEASED; urgency=low
   * Merged from UME patches. Based patch file is moblin-image-creator-0.44+repack/debian/patches/72_ume-platforms.patch. Thanks to Loic Minier <lool@dooz.org>.
   * Fixed some Makefile.am to entried .empty file. It can correspond only Makefile.am. so Removed a .empty file.
   * Merged from UME patches. Based patch file is moblin-image-creator-0.44+repack/debian/patches/73_create-kernel-img-conf.patch. Thanks to Loic Minier <lool@dooz.org>.
+  * Merged from UME patches. Based patch file is moblin-image-creator-0.44+repack/debian/patches/74_boot-is-really-boot.patch. Thanks to Loic Minier <lool@dooz.org>.
 
- -- Mitsutaka Amano <mamano@miraclelinux.com>  Fri, 22 Aug 2008 18:38:07 +0900
+ -- Mitsutaka Amano <mamano@miraclelinux.com>  Fri, 22 Aug 2008 19:05:15 +0900
 
 moblin-image-creator (0.44) gaston; urgency=low
 

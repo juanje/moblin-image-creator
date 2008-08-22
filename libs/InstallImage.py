@@ -302,6 +302,8 @@ class InstallImage(object):
             except OSError:
                 print _("shutil.copy failed. Ignored error")
         self.kernels.pop(0)
+        if not os.path.exists("%s/boot/boot" % self.target.path):
+            os.symlink(".", "%s/boot/boot" % self.target.path)
         fs_path    = self.target.fs_path[len(self.project.path):]
         fs_path    = os.path.join(fs_path, 'boot')
         image_path = self.target.image_path[len(self.project.path):]
