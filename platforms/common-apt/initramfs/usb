@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 # Live USB filesystem mounting			-*- shell-script -*-
 
 mountroot ()
