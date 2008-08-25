@@ -1539,7 +1539,7 @@ class App(object):
     def on_editRepo_activate(self, widget):
         dialog_tree = gtk.glade.XML(self.gladefile, 'fsetsInfo')
         dialog = dialog_tree.get_widget('fsetsInfo')
-        dialog.set_title("Choose a Platform")
+        dialog.set_title(_("Choose a Platform"))
 
         platformComboBox = dialog_tree.get_widget('platform')
         cell = gtk.CellRendererText()
@@ -1648,8 +1648,9 @@ class CommandHistoryDlg(object):
                     break
 
         if os.path.exists (cmds_path) == False:
-            print _("Creating folder /var/lib/moblin-image-creator/cmds ... ")
-            os.popen("mkdir /var/lib/moblin-image-creator/cmds")
+            print _("Creating folder %s ... ") % cmds_path
+            cmd = 'mkdir ' + cmds_path
+            os.popen(cmd)
         
         mic_file = open(cmds_path + '/' + file_name, 'w')
         print >> mic_file, "%s" % self.cmd_txt

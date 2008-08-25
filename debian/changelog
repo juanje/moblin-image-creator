@@ -147,9 +147,10 @@ moblin-image-creator (0.45) UNRELEASED; urgency=low
 
   [ Mitsutaka Amano ]
   * Droped unnecessary codes. Added a Japanese localization.
-  * Droped unnecessary %files entry in spec file. Cleaned dirty codes. 
+  * Droped unnecessary %files entry in spec file. Cleaned dirty codes.
+  * Added Japaense localization in gui/repo_editor.py and more. 
 
- -- Mitsutaka Amano <mamano@miraclelinux.com>  Mon, 25 Aug 2008 12:06:50 +0900
+ -- Mitsutaka Amano <mamano@miraclelinux.com>  Mon, 25 Aug 2008 16:31:57 +0900
 
 moblin-image-creator (0.44) gaston; urgency=low
 

@@ -164,12 +164,12 @@ class repoEditor(object):
     def remove_button_clicked(self, widget):
         model, treePathList = self.repoListView.get_selection().get_selected_rows()   
         if os.path.isfile(os.path.join(self.repoPath, model[treePathList[0]][0])):
-            print _("Removing Repo: %s" % model[treePathList[0]][0])
+            print _("Removing Repo: %s") % model[treePathList[0]][0]
             os.unlink(os.path.join(self.repoPath, model[treePathList[0]][0]))
             self.create_repo_list()
 
     def save_button_clicked(self, widget):
-        print _("Saving: %s" % self.current_repo)
+        print _("Saving: %s") % self.current_repo
         repoFile = open(os.path.join(self.repoPath, self.current_repo))
         fileContent = repoFile.readlines()
         nameWritten = False

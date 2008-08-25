@@ -3091,7 +3091,7 @@ You may have terminals open in the mounted directory path
                       <widget class="GtkLabel" id="repo_name">
                         <property name="visible">True</property>
                         <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                        <property name="label" translatable="yes">Name</property>
+                        <property name="label" translatable="no">Name</property>
                       </widget>
                       <packing>
                         <property name="x_options"></property>

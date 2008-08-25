@@ -440,6 +440,19 @@ msgstr "プロジェクトおよびターゲットの作成"
 msgid "Installing the following fsets: %s"
 msgstr "次に機能セットをインストールします: %s"
 
+#: ../gui/gui.py:1542
+msgid "Choose a Platform"
+msgstr "プラットフォームを選択します"
+
+#: ../gui/gui.py:1569
+msgid "This feature is currently available for Yum based platforms only"
+msgstr "この機能は現在Yumベースのプラットフォームのみ使用できます"
+
+#: ../gui/gui.py:1651
+#, python-format
+msgid "Creating folder %s ... "
+msgstr "フォルダ「%s」を作成しています ... "
+
 #: ../gui/gui.py:1391
 msgid "Please Select a Platform"
 msgstr "プラットフォームを選択してください"
@@ -1546,6 +1559,10 @@ msgstr "ミラーサイトの設定"
 msgid "_Fsets Info"
 msgstr "機能セット情報"
 
+#: ../gui/image-creator.glade:152
+msgid "_Edit Repo"
+msgstr "リポジトリの編集"
+
 #: ../gui/image-creator.glade:155
 msgid "_Help"
 msgstr "ヘルプ"
@@ -1589,6 +1606,14 @@ msgstr "プロジェクトをアップグレードします"
 #: ../gui/image-creator.glade:389
 msgid "_Upgrade Project"
 msgstr "プロジェクトのアップグレード"
+
+#: ../gui/image-creator.glade:425
+msgid "Record MIC command history"
+msgstr "Moblin Image Creatorのコマンド履歴を記録します"
+
+#: ../gui/image-creator.glade:440
+msgid "Command _History"
+msgstr "コマンド履歴"
 
 #: ../gui/image-creator.glade:426
 msgid "List of existing projects"
@@ -1667,6 +1692,10 @@ msgstr "ターゲットをアップグレードします。"
 #: ../gui/image-creator.glade:740
 msgid "Up_grade Target"
 msgstr "ターゲットのアップグレード"
+
+#: ../gui/image-creator.glade:829
+msgid "Edit _Repository"
+msgstr "リポジトリの編集"
 
 #: ../gui/image-creator.glade:777
 msgid "List of existing targets"
@@ -1936,6 +1965,102 @@ msgstr "OK"
 msgid "Fsets Info"
 msgstr "機能セット情報"
 
+#: ../gui/image-creator.glade:2969
+msgid "Remove"
+msgstr "削除"
+
+#: ../gui/image-creator.glade:3018
+msgid "url"
+msgstr ""
+
+#: ../gui/image-creator.glade:3044
+msgid "enabled"
+msgstr ""
+
+#: ../gui/image-creator.glade:3070
+msgid "failovermethod"
+msgstr ""
+
+#: ../gui/image-creator.glade:3109 ../gui/image-creator.glade:3224
+msgid "Save"
+msgstr "保存"
+
+#: ../gui/image-creator.glade:3163
+msgid "Command History"
+msgstr "コマンド履歴"
+
+#: ../gui/image-creator.glade:3196
+msgid "Clean history of MIC commands"
+msgstr "Moblin Image Creatorのコマンド履歴を消去します"
+
+#: ../gui/image-creator.glade:3197
+msgid "Clean"
+msgstr "消去"
+
+#: ../gui/image-creator.glade:3208
+msgid "Copy command history to clipboard"
+msgstr "コマンド履歴をクリップボードへコピーします"
+
+#: ../gui/image-creator.glade:3209
+msgid "Copy"
+msgstr "コピー"
+
+#: ../gui/image-creator.glade:3223
+msgid "Save command history into a file in /var/lib/moblin-image-creator/cmds"
+msgstr "/var/lib/moblin-image-creator/cmdsディレクトリ以下にコマンド履歴を保存します"
+
+#: ../gui/image-creator.glade:3238
+msgid "Close window"
+msgstr "ウィンドウを閉じます"
+
+#: ../gui/image-creator.glade:3239
+msgid "Close"
+msgstr "閉じる"
+
+#: ../gui/image-creator.glade:3258
+msgid "Save to..."
+msgstr "保存します..."
+
+#: ../gui/image-creator.glade:3269
+msgid " File Name: "
+msgstr " ファイル名: "
+
+#: ../gui/image-creator.glade:3329
+msgid "Existed file name."
+msgstr "存在しているファイル名でした"
+
+#: ../gui/image-creator.glade:3337
+msgid ""
+"\n"
+"File exists. Overwrite it?\n"
+"            "
+msgstr ""
+"\n"
+"ファイルが存在しています。上書きしますか?\n"
+"            "
+
 #: ../image-creator.desktop.in:4
 msgid "Developer tool for creating mobile Linux device stacks"
 msgstr "携帯端末用Linuxを構築するための開発ツール"
+
+#: ../gui/repo_editor.py:63
+msgid "Repository List"
+msgstr "リポジトリ一覧"
+
+#: ../gui/repo_editor.py:139
+msgid "New Repo Name"
+msgstr "新しいリポジトリ名"
+
+#: ../gui/repo_editor.py:142
+msgid "Add New Repo"
+msgstr "新しいリポジトリ名の追加"
+
+#: ../gui/repo_editor.py:167
+#, python-format
+msgid "Removing Repo: %s"
+msgstr "リポジトリを削除しています: %s"
+
+#: ../gui/repo_editor.py:172
+#, python-format
+msgid "Saving: %s"
+msgstr "保存しています: %s"
