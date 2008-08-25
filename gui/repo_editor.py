@@ -194,14 +194,14 @@ class repoEditor(object):
                 failovermethodWritten = True
             else:
                 repoFile.write(line)
-            if not nameWritten:
-                repoFile.write("name=%s\n" % self.repoNameEntry.get_text())
-            if not failovermethodWritten:
-                repoFile.write("failovermethod=%s\n" % self.failovermethodEntry.get_text())
-            if not urlWritten:
-                repoFile.write("baseurl=%s\n" % self.repoUrlEntry.get_text())
-            if not enabledWritten:
-                repoFile.write("enabled=%s\n" % self.repoEnabledEntry.get_text())
+        if not nameWritten:
+            repoFile.write("name=%s\n" % self.repoNameEntry.get_text())
+        if not failovermethodWritten:
+            repoFile.write("failovermethod=%s\n" % self.failovermethodEntry.get_text())
+        if not urlWritten:
+            repoFile.write("baseurl=%s\n" % self.repoUrlEntry.get_text())
+        if not enabledWritten:
+            repoFile.write("enabled=%s\n" % self.repoEnabledEntry.get_text())
         repoFile.close()
     
     def run(self):
