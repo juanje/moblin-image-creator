@@ -52,9 +52,11 @@ rm -rf %{buildroot}
 /usr/share/applications/image-creator.desktop
 /usr/share/locale/*/LC_MESSAGES/moblin-image-creator.mo
 /usr/share/pdk/*
-/var/lib/moblin-image-creator/.empty
 
 %changelog
+* Mon Aug 25 2008 Mitsutaka Amano <mamano@miraclelinux.com>
+- Droped unnecessary %files entry.
+
 * Thu Jul 31 2008 Mitsutaka Amano <mamano@miraclelinux.com>
 - Added Requires:.
 
