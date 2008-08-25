@@ -770,6 +770,14 @@ msgstr "         これはディスク上の全てのパーティションを含
 msgid "grub.conf kernel cmdline changed"
 msgstr "grub.conf kernelコマンドラインが変更されました"
 
+#: ../libs/InstallImage.py:679
+msgid ""
+"New Apply hd kernel "
+"cmdline--------------------------------------------------------------------"
+msgstr ""
+"新しいHDD用kernelコマンドラインを適用しています"
+"--------------------------------------------------------------------"
+
 #: ../libs/InstallImage.py:593
 msgid "HddImage: Create Hard Disk Image not implemented!"
 msgstr "HDDイメージ: ハードディスクイメージの作成は実装されていません!"

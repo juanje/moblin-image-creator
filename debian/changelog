@@ -143,9 +143,12 @@ moblin-image-creator (0.45) UNRELEASED; urgency=low
   * Droped backwords compatibility codes.
 
   [ Prajwal Mohan ]
-  * Passing callback to pdk_utils.copy causing problems in FC9 
+  * Passing callback to pdk_utils.copy causing problems in FC9
 
- -- Prajwal Mohan <prajwal@linux.intel.com>  Fri, 22 Aug 2008 13:21:09 -0700
+  [ Mitsutaka Amano ]
+  * Droped unnecessary codes. Added a Japanese localization.
+
+ -- Mitsutaka Amano <mamano@miraclelinux.com>  Mon, 25 Aug 2008 09:24:57 +0900
 
 moblin-image-creator (0.44) gaston; urgency=low
 

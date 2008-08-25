@@ -676,9 +676,7 @@ class InstallUsbImage(BaseUsbImage):
         print _("grub.conf kernel cmdline changed")
         # update the kernel entries
         self.target.chroot("update-grub")
-        # FIXME: JLV: I really don't like all this sed usage, need to clean this up
-        self.target.chroot("/bin/sed s+/boot/+/+g -i /boot/grub/menu.lst")
-        print "New Apply hd kernel cmdline--------------------------------------------------------------------"
+        print _("New Apply hd kernel cmdline--------------------------------------------------------------------")
 
     def __str__(self):
         return ("<InstallUsbImage: project=%s, target=%s, name=%s>"
