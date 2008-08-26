@@ -19,3 +19,7 @@ desktopdir = ${datadir}/applications
 Desktop_Files = image-creator.desktop.in
 desktop_DATA = $(Desktop_Files:.desktop.in=.desktop)
 @INTLTOOL_DESKTOP_RULE@
+
+# We patch the path for the python modules post installation:
+install-exec-hook:
+	sed -i "s|@PATH_PKGDATADIR@|${pkgdatadir}|g" $(DESTDIR)$(bindir)/image-creator

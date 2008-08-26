@@ -7,6 +7,7 @@ python_script_SCRIPTS = \
 	SDK.py \
 	fsets.py \
 	mic_cfg.py \
+	paths.py \
 	pdk_utils.py
 
 python_script_DATA = \
@@ -14,3 +15,10 @@ python_script_DATA = \
 	moblin_pkg.py \
 	moblin_pkgbase.py \
 	moblin_yum.py
+
+install-data-hook:
+	sed -i "s|@PATH_PREFIX@|${prefix}|g" $(DESTDIR)$(datadir)/pdk/lib/paths.py
+	sed -i "s|@PATH_PKGDATADIR@|${pkgdatadir}|g" $(DESTDIR)$(datadir)/pdk/lib/paths.py
+	sed -i "s|@PATH_SYSCONFDIR@|${sysconfdir}|g" $(DESTDIR)$(datadir)/pdk/lib/paths.py
+	sed -i "s|@PATH_LOCALSTATEDIR@|${localstatedir}|g" $(DESTDIR)$(datadir)/pdk/lib/paths.py
+

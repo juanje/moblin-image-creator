@@ -29,6 +29,7 @@ import fsets
 import mic_cfg
 import moblin_pkg
 import pdk_utils
+import paths
 
 _ = gettext.lgettext
 
@@ -160,7 +161,7 @@ class Platform(object):
         output = []
         # XXX Evil hack
         if not os.path.isfile("/usr/lib/debootstrap/scripts/%s" % codename) and not os.path.isfile("/usr/share/debootstrap/scripts/%s" % codename):
-            cmd += " /usr/share/pdk/debootstrap-scripts/%s" % codename
+            cmd += " " + paths.PKGDATADIR + "/debootstrap-scripts/%s" % codename
         # Sometimes we see network issues that trigger debootstrap to claim the
         # apt repository is corrupt.  This trick will force up to 10 attempts
         # before bailing out with an error
@@ -332,4 +333,4 @@ releasever=8
 
 if __name__ == '__main__':
     for p in sys.argv[1:]:
-        print Platform('/usr/share/pdk', p)
+        print Platform(paths.PKGDATADIR, p)

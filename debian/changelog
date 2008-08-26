@@ -156,7 +156,10 @@ moblin-image-creator (0.45) UNRELEASED; urgency=low
   [ Mitsutaka Amano ]
   * Updated Japanese localization.
 
- -- Mitsutaka Amano <mamano@miraclelinux.com>  Tue, 26 Aug 2008 14:13:48 +0900
+  [ Prajwal Mohan ]
+  * Adding option to set install prefix, sysconfdir, localdatadir etc 
+
+ -- Prajwal Mohan <prajwal@linux.intel.com>  Tue, 26 Aug 2008 14:31:15 -0700
 
 moblin-image-creator (0.44) gaston; urgency=low
 

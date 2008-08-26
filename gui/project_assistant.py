@@ -32,6 +32,7 @@ import traceback
 import pdk_utils
 import SDK
 import mic_cfg
+import paths
 
 _ = gettext.lgettext
 
@@ -69,8 +70,8 @@ class projectAssistant(object):
         self.sdk = sdk
 
         self.checkBoxContainer = None
-        sideImage = gtk.gdk.pixbuf_new_from_file("/usr/share/pdk/mic-assistant.xpm")
-        headImage = gtk.gdk.pixbuf_new_from_file("/usr/share/pdk/image-creator-32x32.xpm")
+        sideImage = gtk.gdk.pixbuf_new_from_file(paths.PKGDATADIR + "/mic-assistant.xpm")
+        headImage = gtk.gdk.pixbuf_new_from_file(paths.PKGDATADIR + "/image-creator-32x32.xpm")
         
         #Setting up the Assistant Widget
         self.assistantDialog = gtk.Assistant()        

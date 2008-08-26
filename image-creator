@@ -29,7 +29,7 @@ import traceback
 
 from optparse import OptionParser
 
-sys.path.insert(0, '/usr/share/pdk/lib')
+sys.path.insert(0, '@PATH_PKGDATADIR@/lib')
 import SDK
 import mic_cfg
 import pdk_utils

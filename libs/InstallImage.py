@@ -23,6 +23,7 @@ import shutil
 import sys
 import tempfile
 import traceback
+import paths
 
 import Project
 import SDK
@@ -375,7 +376,7 @@ class InstallImage(object):
     def create_initramfs(self, initrd_file, kernel_version):
         print _("Creating initramfs for kernel version: %s") % kernel_version
         # copy the platform initramfs stuff into /etc/initramfs-tools/ in the target
-        src_path = os.path.join('/usr/share/pdk/platforms', self.project.platform.name, 'initramfs')
+        src_path = os.path.join(paths.PKGDATADIR + '/platforms', self.project.platform.name, 'initramfs')
         dst_path = os.path.join(self.target.fs_path, 'etc', 'initramfs-tools', )
         pdk_utils.rmtree(dst_path, True, callback = self.progress_callback)
         shutil.copytree(src_path, dst_path, True)

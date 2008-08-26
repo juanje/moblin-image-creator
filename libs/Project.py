@@ -32,6 +32,7 @@ import moblin_pkg
 import pdk_utils
 import InstallImage
 import SDK
+import paths
 
 debug = False
 if mic_cfg.config.has_option('general', 'debug'):
@@ -120,7 +121,7 @@ ff02::3 ip6-allhosts
     mount_list = [
         # mnt_type, host_dirname, target_dirname, fs_type, device
         ('bind', '/tmp', False, None, None),
-        ('bind', '/usr/share/pdk', False, None, None),
+        ('bind', paths.PKGDATADIR, False, None, None),
         ('host', '/dev/pts', 'dev/pts', 'devpts', 'devpts'),
         ('host', '/proc', False, 'proc', 'proc'),
         ('host', '/sys', False, 'sysfs', 'sysfs'),
@@ -544,7 +545,7 @@ class Callback:
 if __name__ == '__main__':
     if len(sys.argv) != 6:
         print >> sys.stderr, _("USAGE: %s PROJECT_NAME PROJECT_PATH PROJECT_DESCRIPTION TARGET_NAME PLATFORM_NAME") % (sys.argv[0])
-        print >> sys.stderr, _("\tPROJECT_NAME: name to call the project.  The config file /usr/share/pdk/projects/project_name.proj is used or created")
+        print >> sys.stderr, _("\tPROJECT_NAME: name to call the project.  The config file " + paths.PKGDATADIR + "/projects/project_name.proj is used or created")
         print >> sys.stderr, _("\tPROJECT_PATH: directory to install the project")
         print >> sys.stderr, _("\tPROJECT_DESCRIPTION: Textual description of the project")
         print >> sys.stderr, _("\tTARGET_NAME: ???")
@@ -582,7 +583,7 @@ if __name__ == '__main__':
     print _("Name: %s") % proj.name
     print _("Description: %s") % proj.desc
     if existing_project:
-        print _("Used info from config file: /usr/share/pdk/projects/%s.proj") % name
+        print _("Used info from config file: " + paths.PKGDATADIR + "/projects/%s.proj") % name
         time.sleep(2)
 
     # see if the target exist

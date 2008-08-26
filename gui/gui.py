@@ -35,6 +35,7 @@ import SDK
 import mic_cfg
 import project_assistant
 import repo_editor
+import paths
 
 debug = False
 if mic_cfg.config.has_option('general', 'debug'):
@@ -189,12 +190,12 @@ class App(object):
         if self.pygtkOldVersion == True:
             self.show_error_dialog(_("You are using an old version of PyGTK. Image Creator required atleast PyGTK 2.12. Some features will be disabled"))
             return
-        if os.path.isfile("/usr/share/pdk/newFeature"):
+        if os.path.isfile(paths.PKGDATADIR + "/newFeature"):
             newFeatureTree = gtk.glade.XML(self.gladefile, 'newFeature')
             newFeatureDialog = newFeatureTree.get_widget('newFeature')
             newFeatureLabel = newFeatureTree.get_widget('newFeatureLabel')
             newFeatureText = ""
-            f = open("/usr/share/pdk/newFeature")
+            f = open(paths.PKGDATADIR + "/newFeature")
             for line in f:
                 newFeatureText += "\n"
                 newFeatureText += line
@@ -202,7 +203,7 @@ class App(object):
             newFeatureDialog.set_size_request(400, 250)
             newFeatureDialog.run()
             newFeatureDialog.destroy()
-            os.unlink("/usr/share/pdk/newFeature")
+            os.unlink(paths.PKGDATADIR + "/newFeature")
 
     def target_view_changed(self, selection):
         num_rows_selected = self.targetView.get_selection().count_selected_rows()
@@ -959,7 +960,7 @@ class App(object):
     def on_launch_vm_clicked(self, widget):
         # check whether the shared image exists
         # the path of folder containing this image is fixed and hardcoded
-        kvm_dir = '/var/lib/moblin-image-creator/kvm'
+        kvm_dir = paths.LOCALSTATEDIR + '/lib/moblin-image-creator/kvm'
         kvmimg_file = os.path.join(kvm_dir, 'mic_vm_share.img')
         if os.path.exists (kvm_dir) == False:
             print _("Creating directory %s ... ") % kvm_dir
@@ -997,9 +998,9 @@ class App(object):
             return
         # boot the live usb image in KVM in background
         if mic_cfg.config.get('general', 'package_manager') == 'apt':
-            os.popen("kvm -no-acpi -m 512 -hda " + live_img + " -hdb /var/lib/moblin-image-creator/kvm/mic_vm_share.img -boot c &")
+            os.popen("kvm -no-acpi -m 512 -hda " + live_img + " -hdb " + paths.LOCALSTATEDIR + "/lib/moblin-image-creator/kvm/mic_vm_share.img -boot c &")
         elif mic_cfg.config.get('general', 'package_manager') == 'yum':
-            os.popen("qemu-kvm -no-acpi -m 512 -hda " + live_img + " -hdb /var/lib/moblin-image-creator/kvm/mic_vm_share.img -boot c &")
+            os.popen("qemu-kvm -no-acpi -m 512 -hda " + live_img + " -hdb " + paths.LOCALSTATEDIR + "/lib/moblin-image-creator/kvm/mic_vm_share.img -boot c &")
 
     def getImageName(self, default_name = ".img"):
         """Function to query the user for the name of the image file they want
@@ -1624,7 +1625,7 @@ class CommandHistoryDlg(object):
         clipboard.store()
 
     def on_save_btn_clicked(self, widget):
-        cmds_path = '/var/lib/moblin-image-creator/cmds'
+        cmds_path = paths.LOCALSTATEDIR + '/lib/moblin-image-creator/cmds'
         while True:
             widgets = gtk.glade.XML(self.gladefile, 'save_dlg')
             dialog = widgets.get_widget('save_dlg')

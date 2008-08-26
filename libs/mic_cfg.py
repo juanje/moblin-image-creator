@@ -25,13 +25,14 @@ import platform
 import pwd
 import re
 import sys
+import paths
 
 from ConfigParser import SafeConfigParser
 
 _ = gettext.lgettext
 
 config = None
-DEFAULT_CONFIG_DIR = os.path.expanduser("/usr/share/pdk/default_config/")
+DEFAULT_CONFIG_DIR = os.path.expanduser(paths.PKGDATADIR + "/default_config/")
 CONFIG_DIR = os.path.expanduser("~/.image-creator")
 # List of valid sections for our config file
 BASE_SECTIONS = [ "platform", "installimage", "distribution" ]
@@ -39,7 +40,7 @@ VALID_SECTIONS = BASE_SECTIONS + [ "general" ]
 
 # Default values
 DEFAULTS = [
-    ('general', 'var_dir', '/var/lib/moblin-image-creator'),
+    ('general', 'var_dir', paths.LOCALSTATEDIR + '/lib/moblin-image-creator'),
     ]
 
 

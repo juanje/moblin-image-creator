@@ -124,12 +124,13 @@ import Platform
 import Project
 import mic_cfg
 import pdk_utils
+import paths
 
 _ = gettext.lgettext
 
 class SDK(object):
     def __init__(self, progress_callback = None, status_label_callback = None,
-            path='/usr/share/pdk', var_dir = '/var/lib/moblin-image-creator/'):
+            path=paths.PKGDATADIR, var_dir = paths.LOCALSTATEDIR + '/lib/moblin-image-creator/'):
         self.var_dir = var_dir
         self.path = os.path.realpath(os.path.abspath(os.path.expanduser(path)))
         self.version = "- Undefined"
