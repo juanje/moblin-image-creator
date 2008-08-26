@@ -42,7 +42,7 @@ msgstr "説明"
 #: ../gui/gui.py:107
 #: ../gui/image-creator.glade:1240
 msgid "Path"
-msgstr "作成先"
+msgstr "パス"
 
 #: ../gui/gui.py:108
 #: ../gui/image-creator.glade:1330
@@ -797,11 +797,11 @@ msgstr "HDDイメージ: ハードディスクイメージの作成は実装さ�
 
 #: ../libs/InstallImage.py:656
 msgid "NANDImage: This platform could not support NAND image!"
-msgstr "NAND型イメージ: このプラットフォームはNAND型イメージをサポートしていません!"
+msgstr "NANDフラッシュメモリイメージ: このプラットフォームはNANDフラッシュメモリイメージをサポートしていません!"
 
 #: ../libs/InstallImage.py:657
 msgid "NANDImage: Creating NAND Image..."
-msgstr "NAND型イメージ: NAND型イメージを作成しています..."
+msgstr "NANDフラッシュメモリイメージ: NANDフラッシュメモリイメージを作成しています..."
 
 #: ../libs/InstallImage.py:638
 #, python-format
@@ -1727,7 +1727,7 @@ msgstr ""
 
 #: ../gui/image-creator.glade:903
 msgid "Live USB"
-msgstr "Live USB イメージ\n(読込専用)"
+msgstr "Live USB\n(読込専用)"
 
 #: ../gui/image-creator.glade:924
 msgid ""
@@ -1745,7 +1745,7 @@ msgstr ""
 
 #: ../gui/image-creator.glade:939
 msgid "Live RW USB"
-msgstr "Live USB イメージ\n(読込/書込可能)"
+msgstr "Live USB\n(読込/書込)"
 
 #: ../gui/image-creator.glade:961
 msgid ""
@@ -1759,7 +1759,7 @@ msgstr ""
 
 #: ../gui/image-creator.glade:976
 msgid "Install USB"
-msgstr "インストーラ USB イメージ"
+msgstr "インストーラ USB"
 
 #: ../gui/image-creator.glade:1008
 msgid ""
@@ -1774,19 +1774,19 @@ msgstr ""
 
 #: ../gui/image-creator.glade:1023
 msgid "Live CD"
-msgstr "Live CD イメージ\n(読込専用)"
+msgstr "Live CD\n(読込専用)"
 
 #: ../gui/image-creator.glade:1055
 msgid ""
 "Create a NAND image that can be burned to a Compact flash drive for "
 "Moorestown."
 msgstr ""
-"コンパクトフラッシュに書き込む事が可能な、NAND型イメージを作成します(Moorestown用)。"
+"コンパクトフラッシュに書き込む事が可能な、NANDフラッシュメモリイメージを作成します(Moorestown用)。"
 ""
 
 #: ../gui/image-creator.glade:1070
 msgid "NAND Image"
-msgstr "NAND型イメージ"
+msgstr "NANDフラッシュメモリ"
 
 #: ../gui/image-creator.glade:1055
 msgid ""
@@ -1901,21 +1901,25 @@ msgstr "しばらくお待ちください..."
 msgid "gtk-cancel"
 msgstr "キャンセル"
 
-#: ../gui/image-creator.glade:2062
+#: ../gui/image-creator.glade:2245
 msgid "Kernel cmdline options"
 msgstr "カーネルパラメータオプション"
 
-#: ../gui/image-creator.glade:2094
-msgid "USB Disk Booting kernel cmdline: "
-msgstr "USBメモリからのの起動用:"
+#: ../gui/image-creator.glade:2296
+msgid "NAND Booting kernel cmdline:"
+msgstr "NANDフラッシュメモリ起動時:"
 
-#: ../gui/image-creator.glade:2116
-msgid "HD Installed  kernel cmdline:"
-msgstr "インストールされたハードディスクからの起動用:"
-
-#: ../gui/image-creator.glade:2142
+#: ../gui/image-creator.glade:2322
 msgid "CD Disk Booting kernel cmdline:"
-msgstr "CDからの起動用:"
+msgstr "CD起動時:"
+
+#: ../gui/image-creator.glade:2348
+msgid "HD Installed  kernel cmdline:"
+msgstr "HDD起動時:"
+
+#: ../gui/image-creator.glade:2372
+msgid "USB Disk Booting kernel cmdline: "
+msgstr "USBメモリ起動時:"
 
 #: ../gui/image-creator.glade:2350
 msgid "Mirror Settings"
