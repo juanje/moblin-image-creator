@@ -5,6 +5,7 @@ configure: configure-stamp
 configure-stamp:
 	dh_testdir
 	./autogen.sh
+	./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var
 
 build: configure-stamp build-stamp
 build-stamp:

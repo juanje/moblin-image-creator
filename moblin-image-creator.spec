@@ -22,6 +22,10 @@ or single purposed Linux stacks using a mainstream distribution.
 
 %build
 ./autogen.sh
+./configure \
+    --prefix=$RPM_BUILD_ROOT/usr \
+    --sysconfdir=$RPM_BUILD_ROOT/etc \
+    --localstatedir=$RPM_BUILD_ROOT/var
 
 %install
 make DESTDIR=$RPM_BUILD_ROOT install
