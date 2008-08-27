@@ -58,6 +58,9 @@ rm -rf %{buildroot}
 /usr/share/pdk/*
 
 %changelog
+* Mon Aug 27 2008 Mitsutaka Amano <mamano@miraclelinux.com>
+- Added configure process on %build section.
+
 * Mon Aug 25 2008 Mitsutaka Amano <mamano@miraclelinux.com>
 - Droped unnecessary %files entry.
 
