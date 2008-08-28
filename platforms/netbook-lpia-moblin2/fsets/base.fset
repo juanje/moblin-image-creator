@@ -17,7 +17,7 @@ DEPS=core
 
 [X-Dev]
 DESC=Fset that provides a basic build env allowing X drivers and applications development
-PKGS=xorg-x11-server-sdk xorg-x11-proto-devel libX11-devel libXrender-devel libXext-devel pixman-devel freeglut-devel mesa-libGL-devel libXdamage-devel libdrm-devel
+PKGS=xorg-x11-server-sdk xorg-x11-proto-devel libX11-devel libXrender-devel libXext-devel pixman-devel freeglut-devel mesa-libGL-devel libXdamage-devel libdrm-devel gtk2-devel
 DEBUG_PKGS=
 DEPS=core-dev x
 
