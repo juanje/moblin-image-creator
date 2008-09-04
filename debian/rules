@@ -25,6 +25,7 @@ install-stamp:
 	dh_testroot
 	dh_clean -k
 	dh_installdirs
+	sed -i "s|Exec=.*|Exec=gksu /usr/sbin/image-creator|" image-creator.desktop
 	$(MAKE) DESTDIR=$(CURDIR)/debian/moblin-image-creator install
 	rm -fR $(CURDIR)/debian/moblin-image-creator/usr/lib/
 

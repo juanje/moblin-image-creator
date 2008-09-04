@@ -4,7 +4,7 @@ ACLOCAL_AMFLAGS = -I m4
 
 #EXTRA_DIST = config.rpath m4/ChangeLog  config.rpath m4/ChangeLog
 
-executedir = ${bindir}
+executedir = ${sbindir}
 execute_SCRIPTS = \
 	image-creator
 
@@ -22,4 +22,4 @@ desktop_DATA = $(Desktop_Files:.desktop.in=.desktop)
 
 # We patch the path for the python modules post installation:
 install-exec-hook:
-	sed -i "s|@PATH_PKGDATADIR@|${pkgdatadir}|g" $(DESTDIR)$(bindir)/image-creator
+	sed -i "s|@PATH_PKGDATADIR@|${pkgdatadir}|g" $(DESTDIR)$(sbindir)/image-creator

@@ -2,9 +2,9 @@
 Encoding=UTF-8
 _Name=Moblin Image Creator
 _Comment=Developer tool for creating mobile Linux device stacks
-Exec=gksu /usr/bin/image-creator
+Exec=image-creator
 Terminal=false
 Type=Application
 Categories=Development;
 StartupNotify=false
-Icon=/usr/share/pdk/pixmaps/image-creator-32x32.xpm
+Icon=/usr/share/pdk/image-creator-32x32.xpm

@@ -20,7 +20,6 @@ extra_DATA = \
 
 pixmapsdir = ${pkgdatadir}
 pixmaps_DATA = \
-	pixmaps/README \
 	pixmaps/image-creator-32x32.xcf \
 	pixmaps/image-creator-32x32.xpm \
 	pixmaps/mic-assistant.xcf \

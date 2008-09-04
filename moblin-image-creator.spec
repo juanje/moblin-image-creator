@@ -18,20 +18,20 @@ The moblin-image-creator utility enables developers to build full mobile
 or single purposed Linux stacks using a mainstream distribution.
 
 %prep
+rm -rf $RPM_BUILD_ROOT
 %setup -q
 
 %build
 ./autogen.sh
-./configure \
-    --prefix=$RPM_BUILD_ROOT/usr \
-    --sysconfdir=$RPM_BUILD_ROOT/etc \
-    --localstatedir=$RPM_BUILD_ROOT/var
+%configure
 
 %install
 make DESTDIR=$RPM_BUILD_ROOT install
+%{find_lang} %{name}
 mkdir -p $RPM_BUILD_ROOT/etc/pam.d
 mkdir -p $RPM_BUILD_ROOT/etc/security/console.apps
 mkdir -p $RPM_BUILD_ROOT/usr/sbin
+mkdir -p $RPM_BUILD_ROOT/usr/bin
 cp %_builddir/%{name}-%{version}/image-creator.helperconsole \
     $RPM_BUILD_ROOT/etc/security/console.apps/image-creator
 cp %_builddir/%{name}-%{version}/image-creator.pam.d \
@@ -39,6 +39,7 @@ cp %_builddir/%{name}-%{version}/image-creator.pam.d \
 cp %_builddir/%{name}-%{version}/suse/image-creator* \
     $RPM_BUILD_ROOT/usr/sbin
 ln -f -s /usr/bin/consolehelper $RPM_BUILD_ROOT/usr/bin/image-creator
+sed -i "s|Exec=.*|Exec=/usr/bin/image-creator|" $RPM_BUILD_ROOT/usr/share/applications/image-creator.desktop
 
 %clean
 rm -rf %{buildroot}
@@ -49,6 +50,7 @@ rm -rf %{buildroot}
 /etc/pam.d/image-creator
 /etc/security/console.apps/image-creator
 /usr/bin/image-creator
+/usr/sbin/image-creator
 /usr/sbin/image-creator-suse-install
 /usr/sbin/image-creator-suse-mount
 /usr/sbin/image-creator-suse-start
@@ -58,6 +60,9 @@ rm -rf %{buildroot}
 /usr/share/pdk/*
 
 %changelog
+* Mon Sep 04 2008 Mitsutaka Amano <mamano@miraclelinux.com>
+- Fixed image-creator installation in deb and rpm.
+
 * Mon Aug 27 2008 Mitsutaka Amano <mamano@miraclelinux.com>
 - Added configure process on %build section.
 
