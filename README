@@ -31,9 +31,10 @@ Installation
 ------------
 
 It needs below packages that install Image-Creator.
-autoconf, automake, intltool
+autoconf, automake, intltool, gettext-devel(only Fedora)
 
 $ ./autogen.sh
+$ ./configure
 $ sudo make install
 
 Running
