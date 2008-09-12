@@ -164,7 +164,17 @@ moblin-image-creator (0.45) UNRELEASED; urgency=low
   * I forgot add chagnelog in spec file.
   * Fixed image-creator installation in deb and rpm.
 
- -- Mitsutaka Amano <mamano@miraclelinux.com>  Thu, 04 Sep 2008 12:35:40 +0900
+  [ Rusty Lynch ]
+  * Adding gtk2-devel to the netbook's 'X-Dev' fset
+
+  [ Bob Spencer ]
+  * Improved layout and stretchability of the add project dialog
+  * Made platform description uneditable. Removed reference to EeeeeeePC
+
+  [ Mitsutaka Amano ]
+  * Follow someone changelog. Updated the README.
+
+ -- Mitsutaka Amano <mamano@miraclelinux.com>  Fri, 12 Sep 2008 10:02:11 +0900
 
 moblin-image-creator (0.44) gaston; urgency=low
 
