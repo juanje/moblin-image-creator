@@ -291,23 +291,23 @@ Examples:
                   --project-name='MyProject'
 
 <Create a image>
-    image-creator --command=|create-live-usb \\
-                            |create-live-usbrw \\
-                            |create-install-usb]  \\
-                            |create-live-iso \\
-                            |create-nand \\
-                  --project-name='Myproject' \\
-                  --target-name='MyTraget' \\
+    image-creator --command= [ create-live-usb | \\
+                               create-live-usbrw | \\
+                               create-install-usb |  \\
+                               create-live-iso | \\
+                               create-nand ] \\
+                  --project-name='MyProject' \\
+                  --target-name='MyTarget' \\
                   --image-name='MyImage'
 
 <Save a project>
     image-creator --command=save-project \\
-        --project-name='Myproject' \\
+        --project-name='MyProject' \\
         --file-name='file_name_to_save_project'
 
 <Load a saved project>
     image-creator --command=load-project \\
-        --project-name='Myproject' \\
+        --project-name='MyProject' \\
         --file-name='file_name_of_saved_project'
         --project-path='path_to_restore_project_to'
                   """
