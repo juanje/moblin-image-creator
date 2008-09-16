@@ -174,7 +174,11 @@ moblin-image-creator (0.45) UNRELEASED; urgency=low
   [ Mitsutaka Amano ]
   * Follow someone changelog. Updated the README.
 
- -- Mitsutaka Amano <mamano@miraclelinux.com>  Fri, 12 Sep 2008 10:17:54 +0900
+  [ Prajwal Mohan ]
+  * Changing fset X for netbook. Using xorg-x11-drv-intel instead of
+    xorg-x11-drv-i810 
+
+ -- Prajwal Mohan <prajwal@linux.intel.com>  Tue, 16 Sep 2008 09:39:43 -0700
 
 moblin-image-creator (0.44) gaston; urgency=low
 
