@@ -1,4 +1,10 @@
-moblin-image-creator (0.45) UNRELEASED; urgency=low
+moblin-image-creator (0.46) UNRELEASED; urgency=low
+
+  * Starting new version.
+
+ -- Mitsutaka Amano <mamano@miraclelinux.com>  Wed, 17 Sep 2008 10:16:08 +0900
+
+moblin-image-creator (0.45) gaston; urgency=low
 
   [ John L. Villalovos ]
   * Starting new version
@@ -174,12 +180,15 @@ moblin-image-creator (0.45) UNRELEASED; urgency=low
   [ Mitsutaka Amano ]
   * Follow someone changelog. Updated the README.
 
+  [ Bob Spencer ]
+  * Fixed image-creator help output.  One mispelling and a little confusion on usb-image options listed
+
   [ Prajwal Mohan ]
   * Changing fset X for netbook. Using xorg-x11-drv-intel instead of
     xorg-x11-drv-i810
-  * Adding post install scripts to netbook platform 
+  * Adding post install scripts to netbook platform
 
- -- Prajwal Mohan <prajwal@linux.intel.com>  Tue, 16 Sep 2008 17:18:49 -0700
+ -- Mitsutaka Amano <mamano@miraclelinux.com>  Wed, 17 Sep 2008 10:15:27 +0900
 
 moblin-image-creator (0.44) gaston; urgency=low
 
