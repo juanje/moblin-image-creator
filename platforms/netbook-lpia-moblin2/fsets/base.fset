@@ -1,6 +1,6 @@
 [Core]
 DESC=Fundamental fset that provide a basic console based system
-PKGS=grub passwd kernel-netbook coreutils upstart bash moblin-system-config eeepc-system-config moblin-release yum which dhclient openssh-clients wireless-tools rt73usb-firmware
+PKGS=grub passwd kernel-netbook coreutils sysvinit bash moblin-release yum which dhclient openssh-clients wireless-tools rt73usb-firmware mkinitrd moblin-config-tools
 DEBUG_PKGS=gdb vim-enhanced tickless-utils oprofile
 
 [Core-Dev]
@@ -49,8 +49,8 @@ DEPS=x core-dev x-dev appframework applications
 CONFLICTS=appframework-devel-environment technology-integration-testing
 
 [Traditional-Desktop]
-DESC=Traditional xfce desktop
-PKGS=user-desktop
+DESC=Traditional XFCE Desktop
+PKGS= xfce-utils vibrant-icon-theme moblin-gnome-theme xorg-x11-fonts-100dpi xorg-x11-fonts-Type1 liberation-fonts xfwm4 xfdesktop xfce4-taskmanager xfce4-panel 
 DEBUG_PKGS=
 DEPS=x applications
 CONFLICTS=app-devel-environment appframework-devel-environment technology-integration-testing

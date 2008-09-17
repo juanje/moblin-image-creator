@@ -176,9 +176,10 @@ moblin-image-creator (0.45) UNRELEASED; urgency=low
 
   [ Prajwal Mohan ]
   * Changing fset X for netbook. Using xorg-x11-drv-intel instead of
-    xorg-x11-drv-i810 
+    xorg-x11-drv-i810
+  * Adding post install scripts to netbook platform 
 
- -- Prajwal Mohan <prajwal@linux.intel.com>  Tue, 16 Sep 2008 09:39:43 -0700
+ -- Prajwal Mohan <prajwal@linux.intel.com>  Tue, 16 Sep 2008 17:18:49 -0700
 
 moblin-image-creator (0.44) gaston; urgency=low
 
