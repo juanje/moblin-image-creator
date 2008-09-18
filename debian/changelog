@@ -1,8 +1,12 @@
 moblin-image-creator (0.46) UNRELEASED; urgency=low
 
+  [ Mitsutaka Amano ]
   * Starting new version.
 
- -- Mitsutaka Amano <mamano@miraclelinux.com>  Wed, 17 Sep 2008 10:16:08 +0900
+  [ Prajwal Mohan ]
+  * Changing run level 
+
+ -- Prajwal Mohan <prajwal@linux.intel.com>  Thu, 18 Sep 2008 14:33:30 -0700
 
 moblin-image-creator (0.45) gaston; urgency=low
 

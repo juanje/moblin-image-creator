@@ -120,6 +120,6 @@ cd ${rootmnt}
 exec chroot . /bin/sh <<EOF
     mount -t proc /proc /proc
     mount -t sysfs /sys /sys
-    exec /sbin/init $RUNLEVEL
+    exec /sbin/init $@
 EOF
 
