@@ -60,10 +60,21 @@ rm -rf %{buildroot}
 /usr/share/pdk/*
 
 %changelog
-* Mon Sep 17 2008 Mitsutaka Amano <mamano@miraclelinux.com> [0.46]
+* Fri Sep 19 2008 Mitsutaka Amano <mamano@miraclelinux.com>
+- Added short of changelog(for Prajwal and Bob).
+
+* Thu Sep 18 2008 Prajwal Mohan <prajwal@linux.intel.com>
+- Changing run level
+
+* Thu Sep 18 2008 Bob Spencer <bob.spencer@intel.com>
+- Merge branch 'master' of ssh://bspencer@moblin.org/home/repos/tools/moblin-i
+- A stand-alone python executable script that writes an image to a USB drive.
+- Intended to be used with a QuickStart "Test Drive Moblin" online guide.
+
+* Wed Sep 17 2008 Mitsutaka Amano <mamano@miraclelinux.com> [0.46]
 - Starting new version. 
 
-* Mon Sep 17 2008 Mitsutaka Amano <mamano@miraclelinux.com> [0.45]
+* Wed Sep 17 2008 Mitsutaka Amano <mamano@miraclelinux.com> [0.45]
 - Starting new version
 - https://bugs.launchpad.net/moblin-image-creator/+bug/203561
 - Set a bigger bs paramter to dd command to speed up writing image
