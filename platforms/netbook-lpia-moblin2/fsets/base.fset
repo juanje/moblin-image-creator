@@ -27,6 +27,12 @@ PKGS=firefox xterm
 DEBUG_PKGS=
 DEPS=x
 
+[Communication]
+DESC=Fset that provides communication packages
+PKGS=connman
+DEBUG_PKGS=
+DEPS=
+
 [AppFramework]
 DESC=Installs the collection of packages that are used as an application framework for the Moblin user experience
 PKGS=clutter clutter-cairo clutter-box2d

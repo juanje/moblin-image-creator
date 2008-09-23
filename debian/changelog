@@ -15,9 +15,10 @@ moblin-image-creator (0.46) UNRELEASED; urgency=low
   * Added short of changelog(for Prajwal and Bob).
 
   [ Prajwal Mohan ]
-  * Changing init.1 script to accept init kernel param 
+  * Changing init.1 script to accept init kernel param
+  * Adding communication fset to netbook and menlow platforms 
 
- -- Prajwal Mohan <prajwal@linux.intel.com>  Tue, 23 Sep 2008 09:57:51 -0700
+ -- Prajwal Mohan <prajwal@linux.intel.com>  Tue, 23 Sep 2008 10:19:01 -0700
 
 moblin-image-creator (0.45) gaston; urgency=low
 

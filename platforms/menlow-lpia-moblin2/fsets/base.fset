@@ -21,6 +21,12 @@ PKGS=firefox xterm
 DEBUG_PKGS=
 DEPS=x
 
+[Communication]
+DESC=Fset that provides communication packages
+PKGS=connman
+DEBUG_PKGS=
+DEPS=
+
 [Core-Dev]
 DESC=Fset that provides a basic build env
 PKGS=gcc gcc-c++ make pkgconfig rpm-build libtool autoconf automake intltool gettext m4 ncurses-devel slang-devel zlib-devel bzip2-devel dbus-devel glibc-devel libuser-devel openssl-devel rpm-devel tar vim-enhanced
