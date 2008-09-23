@@ -14,7 +14,10 @@ moblin-image-creator (0.46) UNRELEASED; urgency=low
   [ Mitsutaka Amano ]
   * Added short of changelog(for Prajwal and Bob).
 
- -- Mitsutaka Amano <mamano@miraclelinux.com>  Fri, 19 Sep 2008 10:25:35 +0900
+  [ Prajwal Mohan ]
+  * Changing init.1 script to accept init kernel param 
+
+ -- Prajwal Mohan <prajwal@linux.intel.com>  Tue, 23 Sep 2008 09:57:51 -0700
 
 moblin-image-creator (0.45) gaston; urgency=low
 
