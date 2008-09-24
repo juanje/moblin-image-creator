@@ -23,9 +23,9 @@ DEPS=x
 
 [Communication]
 DESC=Fset that provides communication packages
-PKGS=connman
+PKGS=connman bluez-utils bluez-libs bluez-utils-cups bluez-utils-alsa
 DEBUG_PKGS=
-DEPS=
+DEPS=core
 
 [Core-Dev]
 DESC=Fset that provides a basic build env

@@ -29,9 +29,9 @@ DEPS=x
 
 [Communication]
 DESC=Fset that provides communication packages
-PKGS=connman
+PKGS=connman bluez-utils bluez-libs bluez-utils-cups bluez-utils-alsa
 DEBUG_PKGS=
-DEPS=
+DEPS=core
 
 [AppFramework]
 DESC=Installs the collection of packages that are used as an application framework for the Moblin user experience
