@@ -1,6 +1,6 @@
 [Core]
 DESC=Fundamental fset that provide a basic console based system
-PKGS=grub passwd kernel-crown-beach coreutils upstart bash moblin-config-tools moblin-release yum which dhclient openssh-clients wireless-tools rt73usb-firmware
+PKGS=grub passwd kernel-crown-beach coreutils upstart bash moblin-config-tools moblin-release yum which dhclient openssh-clients wireless-tools rt73usb-firmware openssh-server
 DEBUG_PKGS=gdb yum vim-enhanced tickless-utils oprofile
 
 [X]
@@ -11,7 +11,7 @@ DEPS= core
 
 [XFCE]
 DESC=xfce
-PKGS= xfce-utils vibrant-icon-theme moblin-gnome-theme xorg-x11-fonts-100dpi xorg-x11-fonts-Type1 liberation-fonts xfwm4 xfdesktop xfce4-taskmanager xfce4-panel
+PKGS= xfce-utils vibrant-icon-theme moblin-gnome-theme xorg-x11-fonts-100dpi xorg-x11-fonts-Type1 liberation-fonts xfwm4 xfdesktop xfce4-taskmanager xfce4-panel xfce4-session
 DEBUG_PKGS=
 DEPS= x applications
 
