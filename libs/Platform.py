@@ -115,10 +115,11 @@ class Platform(object):
         output = []
         result = pdk_utils.execCommand(cmd, output = output, callback = callback)
         if result != 0:
-            print >> sys.stderr, _("ERROR: Unable to archive rootstrap!")
-            pdk_utils.rmtree(chroot_dir, callback = callback)
+            print >> sys.stderr, _("Warning: Unable to archive rootstrap!")
+            #FIXME: We dont need to invalidate the project if rootstrap creation failed
+            #pdk_utils.rmtree(chroot_dir, callback = callback)
             # FIXME: Better exception here
-            raise ValueError(" ".join(output))
+            #raise ValueError(" ".join(output))
 
     def aptCreateChroot(self, chroot_dir, use_rootstrap, callback = None):
         """Create chroot in chroot_dir for using APT tools"""
