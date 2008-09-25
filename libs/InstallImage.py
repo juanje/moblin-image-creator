@@ -706,6 +706,7 @@ class NANDImage(InstallImage):
             self.create_all_initrd()
 
         self.target.umount()
+        initrd_path = "/tmp/.tmp.initrd0"
         os.system(os.path.join(self.project.platform.path, "nand.sh %s %s %s %s %s %s %s %s" 
               % (os.path.join(self.target.config_path, 'nand_kernel_cmdline'),
                  os.path.join(self.target.fs_path, 'boot/bootstub'),

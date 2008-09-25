@@ -20,9 +20,10 @@ moblin-image-creator (0.46) UNRELEASED; urgency=low
   * Adding post install scripts to menlow-lpia-moblin2
   * Adding bluez packages to fset
   * Added xfce4-session package to fset
-  * Continue with project creation if rootstrap creation fails 
+  * Continue with project creation if rootstrap creation fails
+  * Fixing path for Nand image initrd 
 
- -- Prajwal Mohan <prajwal@linux.intel.com>  Wed, 24 Sep 2008 16:17:11 -0700
+ -- Prajwal Mohan <prajwal@linux.intel.com>  Thu, 25 Sep 2008 15:44:11 -0700
 
 moblin-image-creator (0.45) gaston; urgency=low
 
