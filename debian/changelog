@@ -22,9 +22,10 @@ moblin-image-creator (0.46) UNRELEASED; urgency=low
   * Added xfce4-session package to fset
   * Continue with project creation if rootstrap creation fails
   * Fixing path for Nand image initrd
-  * Adding hal to communications fset 
+  * Adding hal to communications fset
+  * setting root=/dev/sda2 in grub.conf 
 
- -- Prajwal Mohan <prajwal@linux.intel.com>  Mon, 29 Sep 2008 10:47:45 -0700
+ -- Prajwal Mohan <prajwal@linux.intel.com>  Mon, 29 Sep 2008 13:26:02 -0700
 
 moblin-image-creator (0.45) gaston; urgency=low
 
