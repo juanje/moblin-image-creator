@@ -29,7 +29,7 @@ DEPS=x
 
 [Communication]
 DESC=Fset that provides communication packages
-PKGS=connman bluez-utils bluez-libs bluez-utils-cups bluez-utils-alsa
+PKGS=connman bluez-utils bluez-libs bluez-utils-alsa hal
 DEBUG_PKGS=
 DEPS=core
 
