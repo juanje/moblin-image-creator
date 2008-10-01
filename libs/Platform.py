@@ -84,11 +84,15 @@ class Platform(object):
         # determine what components to use for the buildroot mirror
         components = mic_cfg.config.get(section, "buildroot_components")
         self.buildroot_components = components.split()
-        # determine default kernel cmdline options
-        self.usb_kernel_cmdline = mic_cfg.config.get(section, "usb_kernel_cmdline")
-        self.hd_kernel_cmdline = mic_cfg.config.get(section, "hd_kernel_cmdline")
-        self.cd_kernel_cmdline = mic_cfg.config.get(section, "cd_kernel_cmdline")
-        self.nand_kernel_cmdline = mic_cfg.config.get(section, "nand_kernel_cmdline")
+        # Install platform configurations
+        configs = mic_cfg.config.get(section, "target_configs").split()
+        self.target_configs = {}
+        for config in configs:
+            platform_section = mic_cfg.config.has_section("%s.%s" % (section, self.name))
+            if platform_section:
+                self.target_configs[config] = mic_cfg.config.get(platform_section, config)
+            else:
+                self.target_configs[config] = mic_cfg.config.get(section, config)
         # Architecture
         self.architecture = mic_cfg.config.get(section, "architecture") or "i386"
         # Package Manager

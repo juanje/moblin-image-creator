@@ -191,18 +191,18 @@ class InstallImage(object):
         s = SyslinuxCfg(self.project, self.tmp_path, cfg_filename, message_color, message)
         # Copy the default kernel
         if imageType == 'CDImage':
-            kernel_name = s.add_default(self.default_kernel, self.project.get_target_cd_kernel_cmdline(self.target.name))
+            kernel_name = s.add_default(self.default_kernel, self.project.get_target_config(self.target.name, 'cd_kernel_cmdline'))
         else:
-            kernel_name = s.add_default(self.default_kernel, self.project.get_target_usb_kernel_cmdline(self.target.name))
+            kernel_name = s.add_default(self.default_kernel, self.project.get_target_config(self.target.name, 'usb_kernel_cmdline'))
         src_path = os.path.join(self.target.fs_path, 'boot', self.default_kernel)
         dst_path = os.path.join(self.tmp_path, kernel_name)
         shutil.copyfile(src_path, dst_path)
         # Copy the remaining kernels
         for kernel in self.kernels:
             if imageType == 'CDImage':
-                kernel_name = s.add_target(kernel, self.project.get_target_cd_kernel_cmdline(self.target.name))
+                kernel_name = s.add_target(kernel, self.project.get_target_config(self.target.name, 'cd_kernel_cmdline'))
             else:
-                kernel_name = s.add_target(kernel, self.project.get_target_usb_kernel_cmdline(self.target.name))
+                kernel_name = s.add_target(kernel, self.project.get_target_config(self.target.name, 'usb_kernel_cmdline'))
             src_path = os.path.join(self.target.fs_path, 'boot', kernel)
             dst_path = os.path.join(self.tmp_path, kernel_name)
             shutil.copyfile(src_path, dst_path)
@@ -255,7 +255,7 @@ class InstallImage(object):
         # re-create fstab every time, since user could change fstab options on
         # the fly (by editing image-creator.cfg)
         fstab_path = os.path.join(self.target.fs_path, 'etc/fstab')
-        if int(mic_cfg.config.get(self.section, "swap_option")) == 2:
+        if int(self.project.get_target_config(self.target.name, 'hd_swap_option')) == 2:
             swap = True
         else:
             swap = False
@@ -335,15 +335,15 @@ class InstallImage(object):
         """Write all of the config file options that we care about to the
         specified file"""
         # How big to make the boot partition for the HD installation image
-        boot_partition_size = int(mic_cfg.config.get(self.section, "boot_partition_size"))
+        boot_partition_size = int(self.project.get_target_config(self.target.name, 'hd_boot_partition_size'))
         # Options for swap partition: 0. No swap 1. swap always off 2. swap always on
-        swap_option = int(mic_cfg.config.get(self.section, "swap_option"))
+        swap_option = int(self.project.get_target_config(self.target.name, 'hd_swap_option'))
         # How big to make the swap partition for the HD installation image
-        swap_partition_size = int(mic_cfg.config.get(self.section, "swap_partition_size"))
+        swap_partition_size = int(self.project.get_target_config(self.target.name, 'hd_swap_partition_size'))
         # How big to make the fat32 partition for the HD installation image
-        fat32_partition_size = int(mic_cfg.config.get(self.section, "fat32_partition_size"))
+        fat32_partition_size = int(self.project.get_target_config(self.target.name, 'hd_fat32_partition_size'))
         # Use squashfs or not
-        use_squashfs = int(mic_cfg.config.get(self.section, "use_squashfs"))
+        use_squashfs = int(self.project.get_target_config(self.target.name, 'hd_use_squashfs'))
         if swap_option == 0:
             swap_partition_size = 0
         cfg_dict = {
@@ -425,7 +425,7 @@ do_initrd = yes
             os.unlink(grub_conf)
         if not os.path.exists(menu_dir):
             os.makedirs(menu_dir)
-        hd_kernel_cmdline = self.project.get_target_hd_kernel_cmdline(self.target.name)
+        hd_kernel_cmdline = self.project.get_target_config(self.target.name, 'hd_kernel_cmdline')
         #execCommand does not seem to work. This command needs the hd_kernel_cmdline to be within double quotes
         #execComamnd uses split. This causes only the first part of hd_kernel_cmdline to get picked up
         #self.target.chroot("update-grub %s" % hd_kernel_cmdline)
@@ -575,7 +575,7 @@ class LiveUsbImage(BaseUsbImage):
             print _("LiveUsbImage: Creating Live USB Image(%s) Now...") % fs_type
             image_type = _("Live USB Image (no persistent R/W)")
         # How big to make the ext3 File System on the Live RW USB image, in megabytes
-        ext3fs_fs_size = int(mic_cfg.config.get(self.section, "ext3fs_size"))
+        ext3fs_fs_size = int(self.project.get_target_config(self.target.name, 'usb_ext3fs_size'))
 
         if self.project.platform.config_info['package_manager'] == 'apt':
             self.create_all_initramfs()
@@ -670,7 +670,7 @@ class InstallUsbImage(BaseUsbImage):
         
     def apply_hd_kernel_cmdline(self):
         # set kopt= (in AUTOMAGIC KERNELS LIST)
-        hd_kernel_cmdline = self.project.get_target_hd_kernel_cmdline(self.target.name)
+        hd_kernel_cmdline = self.project.get_target_config(self.target.name, 'hd_kernel_cmdline')
         cmd = "sed -e 's:^\\s*#\\s*kopt\\s*=\\s*.*:# kopt=%s:' -i %s" % (hd_kernel_cmdline, os.path.join(self.target.fs_path, 'boot', 'grub', 'menu.lst'))
         print cmd
         print os.popen(cmd).readlines()
@@ -713,7 +713,7 @@ class NANDImage(InstallImage):
                  os.path.join(self.target.fs_path, 'boot',self.default_kernel),
                  initrd_path,
                  self.target.fs_path,
-                 int(mic_cfg.config.get(self.section, "nand_image_size")),
+                 int(self.project.get_target_config(self.target.name, 'nand_image_size')),
                  self.path+'.boot',
                  self.path)))
 

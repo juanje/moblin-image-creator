@@ -63,6 +63,7 @@ rm -rf %{buildroot}
 %changelog
 * Wed Oct 01 2008 Mitsutaka Amano <mamano@miraclelinux.com>
 - Fixed rpm spec file for initial installation.
+- Added the Target config function.
 
 * Tue Sep 30 2008 Prajwal Mohan <prajwal@linux.intel.com>
 - Adding tmpfs to fstab

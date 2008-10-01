@@ -237,11 +237,9 @@ class Project(FileSystem):
                 self.platform.pkg_manager.resetPackageDB(install_path, None)
             self.targets[name].updateAndUpgrade()
             self.targets[name].setHostname('ume')
-            # Install platform default kernel cmdline
-            self.set_target_usb_kernel_cmdline(name, self.platform.usb_kernel_cmdline)
-            self.set_target_hd_kernel_cmdline(name, self.platform.hd_kernel_cmdline)
-            self.set_target_cd_kernel_cmdline(name, self.platform.cd_kernel_cmdline)
-            self.set_target_nand_kernel_cmdline(name, self.platform.nand_kernel_cmdline)
+            # Install platform configurations
+            for config in self.platform.target_configs:
+                self.set_target_config(name, config, self.platform.target_configs[config])
             #Copy post install scripts
             if os.path.isdir(os.path.join(self.platform.path, "post-install-scripts")):
                 print _("Installing post install scripts")
@@ -255,78 +253,29 @@ class Project(FileSystem):
                 except:
                     pass
         return self.targets[name]
-    
-    def get_target_usb_kernel_cmdline(self, name):
-        if not name:
+
+    def get_target_config(self, target_name, config_param):
+        if not target_name:
            raise ValueError(_("Target name was not specified"))
-        cmdline = open(os.path.join(self.targets[name].config_path, 'usb_kernel_cmdline'), 'r')
-        usb_kernel_cmdline = ''
-        for line in cmdline:
+        file = os.path.join(self.targets[target_name].config_path, config_param)
+        if os.path.isfile(file):
+            param = open(file, 'r')
+        else:
+            print _("%s is not found") % file
+            return False
+        new_value = ''
+        for line in param:
             if not re.search(r'^\s*#',line): 
-                usb_kernel_cmdline += line + ' '
-        cmdline.close()
-        return usb_kernel_cmdline.strip()
+                new_value += line + ' '
+        param.close()
+        return new_value.strip()
 
-    def get_target_hd_kernel_cmdline(self, name):
-        if not name:
+    def set_target_config(self, target_name, config_param, str):
+        if not target_name:
            raise ValueError(_("Target name was not specified"))
-        cmdline = open(os.path.join(self.targets[name].config_path, 'hd_kernel_cmdline'), 'r')
-        hd_kernel_cmdline = ''
-        for line in cmdline:
-            if not re.search(r'^\s*#',line): 
-                hd_kernel_cmdline += line + ' '
-        cmdline.close()
-        return hd_kernel_cmdline.strip()
-
-    def get_target_cd_kernel_cmdline(self, name):
-        if not name:
-           raise ValueError(_("Target name was not specified"))
-        cmdline = open(os.path.join(self.targets[name].config_path, 'cd_kernel_cmdline'), 'r')
-        cd_kernel_cmdline = ''
-        for line in cmdline:
-            if not re.search(r'^\s*#',line): 
-                cd_kernel_cmdline += line + ' '
-        cmdline.close()
-        return cd_kernel_cmdline.strip()
-
-    def get_target_nand_kernel_cmdline(self, name):
-        if not name:
-           raise ValueError(_("Target name was not specified"))
-        cmdline = open(os.path.join(self.targets[name].config_path, 'nand_kernel_cmdline'), 'r')
-        nand_kernel_cmdline = ''
-        for line in cmdline:
-            if not re.search(r'^\s*#',line): 
-                nand_kernel_cmdline += line + ' '
-        cmdline.close()
-        return nand_kernel_cmdline.strip()
-
-    def set_target_usb_kernel_cmdline(self, name, str):
-        if not name:
-           raise ValueError(_("Target name was not specified"))
-        cmdline = open(os.path.join(self.targets[name].config_path, 'usb_kernel_cmdline'), 'w')
-        print >> cmdline, str
-        cmdline.close()
-
-    def set_target_hd_kernel_cmdline(self, name, str):
-        if not name:
-           raise ValueError(_("Target name was not specified"))
-        cmdline = open(os.path.join(self.targets[name].config_path, 'hd_kernel_cmdline'), 'w')
-        print >> cmdline, str
-        cmdline.close()
-
-    def set_target_cd_kernel_cmdline(self, name, str):
-        if not name:
-           raise ValueError(_("Target name was not specified"))
-        cmdline = open(os.path.join(self.targets[name].config_path, 'cd_kernel_cmdline'), 'w')
-        print >> cmdline, str
-        cmdline.close()
-
-    def set_target_nand_kernel_cmdline(self, name, str):
-        if not name:
-           raise ValueError(_("Target name was not specified"))
-        cmdline = open(os.path.join(self.targets[name].config_path, 'nand_kernel_cmdline'), 'w')
-        print >> cmdline, str
-        cmdline.close()
+        param = open(os.path.join(self.targets[target_name].config_path, config_param), 'w')
+        print >> param, str
+        param.close()
 
     def delete_target(self, name, do_pop=True, callback = None):
         target = self.targets[name]

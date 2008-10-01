@@ -28,6 +28,7 @@ import sys
 import time
 import traceback
 import signal
+import Platform
 from threading import Thread
 
 import pdk_utils
@@ -91,7 +92,7 @@ class App(object):
                 "on_about_activate": self.on_about_activate,
                 "on_term_launch_clicked": self.on_term_launch_clicked,
                 "on_target_term_launch_clicked": self.on_target_term_launch_clicked,
-                "on_target_kernel_cmdline_clicked": self.on_target_kernel_cmdline_clicked,
+                "on_target_config_clicked": self.on_target_config_clicked,
                 "on_Write_USB_clicked": self.writeUsbImage,
                 "on_launch_vm_btn_clicked": self.on_launch_vm_clicked, 
                 "on_WriteUsbImage_activate":self.on_WriteUsbImage_activate,
@@ -142,7 +143,6 @@ class App(object):
         #main_window.set_size_request(900, 600)
 
         self.newFeatureDialog()        
-
         obsolete_projects = self.sdk.return_obsolete_projects()
         if obsolete_projects:         
             error_message = ""
@@ -233,7 +233,7 @@ class App(object):
         self.buttons.create_liveusb.set_sensitive(fset_state)
         self.buttons.create_liverwusb.set_sensitive(fset_state)
         self.buttons.create_installusb.set_sensitive(fset_state)
-        self.buttons.target_kernel_cmdline.set_sensitive(fset_state)
+        self.buttons.target_config.set_sensitive(fset_state)
         self.buttons.create_liveCD.set_sensitive(fset_state)
         self.buttons.create_NAND.set_sensitive(fset_state)
         self.buttons.Write_USB.set_sensitive(fset_state)
@@ -822,26 +822,43 @@ class App(object):
             cmd = '/usr/bin/xterm -e /usr/sbin/chroot %s env -u SHELL HOME=/root sh &' % (project_path)
             os.system(cmd)
 
-    def on_target_kernel_cmdline_clicked(self, widget):
+    def on_target_config_clicked(self, widget):
         project_path = self.current_project().path
         target = self.current_target()
-        target_path= "%s/targets/%s/image" % (project_path, target.name)
-        widgets = gtk.glade.XML(self.gladefile, 'kernel_cmdline_dlg')
-        dialog = widgets.get_widget('kernel_cmdline_dlg')
-        usb_kernel_cmdline = widgets.get_widget('usb_kernel_cmdline')
-        hd_kernel_cmdline = widgets.get_widget('hd_kernel_cmdline')
-        cd_kernel_cmdline = widgets.get_widget('cd_kernel_cmdline')
-        nand_kernel_cmdline = widgets.get_widget('nand_kernel_cmdline')
-        usb_kernel_cmdline.set_text(self.current_project().get_target_usb_kernel_cmdline(target.name))
-        hd_kernel_cmdline.set_text(self.current_project().get_target_hd_kernel_cmdline(target.name))
-        cd_kernel_cmdline.set_text(self.current_project().get_target_cd_kernel_cmdline(target.name))
-        nand_kernel_cmdline.set_text(self.current_project().get_target_nand_kernel_cmdline(target.name))
+        widgets = gtk.glade.XML(self.gladefile, 'target_config_dlg')
+        dialog = widgets.get_widget('target_config_dlg')
+        current_target = {}
+        for config in self.current_project().platform.target_configs:
+            current_target[config] = widgets.get_widget(config)
+            config_value = self.current_project().get_target_config(target.name, config)
+            if not config_value:
+                print _("%s: Using default parametor.") % config
+                config_value = self.current_project().platform.target_configs[config]
+            if isinstance(current_target[config], gtk.Entry) or \
+                isinstance(current_target[config], gtk.SpinButton):
+                current_target[config].set_text(config_value)
+            elif isinstance(current_target[config], gtk.CheckButton) or \
+                isinstance(current_target[config], gtk.ComboBox):
+                current_target[config].set_active(int(config_value))
+            else:
+                try:
+                    current_target[config].set_text(config_value)
+                except:
+                    pass
         result = dialog.run()
         if result == gtk.RESPONSE_OK:
-            self.current_project().set_target_usb_kernel_cmdline(target.name, usb_kernel_cmdline.get_text())
-            self.current_project().set_target_hd_kernel_cmdline(target.name, hd_kernel_cmdline.get_text())
-            self.current_project().set_target_cd_kernel_cmdline(target.name, cd_kernel_cmdline.get_text())
-            self.current_project().set_target_nand_kernel_cmdline(target.name, nand_kernel_cmdline.get_text())
+            for config in self.current_project().platform.target_configs:
+                if isinstance(current_target[config], gtk.Entry) or \
+                    isinstance(current_target[config], gtk.SpinButton):
+                    self.current_project().set_target_config(target.name, config, current_target[config].get_text())
+                elif isinstance(current_target[config], gtk.CheckButton) or \
+                    isinstance(current_target[config], gtk.ComboBox):
+                    self.current_project().set_target_config(target.name, config, int(current_target[config].get_active()))
+                else:
+                    try:
+                        self.current_project().set_target_config(target.name, config, current_target[config].get_text())
+                    except:
+                        pass
         dialog.destroy()
 
     def on_liveUSB_clicked(self, widget):
@@ -1866,7 +1883,7 @@ class MainWindowButtons(object):
         # Terminal button
         self.term_launch = widgets.get_widget('term_launch')
         self.target_term_launch = widgets.get_widget('target_term_launch')
-        self.target_kernel_cmdline = widgets.get_widget('target_kernel_cmdline')
+        self.target_config = widgets.get_widget('target_config')
         self.Write_USB = widgets.get_widget('Write_USB')
         self.create_launchvm = widgets.get_widget('launch_vm_btn')
 
