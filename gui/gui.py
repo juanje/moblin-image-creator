@@ -35,6 +35,7 @@ import SDK
 import mic_cfg
 import project_assistant
 import repo_editor
+import package_group
 import paths
 
 debug = False
@@ -83,6 +84,7 @@ class App(object):
                 "on_new_target_add_clicked": self.on_new_target_add_clicked,
                 "on_delete_target_clicked": self.on_delete_target_clicked,
                 "on_install_fset": self.on_install_fset,
+                "on_install_group": self.on_install_group,
                 "on_create_liveUSB_clicked": self.on_liveUSB_clicked,
                 "on_create_liveRWUSB_clicked": self.on_liveRWUSB_clicked,
                 "on_create_installUSB_clicked": self.on_installUSB_clicked,
@@ -229,6 +231,7 @@ class App(object):
         self.buttons.target_term_launch.set_sensitive(target_selected_state)
         self.buttons.upgrade_target.set_sensitive(target_selected_state)
         self.buttons.edit_repo.set_sensitive(target_selected_state)
+        self.buttons.install_group.set_sensitive(target_selected_state)
         # Items which should be enabled if our selected target has an fset
         self.buttons.create_liveusb.set_sensitive(fset_state)
         self.buttons.create_liverwusb.set_sensitive(fset_state)
@@ -257,6 +260,7 @@ class App(object):
             self.buttons.upgrade_project.set_sensitive(False)
             self.buttons.add_target.set_sensitive(False)
             self.buttons.install_fset.set_sensitive(False)
+            self.buttons.install_group.set_sensitive(False)   
             self.buttons.delete_target.set_sensitive(False)
             self.buttons.term_launch.set_sensitive(False)
             return
@@ -266,6 +270,7 @@ class App(object):
             self.buttons.upgrade_project.set_sensitive(False)
             self.buttons.add_target.set_sensitive(False)
             self.buttons.install_fset.set_sensitive(False)
+            self.buttons.install_group.set_sensitive(False)
             self.buttons.delete_target.set_sensitive(False)
             self.buttons.term_launch.set_sensitive(False)
             return
@@ -639,6 +644,21 @@ class App(object):
                 break
         dialog.destroy()
         return (fsetToInstall, debug_pkgs)
+
+    def on_install_group(self, widget):
+        self.gladefile = os.path.join(self.sdk.path, "image-creator.glade")
+        progress_tree = gtk.glade.XML(self.gladefile, 'ProgressDialog')
+        progress_dialog = progress_tree.get_widget('ProgressDialog')
+        progress_dialog.connect('delete_event', self.ignore)
+        self.progressbar = progress_tree.get_widget('progressbar')
+        progress_tree.get_widget('progress_label').set_text(_("Getting Group List..."))
+
+        packageGroup = package_group.packageGroup(self.sdk, self.current_target())
+        groupList = packageGroup.run()
+        if groupList:
+            self.current_target().installGroups(groupList)
+        progress_dialog.destroy()
+
 
     def on_install_fset(self, widget):
         platformName = self.current_project().platform.name
@@ -1855,6 +1875,7 @@ class MainWindowButtons(object):
         self.add_target = widgets.get_widget('new_target_add')
         self.delete_target = widgets.get_widget('target_delete')
         self.install_fset = widgets.get_widget('target_install_fset')
+        self.install_group = widgets.get_widget('target_install_group')
         self.upgrade_target = widgets.get_widget('upgrade_target')
         self.edit_repo = widgets.get_widget('edit_repo')
         # Action buttons

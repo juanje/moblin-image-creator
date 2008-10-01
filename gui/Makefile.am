@@ -2,7 +2,8 @@ python_scriptdir = ${pkgdatadir}/lib
 python_script_DATA = \
 	gui.py \
 	project_assistant.py\
-	repo_editor.py
+	repo_editor.py\
+	package_group.py
 
 gladedir = ${pkgdatadir}
 glade_DATA = \

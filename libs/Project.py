@@ -103,6 +103,11 @@ ff02::3 ip6-allhosts
         return self.platform.pkg_manager.installPackages(self.chroot_path,
             packages_list, callback = self.progress_callback)
 
+    def installGroups(self, groups_list):
+        self.mount()
+        return self.platform.pkg_manager.installGroups(self.chroot_path,
+            groups_list, callback = self.progress_callback)
+
     def chroot(self, cmd, output = None):
         if not os.path.isfile(os.path.join(self.chroot_path, 'bin/bash')):
             print >> sys.stderr, _("Incomplete jailroot at %s") % (self.chroot_path)
@@ -473,6 +478,10 @@ class Target(FileSystem):
                         pass
         else:
             print _("No post-install-scripts found")
+
+    def installGroup(self, groups_list):
+        self.installGroups(groups_list)
+
 
     def installFset(self, fset, debug_pkgs = 0, fsets = None, seen_fsets = None):
         """
