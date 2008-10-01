@@ -58,8 +58,34 @@ rm -rf %{buildroot}
 /usr/share/applications/image-creator.desktop
 /usr/share/locale/*/LC_MESSAGES/moblin-image-creator.mo
 /usr/share/pdk/*
+/var/lib/moblin-image-creator/projects
 
 %changelog
+* Wed Oct 01 2008 Mitsutaka Amano <mamano@miraclelinux.com>
+- Fixed rpm spec file for initial installation.
+
+* Tue Sep 30 2008 Prajwal Mohan <prajwal@linux.intel.com>
+- Adding tmpfs to fstab
+- Changing repo url
+
+* Mon Sep 29 2008 Prajwal Mohan <prajwal@linux.intel.com>
+- Adding hal to communications fset
+- setting root=/dev/sda2 in grub.conf
+- Creating rootfs before bootfs
+
+* Thu Sep 25 2008 Prajwal Mohan <prajwal@linux.intel.com>
+- Fixing path for Nand image initrd
+
+* Wed Sep 24 2008 Prajwal Mohan <prajwal@linux.intel.com>
+- Added xfce4-session package to fset
+- Continue with project creation if rootstrap creation fails
+
+* Tue Sep 23 2008 Prajwal Mohan <prajwal@linux.intel.com>
+- Changing init.1 script to accept init kernel param
+- Adding communication fset to netbook and menlow platforms
+- Adding post install scripts to menlow-lpia-moblin2
+- Adding bluez packages to fset
+
 * Fri Sep 19 2008 Mitsutaka Amano <mamano@miraclelinux.com>
 - Added short of changelog(for Prajwal and Bob).
 
