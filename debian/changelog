@@ -1,4 +1,39 @@
-moblin-image-creator (0.45) UNRELEASED; urgency=low
+moblin-image-creator (0.46) UNRELEASED; urgency=low
+
+  [ Mitsutaka Amano ]
+  * Starting new version.
+
+  [ Bob Spencer ]
+  * A stand-alone python executable script that writes an image to a USB drive.
+  * Intended to be used with a QuickStart "Test Drive Moblin" online guide.
+  * Merge branch 'master' of ssh://bspencer@moblin.org/home/repos/tools/moblin-i
+
+  [ Prajwal Mohan ]
+  * Changing run level
+
+  [ Mitsutaka Amano ]
+  * Added short of changelog(for Prajwal and Bob).
+
+  [ Prajwal Mohan ]
+  * Changing init.1 script to accept init kernel param
+  * Adding communication fset to netbook and menlow platforms
+  * Adding post install scripts to menlow-lpia-moblin2
+  * Adding bluez packages to fset
+  * Added xfce4-session package to fset
+  * Continue with project creation if rootstrap creation fails
+  * Fixing path for Nand image initrd
+  * Adding hal to communications fset
+  * setting root=/dev/sda2 in grub.conf
+  * Creating rootfs before bootfs
+  * Adding tmpfs to fstab
+  * Changing repo url
+
+  [ Mitsutaka Amano ]
+  * Fixed rpm spec file for initial installation.
+
+ -- Mitsutaka Amano <mamano@miraclelinux.com>  Wed, 01 Oct 2008 13:22:37 +0900
+
+moblin-image-creator (0.45) gaston; urgency=low
 
   [ John L. Villalovos ]
   * Starting new version
@@ -174,7 +209,15 @@ moblin-image-creator (0.45) UNRELEASED; urgency=low
   [ Mitsutaka Amano ]
   * Follow someone changelog. Updated the README.
 
- -- Mitsutaka Amano <mamano@miraclelinux.com>  Fri, 12 Sep 2008 10:02:11 +0900
+  [ Bob Spencer ]
+  * Fixed image-creator help output.  One mispelling and a little confusion on usb-image options listed
+
+  [ Prajwal Mohan ]
+  * Changing fset X for netbook. Using xorg-x11-drv-intel instead of
+    xorg-x11-drv-i810
+  * Adding post install scripts to netbook platform
+
+ -- Mitsutaka Amano <mamano@miraclelinux.com>  Wed, 17 Sep 2008 10:15:27 +0900
 
 moblin-image-creator (0.44) gaston; urgency=low
 

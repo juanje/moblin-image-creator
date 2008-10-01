@@ -1,25 +1,31 @@
 [Core]
 DESC=Fundamental fset that provide a basic console based system
-PKGS=grub passwd kernel-crown-beach coreutils upstart bash moblin-system-config eeepc-system-config moblin-release yum which dhclient openssh-clients wireless-tools rt73usb-firmware
+PKGS=grub passwd kernel-crown-beach coreutils upstart bash moblin-config-tools moblin-release yum which dhclient openssh-clients wireless-tools rt73usb-firmware openssh-server
 DEBUG_PKGS=gdb yum vim-enhanced tickless-utils oprofile
 
 [X]
 DESC=Fundmental fset that provides a X system
-PKGS=xorg-x11-server-Xorg libdrm mesa-libGL xorg-x11-fonts-misc xterm xorg-x11-xinit xorg-x11-apps
+PKGS=xorg-x11-server-Xorg libdrm mesa-libGL xorg-x11-fonts-misc xterm xorg-x11-xinit xorg-x11-apps xorg-x11-drv-vesa
 DEBUG_PKGS=
 DEPS= core
 
 [XFCE]
 DESC=xfce
-PKGS= user-desktop
+PKGS= xfce-utils vibrant-icon-theme moblin-gnome-theme xorg-x11-fonts-100dpi xorg-x11-fonts-Type1 liberation-fonts xfwm4 xfdesktop xfce4-taskmanager xfce4-panel xfce4-session
 DEBUG_PKGS=
-DEPS= x
+DEPS= x applications
 
 [Applications]
 DESC=Useful applications
 PKGS=firefox xterm
 DEBUG_PKGS=
 DEPS=x
+
+[Communication]
+DESC=Fset that provides communication packages
+PKGS=connman bluez-utils bluez-libs bluez-utils-alsa hal
+DEBUG_PKGS=
+DEPS=core
 
 [Core-Dev]
 DESC=Fset that provides a basic build env

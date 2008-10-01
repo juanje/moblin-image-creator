@@ -1,5 +1,5 @@
 [Moblin]
 name=Moblin
 failovermethod=priority
-baseurl=http://repo.moblin.org/Stable/
+baseurl=http://repo.moblin.org/moblin/releases/test/moblin2-pre-alpha1/ia32/
 enabled=1

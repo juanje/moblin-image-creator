@@ -628,8 +628,8 @@ class InstallUsbImage(BaseUsbImage):
             self.create_all_initrd()
             self.create_grub_menu_yum()
 
-        self.create_bootfs()
         self.create_rootfs()
+        self.create_bootfs()
         initrd_stat_result = os.stat('/tmp/.tmp.initrd0')
         rootfs_stat_result = os.stat(self.rootfs_path)
         bootfs_stat_result = os.stat(self.bootfs_path)
@@ -706,6 +706,7 @@ class NANDImage(InstallImage):
             self.create_all_initrd()
 
         self.target.umount()
+        initrd_path = "/tmp/.tmp.initrd0"
         os.system(os.path.join(self.project.platform.path, "nand.sh %s %s %s %s %s %s %s %s" 
               % (os.path.join(self.target.config_path, 'nand_kernel_cmdline'),
                  os.path.join(self.target.fs_path, 'boot/bootstub'),

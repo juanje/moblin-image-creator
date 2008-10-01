@@ -4,6 +4,7 @@ RUNLEVEL=3
 PATH=/bin:/sbin:/usr/bin:/usr/sbin
 ln -s /bin/busybox /bin/umount
 export PATH
+export init=/sbin/init
 
 echo Mounting proc filesystem
 mount -t proc /proc /proc
@@ -116,10 +117,5 @@ done
 echo 'Mounting Root Filesystem ...'
 . /${BOOT}
 mountroot
-cd ${rootmnt}
-exec chroot . /bin/sh <<EOF
-    mount -t proc /proc /proc
-    mount -t sysfs /sys /sys
-    exec /sbin/init $RUNLEVEL
-EOF
+exec switch_root ${rootmnt} ${init} $@
 
