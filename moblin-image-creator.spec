@@ -67,6 +67,7 @@ rm -rf %{buildroot}
 - Updated ja.po.
 - Added welcome_message in the Target config.
 - Updated ja.po.
+- Fixed typo and resolved https://bugs.launchpad.net/moblin-image-creator/+bug/199180
 
 * Wed Oct 01 2008 Prajwal Mohan <prajwal@linux.intel.com>
 - Adding feature to install package groups

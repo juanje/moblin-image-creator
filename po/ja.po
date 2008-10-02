@@ -1990,7 +1990,7 @@ msgstr "ターゲットの設定"
 
 #: ../gui/image-creator.glade:3551
 msgid "<b>Common configuration</b>"
-msgstr "共通の設定"
+msgstr "<b>共通の設定</b>"
 
 #: ../gui/image-creator.glade:3579
 msgid "Welcome message: "
