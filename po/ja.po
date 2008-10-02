@@ -1988,6 +1988,14 @@ msgstr "しばらくお待ちください..."
 msgid "Target configurations"
 msgstr "ターゲットの設定"
 
+#: ../gui/image-creator.glade:3551
+msgid "<b>Common configuration</b>"
+msgstr "共通の設定"
+
+#: ../gui/image-creator.glade:3579
+msgid "Welcome message: "
+msgstr "ウェルカムメッセージ: "
+
 #: ../gui/image-creator.glade:2154 ../gui/image-creator.glade:2392
 #: ../gui/image-creator.glade:2725 ../gui/image-creator.glade:2914
 msgid "Use squashfs:"
