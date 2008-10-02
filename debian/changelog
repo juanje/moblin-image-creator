@@ -42,7 +42,10 @@ moblin-image-creator (0.46) UNRELEASED; urgency=low
   * Updated ja.po.
   * Fixed typo and resolved https://bugs.launchpad.net/moblin-image-creator/+bug/199180
 
- -- Mitsutaka Amano <mamano@miraclelinux.com>  Thu, 02 Oct 2008 16:13:26 +0900
+  [ Prajwal Mohan ]
+  * Changing progress bar label 
+
+ -- Prajwal Mohan <prajwal@linux.intel.com>  Thu, 02 Oct 2008 10:03:33 -0700
 
 moblin-image-creator (0.45) gaston; urgency=low
 
