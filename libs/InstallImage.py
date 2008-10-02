@@ -40,20 +40,20 @@ _ = gettext.lgettext
 class SyslinuxCfg(object):
     """Class to provide helper functions for doing the syslinux stuff.
     Syslinux home page: http://syslinux.zytor.com/"""
-    def __init__(self, project, path, cfg_filename, message_color, message):
+    def __init__(self, project, target, path, cfg_filename, message_color, message):
         try:
             self.project = project
+            self.target = target
             self.path = path
             self.cfg_filename = cfg_filename
             self.cfg_path = os.path.join(self.path, cfg_filename)
             self.msg_path = os.path.join(self.path, 'boot.msg')
             self.index = 1
 
-            for section in [ "installimage.%s" % self.project.platform.name, "installimage" ]:
-                if mic_cfg.config.has_section(section):
-                   # section is now set to the appropriate section
-                   break
-            welcome_mesg = mic_cfg.config.get(section, "welcome_message")
+            welcome_mesg = self.project.get_target_config(self.target.name, 'welcome_message')
+            if not welcome_mesg:
+                print _("%s: Using default parametor.") % 'welcome_message'
+                welcome_mesg = self.project.platform.target_configs['welcome_message']
             # Create and initialize the syslinux config file
             cfg_file = open(self.cfg_path, 'w')
             print >> cfg_file, """\
@@ -164,12 +164,6 @@ class InstallImage(object):
         self.rootfs_path = ''
         self.kernels = []
         self.default_kernel = ''
-        # Find the config section for whole class usage 
-        for section in [ "installimage.%s" % self.project.platform.name, "installimage" ]:
-            if mic_cfg.config.has_section(section):
-                # section is now set to the appropriate section
-                break
-        self.section = section
         for filename in os.listdir(os.path.join(self.target.fs_path, 'boot')):
             if filename.find('vmlinuz') == 0:
                 if (not self.default_kernel) and (filename.find('default') > 0):
@@ -188,7 +182,7 @@ class InstallImage(object):
         if not self.tmp_path:
             raise ValueError, _("tmp_path doesn't exist")
 
-        s = SyslinuxCfg(self.project, self.tmp_path, cfg_filename, message_color, message)
+        s = SyslinuxCfg(self.project, self.target, self.tmp_path, cfg_filename, message_color, message)
         # Copy the default kernel
         if imageType == 'CDImage':
             kernel_name = s.add_default(self.default_kernel, self.project.get_target_config(self.target.name, 'cd_kernel_cmdline'))

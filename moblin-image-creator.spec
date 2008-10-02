@@ -65,6 +65,7 @@ rm -rf %{buildroot}
 - Added the Target config function.
 - Updated debian/changelog and rpm spec file.
 - Updated ja.po.
+- Added welcome_message in the Target config.
 
 * Wed Oct 01 2008 Prajwal Mohan <prajwal@linux.intel.com>
 - Adding feature to install package groups

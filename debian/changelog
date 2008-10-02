@@ -38,8 +38,9 @@ moblin-image-creator (0.46) UNRELEASED; urgency=low
   * Added the Target config function.
   * Updated debian/changelog and rpm spec file.
   * Updated ja.po.
+  * Added welcome_message in the Target config.
 
- -- Mitsutaka Amano <mamano@miraclelinux.com>  Thu, 02 Oct 2008 13:52:00 +0900
+ -- Mitsutaka Amano <mamano@miraclelinux.com>  Thu, 02 Oct 2008 15:59:19 +0900
 
 moblin-image-creator (0.45) gaston; urgency=low
 

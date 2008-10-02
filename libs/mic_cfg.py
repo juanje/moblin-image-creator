@@ -35,7 +35,7 @@ config = None
 DEFAULT_CONFIG_DIR = os.path.expanduser(paths.PKGDATADIR + "/default_config/")
 CONFIG_DIR = os.path.expanduser("~/.image-creator")
 # List of valid sections for our config file
-BASE_SECTIONS = [ "platform", "installimage", "distribution" ]
+BASE_SECTIONS = [ "platform", "distribution" ]
 VALID_SECTIONS = BASE_SECTIONS + [ "general" ]
 
 # Default values
