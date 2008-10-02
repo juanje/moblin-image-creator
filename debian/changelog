@@ -32,9 +32,12 @@ moblin-image-creator (0.46) UNRELEASED; urgency=low
   * Fixed rpm spec file for initial installation.
 
   [ Prajwal Mohan ]
-  * Adding feature to install package groups 
+  * Adding feature to install package groups
 
- -- Prajwal Mohan <prajwal@linux.intel.com>  Wed, 01 Oct 2008 16:16:21 -0700
+  [ Mitsutaka Amano ]
+  * Added the Target config function.
+
+ -- Mitsutaka Amano <mamano@miraclelinux.com>  Thu, 02 Oct 2008 10:09:38 +0900
 
 moblin-image-creator (0.45) gaston; urgency=low
 
@@ -220,7 +223,7 @@ moblin-image-creator (0.45) gaston; urgency=low
     xorg-x11-drv-i810
   * Adding post install scripts to netbook platform
 
- -- Mitsutaka Amano <mamano@miraclelinux.com>  Wed, 17 Sep 2008 10:15:27 +0900
+ -- Mitsutaka Amano <mamano@miraclelinux.com>  Wed, 01 Oct 2008 17:03:17 +0900
 
 moblin-image-creator (0.44) gaston; urgency=low
 
