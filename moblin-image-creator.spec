@@ -64,6 +64,7 @@ rm -rf %{buildroot}
 * Thu Oct 02 2008  Mitsutaka Amano <mamano@miraclelinux.com>
 - Added the Target config function.
 - Updated debian/changelog and rpm spec file.
+- Updated ja.po.
 
 * Wed Oct 01 2008 Prajwal Mohan <prajwal@linux.intel.com>
 - Adding feature to install package groups

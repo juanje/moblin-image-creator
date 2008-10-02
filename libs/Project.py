@@ -418,7 +418,7 @@ class Target(FileSystem):
         script_path = os.path.join(self.path, "post-install-scripts")
         if os.path.isdir(script_path):
             for filename in os.listdir(script_path):
-                    print _("Executing scritp: %s") % filename
+                    print _("Executing script: %s") % filename
                     cmd = "/post-install-scripts/%s" % filename
                     #Ignore error and continue
                     try:
@@ -503,7 +503,7 @@ class Callback:
 if __name__ == '__main__':
     if len(sys.argv) != 6:
         print >> sys.stderr, _("USAGE: %s PROJECT_NAME PROJECT_PATH PROJECT_DESCRIPTION TARGET_NAME PLATFORM_NAME") % (sys.argv[0])
-        print >> sys.stderr, _("\tPROJECT_NAME: name to call the project.  The config file " + paths.PKGDATADIR + "/projects/project_name.proj is used or created")
+        print >> sys.stderr, _("\tPROJECT_NAME: name to call the project.  The config file ") + paths.PKGDATADIR + _("/projects/project_name.proj is used or created")
         print >> sys.stderr, _("\tPROJECT_PATH: directory to install the project")
         print >> sys.stderr, _("\tPROJECT_DESCRIPTION: Textual description of the project")
         print >> sys.stderr, _("\tTARGET_NAME: ???")

@@ -1,59 +1,55 @@
 # ja.po
 # Copyright (C) 2008 MIRACLE LINUX CORPOLATION
-# This file is distributed under the same license as the moblin-image-creator package.
-# Mitsutaak Amano <mamano@miraclelinux.com>, 2008.
+# This file is distributed under the same license as the PACKAGE package.
+# Mitsutaka Amano <mamano@miraclelinux.com>, 2008.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: 0.45\n"
+"Project-Id-Version: 0.46\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-06-10 17:46+0900\n"
-"PO-Revision-Date: 2008-06-10 17:46+0900\n"
+"POT-Creation-Date: 2008-10-02 10:39+0900\n"
+"PO-Revision-Date: 2008-10-02 10:39+0900\n"
 "Last-Translator: Mitsutaka Amano <mamano@miraclelinux.com>\n"
-"Language-Team: None <none@example.org>\n"
+"Language-Team: None <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../gui/gui.py:52
+#: ../gui/gui.py:56
 msgid "Unmounting all mounted directories..."
 msgstr "マウントされている全てのディレクトリをアンマウントしています..."
 
-#: ../gui/gui.py:56
+#: ../gui/gui.py:60
 #, python-format
 msgid "Could not unmount these dirs: %s"
 msgstr "これらのディレクトリはアンマウントできませんでした。\n %s"
 
-#: ../gui/gui.py:58
+#: ../gui/gui.py:62
 msgid "Unmounting complete"
 msgstr "アンマウント完了"
 
-#: ../gui/gui.py:105 ../gui/gui.py:116
-#: ../gui/image-creator.glade:1216
+#: ../gui/gui.py:115 ../gui/gui.py:126
 msgid "Name"
 msgstr "プロジェクト名"
 
-#: ../gui/gui.py:106
-#: ../gui/image-creator.glade:1343
+#: ../gui/gui.py:116
 msgid "Description"
 msgstr "説明"
 
-#: ../gui/gui.py:107
-#: ../gui/image-creator.glade:1240
+#: ../gui/gui.py:117
 msgid "Path"
 msgstr "パス"
 
-#: ../gui/gui.py:108
-#: ../gui/image-creator.glade:1330
+#: ../gui/gui.py:118
 msgid "Platform"
 msgstr "プラットフォーム"
 
-#: ../gui/gui.py:117
+#: ../gui/gui.py:127
 msgid "Function Sets"
 msgstr "インストール済みの機能セット"
 
-#: ../gui/gui.py:139
+#: ../gui/gui.py:153
 #, python-format
 msgid ""
 "Found unsupported project(s): %s\n"
@@ -62,15 +58,15 @@ msgstr ""
 "サポートされていないプロジェクトが見つかりました: %s\n"
 "スキップします"
 
-#: ../gui/gui.py:152
+#: ../gui/gui.py:168
 msgid "Please wait while MIC attempts to unmount all projects and targets..."
 msgstr "Moblin Image Creatorが全てのプロジェクト、ターゲットをアンマウントしようとしています。しばらくお待ちください..."
 
-#: ../gui/gui.py:158
+#: ../gui/gui.py:174
 msgid "Closing Image-Creator"
-msgstr "Image Creatorを閉じています"
+msgstr "Moblin Image Creatorを閉じています"
 
-#: ../gui/gui.py:177
+#: ../gui/gui.py:193
 msgid ""
 "You are using an old version of PyGTK. Image Creator required atleast PyGTK "
 "2.12. Some features will be disabled"
@@ -78,90 +74,90 @@ msgstr ""
 "PyGTKの古いバージョンを使用しています。Image Creator は少なくとも2.12以上のバージョンに依存しています。"
 "いくつかの機能が無効になります"
 
-#: ../gui/gui.py:285
+#: ../gui/gui.py:307
 msgid "Are you sure you want to cancel project creation?"
 msgstr "プロジェクトの作成を本当に中止しますか?"
 
-#: ../gui/gui.py:297
+#: ../gui/gui.py:319
 #, python-format
 msgid "Canceled Function was %s and cancel type was %s"
 msgstr "%s とキャンセルタイプ %s の機能がキャンセルされました"
 
-#: ../gui/gui.py:318
+#: ../gui/gui.py:340
 msgid "All values must be specified"
 msgstr "値は全て指定されなければなりません"
 
-#: ../gui/gui.py:321
+#: ../gui/gui.py:343
 #, python-format
 msgid "Project already exists with the name: %s"
 msgstr "プロジェクト「%s」は既に存在しています"
 
-#: ../gui/gui.py:327
+#: ../gui/gui.py:349
 #, python-format
 msgid "Path: %s exists but is not a directory"
 msgstr "パス「%s」は存在しますが、ディレクトリではありません"
 
-#: ../gui/gui.py:331
+#: ../gui/gui.py:353
 #, python-format
 msgid "Path: %s is a directory which is NOT empty"
 msgstr "パス「%s」はディレクトリですが、空ではありません"
 
-#: ../gui/gui.py:340 ../gui/gui.py:601 ../gui/gui.py:1330 ../gui/gui.py:1365
+#: ../gui/gui.py:362 ../gui/gui.py:677 ../gui/gui.py:1523 ../gui/gui.py:1561
 #, python-format
 msgid "Please wait while installing %s"
 msgstr "「%s」をインストールしています。しばらくお待ちください"
 
-#: ../gui/gui.py:353 ../gui/gui.py:357
+#: ../gui/gui.py:378 ../gui/gui.py:382
 msgid "Project Creation cancelled"
 msgstr "プロジェクトの作成が中止されました"
 
-#: ../gui/gui.py:360
+#: ../gui/gui.py:385
 msgid "Trying to cleanup"
 msgstr "クリーンアップを試みています"
 
-#: ../gui/gui.py:363
+#: ../gui/gui.py:388
 msgid "could not cleanup project"
 msgstr "プロジェクトをクリーンアップできませんでした"
 
-#: ../gui/gui.py:392
+#: ../gui/gui.py:419
 msgid "A tool for building Mobile and/or Single Purpose Linux Device Stacks"
 msgstr "携帯型デバイス向けおよび(または)目的別のLinux環境の構築を目的としたツールです。"
 
-#: ../gui/gui.py:409
+#: ../gui/gui.py:436
 msgid "Delete Project(s)?\n"
 msgstr "プロジェクトを削除しますか?\n"
 
-#: ../gui/gui.py:427 ../gui/gui.py:653
+#: ../gui/gui.py:454 ../gui/gui.py:734
 #, python-format
 msgid "Please wait while deleting %s"
 msgstr "「%s」を削除しています。しばらくお待ちください"
 
-#: ../gui/gui.py:452 ../gui/gui.py:1537
+#: ../gui/gui.py:482 ../gui/gui.py:1855
 msgid "Must specify a target name"
 msgstr "ターゲット名は指定しなければなりません"
 
-#: ../gui/gui.py:454
+#: ../gui/gui.py:484
 #, python-format
 msgid "Target: %s already exists"
 msgstr "ターゲット「%s」は既に存在しています"
 
-#: ../gui/gui.py:457 ../gui/project_assistant.py:442
+#: ../gui/gui.py:487 ../gui/project_assistant.py:465
 msgid ""
 "Target names can only contain alpha/numeric characters, hyphen and underscore"
 msgstr ""
 "ターゲット名は英数字、ハイフンおよびアンダースコアのみ含むことができます"
 
-#: ../gui/gui.py:473 ../gui/gui.py:810 ../gui/gui.py:830 ../gui/gui.py:852
-#: ../gui/gui.py:872
+#: ../gui/gui.py:498 ../gui/gui.py:914 ../gui/gui.py:936 ../gui/gui.py:960
+#: ../gui/gui.py:982
 #, python-format
 msgid "Please wait while creating %s"
 msgstr "「%s」を作成しています。しばらくお待ちください"
 
-#: ../gui/gui.py:540 ../gui/project_assistant.py:374
+#: ../gui/gui.py:596 ../gui/project_assistant.py:375
 msgid "<b>Depends on FSet(s):</b> "
 msgstr "<b>依存している機能セット:</b>"
 
-#: ../gui/gui.py:543 ../gui/project_assistant.py:377
+#: ../gui/gui.py:599 ../gui/project_assistant.py:378
 msgid ""
 "\n"
 "<b>Debug Packages:</b> "
@@ -169,7 +165,7 @@ msgstr ""
 "\n"
 "<b>デバッグ用パッケージ:</b> "
 
-#: ../gui/gui.py:546 ../gui/project_assistant.py:380
+#: ../gui/gui.py:602 ../gui/project_assistant.py:381
 msgid ""
 "\n"
 "<b>Packages:</b> "
@@ -177,116 +173,129 @@ msgstr ""
 "\n"
 "<b>パッケージ:</b> "
 
-#: ../gui/gui.py:553
+#: ../gui/gui.py:614 ../gui/package_group.py:114
 msgid "Nothing available to install!"
 msgstr "何もインストールしませんでした!"
 
-#: ../gui/gui.py:571
+#: ../gui/gui.py:632
 #, python-format
 msgid "Number of fsets to install: %s"
 msgstr "インストールする機能セット数: %s"
 
-#: ../gui/gui.py:580
+#: ../gui/gui.py:641
 msgid "No fset selected"
 msgstr "機能セットが未選択でした"
 
-#: ../gui/gui.py:581
+#: ../gui/gui.py:642
 msgid "Please Choose an Fset"
 msgstr "機能セットを選択してください"
 
-#: ../gui/gui.py:591
+#: ../gui/gui.py:654
+msgid "Getting Group List..."
+msgstr "グループの一覧を取得しています..."
+
+#: ../gui/gui.py:667
 #, python-format
 msgid "Debug packages = %s"
 msgstr "デバッグ用パッケージ = %s"
 
-#: ../gui/gui.py:600 ../gui/gui.py:1364
+#: ../gui/gui.py:676 ../gui/gui.py:1560
 #, python-format
 msgid "Installing fset %s.................\n"
 msgstr "機能セット「%s」をインストールしています.................\n"
 
-#: ../gui/gui.py:609 ../gui/gui.py:1373
+#: ../gui/gui.py:690 ../gui/gui.py:1569
 #, python-format
 msgid "Unexpected error: %s"
-msgstr "予想外のエラー: %s"
+msgstr "予期せぬエラー: %s"
 
-#: ../gui/gui.py:617
+#: ../gui/gui.py:698
 #, python-format
 msgid "Setting new status label: %s"
 msgstr "新しいステータスのラベルを設定しています: %s"
 
-#: ../gui/gui.py:618
+#: ../gui/gui.py:699
 #, python-format
 msgid "Current action: %s"
 msgstr "現在の処理: %s"
 
-#: ../gui/gui.py:633
+#: ../gui/gui.py:714
 msgid "Delete Target(s)?\n"
 msgstr "ターゲットを削除しますか?\n"
 
-#: ../gui/gui.py:639
+#: ../gui/gui.py:720
 msgid "Delete Target"
 msgstr "ターゲットを削除"
 
-#: ../gui/gui.py:706
+#: ../gui/gui.py:790 ../gui/package_group.py:154
 msgid "An unknown error has occurred!"
 msgstr "未知のエラーが発生しました!"
 
-#: ../gui/gui.py:720
+#: ../gui/gui.py:804
 msgid "Directory List"
 msgstr "ディレクトリ一覧"
 
-#: ../gui/gui.py:736
+#: ../gui/gui.py:820
 #, python-format
 msgid "Project path: %s"
 msgstr "プロジェクトパス: %s"
 
-#: ../gui/gui.py:749
+#: ../gui/gui.py:824 ../gui/gui.py:841
+msgid "gnome-terminal may not be present. Trying xterm"
+msgstr "gnome-terminalは提供されていないようです。xtermの起動を試行します"
+
+#: ../gui/gui.py:837
 #, python-format
 msgid "Target path: %s"
 msgstr "ターゲットパス: %s"
 
-#: ../gui/gui.py:781
+#: ../gui/gui.py:855
+#, python-format
+msgid "%s: Using default parametor."
+msgstr "%s: デフォルトのパラメータを使用します。"
+
+#: ../gui/gui.py:892
 #, python-format
 msgid "Please wait while while creating %s"
 msgstr "「%s」を作成しています。しばらくお待ちください"
 
-#: ../gui/gui.py:891
+#: ../gui/gui.py:1003
 #, python-format
 msgid "Creating directory %s ... "
 msgstr "ディレクトリ「%s」を作成しています..."
 
-#: ../gui/gui.py:894
+#: ../gui/gui.py:1007
 #, python-format
 msgid "Creating image %s ... "
 msgstr "イメージ「%s」を作成しています..."
 
-#: ../gui/gui.py:898
+#: ../gui/gui.py:1011
 msgid "Please wait while creating shared image..."
 msgstr "共有イメージ「%s」を作成しています。しばらくお待ちください"
 
-#: ../gui/gui.py:905
+#: ../gui/gui.py:1018
 msgid "Choose a Live USB image"
 msgstr "Live USBイメージを選択してください"
 
-#: ../gui/gui.py:885 ../gui/gui.py:1021
+#: ../gui/gui.py:1071 ../gui/gui.py:1207
 msgid "No target image selected!"
 msgstr "ターゲットイメージが未選択でした!"
 
-#: ../gui/gui.py:890 ../gui/gui.py:1024
+#: ../gui/gui.py:1076 ../gui/gui.py:1210
 #, python-format
 msgid "Selected file name: %s "
 msgstr "選択されたファイル名: %s"
 
-#: ../gui/gui.py:912
+#: ../gui/gui.py:1098
 msgid "No USB device selected!"
 msgstr "USBデバイスが未選択でした!"
 
-#: ../gui/gui.py:920
+#: ../gui/gui.py:1106
 #, python-format
 msgid "Selected USB disk %s"
 msgstr "USBメモリ「%s」が選択されました"
 
-#: ../gui/gui.py:922
+#: ../gui/gui.py:1108
 #, python-format
 msgid ""
 "Can not umount %s. Please close any shells or opened files still under mount "
@@ -295,174 +304,174 @@ msgstr ""
 "%s をアンマウントで来ません。まだマウントポイント下でシェルや開いているファイルを閉じて再試行してください!"
 ""
 
-#: ../gui/gui.py:928
+#: ../gui/gui.py:1114
 msgid "Please wait while writing image to USB disk"
-msgstr "イメージをUSBメモリへ書き込んでいるのでしばらくお待ちください"
+msgstr "イメージをUSBメモリへ書き込んでいます しばらくお待ちください"
 
-#: ../gui/gui.py:930
+#: ../gui/gui.py:1116
 #, python-format
 msgid "Writing image to USB disk %s"
 msgstr "USBメモリ「%s」へ書き込んでいます"
 
-#: ../gui/gui.py:935
+#: ../gui/gui.py:1121
 #, python-format
 msgid "Error writing to USB drive.  'dd' returned code: %s"
 msgstr "USBメモリの書き込みでエラーがありました。 'dd'コマンドの戻り値: %s"
 
-#: ../gui/gui.py:939
+#: ../gui/gui.py:1125
 msgid "Writing Complete"
 msgstr "書き込み完了"
 
-#: ../gui/gui.py:956
+#: ../gui/gui.py:1142
 msgid "In on_ClearRootstraps_activate"
 msgstr ""
 
-#: ../gui/gui.py:960
+#: ../gui/gui.py:1146
 msgid "Please wait while clearing rootstraps"
 msgstr "ルートストラップを消去しているのでしばらくお待ちください"
 
-#: ../gui/gui.py:968
+#: ../gui/gui.py:1154
 msgid "In on_Load_activate"
 msgstr ""
 
-#: ../gui/gui.py:969
+#: ../gui/gui.py:1155
 msgid "Provide a Project Name"
 msgstr "プロジェクト名の提供"
 
-#: ../gui/gui.py:987 ../gui/gui.py:1081 ../gui/gui.py:1091
+#: ../gui/gui.py:1173 ../gui/gui.py:1267 ../gui/gui.py:1277
 msgid "No Project Name"
 msgstr "プロジェクト名がありません"
 
-#: ../gui/gui.py:992
+#: ../gui/gui.py:1178
 msgid "Project Name is blank"
 msgstr "プロジェクト名が空白です"
 
-#: ../gui/gui.py:994
+#: ../gui/gui.py:1180
 msgid "<b><span foreground=\"red\">Please provide a project name</span></b>"
 msgstr "<b><span foreground=\"red\">プロジェクト名を提供してください</span></b>"
 
-#: ../gui/gui.py:996
+#: ../gui/gui.py:1182
 #, python-format
 msgid "Project name: %s"
 msgstr "プロジェクト名: %s"
 
-#: ../gui/gui.py:1002
+#: ../gui/gui.py:1188
 #, python-format
 msgid "Project %s already exists"
 msgstr "プロジェクト「%s」は既に存在しています"
 
-#: ../gui/gui.py:1004
+#: ../gui/gui.py:1190
 #, python-format
 msgid "<b><span foreground=\"red\">Project %s already exists.</span></b>"
 msgstr "<b><span foreground=\"red\">プロジェクト「%s」は既に存在しています。</span></b>"
 
-#: ../gui/gui.py:1030
+#: ../gui/gui.py:1216
 msgid "No Destination Folder"
 msgstr "宛先のフォルダがありません"
 
-#: ../gui/gui.py:1034 ../gui/gui.py:1095
+#: ../gui/gui.py:1220 ../gui/gui.py:1281
 #, python-format
 msgid "Targer File Name: %s"
 msgstr "ターゲットファイル名: %s"
 
-#: ../gui/gui.py:1040
+#: ../gui/gui.py:1226
 #, python-format
 msgid "Please wait while loading Project: %s"
-msgstr "プロジェクトを読み込んでいるのでしばらくお待ちください: %s"
+msgstr "プロジェクトを読み込んでいます しばらくお待ちください: %s"
 
-#: ../gui/gui.py:1043
+#: ../gui/gui.py:1229
 #, python-format
 msgid "Loading Project %s"
 msgstr "プロジェクト「%s」を読み込んでいます"
 
-#: ../gui/gui.py:1045
+#: ../gui/gui.py:1231
 msgid "Loading Project Complete"
 msgstr "プロジェクトの読み込み完了"
 
-#: ../gui/gui.py:1067
+#: ../gui/gui.py:1253
 msgid "In on_Save_activate"
 msgstr ""
 
-#: ../gui/gui.py:1068
+#: ../gui/gui.py:1254
 msgid "Choose Project to Save"
 msgstr "保存するプロジェクトを選択してください"
 
-#: ../gui/gui.py:1085
+#: ../gui/gui.py:1271
 #, python-format
 msgid "Project name to Save: %s"
 msgstr "保存するプロジェクト: %s"
 
-#: ../gui/gui.py:1101
+#: ../gui/gui.py:1287
 #, python-format
 msgid "Please wait while saving Project: %s"
-msgstr "プロジェクトを保存しているのでしばらくお待ちください: %s"
+msgstr "プロジェクトを保存しています しばらくお待ちください: %s"
 
-#: ../gui/gui.py:1106
+#: ../gui/gui.py:1292
 #, python-format
 msgid "Saving Project %s"
 msgstr "プロジェクト「%s」を保存しています"
 
-#: ../gui/gui.py:1108
+#: ../gui/gui.py:1294
 msgid "Saving Complete"
 msgstr "保存完了"
 
-#: ../gui/gui.py:1115
+#: ../gui/gui.py:1301
 msgid "Please wait while upgrading Project"
-msgstr "プロジェクトをアップグレードしていますのでしばらくお待ちください"
+msgstr "プロジェクトをアップグレードしています しばらくお待ちください"
 
-#: ../gui/gui.py:1120 ../gui/gui.py:1133
+#: ../gui/gui.py:1307 ../gui/gui.py:1321
 #, python-format
 msgid "Internal error while attempting to run update/upgrade: %s"
 msgstr "アップデート/アップグレード実行中の内部エラー: %s"
 
-#: ../gui/gui.py:1128
+#: ../gui/gui.py:1315
 msgid "Please wait while upgrading Target"
-msgstr "ターゲットをアップグレードしているのでしばらくお待ちください"
+msgstr "ターゲットをアップグレードしています しばらくお待ちください"
 
-#: ../gui/gui.py:1227 ../gui/gui.py:1230
+#: ../gui/gui.py:1420 ../gui/gui.py:1423
 msgid "All fields are required"
 msgstr "全てのフィールドが必要です"
 
-#: ../gui/gui.py:1292
+#: ../gui/gui.py:1485
 msgid "Search Expression"
 msgstr "検索"
 
-#: ../gui/gui.py:1293
+#: ../gui/gui.py:1486
 msgid "Replace Expression"
 msgstr "置換"
 
-#: ../gui/gui.py:1324
+#: ../gui/gui.py:1517
 msgid "Creating Project and Target"
 msgstr "プロジェクトおよびターゲットの作成"
 
-#: ../gui/gui.py:1356
+#: ../gui/gui.py:1552
 #, python-format
 msgid "Installing the following fsets: %s"
 msgstr "次に機能セットをインストールします: %s"
 
-#: ../gui/gui.py:1542
+#: ../gui/gui.py:1580
 msgid "Choose a Platform"
 msgstr "プラットフォームを選択します"
 
-#: ../gui/gui.py:1569
+#: ../gui/gui.py:1607
 msgid "This feature is currently available for Yum based platforms only"
 msgstr "この機能は現在Yumベースのプラットフォームのみ使用できます"
 
-#: ../gui/gui.py:1651
+#: ../gui/gui.py:1689
 #, python-format
 msgid "Creating folder %s ... "
 msgstr "フォルダ「%s」を作成しています ... "
 
-#: ../gui/gui.py:1391
+#: ../gui/gui.py:1709
 msgid "Please Select a Platform"
 msgstr "プラットフォームを選択してください"
 
-#: ../gui/gui.py:1426
+#: ../gui/gui.py:1744
 #, python-format
 msgid "Fset Description: %s"
 msgstr "機能セットの説明: %s"
 
-#: ../gui/gui.py:1428
+#: ../gui/gui.py:1746
 msgid ""
 "\n"
 "\n"
@@ -472,7 +481,7 @@ msgstr ""
 "\n"
 "機能セットの依存関係: "
 
-#: ../gui/gui.py:1431
+#: ../gui/gui.py:1749
 msgid ""
 "\n"
 "\n"
@@ -482,7 +491,7 @@ msgstr ""
 "\n"
 "機能セットに含まれるパッケージ: "
 
-#: ../gui/gui.py:1439
+#: ../gui/gui.py:1757
 msgid ""
 "\n"
 "\n"
@@ -492,42 +501,63 @@ msgstr ""
 "\n"
 "機能セットに含まれるデバッグ用パッケージ: "
 
-#: ../gui/gui.py:1445
+#: ../gui/gui.py:1763
 msgid "Please Select an Fset"
 msgstr "機能セットを選択してください"
 
-#: ../gui/gui.py:1543
+#: ../gui/gui.py:1861
 #, python-format
 msgid "Adding Target: %s"
 msgstr "ターゲットを追加します: %s"
 
-#: ../gui/gui.py:1559 ../gui/project_assistant.py:286
+#: ../gui/gui.py:1877 ../gui/project_assistant.py:287
 msgid "Choose Project Directory"
 msgstr "プロジェクトのディレクトリを選択します"
 
-#: ../gui/gui.py:1604 ../libs/InstallImage.py:615
+#: ../gui/gui.py:1927 ../libs/InstallImage.py:741
 msgid "Locals by frame, innermost last"
 msgstr ""
 
-#: ../gui/gui.py:1607 ../libs/InstallImage.py:618
+#: ../gui/gui.py:1930 ../libs/InstallImage.py:744
 #, python-format
 msgid "Frame %s in %s at line %s"
 msgstr ""
 
-#: ../gui/gui.py:1611
+#: ../gui/gui.py:1934
 #, python-format
 msgid "\t%20s = "
 msgstr ""
 
-#: ../gui/gui.py:1617 ../libs/InstallImage.py:628
+#: ../gui/gui.py:1940 ../libs/InstallImage.py:754
 msgid "<ERROR WHILE PRINTING VALUE>"
 msgstr ""
 
-#: ../gui/project_assistant.py:87
+#: ../gui/package_group.py:73
+msgid "Could not get Group List"
+msgstr "グループの一覧を取得できませんでした"
+
+#: ../gui/package_group.py:123
+msgid " is already installed"
+msgstr "は、既にインストールされています"
+
+#: ../gui/package_group.py:140
+#, python-format
+msgid "Number of groups to install: %s"
+msgstr "インストールするグループ数: %s"
+
+#: ../gui/package_group.py:146
+msgid "No Groups selected"
+msgstr "グループが未選択でした"
+
+#: ../gui/package_group.py:147
+msgid "Please Choose a Group"
+msgstr "グループを選択してください"
+
+#: ../gui/project_assistant.py:88
 msgid "Introduction"
 msgstr "はじめに"
 
-#: ../gui/project_assistant.py:94
+#: ../gui/project_assistant.py:95
 msgid ""
 "<b>This assistant will help you to create a project and a target.\n"
 "You also will be able to select which functional sets (fsets) to install.</b>"
@@ -535,227 +565,274 @@ msgstr ""
 "<b>このアシスタントはプロジェクト、およびターゲットの作成を支援します。\n"
 "インストールする機能セットも選択することができます。</b>"
 
-#: ../gui/project_assistant.py:100
+#: ../gui/project_assistant.py:101
 msgid "Create Project"
 msgstr "プロジェクトの作成"
 
-#: ../gui/project_assistant.py:113
+#: ../gui/project_assistant.py:114
 msgid "Create Target and add Fsets"
 msgstr "ターゲットの作成、機能セットの追加"
 
-#: ../gui/project_assistant.py:126
+#: ../gui/project_assistant.py:127
 msgid "Confirm"
 msgstr "確認"
 
-#: ../gui/project_assistant.py:133
+#: ../gui/project_assistant.py:134
 msgid "Please review the configuration before proceeding."
 msgstr "処理する前に設定を確認してください。"
 
-#: ../gui/project_assistant.py:193
+#: ../gui/project_assistant.py:191
+msgid "Project Name"
+msgstr "プロジェクト名"
+
+#: ../gui/project_assistant.py:194
 msgid "Project Description"
 msgstr "プロジェクトの説明"
 
-#: ../gui/project_assistant.py:196
+#: ../gui/project_assistant.py:197
 msgid "Project Path"
 msgstr "プロジェクトのパス"
 
-#: ../gui/project_assistant.py:200
+#: ../gui/project_assistant.py:201
 msgid "Browse"
 msgstr "参照"
 
-#: ../gui/project_assistant.py:210
+#: ../gui/project_assistant.py:211
 msgid "Project Platform"
 msgstr "プロジェクトのプラットフォーム"
 
-#: ../gui/project_assistant.py:211
+#: ../gui/project_assistant.py:212
 msgid "Platform Description"
 msgstr "プラットフォームの説明"
 
-#: ../gui/project_assistant.py:309
+#: ../gui/project_assistant.py:310
 msgid "Path exists but is not a directory"
 msgstr "パスは存在していますが、ディレクトリではありません"
 
-#: ../gui/project_assistant.py:314
+#: ../gui/project_assistant.py:315
 msgid "Path is a directory which is NOT empty"
 msgstr "パスは空でないディレクトリです"
 
-#: ../gui/project_assistant.py:319
+#: ../gui/project_assistant.py:320
 msgid "Target Name"
 msgstr "ターゲット名"
 
-#: ../gui/project_assistant.py:337
+#: ../gui/project_assistant.py:338
 msgid "Include Debug packages (if any)"
 msgstr "デバッグ用パッケージを含む(任意)"
 
-#: ../gui/project_assistant.py:357
+#: ../gui/project_assistant.py:358
 msgid "<b>Available Fsets for the choosen platform</b>"
 msgstr "<b>選択されたプラットフォームの機能セットを利用可能です</b>"
 
-#: ../gui/project_assistant.py:450
+#: ../gui/project_assistant.py:473
 #, python-format
 msgid "Project Name: %s"
 msgstr "プロジェクト名: %s"
 
-#: ../gui/project_assistant.py:451
+#: ../gui/project_assistant.py:474
 #, python-format
 msgid "Project Description: %s"
 msgstr "プロジェクトの説明: %s"
 
-#: ../gui/project_assistant.py:452
+#: ../gui/project_assistant.py:475
 #, python-format
 msgid "Project Path: %s"
 msgstr "プロジェクトのパス: %s"
 
-#: ../gui/project_assistant.py:453
+#: ../gui/project_assistant.py:476
 #, python-format
 msgid "Project Platform: %s"
 msgstr "プロジェクトのプラットフォーム: %s"
 
-#: ../gui/project_assistant.py:454
+#: ../gui/project_assistant.py:477
 #, python-format
 msgid "Target Name: %s"
 msgstr "ターゲット名: %s"
 
-#: ../gui/project_assistant.py:455
+#: ../gui/project_assistant.py:478
 #, python-format
 msgid "Fset List: %s"
 msgstr "機能セットの一覧: %s"
 
-#: ../gui/project_assistant.py:456
+#: ../gui/project_assistant.py:479
 #, python-format
 msgid "Install Debug Packages: %s"
 msgstr "インストールするデバッグ用パッケージ: %s"
 
-#: ../libs/InstallImage.py:95
+#: ../gui/repo_editor.py:63
+msgid "Repository List"
+msgstr "リポジトリ一覧"
+
+#: ../gui/repo_editor.py:139
+msgid "New Repo Name"
+msgstr "新しいリポジトリ名"
+
+#: ../gui/repo_editor.py:142
+msgid "Add New Repo"
+msgstr "新しいリポジトリの追加"
+
+#: ../gui/repo_editor.py:167
+#, python-format
+msgid "Removing Repo: %s"
+msgstr "リポジトリを削除しています: %s"
+
+#: ../gui/repo_editor.py:172
+#, python-format
+msgid "Saving: %s"
+msgstr "保存しています: %s"
+
+#: ../libs/InstallImage.py:97
 #, python-format
 msgid ""
 "message_color string must be 2 bytes long.  Passed in string was: %s bytes "
 "long.  String: %s"
 msgstr "メッセージの色は2バイトの長さの文字列でなければなりません。 %s バイトの文字列が渡されました"
 
-#: ../libs/InstallImage.py:178
+#: ../libs/InstallImage.py:180
 msgid "no kernels were found"
 msgstr "kernelは見つかりませんでした"
 
-#: ../libs/InstallImage.py:187
+#: ../libs/InstallImage.py:189
 msgid "tmp_path doesn't exist"
 msgstr "tmp_passが存在しません"
 
-#: ../libs/InstallImage.py:236
+#: ../libs/InstallImage.py:252
 msgid "Creating root file system..."
 msgstr "ルートファイルシステムを作成しています..."
 
-#: ../libs/InstallImage.py:257
+#: ../libs/InstallImage.py:276
 #, python-format
 msgid "Executing the mksquashfs program: %s"
 msgstr "mksquashfsプログラムを実行しています: %s"
 
-#: ../libs/InstallImage.py:272
+#: ../libs/InstallImage.py:291
 #, python-format
 msgid "Creating bootfs at: %s"
 msgstr "bootfsを %s に作成しています"
 
-#: ../libs/InstallImage.py:304
+#: ../libs/InstallImage.py:304 ../libs/InstallImage.py:325
+msgid "shutil.copy failed. Ignored error"
+msgstr "shutil.copyが失敗しました。 エラーを無視しました"
+
+#: ../libs/InstallImage.py:332
 msgid "install.cfg created"
 msgstr "install.cfgを作成しました"
 
-#: ../libs/InstallImage.py:343
+#: ../libs/InstallImage.py:377
 #, python-format
 msgid "Creating initramfs for kernel version: %s"
 msgstr "kernelバージョン %s のinitramfsを作成しています"
 
-#: ../libs/InstallImage.py:354
+#: ../libs/InstallImage.py:388
 msgid "moblin-initramfs.cfg file created"
 msgstr "moblin-initramfs.cfg ファイルを作成しました"
 
-#: ../libs/InstallImage.py:357
+#: ../libs/InstallImage.py:391
 #, python-format
 msgid "Executing: %s"
 msgstr "%s を実行しています"
 
-#: ../libs/InstallImage.py:361
+#: ../libs/InstallImage.py:395 ../libs/InstallImage.py:417
 msgid "Creating the grub menu"
 msgstr "GRUBメニューを作成しています"
 
-#: ../libs/InstallImage.py:401
+#: ../libs/InstallImage.py:457
 #, python-format
 msgid "LiveCDImage: Creating Live CD Image(%s) Now..."
 msgstr "LiveCDイメージ: Live CD イメージ(%s)を作成しています..."
 
-#: ../libs/InstallImage.py:402
+#: ../libs/InstallImage.py:458
 #: This message is printed on Boot session. Can't show multi byte.
 msgid "Live CD Image (no persistent R/W)"
 msgstr ""
 
-#: ../libs/InstallImage.py:420
+#: ../libs/InstallImage.py:472 ../libs/InstallImage.py:599
+#: ../libs/InstallImage.py:645
+msgid "shutil.move failed. Ignored error"
+msgstr "shutil.moveが失敗しました。エラーを無視しました"
+
+#: ../libs/InstallImage.py:479
 #, python-format
 msgid "Creating CD image file at: %s"
 msgstr "CD イメージファイルを %s に作成しています"
 
-#: ../libs/InstallImage.py:424 ../libs/InstallImage.py:425
-#: ../libs/InstallImage.py:466 ../libs/InstallImage.py:467
-#: ../libs/InstallImage.py:487 ../libs/InstallImage.py:488
-#: ../libs/InstallImage.py:496 ../libs/InstallImage.py:497
+#: ../libs/InstallImage.py:483 ../libs/InstallImage.py:484
+#: ../libs/InstallImage.py:526 ../libs/InstallImage.py:527
+#: ../libs/InstallImage.py:548 ../libs/InstallImage.py:549
+#: ../libs/InstallImage.py:557 ../libs/InstallImage.py:558
 #, python-format
 msgid "Error running command: %s"
 msgstr "コマンドの実行中エラー: %s"
 
-#: ../libs/InstallImage.py:431
+#: ../libs/InstallImage.py:490
 msgid "LiveIsoImage: Finished!"
 msgstr "LiveISOイメージ: 完了!"
 
-#: ../libs/InstallImage.py:440
+#: ../libs/InstallImage.py:499
 msgid "InstallIsoImage: Create Install ISO Image not implemented!"
 msgstr "インストールISOイメージ: インストールISOイメージの作成は実装されていません!"
 
-#: ../libs/InstallImage.py:452
+#: ../libs/InstallImage.py:511
 #, python-format
 msgid "Creating USB flash drive image file at: %s"
 msgstr "USBメモリ用イメージファイルを作成しています: %s"
 
-#: ../libs/InstallImage.py:503 ../libs/InstallImage.py:504
+#: ../libs/InstallImage.py:564 ../libs/InstallImage.py:565
 #, python-format
 msgid "Error unmounting: %s"
 msgstr "アンマウントエラー: %s"
 
-#: ../libs/InstallImage.py:511
+#: ../libs/InstallImage.py:572
 #, python-format
 msgid "LiveUsbImage: Creating Live R/W USB Image(%s) Now..."
 msgstr "LiveUSBイメージ: Live R/W USB イメージ(%s)を作成しています..."
 
-#: ../libs/InstallImage.py:512
+#: ../libs/InstallImage.py:573
 #: This message is printed on Boot session. Can't show multi byte.
 msgid "Live R/W USB Image"
 msgstr ""
 
-#: ../libs/InstallImage.py:514
+#: ../libs/InstallImage.py:575
 #, python-format
 msgid "LiveUsbImage: Creating Live USB Image(%s) Now..."
 msgstr "LiveUSBイメージ: Live USB イメージ(%s)を作成しています..."
 
-#: ../libs/InstallImage.py:515
+#: ../libs/InstallImage.py:576
 #: This message is printed on Boot session. Can't show multi byte.
 msgid "Live USB Image (no persistent R/W)"
 msgstr ""
 
-#: ../libs/InstallImage.py:539
+#: ../libs/InstallImage.py:606 ../libs/InstallImage.py:652
+msgid "Could not copy rootfs_path. Ignored error"
+msgstr "rootfs_pathをコピーできませんでした。エラーを無視しました"
+
+#: ../libs/InstallImage.py:612
 msgid "LiveUsbImage: Finished!"
 msgstr "LiveUSBイメージ: 完了!"
 
-#: ../libs/InstallImage.py:548
+#: ../libs/InstallImage.py:621
 msgid "InstallUsbImage: Creating InstallUSB Image..."
 msgstr "インストールUSBイメージ: インストールUSBイメージを作成しています..."
 
-#: ../libs/InstallImage.py:549
+#: ../libs/InstallImage.py:622
 #: This message is printed on Boot session. Can't show multi byte.
 msgid "Install USB Image.  This will DESTROY all content on your hard drive!!"
 msgstr ""
 
-#: ../libs/InstallImage.py:574 ../libs/InstallImage.py:578
+#: ../libs/InstallImage.py:656
+msgid "Could not copy bootfs_path. Ignored error"
+msgstr "bootfs_pathをコピーできませんでした。エラーを無視しました"
+
+#: ../libs/InstallImage.py:660
+msgid "Could create install script. Ignored error"
+msgstr "インストールスクリプトを作成できませんでした。エラーを無視しました"
+
+#: ../libs/InstallImage.py:665 ../libs/InstallImage.py:669
 msgid "InstallUsbImage: Finished!"
 msgstr "インストールUSBイメージ: 完了!"
 
-#: ../libs/InstallImage.py:575
+#: ../libs/InstallImage.py:666
 msgid ""
 "\n"
 "You can now use the image to boot and install the target file-system on the "
@@ -765,7 +842,7 @@ msgstr ""
 "イメージを使って起動し、ターゲットデバイスのHDD上にファイルシステムを"
 "インストールします。\n"
 
-#: ../libs/InstallImage.py:576
+#: ../libs/InstallImage.py:667
 msgid ""
 "\n"
 "WARNING: Entire contents of the target devices's HDD will be erased prior to "
@@ -775,15 +852,15 @@ msgstr ""
 "警告: ターゲットデバイスの内容はインストールする前に消去されます!"
 ""
 
-#: ../libs/InstallImage.py:577
+#: ../libs/InstallImage.py:668
 msgid "         This includes ALL partitions on the disk!\n"
 msgstr "         これはディスク上の全てのパーティションを含んでいます!\n"
 
-#: ../libs/InstallImage.py:584
+#: ../libs/InstallImage.py:677
 msgid "grub.conf kernel cmdline changed"
 msgstr "grub.conf kernelコマンドラインが変更されました"
 
-#: ../libs/InstallImage.py:679
+#: ../libs/InstallImage.py:680
 msgid ""
 "New Apply hd kernel "
 "cmdline--------------------------------------------------------------------"
@@ -791,30 +868,30 @@ msgstr ""
 "新しいHDD用kernelコマンドラインを適用しています"
 "--------------------------------------------------------------------"
 
-#: ../libs/InstallImage.py:593
+#: ../libs/InstallImage.py:689
 msgid "HddImage: Create Hard Disk Image not implemented!"
 msgstr "HDDイメージ: ハードディスクイメージの作成は実装されていません!"
 
-#: ../libs/InstallImage.py:656
+#: ../libs/InstallImage.py:700
 msgid "NANDImage: This platform could not support NAND image!"
 msgstr "NANDフラッシュメモリイメージ: このプラットフォームはNANDフラッシュメモリイメージをサポートしていません!"
 
-#: ../libs/InstallImage.py:657
+#: ../libs/InstallImage.py:701
 msgid "NANDImage: Creating NAND Image..."
 msgstr "NANDフラッシュメモリイメージ: NANDフラッシュメモリイメージを作成しています..."
 
-#: ../libs/InstallImage.py:638
+#: ../libs/InstallImage.py:764
 #, python-format
 msgid "USAGE: %s proj_path proj_name platform_name"
 msgstr "使い方: %s proj_path proj_name platform_name"
 
-#: ../libs/InstallImage.py:639
+#: ../libs/InstallImage.py:765
 #, python-format
 msgid "       %s proj_name"
 msgstr "       %s proj_name"
 
-#: ../libs/InstallImage.py:662 ../libs/InstallImage.py:666
-#: ../libs/InstallImage.py:670
+#: ../libs/InstallImage.py:788 ../libs/InstallImage.py:792
+#: ../libs/InstallImage.py:796
 #, python-format
 msgid ""
 "\n"
@@ -823,7 +900,7 @@ msgstr ""
 "\n"
 "イメージファイル名: %s"
 
-#: ../libs/InstallImage.py:673
+#: ../libs/InstallImage.py:799
 msgid ""
 "\n"
 "\n"
@@ -833,172 +910,192 @@ msgstr ""
 "\n"
 "終了!\n"
 
-#: ../libs/Platform.py:52
+#: ../libs/Platform.py:53
 msgid "Platform called but config_info value not passed in"
 msgstr "プラットフォームは呼び出されましたが、config_info値は渡されませんでした"
 
-#: ../libs/Platform.py:68
+#: ../libs/Platform.py:69
 msgid "Error: No buildroot config file information found!"
 msgstr "エラー: buildroot 設定ファイル情報が見つかりませんでした!"
 
-#: ../libs/Platform.py:100
+#: ../libs/Platform.py:106
 #, python-format
 msgid "package manager value of: '%s' is invalid"
 msgstr "パッケージマネージャの値: '%s'は無効です"
 
-#: ../libs/Platform.py:116
-msgid "ERROR: Unable to archive rootstrap!"
+#: ../libs/Platform.py:122
+msgid "Warning: Unable to archive rootstrap!"
 msgstr "エラー: ルートストラップのアーカイブがありません!"
 
-#: ../libs/Platform.py:136 ../libs/Platform.py:207
+#: ../libs/Platform.py:143 ../libs/Platform.py:217
 #, python-format
 msgid "ERROR: Unable to rootstrap %s from %s!"
 msgstr "エラー: %s から ルートストラップ %s がありません!"
 
-#: ../libs/Platform.py:166
+#: ../libs/Platform.py:176
 #, python-format
 msgid "--------%s rootstrap creation try: %s ----------"
 msgstr "--------%s ルートストラップの作成を試行します: %s ----------"
 
-#: ../libs/Platform.py:167
+#: ../libs/Platform.py:177
 #, python-format
 msgid "Execing command: %s"
 msgstr "実行中のコマンド: %s"
 
-#: ../libs/Platform.py:170
+#: ../libs/Platform.py:180
 #, python-format
 msgid "--------%s rootstrap creation completed successfully----------"
 msgstr "--------%s ルートストラップの作成が完了しました----------"
 
-#: ../libs/Platform.py:173 ../libs/moblin_apt.py:61
+#: ../libs/Platform.py:183 ../libs/moblin_apt.py:61
 msgid "Process Aborted"
 msgstr "処理がアボートされました"
 
-#: ../libs/Platform.py:175
+#: ../libs/Platform.py:185
 #, python-format
 msgid "--------%s rootstrap creation failed result: %s ----------"
 msgstr "--------%s ルートストラップの作成が失敗しました 戻り値: %s ----------"
 
-#: ../libs/Platform.py:177
+#: ../libs/Platform.py:187
 #, python-format
 msgid "--------For try: %s.  Sleeping for %s seconds... -----------------"
 msgstr "--------試行します: %s.  %s 秒スリープします... -----------------"
 
-#: ../libs/Platform.py:180
+#: ../libs/Platform.py:190
 #, python-format
 msgid "ERROR: Unable to generate %s rootstrap!"
 msgstr "エラー: ルートストラップ %s を生成しません!"
 
-#: ../libs/Platform.py:220 ../utils/create-rootstrap.py:85
+#: ../libs/Platform.py:230 ../utils/create-rootstrap.py:85
 msgid "Creating rootstrap directory with yum..."
 msgstr "ルートストラップのディレクトリをyumで作成しています..."
 
-#: ../libs/Platform.py:225
+#: ../libs/Platform.py:235
 #, python-format
 msgid "Exec command: %s"
 msgstr "実行中のコマンド: %s"
 
-#: ../libs/Platform.py:228
+#: ../libs/Platform.py:238
 msgid "Failed to create Yum based rootstrap"
 msgstr "Yumベースのルートストラップの作成に失敗しました"
 
-#: ../libs/Platform.py:309 ../libs/Platform.py:325 ../libs/moblin_apt.py:94
-#: ../libs/moblin_yum.py:78
+#: ../libs/Platform.py:320 ../libs/Platform.py:336 ../libs/moblin_apt.py:94
+#: ../libs/moblin_yum.py:77 ../libs/moblin_yum.py:118
 #, python-format
 msgid "Internal error while attempting to run: %s"
 msgstr "実行中の内部エラー: %s"
 
-#: ../libs/Project.py:62 ../libs/Project.py:377 ../libs/SDK.py:225
+#: ../libs/Project.py:63 ../libs/Project.py:378 ../libs/SDK.py:219
 msgid "Empty argument passed in"
 msgstr "空の引数が渡されました"
 
-#: ../libs/Project.py:104 ../libs/moblin_apt.py:128 ../libs/pdk_utils.py:296
+#: ../libs/Project.py:113 ../libs/moblin_apt.py:128 ../libs/pdk_utils.py:306
 #, python-format
 msgid "Incomplete jailroot at %s"
 msgstr "不完全なjailroot %s"
 
-#: ../libs/Project.py:105 ../libs/moblin_apt.py:129 ../libs/pdk_utils.py:297
+#: ../libs/Project.py:114 ../libs/moblin_apt.py:129 ../libs/pdk_utils.py:307
 #, python-format
 msgid "Internal Error: Invalid buildroot at %s"
 msgstr "内部エラー: buildroot %s は無効です"
 
-#: ../libs/Project.py:111
+#: ../libs/Project.py:120
 #, python-format
 msgid "Error in chroot command exec.  Result: %s"
 msgstr "chroot コマンドの実行でエラーが起こりました。 戻り値: %s"
 
-#: ../libs/Project.py:112 ../libs/pdk_utils.py:304
+#: ../libs/Project.py:121 ../libs/pdk_utils.py:314
 #, python-format
 msgid "Command was: %s"
 msgstr "コマンド: %s"
 
-#: ../libs/Project.py:113
+#: ../libs/Project.py:122
 #, python-format
 msgid "chroot was: %s"
 msgstr "chroot: %s"
 
-#: ../libs/Project.py:159
+#: ../libs/Project.py:168
 #, python-format
 msgid "Failed to umount FileSystem directory: %s"
 msgstr "ファイルシステムディレクトリのアンマウントに失敗しました: %s"
 
-#: ../libs/Project.py:161 ../libs/Project.py:217 ../libs/Project.py:321
+#: ../libs/Project.py:170 ../libs/Project.py:229 ../libs/Project.py:315
 #, python-format
 msgid "Execing: %s"
 msgstr "実行中: %s"
 
-#: ../libs/Project.py:163
+#: ../libs/Project.py:172
 #, python-format
 msgid "Sleeping for 5 seconds, try %s of %s"
 msgstr "5秒間スリープしています、%s 回試行します(%s 回中)"
 
-#: ../libs/Project.py:213
+#: ../libs/Project.py:225
 #, python-format
 msgid "Failed to umount project: %s"
 msgstr "プロジェクトのアンマウントに失敗しました: %s"
 
-#: ../libs/Project.py:215
+#: ../libs/Project.py:227
 #, python-format
 msgid "Failed to umount Project directory: %s"
 msgstr "プロジェクトディレクトリのアンマウントに失敗しました: %s"
 
-#: ../libs/Project.py:223 ../libs/Project.py:239 ../libs/Project.py:250
-#: ../libs/Project.py:261 ../libs/Project.py:272 ../libs/Project.py:279
-#: ../libs/Project.py:286
+#: ../libs/Project.py:235 ../libs/Project.py:264 ../libs/Project.py:280
 msgid "Target name was not specified"
 msgstr "ターゲット名は指定されませんでした"
 
-#: ../libs/Project.py:319 ../libs/Project.py:323
+#: ../libs/Project.py:250
+msgid "Installing post install scripts"
+msgstr "post installスクリプトをインストールしています"
+
+#: ../libs/Project.py:269
+#, python-format
+msgid "%s is not found"
+msgstr "%sが見つかりませんでした"
+
+#: ../libs/Project.py:313 ../libs/Project.py:317
 #, python-format
 msgid "Failed to umount target: %s"
 msgstr "ターゲットのアンマウントに失敗しました: %s"
 
-#: ../libs/Project.py:422
+#: ../libs/Project.py:417
+msgid "Executing post install scripts"
+msgstr "post installスクリプトを実行しています"
+
+#: ../libs/Project.py:421
+#, python-format
+msgid "Executing script: %s"
+msgstr "実行中のスクリプト: %s"
+
+#: ../libs/Project.py:429
+msgid "No post-install-scripts found"
+msgstr "post installスクリプトが見つかりませんでした"
+
+#: ../libs/Project.py:442
 #, python-format
 msgid "fset %s is already installed!"
 msgstr "機能セット %s は既にインストールされています!"
 
-#: ../libs/Project.py:426
+#: ../libs/Project.py:446
 #, python-format
 msgid "Installing Function Set: %s (and any dependencies)"
 msgstr "機能セットをインストールしています: %s (依存している機能セットを含む)"
 
-#: ../libs/Project.py:430
+#: ../libs/Project.py:450
 #, python-format
 msgid "Circular fset dependency encountered for: %s"
 msgstr "機能セットの依存関係の無限ループが発生: %s"
 
-#: ../libs/Project.py:452
+#: ../libs/Project.py:472
 #, python-format
 msgid "fset %s must be installed first!"
 msgstr "機能セット %s は始めにインストールされなければなりません!"
 
-#: ../libs/Project.py:465
+#: ../libs/Project.py:485
 #, python-format
 msgid "Installing required Function Set: %s"
 msgstr "関係する機能セットをインストールしています: %s"
 
-#: ../libs/Project.py:485
+#: ../libs/Project.py:505
 #, python-format
 msgid ""
 "USAGE: %s PROJECT_NAME PROJECT_PATH PROJECT_DESCRIPTION TARGET_NAME "
@@ -1007,232 +1104,231 @@ msgstr ""
 "使い方: %s PROJECT_NAME PROJECT_PATH PROJECT_DESCRIPTION TARGET_NAME "
 "PLATFORM_NAME"
 
-#: ../libs/Project.py:486
-msgid ""
-"\tPROJECT_NAME: name to call the project.  The config file /usr/share/pdk/"
-"projects/project_name.proj is used or created"
-msgstr ""
-"\tPROJECT_NAME: プロジェクトの名前を指しています。 設定ファイルの/usr/share/pdk/"
-"projects/project_name.projを使用または作成されます"
+#: ../libs/Project.py:506
+msgid "\tPROJECT_NAME: name to call the project.  The config file "
+msgstr "\tPROJECT_NAME: プロジェクトの名前を指しています。 設定ファイルの"
 
-#: ../libs/Project.py:487
+#: ../libs/Project.py:506
+msgid "/projects/project_name.proj is used or created"
+msgstr "/projects/project_name.projを使用または作成されます"
+
+#: ../libs/Project.py:507
 msgid "\tPROJECT_PATH: directory to install the project"
 msgstr "\tPROJECT_PATH: プロジェクトをインストールするディレクトリです"
 
-#: ../libs/Project.py:488
+#: ../libs/Project.py:508
 msgid "\tPROJECT_DESCRIPTION: Textual description of the project"
 msgstr "\tPROJECT_DESCRIPTION: プロジェクトの説明を記述します"
 
-#: ../libs/Project.py:489
+#: ../libs/Project.py:509
 msgid "\tTARGET_NAME: ???"
 msgstr "\tTARGET_NAME: ターゲットの名前を指しています"
 
-#: ../libs/Project.py:490
+#: ../libs/Project.py:510
 msgid "\tPLATFORM_NAME: The platform.  e.g. donley"
 msgstr "\tPLATFORM_NAME: プラットフォームです。(例) donkey"
 
-#: ../libs/Project.py:503
+#: ../libs/Project.py:523
 #, python-format
 msgid "ERROR: %s is not a valid platform!"
 msgstr "エラー: %s のプラットフォームは有効ではありません!"
 
-#: ../libs/Project.py:504
+#: ../libs/Project.py:524
 msgid "Available platforms include:"
 msgstr "使用可能なプラットフォームを含んでいます:"
 
-#: ../libs/Project.py:513
+#: ../libs/Project.py:533
 msgid "Opening existing project...Using info from config file..."
 msgstr "存在するプロジェクトを開いています...使い方は設定ファイルから情報を利用してください..."
 
-#: ../libs/Project.py:517
+#: ../libs/Project.py:537
 msgid "Creating new project..."
 msgstr "新しいプロジェクトを作成しています..."
 
-#: ../libs/Project.py:520
+#: ../libs/Project.py:540
 #, python-format
 msgid "Install path: %s"
 msgstr "インストールパス: %s"
 
-#: ../libs/Project.py:521
+#: ../libs/Project.py:541
 #, python-format
 msgid "Name: %s"
 msgstr "名前: %s"
 
-#: ../libs/Project.py:522
+#: ../libs/Project.py:542
 #, python-format
 msgid "Description: %s"
 msgstr "説明"
 
-#: ../libs/Project.py:524
-#, python-format
-msgid "Used info from config file: /usr/share/pdk/projects/%s.proj"
-msgstr "設定ファイルから情報を利用しました: /usr/share/pdk/projects/%s.proj"
+#: ../libs/Project.py:544
+msgid "Used info from config file: "
+msgstr "設定ファイルから情報を利用しました: "
 
-#: ../libs/Project.py:529
+#: ../libs/Project.py:549
 #, python-format
 msgid "Target already exists: %s"
 msgstr "ターゲットは既に存在しています: %s"
 
-#: ../libs/Project.py:532
+#: ../libs/Project.py:552
 msgid "Creating new project target filesystem..."
 msgstr "新しいプロジェクトのファイルシステムを作成しています..."
 
-#: ../libs/Project.py:535
+#: ../libs/Project.py:555
 msgid "Installing all available fsets inside target..."
 msgstr "ターゲットの中で利用可能な機能セットの全てをインストールしています..."
 
-#: ../libs/SDK.py:156
+#: ../libs/SDK.py:155
 #, python-format
 msgid "Platforms config file not found: %s"
 msgstr "プラットフォームの設定ファイルが見つかりませんでした: %s"
 
-#: ../libs/SDK.py:162
+#: ../libs/SDK.py:161
 #, python-format
 msgid ""
 "Platform config file: %s has a section: %s but no corresponding directory: %s"
 msgstr ""
 "プラットフォームの設定ファイル: %s の持つセクション: %s しかし対応しないディレクトリです: %s"
 
-#: ../libs/SDK.py:197
+#: ../libs/SDK.py:191
 #, python-format
 msgid "Platform %s not found. Skipping the project %s"
 msgstr "プラットフォーム %s が見つかりませんでした。 %s をスキップします"
 
-#: ../libs/SDK.py:227
+#: ../libs/SDK.py:221
 #, python-format
 msgid "Project: %s already exists"
 msgstr "プロジェクト: %s は既に存在しています"
 
-#: ../libs/SDK.py:229
+#: ../libs/SDK.py:223
 msgid "Creating the project chroot environment"
 msgstr "プロジェクトのchroot環境を作成しています"
 
-#: ../libs/SDK.py:232
+#: ../libs/SDK.py:226
 msgid "Rootstrap Creating cancelled"
 msgstr "ルートストラップの作成が中止されました"
 
-#: ../libs/SDK.py:234
+#: ../libs/SDK.py:228
 msgid "Creating Config file"
 msgstr "設定ファイルを作成しています"
 
-#: ../libs/SDK.py:237
+#: ../libs/SDK.py:231
 #, python-format
 msgid "NAME=%s\n"
 msgstr ""
 
-#: ../libs/SDK.py:238
+#: ../libs/SDK.py:232
 #, python-format
 msgid "PATH=%s\n"
 msgstr ""
 
-#: ../libs/SDK.py:239
+#: ../libs/SDK.py:233
 #, python-format
 msgid "DESC=%s\n"
 msgstr ""
 
-#: ../libs/SDK.py:240
+#: ../libs/SDK.py:234
 #, python-format
 msgid "PLATFORM=%s\n"
 msgstr ""
 
-#: ../libs/SDK.py:243
+#: ../libs/SDK.py:237
 msgid "Initiating the project"
 msgstr "プロジェクトを初期化しています"
 
-#: ../libs/SDK.py:278
+#: ../libs/SDK.py:272
 msgid "Creating project tarfile.  This can take a long time..."
 msgstr "プロジェクトのtarファイルを作成しています。これはしばらく時間がかかります..."
 
-#: ../libs/SDK.py:279
+#: ../libs/SDK.py:273
 #, python-format
 msgid "Filename: %s"
-msgstr ""
+msgstr "ファイル名: %s"
 
-#: ../libs/SDK.py:282
+#: ../libs/SDK.py:276
 #, python-format
 msgid "Project tarfile created at: %s"
 msgstr "プロジェクトのtarファイルが作成されました: %s"
 
-#: ../libs/SDK.py:289
+#: ../libs/SDK.py:283
 #, python-format
 msgid "Specified project restore file: %s, does not end in .mic.tar.bz2"
 msgstr "指定されたプロジェクトの復元ファイル: %s, は .mic.tar.bz2 で終わっていません"
 
-#: ../libs/SDK.py:292
+#: ../libs/SDK.py:286
 #, python-format
 msgid "A project already exists with that name: %s"
 msgstr "この名前のプロジェクトは既に存在しています: %s"
 
-#: ../libs/SDK.py:294
+#: ../libs/SDK.py:288
 #, python-format
 msgid "Specified project path contains a space character, not allowed: %s"
 msgstr "指定されたプロジェクトのパスはスペースを含んでいます。割り当てられませんでした: %s"
 
-#: ../libs/SDK.py:298
+#: ../libs/SDK.py:292
 #, python-format
 msgid "Specified project-path, is a directory, but it is NOT empty: %s"
 msgstr "指定されたプロジェクトのパスはディレクトリですが空ではありません: %s"
 
-#: ../libs/SDK.py:302
+#: ../libs/SDK.py:296
 msgid "Specified project-path, exists, but it is not a directory"
 msgstr "指定されたプロジェクトのパスは存在していますが、ディレクトリではありません"
 
-#: ../libs/SDK.py:306
+#: ../libs/SDK.py:300
 #, python-format
 msgid "Extracting: %s to temporary directory: %s/"
 msgstr "展開しています: 一時ファイルのディレクトリ %s へ: %s/"
 
-#: ../libs/SDK.py:316
+#: ../libs/SDK.py:310
 #, python-format
 msgid ""
 "Project config file did not exist in project tarfile.  Could not find: %s"
 msgstr ""
 "プロジェクトの設定ファイルはtarファイルの中に存在しませんでした。見つかりませんでした: %s"
 
-#: ../libs/SDK.py:319
+#: ../libs/SDK.py:313
 #, python-format
 msgid "Project directory did not exist in project tarfile.  Could not find: %s"
 msgstr "プロジェクトのディレクトリはtarファイルの中に存在しませんでした。見つかりませんでした: %s"
 
-#: ../libs/SDK.py:320
+#: ../libs/SDK.py:314
 #, python-format
 msgid "Writing new config file: %s"
 msgstr "新しい設定ファイルを書き込んでいます: %s"
 
-#: ../libs/SDK.py:322
+#: ../libs/SDK.py:316
 #, python-format
 msgid "Moving project directory into place at: %s"
 msgstr "プロジェクトのディレクトリを移動しています: %s"
 
-#: ../libs/SDK.py:327
+#: ../libs/SDK.py:321
 msgid "Error doing 'mv' cmd"
 msgstr "'mv'コマンドのエラーです"
 
-#: ../libs/SDK.py:329
+#: ../libs/SDK.py:323
 #, python-format
 msgid "Removing temporary directory: %s"
 msgstr "一時ディレクトリを削除しています: %s"
 
-#: ../libs/SDK.py:331
+#: ../libs/SDK.py:325
 #, python-format
 msgid "Project: %s restored to: %s"
 msgstr "プロジェクト: %s が復元されました: %s"
 
-#: ../libs/SDK.py:362
+#: ../libs/SDK.py:356
 msgid "Deleting rootstraps..."
 msgstr "ルートストラップを削除しています..."
 
-#: ../libs/SDK.py:368
+#: ../libs/SDK.py:362
 #, python-format
 msgid "Deleting: %s"
 msgstr "削除しています: %s"
 
-#: ../libs/SDK.py:373
+#: ../libs/SDK.py:367
 #, python-format
 msgid "Deleting rootstrap directory: %s"
 msgstr "ルートストラップのディレクトリを削除しています: %s"
 
-#: ../libs/SDK.py:435
+#: ../libs/SDK.py:429
 #, python-format
 msgid "'%s' object has no attribute '%s'"
 msgstr "'%s'オブジェクトに'%s'の属性がありませんでした"
@@ -1261,53 +1357,50 @@ msgstr "種類: %s"
 msgid "USAGE: %s FSET_FILE ..."
 msgstr "使い方: %s FSET_FILE ..."
 
-#: ../libs/mic_cfg.py:62 ../libs/pdk_utils.py:44
+#: ../libs/mic_cfg.py:63 ../libs/pdk_utils.py:44
 msgid "~/.image-creator/ directory did not exist.  Creating"
 msgstr "~/.image-creator/ ディレクトリは存在しませんでした。作成しています"
 
-#: ../libs/mic_cfg.py:69
+#: ../libs/mic_cfg.py:70
 #, python-format
 msgid "Error: The file: %s exists"
 msgstr "エラー: ファイル: %s は存在しています"
 
-#: ../libs/mic_cfg.py:70
+#: ../libs/mic_cfg.py:71
 msgid ""
 "This file is no longer used.  Please convert it over to the new file and "
 "then delete it"
 msgstr ""
 "このファイルはもう使用されません。新しいファイルを置き換えし、このファイルを削除してください"
 
-#: ../libs/mic_cfg.py:71
+#: ../libs/mic_cfg.py:72
 #, python-format
 msgid "Please create a: %s file"
 msgstr "作成してください: %s ファイル"
 
-#: ../libs/mic_cfg.py:72
+#: ../libs/mic_cfg.py:73
 #, python-format
 msgid "And set it up like the file: %s"
 msgstr "そしてこのファイルのように設定してください: %s"
 
-#: ../libs/mic_cfg.py:96 ../libs/mic_cfg.py:101
+#: ../libs/mic_cfg.py:97 ../libs/mic_cfg.py:102
 #, python-format
 msgid "Invalid section: %s"
 msgstr "無効なセクション: %s"
 
-#: ../libs/mic_cfg.py:97 ../libs/mic_cfg.py:102
+#: ../libs/mic_cfg.py:98 ../libs/mic_cfg.py:103
 #, python-format
 msgid "Found in file: %s"
 msgstr "ファイルが見つかりました: %s"
-
-#: ../libs/mic_cfg.py:165
-msgid "unsupported distribution"
-msgstr "未サポートのディストリビューションです"
 
 #: ../libs/moblin_apt.py:54
 #, python-format
 msgid "Running 'apt-get install' command: %s"
 msgstr "'apt-get install'コマンドを実行しています: %s"
 
-#: ../libs/moblin_apt.py:55 ../libs/moblin_yum.py:55 ../libs/moblin_yum.py:85
-#: ../libs/moblin_yum.py:92
+#: ../libs/moblin_apt.py:55 ../libs/moblin_yum.py:54 ../libs/moblin_yum.py:95
+#: ../libs/moblin_yum.py:125 ../libs/moblin_yum.py:130
+#: ../libs/moblin_yum.py:138 ../libs/moblin_yum.py:152
 #, python-format
 msgid "\t in the chroot: %s"
 msgstr "\t chrootの中: %s"
@@ -1371,58 +1464,73 @@ msgid ""
 "moblin_apt.__aptgetPostRun() called without corresponding aptgetPreRun()"
 msgstr ""
 
-#: ../libs/moblin_yum.py:54
+#: ../libs/moblin_yum.py:53
 #, python-format
-msgid "Running 'yum install' command: %s"
-msgstr "'yum install' コマンドを実行しています: %s"
+msgid "Running 'yum groupinstall' command: %s"
+msgstr "'yum groupinstall'コマンドを実行しています: %s"
 
-#: ../libs/moblin_yum.py:58
-msgid "Completed 'yum install' successfully"
-msgstr "'yum install' が完了しました"
+#: ../libs/moblin_yum.py:57
+msgid "Completed 'yum groupinstall' successfully"
+msgstr "'yum groupinstall' が完了しました"
 
-#: ../libs/moblin_yum.py:61
+#: ../libs/moblin_yum.py:60
 #, python-format
-msgid "Error running 'yum install' command: %s"
-msgstr "'yum install'コマンドの実行中にエラーがありました: %s"
+msgid "Error running 'yum groupinstall' command: %s"
+msgstr "'yum groupinstall'コマンドの実行中にエラーがありました: %s"
 
-#: ../libs/moblin_yum.py:62
+#: ../libs/moblin_yum.py:61 ../libs/moblin_yum.py:102
 msgid "Will try 'yum update' in 15 seconds"
 msgstr "'yum update'を15秒後に再試行します"
 
-#: ../libs/moblin_yum.py:67 ../libs/moblin_yum.py:84
+#: ../libs/moblin_yum.py:66 ../libs/moblin_yum.py:107
+#: ../libs/moblin_yum.py:124 ../libs/moblin_yum.py:129
 #, python-format
 msgid "Running 'yum update' command: %s"
 msgstr "'yum update'コマンドを実行しています: %s"
 
-#: ../libs/moblin_yum.py:71
+#: ../libs/moblin_yum.py:70 ../libs/moblin_yum.py:111
 #, python-format
 msgid "Error running 'yum update' command: %s"
 msgstr "'yum update'コマンドの実行中にエラーがありました: %s"
 
-#: ../libs/moblin_yum.py:74
+#: ../libs/moblin_yum.py:73 ../libs/moblin_yum.py:114
 msgid "Completed 'yum update' successfully"
 msgstr "'yum update' が完了しました"
 
-#: ../libs/moblin_yum.py:75
+#: ../libs/moblin_yum.py:74 ../libs/moblin_yum.py:115
 msgid "Will try 'yum install -f' in 15 seconds"
 msgstr "'yum install -f'を15秒後に再試行します"
 
-#: ../libs/moblin_yum.py:91
+#: ../libs/moblin_yum.py:94
+#, python-format
+msgid "Running 'yum install' command: %s"
+msgstr "'yum install' コマンドを実行しています: %s"
+
+#: ../libs/moblin_yum.py:98
+msgid "Completed 'yum install' successfully"
+msgstr "'yum install' が完了しました"
+
+#: ../libs/moblin_yum.py:101
+#, python-format
+msgid "Error running 'yum install' command: %s"
+msgstr "'yum install'コマンドの実行中にエラーがありました: %s"
+
+#: ../libs/moblin_yum.py:137
 #, python-format
 msgid "Running 'yum clean' command: %s"
 msgstr "'yum clean'コマンドを実行しています: %s"
 
-#: ../libs/moblin_yum.py:107
+#: ../libs/moblin_yum.py:148
 #, python-format
 msgid "Running command: %s"
 msgstr "実行中のコマンド: %s"
 
-#: ../libs/moblin_yum.py:110
+#: ../libs/moblin_yum.py:151
 #, python-format
 msgid "Running rpm db reset command: %s"
 msgstr "実行中のRPMデータベース初期化コマンド: %s"
 
-#: ../libs/moblin_yum.py:114
+#: ../libs/moblin_yum.py:155
 #, python-format
 msgid "Error running command %s"
 msgstr "実行コマンドエラー: %s"
@@ -1437,17 +1545,22 @@ msgstr "サンプル %s ファイルを作成しています"
 msgid "USB devices: %s"
 msgstr "USBデバイス: %s"
 
-#: ../libs/pdk_utils.py:198
+#: ../libs/pdk_utils.py:126
+#, python-format
+msgid "usb_list file is %s"
+msgstr "usb_list ファイルは %s です"
+
+#: ../libs/pdk_utils.py:208
 #, python-format
 msgid "Umounting: %s"
 msgstr "アンマウントしています: %s"
 
-#: ../libs/pdk_utils.py:303
+#: ../libs/pdk_utils.py:313
 #, python-format
 msgid "Error in chroot.  Result: %s"
 msgstr "chroot内のエラー 戻り値: %s"
 
-#: ../libs/pdk_utils.py:409
+#: ../libs/pdk_utils.py:419
 msgid ""
 "# ##-Created by Moblin Image Creator: if this line exists we will overwrite "
 "this file -##"
@@ -1455,17 +1568,17 @@ msgstr ""
 "# ##-Moblin Image Creatorによって作成されました: もしこの行が存在すればこのファイルを上書きすることができます -## "
 ""
 
-#: ../libs/pdk_utils.py:452
+#: ../libs/pdk_utils.py:462
 #, python-format
 msgid "Internal error while attempting to bind mount /%s!"
 msgstr "bindマウント中に内部エラーが発生しました! /%s"
 
-#: ../libs/pdk_utils.py:470
+#: ../libs/pdk_utils.py:480
 #, python-format
 msgid "Internal error while attempting to mount %s %s!"
 msgstr "マウント中に内部エラーが発生しました! %s %s"
 
-#: ../libs/pdk_utils.py:537 ../libs/pdk_utils.py:546
+#: ../libs/pdk_utils.py:547 ../libs/pdk_utils.py:556
 #, python-format
 msgid "Sending signal: %s to PID: %s"
 msgstr "シグナルを送っています: %s の PID: %s"
@@ -1498,7 +1611,6 @@ msgid "removing the following rpms: "
 msgstr "次のRPMパッケージを取り除いています:"
 
 #: ../gui/image-creator.glade:7
-#: ../image-creator.desktop.in:3
 msgid "Moblin Image Creator"
 msgstr "Moblin Image Creator"
 
@@ -1543,7 +1655,7 @@ msgid "_Write USB Image"
 msgstr "USB用イメージの書き込み"
 
 #: ../gui/image-creator.glade:109 ../gui/image-creator.glade:123
-#: ../gui/image-creator.glade:137
+#: ../gui/image-creator.glade:137 ../gui/image-creator.glade:151
 msgid "Clear Rootstraps"
 msgstr "ルートストラップを消去します"
 
@@ -1563,47 +1675,47 @@ msgstr "機能セット情報"
 msgid "_Edit Repo"
 msgstr "リポジトリの編集"
 
-#: ../gui/image-creator.glade:155
+#: ../gui/image-creator.glade:169
 msgid "_Help"
 msgstr "ヘルプ"
 
-#: ../gui/image-creator.glade:243
+#: ../gui/image-creator.glade:257
 msgid ""
 "Create a project for the desired platform.  You can then add a target below."
 msgstr ""
 "必要なプラットフォーム用のプロジェクトを作成します。ターゲットを追加することができます。"
 
-#: ../gui/image-creator.glade:260
+#: ../gui/image-creator.glade:274
 msgid "Create a new project"
 msgstr "新しいプロジェクトを作成します"
 
-#: ../gui/image-creator.glade:276
+#: ../gui/image-creator.glade:290
 msgid "_Add"
 msgstr "プロジェクトの追加"
 
-#: ../gui/image-creator.glade:298
+#: ../gui/image-creator.glade:312
 msgid "Delete the selected project"
 msgstr "選択したプロジェクトを削除します"
 
-#: ../gui/image-creator.glade:313
+#: ../gui/image-creator.glade:327
 msgid "D_elete"
 msgstr "プロジェクトの削除"
 
-#: ../gui/image-creator.glade:336
+#: ../gui/image-creator.glade:350
 msgid ""
 "Open a terminal chrooted to the root of the selected project's file system"
 msgstr ""
 "選択されたプロジェクトのファイルシステムにchrootされた端末を開きます"
 
-#: ../gui/image-creator.glade:351
+#: ../gui/image-creator.glade:365
 msgid "_Terminal"
 msgstr "端末"
 
-#: ../gui/image-creator.glade:374
+#: ../gui/image-creator.glade:388
 msgid "Upgrade Project"
 msgstr "プロジェクトをアップグレードします"
 
-#: ../gui/image-creator.glade:389
+#: ../gui/image-creator.glade:403
 msgid "_Upgrade Project"
 msgstr "プロジェクトのアップグレード"
 
@@ -1615,15 +1727,15 @@ msgstr "Moblin Image Creatorのコマンド履歴を記録します"
 msgid "Command _History"
 msgstr "コマンド履歴"
 
-#: ../gui/image-creator.glade:426
+#: ../gui/image-creator.glade:477
 msgid "List of existing projects"
 msgstr "存在するプロジェクトの一覧です。"
 
-#: ../gui/image-creator.glade:465
+#: ../gui/image-creator.glade:516
 msgid "<b>Platform Projects</b>"
 msgstr "<b>プラットフォームプロジェクト(Platform Projects)</b>"
 
-#: ../gui/image-creator.glade:518
+#: ../gui/image-creator.glade:569
 msgid ""
 "Select a project above then create a target based on the project target "
 "platform.  You can then add functional sets (software packages) to the "
@@ -1635,15 +1747,15 @@ msgstr ""
 "最後に、「ターゲットイメージ」のセクションでターゲットのイメージを作成することができます。"
 ""
 
-#: ../gui/image-creator.glade:535
+#: ../gui/image-creator.glade:586
 msgid "Create a new target for the project selected above"
 msgstr "上記で選択されたプロジェクト用の新しいターゲットを作成します"
 
-#: ../gui/image-creator.glade:550
+#: ../gui/image-creator.glade:601
 msgid "A_dd"
 msgstr "ターゲットの作成"
 
-#: ../gui/image-creator.glade:572
+#: ../gui/image-creator.glade:623
 msgid ""
 "Add functional sets (groups of related software packages) to the selected "
 "target"
@@ -1651,11 +1763,11 @@ msgstr ""
 "選択されたターゲットへ機能セット(関連したソフトウェアパッケージのグループ)を追加します。"
 ""
 
-#: ../gui/image-creator.glade:587
+#: ../gui/image-creator.glade:638
 msgid "Add _Functional Sets"
 msgstr "機能セットの追加"
 
-#: ../gui/image-creator.glade:611
+#: ../gui/image-creator.glade:662
 msgid ""
 "Delete the selected target.  All installed functional sets will be deleted "
 "along with the file system structure."
@@ -1663,49 +1775,57 @@ msgstr ""
 "選択されたターゲットを削除します。インストールされた"
 "全ての機能セットをターゲットのファイルシステムを削除します。"
 
-#: ../gui/image-creator.glade:626
+#: ../gui/image-creator.glade:677
 msgid "De_lete"
 msgstr "ターゲットの削除"
 
-#: ../gui/image-creator.glade:649
+#: ../gui/image-creator.glade:700
 msgid ""
 "Open a terminal chrooted to the root of the selected target's file system"
 msgstr ""
 "選択されたターゲットのファイルシステムにchrootされた端末を開きます。"
 
-#: ../gui/image-creator.glade:664
+#: ../gui/image-creator.glade:715
 msgid "Te_rminal"
 msgstr "端末"
 
-#: ../gui/image-creator.glade:687
-msgid "Edit the kernel command lines for booting."
-msgstr "起動用のカーネルパラメータを編集します。"
+#: ../gui/image-creator.glade:738
+msgid "Edit the target configuration."
+msgstr "ターゲットの設定を行います。"
 
-#: ../gui/image-creator.glade:702
-msgid "_Kernel cmdline"
-msgstr "カーネルパラメータの編集"
+#: ../gui/image-creator.glade:770
+msgid "_Target config"
+msgstr "ターゲットの設定"
 
-#: ../gui/image-creator.glade:725
+#: ../gui/image-creator.glade:806 ../gui/image-creator.glade:844
 msgid "Upgrade Target"
 msgstr "ターゲットをアップグレードします。"
 
-#: ../gui/image-creator.glade:740
+#: ../gui/image-creator.glade:821
 msgid "Up_grade Target"
 msgstr "ターゲットのアップグレード"
 
-#: ../gui/image-creator.glade:829
+#: ../gui/image-creator.glade:859
 msgid "Edit _Repository"
 msgstr "リポジトリの編集"
 
-#: ../gui/image-creator.glade:777
+#: ../gui/image-creator.glade:882
+msgid "Add Package Groups"
+msgstr "パッケージグループを追加します"
+
+#: ../gui/image-creator.glade:897
+msgid "Package Groups"
+msgstr "パッケージグループ"
+
+#: ../gui/image-creator.glade:935
 msgid "List of existing targets"
 msgstr "存在するターゲットの一覧です。"
 
-#: ../gui/image-creator.glade:816
+#: ../gui/image-creator.glade:974
 msgid "<b>Targets</b>"
 msgstr "<b>ターゲット(Targets)</b>"
 
-#: ../gui/image-creator.glade:869
+#: ../gui/image-creator.glade:1027
 msgid ""
 "Select a target above then select the type of image you wish to create.  \n"
 "(See the tooltips on the buttons below for more information) "
@@ -1713,7 +1833,7 @@ msgstr ""
 "上記のターゲットを選択入力し、選択された種類のイメージを作成します。\n"
 "(詳細については、ボタン上に表示される情報をご覧ください)"
 
-#: ../gui/image-creator.glade:888
+#: ../gui/image-creator.glade:1046
 msgid ""
 "Create a Live USB image that can be burned to a USB flash drive.  You can "
 "boot linux and run completely off the USB flash drive.  Nothing is written "
@@ -1725,11 +1845,11 @@ msgstr ""
 "起動中に作成、変更されたものは、シャットダウンするとUSBフラッシュメモリから消去されます。"
 ""
 
-#: ../gui/image-creator.glade:903
+#: ../gui/image-creator.glade:1061
 msgid "Live USB"
 msgstr "Live USB\n(読込専用)"
 
-#: ../gui/image-creator.glade:924
+#: ../gui/image-creator.glade:1082
 msgid ""
 "Create a Live read/write USB image that can be burned to a USB flash drive  "
 "You can boot linux and run completely off the USB flash drive.  Nothing is "
@@ -1743,11 +1863,11 @@ msgstr ""
 "起動中に作成、変更されたものは持続され、USBフラッシュメモリ上に保存されます。"
 ""
 
-#: ../gui/image-creator.glade:939
+#: ../gui/image-creator.glade:1097
 msgid "Live RW USB"
 msgstr "Live USB\n(読込/書込)"
 
-#: ../gui/image-creator.glade:961
+#: ../gui/image-creator.glade:1119
 msgid ""
 "Create an installation image that can be burned to a USB flash drive.  When "
 "you boot off the USB flash drive it will erase the target harddrive, then "
@@ -1757,11 +1877,11 @@ msgstr ""
 "ブートするとデバイスのハードディスクを消去し、パーティションの再作成、"
 "イメージのインストールを行います。"
 
-#: ../gui/image-creator.glade:976
+#: ../gui/image-creator.glade:1134
 msgid "Install USB"
 msgstr "インストーラ USB"
 
-#: ../gui/image-creator.glade:1008
+#: ../gui/image-creator.glade:1166
 msgid ""
 "Create an installation image that can be burned to a CD. You can boot linux "
 "and run completely off the CD.  Nothing is written to the target device.  "
@@ -1772,11 +1892,11 @@ msgstr ""
 "起動中に作成、変更されたものは持続され、USBフラッシュメモリ上に保存されます。"
 "起動中に作成、変更されたものは、シャットダウンするとCDから消去されます。"
 
-#: ../gui/image-creator.glade:1023
+#: ../gui/image-creator.glade:1181
 msgid "Live CD"
 msgstr "Live CD\n(読込専用)"
 
-#: ../gui/image-creator.glade:1055
+#: ../gui/image-creator.glade:1213
 msgid ""
 "Create a NAND image that can be burned to a Compact flash drive for "
 "Moorestown."
@@ -1784,11 +1904,11 @@ msgstr ""
 "コンパクトフラッシュに書き込む事が可能な、NANDフラッシュメモリイメージを作成します(Moorestown用)。"
 ""
 
-#: ../gui/image-creator.glade:1070
+#: ../gui/image-creator.glade:1228
 msgid "NAND Image"
 msgstr "NANDフラッシュメモリ"
 
-#: ../gui/image-creator.glade:1055
+#: ../gui/image-creator.glade:1260
 msgid ""
 "Write a USB image to the USB flash drive.  An image must first be created "
 "using one of the USB options to the left."
@@ -1796,160 +1916,159 @@ msgstr ""
 "USBメモリに書き込みます。USBメモリ用の"
 "イメージのうち一つを使用します。"
 
-#: ../gui/image-creator.glade:1070
+#: ../gui/image-creator.glade:1275
 msgid "Write USB Image"
 msgstr "USBイメージの書き込み"
 
-#: ../gui/image-creator.glade:1149
+#: ../gui/image-creator.glade:1307
 msgid "Boot a live USB image in KVM"
 msgstr "KVM上でLive USBイメージを起動します"
 
-#: ../gui/image-creator.glade:1164
+#: ../gui/image-creator.glade:1322
 msgid "Launch VM"
 msgstr "KVMの起動"
 
-#: ../gui/image-creator.glade:1125
+#: ../gui/image-creator.glade:1377
 msgid "<b>Target Images</b>"
 msgstr "<b>ターゲットイメージ(Target Images)</b>"
 
-#: ../gui/image-creator.glade:1176
-msgid "New Project"
-msgstr "新しいプロジェクト"
-
-
-#: ../gui/image-creator.glade:1227
-msgid "Desc"
-msgstr "説明"
-
-#: ../gui/image-creator.glade:1264
-msgid "Browse..."
-msgstr "参照"
-
-#: ../gui/image-creator.glade:1289
-msgid "Describe project"
-msgstr "プロジェクトを記述"
-
-#: ../gui/image-creator.glade:1304 ../gui/project_assistant.py:190
-msgid "Project Name"
-msgstr "プロジェクト名"
-
-#: ../gui/image-creator.glade:1315
-msgid "\n"
-msgstr "\n"
-
-#: ../gui/image-creator.glade:1403
-msgid "Add a Target"
-msgstr "ターゲットの追加"
-
-#: ../gui/image-creator.glade:1458
+#: ../gui/image-creator.glade:1428
 msgid "Add New Target"
 msgstr "新しいターゲットの追加"
 
-#: ../gui/image-creator.glade:1469
+#: ../gui/image-creator.glade:1439
 msgid "New Target Name:"
 msgstr "新しいターゲット名:"
 
-#: ../gui/image-creator.glade:1531
+#: ../gui/image-creator.glade:1501
 msgid "Delete Project"
 msgstr "プロジェクトの削除"
 
-#: ../gui/image-creator.glade:1554
+#: ../gui/image-creator.glade:1524
 msgid "Are you sure want to delete this project?"
 msgstr "本当にこのプロジェクトを削除しますか？"
 
-#: ../gui/image-creator.glade:1617 ../gui/image-creator.glade:2210
+#: ../gui/image-creator.glade:1587 ../gui/image-creator.glade:3128
 msgid "Install Function Set"
 msgstr "機能セットのインストール"
 
-#: ../gui/image-creator.glade:1675
+#: ../gui/image-creator.glade:1645
 msgid "foobar"
 msgstr ""
 
-#: ../gui/image-creator.glade:1702 ../gui/image-creator.glade:2288
+#: ../gui/image-creator.glade:1672 ../gui/image-creator.glade:3206
 msgid "Include Debug Packages (if any)"
 msgstr "デバッグ用パッケージを含む(任意)"
 
-#: ../gui/image-creator.glade:1758 ../gui/image-creator.glade:2592
+#: ../gui/image-creator.glade:1728 ../gui/image-creator.glade:3423
 msgid "ERROR!"
 msgstr "エラー!"
 
-#: ../gui/image-creator.glade:1770
+#: ../gui/image-creator.glade:1740
 msgid "An unknown error has occured!"
 msgstr "未知のエラーが発生しました!"
 
-#: ../gui/image-creator.glade:1805
+#: ../gui/image-creator.glade:1775
 msgid "New Image name"
 msgstr "新しいイメージの名前"
 
-#: ../gui/image-creator.glade:1816
+#: ../gui/image-creator.glade:1786
 msgid "Image Name:"
 msgstr "イメージの名前:"
 
-#: ../gui/image-creator.glade:1878
+#: ../gui/image-creator.glade:1848
 msgid "Select your USB disk"
 msgstr "USBメモリを選択してください"
 
-#: ../gui/image-creator.glade:1943
-msgid "Please Wait..."
-msgstr "しばらくお待ちください..."
-
-#: ../gui/image-creator.glade:1971
+#: ../gui/image-creator.glade:1913 ../gui/image-creator.glade:1941
 msgid "Please wait..."
 msgstr "しばらくお待ちください..."
 
-#: ../gui/image-creator.glade:2045
-msgid "gtk-cancel"
-msgstr "キャンセル"
+#: ../gui/image-creator.glade:2032
+msgid "Target configurations"
+msgstr "ターゲットの設定"
 
-#: ../gui/image-creator.glade:2245
-msgid "Kernel cmdline options"
-msgstr "カーネルパラメータオプション"
+#: ../gui/image-creator.glade:2154 ../gui/image-creator.glade:2392
+#: ../gui/image-creator.glade:2725 ../gui/image-creator.glade:2914
+msgid "Use squashfs:"
+msgstr "squashfsを使用する:"
 
-#: ../gui/image-creator.glade:2296
-msgid "NAND Booting kernel cmdline:"
-msgstr "NANDフラッシュメモリ起動時:"
+#: ../gui/image-creator.glade:2182
+msgid "ext3fs size(MB):"
+msgstr "ext3fsのサイズ(MB):"
 
-#: ../gui/image-creator.glade:2322
-msgid "CD Disk Booting kernel cmdline:"
-msgstr "CD起動時:"
+#: ../gui/image-creator.glade:2211
+msgid "<b>USB boot configuration</b>"
+msgstr "<b>USBメモリ起動の設定</b>"
 
-#: ../gui/image-creator.glade:2348
-msgid "HD Installed  kernel cmdline:"
-msgstr "HDD起動時:"
+#: ../gui/image-creator.glade:2239 ../gui/image-creator.glade:2321
+#: ../gui/image-creator.glade:2676 ../gui/image-creator.glade:2837
+msgid "kernel cmdline: "
+msgstr "カーネルパラメータ:"
 
-#: ../gui/image-creator.glade:2372
-msgid "USB Disk Booting kernel cmdline: "
-msgstr "USBメモリ起動時:"
+#: ../gui/image-creator.glade:2420
+msgid "Swap partition size(MB):"
+msgstr "Swapパーティションのサイズ(MB):"
 
-#: ../gui/image-creator.glade:2350
+#: ../gui/image-creator.glade:2448 ../gui/image-creator.glade:2964
+msgid "Boot partition size(MB):"
+msgstr "ブートパーティションのサイズ(MB):"
+
+#: ../gui/image-creator.glade:2476 ../gui/image-creator.glade:2992
+msgid "Fat32 partition size(MB):"
+msgstr "fat32パーティションのサイズ(MB):"
+
+#: ../gui/image-creator.glade:2504
+msgid "Swap option:"
+msgstr "Swapオプション:"
+
+#: ../gui/image-creator.glade:2533
+msgid "<b>HDD boot configuration</b>"
+msgstr "<b>HDD起動の設定</b>"
+
+#: ../gui/image-creator.glade:2624
+msgid ""
+"No swap\n"
+"Swap file create only\n"
+"Swap file create and swap on"
+msgstr ""
+"Swapを使用しない\n"
+"Swapパーティションを作成するが、使用しない\n"
+"Swapパーティションを作成し、使用する"
+
+#: ../gui/image-creator.glade:2776
+msgid "<b>CD boot configuration</b>"
+msgstr "<b>CD起動の設定</b>"
+
+#: ../gui/image-creator.glade:2886
+msgid "Image size(MB):"
+msgstr "イメージのサイズ(MB):"
+
+#: ../gui/image-creator.glade:3021
+msgid "<b>NAND boot configuration</b>"
+msgstr "<b>NANDイメージ起動の設定</b>"
+
+#: ../gui/image-creator.glade:3268
 msgid "Mirror Settings"
 msgstr "ミラーリポジトリの設定"
 
-#: ../gui/image-creator.glade:2364
+#: ../gui/image-creator.glade:3282
 msgid "No Mirror"
 msgstr "ミラーリポジトリを使用しない"
 
-#: ../gui/image-creator.glade:2379
+#: ../gui/image-creator.glade:3297
 msgid "Use Mirror"
 msgstr "ミラーリポジトリを使用する"
 
-#: ../gui/image-creator.glade:2396
+#: ../gui/image-creator.glade:3314 ../gui/image-creator.glade:3639
 msgid "Add"
 msgstr "追加"
 
-#: ../gui/image-creator.glade:2430
+#: ../gui/image-creator.glade:3348
 msgid "Search and Replace Expression can be any Python regular expression"
-msgstr "検索と置換の表現は、Pythonの正規表現です"
+msgstr "検索と置換の表現は、Pythonの正規表現を使用します"
 
-#: ../gui/image-creator.glade:2499
-msgid "Section Name"
-msgstr "セクション名"
-
-#: ../gui/image-creator.glade:2523
-msgid "Mirror List"
-msgstr "ミラー一覧"
-
-#: ../gui/image-creator.glade:2604
+#: ../gui/image-creator.glade:3435
 msgid ""
 "Warning:The directories listed below could not be unmounted. \n"
 "You may have terminals open in the mounted directory path\n"
@@ -1957,83 +2076,79 @@ msgstr ""
 "警告: 以下の一覧のディレクトリはアンマウントできませんでした。\n"
 "端末でマウントされているディレクトリパスを開いているかもしれません\n"
 
-#: ../gui/image-creator.glade:2653
+#: ../gui/image-creator.glade:3483
 msgid "Did you know..."
 msgstr "ご存知ですか？"
 
-#: ../gui/image-creator.glade:2701 ../gui/image-creator.glade:2778
-msgid "gtk-ok"
-msgstr "OK"
-
-#: ../gui/image-creator.glade:2721
+#: ../gui/image-creator.glade:3544
 msgid "Fsets Info"
 msgstr "機能セット情報"
 
-#: ../gui/image-creator.glade:2969
+#: ../gui/image-creator.glade:3652
 msgid "Remove"
 msgstr "削除"
 
-#: ../gui/image-creator.glade:3018
-msgid "url"
-msgstr ""
-
-#: ../gui/image-creator.glade:3044
-msgid "enabled"
-msgstr ""
-
-#: ../gui/image-creator.glade:3070
+#: ../gui/image-creator.glade:3707
 msgid "failovermethod"
 msgstr ""
 
-#: ../gui/image-creator.glade:3109 ../gui/image-creator.glade:3224
+#: ../gui/image-creator.glade:3732
+msgid "enabled"
+msgstr ""
+
+#: ../gui/image-creator.glade:3757
+msgid "url"
+msgstr ""
+
+#: ../gui/image-creator.glade:3785 ../gui/image-creator.glade:3901
 msgid "Save"
 msgstr "保存"
 
-#: ../gui/image-creator.glade:3163
+#: ../gui/image-creator.glade:3840
 msgid "Command History"
 msgstr "コマンド履歴"
 
-#: ../gui/image-creator.glade:3196
+#: ../gui/image-creator.glade:3873
 msgid "Clean history of MIC commands"
 msgstr "Moblin Image Creatorのコマンド履歴を消去します"
 
-#: ../gui/image-creator.glade:3197
+#: ../gui/image-creator.glade:3874
 msgid "Clean"
 msgstr "消去"
 
-#: ../gui/image-creator.glade:3208
+#: ../gui/image-creator.glade:3885
 msgid "Copy command history to clipboard"
 msgstr "コマンド履歴をクリップボードへコピーします"
 
-#: ../gui/image-creator.glade:3209
+#: ../gui/image-creator.glade:3886
 msgid "Copy"
 msgstr "コピー"
 
-#: ../gui/image-creator.glade:3223
+#: ../gui/image-creator.glade:3900
 msgid "Save command history into a file in /var/lib/moblin-image-creator/cmds"
 msgstr "/var/lib/moblin-image-creator/cmdsディレクトリ以下にコマンド履歴を保存します"
 
-#: ../gui/image-creator.glade:3238
+#: ../gui/image-creator.glade:3915
 msgid "Close window"
 msgstr "ウィンドウを閉じます"
 
-#: ../gui/image-creator.glade:3239
+#: ../gui/image-creator.glade:3916
 msgid "Close"
 msgstr "閉じる"
 
-#: ../gui/image-creator.glade:3258
+#: ../gui/image-creator.glade:3935
 msgid "Save to..."
 msgstr "保存します..."
 
-#: ../gui/image-creator.glade:3269
+#: ../gui/image-creator.glade:3946
 msgid " File Name: "
 msgstr " ファイル名: "
 
-#: ../gui/image-creator.glade:3329
+#: ../gui/image-creator.glade:4006
 msgid "Existed file name."
 msgstr "存在しているファイル名でした"
 
-#: ../gui/image-creator.glade:3337
+#: ../gui/image-creator.glade:4014
 msgid ""
 "\n"
 "File exists. Overwrite it?\n"
@@ -2043,28 +2158,42 @@ msgstr ""
 "ファイルが存在しています。上書きしますか?\n"
 "            "
 
+#: ../gui/image-creator.glade:4062
+msgid "New Project"
+msgstr "新しいプロジェクト"
+
+#: ../gui/image-creator.glade:4131
+msgid "\n"
+msgstr ""
+
+#: ../gui/image-creator.glade:4148
+msgid "Description:  "
+msgstr "説明: "
+
+#: ../gui/image-creator.glade:4161
+msgid "_Add Target..."
+msgstr "ターゲットを追加します..."
+
+#: ../gui/image-creator.glade:4187
+msgid "_Browse..."
+msgstr "参照..."
+
+#: ../gui/image-creator.glade:4247
+msgid "P_latform:  "
+msgstr "プラットフォーム: "
+
+#: ../gui/image-creator.glade:4262
+msgid "_Path:  "
+msgstr "パス: "
+
+#: ../gui/image-creator.glade:4277
+msgid "Project _Desc:  "
+msgstr "プロジェクトの説明: "
+
+#: ../gui/image-creator.glade:4292
+msgid "Project _Name:  "
+msgstr "プロジェクト名: "
+
 #: ../image-creator.desktop.in:4
 msgid "Developer tool for creating mobile Linux device stacks"
 msgstr "携帯端末用Linuxを構築するための開発ツール"
-
-#: ../gui/repo_editor.py:63
-msgid "Repository List"
-msgstr "リポジトリ一覧"
-
-#: ../gui/repo_editor.py:139
-msgid "New Repo Name"
-msgstr "新しいリポジトリ名"
-
-#: ../gui/repo_editor.py:142
-msgid "Add New Repo"
-msgstr "新しいリポジトリ名の追加"
-
-#: ../gui/repo_editor.py:167
-#, python-format
-msgid "Removing Repo: %s"
-msgstr "リポジトリを削除しています: %s"
-
-#: ../gui/repo_editor.py:172
-#, python-format
-msgid "Saving: %s"
-msgstr "保存しています: %s"
