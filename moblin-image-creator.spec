@@ -61,9 +61,15 @@ rm -rf %{buildroot}
 /var/lib/moblin-image-creator/projects
 
 %changelog
+* Thu Oct 02 2008  Mitsutaka Amano <mamano@miraclelinux.com>
+- Added the Target config function.
+- Updated debian/changelog and rpm spec file.
+
+* Wed Oct 01 2008 Prajwal Mohan <prajwal@linux.intel.com>
+- Adding feature to install package groups
+
 * Wed Oct 01 2008 Mitsutaka Amano <mamano@miraclelinux.com>
 - Fixed rpm spec file for initial installation.
-- Added the Target config function.
 
 * Tue Sep 30 2008 Prajwal Mohan <prajwal@linux.intel.com>
 - Adding tmpfs to fstab
