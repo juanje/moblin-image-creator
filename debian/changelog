@@ -43,9 +43,12 @@ moblin-image-creator (0.46) UNRELEASED; urgency=low
   * Fixed typo and resolved https://bugs.launchpad.net/moblin-image-creator/+bug/199180
 
   [ Prajwal Mohan ]
-  * Changing progress bar label 
+  * Changing progress bar label
 
- -- Prajwal Mohan <prajwal@linux.intel.com>  Thu, 02 Oct 2008 10:03:33 -0700
+  [ Mitsutaka Amano ]
+  * Fixed newProject dialog stretch bug.
+
+ -- Mitsutaka Amano <mamano@miraclelinux.com>  Fri, 03 Oct 2008 21:09:43 +0900
 
 moblin-image-creator (0.45) gaston; urgency=low
 

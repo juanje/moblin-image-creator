@@ -61,7 +61,13 @@ rm -rf %{buildroot}
 /var/lib/moblin-image-creator/projects
 
 %changelog
-* Thu Oct 02 2008  Mitsutaka Amano <mamano@miraclelinux.com>
+* Fri Oct 03 2008 Mitsutaka Amano <mamano@miraclelinux.com>
+- Fixed newProject dialog stretch bug.
+
+* Thu Oct 02 2008 Prajwal Mohan <prajwal@linux.intel.com>
+- Changing progress bar label
+
+* Thu Oct 02 2008 Mitsutaka Amano <mamano@miraclelinux.com>
 - Added the Target config function.
 - Updated debian/changelog and rpm spec file.
 - Updated ja.po.
