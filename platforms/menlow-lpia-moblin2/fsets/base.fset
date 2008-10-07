@@ -1,6 +1,6 @@
 [Core]
 DESC=Fundamental fset that provide a basic console based system
-PKGS=grub passwd kernel-crown-beach coreutils upstart bash moblin-config-tools moblin-release yum which dhclient openssh-clients wireless-tools rt73usb-firmware openssh-server
+PKGS=grub passwd kernel-crown-beach coreutils upstart bash moblin-config-tools moblin-release yum which dhclient openssh-clients wireless-tools rt73usb-firmware openssh-server moblin-installer
 DEBUG_PKGS=gdb yum vim-enhanced tickless-utils oprofile
 
 [X]

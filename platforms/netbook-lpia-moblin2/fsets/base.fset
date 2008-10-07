@@ -1,6 +1,6 @@
 [Core]
 DESC=Fundamental fset that provide a basic console based system
-PKGS=grub passwd kernel-netbook coreutils sysvinit bash moblin-release yum which dhclient openssh-clients wireless-tools rt73usb-firmware mkinitrd moblin-config-tools openssh-server
+PKGS=grub passwd kernel-netbook coreutils sysvinit bash moblin-release yum which dhclient openssh-clients wireless-tools rt73usb-firmware mkinitrd moblin-config-tools openssh-server moblin-installer
 DEBUG_PKGS=gdb vim-enhanced tickless-utils oprofile
 
 [Core-Dev]
