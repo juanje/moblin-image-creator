@@ -15,7 +15,7 @@ EOF
 
 # creat the grub config file
 comment="#It is created by update-grub"
-args='boot=disk'
+args='root=/dev/sda2'
 grub_config_file="/boot/grub/grub.conf"
 grub_config_bak_file="/boot/grub/grub.conf.bak"
 
@@ -30,6 +30,6 @@ do
    kern=$(echo ${kern} | sed -e 's/\/boot//g')
    echo "add ${kern} to grub config file"
    initrd=$(echo ${kern} | sed -e 's/vmlinuz/initrd\.img/g')
-   /sbin/grubby --add-kernel=${kern} --args=${args} -c ${grub_config_file}  --grub --initrd=${initrd} --title="moblin2 ${kern}"   
+   /sbin/grubby --add-kernel=${kern} --args=${args} -c ${grub_config_file}  --grub --title="moblin2 ${kern}"
 done
 

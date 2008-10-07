@@ -52,9 +52,9 @@ moblin-image-creator (0.46) UNRELEASED; urgency=low
   * Setting defaults for moblin2 platforms
   * Changing defaults for menlow-lpia-moblin2
   * Adding moblin-installer to core fset of moblin2 platforms
- 
+  * Setting root=/dev/sda2 in grub.conf for jax10 
 
- -- Prajwal Mohan <prajwal@linux.intel.com>  Tue, 07 Oct 2008 14:17:01 -0700
+ -- Prajwal Mohan <prajwal@linux.intel.com>  Tue, 07 Oct 2008 14:46:23 -0700
 
 moblin-image-creator (0.45) gaston; urgency=low
 
