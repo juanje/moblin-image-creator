@@ -48,7 +48,10 @@ moblin-image-creator (0.46) UNRELEASED; urgency=low
   [ Mitsutaka Amano ]
   * Fixed newProject dialog stretch bug.
 
- -- Mitsutaka Amano <mamano@miraclelinux.com>  Fri, 03 Oct 2008 21:09:43 +0900
+  [ Prajwal Mohan ]
+  * Setting defaults for moblin2 platforms 
+
+ -- Prajwal Mohan <prajwal@linux.intel.com>  Tue, 07 Oct 2008 11:53:42 -0700
 
 moblin-image-creator (0.45) gaston; urgency=low
 
