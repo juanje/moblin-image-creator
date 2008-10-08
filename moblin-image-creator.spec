@@ -1,6 +1,6 @@
 Summary: Mobline Image Creator -- Mobile & Internet Linux Development Kit
 Name: moblin-image-creator
-Version: 0.46
+Version: 0.47
 Release: 1%{?dist}
 License: GPL
 Group: Development
@@ -61,6 +61,15 @@ rm -rf %{buildroot}
 /var/lib/moblin-image-creator/projects
 
 %changelog
+* Fri Oct 08 2008 Mitsutaka Amano <mamano@miraclelinux.com>
+- Starting new version.
+
+* Thu Oct 07 2008 Prajwal Mohan <prajwal@linux.intel.com>
+- Setting defaults for moblin2 platforms
+- Changing defaults for menlow-lpia-moblin2
+- Adding moblin-installer to core fset of moblin2 platforms
+- Setting root=/dev/sda2 in grub.conf for jax10
+
 * Fri Oct 03 2008 Mitsutaka Amano <mamano@miraclelinux.com>
 - Fixed newProject dialog stretch bug.
 

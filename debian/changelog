@@ -1,4 +1,10 @@
-moblin-image-creator (0.46) UNRELEASED; urgency=low
+moblin-image-creator (0.47) gaston; urgency=low
+
+  * Starting new version.
+
+ -- Mitsutaka Amano <mamano@miraclelinux.com>  Wed, 08 Oct 2008 11:33:52 +0900
+
+moblin-image-creator (0.46) gaston; urgency=low
 
   [ Mitsutaka Amano ]
   * Starting new version.
