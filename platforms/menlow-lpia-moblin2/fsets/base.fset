@@ -9,11 +9,19 @@ PKGS=xorg-x11-server-Xorg libdrm mesa-libGL xorg-x11-fonts-misc xterm xorg-x11-x
 DEBUG_PKGS=
 DEPS= core
 
-[XFCE]
-DESC=xfce
-PKGS= xfce-utils vibrant-icon-theme moblin-gnome-theme xorg-x11-fonts-100dpi xorg-x11-fonts-Type1 liberation-fonts xfwm4 xfdesktop xfce4-taskmanager xfce4-panel xfce4-session
+[Traditional-Desktop]
+DESC=Traditional XFCE Desktop
+PKGS= xfce-utils vibrant-icon-theme moblin-gnome-theme xorg-x11-fonts-100dpi xorg-x11-fonts-Type1 liberation-fonts xfwm4 xfdesktop xfce4-taskmanager xfce4-panel xfce4-session 
 DEBUG_PKGS=
-DEPS= x applications
+DEPS=x applications
+CONFLICTS=
+
+[Matchbox-Desktop]
+DESC=Matchbox Desktop
+PKGS= matchbox-desktop matchbox-keyboard
+DEBUG_PKGS=
+DEPS=x
+CONFLICTS=
 
 [Applications]
 DESC=Useful applications

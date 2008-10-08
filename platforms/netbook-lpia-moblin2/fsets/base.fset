@@ -61,6 +61,13 @@ DEBUG_PKGS=
 DEPS=x applications
 CONFLICTS=app-devel-environment appframework-devel-environment technology-integration-testing
 
+[Matchbox-Desktop]
+DESC=Matchbox Desktop
+PKGS= matchbox-desktop matchbox-keyboard
+DEBUG_PKGS=
+DEPS=x
+CONFLICTS=
+
 [Technology-Integration-Testing]
 DESC=Installs all available techology components needed to showcase the Moblin user experience
 PKGS=compiz
