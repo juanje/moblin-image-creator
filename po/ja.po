@@ -803,7 +803,8 @@ msgstr "LiveUSBイメージ: Live USB イメージ(%s)を作成しています..
 msgid "Live USB Image (no persistent R/W)"
 msgstr ""
 
-#: ../libs/InstallImage.py:606 ../libs/InstallImage.py:652
+#: ../libs/InstallImage.py:524 ../libs/InstallImage.py:670
+#: ../libs/InstallImage.py:716
 msgid "Could not copy rootfs_path. Ignored error"
 msgstr "rootfs_pathをコピーできませんでした。エラーを無視しました"
 
@@ -820,17 +821,25 @@ msgstr "インストールUSBイメージ: インストールUSBイメージを�
 msgid "Install USB Image.  This will DESTROY all content on your hard drive!!"
 msgstr ""
 
-#: ../libs/InstallImage.py:656
+#: ../libs/InstallImage.py:528 ../libs/InstallImage.py:720
 msgid "Could not copy bootfs_path. Ignored error"
 msgstr "bootfs_pathをコピーできませんでした。エラーを無視しました"
 
 #: ../libs/InstallImage.py:660
-msgid "Could create install script. Ignored error"
+msgid "Could not create install script. Ignored error"
 msgstr "インストールスクリプトを作成できませんでした。エラーを無視しました"
 
 #: ../libs/InstallImage.py:665 ../libs/InstallImage.py:669
 msgid "InstallUsbImage: Finished!"
 msgstr "インストールUSBイメージ: 完了!"
+
+#: ../libs/InstallImage.py:536
+msgid "Could not copy isolinux.bin. Ignored error"
+msgstr "isolinux.binをコピーできませんでした。エラーを無視しました"
+
+#: ../libs/InstallImage.py:548 ../libs/InstallImage.py:552
+msgid "InstallIsoImage: Finished!"
+msgstr "インストールISOイメージ: 完了!"
 
 #: ../libs/InstallImage.py:666
 msgid ""
@@ -1895,6 +1904,19 @@ msgstr ""
 #: ../gui/image-creator.glade:1181
 msgid "Live CD"
 msgstr "Live CD\n(読込専用)"
+
+#: ../gui/image-creator.glade:2078
+msgid ""
+"Create an installation image that can be burned to a CD. When you boot off "
+"the CD it will erase the target harddrive, then repartition and install the "
+"target image."
+msgstr "CDに書き込む事が可能な、CDイメージを作成します。"
+"ブートするとデバイスのハードディスクを消去し、パーティションの再作成、"
+"イメージのインストールを行います。"
+
+#: ../gui/image-creator.glade:2110
+msgid "Install CD"
+msgstr "インストーラ CD"
 
 #: ../gui/image-creator.glade:1213
 msgid ""

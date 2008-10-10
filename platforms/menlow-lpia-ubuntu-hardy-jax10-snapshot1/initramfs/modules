@@ -22,3 +22,5 @@ jbd
 ext2
 ext3
 fbcon
+cdrom
+isofs

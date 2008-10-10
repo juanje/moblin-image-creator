@@ -26,6 +26,8 @@ type usplash_write > /dev/null 2>&1 && SPLASHWRITE=1
 # Disable usplash, since we want text mode
 SPLASHWRITE=0
 
+BOOTDEVICE=$1
+
 # show the progress at status bar.
 # $1 = 0-100
 splash_progress(){
@@ -66,9 +68,14 @@ while true; do
         echo "checking device: /dev/${device} for installation target"
         if [ -e /sys/block/${device}/removable ]; then
            if [ "$(cat /sys/block/${device}/removable)" = "0" ]; then
-              splash_display "found harddisk at /dev/${device}"
-              found="yes"
-              break
+              if cat /proc/mounts | grep /dev/${device}
+              then
+                  continue
+              else
+                  found="yes"
+                  splash_display "found harddisk at /dev/${device}"
+                  break
+              fi
            fi
          fi
       done
@@ -235,8 +242,6 @@ splash_delay 10
 sleep 1
 splash_delay 6000
 splash_display "Install Successfully"
-splash_display "Unplug USB Key, System Will Reboot Automatically"
-
 # need to call reboot --help and let file system cache hold it, since we will
 # unplug USB disk soon, and after that, reboot command will not be accessible.
 # The reason why reboot still works sometimes without this is the whole
@@ -245,10 +250,20 @@ splash_display "Unplug USB Key, System Will Reboot Automatically"
 # have found this issue when creating big installation)
 reboot --help > /dev/null 2>&1
 
-while [ $pre_scsi_disk_number = $(ls /sys/class/scsi_disk | wc -l) ]
-do
-    sleep 1
-done
+
+case $BOOTDEVICE in
+usb)
+    splash_display "Unplug USB Key, System Will Reboot Automatically"
+    while [ $pre_scsi_disk_number = $(ls /sys/class/scsi_disk | wc -l) ]
+    do
+        sleep 1
+    done
+    ;;
+cd)
+    splash_display "Sysstem Will Reboot after 5 seconds"
+    sleep 5
+    ;;
+esac
 
 splash_progress 100
 splash_delay 1

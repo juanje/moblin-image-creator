@@ -26,6 +26,8 @@ type usplash_write > /dev/null 2>&1 && SPLASHWRITE=1
 # Disable usplash, since we want text mode
 SPLASHWRITE=0
 
+BOOTDEVICE=$1
+
 # show the progress at status bar.
 # $1 = 0-100
 splash_progress(){
@@ -60,7 +62,6 @@ splash_display 'INSTALL..........'
 pre_scsi_disk_number=$( ls /sys/class/scsi_disk | wc -l)
 found=no
 # Find the install disk
-mount -t proc none /proc
 while true; do
       for device in 'hda' 'hdb' 'sda' 'sdb'
       do
@@ -85,6 +86,7 @@ while true; do
       echo "Did not find an installation target device"
 done
 echo "will install to /dev/${device}"
+
 blocks=`fdisk -s /dev/${device}`
 cylinders=$((blocks*2/63/255))
 
@@ -158,21 +160,23 @@ EOF
 fi
 
 sync
-mount /dev/${device}1 /.asjdflasjdf
 splash_progress 10
 splash_delay 10
+
 splash_display "Formatting /dev/${device}1 w/ ext3..."
 splash_delay 200
 mkfs.ext3 /dev/${device}1
 sync
 splash_progress 20
 splash_delay 10
+
 splash_display "Formatting /dev/${device}2 w/ ext3..."
 splash_delay 200
 mkfs.ext3 /dev/${device}2
 sync
 splash_progress 60
 splash_delay 10
+
 if [ $swap_partition_size -ne 0 ]
 then
     splash_display "Formatting /dev/${device}3 w/ swap..."
@@ -194,10 +198,12 @@ fi
 sync
 splash_progress 65
 splash_delay 10
+
 splash_display 'Mounting partitions...'
 splash_delay 200
 mkdir /tmp/boot
 mount -o loop -t squashfs /tmp/install/bootfs.img /tmp/boot
+
 mount /dev/${device}2 /mnt
 mkdir /mnt/boot
 mount /dev/${device}1 /mnt/boot
@@ -207,6 +213,7 @@ splash_delay 10
 splash_display 'Copying system files onto hard disk drive...'
 splash_delay 200
 cp -av /tmp/boot /mnt
+
 if [ "${use_squashfs}" -eq 1 ]
 then
     echo "Copying squashfs filesystem into place..."
@@ -221,6 +228,7 @@ fi
 /sbin/grub-install --root-directory=/mnt /dev/${device}
 splash_progress 90
 splash_delay 10
+
 splash_display 'Unmounting partitions...'
 splash_delay 200
 
@@ -234,8 +242,6 @@ splash_delay 10
 sleep 1
 splash_delay 6000
 splash_display "Install Successfully"
-splash_display "Unplug USB Key, System Will Reboot Automatically"
-
 # need to call reboot --help and let file system cache hold it, since we will
 # unplug USB disk soon, and after that, reboot command will not be accessible.
 # The reason why reboot still works sometimes without this is the whole
@@ -244,10 +250,20 @@ splash_display "Unplug USB Key, System Will Reboot Automatically"
 # have found this issue when creating big installation)
 reboot --help > /dev/null 2>&1
 
-while [ $pre_scsi_disk_number = $(ls /sys/class/scsi_disk | wc -l) ]
-do
-    sleep 1
-done
+
+case $BOOTDEVICE in
+usb)
+    splash_display "Unplug USB Key, System Will Reboot Automatically"
+    while [ $pre_scsi_disk_number = $(ls /sys/class/scsi_disk | wc -l) ]
+    do
+        sleep 1
+    done
+    ;;
+cd)
+    splash_display "Sysstem Will Reboot after 5 seconds"
+    sleep 5
+    ;;
+esac
 
 splash_progress 100
 splash_delay 1

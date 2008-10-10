@@ -15,10 +15,12 @@ yumrepos_DATA = \
 	yum.repos.d/Moblin.repo
 
 platformdir = ${pkgdatadir}/platforms/${PNAME}
+platform_SCRIPTS = \
+	../common-yum/install.sh \
+	../common-yum/nand.sh
+
 platform_DATA = \
 	../common-yum/exclude \
-	../common-yum/install.sh \
-	../common-yum/nand.sh\
 	fstab
 
 initramfsdir = ${pkgdatadir}/platforms/${PNAME}/initramfs
