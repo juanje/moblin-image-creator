@@ -24,3 +24,5 @@ ext3
 fbcon
 asix
 nfs
+cdrom
+isofs

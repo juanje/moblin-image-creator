@@ -5,10 +5,12 @@ fsets_DATA = \
 	fsets/base.fset
 
 platformdir = ${pkgdatadir}/platforms/${PNAME}
-platform_DATA = \
-	../common-apt/exclude \
+platform_SCRIPTS = \
 	../common-apt/install.sh \
 	../common-apt/nand.sh
+
+platform_DATA = \
+	../common-apt/exclude
 
 initramfsdir = ${pkgdatadir}/platforms/${PNAME}/initramfs
 initramfs_SCRIPTS = \

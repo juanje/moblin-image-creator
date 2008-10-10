@@ -556,9 +556,79 @@ class NFSLiveIsoImage(InstallImage):
                 % (self.project, self.target, self.name))
 
 class InstallIsoImage(InstallImage):
+    def install_kernels(self, message_color, message):
+        InstallImage.install_kernels(self, 'isolinux.cfg', message_color, message, 'CDImage')
+
     def create_image(self):
-        raise ValueError(_("InstallIsoImage: Create Install ISO Image not implemented!"))
-        
+        print _("InstallCDImage: Creating Install CD Image Now...")
+        image_type = _("Install CD Image.  This will DESTROY all content on your hard drive!!")
+        if self.project.platform.config_info['package_manager'] == 'apt':
+            self.create_all_initramfs()
+            self.create_grub_menu()
+            self.apply_hd_kernel_cmdline()
+        if self.project.platform.config_info['package_manager'] == 'yum':
+            self.create_all_initrd()
+            self.create_grub_menu_yum()
+        self.create_rootfs()
+        self.create_bootfs()
+        initrd_stat_result = os.stat('/tmp/.tmp.initrd0')
+        rootfs_stat_result = os.stat(self.rootfs_path)
+        bootfs_stat_result = os.stat(self.bootfs_path)
+        self.tmp_path = tempfile.mkdtemp('','pdk-', '/tmp')
+        self.kernels.insert(0,self.default_kernel)
+        for count, kernel in enumerate(self.kernels):
+            initrd_path = os.path.join(self.tmp_path, "initrd%d.img" % count)
+            try:
+                shutil.move("/tmp/.tmp.initrd%d" % count, initrd_path)
+            except:
+                print _("shutil.move failed. Ignored error")
+        self.kernels.pop(0)
+        # Flashing yellow on a blue background
+        self.install_kernels("ce", image_type)
+        try:
+            pdk_utils.copy(self.rootfs_path, self.tmp_path)
+        except OSError:
+            print _("Could not copy rootfs_path. Ignored error")
+        try:
+            pdk_utils.copy(self.bootfs_path, self.tmp_path)
+        except OSError:
+            print _("Could not copy bootfs_path. Ignored error")
+        try:
+            self.create_install_script(self.tmp_path)
+        except OSError:
+            print _("Could not create install script. Ignored error")
+        try:
+            pdk_utils.copy(os.path.join(self.project.path, "/usr/lib/syslinux/isolinux.bin"), self.tmp_path)
+        except OSError:
+            print _("Could not copy isolinux.bin. Ignored error")
+
+        print _("Creating CD image file at: %s") % self.path
+        cmd_line = "genisoimage -quiet -o %s -b isolinux.bin -c boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table -l -R -r %s" % (self.path, self.tmp_path)
+        result = pdk_utils.execCommand(cmd_line, callback = self.progress_callback)
+        if result:
+            print >> sys.stderr, _("Error running command: %s") % cmd_line
+            raise EnvironmentError, _("Error running command: %s") % cmd_line
+        shutil.rmtree(self.tmp_path)
+        self.tmp_path = ''
+        self.delete_rootfs()
+        self.delete_bootfs()
+        print _("InstallIsoImage: Finished!")
+        print _("\nYou can now use the image to boot and install the target file-system on the target device's HDD.\n")
+        print _("\nWARNING: Entire contents of the target devices's HDD will be erased prior to installation!")
+        print _("         This includes ALL partitions on the disk!\n")
+        print _("InstallIsoImage: Finished!")
+
+    def apply_hd_kernel_cmdline(self):
+        # set kopt= (in AUTOMAGIC KERNELS LIST)
+        hd_kernel_cmdline = self.project.get_target_config(self.target.name, 'hd_kernel_cmdline')
+        cmd = "sed -e 's:^\\s*#\\s*kopt\\s*=\\s*.*:# kopt=%s:' -i %s" % (hd_kernel_cmdline, os.path.join(self.target.fs_path, 'boot', 'grub', 'menu.lst'))
+        print cmd
+        print os.popen(cmd).readlines()
+        print _("grub.conf kernel cmdline changed")
+        # update the kernel entries
+        self.target.chroot("update-grub")
+        print _("New Apply hd kernel cmdline--------------------------------------------------------------------")
+
     def __str__(self):
         return ("<InstallIsoImage: project=%s, target=%s, name=%s>"
                 % (self.project, self.target, self.name))

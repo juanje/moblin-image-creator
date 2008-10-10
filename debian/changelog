@@ -7,10 +7,11 @@ moblin-image-creator (0.47) gaston; urgency=low
   * Adding Matchbox Desktop fset
 
   [ Mitsutaka Amano ]
+  * Added the Create Install CD.
   * Added NFS Live USB Image function.
   * Added NFS Live CD Image function.
 
- -- Mitsutaka Amano <mamano@miraclelinux.com>  Wed, 22 Oct 2008 10:11:17 +0900
+ -- Mitsutaka Amano <mamano@miraclelinux.com>  Fri, 10 Oct 2008 17:23:34 +0900
 
 moblin-image-creator (0.46) gaston; urgency=low
 

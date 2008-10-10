@@ -92,6 +92,7 @@ class App(object):
                 "on_create_installUSB_clicked": self.on_installUSB_clicked,
                 "on_create_liveCD_clicked": self.on_liveCD_clicked,
                 "on_create_NFSliveCD_clicked": self.on_NFSliveCD_clicked,
+                "on_create_installCD_clicked": self.on_installCD_clicked,
                 "on_create_NAND_btn_clicked": self.on_NAND_clicked,
                 "on_about_activate": self.on_about_activate,
                 "on_term_launch_clicked": self.on_term_launch_clicked,
@@ -242,6 +243,7 @@ class App(object):
         self.buttons.target_config.set_sensitive(fset_state)
         self.buttons.create_liveCD.set_sensitive(fset_state)
         self.buttons.create_nfsliveCD.set_sensitive(fset_state)
+        self.buttons.create_installCD.set_sensitive(fset_state)
         self.buttons.create_NAND.set_sensitive(fset_state)
         self.buttons.Write_USB.set_sensitive(fset_state)
         self.buttons.create_launchvm.set_sensitive(fset_state)
@@ -1012,6 +1014,28 @@ class App(object):
                 mic_cmd = 'image-creator --command=create-nfslive-iso --project-name=\'' + project.name + '\' --target-name=\'' + target.name + '\' --image-name=\'' + img_name + '\''
                 self.append_cmd_list(mic_cmd)
                 self.current_project().create_nfslive_iso(target.name, img_name)
+            except ValueError, e:
+                self.show_error_dialog(e.args[0])
+            except:
+                traceback.print_exc()
+                if debug: print_exc_plus()
+                self.show_error_dialog()
+            progress_dialog.destroy()
+
+    def on_installCD_clicked(self, widget):
+        project = self.current_project()
+        target = self.current_target()
+        result, img_name = self.getImageName(default_name=".iso")
+        if result == gtk.RESPONSE_OK:
+            progress_tree = gtk.glade.XML(self.gladefile, 'ProgressDialog')
+            progress_dialog = progress_tree.get_widget('ProgressDialog')
+            progress_dialog.connect('delete_event', self.ignore)
+            progress_tree.get_widget('progress_label').set_text(_("Please wait while creating %s") % img_name)
+            self.progressbar = progress_tree.get_widget('progressbar')
+            try:
+                mic_cmd = 'image-creator --command=create-install-iso --project-name=\'' + project.name + '\' --target-name=\'' + target.name + '\' --image-name=\'' + img_name + '\''
+                self.append_cmd_list(mic_cmd)
+                self.current_project().create_install_iso(target.name, img_name)
             except ValueError, e:
                 self.show_error_dialog(e.args[0])
             except:
@@ -1951,6 +1975,7 @@ class MainWindowButtons(object):
         self.create_installusb = widgets.get_widget('create_installUSB_btn')
         self.create_liveCD = widgets.get_widget('create_liveCD_btn')
         self.create_nfsliveCD = widgets.get_widget('create_NFSliveCD_btn')
+        self.create_installCD = widgets.get_widget('create_installCD_btn')
         self.create_NAND = widgets.get_widget('create_NAND_btn')
         # Terminal button
         self.term_launch = widgets.get_widget('term_launch')

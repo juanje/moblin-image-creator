@@ -67,6 +67,9 @@ rm -rf %{buildroot}
 * Tue Oct 14 2008 Mitsutaka Amano <mamano@miraclelinux.com>
 - Added NFS Live USB Image function.
 
+* Fri Oct 10 2008 Mitsutaka Amano <mamano@miraclelinux.com>
+- Added the Create Install CD.
+
 * Wed Oct 08 2008 Mitsutaka Amano <mamano@miraclelinux.com>
 - Starting new version.
 

@@ -68,11 +68,12 @@ mountroot ()
 	 mkdir -p ${rootmnt}/tmp/install
 	 mount --bind /dev ${rootmnt}/dev
 	 mount --bind /sys ${rootmnt}/sys
+	 mount --bind /proc ${rootmnt}/proc
 	 mount --bind /container ${rootmnt}/tmp/install
 	 cp /container/install.sh ${rootmnt}
 	 cp /container/install.cfg ${rootmnt}
 
 	 maybe_break install
-	 chroot ${rootmnt} /install.sh
+	 chroot ${rootmnt} /install.sh ${BOOT}
     fi
 }
