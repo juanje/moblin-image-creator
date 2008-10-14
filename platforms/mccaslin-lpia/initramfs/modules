@@ -1,4 +1,6 @@
 usbcore
+asix
+nfs
 hid
 usbhid
 ehci-hcd

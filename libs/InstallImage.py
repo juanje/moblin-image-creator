@@ -609,6 +609,36 @@ class LiveUsbImage(BaseUsbImage):
         return ("<LiveUsbImage: project=%s, target=%s, name=%s>"
                 % (self.project, self.target, self.name))
 
+class NFSLiveUsbImage(BaseUsbImage):
+    def create_image(self, fs_type='RAMFS'):
+        print _("NFSLiveUsbImage: Creating NFS Live USB Image Now...")
+        image_type = _("NFS Live USB Image")
+        if self.project.platform.config_info['package_manager'] == 'apt':
+            self.create_all_initramfs()
+        if self.project.platform.config_info['package_manager'] == 'yum':
+            self.create_all_initrd()
+
+        initrd_stat_result = os.stat('/tmp/.tmp.initrd0')
+        size = (initrd_stat_result.st_size / (1024 * 1024)) + 64
+        self.create_usb_image(size)
+        self.mount_container()
+        self.kernels.insert(0,self.default_kernel)
+        for count, kernel in enumerate(self.kernels):
+            initrd_path = os.path.join(self.tmp_path, "initrd%d.img" % count)
+            try:
+                shutil.move("/tmp/.tmp.initrd%d" % count, initrd_path)
+            except:
+                print _("shutil.move failed. Ignored error")
+        self.kernels.pop(0)
+        # Flashing yellow on a blue background
+        self.install_kernels("ae", image_type)
+
+        self.umount_container()
+        print _("LiveUsbImage: Finished!")
+        
+    def __str__(self):
+        return ("<NFSLiveUsbImage: project=%s, target=%s, name=%s>"
+                % (self.project, self.target, self.name))
 
 class InstallUsbImage(BaseUsbImage):
     def create_image(self):

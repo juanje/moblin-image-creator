@@ -811,6 +811,15 @@ msgstr "rootfs_pathをコピーできませんでした。エラーを無視し�
 msgid "LiveUsbImage: Finished!"
 msgstr "LiveUSBイメージ: 完了!"
 
+#: ../libs/InstallImage.py:614
+msgid "NFSLiveUsbImage: Creating NFS Live USB Image Now..."
+msgstr "NFSLiveUSBイメージ: NFS Live USB イメージを作成しています..."
+
+#: ../libs/InstallImage.py:615
+#: This message is printed on Boot session. Can't show multi byte.
+msgid "NFS Live USB Image"
+msgstr ""
+
 #: ../libs/InstallImage.py:621
 msgid "InstallUsbImage: Creating InstallUSB Image..."
 msgstr "インストールUSBイメージ: インストールUSBイメージを作成しています..."
@@ -1866,6 +1875,22 @@ msgstr ""
 #: ../gui/image-creator.glade:1097
 msgid "Live RW USB"
 msgstr "Live USB\n(読込/書込)"
+
+#: ../gui/image-creator.glade:1932
+msgid ""
+"Create a Live  USB image that can be burned to a USB flash drive  You can "
+"boot linux and run completely off the USB flash drive.  Nothing is written "
+"to the target device. Boot and mount to nfs server rootfs. You can use the "
+"storage on nfs server. This image is very small(about 60MB)."
+msgstr "USBメモリに書き込む事が、可能なLive USBイメージを作成します。"
+"Linuxをブートする事が可能で、デバイスには何も書き込まれません。"
+"NFSサーバのrootファイルシステムをマウントして起動します。"
+"そのため、NFSサーバのストレージを活用する事ができます。"
+"このイメージは非常に小さいです(約60MB)"
+
+#: ../gui/image-creator.glade:1964
+msgid "NFS Live USB"
+msgstr "Live USB\n(NFSマウント)"
 
 #: ../gui/image-creator.glade:1119
 msgid ""

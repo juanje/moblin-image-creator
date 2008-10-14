@@ -61,6 +61,9 @@ rm -rf %{buildroot}
 /var/lib/moblin-image-creator/projects
 
 %changelog
+* Fri Oct 14 2008 Mitsutaka Amano <mamano@miraclelinux.com>
+- Added NFS Live USB Image function.
+
 * Fri Oct 08 2008 Mitsutaka Amano <mamano@miraclelinux.com>
 - Starting new version.
 

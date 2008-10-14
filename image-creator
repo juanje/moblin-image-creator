@@ -132,7 +132,7 @@ def main():
         update_project(options)
     elif options.cmd == "update-target":
         update_target(options)
-    elif options.cmd in ["create-live-usb", "create-live-usbrw", "create-install-usb", "create-live-iso", "create-nand"]:
+    elif options.cmd in ["create-live-usb", "create-live-usbrw", "create-nfslive-usb", "create-install-usb", "create-live-iso", "create-nand"]:
         create_image(options)
     elif options.cmd == "chroot-project":
         chroot_project(options)
@@ -157,6 +157,7 @@ def parseCommandLine():
         "create-install-usb" :  1,
         "create-live-usb" :     1,
         "create-live-usbrw" :   1,
+        "create-nfslive-usb" :   1,
         "create-live-iso" :     1,
         "create-nand" :         1,
         "create-project" :      1,
@@ -293,6 +294,7 @@ Examples:
 <Create a image>
     image-creator --command= [ create-live-usb | \\
                                create-live-usbrw | \\
+                               create-nfslive-usb | \\
                                create-install-usb |  \\
                                create-live-iso | \\
                                create-nand ] \\
@@ -392,7 +394,7 @@ Examples:
             parser.error(_("Must specify target-name when using %s command") % options.cmd)
         if not options.fset_names:
             parser.error(_("Must specify at least one fset-name when using %s command") % options.cmd)
-    if options.cmd == "create-live-usb" or options.cmd == "create-live-usbrw" or options.cmd == "create-install-usb" or options.cmd == "create-live-iso":
+    if options.cmd == "create-live-usb" or options.cmd == "create-live-usbrw" or options.cmd == "create-nfslive-usb" or options.cmd == "create-install-usb" or options.cmd == "create-live-iso":
         if not options.project_name:
             parser.error(_("Must specify project-name when using %s command") % options.cmd)
         if not options.target_name:
@@ -601,6 +603,8 @@ def create_image(options):
         proj.create_live_usb(options.target_name, options.image_name)
     elif options.cmd == "create-live-usbrw":
         proj.create_live_usb(options.target_name, options.image_name, 'EXT3FS')
+    elif options.cmd == "create-nfslive-usb":
+        proj.create_nfslive_usb(options.target_name, options.image_name)
     elif options.cmd == "create-install-usb":
         proj.create_install_usb(options.target_name, options.image_name)
     elif options.cmd == "create-live-iso":

@@ -340,6 +340,13 @@ class Project(FileSystem):
         image.create_image(type)
         target.mount()
 
+    def create_nfslive_usb(self, target_name, image_name):
+        target = self.targets[target_name]
+        self.umountTarget(target)
+        image = InstallImage.NFSLiveUsbImage(self, self.targets[target_name], image_name, progress_callback = self.progress_callback)
+        image.create_image(type)
+        target.mount()
+
     def create_install_usb(self, target_name, image_name):
         target = self.targets[target_name]
         self.umountTarget(target)

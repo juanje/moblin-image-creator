@@ -88,6 +88,7 @@ class App(object):
                 "on_install_group": self.on_install_group,
                 "on_create_liveUSB_clicked": self.on_liveUSB_clicked,
                 "on_create_liveRWUSB_clicked": self.on_liveRWUSB_clicked,
+                "on_create_NFSliveUSB_clicked": self.on_NFSliveUSB_clicked,
                 "on_create_installUSB_clicked": self.on_installUSB_clicked,
                 "on_create_liveCD_clicked": self.on_liveCD_clicked,
                 "on_create_NAND_btn_clicked": self.on_NAND_clicked,
@@ -235,6 +236,7 @@ class App(object):
         # Items which should be enabled if our selected target has an fset
         self.buttons.create_liveusb.set_sensitive(fset_state)
         self.buttons.create_liverwusb.set_sensitive(fset_state)
+        self.buttons.create_nfsliveusb.set_sensitive(fset_state)
         self.buttons.create_installusb.set_sensitive(fset_state)
         self.buttons.target_config.set_sensitive(fset_state)
         self.buttons.create_liveCD.set_sensitive(fset_state)
@@ -918,6 +920,28 @@ class App(object):
                 mic_cmd = 'image-creator --command=create-live-usbrw --project-name=\'' + project.name + '\' --target-name=\'' + target.name + '\' --image-name=\'' + img_name + '\''
                 self.append_cmd_list(mic_cmd)
                 self.current_project().create_live_usb(target.name, img_name, 'EXT3FS')
+            except ValueError, e:
+                self.show_error_dialog(e.args[0])
+            except:
+                traceback.print_exc()
+                if debug: print_exc_plus()
+                self.show_error_dialog()
+            progress_dialog.destroy()
+
+    def on_NFSliveUSB_clicked(self, widget):
+        project = self.current_project()
+        target = self.current_target()
+        result, img_name = self.getImageName()
+        if result == gtk.RESPONSE_OK:
+            progress_tree = gtk.glade.XML(self.gladefile, 'ProgressDialog')
+            progress_dialog = progress_tree.get_widget('ProgressDialog')
+            progress_dialog.connect('delete_event', self.ignore)
+            progress_tree.get_widget('progress_label').set_text(_("Please wait while creating %s") % img_name)
+            self.progressbar = progress_tree.get_widget('progressbar')
+            try:
+                mic_cmd = 'image-creator --command=create-nfslive-usb --project-name=\'' + project.name + '\' --target-name=\'' + target.name + '\' --image-name=\'' + img_name + '\''
+                self.append_cmd_list(mic_cmd)
+                self.current_project().create_nfslive_usb(target.name, img_name)
             except ValueError, e:
                 self.show_error_dialog(e.args[0])
             except:
@@ -1899,6 +1923,7 @@ class MainWindowButtons(object):
         # Action buttons
         self.create_liveusb = widgets.get_widget('create_liveUSB_btn')
         self.create_liverwusb = widgets.get_widget('create_liveRWUSB_btn')
+        self.create_nfsliveusb = widgets.get_widget('create_NFSliveUSB_btn')
         self.create_installusb = widgets.get_widget('create_installUSB_btn')
         self.create_liveCD = widgets.get_widget('create_liveCD_btn')
         self.create_NAND = widgets.get_widget('create_NAND_btn')
