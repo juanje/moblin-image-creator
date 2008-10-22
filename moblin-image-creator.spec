@@ -61,13 +61,16 @@ rm -rf %{buildroot}
 /var/lib/moblin-image-creator/projects
 
 %changelog
+* Wed Oct 22 2008 Mitsutaka Amano <mamano@miraclelinux.com>
+- Added error handling and modified destination of isolinux.bin LiveIsoImage.
+
 * Fri Oct 10 2008 Mitsutaka Amano <mamano@miraclelinux.com>
 - Added the Create Install CD.
 
-* Fri Oct 08 2008 Mitsutaka Amano <mamano@miraclelinux.com>
+* Wed Oct 08 2008 Mitsutaka Amano <mamano@miraclelinux.com>
 - Starting new version.
 
-* Thu Oct 07 2008 Prajwal Mohan <prajwal@linux.intel.com>
+* Tue Oct 07 2008 Prajwal Mohan <prajwal@linux.intel.com>
 - Setting defaults for moblin2 platforms
 - Changing defaults for menlow-lpia-moblin2
 - Adding moblin-installer to core fset of moblin2 platforms

@@ -8,8 +8,9 @@ moblin-image-creator (0.47) gaston; urgency=low
 
   [ Mitsutaka Amano ]
   * Added the Create Install CD.
+  * Added error handling and modified destination of isolinux.bin LiveIsoImage.
 
- -- Mitsutaka Amano <mamano@miraclelinux.com>  Fri, 10 Oct 2008 17:23:34 +0900
+ -- Mitsutaka Amano <mamano@miraclelinux.com>  Wed, 22 Oct 2008 16:07:54 +0900
 
 moblin-image-creator (0.46) gaston; urgency=low
 
