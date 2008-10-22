@@ -10,8 +10,9 @@ moblin-image-creator (0.47) gaston; urgency=low
   * Added the Create Install CD.
   * Added NFS Live USB Image function.
   * Added NFS Live CD Image function.
+  * Added error handling and modified destination of isolinux.bin LiveIsoImage.
 
- -- Mitsutaka Amano <mamano@miraclelinux.com>  Fri, 10 Oct 2008 17:23:34 +0900
+ -- Mitsutaka Amano <mamano@miraclelinux.com>  Wed, 22 Oct 2008 16:07:54 +0900
 
 moblin-image-creator (0.46) gaston; urgency=low
 

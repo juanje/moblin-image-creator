@@ -491,8 +491,14 @@ class LiveIsoImage(InstallImage):
         self.kernels.pop(0)
         # Flashing yellow on a blue background
         self.install_kernels("9e", image_type, 'CDImage')
-        pdk_utils.copy(self.rootfs_path, self.tmp_path)
-        pdk_utils.copy("/usr/lib/syslinux/isolinux.bin", self.tmp_path)
+        try:
+            pdk_utils.copy(self.rootfs_path, self.tmp_path)
+        except OSError:
+            print _("Could not copy rootfs_path. Ignored error")
+        try:
+            pdk_utils.copy(os.path.join(self.project.path, "/usr/lib/syslinux/isolinux.bin"), self.tmp_path)
+        except OSError:
+            print _("Could not copy isolinux.bin. Ignored error")
 
         print _("Creating CD image file at: %s") % self.path
         cmd_line = "genisoimage -quiet -o %s -b isolinux.bin -c boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table -l -R -r %s" % (self.path, self.tmp_path)
