@@ -769,6 +769,25 @@ msgstr "コマンドの実行中エラー: %s"
 msgid "LiveIsoImage: Finished!"
 msgstr "LiveISOイメージ: 完了!"
 
+#: ../libs/InstallImage.py:519
+#, python-format
+msgid "NFSLiveCDImage: Creating Live CD Image(%s) Now..."
+msgstr "NFSLiveCDイメージ: NFS Live CD イメージを作成しています..."
+
+#: ../libs/InstallImage.py:520
+#: This message is printed on Boot session. Can't show multi byte.
+msgid "NFS Live CD Image"
+msgstr ""
+
+#: ../libs/InstallImage.py:541
+#, python-format
+msgid "Creating NFS CD image file at: %s"
+msgstr "NFS CD イメージファイルを %s に作成しています"
+
+#: ../libs/InstallImage.py:552
+msgid "NFSLiveIsoImage: Finished!"
+msgstr "NFSLiveIsoイメージ: 完了!"
+
 #: ../libs/InstallImage.py:499
 msgid "InstallIsoImage: Create Install ISO Image not implemented!"
 msgstr "インストールISOイメージ: インストールISOイメージの作成は実装されていません!"
@@ -819,6 +838,10 @@ msgstr "NFSLiveUSBイメージ: NFS Live USB イメージを作成していま�
 #: This message is printed on Boot session. Can't show multi byte.
 msgid "NFS Live USB Image"
 msgstr ""
+
+#: ../libs/InstallImage.py:704
+msgid "NFSLiveUsbImage: Finished!"
+msgstr "NFSLiveUsbイメージ: 完了!"
 
 #: ../libs/InstallImage.py:621
 msgid "InstallUsbImage: Creating InstallUSB Image..."
@@ -1921,6 +1944,22 @@ msgstr ""
 msgid "Live CD"
 msgstr "Live CD\n(読込専用)"
 
+#: ../gui/image-creator.glade:2145
+msgid ""
+"Create an installation image that can be burned to a CD. You can boot linux "
+"and run completely off the CD.  Nothing is written to the target device.  "
+"Boot and mount to nfs server rootfs. You can use the storage on nfs server. "
+"This image is very small(about 60MB)."
+msgstr ""
+"CDに書き込む事が可能な、Live CDイメージ(読み込み専用)を作成します。"
+"Linuxをブートすることが可能で、デバイスには何も書き込まれません。"
+"NFSサーバのルートファイルシステムをマウントして起動します。そのため、NFSサーバのストレージを活用する事ができます。"
+"このイメージは非常に小さいです(60MB)"
+
+#: ../gui/image-creator.glade:2177
+msgid "NFS Live CD"
+msgstr "Live CD\n(NFSマウント)"
+
 #: ../gui/image-creator.glade:1213
 msgid ""
 "Create a NAND image that can be burned to a Compact flash drive for "
@@ -2029,6 +2068,10 @@ msgstr "squashfsを使用する:"
 #: ../gui/image-creator.glade:2182
 msgid "ext3fs size(MB):"
 msgstr "ext3fsのサイズ(MB):"
+
+#: ../gui/image-creator.glade:3894 ../gui/image-creator.glade:4409
+msgid "NFS server IP address:"
+msgstr "NFSサーバのIPアドレス:"
 
 #: ../gui/image-creator.glade:2211
 msgid "<b>USB boot configuration</b>"

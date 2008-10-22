@@ -108,10 +108,22 @@ class SyslinuxCfg(object):
     def __str__(self):
         return "<SyslinuxCfg: __dict__=%s>" % self.__dict__
 
-    def add_default(self, kernel, append = 'initrd=initrd.img'):
+    def add_default(self, kernel, append, imageType):
+        if not append:
+            append = 'initrd=initrd.img'
         label = 'linux'
         append = re.sub(r'initrd.img',"initrd0.img", append)
         kernel_file = 'vmlinuz'
+        if imageType == 'NFSUSBImage':
+            append = re.sub(r'boot=usb',"boot=nfs", append)
+            nfs_path = self.target.path
+            nfs_ipaddr = self.project.get_target_config(self.target.name, 'usb_nfs_ipaddr')
+            append = append + " nfsroot=" + nfs_ipaddr + ":" + nfs_path
+        elif imageType == 'NFSCDImage':
+            append = re.sub(r'boot=cd',"boot=nfs", append)
+            nfs_path = self.target.path
+            nfs_ipaddr = self.project.get_target_config(self.target.name, 'usb_nfs_ipaddr')
+            append = append + " nfsroot=" + nfs_ipaddr + ":" + nfs_path
         # Add the default entry to the syslinux config file
         cfg_file = open(self.cfg_path, 'a ')
         print >> cfg_file, "default " + label
@@ -126,11 +138,23 @@ class SyslinuxCfg(object):
         msg_file.close()
         return kernel_file
 
-    def add_target(self, kernel, append = 'initrd=initrd.img'):
+    def add_target(self, kernel, append, imageType):
+        if not append:
+            append = 'initrd=initrd.img'
         label = "linux%s" % self.index
         kernel_file = "linux%s" % self.index
         append = re.sub(r'initrd.img',"initrd%d.img" % self.index, append)
         self.index += 1
+        if imageType == 'NFSUSBImage':
+            append = re.sub(r'boot=usb',"boot=nfs", append)
+            nfs_path = self.target.path
+            nfs_ipaddr = self.project.get_target_config(self.target.name, 'usb_nfs_ipaddr')
+            append = append + " nfsroot=" + nfs_ipaddr + ":" + nfs_path
+        elif imageType == 'CDUSBImage':
+            append = re.sub(r'boot=cd',"boot=nfs", append)
+            nfs_path = self.target.path
+            nfs_ipaddr = self.project.get_target_config(self.target.name, 'cd_nfs_ipaddr')
+            append = append + " nfsroot=" + nfs_ipaddr + ":" + nfs_path
         # Add the target to the syslinux config file
         cfg_file = open(self.cfg_path, 'a ')
         print >> cfg_file, "label " + label
@@ -184,19 +208,19 @@ class InstallImage(object):
 
         s = SyslinuxCfg(self.project, self.target, self.tmp_path, cfg_filename, message_color, message)
         # Copy the default kernel
-        if imageType == 'CDImage':
-            kernel_name = s.add_default(self.default_kernel, self.project.get_target_config(self.target.name, 'cd_kernel_cmdline'))
-        else:
-            kernel_name = s.add_default(self.default_kernel, self.project.get_target_config(self.target.name, 'usb_kernel_cmdline'))
+        if imageType == 'CDImage' or imageType == 'NFSCDImage':
+            kernel_name = s.add_default(self.default_kernel, self.project.get_target_config(self.target.name, 'cd_kernel_cmdline'), imageType)
+        elif imageType == 'USBImage' or imageType == 'NFSUSBImage':
+            kernel_name = s.add_default(self.default_kernel, self.project.get_target_config(self.target.name, 'usb_kernel_cmdline'), imageType)
         src_path = os.path.join(self.target.fs_path, 'boot', self.default_kernel)
         dst_path = os.path.join(self.tmp_path, kernel_name)
         shutil.copyfile(src_path, dst_path)
         # Copy the remaining kernels
         for kernel in self.kernels:
-            if imageType == 'CDImage':
-                kernel_name = s.add_target(kernel, self.project.get_target_config(self.target.name, 'cd_kernel_cmdline'))
-            else:
-                kernel_name = s.add_target(kernel, self.project.get_target_config(self.target.name, 'usb_kernel_cmdline'))
+            if imageType == 'CDImage' or imageType == 'NFSCDImage':
+                kernel_name = s.add_target(kernel, self.project.get_target_config(self.target.name, 'cd_kernel_cmdline'), imageType)
+            elif imageType == 'USBImage' or imageType == 'NFSUSBImage':
+                kernel_name = s.add_target(kernel, self.project.get_target_config(self.target.name, 'usb_kernel_cmdline'), imageType)
             src_path = os.path.join(self.target.fs_path, 'boot', kernel)
             dst_path = os.path.join(self.tmp_path, kernel_name)
             shutil.copyfile(src_path, dst_path)
@@ -444,8 +468,8 @@ do_initrd = yes
 
 
 class LiveIsoImage(InstallImage):
-    def install_kernels(self, message_color, message):
-        InstallImage.install_kernels(self, 'isolinux.cfg', message_color, message, 'CDImage')
+    def install_kernels(self, message_color, message, imageType):
+        InstallImage.install_kernels(self, 'isolinux.cfg', message_color, message, imageType)
 
     def create_image(self, fs_type='RAMFS'):
         print _("LiveCDImage: Creating Live CD Image(%s) Now...") % fs_type
@@ -466,7 +490,7 @@ class LiveIsoImage(InstallImage):
                 print _("shutil.move failed. Ignored error")
         self.kernels.pop(0)
         # Flashing yellow on a blue background
-        self.install_kernels("9e", image_type)
+        self.install_kernels("9e", image_type, 'CDImage')
         pdk_utils.copy(self.rootfs_path, self.tmp_path)
         pdk_utils.copy("/usr/lib/syslinux/isolinux.bin", self.tmp_path)
 
@@ -487,6 +511,49 @@ class LiveIsoImage(InstallImage):
         return ("<LiveIsoImage: project=%s, target=%s, name=%s>"
                 % (self.project, self.target, self.name))
 
+class NFSLiveIsoImage(InstallImage):
+    def install_kernels(self, message_color, message, imageType):
+        InstallImage.install_kernels(self, 'isolinux.cfg', message_color, message, imageType)
+
+    def create_image(self, fs_type='RAMFS'):
+        print _("NFSLiveCDImage: Creating Live CD Image(%s) Now...") % fs_type
+        image_type = _("NFS Live CD Image")
+        self.create_all_initramfs()
+        self.create_rootfs()
+        initrd_stat_result = os.stat('/tmp/.tmp.initrd0')
+        rootfs_stat_result = os.stat(self.rootfs_path)
+
+        self.tmp_path = tempfile.mkdtemp('','pdk-', '/tmp')
+
+        self.kernels.insert(0,self.default_kernel)
+        for count, kernel in enumerate(self.kernels):
+            initrd_path = os.path.join(self.tmp_path, "initrd%d.img" % count)
+            try:
+                shutil.move("/tmp/.tmp.initrd%d" % count, initrd_path)
+            except:
+                print _("shutil.move failed. Ignored error")
+        self.kernels.pop(0)
+        # Flashing yellow on a blue background
+        self.install_kernels("ae", image_type, 'NFSCDImage')
+        pdk_utils.copy(self.rootfs_path, self.tmp_path)
+        pdk_utils.copy("/usr/lib/syslinux/isolinux.bin", self.tmp_path)
+
+        print _("Creating NFS CD image file at: %s") % self.path
+        cmd_line = "genisoimage -quiet -o %s -b isolinux.bin -c boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table -l -R -r %s" % (self.path, self.tmp_path)
+        result = pdk_utils.execCommand(cmd_line, callback = self.progress_callback)
+        if result:
+            print >> sys.stderr, _("Error running command: %s") % cmd_line
+            raise EnvironmentError, _("Error running command: %s") % cmd_line
+
+        shutil.rmtree(self.tmp_path)
+        self.tmp_path = ''
+
+        self.delete_rootfs()
+        print _("NFSLiveIsoImage: Finished!")
+        
+    def __str__(self):
+        return ("<NFSLiveIsoImage: project=%s, target=%s, name=%s>"
+                % (self.project, self.target, self.name))
 
 class InstallIsoImage(InstallImage):
     def create_image(self):
@@ -498,8 +565,8 @@ class InstallIsoImage(InstallImage):
 
 
 class BaseUsbImage(InstallImage):
-    def install_kernels(self, message_color, message):
-        InstallImage.install_kernels(self, 'syslinux.cfg', message_color, message)
+    def install_kernels(self, message_color, message, imageType):
+        InstallImage.install_kernels(self, 'syslinux.cfg', message_color, message, imageType)
         
     def create_usb_image(self, size):
         print _("Creating USB flash drive image file at: %s") % self.path
@@ -631,10 +698,10 @@ class NFSLiveUsbImage(BaseUsbImage):
                 print _("shutil.move failed. Ignored error")
         self.kernels.pop(0)
         # Flashing yellow on a blue background
-        self.install_kernels("ae", image_type)
+        self.install_kernels("ae", image_type, 'NFSUSBImage')
 
         self.umount_container()
-        print _("LiveUsbImage: Finished!")
+        print _("NFSLiveUsbImage: Finished!")
         
     def __str__(self):
         return ("<NFSLiveUsbImage: project=%s, target=%s, name=%s>"

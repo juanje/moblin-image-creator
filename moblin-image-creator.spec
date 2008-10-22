@@ -61,13 +61,16 @@ rm -rf %{buildroot}
 /var/lib/moblin-image-creator/projects
 
 %changelog
-* Fri Oct 14 2008 Mitsutaka Amano <mamano@miraclelinux.com>
+* Wed Oct 22 2008 Mitsutaka Amano <mamano@miraclelinux.com>
+- Added NFS Live CD Image function.
+
+* Tue Oct 14 2008 Mitsutaka Amano <mamano@miraclelinux.com>
 - Added NFS Live USB Image function.
 
-* Fri Oct 08 2008 Mitsutaka Amano <mamano@miraclelinux.com>
+* Wed Oct 08 2008 Mitsutaka Amano <mamano@miraclelinux.com>
 - Starting new version.
 
-* Thu Oct 07 2008 Prajwal Mohan <prajwal@linux.intel.com>
+* Tue Oct 07 2008 Prajwal Mohan <prajwal@linux.intel.com>
 - Setting defaults for moblin2 platforms
 - Changing defaults for menlow-lpia-moblin2
 - Adding moblin-installer to core fset of moblin2 platforms
