@@ -202,7 +202,7 @@ class InstallImage(object):
         self.default_kernel_mod_path = os.path.join(self.target.fs_path, 'lib', 'modules', self.default_kernel.split('vmlinuz-').pop().strip())
         self.exclude_file = os.path.join(self.project.platform.path, 'exclude')
 
-    def install_kernels(self, cfg_filename, message_color, message, imageType='USBImage'):
+    def install_kernels(self, cfg_filename, message_color, message, imageType):
         if not self.tmp_path:
             raise ValueError, _("tmp_path doesn't exist")
 
@@ -522,7 +522,7 @@ class NFSLiveIsoImage(InstallImage):
         InstallImage.install_kernels(self, 'isolinux.cfg', message_color, message, imageType)
 
     def create_image(self, fs_type='RAMFS'):
-        print _("NFSLiveCDImage: Creating Live CD Image(%s) Now...") % fs_type
+        print _("NFSLiveCDImage: Creating Live CD Image Now...")
         image_type = _("NFS Live CD Image")
         self.create_all_initramfs()
         self.create_rootfs()
@@ -539,7 +539,7 @@ class NFSLiveIsoImage(InstallImage):
             except:
                 print _("shutil.move failed. Ignored error")
         self.kernels.pop(0)
-        # Flashing yellow on a blue background
+        # Flashing yellow on a green background
         self.install_kernels("ae", image_type, 'NFSCDImage')
         pdk_utils.copy(self.rootfs_path, self.tmp_path)
         pdk_utils.copy("/usr/lib/syslinux/isolinux.bin", self.tmp_path)
@@ -562,8 +562,8 @@ class NFSLiveIsoImage(InstallImage):
                 % (self.project, self.target, self.name))
 
 class InstallIsoImage(InstallImage):
-    def install_kernels(self, message_color, message):
-        InstallImage.install_kernels(self, 'isolinux.cfg', message_color, message, 'CDImage')
+    def install_kernels(self, message_color, message, imageType):
+        InstallImage.install_kernels(self, 'isolinux.cfg', message_color, message, imageType)
 
     def create_image(self):
         print _("InstallCDImage: Creating Install CD Image Now...")
@@ -589,8 +589,8 @@ class InstallIsoImage(InstallImage):
             except:
                 print _("shutil.move failed. Ignored error")
         self.kernels.pop(0)
-        # Flashing yellow on a blue background
-        self.install_kernels("ce", image_type)
+        # Flashing yellow on a red background
+        self.install_kernels("ce", image_type, 'CDImage')
         try:
             pdk_utils.copy(self.rootfs_path, self.tmp_path)
         except OSError:
@@ -736,7 +736,7 @@ class LiveUsbImage(BaseUsbImage):
                 print _("shutil.move failed. Ignored error")
         self.kernels.pop(0)
         # Flashing yellow on a blue background
-        self.install_kernels("9e", image_type)
+        self.install_kernels("9e", image_type, 'USBImage')
         try:
             pdk_utils.copy(self.rootfs_path, self.tmp_path)
         except OSError:
@@ -773,7 +773,7 @@ class NFSLiveUsbImage(BaseUsbImage):
             except:
                 print _("shutil.move failed. Ignored error")
         self.kernels.pop(0)
-        # Flashing yellow on a blue background
+        # Flashing yellow on a green background
         self.install_kernels("ae", image_type, 'NFSUSBImage')
 
         self.umount_container()
@@ -812,7 +812,7 @@ class InstallUsbImage(BaseUsbImage):
                 print _("shutil.move failed. Ignored error")
         self.kernels.pop(0)
         # Flashing yellow on a red background
-        self.install_kernels("ce", image_type)
+        self.install_kernels("ce", image_type, 'USBImage')
         try:
             pdk_utils.copy(self.rootfs_path, self.tmp_path)
         except OSError:

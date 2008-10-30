@@ -771,7 +771,7 @@ msgstr "LiveISOイメージ: 完了!"
 
 #: ../libs/InstallImage.py:519
 #, python-format
-msgid "NFSLiveCDImage: Creating Live CD Image(%s) Now..."
+msgid "NFSLiveCDImage: Creating Live CD Image Now..."
 msgstr "NFSLiveCDイメージ: NFS Live CD イメージを作成しています..."
 
 #: ../libs/InstallImage.py:520

@@ -61,6 +61,9 @@ rm -rf %{buildroot}
 /var/lib/moblin-image-creator/projects
 
 %changelog
+* Thu Oct 30 2008 Mitsutaka Amano <mamano@miraclelinux.com>
+- Rebase with nfsboot function. Fixed some comments and install_kernels() arguments.
+
 * Wed Oct 22 2008 Mitsutaka Amano <mamano@miraclelinux.com>
 - Added NFS Live CD Image function.
 
