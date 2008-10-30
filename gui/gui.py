@@ -1043,7 +1043,7 @@ class App(object):
                 if debug: print_exc_plus()
                 self.show_error_dialog()
             progress_dialog.destroy()
-
+ 
     def on_NAND_clicked(self, widget):
         project = self.current_project()
         target = self.current_target()
