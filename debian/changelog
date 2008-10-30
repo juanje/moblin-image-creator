@@ -12,8 +12,9 @@ moblin-image-creator (0.47) gaston; urgency=low
   * Added NFS Live CD Image function.
   * Added error handling and modified destination of isolinux.bin LiveIsoImage.
   * Rebase with nfsboot function. Fixed some comments and install_kernels() arguments.
+  * Deleted necessary function in NFSLiveIsoImage. Adjusted NFSLiveUsbImage size. 
 
- -- Mitsutaka Amano <mamano@miraclelinux.com>  Thu, 30 Oct 2008 11:43:46 +0900
+ -- Mitsutaka Amano <mamano@miraclelinux.com>  Thu, 30 Oct 2008 16:06:52 +0900
 
 moblin-image-creator (0.46) gaston; urgency=low
 

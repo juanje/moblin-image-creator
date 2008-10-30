@@ -525,9 +525,7 @@ class NFSLiveIsoImage(InstallImage):
         print _("NFSLiveCDImage: Creating Live CD Image Now...")
         image_type = _("NFS Live CD Image")
         self.create_all_initramfs()
-        self.create_rootfs()
         initrd_stat_result = os.stat('/tmp/.tmp.initrd0')
-        rootfs_stat_result = os.stat(self.rootfs_path)
 
         self.tmp_path = tempfile.mkdtemp('','pdk-', '/tmp')
 
@@ -541,8 +539,10 @@ class NFSLiveIsoImage(InstallImage):
         self.kernels.pop(0)
         # Flashing yellow on a green background
         self.install_kernels("ae", image_type, 'NFSCDImage')
-        pdk_utils.copy(self.rootfs_path, self.tmp_path)
-        pdk_utils.copy("/usr/lib/syslinux/isolinux.bin", self.tmp_path)
+        try:
+            pdk_utils.copy(os.path.join(self.project.path, "/usr/lib/syslinux/isolinux.bin"), self.tmp_path)
+        except OSError:
+            print _("Could not copy isolinux.bin. Ignored error")
 
         print _("Creating NFS CD image file at: %s") % self.path
         cmd_line = "genisoimage -quiet -o %s -b isolinux.bin -c boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table -l -R -r %s" % (self.path, self.tmp_path)
@@ -554,7 +554,6 @@ class NFSLiveIsoImage(InstallImage):
         shutil.rmtree(self.tmp_path)
         self.tmp_path = ''
 
-        self.delete_rootfs()
         print _("NFSLiveIsoImage: Finished!")
         
     def __str__(self):
@@ -762,7 +761,7 @@ class NFSLiveUsbImage(BaseUsbImage):
             self.create_all_initrd()
 
         initrd_stat_result = os.stat('/tmp/.tmp.initrd0')
-        size = (initrd_stat_result.st_size / (1024 * 1024)) + 64
+        size = (initrd_stat_result.st_size / (1024 * 1024)) + 4
         self.create_usb_image(size)
         self.mount_container()
         self.kernels.insert(0,self.default_kernel)

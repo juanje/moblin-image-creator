@@ -63,6 +63,7 @@ rm -rf %{buildroot}
 %changelog
 * Thu Oct 30 2008 Mitsutaka Amano <mamano@miraclelinux.com>
 - Rebase with nfsboot function. Fixed some comments and install_kernels() arguments.
+- Deleted necessary function in NFSLiveIsoImage. Adjusted NFSLiveUsbImage size.
 
 * Wed Oct 22 2008 Mitsutaka Amano <mamano@miraclelinux.com>
 - Added NFS Live CD Image function.
