@@ -63,6 +63,7 @@ rm -rf %{buildroot}
 %changelog
 * Thu Nov 05 2008 Mitsutaka Amano <mamano@miraclelinux.com>
 - Fixed moblin 1.0 apt repository URL.
+- Starting new version.
 
 * Thu Oct 30 2008 Mitsutaka Amano <mamano@miraclelinux.com>
 - Rebase with nfsboot function. Fixed some comments and install_kernels() arguments.
