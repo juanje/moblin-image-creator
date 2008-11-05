@@ -1,6 +1,6 @@
 Summary: Mobline Image Creator -- Mobile & Internet Linux Development Kit
 Name: moblin-image-creator
-Version: 0.47
+Version: 0.48
 Release: 1%{?dist}
 License: GPL
 Group: Development
