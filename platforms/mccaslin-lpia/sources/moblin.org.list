@@ -1,2 +1,2 @@
-deb http://www.moblin.org/apt gaston main
-deb-src http://www.moblin.org/apt gaston main
+deb http://v1.moblin.org/apt gaston main
+deb-src http://v1.moblin.org/apt gaston main

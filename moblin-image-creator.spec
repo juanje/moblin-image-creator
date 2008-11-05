@@ -61,6 +61,9 @@ rm -rf %{buildroot}
 /var/lib/moblin-image-creator/projects
 
 %changelog
+* Thu Nov 05 2008 Mitsutaka Amano <mamano@miraclelinux.com>
+- Fixed moblin 1.0 apt repository URL.
+
 * Thu Oct 30 2008 Mitsutaka Amano <mamano@miraclelinux.com>
 - Rebase with nfsboot function. Fixed some comments and install_kernels() arguments.
 - Deleted necessary function in NFSLiveIsoImage. Adjusted NFSLiveUsbImage size.
