@@ -1,8 +1,12 @@
 moblin-image-creator (0.48) gaston; urgency=low
 
+  [ Mitsutaka Amano ]
   * Starting new version.
 
- -- Mitsutaka Amano <mamano@miraclelinux.com>  Wed, 05 Nov 2008 10:12:16 +0900
+  [ Prajwal Mohan ]
+  * Fixing usb script 
+
+ -- Prajwal Mohan <prajwal@linux.intel.com>  Thu, 06 Nov 2008 16:21:09 -0800
 
 moblin-image-creator (0.47) gaston; urgency=low
 

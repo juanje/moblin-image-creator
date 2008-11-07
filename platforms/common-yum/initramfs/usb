@@ -20,6 +20,7 @@ mountroot ()
     do
       for device in 'sda' 'sdb' 'sdc' 'sdd'; do
         echo "checking device /dev/${device} for installation source..."
+	mdev -s
         if [ -e /sys/block/${device}/removable ]; then
            if [ "$(cat /sys/block/${device}/removable)" = "1" ]; then
               echo "Found Removable drive at /dev/${device}"
