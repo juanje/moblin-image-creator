@@ -4,9 +4,12 @@ moblin-image-creator (0.48) gaston; urgency=low
   * Starting new version.
 
   [ Prajwal Mohan ]
-  * Fixing usb script 
+  * Fixing usb script
 
- -- Prajwal Mohan <prajwal@linux.intel.com>  Thu, 06 Nov 2008 16:21:09 -0800
+  [ Mitsutaka Amano ]
+  * Hiding PERL_BADLANG persistent messages when package installation.
+
+ -- Mitsutaka Amano <mamano@miraclelinux.com>  Sun, 09 Nov 2008 00:55:01 +0900
 
 moblin-image-creator (0.47) gaston; urgency=low
 

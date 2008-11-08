@@ -38,6 +38,7 @@ _ = gettext.lgettext
 
 ENVIRONMENT_VARS = {
     'PATH' : '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
+    'PERL_BADLANG' : '0',
 }
 
 debug = False

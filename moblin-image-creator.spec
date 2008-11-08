@@ -61,7 +61,13 @@ rm -rf %{buildroot}
 /var/lib/moblin-image-creator/projects
 
 %changelog
-* Thu Nov 05 2008 Mitsutaka Amano <mamano@miraclelinux.com>
+* Sun Nov 09 2008 Mitsutaka Amano <mamano@miraclelinux.com>
+- Hiding PERL_BADLANG persistent messages when package installation.
+
+* Thu Nov 06 2008 Prajwal Mohan <prajwal@linux.intel.com>
+- Fixing usb script
+
+* Wed Nov 05 2008 Mitsutaka Amano <mamano@miraclelinux.com>
 - Fixed moblin 1.0 apt repository URL.
 - Starting new version.
 
