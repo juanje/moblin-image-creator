@@ -1936,7 +1936,7 @@ msgstr ""
 
 #: ../gui/image-creator.glade:1134
 msgid "Install USB"
-msgstr "インストーラ USB"
+msgstr "インストーラ\nUSB"
 
 #: ../gui/image-creator.glade:1166
 msgid ""
@@ -1981,7 +1981,7 @@ msgstr ""
 
 #: ../gui/image-creator.glade:2110
 msgid "Install CD"
-msgstr "インストーラ CD"
+msgstr "インストーラ\nCD"
 
 #: ../gui/image-creator.glade:1213
 msgid ""
@@ -1993,7 +1993,7 @@ msgstr ""
 
 #: ../gui/image-creator.glade:1228
 msgid "NAND Image"
-msgstr "NANDフラッシュメモリ"
+msgstr "NAND\nイメージ"
 
 #: ../gui/image-creator.glade:1260
 msgid ""
@@ -2005,7 +2005,7 @@ msgstr ""
 
 #: ../gui/image-creator.glade:1275
 msgid "Write USB Image"
-msgstr "USBイメージの書き込み"
+msgstr "USBイメージ\nの書き込み"
 
 #: ../gui/image-creator.glade:1307
 msgid "Boot a live USB image in KVM"

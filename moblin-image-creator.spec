@@ -61,6 +61,9 @@ rm -rf %{buildroot}
 /var/lib/moblin-image-creator/projects
 
 %changelog
+* Mon Nov 10 2008 Mitsutaka Amano <mamano@miraclelinux.com>
+- Updated ja.po.
+
 * Sun Nov 09 2008 Mitsutaka Amano <mamano@miraclelinux.com>
 - Hiding PERL_BADLANG persistent messages when package installation.
 

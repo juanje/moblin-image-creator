@@ -8,8 +8,9 @@ moblin-image-creator (0.48) gaston; urgency=low
 
   [ Mitsutaka Amano ]
   * Hiding PERL_BADLANG persistent messages when package installation.
+  * Updated ja.po.
 
- -- Mitsutaka Amano <mamano@miraclelinux.com>  Sun, 09 Nov 2008 00:55:01 +0900
+ -- Mitsutaka Amano <mamano@miraclelinux.com>  Mon, 10 Nov 2008 13:44:05 +0900
 
 moblin-image-creator (0.47) gaston; urgency=low
 
