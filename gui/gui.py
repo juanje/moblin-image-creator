@@ -128,10 +128,12 @@ class App(object):
         # Set targetView widget
         self.tName = _("Name")
         self.tFSet = _("Function Sets")
+        self.tUpdates = _("Updates")
         self.targetView = self.widgets.get_widget("targetView")
         self.set_tlist(self.tName, 0)
         self.set_tlist(self.tFSet, 1)
-        self.targetList = gtk.ListStore(str, str)
+        self.set_tlist(self.tUpdates, 2)
+        self.targetList = gtk.ListStore(str, str, str)
         self.targetView.set_model(self.targetList)
         self.buttons = MainWindowButtons(self.widgets)
         # read in project list using SDK()
@@ -286,12 +288,32 @@ class App(object):
         self.buttons.add_target.set_sensitive(True)
         self.buttons.term_launch.set_sensitive(True)
         self.buttons.upgrade_project.set_sensitive(True)
+
+        progress_tree = gtk.glade.XML(self.gladefile, 'ProgressDialog')
+        progress_dialog = progress_tree.get_widget('ProgressDialog')
+        progress_dialog.set_size_request(450, 250)
+        progress_dialog.connect('delete_event', self.ignore)
+        progress_tree.get_widget('progress_label').set_text(_("Checking for updates..."))
+        self.progressbar = progress_tree.get_widget('progressbar')
+        self.statuslabel = progress_tree.get_widget('status_label')
+
         for key in sorted(self.current_project().targets):
             installed_fsets = ' '.join(self.current_project().targets[key].installed_fsets())
-            self.targetList.append((key, installed_fsets))
+            if self.current_project().platform.config_info['package_manager'] == 'yum':
+                cmdOutput = []
+                retVal = self.current_project().targets[key].chroot("yum check-update", cmdOutput)
+                if retVal == 100:
+                    self.targetList.append((key, installed_fsets, "Updates availalbe for %s packages" % len(cmdOutput)))
+                elif retVal == 0:
+                        self.targetList.append((key, installed_fsets, "None"))
+                else:
+                    self.targetList.append((key, installed_fsets, "Could not retrieve information"))
+            else:
+                    self.targetList.append((key, installed_fsets, "Info Not Available"))
         if self.current_project().targets:
             selection = self.targetView.get_selection()
             selection.select_path(0)
+        progress_dialog.destroy()
 
     def set_plist(self, name, id):
         """Add project list column descriptions"""
@@ -1393,6 +1415,7 @@ class App(object):
         if result != 0:
              raise OSError(_("Internal error while attempting to run update/upgrade: %s") % result)
         progress_dialog.destroy()
+        self.redraw_target_view()
 
     def on_editRepo_clicked(self, widget):
         editRepo = repo_editor.repoEditor(self.sdk, os.path.join(self.current_target().path, "etc/yum.repos.d"))
