@@ -160,6 +160,8 @@ EOF
 fi
 
 sync
+mount /dev/sde /foo
+sync
 splash_progress 10
 splash_delay 10
 
