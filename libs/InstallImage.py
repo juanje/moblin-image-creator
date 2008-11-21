@@ -876,7 +876,7 @@ class NANDImage(InstallImage):
         os.system(os.path.join(self.project.platform.path, "nand.sh %s %s %s %s %s %s %s %s" 
               % (os.path.join(self.target.config_path, 'nand_kernel_cmdline'),
                  os.path.join(self.target.fs_path, 'boot/bootstub'),
-                 os.path.join(self.target.fs_path, 'boot',self.default_kernel),
+                 os.path.join(self.target.fs_path, 'boot','bzImage'),
                  initrd_path,
                  self.target.fs_path,
                  int(self.project.get_target_config(self.target.name, 'nand_image_size')),

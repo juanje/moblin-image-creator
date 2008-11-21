@@ -12,9 +12,10 @@ moblin-image-creator (0.48) gaston; urgency=low
 
   [ Prajwal Mohan ]
   * Adding update column in targer view
-  * Adding mount in install script 
+  * Adding mount in install script
+  * Should be using bzImage for nand and not vmlinuz 
 
- -- Prajwal Mohan <prajwal@linux.intel.com>  Wed, 19 Nov 2008 10:08:42 -0800
+ -- Prajwal Mohan <prajwal@linux.intel.com>  Fri, 21 Nov 2008 13:07:28 -0800
 
 moblin-image-creator (0.47) gaston; urgency=low
 
