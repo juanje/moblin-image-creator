@@ -129,6 +129,8 @@ def main():
         delete_target(options)
     elif options.cmd == "install-fset":
         install_fset(options)
+    elif options.cmd == "add-repo":
+        add_repo(options)
     elif options.cmd == "update-project":
         update_project(options)
     elif options.cmd == "update-target":
@@ -168,6 +170,7 @@ def parseCommandLine():
         "delete-project" :      1,
         "delete-target" :       1,
         "install-fset" :        1,
+        "add-repo" :            1,
         "list-fsets" :          0,
         "list-pkgs" :           0,
         "list-sources-files" :  0,
@@ -210,6 +213,10 @@ def parseCommandLine():
         help=_("Target name"))
     parser.add_option("--fset-name", dest="fset_names", action="append",
         help=_("Feature set identifier"))
+    parser.add_option("--repo-name", dest="repo_name",
+        help=_("Repo name"))
+    parser.add_option("--repo-url", dest="repo_url", 
+        help=_("Repo URL"))
     parser.add_option("--image-name", dest="image_name",
         help=_("Name to use for target image file"))
     parser.add_option("--run-command", dest="run_command",
@@ -399,6 +406,15 @@ Examples:
             parser.error(_("Must specify target-name when using %s command") % options.cmd)
         if not options.fset_names:
             parser.error(_("Must specify at least one fset-name when using %s command") % options.cmd)
+    if options.cmd == "add-repo":
+        if not options.project_name:
+            parser.error(_("Must specify project-name when using %s command") % options.cmd)
+        if not options.target_name:
+            parser.error(_("Must specify target-name when using %s command") % options.cmd)
+        if not options.repo_name:
+            parser.error(_("Must specify repo-name when using %s command") % options.cmd)        
+        if not options.repo_url:
+            parser.error(_("Must specify repo-url when using %s command") % options.cmd)                
     if options.cmd == "create-live-usb" or options.cmd == "create-live-usbrw" or options.cmd == "create-nfslive-usb" or options.cmd == "create-install-usb" or options.cmd == "create-live-iso" or options.cmd == "create-nfslive-iso" or options.cmd == "create-install-iso":
         if not options.project_name:
             parser.error(_("Must specify project-name when using %s command") % options.cmd)
@@ -601,6 +617,29 @@ def install_fset(options):
     for f in options.fset_names:
         fset = sdk.platforms[platform_name].fset[f]
         target.installFset(fset, fsets = fsets, debug_pkgs = options.debug)
+#FIXME
+def add_repo(options):
+    if not options.project_name in sdk.projects:
+        print >> sys.stderr, _("Project %s does not exist") % (options.project_name)
+        sys.exit(1)
+    if not options.target_name in sdk.projects[options.project_name].targets:
+        print >> sys.stderr, _("Target %s does not exist") % (options.target_name)
+        sys.exit(1)
+    project_path = sdk.projects[options.project_name].path
+    target_fs_path = os.path.join(project_path, "targets", options.target_name, "fs")
+    repo_path = os.path.join(target_fs_path, "etc/yum.repos.d")
+    repo_file = os.path.join(repo_path, "%s.repo" % options.repo_name)
+    if os.path.exists(repo_path):
+        repo_file_handle = open(repo_file, 'w')
+        repo_file_handle.write("[%s]\n" % options.repo_name)
+        repo_file_handle.write("name=%s\n" % options.repo_name)
+        repo_file_handle.write("enabled=1\n")
+        repo_file_handle.write("failovermethod=priority\n")
+        repo_file_handle.write("baseurl=%s\n" % options.repo_url)
+        repo_file_handle.close()
+    else:
+        print _("Path %s Does not exist") % repo_path    
+    
 
 def create_image(options):
     proj = sdk.projects[options.project_name]
