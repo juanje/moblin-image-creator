@@ -75,3 +75,10 @@ DEBUG_PKGS=
 DEPS=x appframework applications
 CONFLICTS=appframework-devel-environment app-devel-environment 
 
+[Package-Groups]
+DESC=Virtual FSet for Package Groups
+PKGS=
+DEBUG_PKGS=
+DEPS=
+CONFLICTS=
+

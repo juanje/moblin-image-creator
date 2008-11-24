@@ -444,6 +444,10 @@ class Target(FileSystem):
 
     def installGroup(self, groups_list):
         self.installGroups(groups_list)
+        print "Creating a fset file for the group"
+        group_file = open(os.path.join(self.top, "package-groups"), 'w')
+        group_file.close()
+
 
 
     def installFset(self, fset, debug_pkgs = 0, fsets = None, seen_fsets = None):
