@@ -17,9 +17,10 @@ moblin-image-creator (0.48) gaston; urgency=low
   * Adding command line options to add repos to yum targets
   * Changing Nand cmd line
   * Changing USB script to accomodate booting through KVM/QEMU
-  * Fixing bugs with yum group install 
+  * Fixing bugs with yum group install
+  * Changing fsets 
 
- -- Prajwal Mohan <prajwal@linux.intel.com>  Mon, 24 Nov 2008 15:20:31 -0800
+ -- Prajwal Mohan <prajwal@linux.intel.com>  Tue, 25 Nov 2008 11:28:02 -0800
 
 moblin-image-creator (0.47) gaston; urgency=low
 
