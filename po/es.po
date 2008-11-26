@@ -1,0 +1,2478 @@
+# Spanish Translation for Moblin Image Creator 
+# Copyright (C) 2008 Moblin project
+# This file is distributed under the same license as the hamster-applet package.
+# Juanje Ojeda Croissier <jojeda@emergya.es>, 2008.
+msgid ""
+msgstr ""
+"Project-Id-Version: 0.48\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2008-11-26 13:13+0100\n"
+"PO-Revision-Date: 2008-11-26 13:13+0100\n"
+"Last-Translator: Juanje Ojeda <jojeda@emergya.es>\n"
+"Language-Team: Español <gnome-es-list@gnome.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: ../gui/gui.py:56
+msgid "Unmounting all mounted directories..."
+msgstr ""
+
+#: ../gui/gui.py:60
+#, python-format
+msgid "Could not unmount these dirs: %s"
+msgstr ""
+
+#: ../gui/gui.py:62
+msgid "Unmounting complete"
+msgstr ""
+
+#. setup projectView widget
+#. Set targetView widget
+#: ../gui/gui.py:118 ../gui/gui.py:129
+msgid "Name"
+msgstr ""
+
+#: ../gui/gui.py:119
+msgid "Description"
+msgstr ""
+
+#: ../gui/gui.py:120
+msgid "Path"
+msgstr ""
+
+#: ../gui/gui.py:121
+msgid "Platform"
+msgstr ""
+
+#: ../gui/gui.py:130
+msgid "Function Sets"
+msgstr ""
+
+#: ../gui/gui.py:131
+msgid "Updates"
+msgstr ""
+
+#: ../gui/gui.py:158
+#, python-format
+msgid ""
+"Found unsupported project(s): %s\n"
+"skipping them"
+msgstr ""
+
+#: ../gui/gui.py:173
+msgid "Please wait while MIC attempts to unmount all projects and targets..."
+msgstr ""
+
+#: ../gui/gui.py:179
+msgid "Closing Image-Creator"
+msgstr ""
+
+#: ../gui/gui.py:198
+msgid ""
+"You are using an old version of PyGTK. Image Creator required atleast PyGTK "
+"2.12. Some features will be disabled"
+msgstr ""
+
+#: ../gui/gui.py:296
+msgid "Checking for updates..."
+msgstr ""
+
+#: ../gui/gui.py:335
+msgid "Are you sure you want to cancel project creation?"
+msgstr ""
+
+#: ../gui/gui.py:347
+#, python-format
+msgid "Canceled Function was %s and cancel type was %s"
+msgstr ""
+
+#: ../gui/gui.py:368
+msgid "All values must be specified"
+msgstr ""
+
+#: ../gui/gui.py:371
+#, python-format
+msgid "Project already exists with the name: %s"
+msgstr ""
+
+#: ../gui/gui.py:377
+#, python-format
+msgid "Path: %s exists but is not a directory"
+msgstr ""
+
+#: ../gui/gui.py:381
+#, python-format
+msgid "Path: %s is a directory which is NOT empty"
+msgstr ""
+
+#: ../gui/gui.py:390 ../gui/gui.py:706 ../gui/gui.py:1619 ../gui/gui.py:1657
+#, python-format
+msgid "Please wait while installing %s"
+msgstr ""
+
+#: ../gui/gui.py:406 ../gui/gui.py:410
+msgid "Project Creation cancelled"
+msgstr ""
+
+#: ../gui/gui.py:413
+msgid "Trying to cleanup"
+msgstr ""
+
+#: ../gui/gui.py:416
+msgid "could not cleanup project"
+msgstr ""
+
+#: ../gui/gui.py:447
+msgid "A tool for building Mobile and/or Single Purpose Linux Device Stacks"
+msgstr ""
+
+#: ../gui/gui.py:464
+msgid "Delete Project(s)?\n"
+msgstr ""
+
+#: ../gui/gui.py:482 ../gui/gui.py:763
+#, python-format
+msgid "Please wait while deleting %s"
+msgstr ""
+
+#: ../gui/gui.py:510 ../gui/gui.py:1951
+msgid "Must specify a target name"
+msgstr ""
+
+#: ../gui/gui.py:512
+#, python-format
+msgid "Target: %s already exists"
+msgstr ""
+
+#: ../gui/gui.py:515 ../gui/project_assistant.py:465
+msgid ""
+"Target names can only contain alpha/numeric characters, hyphen and underscore"
+msgstr ""
+
+#: ../gui/gui.py:526 ../gui/gui.py:943 ../gui/gui.py:965 ../gui/gui.py:987
+#: ../gui/gui.py:1011 ../gui/gui.py:1033 ../gui/gui.py:1055 ../gui/gui.py:1077
+#, python-format
+msgid "Please wait while creating %s"
+msgstr ""
+
+#: ../gui/gui.py:624 ../gui/project_assistant.py:375
+msgid "<b>Depends on FSet(s):</b> "
+msgstr ""
+
+#: ../gui/gui.py:627 ../gui/project_assistant.py:378
+msgid ""
+"\n"
+"<b>Debug Packages:</b> "
+msgstr ""
+
+#: ../gui/gui.py:630 ../gui/project_assistant.py:381
+msgid ""
+"\n"
+"<b>Packages:</b> "
+msgstr ""
+
+#: ../gui/gui.py:642
+msgid "Nothing available to install!"
+msgstr ""
+
+#: ../gui/gui.py:660
+#, python-format
+msgid "Number of fsets to install: %s"
+msgstr ""
+
+#: ../gui/gui.py:669
+msgid "No fset selected"
+msgstr ""
+
+#: ../gui/gui.py:670
+msgid "Please Choose an Fset"
+msgstr ""
+
+#: ../gui/gui.py:682
+msgid "Getting Group List..."
+msgstr ""
+
+#: ../gui/gui.py:687
+msgid "Installing Groups..."
+msgstr ""
+
+#: ../gui/gui.py:696
+#, python-format
+msgid "Debug packages = %s"
+msgstr ""
+
+#: ../gui/gui.py:705 ../gui/gui.py:1656
+#, python-format
+msgid "Installing fset %s.................\n"
+msgstr ""
+
+#: ../gui/gui.py:719 ../gui/gui.py:1665
+#, python-format
+msgid "Unexpected error: %s"
+msgstr ""
+
+#: ../gui/gui.py:727
+#, python-format
+msgid "Setting new status label: %s"
+msgstr ""
+
+#: ../gui/gui.py:728
+#, python-format
+msgid "Current action: %s"
+msgstr ""
+
+#: ../gui/gui.py:743
+msgid "Delete Target(s)?\n"
+msgstr ""
+
+#: ../gui/gui.py:749
+msgid "Delete Target"
+msgstr ""
+
+#: ../gui/gui.py:819
+msgid "An unknown error has occurred!"
+msgstr ""
+
+#: ../gui/gui.py:833
+msgid "Directory List"
+msgstr ""
+
+#: ../gui/gui.py:849
+#, python-format
+msgid "Project path: %s"
+msgstr ""
+
+#: ../gui/gui.py:853 ../gui/gui.py:870
+msgid "gnome-terminal may not be present. Trying xterm"
+msgstr ""
+
+#: ../gui/gui.py:866
+#, python-format
+msgid "Target path: %s"
+msgstr ""
+
+#: ../gui/gui.py:884 ../libs/InstallImage.py:55
+#, python-format
+msgid "%s: Using default parametor."
+msgstr ""
+
+#: ../gui/gui.py:921
+#, python-format
+msgid "Please wait while while creating %s"
+msgstr ""
+
+#: ../gui/gui.py:1098
+#, python-format
+msgid "Creating directory %s ... "
+msgstr ""
+
+#: ../gui/gui.py:1102
+#, python-format
+msgid "Creating image %s ... "
+msgstr ""
+
+#: ../gui/gui.py:1106
+msgid "Please wait while creating shared image..."
+msgstr ""
+
+#: ../gui/gui.py:1113
+msgid "Choose a Live USB image"
+msgstr ""
+
+#: ../gui/gui.py:1166 ../gui/gui.py:1302
+msgid "No target image selected!"
+msgstr ""
+
+#: ../gui/gui.py:1171 ../gui/gui.py:1305
+#, python-format
+msgid "Selected file name: %s "
+msgstr ""
+
+#: ../gui/gui.py:1193
+msgid "No USB device selected!"
+msgstr ""
+
+#: ../gui/gui.py:1201
+#, python-format
+msgid "Selected USB disk %s"
+msgstr ""
+
+#: ../gui/gui.py:1203
+#, python-format
+msgid ""
+"Can not umount %s. Please close any shells or opened files still under mount "
+"point and try again!"
+msgstr ""
+
+#: ../gui/gui.py:1209
+msgid "Please wait while writing image to USB disk"
+msgstr ""
+
+#: ../gui/gui.py:1211
+#, python-format
+msgid "Writing image to USB disk %s"
+msgstr ""
+
+#: ../gui/gui.py:1216
+#, python-format
+msgid "Error writing to USB drive.  'dd' returned code: %s"
+msgstr ""
+
+#: ../gui/gui.py:1220
+msgid "Writing Complete"
+msgstr ""
+
+#: ../gui/gui.py:1237
+msgid "In on_ClearRootstraps_activate"
+msgstr ""
+
+#: ../gui/gui.py:1241
+msgid "Please wait while clearing rootstraps"
+msgstr ""
+
+#: ../gui/gui.py:1249
+msgid "In on_Load_activate"
+msgstr ""
+
+#: ../gui/gui.py:1250
+msgid "Provide a Project Name"
+msgstr ""
+
+#: ../gui/gui.py:1268 ../gui/gui.py:1362 ../gui/gui.py:1372
+msgid "No Project Name"
+msgstr ""
+
+#: ../gui/gui.py:1273
+msgid "Project Name is blank"
+msgstr ""
+
+#: ../gui/gui.py:1275
+msgid "<b><span foreground=\"red\">Please provide a project name</span></b>"
+msgstr ""
+
+#: ../gui/gui.py:1277
+#, python-format
+msgid "Project name: %s"
+msgstr ""
+
+#: ../gui/gui.py:1283
+#, python-format
+msgid "Project %s already exists"
+msgstr ""
+
+#: ../gui/gui.py:1285
+#, python-format
+msgid "<b><span foreground=\"red\">Project %s already exists.</span></b>"
+msgstr ""
+
+#: ../gui/gui.py:1311
+msgid "No Destination Folder"
+msgstr ""
+
+#: ../gui/gui.py:1315 ../gui/gui.py:1376
+#, python-format
+msgid "Targer File Name: %s"
+msgstr ""
+
+#: ../gui/gui.py:1321
+#, python-format
+msgid "Please wait while loading Project: %s"
+msgstr ""
+
+#: ../gui/gui.py:1324
+#, python-format
+msgid "Loading Project %s"
+msgstr ""
+
+#: ../gui/gui.py:1326
+msgid "Loading Project Complete"
+msgstr ""
+
+#: ../gui/gui.py:1348
+msgid "In on_Save_activate"
+msgstr ""
+
+#: ../gui/gui.py:1349
+msgid "Choose Project to Save"
+msgstr ""
+
+#: ../gui/gui.py:1366
+#, python-format
+msgid "Project name to Save: %s"
+msgstr ""
+
+#: ../gui/gui.py:1382
+#, python-format
+msgid "Please wait while saving Project: %s"
+msgstr ""
+
+#: ../gui/gui.py:1387
+#, python-format
+msgid "Saving Project %s"
+msgstr ""
+
+#: ../gui/gui.py:1389
+msgid "Saving Complete"
+msgstr ""
+
+#: ../gui/gui.py:1396
+msgid "Please wait while upgrading Project"
+msgstr ""
+
+#: ../gui/gui.py:1402 ../gui/gui.py:1416
+#, python-format
+msgid "Internal error while attempting to run update/upgrade: %s"
+msgstr ""
+
+#: ../gui/gui.py:1410
+msgid "Please wait while upgrading Target"
+msgstr ""
+
+#: ../gui/gui.py:1516 ../gui/gui.py:1519
+msgid "All fields are required"
+msgstr ""
+
+#: ../gui/gui.py:1581
+msgid "Search Expression"
+msgstr ""
+
+#: ../gui/gui.py:1582
+msgid "Replace Expression"
+msgstr ""
+
+#: ../gui/gui.py:1613
+msgid "Creating Project and Target"
+msgstr ""
+
+#: ../gui/gui.py:1648
+#, python-format
+msgid "Installing the following fsets: %s"
+msgstr ""
+
+#: ../gui/gui.py:1676
+msgid "Choose a Platform"
+msgstr ""
+
+#: ../gui/gui.py:1703
+msgid "This feature is currently available for Yum based platforms only"
+msgstr ""
+
+#: ../gui/gui.py:1785
+#, python-format
+msgid "Creating folder %s ... "
+msgstr ""
+
+#: ../gui/gui.py:1805
+msgid "Please Select a Platform"
+msgstr ""
+
+#: ../gui/gui.py:1840
+#, python-format
+msgid "Fset Description: %s"
+msgstr ""
+
+#. self.textBuffer.insert_at_cursor(_("\nFset Dedendency: %s") % platform.fset[fsetName].deps)
+#: ../gui/gui.py:1842
+msgid ""
+"\n"
+"\n"
+"Fset Dedendency: "
+msgstr ""
+
+#: ../gui/gui.py:1845
+msgid ""
+"\n"
+"\n"
+"Packages in the Fset: "
+msgstr ""
+
+#: ../gui/gui.py:1853
+msgid ""
+"\n"
+"\n"
+"Debug Packages in the Fset: "
+msgstr ""
+
+#: ../gui/gui.py:1859
+msgid "Please Select an Fset"
+msgstr ""
+
+#: ../gui/gui.py:1957
+#, python-format
+msgid "Adding Target: %s"
+msgstr ""
+
+#: ../gui/gui.py:1973 ../gui/project_assistant.py:287
+msgid "Choose Project Directory"
+msgstr ""
+
+#: ../gui/gui.py:2026 ../image-creator:695 ../libs/InstallImage.py:907
+msgid "Locals by frame, innermost last"
+msgstr ""
+
+#: ../gui/gui.py:2029 ../image-creator:698 ../libs/InstallImage.py:910
+#, c-format, python-format
+msgid "Frame %s in %s at line %s"
+msgstr ""
+
+#: ../gui/gui.py:2033
+#, python-format
+msgid "\t%20s = "
+msgstr ""
+
+#: ../gui/gui.py:2039 ../image-creator:708 ../libs/InstallImage.py:920
+msgid "<ERROR WHILE PRINTING VALUE>"
+msgstr ""
+
+#: ../gui/image-creator.glade.h:1
+msgid "\n"
+msgstr ""
+
+#: ../gui/image-creator.glade.h:3
+msgid ""
+"\n"
+"File exists. Overwrite it?\n"
+"            "
+msgstr ""
+
+#: ../gui/image-creator.glade.h:6
+msgid " File Name: "
+msgstr ""
+
+#: ../gui/image-creator.glade.h:7
+msgid "<b>CD boot configuration</b>"
+msgstr ""
+
+#: ../gui/image-creator.glade.h:8
+msgid "<b>Common configuration</b>"
+msgstr ""
+
+#: ../gui/image-creator.glade.h:9
+msgid "<b>HDD boot configuration</b>"
+msgstr ""
+
+#: ../gui/image-creator.glade.h:10
+msgid "<b>NAND boot configuration</b>"
+msgstr ""
+
+#: ../gui/image-creator.glade.h:11
+msgid "<b>Platform Projects</b>"
+msgstr ""
+
+#: ../gui/image-creator.glade.h:12
+msgid "<b>Target Images</b>"
+msgstr ""
+
+#: ../gui/image-creator.glade.h:13
+msgid "<b>Targets</b>"
+msgstr ""
+
+#: ../gui/image-creator.glade.h:14
+msgid "<b>USB boot configuration</b>"
+msgstr ""
+
+#: ../gui/image-creator.glade.h:15
+msgid "A_dd"
+msgstr ""
+
+#: ../gui/image-creator.glade.h:16
+msgid "Add"
+msgstr ""
+
+#: ../gui/image-creator.glade.h:17
+msgid "Add New Target"
+msgstr ""
+
+#: ../gui/image-creator.glade.h:18
+msgid "Add Package Groups"
+msgstr ""
+
+#: ../gui/image-creator.glade.h:19
+msgid "Add _Functional Sets"
+msgstr ""
+
+#: ../gui/image-creator.glade.h:20
+msgid ""
+"Add functional sets (groups of related software packages) to the selected "
+"target"
+msgstr ""
+
+#: ../gui/image-creator.glade.h:21
+msgid "An unknown error has occured!"
+msgstr ""
+
+#: ../gui/image-creator.glade.h:22
+msgid "Are you sure want to delete this project?"
+msgstr ""
+
+#: ../gui/image-creator.glade.h:23
+msgid "Boot a live USB image in KVM"
+msgstr ""
+
+#: ../gui/image-creator.glade.h:24
+msgid "Boot partition size(MB):"
+msgstr ""
+
+#: ../gui/image-creator.glade.h:25
+msgid "Clean"
+msgstr ""
+
+#: ../gui/image-creator.glade.h:26
+msgid "Clean history of MIC commands"
+msgstr ""
+
+#: ../gui/image-creator.glade.h:27
+msgid "Clear Rootstraps"
+msgstr ""
+
+#: ../gui/image-creator.glade.h:28
+msgid "Close"
+msgstr ""
+
+#: ../gui/image-creator.glade.h:29
+msgid "Close window"
+msgstr ""
+
+#: ../gui/image-creator.glade.h:30
+msgid "Command History"
+msgstr ""
+
+#: ../gui/image-creator.glade.h:31
+msgid "Command _History"
+msgstr ""
+
+#: ../gui/image-creator.glade.h:32
+msgid "Copy"
+msgstr ""
+
+#: ../gui/image-creator.glade.h:33
+msgid "Copy command history to clipboard"
+msgstr ""
+
+#: ../gui/image-creator.glade.h:34
+msgid ""
+"Create a Live  USB image that can be burned to a USB flash drive  You can "
+"boot linux and run completely off the USB flash drive.  Nothing is written "
+"to the target device. Boot and mount to nfs server rootfs. You can use the "
+"storage on nfs server. This image is very small(about 60MB)."
+msgstr ""
+
+#: ../gui/image-creator.glade.h:35
+msgid ""
+"Create a Live USB image that can be burned to a USB flash drive.  You can "
+"boot linux and run completely off the USB flash drive.  Nothing is written "
+"to the target device.  All changes made while running from the USB flash "
+"drive are lost on shutdown."
+msgstr ""
+
+#: ../gui/image-creator.glade.h:36
+msgid ""
+"Create a Live read/write USB image that can be burned to a USB flash drive  "
+"You can boot linux and run completely off the USB flash drive.  Nothing is "
+"written to the target device.  The USB flash drive supports data "
+"persistence--changes made while running from the USB flash drive are saved "
+"on the USB flash drive."
+msgstr ""
+
+#: ../gui/image-creator.glade.h:37
+msgid ""
+"Create a NAND image that can be burned to a Compact flash drive for "
+"Moorestown."
+msgstr ""
+
+#: ../gui/image-creator.glade.h:38
+msgid "Create a new project"
+msgstr ""
+
+#: ../gui/image-creator.glade.h:39
+msgid "Create a new target for the project selected above"
+msgstr ""
+
+#: ../gui/image-creator.glade.h:40
+msgid ""
+"Create a project for the desired platform.  You can then add a target below."
+msgstr ""
+
+#: ../gui/image-creator.glade.h:41
+msgid ""
+"Create an installation image that can be burned to a CD. When you boot off "
+"the CD it will erase the target harddrive, then repartition and install the "
+"target image."
+msgstr ""
+
+#: ../gui/image-creator.glade.h:42
+msgid ""
+"Create an installation image that can be burned to a CD. You can boot linux "
+"and run completely off the CD.  Nothing is written to the target device.  "
+"All changes made while running from the CD drive are lost on shutdown."
+msgstr ""
+
+#: ../gui/image-creator.glade.h:43
+msgid ""
+"Create an installation image that can be burned to a CD. You can boot linux "
+"and run completely off the CD.  Nothing is written to the target device.  "
+"Boot and mount to nfs server rootfs. You can use the storage on nfs server. "
+"This image is very small(about 60MB)."
+msgstr ""
+
+#: ../gui/image-creator.glade.h:44
+msgid ""
+"Create an installation image that can be burned to a USB flash drive.  When "
+"you boot off the USB flash drive it will erase the target harddrive, then "
+"repartition and install the target image."
+msgstr ""
+
+#: ../gui/image-creator.glade.h:45
+msgid "D_elete"
+msgstr ""
+
+#: ../gui/image-creator.glade.h:46
+msgid "De_lete"
+msgstr ""
+
+#: ../gui/image-creator.glade.h:47
+msgid "Delete Project"
+msgstr ""
+
+#: ../gui/image-creator.glade.h:48
+msgid "Delete the selected project"
+msgstr ""
+
+#: ../gui/image-creator.glade.h:49
+msgid ""
+"Delete the selected target.  All installed functional sets will be deleted "
+"along with the file system structure."
+msgstr ""
+
+#: ../gui/image-creator.glade.h:50
+msgid "Description:  "
+msgstr ""
+
+#: ../gui/image-creator.glade.h:51
+msgid "Did you know..."
+msgstr ""
+
+#: ../gui/image-creator.glade.h:52
+msgid "ERROR!"
+msgstr ""
+
+#: ../gui/image-creator.glade.h:53
+msgid "Edit _Repository"
+msgstr ""
+
+#: ../gui/image-creator.glade.h:54
+msgid "Edit the target configuration."
+msgstr ""
+
+#: ../gui/image-creator.glade.h:55
+msgid "Existed file name."
+msgstr ""
+
+#: ../gui/image-creator.glade.h:56
+msgid "Fat32 partition size(MB):"
+msgstr ""
+
+#: ../gui/image-creator.glade.h:57
+msgid "Fsets Info"
+msgstr ""
+
+#: ../gui/image-creator.glade.h:58
+msgid "Image Name:"
+msgstr ""
+
+#: ../gui/image-creator.glade.h:59
+msgid "Image size(MB):"
+msgstr ""
+
+#: ../gui/image-creator.glade.h:60
+msgid "Include Debug Packages (if any)"
+msgstr ""
+
+#: ../gui/image-creator.glade.h:61
+msgid "Install CD"
+msgstr ""
+
+#: ../gui/image-creator.glade.h:62
+msgid "Install Function Set"
+msgstr ""
+
+#: ../gui/image-creator.glade.h:63
+msgid "Install USB"
+msgstr ""
+
+#: ../gui/image-creator.glade.h:64
+msgid "Launch VM"
+msgstr ""
+
+#: ../gui/image-creator.glade.h:65
+msgid "List of existing projects"
+msgstr ""
+
+#: ../gui/image-creator.glade.h:66
+msgid "List of existing targets"
+msgstr ""
+
+#: ../gui/image-creator.glade.h:67
+msgid "Live CD"
+msgstr ""
+
+#: ../gui/image-creator.glade.h:68
+msgid "Live RW USB"
+msgstr ""
+
+#: ../gui/image-creator.glade.h:69
+msgid "Live USB"
+msgstr ""
+
+#: ../gui/image-creator.glade.h:70
+msgid "Load Project"
+msgstr ""
+
+#: ../gui/image-creator.glade.h:71
+msgid "Mirror Settings"
+msgstr ""
+
+#: ../gui/image-creator.glade.h:72
+msgid "Moblin Image Creator"
+msgstr ""
+
+#: ../gui/image-creator.glade.h:73
+msgid "NAND Image"
+msgstr ""
+
+#: ../gui/image-creator.glade.h:74
+msgid "NFS Live CD"
+msgstr ""
+
+#: ../gui/image-creator.glade.h:75
+msgid "NFS Live USB"
+msgstr ""
+
+#: ../gui/image-creator.glade.h:76
+msgid "NFS server IP address:"
+msgstr ""
+
+#: ../gui/image-creator.glade.h:77
+msgid "New Image name"
+msgstr ""
+
+#: ../gui/image-creator.glade.h:78
+msgid "New Project"
+msgstr ""
+
+#: ../gui/image-creator.glade.h:79
+msgid "New Target Name:"
+msgstr ""
+
+#: ../gui/image-creator.glade.h:80
+msgid "No Mirror"
+msgstr ""
+
+#: ../gui/image-creator.glade.h:81
+msgid ""
+"No swap\n"
+"Swap file create only\n"
+"Swap file create and swap on"
+msgstr ""
+
+#: ../gui/image-creator.glade.h:84
+msgid ""
+"Open a terminal chrooted to the root of the selected project's file system"
+msgstr ""
+
+#: ../gui/image-creator.glade.h:85
+msgid ""
+"Open a terminal chrooted to the root of the selected target's file system"
+msgstr ""
+
+#: ../gui/image-creator.glade.h:86
+msgid "P_latform:  "
+msgstr ""
+
+#: ../gui/image-creator.glade.h:87
+msgid "Package Groups"
+msgstr ""
+
+#: ../gui/image-creator.glade.h:88
+msgid "Please wait..."
+msgstr ""
+
+#: ../gui/image-creator.glade.h:89
+msgid "Project _Desc:  "
+msgstr ""
+
+#: ../gui/image-creator.glade.h:90
+msgid "Project _Name:  "
+msgstr ""
+
+#: ../gui/image-creator.glade.h:91
+msgid "Record MIC command history"
+msgstr ""
+
+#: ../gui/image-creator.glade.h:92
+msgid "Remove"
+msgstr ""
+
+#: ../gui/image-creator.glade.h:93
+msgid "Save"
+msgstr ""
+
+#: ../gui/image-creator.glade.h:94
+msgid "Save Project"
+msgstr ""
+
+#: ../gui/image-creator.glade.h:95
+msgid "Save command history into a file in /var/lib/moblin-image-creator/cmds"
+msgstr ""
+
+#: ../gui/image-creator.glade.h:96
+msgid "Save to..."
+msgstr ""
+
+#: ../gui/image-creator.glade.h:97
+msgid "Search and Replace Expression can be any Python regular expression"
+msgstr ""
+
+#: ../gui/image-creator.glade.h:98
+msgid ""
+"Select a project above then create a target based on the project target "
+"platform.  You can then add functional sets (software packages) to the "
+"target.  Finally, you can create an image of the target in the \"Target "
+"Images\" section below."
+msgstr ""
+
+#: ../gui/image-creator.glade.h:99
+msgid ""
+"Select a target above then select the type of image you wish to create.  \n"
+"(See the tooltips on the buttons below for more information) "
+msgstr ""
+
+#: ../gui/image-creator.glade.h:101
+msgid "Select your USB disk"
+msgstr ""
+
+#: ../gui/image-creator.glade.h:102
+msgid "Swap option:"
+msgstr ""
+
+#: ../gui/image-creator.glade.h:103
+msgid "Swap partition size(MB):"
+msgstr ""
+
+#: ../gui/image-creator.glade.h:104
+msgid "Target configurations"
+msgstr ""
+
+#: ../gui/image-creator.glade.h:105
+msgid "Te_rminal"
+msgstr ""
+
+#: ../gui/image-creator.glade.h:106
+msgid "Tools"
+msgstr ""
+
+#: ../gui/image-creator.glade.h:107
+msgid "Up_grade Target"
+msgstr ""
+
+#: ../gui/image-creator.glade.h:108
+msgid "Upgrade Project"
+msgstr ""
+
+#: ../gui/image-creator.glade.h:109
+msgid "Upgrade Target"
+msgstr ""
+
+#: ../gui/image-creator.glade.h:110
+msgid "Use Mirror"
+msgstr ""
+
+#: ../gui/image-creator.glade.h:111
+msgid "Use squashfs:"
+msgstr ""
+
+#: ../gui/image-creator.glade.h:112
+msgid ""
+"Warning:The directories listed below could not be unmounted. \n"
+"You may have terminals open in the mounted directory path\n"
+msgstr ""
+
+#: ../gui/image-creator.glade.h:115
+msgid "Welcome message: "
+msgstr ""
+
+#: ../gui/image-creator.glade.h:116
+msgid "Write USB Image"
+msgstr ""
+
+#: ../gui/image-creator.glade.h:117
+msgid ""
+"Write a USB image to the USB flash drive.  An image must first be created "
+"using one of the USB options to the left."
+msgstr ""
+
+#: ../gui/image-creator.glade.h:118
+msgid "Writes an Image to USB Drive"
+msgstr ""
+
+#: ../gui/image-creator.glade.h:119
+msgid "_Add"
+msgstr ""
+
+#: ../gui/image-creator.glade.h:120
+msgid "_Add Project Wizard"
+msgstr ""
+
+#: ../gui/image-creator.glade.h:121
+msgid "_Add Target..."
+msgstr ""
+
+#: ../gui/image-creator.glade.h:122
+msgid "_Browse..."
+msgstr ""
+
+#: ../gui/image-creator.glade.h:123
+msgid "_Clear Rootstraps"
+msgstr ""
+
+#: ../gui/image-creator.glade.h:124
+msgid "_Edit Repo"
+msgstr ""
+
+#: ../gui/image-creator.glade.h:125
+msgid "_File"
+msgstr ""
+
+#: ../gui/image-creator.glade.h:126
+msgid "_Fsets Info"
+msgstr ""
+
+#: ../gui/image-creator.glade.h:127
+msgid "_Help"
+msgstr ""
+
+#: ../gui/image-creator.glade.h:128
+msgid "_Load Project"
+msgstr ""
+
+#: ../gui/image-creator.glade.h:129
+msgid "_Mirror Settings"
+msgstr ""
+
+#: ../gui/image-creator.glade.h:130
+msgid "_Path:  "
+msgstr ""
+
+#: ../gui/image-creator.glade.h:131
+msgid "_Save Project"
+msgstr ""
+
+#: ../gui/image-creator.glade.h:132
+msgid "_Target config"
+msgstr ""
+
+#: ../gui/image-creator.glade.h:133
+msgid "_Terminal"
+msgstr ""
+
+#: ../gui/image-creator.glade.h:134
+msgid "_Tools"
+msgstr ""
+
+#: ../gui/image-creator.glade.h:135
+msgid "_Upgrade Project"
+msgstr ""
+
+#: ../gui/image-creator.glade.h:136
+msgid "_Write USB Image"
+msgstr ""
+
+#: ../gui/image-creator.glade.h:137
+msgid "enabled"
+msgstr ""
+
+#: ../gui/image-creator.glade.h:138
+msgid "ext3fs size(MB):"
+msgstr ""
+
+#: ../gui/image-creator.glade.h:139
+msgid "failovermethod"
+msgstr ""
+
+#: ../gui/image-creator.glade.h:140
+msgid "foobar"
+msgstr ""
+
+#: ../gui/image-creator.glade.h:141
+msgid "kernel cmdline: "
+msgstr ""
+
+#: ../gui/image-creator.glade.h:142
+msgid "url"
+msgstr ""
+
+#: ../gui/project_assistant.py:88
+msgid "Introduction"
+msgstr ""
+
+#: ../gui/project_assistant.py:95
+msgid ""
+"<b>This assistant will help you to create a project and a target.\n"
+"You also will be able to select which functional sets (fsets) to install.</b>"
+msgstr ""
+
+#: ../gui/project_assistant.py:101
+msgid "Create Project"
+msgstr ""
+
+#: ../gui/project_assistant.py:114
+msgid "Create Target and add Fsets"
+msgstr ""
+
+#: ../gui/project_assistant.py:127
+msgid "Confirm"
+msgstr ""
+
+#: ../gui/project_assistant.py:134
+msgid "Please review the configuration before proceeding."
+msgstr ""
+
+#: ../gui/project_assistant.py:191
+msgid "Project Name"
+msgstr ""
+
+#: ../gui/project_assistant.py:194
+msgid "Project Description"
+msgstr ""
+
+#: ../gui/project_assistant.py:197
+msgid "Project Path"
+msgstr ""
+
+#: ../gui/project_assistant.py:201
+msgid "Browse"
+msgstr ""
+
+#: ../gui/project_assistant.py:211
+msgid "Project Platform"
+msgstr ""
+
+#: ../gui/project_assistant.py:212
+msgid "Platform Description"
+msgstr ""
+
+#: ../gui/project_assistant.py:310
+msgid "Path exists but is not a directory"
+msgstr ""
+
+#: ../gui/project_assistant.py:315
+msgid "Path is a directory which is NOT empty"
+msgstr ""
+
+#: ../gui/project_assistant.py:320
+msgid "Target Name"
+msgstr ""
+
+#: ../gui/project_assistant.py:338
+msgid "Include Debug packages (if any)"
+msgstr ""
+
+#: ../gui/project_assistant.py:358
+msgid "<b>Available Fsets for the choosen platform</b>"
+msgstr ""
+
+#: ../gui/project_assistant.py:473
+#, python-format
+msgid "Project Name: %s"
+msgstr ""
+
+#: ../gui/project_assistant.py:474
+#, python-format
+msgid "Project Description: %s"
+msgstr ""
+
+#: ../gui/project_assistant.py:475
+#, python-format
+msgid "Project Path: %s"
+msgstr ""
+
+#: ../gui/project_assistant.py:476
+#, python-format
+msgid "Project Platform: %s"
+msgstr ""
+
+#: ../gui/project_assistant.py:477
+#, python-format
+msgid "Target Name: %s"
+msgstr ""
+
+#: ../gui/project_assistant.py:478
+#, python-format
+msgid "Fset List: %s"
+msgstr ""
+
+#: ../gui/project_assistant.py:479
+#, python-format
+msgid "Install Debug Packages: %s"
+msgstr ""
+
+#: ../gui/repo_editor.py:63
+msgid "Repository List"
+msgstr ""
+
+#: ../gui/repo_editor.py:139
+msgid "New Repo Name"
+msgstr ""
+
+#: ../gui/repo_editor.py:142
+msgid "Add New Repo"
+msgstr ""
+
+#: ../gui/repo_editor.py:167
+#, python-format
+msgid "Removing Repo: %s"
+msgstr ""
+
+#: ../gui/repo_editor.py:172
+#, python-format
+msgid "Saving: %s"
+msgstr ""
+
+#: ../image-creator:61
+#, c-format
+msgid "Error: %s depends on a Python version of at least 2.4!"
+msgstr ""
+
+#: ../image-creator:79
+msgid "Error: Must run image creator with sudo or run as root"
+msgstr ""
+
+#: ../image-creator:80
+msgid "Example, run image creator:  sudo image-creator"
+msgstr ""
+
+#: ../image-creator:88
+msgid "Error: Unable to run the GUI, maybe you are in a text console"
+msgstr ""
+
+#: ../image-creator:89
+msgid "Do -h for help"
+msgstr ""
+
+#: ../image-creator:93
+msgid "Error: Your DISPLAY environment variable is NOT set"
+msgstr ""
+
+#: ../image-creator:94
+msgid "The Moblin Image Creator GUI can NOT run"
+msgstr ""
+
+#: ../image-creator:149
+msgid "Unknown command specified"
+msgstr ""
+
+#: ../image-creator:200
+msgid "Display version"
+msgstr ""
+
+#: ../image-creator:203
+#, c-format
+msgid "Where CMD is one of: %s"
+msgstr ""
+
+#: ../image-creator:205
+msgid "Platform name"
+msgstr ""
+
+#: ../image-creator:207
+msgid "Project name"
+msgstr ""
+
+#: ../image-creator:209
+msgid "Project description"
+msgstr ""
+
+#: ../image-creator:211
+msgid "Project path"
+msgstr ""
+
+#: ../image-creator:213
+msgid "Target name"
+msgstr ""
+
+#: ../image-creator:215
+msgid "Feature set identifier"
+msgstr ""
+
+#: ../image-creator:217
+msgid "Repo name"
+msgstr ""
+
+#: ../image-creator:219
+msgid "Repo URL"
+msgstr ""
+
+#: ../image-creator:221
+msgid "Name to use for target image file"
+msgstr ""
+
+#: ../image-creator:223
+msgid "Command to execute inside a project or target chroot filesystem"
+msgstr ""
+
+#: ../image-creator:226
+msgid "Disable creation or use of rootstrap files"
+msgstr ""
+
+#: ../image-creator:229
+msgid "Enable additional debug package while installing fsets"
+msgstr ""
+
+#: ../image-creator:231
+msgid ""
+"Filename to use when saving or restoring a project, if .mic.tar.bz2 is not "
+"the extension during a save then .mic.tar.bz2 will be appended"
+msgstr ""
+
+#: ../image-creator:232
+msgid "show this help message and exit"
+msgstr ""
+
+#: ../image-creator:343
+msgid "Must specify a -c/--command argument"
+msgstr ""
+
+#: ../image-creator:345
+#, c-format
+msgid ""
+"Command specified for option -c/--command invalid.  Valid commands are: %s"
+msgstr ""
+
+#: ../image-creator:348
+#, c-format
+msgid ""
+"Command specified requires you to run as root or using sudo.  Command is: %s"
+msgstr ""
+
+#: ../image-creator:354
+#, c-format
+msgid "Must specify a project-name when using %s command."
+msgstr ""
+
+#: ../image-creator:356 ../image-creator:359 ../image-creator:364
+#: ../image-creator:367
+#, c-format
+msgid "Must specify platform-name when using %s command"
+msgstr ""
+
+#: ../image-creator:361
+#, c-format
+msgid "Must specify at least one fset when using %s command"
+msgstr ""
+
+#: ../image-creator:369 ../image-creator:375 ../image-creator:377
+#: ../image-creator:380 ../image-creator:385 ../image-creator:390
+#: ../image-creator:396 ../image-creator:399 ../image-creator:404
+#: ../image-creator:411 ../image-creator:420 ../image-creator:427
+#: ../image-creator:430 ../image-creator:435
+#, c-format
+msgid "Must specify project-name when using %s command"
+msgstr ""
+
+#: ../image-creator:371
+#, c-format
+msgid "Must specify project-description when using %s command"
+msgstr ""
+
+#: ../image-creator:373 ../image-creator:440
+#, c-format
+msgid "Must specify project-path when using %s command"
+msgstr ""
+
+#: ../image-creator:382 ../image-creator:392 ../image-creator:401
+#: ../image-creator:406 ../image-creator:413 ../image-creator:422
+#: ../image-creator:432
+#, c-format
+msgid "Must specify target-name when using %s command"
+msgstr ""
+
+#: ../image-creator:387 ../image-creator:394
+#, c-format
+msgid "Must specify run-command when using %s command"
+msgstr ""
+
+#: ../image-creator:408
+#, c-format
+msgid "Must specify at least one fset-name when using %s command"
+msgstr ""
+
+#: ../image-creator:415
+#, c-format
+msgid "Must specify repo-name when using %s command"
+msgstr ""
+
+#: ../image-creator:417
+#, c-format
+msgid "Must specify repo-url when using %s command"
+msgstr ""
+
+#: ../image-creator:424
+#, c-format
+msgid "Must specify image-name when using %s command"
+msgstr ""
+
+#: ../image-creator:437
+#, c-format
+msgid "Must specify file-name when using %s command"
+msgstr ""
+
+#: ../image-creator:442
+msgid "Filename must have the extension: .mic.tar.bz2"
+msgstr ""
+
+#: ../image-creator:454
+#, c-format
+msgid "Moblin Image Creator %s"
+msgstr ""
+
+#: ../image-creator:466 ../image-creator:473 ../image-creator:499
+#: ../image-creator:515 ../image-creator:613
+#, c-format
+msgid "%s: is not a valid platform name"
+msgstr ""
+
+#: ../image-creator:489
+#, c-format
+msgid "%s: is not a valid fset name in this platform"
+msgstr ""
+
+#: ../image-creator:512
+#, c-format
+msgid "Project %s already exist!"
+msgstr ""
+
+#: ../image-creator:519
+msgid "The project path can not be part of the current working directory"
+msgstr ""
+
+#: ../image-creator:526 ../image-creator:532 ../image-creator:540
+#: ../image-creator:549 ../image-creator:555 ../image-creator:564
+#: ../image-creator:570 ../image-creator:579 ../image-creator:589
+#: ../image-creator:602 ../image-creator:623
+#, c-format
+msgid "Project %s does not exist"
+msgstr ""
+
+#: ../image-creator:543 ../image-creator:558 ../image-creator:583
+#: ../image-creator:593 ../image-creator:606 ../image-creator:626
+#, c-format
+msgid "Target %s does not exist"
+msgstr ""
+
+#: ../image-creator:573
+msgid "Target names can only contain alpha/numeric characters"
+msgstr ""
+
+#: ../image-creator:599
+#, c-format
+msgid "Ignoring Plaform name %s"
+msgstr ""
+
+#: ../image-creator:600
+#, c-format
+msgid "Using %s"
+msgstr ""
+
+#: ../image-creator:610
+#, c-format
+msgid "Feature set %s does not exist"
+msgstr ""
+
+#: ../image-creator:641
+#, c-format
+msgid "Path %s Does not exist"
+msgstr ""
+
+#: ../image-creator:717
+msgid "Error: No 'PATH' environment variable defined"
+msgstr ""
+
+#: ../image-creator:730
+#, c-format
+msgid "Unsupported distribution: %s"
+msgstr ""
+
+#: ../image-creator:737
+#, c-format
+msgid "Error: Could not find the executable: '%s' in the PATH"
+msgstr ""
+
+#: ../image-creator:740
+msgid ""
+"Without the executable(s) listed, image-creator will fail to operate "
+"properly."
+msgstr ""
+
+#: ../libs/InstallImage.py:97
+#, python-format
+msgid ""
+"message_color string must be 2 bytes long.  Passed in string was: %s bytes "
+"long.  String: %s"
+msgstr ""
+
+#: ../libs/InstallImage.py:198
+msgid "no kernels were found"
+msgstr ""
+
+#: ../libs/InstallImage.py:207
+msgid "tmp_path doesn't exist"
+msgstr ""
+
+#: ../libs/InstallImage.py:270
+msgid "Creating root file system..."
+msgstr ""
+
+#: ../libs/InstallImage.py:294
+#, python-format
+msgid "Executing the mksquashfs program: %s"
+msgstr ""
+
+#: ../libs/InstallImage.py:309
+#, python-format
+msgid "Creating bootfs at: %s"
+msgstr ""
+
+#: ../libs/InstallImage.py:322 ../libs/InstallImage.py:343
+msgid "shutil.copy failed. Ignored error"
+msgstr ""
+
+#: ../libs/InstallImage.py:350
+msgid "install.cfg created"
+msgstr ""
+
+#: ../libs/InstallImage.py:395
+#, python-format
+msgid "Creating initramfs for kernel version: %s"
+msgstr ""
+
+#: ../libs/InstallImage.py:406
+msgid "moblin-initramfs.cfg file created"
+msgstr ""
+
+#: ../libs/InstallImage.py:409
+#, python-format
+msgid "Executing: %s"
+msgstr ""
+
+#. FIXME: We need to generate grub menu
+#: ../libs/InstallImage.py:413 ../libs/InstallImage.py:435
+msgid "Creating the grub menu"
+msgstr ""
+
+#: ../libs/InstallImage.py:475
+#, python-format
+msgid "LiveCDImage: Creating Live CD Image(%s) Now..."
+msgstr ""
+
+#: ../libs/InstallImage.py:476
+msgid "Live CD Image (no persistent R/W)"
+msgstr ""
+
+#: ../libs/InstallImage.py:490 ../libs/InstallImage.py:538
+#: ../libs/InstallImage.py:589 ../libs/InstallImage.py:735
+#: ../libs/InstallImage.py:773 ../libs/InstallImage.py:811
+msgid "shutil.move failed. Ignored error"
+msgstr ""
+
+#: ../libs/InstallImage.py:497 ../libs/InstallImage.py:596
+#: ../libs/InstallImage.py:742 ../libs/InstallImage.py:818
+msgid "Could not copy rootfs_path. Ignored error"
+msgstr ""
+
+#: ../libs/InstallImage.py:501 ../libs/InstallImage.py:545
+#: ../libs/InstallImage.py:608
+msgid "Could not copy isolinux.bin. Ignored error"
+msgstr ""
+
+#: ../libs/InstallImage.py:503 ../libs/InstallImage.py:610
+#, python-format
+msgid "Creating CD image file at: %s"
+msgstr ""
+
+#: ../libs/InstallImage.py:507 ../libs/InstallImage.py:508
+#: ../libs/InstallImage.py:551 ../libs/InstallImage.py:552
+#: ../libs/InstallImage.py:614 ../libs/InstallImage.py:615
+#: ../libs/InstallImage.py:662 ../libs/InstallImage.py:663
+#: ../libs/InstallImage.py:684 ../libs/InstallImage.py:685
+#: ../libs/InstallImage.py:693 ../libs/InstallImage.py:694
+#, python-format
+msgid "Error running command: %s"
+msgstr ""
+
+#: ../libs/InstallImage.py:514
+msgid "LiveIsoImage: Finished!"
+msgstr ""
+
+#: ../libs/InstallImage.py:525
+msgid "NFSLiveCDImage: Creating Live CD Image Now..."
+msgstr ""
+
+#: ../libs/InstallImage.py:526
+msgid "NFS Live CD Image"
+msgstr ""
+
+#: ../libs/InstallImage.py:547
+#, python-format
+msgid "Creating NFS CD image file at: %s"
+msgstr ""
+
+#: ../libs/InstallImage.py:557
+msgid "NFSLiveIsoImage: Finished!"
+msgstr ""
+
+#: ../libs/InstallImage.py:568
+msgid "InstallCDImage: Creating Install CD Image Now..."
+msgstr ""
+
+#: ../libs/InstallImage.py:569
+msgid "Install CD Image.  This will DESTROY all content on your hard drive!!"
+msgstr ""
+
+#: ../libs/InstallImage.py:600 ../libs/InstallImage.py:822
+msgid "Could not copy bootfs_path. Ignored error"
+msgstr ""
+
+#: ../libs/InstallImage.py:604
+msgid "Could not create install script. Ignored error"
+msgstr ""
+
+#: ../libs/InstallImage.py:620 ../libs/InstallImage.py:624
+msgid "InstallIsoImage: Finished!"
+msgstr ""
+
+#: ../libs/InstallImage.py:621 ../libs/InstallImage.py:832
+msgid ""
+"\n"
+"You can now use the image to boot and install the target file-system on the "
+"target device's HDD.\n"
+msgstr ""
+
+#: ../libs/InstallImage.py:622 ../libs/InstallImage.py:833
+msgid ""
+"\n"
+"WARNING: Entire contents of the target devices's HDD will be erased prior to "
+"installation!"
+msgstr ""
+
+#: ../libs/InstallImage.py:623 ../libs/InstallImage.py:834
+msgid "         This includes ALL partitions on the disk!\n"
+msgstr ""
+
+#: ../libs/InstallImage.py:632 ../libs/InstallImage.py:843
+msgid "grub.conf kernel cmdline changed"
+msgstr ""
+
+#: ../libs/InstallImage.py:635 ../libs/InstallImage.py:846
+msgid ""
+"New Apply hd kernel "
+"cmdline--------------------------------------------------------------------"
+msgstr ""
+
+#: ../libs/InstallImage.py:647
+#, python-format
+msgid "Creating USB flash drive image file at: %s"
+msgstr ""
+
+#: ../libs/InstallImage.py:700 ../libs/InstallImage.py:701
+#, python-format
+msgid "Error unmounting: %s"
+msgstr ""
+
+#: ../libs/InstallImage.py:708
+#, python-format
+msgid "LiveUsbImage: Creating Live R/W USB Image(%s) Now..."
+msgstr ""
+
+#: ../libs/InstallImage.py:709
+msgid "Live R/W USB Image"
+msgstr ""
+
+#: ../libs/InstallImage.py:711
+#, python-format
+msgid "LiveUsbImage: Creating Live USB Image(%s) Now..."
+msgstr ""
+
+#: ../libs/InstallImage.py:712
+msgid "Live USB Image (no persistent R/W)"
+msgstr ""
+
+#: ../libs/InstallImage.py:748
+msgid "LiveUsbImage: Finished!"
+msgstr ""
+
+#: ../libs/InstallImage.py:756
+msgid "NFSLiveUsbImage: Creating NFS Live USB Image Now..."
+msgstr ""
+
+#: ../libs/InstallImage.py:757
+msgid "NFS Live USB Image"
+msgstr ""
+
+#: ../libs/InstallImage.py:779
+msgid "NFSLiveUsbImage: Finished!"
+msgstr ""
+
+#: ../libs/InstallImage.py:787
+msgid "InstallUsbImage: Creating InstallUSB Image..."
+msgstr ""
+
+#: ../libs/InstallImage.py:788
+msgid "Install USB Image.  This will DESTROY all content on your hard drive!!"
+msgstr ""
+
+#: ../libs/InstallImage.py:826
+msgid "Could create install script. Ignored error"
+msgstr ""
+
+#: ../libs/InstallImage.py:831 ../libs/InstallImage.py:835
+msgid "InstallUsbImage: Finished!"
+msgstr ""
+
+#: ../libs/InstallImage.py:855
+msgid "HddImage: Create Hard Disk Image not implemented!"
+msgstr ""
+
+#: ../libs/InstallImage.py:866
+msgid "NANDImage: This platform could not support NAND image!"
+msgstr ""
+
+#: ../libs/InstallImage.py:867
+msgid "NANDImage: Creating NAND Image..."
+msgstr ""
+
+#: ../libs/InstallImage.py:930
+#, python-format
+msgid "USAGE: %s proj_path proj_name platform_name"
+msgstr ""
+
+#: ../libs/InstallImage.py:931
+#, python-format
+msgid "       %s proj_name"
+msgstr ""
+
+#: ../libs/InstallImage.py:954 ../libs/InstallImage.py:958
+#: ../libs/InstallImage.py:962
+#, python-format
+msgid ""
+"\n"
+"Image File Name: %s"
+msgstr ""
+
+#: ../libs/InstallImage.py:965
+msgid ""
+"\n"
+"\n"
+"Finish!\n"
+msgstr ""
+
+#: ../libs/Platform.py:53
+msgid "Platform called but config_info value not passed in"
+msgstr ""
+
+#: ../libs/Platform.py:69
+msgid "Error: No buildroot config file information found!"
+msgstr ""
+
+#: ../libs/Platform.py:106
+#, python-format
+msgid "package manager value of: '%s' is invalid"
+msgstr ""
+
+#: ../libs/Platform.py:122
+msgid "Warning: Unable to archive rootstrap!"
+msgstr ""
+
+#: ../libs/Platform.py:143 ../libs/Platform.py:217
+#, python-format
+msgid "ERROR: Unable to rootstrap %s from %s!"
+msgstr ""
+
+#: ../libs/Platform.py:176
+#, python-format
+msgid "--------%s rootstrap creation try: %s ----------"
+msgstr ""
+
+#: ../libs/Platform.py:177
+#, python-format
+msgid "Execing command: %s"
+msgstr ""
+
+#: ../libs/Platform.py:180
+#, python-format
+msgid "--------%s rootstrap creation completed successfully----------"
+msgstr ""
+
+#: ../libs/Platform.py:183 ../libs/moblin_apt.py:61
+msgid "Process Aborted"
+msgstr ""
+
+#: ../libs/Platform.py:185
+#, python-format
+msgid "--------%s rootstrap creation failed result: %s ----------"
+msgstr ""
+
+#: ../libs/Platform.py:187
+#, python-format
+msgid "--------For try: %s.  Sleeping for %s seconds... -----------------"
+msgstr ""
+
+#: ../libs/Platform.py:190
+#, python-format
+msgid "ERROR: Unable to generate %s rootstrap!"
+msgstr ""
+
+#. install yum inside the project using the host tools
+#: ../libs/Platform.py:230 ../utils/create-rootstrap.py:85
+msgid "Creating rootstrap directory with yum..."
+msgstr ""
+
+#. cmd = 'yum -y --installroot=%s groupinstall buildsys-build' % chroot_dir
+#: ../libs/Platform.py:235
+#, python-format
+msgid "Exec command: %s"
+msgstr ""
+
+#: ../libs/Platform.py:238
+msgid "Failed to create Yum based rootstrap"
+msgstr ""
+
+#: ../libs/Platform.py:320 ../libs/Platform.py:336 ../libs/moblin_apt.py:94
+#: ../libs/moblin_yum.py:80 ../libs/moblin_yum.py:121
+#, python-format
+msgid "Internal error while attempting to run: %s"
+msgstr ""
+
+#: ../libs/Project.py:63 ../libs/Project.py:392 ../libs/SDK.py:219
+msgid "Empty argument passed in"
+msgstr ""
+
+#: ../libs/Project.py:113 ../libs/moblin_apt.py:128 ../libs/pdk_utils.py:311
+#, python-format
+msgid "Incomplete jailroot at %s"
+msgstr ""
+
+#: ../libs/Project.py:114 ../libs/moblin_apt.py:129 ../libs/pdk_utils.py:312
+#, python-format
+msgid "Internal Error: Invalid buildroot at %s"
+msgstr ""
+
+#: ../libs/Project.py:120
+#, python-format
+msgid "Error in chroot command exec.  Result: %s"
+msgstr ""
+
+#: ../libs/Project.py:121 ../libs/pdk_utils.py:319
+#, python-format
+msgid "Command was: %s"
+msgstr ""
+
+#: ../libs/Project.py:122
+#, python-format
+msgid "chroot was: %s"
+msgstr ""
+
+#: ../libs/Project.py:168
+#, python-format
+msgid "Failed to umount FileSystem directory: %s"
+msgstr ""
+
+#: ../libs/Project.py:170 ../libs/Project.py:229 ../libs/Project.py:315
+#, python-format
+msgid "Execing: %s"
+msgstr ""
+
+#: ../libs/Project.py:172
+#, python-format
+msgid "Sleeping for 5 seconds, try %s of %s"
+msgstr ""
+
+#: ../libs/Project.py:225
+#, python-format
+msgid "Failed to umount project: %s"
+msgstr ""
+
+#: ../libs/Project.py:227
+#, python-format
+msgid "Failed to umount Project directory: %s"
+msgstr ""
+
+#: ../libs/Project.py:235 ../libs/Project.py:264 ../libs/Project.py:280
+msgid "Target name was not specified"
+msgstr ""
+
+#: ../libs/Project.py:250
+msgid "Installing post install scripts"
+msgstr ""
+
+#: ../libs/Project.py:269
+#, python-format
+msgid "%s is not found"
+msgstr ""
+
+#. Failed to umount
+#: ../libs/Project.py:313 ../libs/Project.py:317
+#, python-format
+msgid "Failed to umount target: %s"
+msgstr ""
+
+#: ../libs/Project.py:431
+msgid "Executing post install scripts"
+msgstr ""
+
+#: ../libs/Project.py:435
+#, python-format
+msgid "Executing script: %s"
+msgstr ""
+
+#: ../libs/Project.py:443
+msgid "No post-install-scripts found"
+msgstr ""
+
+#: ../libs/Project.py:460
+#, python-format
+msgid "fset %s is already installed!"
+msgstr ""
+
+#: ../libs/Project.py:464
+#, python-format
+msgid "Installing Function Set: %s (and any dependencies)"
+msgstr ""
+
+#: ../libs/Project.py:468
+#, python-format
+msgid "Circular fset dependency encountered for: %s"
+msgstr ""
+
+#: ../libs/Project.py:490
+#, python-format
+msgid "fset %s must be installed first!"
+msgstr ""
+
+#: ../libs/Project.py:503
+#, python-format
+msgid "Installing required Function Set: %s"
+msgstr ""
+
+#: ../libs/Project.py:523
+#, python-format
+msgid ""
+"USAGE: %s PROJECT_NAME PROJECT_PATH PROJECT_DESCRIPTION TARGET_NAME "
+"PLATFORM_NAME"
+msgstr ""
+
+#: ../libs/Project.py:524
+msgid "\tPROJECT_NAME: name to call the project.  The config file "
+msgstr ""
+
+#: ../libs/Project.py:524
+msgid "/projects/project_name.proj is used or created"
+msgstr ""
+
+#: ../libs/Project.py:525
+msgid "\tPROJECT_PATH: directory to install the project"
+msgstr ""
+
+#: ../libs/Project.py:526
+msgid "\tPROJECT_DESCRIPTION: Textual description of the project"
+msgstr ""
+
+#: ../libs/Project.py:527
+msgid "\tTARGET_NAME: ???"
+msgstr ""
+
+#: ../libs/Project.py:528
+msgid "\tPLATFORM_NAME: The platform.  e.g. donley"
+msgstr ""
+
+#: ../libs/Project.py:541
+#, python-format
+msgid "ERROR: %s is not a valid platform!"
+msgstr ""
+
+#: ../libs/Project.py:542
+msgid "Available platforms include:"
+msgstr ""
+
+#: ../libs/Project.py:551
+msgid "Opening existing project...Using info from config file..."
+msgstr ""
+
+#: ../libs/Project.py:555
+msgid "Creating new project..."
+msgstr ""
+
+#: ../libs/Project.py:558
+#, python-format
+msgid "Install path: %s"
+msgstr ""
+
+#: ../libs/Project.py:559
+#, python-format
+msgid "Name: %s"
+msgstr ""
+
+#: ../libs/Project.py:560
+#, python-format
+msgid "Description: %s"
+msgstr ""
+
+#: ../libs/Project.py:562
+msgid "Used info from config file: "
+msgstr ""
+
+#: ../libs/Project.py:567
+#, python-format
+msgid "Target already exists: %s"
+msgstr ""
+
+#: ../libs/Project.py:570
+msgid "Creating new project target filesystem..."
+msgstr ""
+
+#: ../libs/Project.py:573
+msgid "Installing all available fsets inside target..."
+msgstr ""
+
+#: ../libs/SDK.py:155
+#, python-format
+msgid "Platforms config file not found: %s"
+msgstr ""
+
+#: ../libs/SDK.py:161
+#, python-format
+msgid ""
+"Platform config file: %s has a section: %s but no corresponding directory: %s"
+msgstr ""
+
+#: ../libs/SDK.py:191
+#, python-format
+msgid "Platform %s not found. Skipping the project %s"
+msgstr ""
+
+#: ../libs/SDK.py:221
+#, python-format
+msgid "Project: %s already exists"
+msgstr ""
+
+#: ../libs/SDK.py:223
+msgid "Creating the project chroot environment"
+msgstr ""
+
+#: ../libs/SDK.py:226
+msgid "Rootstrap Creating cancelled"
+msgstr ""
+
+#. create the config file
+#: ../libs/SDK.py:228
+msgid "Creating Config file"
+msgstr ""
+
+#: ../libs/SDK.py:231
+#, python-format
+msgid "NAME=%s\n"
+msgstr ""
+
+#: ../libs/SDK.py:232
+#, python-format
+msgid "PATH=%s\n"
+msgstr ""
+
+#: ../libs/SDK.py:233
+#, python-format
+msgid "DESC=%s\n"
+msgstr ""
+
+#: ../libs/SDK.py:234
+#, python-format
+msgid "PLATFORM=%s\n"
+msgstr ""
+
+#. instantiate the project
+#: ../libs/SDK.py:237
+msgid "Initiating the project"
+msgstr ""
+
+#: ../libs/SDK.py:272
+msgid "Creating project tarfile.  This can take a long time..."
+msgstr ""
+
+#: ../libs/SDK.py:273
+#, python-format
+msgid "Filename: %s"
+msgstr ""
+
+#: ../libs/SDK.py:276
+#, python-format
+msgid "Project tarfile created at: %s"
+msgstr ""
+
+#: ../libs/SDK.py:283
+#, python-format
+msgid "Specified project restore file: %s, does not end in .mic.tar.bz2"
+msgstr ""
+
+#: ../libs/SDK.py:286
+#, python-format
+msgid "A project already exists with that name: %s"
+msgstr ""
+
+#: ../libs/SDK.py:288
+#, python-format
+msgid "Specified project path contains a space character, not allowed: %s"
+msgstr ""
+
+#: ../libs/SDK.py:292
+#, python-format
+msgid "Specified project-path, is a directory, but it is NOT empty: %s"
+msgstr ""
+
+#: ../libs/SDK.py:296
+msgid "Specified project-path, exists, but it is not a directory"
+msgstr ""
+
+#: ../libs/SDK.py:300
+#, python-format
+msgid "Extracting: %s to temporary directory: %s/"
+msgstr ""
+
+#: ../libs/SDK.py:310
+#, python-format
+msgid ""
+"Project config file did not exist in project tarfile.  Could not find: %s"
+msgstr ""
+
+#: ../libs/SDK.py:313
+#, python-format
+msgid "Project directory did not exist in project tarfile.  Could not find: %s"
+msgstr ""
+
+#: ../libs/SDK.py:314
+#, python-format
+msgid "Writing new config file: %s"
+msgstr ""
+
+#: ../libs/SDK.py:316
+#, python-format
+msgid "Moving project directory into place at: %s"
+msgstr ""
+
+#: ../libs/SDK.py:321
+msgid "Error doing 'mv' cmd"
+msgstr ""
+
+#: ../libs/SDK.py:323
+#, python-format
+msgid "Removing temporary directory: %s"
+msgstr ""
+
+#: ../libs/SDK.py:325
+#, python-format
+msgid "Project: %s restored to: %s"
+msgstr ""
+
+#: ../libs/SDK.py:356
+msgid "Deleting rootstraps..."
+msgstr ""
+
+#: ../libs/SDK.py:362
+#, python-format
+msgid "Deleting: %s"
+msgstr ""
+
+#: ../libs/SDK.py:367
+#, python-format
+msgid "Deleting rootstrap directory: %s"
+msgstr ""
+
+#: ../libs/SDK.py:429
+#, python-format
+msgid "'%s' object has no attribute '%s'"
+msgstr ""
+
+#: ../libs/fsets.py:57
+#, python-format
+msgid "Error: Already have a section called: %s"
+msgstr ""
+
+#: ../libs/fsets.py:88
+#, python-format
+msgid "Found unsupported value, ignoring: %s = %s"
+msgstr ""
+
+#: ../libs/fsets.py:96
+msgid "Error: Unsupported type specified in FsetInstance.valid_values"
+msgstr ""
+
+#: ../libs/fsets.py:97
+#, python-format
+msgid "Type was: %s"
+msgstr ""
+
+#: ../libs/fsets.py:119
+#, python-format
+msgid "USAGE: %s FSET_FILE ..."
+msgstr ""
+
+#: ../libs/mic_cfg.py:63 ../libs/pdk_utils.py:44
+msgid "~/.image-creator/ directory did not exist.  Creating"
+msgstr ""
+
+#: ../libs/mic_cfg.py:70
+#, python-format
+msgid "Error: The file: %s exists"
+msgstr ""
+
+#: ../libs/mic_cfg.py:71
+msgid ""
+"This file is no longer used.  Please convert it over to the new file and "
+"then delete it"
+msgstr ""
+
+#: ../libs/mic_cfg.py:72
+#, python-format
+msgid "Please create a: %s file"
+msgstr ""
+
+#: ../libs/mic_cfg.py:73
+#, python-format
+msgid "And set it up like the file: %s"
+msgstr ""
+
+#: ../libs/mic_cfg.py:97 ../libs/mic_cfg.py:102
+#, python-format
+msgid "Invalid section: %s"
+msgstr ""
+
+#: ../libs/mic_cfg.py:98 ../libs/mic_cfg.py:103
+#, python-format
+msgid "Found in file: %s"
+msgstr ""
+
+#: ../libs/moblin_apt.py:54
+#, python-format
+msgid "Running 'apt-get install' command: %s"
+msgstr ""
+
+#: ../libs/moblin_apt.py:55 ../libs/moblin_yum.py:57 ../libs/moblin_yum.py:98
+#: ../libs/moblin_yum.py:128 ../libs/moblin_yum.py:133
+#: ../libs/moblin_yum.py:141 ../libs/moblin_yum.py:155
+#, python-format
+msgid "\t in the chroot: %s"
+msgstr ""
+
+#: ../libs/moblin_apt.py:58
+msgid "Completed 'apt-get install' successfully"
+msgstr ""
+
+#: ../libs/moblin_apt.py:64
+#, python-format
+msgid "Error running 'apt-get install' command: %s"
+msgstr ""
+
+#: ../libs/moblin_apt.py:65
+msgid "Will try 'apt-get update' in 15 seconds"
+msgstr ""
+
+#: ../libs/moblin_apt.py:70
+#, python-format
+msgid "Running 'apt-get update' command: %s"
+msgstr ""
+
+#: ../libs/moblin_apt.py:74
+#, python-format
+msgid "Error running 'apt-get update' command: %s"
+msgstr ""
+
+#: ../libs/moblin_apt.py:75 ../libs/moblin_apt.py:79
+msgid "Will try 'apt-get install -f' in 15 seconds"
+msgstr ""
+
+#: ../libs/moblin_apt.py:78
+msgid "Completed 'apt-get update' successfully"
+msgstr ""
+
+#: ../libs/moblin_apt.py:86
+#, python-format
+msgid "Error running 'apt-get install -f' command: %s"
+msgstr ""
+
+#: ../libs/moblin_apt.py:87 ../libs/moblin_apt.py:91
+msgid "Will try 'apt-get install' in 15 seconds"
+msgstr ""
+
+#: ../libs/moblin_apt.py:90
+msgid "Completed 'apt-get install -f' successfully"
+msgstr ""
+
+#: ../libs/moblin_apt.py:100
+#, python-format
+msgid "Updating the chroot dir: %s"
+msgstr ""
+
+#: ../libs/moblin_apt.py:121
+#, python-format
+msgid "The directory: %s is missing, will create it"
+msgstr ""
+
+#: ../libs/moblin_apt.py:143
+msgid ""
+"moblin_apt.__aptgetPostRun() called without corresponding aptgetPreRun()"
+msgstr ""
+
+#. command = "yum -y groupinstall %s" % (groups)
+#: ../libs/moblin_yum.py:56
+#, python-format
+msgid "Running 'yum groupinstall' command: %s"
+msgstr ""
+
+#: ../libs/moblin_yum.py:60
+msgid "Completed 'yum groupinstall' successfully"
+msgstr ""
+
+#: ../libs/moblin_yum.py:63
+#, python-format
+msgid "Error running 'yum groupinstall' command: %s"
+msgstr ""
+
+#: ../libs/moblin_yum.py:64 ../libs/moblin_yum.py:105
+msgid "Will try 'yum update' in 15 seconds"
+msgstr ""
+
+#: ../libs/moblin_yum.py:69 ../libs/moblin_yum.py:110
+#: ../libs/moblin_yum.py:127 ../libs/moblin_yum.py:132
+#, python-format
+msgid "Running 'yum update' command: %s"
+msgstr ""
+
+#: ../libs/moblin_yum.py:73 ../libs/moblin_yum.py:114
+#, python-format
+msgid "Error running 'yum update' command: %s"
+msgstr ""
+
+#: ../libs/moblin_yum.py:76 ../libs/moblin_yum.py:117
+msgid "Completed 'yum update' successfully"
+msgstr ""
+
+#: ../libs/moblin_yum.py:77 ../libs/moblin_yum.py:118
+msgid "Will try 'yum install -f' in 15 seconds"
+msgstr ""
+
+#: ../libs/moblin_yum.py:97
+#, python-format
+msgid "Running 'yum install' command: %s"
+msgstr ""
+
+#: ../libs/moblin_yum.py:101
+msgid "Completed 'yum install' successfully"
+msgstr ""
+
+#: ../libs/moblin_yum.py:104
+#, python-format
+msgid "Error running 'yum install' command: %s"
+msgstr ""
+
+#: ../libs/moblin_yum.py:140
+#, python-format
+msgid "Running 'yum clean' command: %s"
+msgstr ""
+
+#: ../libs/moblin_yum.py:151
+#, python-format
+msgid "Running command: %s"
+msgstr ""
+
+#: ../libs/moblin_yum.py:154
+#, python-format
+msgid "Running rpm db reset command: %s"
+msgstr ""
+
+#: ../libs/moblin_yum.py:158
+#, python-format
+msgid "Error running command %s"
+msgstr ""
+
+#: ../libs/pdk_utils.py:67
+#, python-format
+msgid "Creating sample %s file"
+msgstr ""
+
+#. Add something to exercise this code
+#: ../libs/pdk_utils.py:110
+#, python-format
+msgid "USB devices: %s"
+msgstr ""
+
+#: ../libs/pdk_utils.py:126
+#, python-format
+msgid "usb_list file is %s"
+msgstr ""
+
+#: ../libs/pdk_utils.py:208
+#, python-format
+msgid "Umounting: %s"
+msgstr ""
+
+#: ../libs/pdk_utils.py:318
+#, python-format
+msgid "Error in chroot.  Result: %s"
+msgstr ""
+
+#: ../libs/pdk_utils.py:424
+msgid ""
+"# ##-Created by Moblin Image Creator: if this line exists we will overwrite "
+"this file -##"
+msgstr ""
+
+#: ../libs/pdk_utils.py:467
+#, python-format
+msgid "Internal error while attempting to bind mount /%s!"
+msgstr ""
+
+#: ../libs/pdk_utils.py:485
+#, python-format
+msgid "Internal error while attempting to mount %s %s!"
+msgstr ""
+
+#: ../libs/pdk_utils.py:552 ../libs/pdk_utils.py:561
+#, python-format
+msgid "Sending signal: %s to PID: %s"
+msgstr ""
+
+#: ../utils/create-rootstrap.py:66
+#, python-format
+msgid "USAGE: %s PLATFORM_DIR"
+msgstr ""
+
+#: ../utils/create-rootstrap.py:92
+msgid "ERROR: Unable to create rootstrap!"
+msgstr ""
+
+#: ../utils/create-rootstrap.py:100
+#, python-format
+msgid "Creating tarball: %s ..."
+msgstr ""
+
+#: ../utils/jailroot-reset.py:12
+#, python-format
+msgid "Usage: %s [--test]"
+msgstr ""
+
+#: ../utils/jailroot-reset.py:39
+msgid "no rpms to remove"
+msgstr ""
+
+#: ../utils/jailroot-reset.py:42
+msgid "removing the following rpms: "
+msgstr ""
