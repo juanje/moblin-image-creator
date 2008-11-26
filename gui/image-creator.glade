@@ -47,7 +47,7 @@
 		  <child>
 		    <widget class="GtkImageMenuItem" id="Add Project Wizard">
 		      <property name="visible">True</property>
-		      <property name="tooltip" translatable="yes">Load Project</property>
+		      <property name="tooltip" translatable="yes">Add Project Wizard</property>
 		      <property name="label" translatable="yes">_Add Project Wizard</property>
 		      <property name="use_underline">True</property>
 		      <signal name="activate" handler="on_Add_Project_Wizard_activate"/>
@@ -177,7 +177,7 @@
 		  <child>
 		    <widget class="GtkImageMenuItem" id="MirrorSettings">
 		      <property name="visible">True</property>
-		      <property name="tooltip" translatable="yes">Clear Rootstraps</property>
+		      <property name="tooltip" translatable="yes">Mirror Settings</property>
 		      <property name="label" translatable="yes">_Mirror Settings</property>
 		      <property name="use_underline">True</property>
 		      <signal name="activate" handler="on_MirrorSettings_activate"/>
@@ -198,7 +198,7 @@
 		  <child>
 		    <widget class="GtkImageMenuItem" id="fsetsInfo">
 		      <property name="visible">True</property>
-		      <property name="tooltip" translatable="yes">Clear Rootstraps</property>
+		      <property name="tooltip" translatable="yes">Fsets Info</property>
 		      <property name="label" translatable="yes">_Fsets Info</property>
 		      <property name="use_underline">True</property>
 		      <signal name="activate" handler="on_fsetsInfo_activate"/>
@@ -219,7 +219,7 @@
 		  <child>
 		    <widget class="GtkImageMenuItem" id="editRepo">
 		      <property name="visible">True</property>
-		      <property name="tooltip" translatable="yes">Clear Rootstraps</property>
+		      <property name="tooltip" translatable="yes">Edit Repo</property>
 		      <property name="label" translatable="yes">_Edit Repo</property>
 		      <property name="use_underline">True</property>
 		      <signal name="activate" handler="on_editRepo_activate"/>
@@ -1413,7 +1413,7 @@
 				    <widget class="GtkButton" id="edit_repo">
 				      <property name="visible">True</property>
 				      <property name="sensitive">False</property>
-				      <property name="tooltip" translatable="yes">Upgrade Target</property>
+				      <property name="tooltip" translatable="yes">Edit, add or remove repositories</property>
 				      <property name="can_focus">True</property>
 				      <property name="relief">GTK_RELIEF_NORMAL</property>
 				      <property name="focus_on_click">True</property>
