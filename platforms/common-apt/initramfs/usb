@@ -44,6 +44,9 @@ mountroot ()
          /bin/sleep 5
          echo "Sleeping finished"
       done
+      if [ "$found" = "yes" ]; then
+         break;
+      fi
       echo "Trying non-removable drives"
       /bin/sleep 5
       for device in 'sda' 'sdb' 'sdc' 'sdd'; do
@@ -67,7 +70,7 @@ mountroot ()
 
     mount -o rw /dev/${device} /container 2> /dev/null
     while [ ! -e "/container/rootfs.img" ]; do
-	/bin/sleep 0.5
+	/bin/sleep 1
 	mount -o rw /dev/${device} /container 2> /dev/null
     done
 
