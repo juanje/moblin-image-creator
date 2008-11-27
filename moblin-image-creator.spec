@@ -61,6 +61,34 @@ rm -rf %{buildroot}
 /var/lib/moblin-image-creator/projects
 
 %changelog
+* Mon Nov 27 2008 Mitsutaka Amano <mamano@miraclelinux.com>
+- Fixing a bug about http://bugzilla.moblin.org/show_bug.cgi?id=130
+- Following Prajwal's changelog.
+
+* Wed Nov 26 2008 Prajwal Mohan <prajwal@linux.intel.com>
+- Changing fsets
+- Fixing usb script
+
+* Tue Nov 25 2008 Prajwal Mohan <prajwal@linux.intel.com>
+- Fixing bugs with yum group install
+- Changing fsets
+
+* Mon Nov 24 2008 Prajwal Mohan <prajwal@linux.intel.com>
+- Changing USB script to accomodate boothing through KVM/QEMU
+- Fixing bugs with yum group install
+
+* Fri Nov 21 2008 Prajwal Mohan <prajwal@linux.intel.com>
+- Should be using bzImage for nand and not vmlinuz
+- Adding command line options to add repos to yum targets
+- Adding command line options to add repos to yum targets
+- Changing Nand cmd line
+
+* Thu Nov 19 2008 Prajwal Mohan <prajwal@linux.intel.com>
+- Adding mount in install script
+
+* Thu Nov 13 2008 Prajwal Mohan <prajwal@linux.intel.com>
+- Adding update column for target view
+
 * Mon Nov 10 2008 Mitsutaka Amano <mamano@miraclelinux.com>
 - Updated ja.po.
 
