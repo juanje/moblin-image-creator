@@ -18,6 +18,7 @@ mountroot ()
     # Find the USB flash drive	
     while true
     do
+    for try in '1' '2' '3'; do
       for device in 'sda' 'sdb' 'sdc' 'sdd'; do
         echo "checking device /dev/${device} for installation source..."
         if [ -e /sys/block/${device}/removable ]; then
@@ -32,22 +33,44 @@ mountroot ()
               if [ "$found" = "yes" ]; then
                  break;
               fi	      
-              echo "/dev/${device} does not contain a rootfs"
-           fi
+                 echo "/dev/${device} does not contain a rootfs"
+              fi
+            fi
+         done
+         if [ "$found" = "yes" ]; then
+	   break;
          fi
+         echo "Sleeping for 5 seconds"
+         /bin/sleep 5
+         echo "Sleeping finished"
       done
       if [ "$found" = "yes" ]; then
-	break;
+         break;
       fi
-      echo "Sleeping for 5 seconds"
+      echo "Trying non-removable drives"
       /bin/sleep 5
-      echo "Sleeping finished"
+      for device in 'sda' 'sdb' 'sdc' 'sdd'; do
+         echo "checking device /dev/${device} for installation source..."
+         mount /dev/${device}  /mnt
+         if [ -f /mnt/rootfs.img ] ; then
+            echo "Found Boot drive at /dev/${device}"	        
+            found="yes"
+         fi
+         umount /dev/${device}
+         if [ "$found" = "yes" ]; then
+            break;
+         fi	      
+         echo "/dev/${device} does not contain a rootfs"
+      done
+      if [ "$found" = "yes" ]; then
+         break;
+      fi
     done
     echo "will mount root from /dev/${device}"
 
     mount -o rw /dev/${device} /container 2> /dev/null
     while [ ! -e "/container/rootfs.img" ]; do
-	/bin/sleep 0.5
+	/bin/sleep 1
 	mount -o rw /dev/${device} /container 2> /dev/null
     done
 

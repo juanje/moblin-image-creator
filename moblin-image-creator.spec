@@ -64,6 +64,7 @@ rm -rf %{buildroot}
 * Mon Nov 27 2008 Mitsutaka Amano <mamano@miraclelinux.com>
 - Fixing a bug about http://bugzilla.moblin.org/show_bug.cgi?id=130
 - Following Prajwal's changelog.
+- Fixing a bug about http://bugzilla.moblin.org/show_bug.cgi?id=135 for apt platform. Thanks to Juan Jesus Ojeda Croissier <juanje.ojeda@gmail.com>
 
 * Wed Nov 26 2008 Prajwal Mohan <prajwal@linux.intel.com>
 - Changing fsets
