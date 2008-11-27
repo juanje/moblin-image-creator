@@ -25,8 +25,9 @@ moblin-image-creator (0.48) gaston; urgency=low
   * Fixing a bug about http://bugzilla.moblin.org/show_bug.cgi?id=130
   * Following Prajwal's changelog.
   * Fixing a bug about http://bugzilla.moblin.org/show_bug.cgi?id=135 for apt platform. Thanks to Juan Jesus Ojeda Croissier <juanje.ojeda@gmail.com>.
+  * Fixing a bug about http://bugzilla.moblin.org/show_bug.cgi?id=112. Thanks to Juan Jesus Ojeda Croissier <juanje.ojeda@gmail.com>
 
- -- Mitsutaka Amano <mamano@miraclelinux.com>  Thu, 27 Nov 2008 21:41:41 +0900
+ -- Mitsutaka Amano <mamano@miraclelinux.com>  Thu, 27 Nov 2008 21:46:24 +0900
 
 moblin-image-creator (0.47) gaston; urgency=low
 
