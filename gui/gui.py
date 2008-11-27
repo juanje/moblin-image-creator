@@ -700,7 +700,7 @@ class App(object):
         groupList = packageGroup.run()
         if groupList:
             progress_tree.get_widget('progress_label').set_text(_("Installing Groups..."))
-            self.current_target().installGroups(groupList)
+            self.current_target().installGroup(groupList)
         progress_dialog.destroy()
 
 

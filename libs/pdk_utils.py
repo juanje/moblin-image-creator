@@ -252,7 +252,12 @@ def setblocking(f, flag):
     fcntl.fcntl(fd, fcntl.F_SETFL, fl)
 
 def execCommand(cmd_line, quiet = False, output = None, callback = None):
-        if output == None and callback == None:
+        if cmd_line.find("\"") != -1:
+            print "Command was: %s" % cmd_line
+            print "Found Quotes -- using os.system instead"
+            os.system(cmd_line)
+            return 0
+        if output == None and callback == None:                        
             p = subprocess.Popen(cmd_line.split())
         else:
             p = subprocess.Popen(cmd_line.split(), stdout = subprocess.PIPE, stderr = subprocess.STDOUT, stdin = subprocess.PIPE, close_fds = True)

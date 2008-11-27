@@ -13,6 +13,13 @@ moblin-image-creator (0.48) gaston; urgency=low
   [ Prajwal Mohan ]
   * Adding update column in targer view
   * Adding mount in install script
+  * Should be using bzImage for nand and not vmlinuz
+  * Adding command line options to add repos to yum targets
+  * Changing Nand cmd line
+  * Changing USB script to accomodate booting through KVM/QEMU
+  * Fixing bugs with yum group install
+  * Changing fsets
+  * Fixing usb script 
 
   [ Mitsutaka Amano ]
   * Fixing a bug about http://bugzilla.moblin.org/show_bug.cgi?id=130

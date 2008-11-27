@@ -50,3 +50,10 @@ DEPS=core-dev
 DESC=Fset that provides build system specific pkgs
 PKGS=build-root-config
 DEBUG_PKGS=
+
+[Package-Groups]
+DESC=Virtual FSet for Package Groups
+PKGS=
+DEBUG_PKGS=
+DEPS=
+CONFLICTS=

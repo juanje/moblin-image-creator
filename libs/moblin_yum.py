@@ -49,7 +49,10 @@ class YumPackageManager(moblin_pkgbase.PackageManager):
         while (retry_count < 10):
             self.updateChroot(chroot_dir, callback = callback)
             # yum groupinstall
-            command = "yum -y groupinstall %s" % (groups)
+            command = "yum -y groupinstall "
+            for group in groups_list:
+                command += "\"%s\" " % group
+            #command = "yum -y groupinstall %s" % (groups)
             print _("Running 'yum groupinstall' command: %s") % (command)
             print _("\t in the chroot: %s") % (chroot_dir)
             result = pdk_utils.execChrootCommand(chroot_dir, command, callback = callback)
