@@ -329,23 +329,26 @@ class App(object):
         column.set_sort_column_id(id)
         self.targetView.append_column(column)
 
-    def stop_progress(self, widget, cancelData):        
-        #self.stopTest = True
+    def stop_progress(self, widget, cancelData): 
+        cur_pid = os.getpid()
+        child_list = pdk_utils.findChildren(cur_pid)
+        for child in child_list:
+            print child
         tree = gtk.glade.XML(self.gladefile, 'qDialog')
-        tree.get_widget('queryLabel').set_text(_("Are you sure you want to cancel project creation?"))
+        tree.get_widget('queryLabel').set_text(cancelData[0])
         tree.get_widget('cancelbutton2').set_label("gtk-no")
         tree.get_widget('okbutton2').set_label("gtk-yes")
         dialog = tree.get_widget('qDialog')
         result = dialog.run()
-        dialog.destroy()       
+        dialog.destroy()
         if result == gtk.RESPONSE_OK:
             cur_pid = os.getpid()
             child_list = pdk_utils.findChildren(cur_pid)
             for child in child_list:
+                print child
                 if child != cur_pid:
                     os.kill(child, signal.SIGKILL)
-        print _("Canceled Function was %s and cancel type was %s") % (cancelData[0], cancelData[1])
-
+        print _("Canceled Function was %s and cancel type was %s") % (cancelData[1], cancelData[2])
 
     def on_new_project_clicked(self, widget):
         """Instantiate a new dialogue"""
@@ -392,8 +395,8 @@ class App(object):
                 self.statuslabel = progress_tree.get_widget('status_label')
                 self.progressCancel = progress_tree.get_widget('progressCancel')
                 self.progressCancel.set_sensitive(True)
-                cancelData = ("AddProject", "Hard")
-                self.progressCancel.connect("clicked", self.stop_progress, cancelData)           
+                cancelData = (_("Are you sure you want to cancel project creation?"), "AddProject", "Hard")
+                self.progressCancel.connect("clicked", self.stop_progress, cancelData)
                 while gtk.events_pending():
                     gtk.main_iteration(False)
                 platformName = dialog.platform.split()[0]
@@ -419,7 +422,6 @@ class App(object):
                         pass
                     return
                 self.projectList.append((dialog.name, dialog.desc, dialog.path, platformName))
-                
                 progress_dialog.destroy()
                 if target_name != None:
                     mic_cmd = 'image-creator --command=create-target --project-name=\'' + dialog.name + '\' --target-name=\'' + target_name + '\''
@@ -525,15 +527,28 @@ class App(object):
         progress_dialog.connect('delete_event', self.ignore)
         progress_tree.get_widget('progress_label').set_text(_("Please wait while creating %s") % target_name)
         self.progressbar = progress_tree.get_widget('progressbar')
+        self.statuslabel = progress_tree.get_widget('status_label')
+        self.progressCancel = progress_tree.get_widget('progressCancel')
+        self.progressCancel.set_sensitive(True)
+        cancelData = (_("Are you sure you want to cancel target creation?"), "AddTarget", "Hard")
+        self.progressCancel.connect("clicked", self.stop_progress, cancelData)
         while gtk.events_pending():
             gtk.main_iteration(False)
-        if mic_cfg.config.get('general', 'use_rootstraps') == '1':
-            project.create_target(target_name)
-        else:
-            project.create_target(target_name, False)
+        try:
+            if mic_cfg.config.get('general', 'use_rootstraps') == '1':
+                project.create_target(target_name)
+            else:
+                project.create_target(target_name, False)
+        except:
+            print _("Target Creation cancelled")
+            try:
+                project.delete_target(target_name)
+            except:
+                # if the project creation failed before the list of
+                # projects has been updated, then we expect failure here
+                pass
         self.redraw_target_view()
         progress_dialog.destroy()
-
 
     def checkBoxCallback(self, widget, fSetName):
         """Call back function when the check box is clicked. This function calculates all dependencies of fsets and checks the rest of the boxes"""
@@ -1395,13 +1410,24 @@ class App(object):
         progress_dialog.connect('delete_event', self.ignore)
         progress_tree.get_widget('progress_label').set_text(_("Please wait while upgrading Project"))
         self.progressbar = progress_tree.get_widget('progressbar')
-        mic_cmd='image-creator --command=update-project --project-name=\'' + self.current_project().name + '\''
-        self.append_cmd_list(mic_cmd)
-        result = self.current_project().updateAndUpgrade()
-        if result != 0:
-             raise OSError(_("Internal error while attempting to run update/upgrade: %s") % result)
+        self.statuslabel = progress_tree.get_widget('status_label')
+        self.progressCancel = progress_tree.get_widget('progressCancel')
+        self.progressCancel.set_sensitive(True)
+        cancelData = (_("Are you sure you want to cancel project update?"), "UpgradeProject", "Hard")
+        self.progressCancel.connect("clicked", self.stop_progress, cancelData)
+        while gtk.events_pending():
+            gtk.main_iteration(False)
+        try:
+            mic_cmd='image-creator --command=update-project --project-name=\'' + self.current_project().name + '\''
+            self.append_cmd_list(mic_cmd)
+            result = self.current_project().updateAndUpgrade()
+            if result != 0:
+                raise OSError(_("Internal error while attempting to run update/upgrade: %s") % result)
+        except:
+            print _("Project update cancelled")
+            progress_dialog.destroy()
+            return
         progress_dialog.destroy()
-
 
     def on_upgrade_target_clicked(self, widget):
         progress_tree = gtk.glade.XML(self.gladefile, 'ProgressDialog')
@@ -1409,11 +1435,23 @@ class App(object):
         progress_dialog.connect('delete_event', self.ignore)
         progress_tree.get_widget('progress_label').set_text(_("Please wait while upgrading Target"))
         self.progressbar = progress_tree.get_widget('progressbar')
-        mic_cmd='image-creator --command=update-target --project-name=\'' + self.current_project().name + '\' --target-name=\'' + self.current_target().name + '\''
-        self.append_cmd_list(mic_cmd)
-        result = self.current_target().updateAndUpgrade()
-        if result != 0:
-             raise OSError(_("Internal error while attempting to run update/upgrade: %s") % result)
+        self.statuslabel = progress_tree.get_widget('status_label')
+        self.progressCancel = progress_tree.get_widget('progressCancel')
+        self.progressCancel.set_sensitive(True)
+        cancelData = (_("Are you sure you want to cancel target update?"), "UpgradeTarget", "Hard")
+        self.progressCancel.connect("clicked", self.stop_progress, cancelData)
+        while gtk.events_pending():
+            gtk.main_iteration(False)
+        try:
+            mic_cmd='image-creator --command=update-target --project-name=\'' + self.current_project().name + '\' --target-name=\'' + self.current_target().name + '\''
+            self.append_cmd_list(mic_cmd)
+            result = self.current_target().updateAndUpgrade()
+            if result != 0:
+                 raise OSError(_("Internal error while attempting to run update/upgrade: %s") % result)
+        except:
+            print _("Target update cancelled")
+            progress_dialog.destroy()
+            return
         progress_dialog.destroy()
         self.redraw_target_view()
 
