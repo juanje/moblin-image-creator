@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: 0.48\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-11-26 13:13+0100\n"
-"PO-Revision-Date: 2008-11-26 13:13+0100\n"
+"PO-Revision-Date: 2008-11-28 01:36+0100\n"
 "Last-Translator: Juanje Ojeda <jojeda@emergya.es>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -17,42 +17,42 @@ msgstr ""
 
 #: ../gui/gui.py:56
 msgid "Unmounting all mounted directories..."
-msgstr ""
+msgstr "Desmontando todos los directorios..."
 
 #: ../gui/gui.py:60
 #, python-format
 msgid "Could not unmount these dirs: %s"
-msgstr ""
+msgstr "No se pudieron desmontar los siguientes directorios: %s"
 
 #: ../gui/gui.py:62
 msgid "Unmounting complete"
-msgstr ""
+msgstr "Desmontaje completo"
 
 #. setup projectView widget
 #. Set targetView widget
 #: ../gui/gui.py:118 ../gui/gui.py:129
 msgid "Name"
-msgstr ""
+msgstr "Nombre"
 
 #: ../gui/gui.py:119
 msgid "Description"
-msgstr ""
+msgstr "Descripción"
 
 #: ../gui/gui.py:120
 msgid "Path"
-msgstr ""
+msgstr "Ruta"
 
 #: ../gui/gui.py:121
 msgid "Platform"
-msgstr ""
+msgstr "Plataforma"
 
 #: ../gui/gui.py:130
 msgid "Function Sets"
-msgstr ""
+msgstr "Conjuntos de funcionalidades"
 
 #: ../gui/gui.py:131
 msgid "Updates"
-msgstr ""
+msgstr "Actualizaciones"
 
 #: ../gui/gui.py:158
 #, python-format
@@ -60,24 +60,30 @@ msgid ""
 "Found unsupported project(s): %s\n"
 "skipping them"
 msgstr ""
+"Se han encontrado los siguientes proyectos no soportados: %s\n"
+"ignorarlos"
 
 #: ../gui/gui.py:173
 msgid "Please wait while MIC attempts to unmount all projects and targets..."
 msgstr ""
+"Por favor, espere mientras MIC intenta desmontar todos los proyectos y "
+"objetivos"
 
 #: ../gui/gui.py:179
 msgid "Closing Image-Creator"
-msgstr ""
+msgstr "Cerrando Image-Creator"
 
 #: ../gui/gui.py:198
 msgid ""
 "You are using an old version of PyGTK. Image Creator required atleast PyGTK "
 "2.12. Some features will be disabled"
 msgstr ""
+"Está usando una versión de PyGTK antigua. Image Creator requiere, al menos, "
+"la versión 2.12. Algunas características estarán deshabilitadas."
 
 #: ../gui/gui.py:296
 msgid "Checking for updates..."
-msgstr ""
+msgstr "Comprobando si hay actualizaciones"
 
 #: ../gui/gui.py:335
 msgid "Are you sure you want to cancel project creation?"
@@ -211,7 +217,7 @@ msgstr ""
 #: ../gui/gui.py:719 ../gui/gui.py:1665
 #, python-format
 msgid "Unexpected error: %s"
-msgstr ""
+msgstr "Error inesperado: %s"
 
 #: ../gui/gui.py:727
 #, python-format
@@ -266,7 +272,7 @@ msgstr ""
 #: ../gui/gui.py:1098
 #, python-format
 msgid "Creating directory %s ... "
-msgstr ""
+msgstr "Creando directorio %s..."
 
 #: ../gui/gui.py:1102
 #, python-format
@@ -436,7 +442,7 @@ msgstr ""
 
 #: ../gui/gui.py:1581
 msgid "Search Expression"
-msgstr ""
+msgstr "Buscar expresión"
 
 #: ../gui/gui.py:1582
 msgid "Replace Expression"
@@ -462,7 +468,7 @@ msgstr ""
 #: ../gui/gui.py:1785
 #, python-format
 msgid "Creating folder %s ... "
-msgstr ""
+msgstr "Creando la carpeta «%s»…"
 
 #: ../gui/gui.py:1805
 msgid "Please Select a Platform"
@@ -528,7 +534,7 @@ msgstr ""
 
 #: ../gui/image-creator.glade.h:1
 msgid "\n"
-msgstr ""
+msgstr "\n"
 
 #: ../gui/image-creator.glade.h:3
 msgid ""
@@ -539,7 +545,7 @@ msgstr ""
 
 #: ../gui/image-creator.glade.h:6
 msgid " File Name: "
-msgstr ""
+msgstr " Nombre de archivo:"
 
 #: ../gui/image-creator.glade.h:7
 msgid "<b>CD boot configuration</b>"
@@ -575,11 +581,11 @@ msgstr ""
 
 #: ../gui/image-creator.glade.h:15
 msgid "A_dd"
-msgstr ""
+msgstr "A_ñadir"
 
 #: ../gui/image-creator.glade.h:16
 msgid "Add"
-msgstr ""
+msgstr "Añadir"
 
 #: ../gui/image-creator.glade.h:17
 msgid "Add New Target"
@@ -617,7 +623,7 @@ msgstr ""
 
 #: ../gui/image-creator.glade.h:25
 msgid "Clean"
-msgstr ""
+msgstr "Limpiar"
 
 #: ../gui/image-creator.glade.h:26
 msgid "Clean history of MIC commands"
@@ -629,11 +635,11 @@ msgstr ""
 
 #: ../gui/image-creator.glade.h:28
 msgid "Close"
-msgstr ""
+msgstr "Cerrar"
 
 #: ../gui/image-creator.glade.h:29
 msgid "Close window"
-msgstr ""
+msgstr "Cerrar la ventana"
 
 #: ../gui/image-creator.glade.h:30
 msgid "Command History"
@@ -645,7 +651,7 @@ msgstr ""
 
 #: ../gui/image-creator.glade.h:32
 msgid "Copy"
-msgstr ""
+msgstr "Copiar"
 
 #: ../gui/image-creator.glade.h:33
 msgid "Copy command history to clipboard"
@@ -684,7 +690,7 @@ msgstr ""
 
 #: ../gui/image-creator.glade.h:38
 msgid "Create a new project"
-msgstr ""
+msgstr "Crear un proyecto nuevo"
 
 #: ../gui/image-creator.glade.h:39
 msgid "Create a new target for the project selected above"
@@ -748,7 +754,7 @@ msgstr ""
 
 #: ../gui/image-creator.glade.h:50
 msgid "Description:  "
-msgstr ""
+msgstr "Descripción:  "
 
 #: ../gui/image-creator.glade.h:51
 msgid "Did you know..."
@@ -756,7 +762,7 @@ msgstr ""
 
 #: ../gui/image-creator.glade.h:52
 msgid "ERROR!"
-msgstr ""
+msgstr "ERROR!"
 
 #: ../gui/image-creator.glade.h:53
 msgid "Edit _Repository"
@@ -780,7 +786,7 @@ msgstr ""
 
 #: ../gui/image-creator.glade.h:58
 msgid "Image Name:"
-msgstr ""
+msgstr "Nombre de la imagen:"
 
 #: ../gui/image-creator.glade.h:59
 msgid "Image size(MB):"
@@ -860,7 +866,7 @@ msgstr ""
 
 #: ../gui/image-creator.glade.h:78
 msgid "New Project"
-msgstr ""
+msgstr "Proyecto nuevo"
 
 #: ../gui/image-creator.glade.h:79
 msgid "New Target Name:"
@@ -897,7 +903,7 @@ msgstr ""
 
 #: ../gui/image-creator.glade.h:88
 msgid "Please wait..."
-msgstr ""
+msgstr "Por favor, espere..."
 
 #: ../gui/image-creator.glade.h:89
 msgid "Project _Desc:  "
@@ -905,7 +911,7 @@ msgstr ""
 
 #: ../gui/image-creator.glade.h:90
 msgid "Project _Name:  "
-msgstr ""
+msgstr "Nombre del proyecto:  "
 
 #: ../gui/image-creator.glade.h:91
 msgid "Record MIC command history"
@@ -913,15 +919,15 @@ msgstr ""
 
 #: ../gui/image-creator.glade.h:92
 msgid "Remove"
-msgstr ""
+msgstr "Eliminar"
 
 #: ../gui/image-creator.glade.h:93
 msgid "Save"
-msgstr ""
+msgstr "Guardar"
 
 #: ../gui/image-creator.glade.h:94
 msgid "Save Project"
-msgstr ""
+msgstr "Guardar proyecto"
 
 #: ../gui/image-creator.glade.h:95
 msgid "Save command history into a file in /var/lib/moblin-image-creator/cmds"
@@ -971,7 +977,7 @@ msgstr ""
 
 #: ../gui/image-creator.glade.h:106
 msgid "Tools"
-msgstr ""
+msgstr "Herramientas"
 
 #: ../gui/image-creator.glade.h:107
 msgid "Up_grade Target"
@@ -1019,7 +1025,7 @@ msgstr ""
 
 #: ../gui/image-creator.glade.h:119
 msgid "_Add"
-msgstr ""
+msgstr "_Añadir"
 
 #: ../gui/image-creator.glade.h:120
 msgid "_Add Project Wizard"
@@ -1027,11 +1033,11 @@ msgstr ""
 
 #: ../gui/image-creator.glade.h:121
 msgid "_Add Target..."
-msgstr ""
+msgstr "Añadir _objetivo…"
 
 #: ../gui/image-creator.glade.h:122
 msgid "_Browse..."
-msgstr ""
+msgstr "_Examinar…"
 
 #: ../gui/image-creator.glade.h:123
 msgid "_Clear Rootstraps"
@@ -1043,7 +1049,7 @@ msgstr ""
 
 #: ../gui/image-creator.glade.h:125
 msgid "_File"
-msgstr ""
+msgstr "_Archivo"
 
 #: ../gui/image-creator.glade.h:126
 msgid "_Fsets Info"
@@ -1051,7 +1057,7 @@ msgstr ""
 
 #: ../gui/image-creator.glade.h:127
 msgid "_Help"
-msgstr ""
+msgstr "_Ayuda"
 
 #: ../gui/image-creator.glade.h:128
 msgid "_Load Project"
@@ -1063,11 +1069,11 @@ msgstr ""
 
 #: ../gui/image-creator.glade.h:130
 msgid "_Path:  "
-msgstr ""
+msgstr "_Ruta:  "
 
 #: ../gui/image-creator.glade.h:131
 msgid "_Save Project"
-msgstr ""
+msgstr "Guardar proyecto"
 
 #: ../gui/image-creator.glade.h:132
 msgid "_Target config"
@@ -1075,11 +1081,11 @@ msgstr ""
 
 #: ../gui/image-creator.glade.h:133
 msgid "_Terminal"
-msgstr ""
+msgstr "_Terminal"
 
 #: ../gui/image-creator.glade.h:134
 msgid "_Tools"
-msgstr ""
+msgstr "_Herramientas"
 
 #: ../gui/image-creator.glade.h:135
 msgid "_Upgrade Project"
@@ -1115,7 +1121,7 @@ msgstr ""
 
 #: ../gui/project_assistant.py:88
 msgid "Introduction"
-msgstr ""
+msgstr "Introducción"
 
 #: ../gui/project_assistant.py:95
 msgid ""
@@ -1133,7 +1139,7 @@ msgstr ""
 
 #: ../gui/project_assistant.py:127
 msgid "Confirm"
-msgstr ""
+msgstr "Confirmar"
 
 #: ../gui/project_assistant.py:134
 msgid "Please review the configuration before proceeding."
@@ -1141,7 +1147,7 @@ msgstr ""
 
 #: ../gui/project_assistant.py:191
 msgid "Project Name"
-msgstr ""
+msgstr "Nombre del proyecto"
 
 #: ../gui/project_assistant.py:194
 msgid "Project Description"
@@ -1153,7 +1159,7 @@ msgstr ""
 
 #: ../gui/project_assistant.py:201
 msgid "Browse"
-msgstr ""
+msgstr "Examinar"
 
 #: ../gui/project_assistant.py:211
 msgid "Project Platform"
@@ -1238,7 +1244,7 @@ msgstr ""
 #: ../gui/repo_editor.py:172
 #, python-format
 msgid "Saving: %s"
-msgstr ""
+msgstr "Guardando: %s"
 
 #: ../image-creator:61
 #, c-format
@@ -1288,7 +1294,7 @@ msgstr ""
 
 #: ../image-creator:207
 msgid "Project name"
-msgstr ""
+msgstr "Nombre del proyecto"
 
 #: ../image-creator:209
 msgid "Project description"
@@ -1300,7 +1306,7 @@ msgstr ""
 
 #: ../image-creator:213
 msgid "Target name"
-msgstr ""
+msgstr "Nombre del objetivo"
 
 #: ../image-creator:215
 msgid "Feature set identifier"
@@ -1338,7 +1344,7 @@ msgstr ""
 
 #: ../image-creator:232
 msgid "show this help message and exit"
-msgstr ""
+msgstr "muestra este mensaje de ayuda y sale"
 
 #: ../image-creator:343
 msgid "Must specify a -c/--command argument"
@@ -1776,6 +1782,9 @@ msgid ""
 "\n"
 "Finish!\n"
 msgstr ""
+"\n"
+"\n"
+"Terminar\n"
 
 #: ../libs/Platform.py:53
 msgid "Platform called but config_info value not passed in"
@@ -2021,12 +2030,12 @@ msgstr ""
 #: ../libs/Project.py:559
 #, python-format
 msgid "Name: %s"
-msgstr ""
+msgstr "Nombre: %s"
 
 #: ../libs/Project.py:560
 #, python-format
 msgid "Description: %s"
-msgstr ""
+msgstr "Descripción: %s"
 
 #: ../libs/Project.py:562
 msgid "Used info from config file: "
@@ -2422,7 +2431,7 @@ msgstr ""
 #: ../libs/pdk_utils.py:208
 #, python-format
 msgid "Umounting: %s"
-msgstr ""
+msgstr "Desmontando: %s"
 
 #: ../libs/pdk_utils.py:318
 #, python-format
