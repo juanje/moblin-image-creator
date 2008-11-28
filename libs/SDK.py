@@ -327,8 +327,8 @@ class SDK(object):
     def copyProjectConfigFile(self, source_config_file, dest_config_file, project_name, project_path):
         """Copy the config file over and update the fields that need to be updated"""
         config = PackageConfig(source_config_file)
-        config.set('name', project_name)
-        config.set('path', project_path)
+        config.set('NAME', project_name)
+        config.set('PATH', project_path)
         config.write(dest_config_file)
     
     def delete_project(self, project_name):
