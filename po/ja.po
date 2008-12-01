@@ -271,7 +271,7 @@ msgstr "イメージ「%s」を作成しています..."
 
 #: ../gui/gui.py:1011
 msgid "Please wait while creating shared image..."
-msgstr "共有イメージ「%s」を作成しています。しばらくお待ちください"
+msgstr "共有イメージを作成しています。しばらくお待ちください"
 
 #: ../gui/gui.py:1018
 msgid "Choose a Live USB image"
@@ -1251,26 +1251,6 @@ msgstr "ルートストラップの作成が中止されました"
 #: ../libs/SDK.py:228
 msgid "Creating Config file"
 msgstr "設定ファイルを作成しています"
-
-#: ../libs/SDK.py:231
-#, python-format
-msgid "NAME=%s\n"
-msgstr ""
-
-#: ../libs/SDK.py:232
-#, python-format
-msgid "PATH=%s\n"
-msgstr ""
-
-#: ../libs/SDK.py:233
-#, python-format
-msgid "DESC=%s\n"
-msgstr ""
-
-#: ../libs/SDK.py:234
-#, python-format
-msgid "PLATFORM=%s\n"
-msgstr ""
 
 #: ../libs/SDK.py:237
 msgid "Initiating the project"
