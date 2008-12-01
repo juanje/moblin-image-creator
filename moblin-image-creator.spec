@@ -61,6 +61,10 @@ rm -rf %{buildroot}
 /var/lib/moblin-image-creator/projects
 
 %changelog
+* Mon Dec 01 2008 Mitsutaka Amano <mamano@miraclelinux.com>
+- Fixing a bug about http://bugzilla.moblin.org/show_bug.cgi?id=189. Thanks to
+ Juan Jesus Ojeda Croissier <juanje.ojeda@gmail.com>
+
 * Mon Nov 27 2008 Mitsutaka Amano <mamano@miraclelinux.com>
 - Fixing a bug about http://bugzilla.moblin.org/show_bug.cgi?id=130
 - Following Prajwal's changelog.
