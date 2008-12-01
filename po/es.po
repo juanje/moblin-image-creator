@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: 0.48\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-12-01 02:36+0100\n"
-"PO-Revision-Date: 2008-12-01 02:32+0100\n"
+"PO-Revision-Date: 2008-12-01 12:37+0100\n"
 "Last-Translator: Juanje Ojeda Croissier <jojeda@emergya.es>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -145,12 +145,12 @@ msgstr ""
 
 #: ../gui/gui.py:512 ../gui/gui.py:1995
 msgid "Must specify a target name"
-msgstr ""
+msgstr "Debe especificar un nombre"
 
 #: ../gui/gui.py:514
 #, python-format
 msgid "Target: %s already exists"
-msgstr ""
+msgstr "Objetivo: %s ya existe"
 
 #: ../gui/gui.py:517 ../gui/project_assistant.py:465
 msgid ""
@@ -161,7 +161,7 @@ msgstr ""
 #: ../gui/gui.py:1026 ../gui/gui.py:1048 ../gui/gui.py:1070 ../gui/gui.py:1092
 #, python-format
 msgid "Please wait while creating %s"
-msgstr ""
+msgstr "Por favor, espere mientras se crea %s"
 
 #: ../gui/gui.py:533
 msgid "Are you sure you want to cancel target creation?"
@@ -169,7 +169,7 @@ msgstr ""
 
 #: ../gui/gui.py:543
 msgid "Target Creation cancelled"
-msgstr ""
+msgstr "Cancelada la creación del objetivo"
 
 #: ../gui/gui.py:639 ../gui/project_assistant.py:375
 msgid "<b>Depends on FSet(s):</b> "
@@ -180,33 +180,37 @@ msgid ""
 "\n"
 "<b>Debug Packages:</b> "
 msgstr ""
+"\n"
+"<b>Paquetes de depuración:</b> "
 
 #: ../gui/gui.py:645 ../gui/project_assistant.py:381
 msgid ""
 "\n"
 "<b>Packages:</b> "
 msgstr ""
+"\n"
+"<b>Paquetes:</b> "
 
 #: ../gui/gui.py:657
 msgid "Nothing available to install!"
-msgstr ""
+msgstr "No hay nada disponible para instalar"
 
 #: ../gui/gui.py:675
 #, python-format
 msgid "Number of fsets to install: %s"
-msgstr ""
+msgstr "Número de fsets que se van a instalar: %s"
 
 #: ../gui/gui.py:684
 msgid "No fset selected"
-msgstr ""
+msgstr "No se ha seleccionado ningún fset"
 
 #: ../gui/gui.py:685
 msgid "Please Choose an Fset"
-msgstr ""
+msgstr "Por favor, elija un conjunto Fset"
 
 #: ../gui/gui.py:697
 msgid "Getting Group List..."
-msgstr ""
+msgstr "Obteniendo lista de grupos..."
 
 #: ../gui/gui.py:702
 msgid "Installing Groups..."
@@ -369,7 +373,7 @@ msgstr ""
 #: ../gui/gui.py:1298
 #, python-format
 msgid "Project name: %s"
-msgstr ""
+msgstr "Nombre del proyecto: %s"
 
 #: ../gui/gui.py:1304
 #, python-format
@@ -398,11 +402,11 @@ msgstr ""
 #: ../gui/gui.py:1345
 #, python-format
 msgid "Loading Project %s"
-msgstr ""
+msgstr "Cargando el proyecto %s"
 
 #: ../gui/gui.py:1347
 msgid "Loading Project Complete"
-msgstr ""
+msgstr "La carga del proyecto se ha completado"
 
 #: ../gui/gui.py:1369
 msgid "In on_Save_activate"
@@ -483,7 +487,7 @@ msgstr ""
 
 #: ../gui/gui.py:1720
 msgid "Choose a Platform"
-msgstr ""
+msgstr "Elija una plataforma"
 
 #: ../gui/gui.py:1747
 msgid "This feature is currently available for Yum based platforms only"
@@ -501,7 +505,7 @@ msgstr ""
 #: ../gui/gui.py:1884
 #, python-format
 msgid "Fset Description: %s"
-msgstr ""
+msgstr "Descripción del Fset: %s"
 
 #. self.textBuffer.insert_at_cursor(_("\nFset Dedendency: %s") % platform.fset[fsetName].deps)
 #: ../gui/gui.py:1886
@@ -510,6 +514,9 @@ msgid ""
 "\n"
 "Fset Dedendency: "
 msgstr ""
+"\n"
+"\n"
+"Dependencias del Fset: "
 
 #: ../gui/gui.py:1889
 msgid ""
@@ -517,6 +524,9 @@ msgid ""
 "\n"
 "Packages in the Fset: "
 msgstr ""
+"\n"
+"\n"
+"Paquetes incluidos en el Fset: "
 
 #: ../gui/gui.py:1897
 msgid ""
@@ -647,7 +657,7 @@ msgstr "Arrancar una imagen USB live en el KVM"
 
 #: ../gui/image-creator.glade.h:25
 msgid "Boot partition size(MB):"
-msgstr ""
+msgstr "Tamaño de la partición de arranque(MB):"
 
 #: ../gui/image-creator.glade.h:26
 msgid "Clean"
@@ -655,11 +665,11 @@ msgstr "Limpiar"
 
 #: ../gui/image-creator.glade.h:27
 msgid "Clean history of MIC commands"
-msgstr ""
+msgstr "Limpiar el histórico de comandos del MIC"
 
 #: ../gui/image-creator.glade.h:28
 msgid "Clear Rootstraps"
-msgstr ""
+msgstr "Limpiar los Rootstraps"
 
 #: ../gui/image-creator.glade.h:29
 msgid "Close"
@@ -671,11 +681,11 @@ msgstr "Cerrar la ventana"
 
 #: ../gui/image-creator.glade.h:31
 msgid "Command History"
-msgstr ""
+msgstr "Histórico de comandos"
 
 #: ../gui/image-creator.glade.h:32
 msgid "Command _History"
-msgstr ""
+msgstr "_Histórico de comandos"
 
 #: ../gui/image-creator.glade.h:33
 msgid "Copy"
@@ -683,7 +693,7 @@ msgstr "Copiar"
 
 #: ../gui/image-creator.glade.h:34
 msgid "Copy command history to clipboard"
-msgstr ""
+msgstr "Copiar el histórico de comandos al portapapeles"
 
 #: ../gui/image-creator.glade.h:35
 msgid ""
@@ -764,7 +774,7 @@ msgstr "_Eliminar"
 
 #: ../gui/image-creator.glade.h:47
 msgid "De_lete"
-msgstr ""
+msgstr "E_liminar"
 
 #: ../gui/image-creator.glade.h:48
 msgid "Delete Project"
@@ -798,15 +808,15 @@ msgstr "Editar repositorio"
 
 #: ../gui/image-creator.glade.h:55
 msgid "Edit _Repository"
-msgstr ""
+msgstr "Editar _repositorio"
 
 #: ../gui/image-creator.glade.h:56
 msgid "Edit the target configuration."
-msgstr ""
+msgstr "Editar la configuración de un objetivo."
 
 #: ../gui/image-creator.glade.h:57
 msgid "Edit, add or remove repositories"
-msgstr ""
+msgstr "Editar, añadir o eliminar repositorios"
 
 #: ../gui/image-creator.glade.h:58
 msgid "Existed file name."
@@ -818,7 +828,7 @@ msgstr ""
 
 #: ../gui/image-creator.glade.h:60
 msgid "Fsets Info"
-msgstr ""
+msgstr "Información del Fset"
 
 #: ../gui/image-creator.glade.h:61
 msgid "Image Name:"
@@ -826,7 +836,7 @@ msgstr "Nombre de la imagen:"
 
 #: ../gui/image-creator.glade.h:62
 msgid "Image size(MB):"
-msgstr ""
+msgstr "Tamaño de la imagen(MB):"
 
 #: ../gui/image-creator.glade.h:63
 msgid "Include Debug Packages (if any)"
@@ -919,6 +929,9 @@ msgid ""
 "Swap file create only\n"
 "Swap file create and swap on"
 msgstr ""
+"Sin swap\n"
+"Sólo crear un archivo swap\n"
+"Crear un archivo swap y configurarlo"
 
 #: ../gui/image-creator.glade.h:87
 msgid ""
@@ -1004,11 +1017,11 @@ msgstr "Seleccione su disco USB"
 
 #: ../gui/image-creator.glade.h:105
 msgid "Swap option:"
-msgstr ""
+msgstr "Opción swap:"
 
 #: ../gui/image-creator.glade.h:106
 msgid "Swap partition size(MB):"
-msgstr ""
+msgstr "Tamaño de la partición swap(MB):"
 
 #: ../gui/image-creator.glade.h:107
 msgid "Target configurations"
@@ -1146,11 +1159,11 @@ msgstr "_Escribir imagen USB"
 
 #: ../gui/image-creator.glade.h:140
 msgid "enabled"
-msgstr ""
+msgstr "activado"
 
 #: ../gui/image-creator.glade.h:141
 msgid "ext3fs size(MB):"
-msgstr ""
+msgstr "tamaño ext3fs(MB):"
 
 #: ../gui/image-creator.glade.h:142
 msgid "failovermethod"
@@ -1162,7 +1175,7 @@ msgstr ""
 
 #: ../gui/image-creator.glade.h:144
 msgid "kernel cmdline: "
-msgstr ""
+msgstr "Comandos para el kernel(cmdline):"
 
 #: ../gui/image-creator.glade.h:145
 msgid "url"
@@ -1180,7 +1193,7 @@ msgstr ""
 
 #: ../gui/project_assistant.py:101
 msgid "Create Project"
-msgstr ""
+msgstr "Crear proyecto"
 
 #: ../gui/project_assistant.py:114
 msgid "Create Target and add Fsets"
@@ -1200,11 +1213,11 @@ msgstr "Nombre del proyecto"
 
 #: ../gui/project_assistant.py:194
 msgid "Project Description"
-msgstr ""
+msgstr "Descripción del proyecto"
 
 #: ../gui/project_assistant.py:197
 msgid "Project Path"
-msgstr ""
+msgstr "Ruta del proyecto"
 
 #: ../gui/project_assistant.py:201
 msgid "Browse"
@@ -1212,11 +1225,11 @@ msgstr "Examinar"
 
 #: ../gui/project_assistant.py:211
 msgid "Project Platform"
-msgstr ""
+msgstr "Plataforma del proyecto"
 
 #: ../gui/project_assistant.py:212
 msgid "Platform Description"
-msgstr ""
+msgstr "Descripción de la plataforma"
 
 #: ../gui/project_assistant.py:310
 msgid "Path exists but is not a directory"
@@ -1228,7 +1241,7 @@ msgstr ""
 
 #: ../gui/project_assistant.py:320
 msgid "Target Name"
-msgstr ""
+msgstr "Nombre del objetivo"
 
 #: ../gui/project_assistant.py:338
 msgid "Include Debug packages (if any)"
@@ -1241,32 +1254,32 @@ msgstr ""
 #: ../gui/project_assistant.py:473
 #, python-format
 msgid "Project Name: %s"
-msgstr ""
+msgstr "Nombre del proyecto: %s"
 
 #: ../gui/project_assistant.py:474
 #, python-format
 msgid "Project Description: %s"
-msgstr ""
+msgstr "Descripción del proyecto: %s"
 
 #: ../gui/project_assistant.py:475
 #, python-format
 msgid "Project Path: %s"
-msgstr ""
+msgstr "Ruta del proyecto: %s"
 
 #: ../gui/project_assistant.py:476
 #, python-format
 msgid "Project Platform: %s"
-msgstr ""
+msgstr "Plataforma del proyecto: %s"
 
 #: ../gui/project_assistant.py:477
 #, python-format
 msgid "Target Name: %s"
-msgstr ""
+msgstr "Nombre del objetivo: %s"
 
 #: ../gui/project_assistant.py:478
 #, python-format
 msgid "Fset List: %s"
-msgstr ""
+msgstr "Lista de Fsets: %s"
 
 #: ../gui/project_assistant.py:479
 #, python-format
