@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: 0.48\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-12-01 02:36+0100\n"
-"PO-Revision-Date: 2008-12-01 12:37+0100\n"
+"PO-Revision-Date: 2008-12-01 13:37+0100\n"
 "Last-Translator: Juanje Ojeda Croissier <jojeda@emergya.es>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -112,7 +112,7 @@ msgstr ""
 #: ../gui/gui.py:393 ../gui/gui.py:721 ../gui/gui.py:1663 ../gui/gui.py:1701
 #, python-format
 msgid "Please wait while installing %s"
-msgstr ""
+msgstr "Por favor, espere mientras se instala %s"
 
 #: ../gui/gui.py:398
 msgid "Are you sure you want to cancel project creation?"
@@ -141,7 +141,7 @@ msgstr ""
 #: ../gui/gui.py:484 ../gui/gui.py:778
 #, python-format
 msgid "Please wait while deleting %s"
-msgstr ""
+msgstr "Por favor, espere mientras se borra %s"
 
 #: ../gui/gui.py:512 ../gui/gui.py:1995
 msgid "Must specify a target name"
@@ -150,7 +150,7 @@ msgstr "Debe especificar un nombre"
 #: ../gui/gui.py:514
 #, python-format
 msgid "Target: %s already exists"
-msgstr "Objetivo: %s ya existe"
+msgstr "Distro: %s ya existe"
 
 #: ../gui/gui.py:517 ../gui/project_assistant.py:465
 msgid ""
@@ -169,7 +169,7 @@ msgstr ""
 
 #: ../gui/gui.py:543
 msgid "Target Creation cancelled"
-msgstr "Cancelada la creación del objetivo"
+msgstr "Cancelada la creación de la distro"
 
 #: ../gui/gui.py:639 ../gui/project_assistant.py:375
 msgid "<b>Depends on FSet(s):</b> "
@@ -279,7 +279,7 @@ msgstr ""
 #: ../gui/gui.py:936
 #, python-format
 msgid "Please wait while while creating %s"
-msgstr ""
+msgstr "Por favor, espere mientras de crea %s"
 
 #: ../gui/gui.py:1113
 #, python-format
@@ -293,7 +293,7 @@ msgstr ""
 
 #: ../gui/gui.py:1121
 msgid "Please wait while creating shared image..."
-msgstr ""
+msgstr "Por favor, espere mientras se crea la imagen compartida..."
 
 #: ../gui/gui.py:1128
 msgid "Choose a Live USB image"
@@ -326,7 +326,7 @@ msgstr ""
 
 #: ../gui/gui.py:1230
 msgid "Please wait while writing image to USB disk"
-msgstr ""
+msgstr "Por favor, espere mientras se escribe la imagen USB al disco"
 
 #: ../gui/gui.py:1232
 #, python-format
@@ -348,7 +348,7 @@ msgstr ""
 
 #: ../gui/gui.py:1262
 msgid "Please wait while clearing rootstraps"
-msgstr ""
+msgstr "Por favor, espere mientras se limpian los rootstraps"
 
 #: ../gui/gui.py:1270
 msgid "In on_Load_activate"
@@ -397,7 +397,7 @@ msgstr ""
 #: ../gui/gui.py:1342
 #, python-format
 msgid "Please wait while loading Project: %s"
-msgstr ""
+msgstr "Por favor, espere mientras se está cargando el proyecto: %s"
 
 #: ../gui/gui.py:1345
 #, python-format
@@ -424,7 +424,7 @@ msgstr ""
 #: ../gui/gui.py:1403
 #, python-format
 msgid "Please wait while saving Project: %s"
-msgstr ""
+msgstr "Por favor, espere mientras se guarda el proyecto: %s"
 
 #: ../gui/gui.py:1408
 #, python-format
@@ -437,7 +437,7 @@ msgstr ""
 
 #: ../gui/gui.py:1417
 msgid "Please wait while upgrading Project"
-msgstr ""
+msgstr "Por favor, espere mientras se actualiza el proyecto"
 
 #: ../gui/gui.py:1422
 msgid "Are you sure you want to cancel project update?"
@@ -454,7 +454,7 @@ msgstr ""
 
 #: ../gui/gui.py:1442
 msgid "Please wait while upgrading Target"
-msgstr ""
+msgstr "Por favor, espere mientras se actualiza la distro"
 
 #: ../gui/gui.py:1447
 msgid "Are you sure you want to cancel target update?"
@@ -599,19 +599,19 @@ msgstr ""
 
 #: ../gui/image-creator.glade.h:11
 msgid "<b>Platform Projects</b>"
-msgstr ""
+msgstr "<b>Proyectos de plataforma</b>"
 
 #: ../gui/image-creator.glade.h:12
 msgid "<b>Target Images</b>"
-msgstr ""
+msgstr "<b>Imagenes de la distro</b>"
 
 #: ../gui/image-creator.glade.h:13
 msgid "<b>Targets</b>"
-msgstr ""
+msgstr "<b>Objetivos</b>"
 
 #: ../gui/image-creator.glade.h:14
 msgid "<b>USB boot configuration</b>"
-msgstr ""
+msgstr "<b>Configuración de arranque del USB</b>"
 
 #: ../gui/image-creator.glade.h:15
 msgid "A_dd"
@@ -623,7 +623,7 @@ msgstr "Añadir"
 
 #: ../gui/image-creator.glade.h:17
 msgid "Add New Target"
-msgstr "Añadir un objetivo nuevo"
+msgstr "Añadir una distro nueva"
 
 #: ../gui/image-creator.glade.h:18
 msgid "Add Package Groups"
@@ -812,7 +812,7 @@ msgstr "Editar _repositorio"
 
 #: ../gui/image-creator.glade.h:56
 msgid "Edit the target configuration."
-msgstr "Editar la configuración de un objetivo."
+msgstr "Editar la configuración de una distro."
 
 #: ../gui/image-creator.glade.h:57
 msgid "Edit, add or remove repositories"
@@ -847,7 +847,6 @@ msgid "Install CD"
 msgstr "CD instalable"
 
 #: ../gui/image-creator.glade.h:65
-#, fuzzy
 msgid "Install Function Set"
 msgstr "Instalar el conjunto de funcionalidades"
 
@@ -917,7 +916,7 @@ msgstr "Proyecto nuevo"
 
 #: ../gui/image-creator.glade.h:82
 msgid "New Target Name:"
-msgstr "Nombre del objetivo nuevo:"
+msgstr "Nombre de la distro nueva:"
 
 #: ../gui/image-creator.glade.h:83
 msgid "No Mirror"
@@ -945,7 +944,7 @@ msgid ""
 "Open a terminal chrooted to the root of the selected target's file system"
 msgstr ""
 "Abrir un terminal dentro de un chroot en el directorio raíz del sistema de "
-"ficheros del objetivo"
+"ficheros de la distro"
 
 #: ../gui/image-creator.glade.h:89
 msgid "P_latform:  "
@@ -1025,7 +1024,7 @@ msgstr "Tamaño de la partición swap(MB):"
 
 #: ../gui/image-creator.glade.h:107
 msgid "Target configurations"
-msgstr "Configuraciones del objetivo"
+msgstr "Configuraciones de la distro"
 
 #: ../gui/image-creator.glade.h:108
 msgid "Te_rminal"
@@ -1037,7 +1036,7 @@ msgstr "Herramientas"
 
 #: ../gui/image-creator.glade.h:110
 msgid "Up_grade Target"
-msgstr "A_ctualizar el objetivo"
+msgstr "A_ctualizar la distro"
 
 #: ../gui/image-creator.glade.h:111
 msgid "Upgrade Project"
@@ -1045,7 +1044,7 @@ msgstr "Actualizar el proyecto"
 
 #: ../gui/image-creator.glade.h:112
 msgid "Upgrade Target"
-msgstr "Actualizar el objetivo"
+msgstr "Actualizar la distro"
 
 #: ../gui/image-creator.glade.h:113
 msgid "Use Mirror"
@@ -1127,7 +1126,7 @@ msgstr "_Cargar proyecto"
 
 #: ../gui/image-creator.glade.h:132
 msgid "_Mirror Settings"
-msgstr "Configuración del.mirror"
+msgstr "Configuración del mirror"
 
 #: ../gui/image-creator.glade.h:133
 msgid "_Path:  "
@@ -1241,7 +1240,7 @@ msgstr ""
 
 #: ../gui/project_assistant.py:320
 msgid "Target Name"
-msgstr "Nombre del objetivo"
+msgstr "Nombre de la distro"
 
 #: ../gui/project_assistant.py:338
 msgid "Include Debug packages (if any)"
@@ -1274,7 +1273,7 @@ msgstr "Plataforma del proyecto: %s"
 #: ../gui/project_assistant.py:477
 #, python-format
 msgid "Target Name: %s"
-msgstr "Nombre del objetivo: %s"
+msgstr "Nombre de la distro: %s"
 
 #: ../gui/project_assistant.py:478
 #, python-format
@@ -1368,7 +1367,7 @@ msgstr ""
 
 #: ../image-creator:213
 msgid "Target name"
-msgstr "Nombre del objetivo"
+msgstr "Nombre de la distro"
 
 #: ../image-creator:215
 msgid "Feature set identifier"
