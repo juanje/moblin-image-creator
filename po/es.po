@@ -6,13 +6,13 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.48\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-11-26 13:13+0100\n"
-"PO-Revision-Date: 2008-11-28 01:36+0100\n"
-"Last-Translator: Juanje Ojeda <jojeda@emergya.es>\n"
+"POT-Creation-Date: 2008-12-01 02:36+0100\n"
+"PO-Revision-Date: 2008-12-01 02:32+0100\n"
+"Last-Translator: Juanje Ojeda Croissier <jojeda@emergya.es>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
+"Content-Transfer-Encoding: 8bits\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: ../gui/gui.py:56
@@ -85,450 +85,474 @@ msgstr ""
 msgid "Checking for updates..."
 msgstr "Comprobando si hay actualizaciones"
 
-#: ../gui/gui.py:335
-msgid "Are you sure you want to cancel project creation?"
-msgstr ""
-
-#: ../gui/gui.py:347
+#: ../gui/gui.py:351
 #, python-format
 msgid "Canceled Function was %s and cancel type was %s"
 msgstr ""
 
-#: ../gui/gui.py:368
+#: ../gui/gui.py:371
 msgid "All values must be specified"
 msgstr ""
 
-#: ../gui/gui.py:371
+#: ../gui/gui.py:374
 #, python-format
 msgid "Project already exists with the name: %s"
 msgstr ""
 
-#: ../gui/gui.py:377
+#: ../gui/gui.py:380
 #, python-format
 msgid "Path: %s exists but is not a directory"
 msgstr ""
 
-#: ../gui/gui.py:381
+#: ../gui/gui.py:384
 #, python-format
 msgid "Path: %s is a directory which is NOT empty"
 msgstr ""
 
-#: ../gui/gui.py:390 ../gui/gui.py:706 ../gui/gui.py:1619 ../gui/gui.py:1657
+#: ../gui/gui.py:393 ../gui/gui.py:721 ../gui/gui.py:1663 ../gui/gui.py:1701
 #, python-format
 msgid "Please wait while installing %s"
 msgstr ""
 
-#: ../gui/gui.py:406 ../gui/gui.py:410
+#: ../gui/gui.py:398
+msgid "Are you sure you want to cancel project creation?"
+msgstr ""
+
+#: ../gui/gui.py:409 ../gui/gui.py:413
 msgid "Project Creation cancelled"
 msgstr ""
 
-#: ../gui/gui.py:413
+#: ../gui/gui.py:416
 msgid "Trying to cleanup"
 msgstr ""
 
-#: ../gui/gui.py:416
+#: ../gui/gui.py:419
 msgid "could not cleanup project"
 msgstr ""
 
-#: ../gui/gui.py:447
+#: ../gui/gui.py:449
 msgid "A tool for building Mobile and/or Single Purpose Linux Device Stacks"
 msgstr ""
 
-#: ../gui/gui.py:464
+#: ../gui/gui.py:466
 msgid "Delete Project(s)?\n"
 msgstr ""
 
-#: ../gui/gui.py:482 ../gui/gui.py:763
+#: ../gui/gui.py:484 ../gui/gui.py:778
 #, python-format
 msgid "Please wait while deleting %s"
 msgstr ""
 
-#: ../gui/gui.py:510 ../gui/gui.py:1951
+#: ../gui/gui.py:512 ../gui/gui.py:1995
 msgid "Must specify a target name"
 msgstr ""
 
-#: ../gui/gui.py:512
+#: ../gui/gui.py:514
 #, python-format
 msgid "Target: %s already exists"
 msgstr ""
 
-#: ../gui/gui.py:515 ../gui/project_assistant.py:465
+#: ../gui/gui.py:517 ../gui/project_assistant.py:465
 msgid ""
 "Target names can only contain alpha/numeric characters, hyphen and underscore"
 msgstr ""
 
-#: ../gui/gui.py:526 ../gui/gui.py:943 ../gui/gui.py:965 ../gui/gui.py:987
-#: ../gui/gui.py:1011 ../gui/gui.py:1033 ../gui/gui.py:1055 ../gui/gui.py:1077
+#: ../gui/gui.py:528 ../gui/gui.py:958 ../gui/gui.py:980 ../gui/gui.py:1002
+#: ../gui/gui.py:1026 ../gui/gui.py:1048 ../gui/gui.py:1070 ../gui/gui.py:1092
 #, python-format
 msgid "Please wait while creating %s"
 msgstr ""
 
-#: ../gui/gui.py:624 ../gui/project_assistant.py:375
+#: ../gui/gui.py:533
+msgid "Are you sure you want to cancel target creation?"
+msgstr ""
+
+#: ../gui/gui.py:543
+msgid "Target Creation cancelled"
+msgstr ""
+
+#: ../gui/gui.py:639 ../gui/project_assistant.py:375
 msgid "<b>Depends on FSet(s):</b> "
 msgstr ""
 
-#: ../gui/gui.py:627 ../gui/project_assistant.py:378
+#: ../gui/gui.py:642 ../gui/project_assistant.py:378
 msgid ""
 "\n"
 "<b>Debug Packages:</b> "
 msgstr ""
 
-#: ../gui/gui.py:630 ../gui/project_assistant.py:381
+#: ../gui/gui.py:645 ../gui/project_assistant.py:381
 msgid ""
 "\n"
 "<b>Packages:</b> "
 msgstr ""
 
-#: ../gui/gui.py:642
+#: ../gui/gui.py:657
 msgid "Nothing available to install!"
 msgstr ""
 
-#: ../gui/gui.py:660
+#: ../gui/gui.py:675
 #, python-format
 msgid "Number of fsets to install: %s"
 msgstr ""
 
-#: ../gui/gui.py:669
+#: ../gui/gui.py:684
 msgid "No fset selected"
 msgstr ""
 
-#: ../gui/gui.py:670
+#: ../gui/gui.py:685
 msgid "Please Choose an Fset"
 msgstr ""
 
-#: ../gui/gui.py:682
+#: ../gui/gui.py:697
 msgid "Getting Group List..."
 msgstr ""
 
-#: ../gui/gui.py:687
+#: ../gui/gui.py:702
 msgid "Installing Groups..."
 msgstr ""
 
-#: ../gui/gui.py:696
+#: ../gui/gui.py:711
 #, python-format
 msgid "Debug packages = %s"
 msgstr ""
 
-#: ../gui/gui.py:705 ../gui/gui.py:1656
+#: ../gui/gui.py:720 ../gui/gui.py:1700
 #, python-format
 msgid "Installing fset %s.................\n"
 msgstr ""
 
-#: ../gui/gui.py:719 ../gui/gui.py:1665
+#: ../gui/gui.py:734 ../gui/gui.py:1709
 #, python-format
 msgid "Unexpected error: %s"
 msgstr "Error inesperado: %s"
 
-#: ../gui/gui.py:727
+#: ../gui/gui.py:742
 #, python-format
 msgid "Setting new status label: %s"
 msgstr ""
 
-#: ../gui/gui.py:728
+#: ../gui/gui.py:743
 #, python-format
 msgid "Current action: %s"
 msgstr ""
 
-#: ../gui/gui.py:743
+#: ../gui/gui.py:758
 msgid "Delete Target(s)?\n"
 msgstr ""
 
-#: ../gui/gui.py:749
+#: ../gui/gui.py:764
 msgid "Delete Target"
 msgstr ""
 
-#: ../gui/gui.py:819
+#: ../gui/gui.py:834
 msgid "An unknown error has occurred!"
 msgstr ""
 
-#: ../gui/gui.py:833
+#: ../gui/gui.py:848
 msgid "Directory List"
 msgstr ""
 
-#: ../gui/gui.py:849
+#: ../gui/gui.py:864
 #, python-format
 msgid "Project path: %s"
 msgstr ""
 
-#: ../gui/gui.py:853 ../gui/gui.py:870
+#: ../gui/gui.py:868 ../gui/gui.py:885
 msgid "gnome-terminal may not be present. Trying xterm"
 msgstr ""
 
-#: ../gui/gui.py:866
+#: ../gui/gui.py:881
 #, python-format
 msgid "Target path: %s"
 msgstr ""
 
-#: ../gui/gui.py:884 ../libs/InstallImage.py:55
+#: ../gui/gui.py:899 ../libs/InstallImage.py:55
 #, python-format
 msgid "%s: Using default parametor."
 msgstr ""
 
-#: ../gui/gui.py:921
+#: ../gui/gui.py:936
 #, python-format
 msgid "Please wait while while creating %s"
 msgstr ""
 
-#: ../gui/gui.py:1098
+#: ../gui/gui.py:1113
 #, python-format
 msgid "Creating directory %s ... "
 msgstr "Creando directorio %s..."
 
-#: ../gui/gui.py:1102
+#: ../gui/gui.py:1117
 #, python-format
 msgid "Creating image %s ... "
 msgstr ""
 
-#: ../gui/gui.py:1106
+#: ../gui/gui.py:1121
 msgid "Please wait while creating shared image..."
 msgstr ""
 
-#: ../gui/gui.py:1113
+#: ../gui/gui.py:1128
 msgid "Choose a Live USB image"
 msgstr ""
 
-#: ../gui/gui.py:1166 ../gui/gui.py:1302
+#: ../gui/gui.py:1187 ../gui/gui.py:1323
 msgid "No target image selected!"
 msgstr ""
 
-#: ../gui/gui.py:1171 ../gui/gui.py:1305
+#: ../gui/gui.py:1192 ../gui/gui.py:1326
 #, python-format
 msgid "Selected file name: %s "
 msgstr ""
 
-#: ../gui/gui.py:1193
+#: ../gui/gui.py:1214
 msgid "No USB device selected!"
 msgstr ""
 
-#: ../gui/gui.py:1201
+#: ../gui/gui.py:1222
 #, python-format
 msgid "Selected USB disk %s"
 msgstr ""
 
-#: ../gui/gui.py:1203
+#: ../gui/gui.py:1224
 #, python-format
 msgid ""
 "Can not umount %s. Please close any shells or opened files still under mount "
 "point and try again!"
 msgstr ""
 
-#: ../gui/gui.py:1209
+#: ../gui/gui.py:1230
 msgid "Please wait while writing image to USB disk"
 msgstr ""
 
-#: ../gui/gui.py:1211
+#: ../gui/gui.py:1232
 #, python-format
 msgid "Writing image to USB disk %s"
 msgstr ""
 
-#: ../gui/gui.py:1216
+#: ../gui/gui.py:1237
 #, python-format
 msgid "Error writing to USB drive.  'dd' returned code: %s"
 msgstr ""
 
-#: ../gui/gui.py:1220
+#: ../gui/gui.py:1241
 msgid "Writing Complete"
 msgstr ""
 
-#: ../gui/gui.py:1237
+#: ../gui/gui.py:1258
 msgid "In on_ClearRootstraps_activate"
 msgstr ""
 
-#: ../gui/gui.py:1241
+#: ../gui/gui.py:1262
 msgid "Please wait while clearing rootstraps"
 msgstr ""
 
-#: ../gui/gui.py:1249
+#: ../gui/gui.py:1270
 msgid "In on_Load_activate"
 msgstr ""
 
-#: ../gui/gui.py:1250
+#: ../gui/gui.py:1271
 msgid "Provide a Project Name"
 msgstr ""
 
-#: ../gui/gui.py:1268 ../gui/gui.py:1362 ../gui/gui.py:1372
+#: ../gui/gui.py:1289 ../gui/gui.py:1383 ../gui/gui.py:1393
 msgid "No Project Name"
 msgstr ""
 
-#: ../gui/gui.py:1273
+#: ../gui/gui.py:1294
 msgid "Project Name is blank"
 msgstr ""
 
-#: ../gui/gui.py:1275
+#: ../gui/gui.py:1296
 msgid "<b><span foreground=\"red\">Please provide a project name</span></b>"
 msgstr ""
 
-#: ../gui/gui.py:1277
+#: ../gui/gui.py:1298
 #, python-format
 msgid "Project name: %s"
 msgstr ""
 
-#: ../gui/gui.py:1283
+#: ../gui/gui.py:1304
 #, python-format
 msgid "Project %s already exists"
 msgstr ""
 
-#: ../gui/gui.py:1285
+#: ../gui/gui.py:1306
 #, python-format
 msgid "<b><span foreground=\"red\">Project %s already exists.</span></b>"
 msgstr ""
 
-#: ../gui/gui.py:1311
+#: ../gui/gui.py:1332
 msgid "No Destination Folder"
 msgstr ""
 
-#: ../gui/gui.py:1315 ../gui/gui.py:1376
+#: ../gui/gui.py:1336 ../gui/gui.py:1397
 #, python-format
 msgid "Targer File Name: %s"
 msgstr ""
 
-#: ../gui/gui.py:1321
+#: ../gui/gui.py:1342
 #, python-format
 msgid "Please wait while loading Project: %s"
 msgstr ""
 
-#: ../gui/gui.py:1324
+#: ../gui/gui.py:1345
 #, python-format
 msgid "Loading Project %s"
 msgstr ""
 
-#: ../gui/gui.py:1326
+#: ../gui/gui.py:1347
 msgid "Loading Project Complete"
 msgstr ""
 
-#: ../gui/gui.py:1348
+#: ../gui/gui.py:1369
 msgid "In on_Save_activate"
 msgstr ""
 
-#: ../gui/gui.py:1349
+#: ../gui/gui.py:1370
 msgid "Choose Project to Save"
-msgstr ""
-
-#: ../gui/gui.py:1366
-#, python-format
-msgid "Project name to Save: %s"
-msgstr ""
-
-#: ../gui/gui.py:1382
-#, python-format
-msgid "Please wait while saving Project: %s"
 msgstr ""
 
 #: ../gui/gui.py:1387
 #, python-format
+msgid "Project name to Save: %s"
+msgstr ""
+
+#: ../gui/gui.py:1403
+#, python-format
+msgid "Please wait while saving Project: %s"
+msgstr ""
+
+#: ../gui/gui.py:1408
+#, python-format
 msgid "Saving Project %s"
 msgstr ""
 
-#: ../gui/gui.py:1389
+#: ../gui/gui.py:1410
 msgid "Saving Complete"
 msgstr ""
 
-#: ../gui/gui.py:1396
+#: ../gui/gui.py:1417
 msgid "Please wait while upgrading Project"
 msgstr ""
 
-#: ../gui/gui.py:1402 ../gui/gui.py:1416
+#: ../gui/gui.py:1422
+msgid "Are you sure you want to cancel project update?"
+msgstr ""
+
+#: ../gui/gui.py:1431 ../gui/gui.py:1456
 #, python-format
 msgid "Internal error while attempting to run update/upgrade: %s"
 msgstr ""
 
-#: ../gui/gui.py:1410
+#: ../gui/gui.py:1433
+msgid "Project update cancelled"
+msgstr ""
+
+#: ../gui/gui.py:1442
 msgid "Please wait while upgrading Target"
 msgstr ""
 
-#: ../gui/gui.py:1516 ../gui/gui.py:1519
+#: ../gui/gui.py:1447
+msgid "Are you sure you want to cancel target update?"
+msgstr ""
+
+#: ../gui/gui.py:1458
+msgid "Target update cancelled"
+msgstr ""
+
+#: ../gui/gui.py:1560 ../gui/gui.py:1563
 msgid "All fields are required"
 msgstr ""
 
-#: ../gui/gui.py:1581
+#: ../gui/gui.py:1625
 msgid "Search Expression"
 msgstr "Buscar expresión"
 
-#: ../gui/gui.py:1582
+#: ../gui/gui.py:1626
 msgid "Replace Expression"
 msgstr ""
 
-#: ../gui/gui.py:1613
+#: ../gui/gui.py:1657
 msgid "Creating Project and Target"
 msgstr ""
 
-#: ../gui/gui.py:1648
+#: ../gui/gui.py:1692
 #, python-format
 msgid "Installing the following fsets: %s"
 msgstr ""
 
-#: ../gui/gui.py:1676
+#: ../gui/gui.py:1720
 msgid "Choose a Platform"
 msgstr ""
 
-#: ../gui/gui.py:1703
+#: ../gui/gui.py:1747
 msgid "This feature is currently available for Yum based platforms only"
 msgstr ""
 
-#: ../gui/gui.py:1785
+#: ../gui/gui.py:1829
 #, python-format
 msgid "Creating folder %s ... "
 msgstr "Creando la carpeta «%s»…"
 
-#: ../gui/gui.py:1805
+#: ../gui/gui.py:1849
 msgid "Please Select a Platform"
 msgstr ""
 
-#: ../gui/gui.py:1840
+#: ../gui/gui.py:1884
 #, python-format
 msgid "Fset Description: %s"
 msgstr ""
 
 #. self.textBuffer.insert_at_cursor(_("\nFset Dedendency: %s") % platform.fset[fsetName].deps)
-#: ../gui/gui.py:1842
+#: ../gui/gui.py:1886
 msgid ""
 "\n"
 "\n"
 "Fset Dedendency: "
 msgstr ""
 
-#: ../gui/gui.py:1845
+#: ../gui/gui.py:1889
 msgid ""
 "\n"
 "\n"
 "Packages in the Fset: "
 msgstr ""
 
-#: ../gui/gui.py:1853
+#: ../gui/gui.py:1897
 msgid ""
 "\n"
 "\n"
 "Debug Packages in the Fset: "
 msgstr ""
 
-#: ../gui/gui.py:1859
+#: ../gui/gui.py:1903
 msgid "Please Select an Fset"
 msgstr ""
 
-#: ../gui/gui.py:1957
+#: ../gui/gui.py:2001
 #, python-format
 msgid "Adding Target: %s"
 msgstr ""
 
-#: ../gui/gui.py:1973 ../gui/project_assistant.py:287
+#: ../gui/gui.py:2017 ../gui/project_assistant.py:287
 msgid "Choose Project Directory"
 msgstr ""
 
-#: ../gui/gui.py:2026 ../image-creator:695 ../libs/InstallImage.py:907
+#: ../gui/gui.py:2070 ../image-creator:695 ../libs/InstallImage.py:907
 msgid "Locals by frame, innermost last"
 msgstr ""
 
-#: ../gui/gui.py:2029 ../image-creator:698 ../libs/InstallImage.py:910
+#: ../gui/gui.py:2073 ../image-creator:698 ../libs/InstallImage.py:910
 #, c-format, python-format
 msgid "Frame %s in %s at line %s"
 msgstr ""
 
-#: ../gui/gui.py:2033
+#: ../gui/gui.py:2077
 #, python-format
 msgid "\t%20s = "
 msgstr ""
 
-#: ../gui/gui.py:2039 ../image-creator:708 ../libs/InstallImage.py:920
+#: ../gui/gui.py:2083 ../image-creator:708 ../libs/InstallImage.py:920
 msgid "<ERROR WHILE PRINTING VALUE>"
 msgstr ""
 
@@ -589,75 +613,79 @@ msgstr "Añadir"
 
 #: ../gui/image-creator.glade.h:17
 msgid "Add New Target"
-msgstr ""
+msgstr "Añadir un objetivo nuevo"
 
 #: ../gui/image-creator.glade.h:18
 msgid "Add Package Groups"
-msgstr ""
+msgstr "Añadir grupo de paquetes"
 
 #: ../gui/image-creator.glade.h:19
-msgid "Add _Functional Sets"
-msgstr ""
+msgid "Add Project Wizard"
+msgstr "Asistente de creación de proyectos"
 
 #: ../gui/image-creator.glade.h:20
+msgid "Add _Functional Sets"
+msgstr "Añadir un conjunto de _funcionalidades"
+
+#: ../gui/image-creator.glade.h:21
 msgid ""
 "Add functional sets (groups of related software packages) to the selected "
 "target"
 msgstr ""
 
-#: ../gui/image-creator.glade.h:21
-msgid "An unknown error has occured!"
-msgstr ""
-
 #: ../gui/image-creator.glade.h:22
-msgid "Are you sure want to delete this project?"
-msgstr ""
+msgid "An unknown error has occured!"
+msgstr "Ha ocurrido un error desconocido"
 
 #: ../gui/image-creator.glade.h:23
-msgid "Boot a live USB image in KVM"
-msgstr ""
+msgid "Are you sure want to delete this project?"
+msgstr "¿Está seguro de que desea borrar este proyecto?"
 
 #: ../gui/image-creator.glade.h:24
+msgid "Boot a live USB image in KVM"
+msgstr "Arrancar una imagen USB live en el KVM"
+
+#: ../gui/image-creator.glade.h:25
 msgid "Boot partition size(MB):"
 msgstr ""
 
-#: ../gui/image-creator.glade.h:25
+#: ../gui/image-creator.glade.h:26
 msgid "Clean"
 msgstr "Limpiar"
 
-#: ../gui/image-creator.glade.h:26
+#: ../gui/image-creator.glade.h:27
 msgid "Clean history of MIC commands"
 msgstr ""
 
-#: ../gui/image-creator.glade.h:27
+#: ../gui/image-creator.glade.h:28
 msgid "Clear Rootstraps"
 msgstr ""
 
-#: ../gui/image-creator.glade.h:28
+#: ../gui/image-creator.glade.h:29
 msgid "Close"
 msgstr "Cerrar"
 
-#: ../gui/image-creator.glade.h:29
+#: ../gui/image-creator.glade.h:30
 msgid "Close window"
 msgstr "Cerrar la ventana"
 
-#: ../gui/image-creator.glade.h:30
+#: ../gui/image-creator.glade.h:31
 msgid "Command History"
 msgstr ""
 
-#: ../gui/image-creator.glade.h:31
+#: ../gui/image-creator.glade.h:32
 msgid "Command _History"
 msgstr ""
 
-#: ../gui/image-creator.glade.h:32
+#: ../gui/image-creator.glade.h:33
 msgid "Copy"
 msgstr "Copiar"
 
-#: ../gui/image-creator.glade.h:33
+#: ../gui/image-creator.glade.h:34
 msgid "Copy command history to clipboard"
 msgstr ""
 
-#: ../gui/image-creator.glade.h:34
+#: ../gui/image-creator.glade.h:35
 msgid ""
 "Create a Live  USB image that can be burned to a USB flash drive  You can "
 "boot linux and run completely off the USB flash drive.  Nothing is written "
@@ -665,7 +693,7 @@ msgid ""
 "storage on nfs server. This image is very small(about 60MB)."
 msgstr ""
 
-#: ../gui/image-creator.glade.h:35
+#: ../gui/image-creator.glade.h:36
 msgid ""
 "Create a Live USB image that can be burned to a USB flash drive.  You can "
 "boot linux and run completely off the USB flash drive.  Nothing is written "
@@ -673,7 +701,7 @@ msgid ""
 "drive are lost on shutdown."
 msgstr ""
 
-#: ../gui/image-creator.glade.h:36
+#: ../gui/image-creator.glade.h:37
 msgid ""
 "Create a Live read/write USB image that can be burned to a USB flash drive  "
 "You can boot linux and run completely off the USB flash drive.  Nothing is "
@@ -682,40 +710,40 @@ msgid ""
 "on the USB flash drive."
 msgstr ""
 
-#: ../gui/image-creator.glade.h:37
+#: ../gui/image-creator.glade.h:38
 msgid ""
 "Create a NAND image that can be burned to a Compact flash drive for "
 "Moorestown."
 msgstr ""
 
-#: ../gui/image-creator.glade.h:38
+#: ../gui/image-creator.glade.h:39
 msgid "Create a new project"
 msgstr "Crear un proyecto nuevo"
 
-#: ../gui/image-creator.glade.h:39
+#: ../gui/image-creator.glade.h:40
 msgid "Create a new target for the project selected above"
 msgstr ""
 
-#: ../gui/image-creator.glade.h:40
+#: ../gui/image-creator.glade.h:41
 msgid ""
 "Create a project for the desired platform.  You can then add a target below."
 msgstr ""
 
-#: ../gui/image-creator.glade.h:41
+#: ../gui/image-creator.glade.h:42
 msgid ""
 "Create an installation image that can be burned to a CD. When you boot off "
 "the CD it will erase the target harddrive, then repartition and install the "
 "target image."
 msgstr ""
 
-#: ../gui/image-creator.glade.h:42
+#: ../gui/image-creator.glade.h:43
 msgid ""
 "Create an installation image that can be burned to a CD. You can boot linux "
 "and run completely off the CD.  Nothing is written to the target device.  "
 "All changes made while running from the CD drive are lost on shutdown."
 msgstr ""
 
-#: ../gui/image-creator.glade.h:43
+#: ../gui/image-creator.glade.h:44
 msgid ""
 "Create an installation image that can be burned to a CD. You can boot linux "
 "and run completely off the CD.  Nothing is written to the target device.  "
@@ -723,225 +751,240 @@ msgid ""
 "This image is very small(about 60MB)."
 msgstr ""
 
-#: ../gui/image-creator.glade.h:44
+#: ../gui/image-creator.glade.h:45
 msgid ""
 "Create an installation image that can be burned to a USB flash drive.  When "
 "you boot off the USB flash drive it will erase the target harddrive, then "
 "repartition and install the target image."
 msgstr ""
 
-#: ../gui/image-creator.glade.h:45
-msgid "D_elete"
-msgstr ""
-
 #: ../gui/image-creator.glade.h:46
+msgid "D_elete"
+msgstr "_Eliminar"
+
+#: ../gui/image-creator.glade.h:47
 msgid "De_lete"
 msgstr ""
 
-#: ../gui/image-creator.glade.h:47
-msgid "Delete Project"
-msgstr ""
-
 #: ../gui/image-creator.glade.h:48
-msgid "Delete the selected project"
-msgstr ""
+msgid "Delete Project"
+msgstr "Eliminar proyecto"
 
 #: ../gui/image-creator.glade.h:49
+msgid "Delete the selected project"
+msgstr "Eliminar el proyecto seleccionado"
+
+#: ../gui/image-creator.glade.h:50
 msgid ""
 "Delete the selected target.  All installed functional sets will be deleted "
 "along with the file system structure."
 msgstr ""
 
-#: ../gui/image-creator.glade.h:50
+#: ../gui/image-creator.glade.h:51
 msgid "Description:  "
 msgstr "Descripción:  "
 
-#: ../gui/image-creator.glade.h:51
+#: ../gui/image-creator.glade.h:52
 msgid "Did you know..."
 msgstr ""
 
-#: ../gui/image-creator.glade.h:52
-msgid "ERROR!"
-msgstr "ERROR!"
-
 #: ../gui/image-creator.glade.h:53
+msgid "ERROR!"
+msgstr "ERROR"
+
+#: ../gui/image-creator.glade.h:54
+msgid "Edit Repo"
+msgstr "Editar repositorio"
+
+#: ../gui/image-creator.glade.h:55
 msgid "Edit _Repository"
 msgstr ""
 
-#: ../gui/image-creator.glade.h:54
+#: ../gui/image-creator.glade.h:56
 msgid "Edit the target configuration."
 msgstr ""
 
-#: ../gui/image-creator.glade.h:55
-msgid "Existed file name."
-msgstr ""
-
-#: ../gui/image-creator.glade.h:56
-msgid "Fat32 partition size(MB):"
-msgstr ""
-
 #: ../gui/image-creator.glade.h:57
-msgid "Fsets Info"
+msgid "Edit, add or remove repositories"
 msgstr ""
 
 #: ../gui/image-creator.glade.h:58
-msgid "Image Name:"
-msgstr "Nombre de la imagen:"
+msgid "Existed file name."
+msgstr ""
 
 #: ../gui/image-creator.glade.h:59
-msgid "Image size(MB):"
+msgid "Fat32 partition size(MB):"
 msgstr ""
 
 #: ../gui/image-creator.glade.h:60
-msgid "Include Debug Packages (if any)"
+msgid "Fsets Info"
 msgstr ""
 
 #: ../gui/image-creator.glade.h:61
-msgid "Install CD"
-msgstr ""
+msgid "Image Name:"
+msgstr "Nombre de la imagen:"
 
 #: ../gui/image-creator.glade.h:62
-msgid "Install Function Set"
+msgid "Image size(MB):"
 msgstr ""
 
 #: ../gui/image-creator.glade.h:63
-msgid "Install USB"
+msgid "Include Debug Packages (if any)"
 msgstr ""
 
 #: ../gui/image-creator.glade.h:64
-msgid "Launch VM"
-msgstr ""
+msgid "Install CD"
+msgstr "CD instalable"
 
 #: ../gui/image-creator.glade.h:65
-msgid "List of existing projects"
-msgstr ""
+#, fuzzy
+msgid "Install Function Set"
+msgstr "Instalar el conjunto de funcionalidades"
 
 #: ../gui/image-creator.glade.h:66
-msgid "List of existing targets"
-msgstr ""
+msgid "Install USB"
+msgstr "USB installable"
 
 #: ../gui/image-creator.glade.h:67
-msgid "Live CD"
-msgstr ""
+msgid "Launch VM"
+msgstr "Lanzar MV"
 
 #: ../gui/image-creator.glade.h:68
-msgid "Live RW USB"
-msgstr ""
+msgid "List of existing projects"
+msgstr "Listar proyectos existentes"
 
 #: ../gui/image-creator.glade.h:69
-msgid "Live USB"
-msgstr ""
+msgid "List of existing targets"
+msgstr "Listar objetivos existentes"
 
 #: ../gui/image-creator.glade.h:70
-msgid "Load Project"
-msgstr ""
+msgid "Live CD"
+msgstr "Live CD"
 
 #: ../gui/image-creator.glade.h:71
-msgid "Mirror Settings"
-msgstr ""
+msgid "Live RW USB"
+msgstr "USB RW Live"
 
 #: ../gui/image-creator.glade.h:72
-msgid "Moblin Image Creator"
-msgstr ""
+msgid "Live USB"
+msgstr "USB Live"
 
 #: ../gui/image-creator.glade.h:73
-msgid "NAND Image"
-msgstr ""
+msgid "Load Project"
+msgstr "Cargar proyecto"
 
 #: ../gui/image-creator.glade.h:74
-msgid "NFS Live CD"
-msgstr ""
+msgid "Mirror Settings"
+msgstr "Opciones del mirror"
 
 #: ../gui/image-creator.glade.h:75
-msgid "NFS Live USB"
-msgstr ""
+msgid "Moblin Image Creator"
+msgstr "Moblin Image Creator"
 
 #: ../gui/image-creator.glade.h:76
-msgid "NFS server IP address:"
-msgstr ""
+msgid "NAND Image"
+msgstr "Imagen NAND"
 
 #: ../gui/image-creator.glade.h:77
-msgid "New Image name"
-msgstr ""
+msgid "NFS Live CD"
+msgstr "NFS Live CD"
 
 #: ../gui/image-creator.glade.h:78
+msgid "NFS Live USB"
+msgstr "NFS Live USB"
+
+#: ../gui/image-creator.glade.h:79
+msgid "NFS server IP address:"
+msgstr "Dirección IP del servidor NFS:"
+
+#: ../gui/image-creator.glade.h:80
+msgid "New Image name"
+msgstr "Nombre de la nueva imagen"
+
+#: ../gui/image-creator.glade.h:81
 msgid "New Project"
 msgstr "Proyecto nuevo"
 
-#: ../gui/image-creator.glade.h:79
+#: ../gui/image-creator.glade.h:82
 msgid "New Target Name:"
-msgstr ""
+msgstr "Nombre del objetivo nuevo:"
 
-#: ../gui/image-creator.glade.h:80
+#: ../gui/image-creator.glade.h:83
 msgid "No Mirror"
-msgstr ""
+msgstr "Sin mirror"
 
-#: ../gui/image-creator.glade.h:81
+#: ../gui/image-creator.glade.h:84
 msgid ""
 "No swap\n"
 "Swap file create only\n"
 "Swap file create and swap on"
 msgstr ""
 
-#: ../gui/image-creator.glade.h:84
+#: ../gui/image-creator.glade.h:87
 msgid ""
 "Open a terminal chrooted to the root of the selected project's file system"
 msgstr ""
+"Abrir un terminal dentro de un chroot en el directorio raíz del sistema de "
+"ficheros del proyecto"
 
-#: ../gui/image-creator.glade.h:85
+#: ../gui/image-creator.glade.h:88
 msgid ""
 "Open a terminal chrooted to the root of the selected target's file system"
 msgstr ""
+"Abrir un terminal dentro de un chroot en el directorio raíz del sistema de "
+"ficheros del objetivo"
 
-#: ../gui/image-creator.glade.h:86
+#: ../gui/image-creator.glade.h:89
 msgid "P_latform:  "
-msgstr ""
+msgstr "P_lataforma:  "
 
-#: ../gui/image-creator.glade.h:87
+#: ../gui/image-creator.glade.h:90
 msgid "Package Groups"
-msgstr ""
+msgstr "Grupos de paquetes"
 
-#: ../gui/image-creator.glade.h:88
+#: ../gui/image-creator.glade.h:91
 msgid "Please wait..."
 msgstr "Por favor, espere..."
 
-#: ../gui/image-creator.glade.h:89
-msgid "Project _Desc:  "
-msgstr ""
-
-#: ../gui/image-creator.glade.h:90
-msgid "Project _Name:  "
-msgstr "Nombre del proyecto:  "
-
-#: ../gui/image-creator.glade.h:91
-msgid "Record MIC command history"
-msgstr ""
-
 #: ../gui/image-creator.glade.h:92
+msgid "Project _Desc:  "
+msgstr "_Descripción del proyecto:"
+
+#: ../gui/image-creator.glade.h:93
+msgid "Project _Name:  "
+msgstr "_Nombre del proyecto:  "
+
+#: ../gui/image-creator.glade.h:94
+msgid "Record MIC command history"
+msgstr "Guardar el histórico del MIC"
+
+#: ../gui/image-creator.glade.h:95
 msgid "Remove"
 msgstr "Eliminar"
 
-#: ../gui/image-creator.glade.h:93
+#: ../gui/image-creator.glade.h:96
 msgid "Save"
 msgstr "Guardar"
 
-#: ../gui/image-creator.glade.h:94
+#: ../gui/image-creator.glade.h:97
 msgid "Save Project"
 msgstr "Guardar proyecto"
 
-#: ../gui/image-creator.glade.h:95
+#: ../gui/image-creator.glade.h:98
 msgid "Save command history into a file in /var/lib/moblin-image-creator/cmds"
 msgstr ""
+"Guardar el histórico de comandos en un archivo en /var/lib/moblin-image-"
+"creator/cmds"
 
-#: ../gui/image-creator.glade.h:96
+#: ../gui/image-creator.glade.h:99
 msgid "Save to..."
-msgstr ""
+msgstr "Guadar en..."
 
-#: ../gui/image-creator.glade.h:97
+#: ../gui/image-creator.glade.h:100
 msgid "Search and Replace Expression can be any Python regular expression"
 msgstr ""
 
-#: ../gui/image-creator.glade.h:98
+#: ../gui/image-creator.glade.h:101
 msgid ""
 "Select a project above then create a target based on the project target "
 "platform.  You can then add functional sets (software packages) to the "
@@ -949,175 +992,181 @@ msgid ""
 "Images\" section below."
 msgstr ""
 
-#: ../gui/image-creator.glade.h:99
+#: ../gui/image-creator.glade.h:102
 msgid ""
 "Select a target above then select the type of image you wish to create.  \n"
 "(See the tooltips on the buttons below for more information) "
 msgstr ""
 
-#: ../gui/image-creator.glade.h:101
+#: ../gui/image-creator.glade.h:104
 msgid "Select your USB disk"
-msgstr ""
+msgstr "Seleccione su disco USB"
 
-#: ../gui/image-creator.glade.h:102
+#: ../gui/image-creator.glade.h:105
 msgid "Swap option:"
 msgstr ""
 
-#: ../gui/image-creator.glade.h:103
+#: ../gui/image-creator.glade.h:106
 msgid "Swap partition size(MB):"
 msgstr ""
 
-#: ../gui/image-creator.glade.h:104
+#: ../gui/image-creator.glade.h:107
 msgid "Target configurations"
-msgstr ""
+msgstr "Configuraciones del objetivo"
 
-#: ../gui/image-creator.glade.h:105
+#: ../gui/image-creator.glade.h:108
 msgid "Te_rminal"
-msgstr ""
+msgstr "Te_rminal"
 
-#: ../gui/image-creator.glade.h:106
+#: ../gui/image-creator.glade.h:109
 msgid "Tools"
 msgstr "Herramientas"
 
-#: ../gui/image-creator.glade.h:107
-msgid "Up_grade Target"
-msgstr ""
-
-#: ../gui/image-creator.glade.h:108
-msgid "Upgrade Project"
-msgstr ""
-
-#: ../gui/image-creator.glade.h:109
-msgid "Upgrade Target"
-msgstr ""
-
 #: ../gui/image-creator.glade.h:110
-msgid "Use Mirror"
-msgstr ""
+msgid "Up_grade Target"
+msgstr "A_ctualizar el objetivo"
 
 #: ../gui/image-creator.glade.h:111
-msgid "Use squashfs:"
-msgstr ""
+msgid "Upgrade Project"
+msgstr "Actualizar el proyecto"
 
 #: ../gui/image-creator.glade.h:112
+msgid "Upgrade Target"
+msgstr "Actualizar el objetivo"
+
+#: ../gui/image-creator.glade.h:113
+msgid "Use Mirror"
+msgstr "Usar mirror"
+
+#: ../gui/image-creator.glade.h:114
+msgid "Use squashfs:"
+msgstr "Usar squashfs:"
+
+#: ../gui/image-creator.glade.h:115
 msgid ""
 "Warning:The directories listed below could not be unmounted. \n"
 "You may have terminals open in the mounted directory path\n"
 msgstr ""
+"Atención: Es posible que los directorios qeu se listan abajo no estén "
+"desmontados. \n"
+"Puede que tenga algún terminal abierto en la ruta de algún directorio "
+"montado\n"
 
-#: ../gui/image-creator.glade.h:115
+#: ../gui/image-creator.glade.h:118
 msgid "Welcome message: "
-msgstr ""
+msgstr "Mensaje de bienvenida: "
 
-#: ../gui/image-creator.glade.h:116
+#: ../gui/image-creator.glade.h:119
 msgid "Write USB Image"
-msgstr ""
+msgstr "Escribir imagen USB"
 
-#: ../gui/image-creator.glade.h:117
+#: ../gui/image-creator.glade.h:120
 msgid ""
 "Write a USB image to the USB flash drive.  An image must first be created "
 "using one of the USB options to the left."
 msgstr ""
+"Escribir una imagen USB en una memoria flash USB.  Antes debe crear una "
+"imagen con una de las opciones para USB de la izquierda."
 
-#: ../gui/image-creator.glade.h:118
+#: ../gui/image-creator.glade.h:121
 msgid "Writes an Image to USB Drive"
-msgstr ""
+msgstr "Escribir una imagen en un dispositivo USB"
 
-#: ../gui/image-creator.glade.h:119
+#: ../gui/image-creator.glade.h:122
 msgid "_Add"
 msgstr "_Añadir"
 
-#: ../gui/image-creator.glade.h:120
+#: ../gui/image-creator.glade.h:123
 msgid "_Add Project Wizard"
-msgstr ""
+msgstr "_Asistente de creación de proyectos"
 
-#: ../gui/image-creator.glade.h:121
+#: ../gui/image-creator.glade.h:124
 msgid "_Add Target..."
 msgstr "Añadir _objetivo…"
 
-#: ../gui/image-creator.glade.h:122
+#: ../gui/image-creator.glade.h:125
 msgid "_Browse..."
 msgstr "_Examinar…"
 
-#: ../gui/image-creator.glade.h:123
+#: ../gui/image-creator.glade.h:126
 msgid "_Clear Rootstraps"
-msgstr ""
+msgstr "_Limpiar los Rootstraps"
 
-#: ../gui/image-creator.glade.h:124
+#: ../gui/image-creator.glade.h:127
 msgid "_Edit Repo"
-msgstr ""
+msgstr "_Editar repositorios"
 
-#: ../gui/image-creator.glade.h:125
+#: ../gui/image-creator.glade.h:128
 msgid "_File"
 msgstr "_Archivo"
 
-#: ../gui/image-creator.glade.h:126
+#: ../gui/image-creator.glade.h:129
 msgid "_Fsets Info"
-msgstr ""
+msgstr "Información sobre los conjuntos funcionales"
 
-#: ../gui/image-creator.glade.h:127
+#: ../gui/image-creator.glade.h:130
 msgid "_Help"
 msgstr "_Ayuda"
 
-#: ../gui/image-creator.glade.h:128
+#: ../gui/image-creator.glade.h:131
 msgid "_Load Project"
-msgstr ""
+msgstr "_Cargar proyecto"
 
-#: ../gui/image-creator.glade.h:129
+#: ../gui/image-creator.glade.h:132
 msgid "_Mirror Settings"
-msgstr ""
+msgstr "Configuración del.mirror"
 
-#: ../gui/image-creator.glade.h:130
+#: ../gui/image-creator.glade.h:133
 msgid "_Path:  "
 msgstr "_Ruta:  "
 
-#: ../gui/image-creator.glade.h:131
+#: ../gui/image-creator.glade.h:134
 msgid "_Save Project"
 msgstr "Guardar proyecto"
 
-#: ../gui/image-creator.glade.h:132
+#: ../gui/image-creator.glade.h:135
 msgid "_Target config"
-msgstr ""
+msgstr "Configurar _objetivo"
 
-#: ../gui/image-creator.glade.h:133
+#: ../gui/image-creator.glade.h:136
 msgid "_Terminal"
 msgstr "_Terminal"
 
-#: ../gui/image-creator.glade.h:134
+#: ../gui/image-creator.glade.h:137
 msgid "_Tools"
 msgstr "_Herramientas"
 
-#: ../gui/image-creator.glade.h:135
+#: ../gui/image-creator.glade.h:138
 msgid "_Upgrade Project"
-msgstr ""
+msgstr "_Actualizar proyecto"
 
-#: ../gui/image-creator.glade.h:136
+#: ../gui/image-creator.glade.h:139
 msgid "_Write USB Image"
-msgstr ""
+msgstr "_Escribir imagen USB"
 
-#: ../gui/image-creator.glade.h:137
+#: ../gui/image-creator.glade.h:140
 msgid "enabled"
 msgstr ""
 
-#: ../gui/image-creator.glade.h:138
+#: ../gui/image-creator.glade.h:141
 msgid "ext3fs size(MB):"
 msgstr ""
 
-#: ../gui/image-creator.glade.h:139
+#: ../gui/image-creator.glade.h:142
 msgid "failovermethod"
 msgstr ""
 
-#: ../gui/image-creator.glade.h:140
+#: ../gui/image-creator.glade.h:143
 msgid "foobar"
 msgstr ""
 
-#: ../gui/image-creator.glade.h:141
+#: ../gui/image-creator.glade.h:144
 msgid "kernel cmdline: "
 msgstr ""
 
-#: ../gui/image-creator.glade.h:142
+#: ../gui/image-creator.glade.h:145
 msgid "url"
-msgstr ""
+msgstr "url"
 
 #: ../gui/project_assistant.py:88
 msgid "Introduction"
@@ -2086,26 +2135,6 @@ msgstr ""
 #. create the config file
 #: ../libs/SDK.py:228
 msgid "Creating Config file"
-msgstr ""
-
-#: ../libs/SDK.py:231
-#, python-format
-msgid "NAME=%s\n"
-msgstr ""
-
-#: ../libs/SDK.py:232
-#, python-format
-msgid "PATH=%s\n"
-msgstr ""
-
-#: ../libs/SDK.py:233
-#, python-format
-msgid "DESC=%s\n"
-msgstr ""
-
-#: ../libs/SDK.py:234
-#, python-format
-msgid "PLATFORM=%s\n"
 msgstr ""
 
 #. instantiate the project
